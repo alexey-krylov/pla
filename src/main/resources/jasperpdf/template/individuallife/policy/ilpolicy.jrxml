@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="policyInLandscape" pageWidth="1000" pageHeight="1500" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03a1851c-2668-4a30-807a-ddd2aa7044e4">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<subDataset name="dataset1" uuid="cb7c3b79-1e7b-49c3-9bac-8ee5b60d6edc"/>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-09-08T20:52:59 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GHPolicy" pageWidth="960" pageHeight="1460" orientation="Landscape" columnWidth="960" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="632d0d79-4743-4a00-8577-9b9631ed5dd2">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="annexure" class="java.util.List">
+		<fieldDescription><![CDATA[annexure]]></fieldDescription>
+	</field>
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
@@ -64,153 +66,320 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="900" splitType="Stretch">
-			<rectangle radius="0">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="1" y="0" width="959" height="900" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="ddc055b7-d0a1-406f-a37b-dd08172caf30"/>
-			</rectangle>
+		<band height="1050" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement x="378" y="2" width="100" height="20" uuid="c42ceb79-1d87-4c08-9e1b-743cadba649f"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				<reportElement x="380" y="10" width="170" height="30" uuid="3cad3951-b7d0-47bf-9ea8-b23f6d738fea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Policy]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="22" width="68" height="20" uuid="a3324e02-d103-44f3-b767-96d7bb8f18ae"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="40" y="40" width="70" height="30" uuid="96c3e1bf-e40d-45ab-8f9f-a2338b42cdf2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Trebuchet MS"/>
+				</textElement>
 				<text><![CDATA[Agent Name :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="42" width="68" height="20" uuid="f4834cad-94b4-4c70-bdc6-82caf045b327"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Agent Code ;]]></text>
+				<reportElement x="40" y="70" width="60" height="30" uuid="032a7e98-a436-487f-8348-f292a94d6cbe"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<text><![CDATA[Agent Code :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="533" y="22" width="100" height="20" uuid="c9a5ad23-5750-451b-bc0a-f551df3d3718"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="600" y="40" width="100" height="30" uuid="0f4105c8-cb62-490d-8d1f-5a4077c9105a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Trebuchet MS"/>
+				</textElement>
 				<text><![CDATA[Contact Number :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="533" y="42" width="132" height="20" uuid="f6a1f3e5-7959-40c8-b131-02add356a187"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="600" y="70" width="110" height="30" uuid="48a7c2ce-5bfe-4ca8-ac5f-bc05d768d01d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Trebuchet MS"/>
+				</textElement>
 				<text><![CDATA[Policy Servicing Office :]]></text>
 			</staticText>
+			<rectangle>
+				<reportElement x="40" y="230" width="890" height="51" uuid="27f48e60-b01c-46bb-9d2d-b2c9914eef64"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="40" y="200" width="100" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" forecolor="#FFFFFF" backcolor="#000000" uuid="a21808fd-cb19-4d01-a29b-13f4a17c2e37"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ Policy Details :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="230" width="90" height="30" uuid="f52f25ed-927e-4240-ac2d-56949178c681"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ Policy Number :]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="40" y="110" width="890" height="30" uuid="e01c9036-002b-4a4f-bc8f-4a42b5ceab9b"/>
+				<rectangle>
+					<reportElement x="0" y="0" width="890" height="30" backcolor="#002060" uuid="7d47a921-9b14-4ffd-bcfd-c8b2134d5119"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="92b4d664-a47c-4263-905e-24e7c77856f9"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ Policy Holder :]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="40" y="200" width="890" height="30" uuid="591ef858-d019-41dc-bb36-cd0cda144cd6"/>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="0" width="890" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" backcolor="#002060" uuid="1e42ba31-7db0-4d6f-b34d-bc2b4bbe0109"/>
+					<graphicElement>
+						<pen lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="0ea4c7f0-ccb2-4059-9ad5-1f9c55fb5d3e"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="14"/>
+					</textElement>
+					<text><![CDATA[ Policy Details : ]]></text>
+				</staticText>
+			</frame>
+			<rectangle>
+				<reportElement x="40" y="140" width="890" height="60" uuid="61a210f1-a745-4163-a6c7-6f3d18fdb4f7"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="40" y="140" width="100" height="20" uuid="cff71e3a-1610-4f94-b9c2-4c53b0cc1987"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="160" width="100" height="20" uuid="b0e55299-f848-40db-84d2-9bbe37e94c1a"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ Address :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="180" width="100" height="20" uuid="5c68b9ea-bb19-42af-abe3-6ad7f65418c1"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Telephone Number(s) :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="260" width="109" height="21" uuid="a4ce1df2-d380-4954-809d-4f4c5478bdf7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Policy Period : From ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="40" y="566" width="530" height="34" backcolor="#002060" uuid="54d115b8-1eed-4be7-805b-41e39dc1dd50"/>
+			</rectangle>
+			<frame>
+				<reportElement x="40" y="478" width="140" height="30" uuid="bc691daf-9210-43db-9198-24ca635099fd"/>
+			</frame>
+			<frame>
+				<reportElement x="40" y="600" width="530" height="120" uuid="8def6d4e-9775-43a1-a1e7-e58820fde14e"/>
+				<rectangle>
+					<reportElement mode="Transparent" x="0" y="0" width="360" height="30" uuid="d70a8b01-1d48-412b-9fbc-7a7d081e6dd1"/>
+					<graphicElement>
+						<pen lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="360" y="0" width="170" height="30" uuid="dc5d7e18-ae78-4321-a637-63a9f3cd8bc9"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="0" y="30" width="360" height="30" uuid="c42899f8-7ff5-4ec1-8b68-1ce5e91f1648"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="360" y="30" width="170" height="30" uuid="404a4fac-dcd7-4112-8eff-27f40fc51577"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="0" y="60" width="360" height="30" uuid="52ffb666-19eb-4aa6-bc05-78afb79cf4dd"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="360" y="60" width="170" height="30" uuid="d7e7a510-2dfb-42ee-97e5-2f8fbd784a82"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="0" y="90" width="360" height="30" uuid="785af378-9e7c-4f3f-9dee-81923daec327"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="360" y="90" width="170" height="30" uuid="6451d861-0eae-4676-bbac-dde6c4e85540"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="0" y="0" width="100" height="30" uuid="87b9e50f-f163-4b98-953c-53c5c3bcd586"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS"/>
+					</textElement>
+					<text><![CDATA[ Net Premium :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="30" width="200" height="30" uuid="31ce4cc8-5532-4509-998c-4d4dc724d609"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS"/>
+					</textElement>
+					<text><![CDATA[ Underwriting Loading :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="60" width="200" height="30" uuid="a45559b4-8c89-4706-af56-b69f8b06ab98"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[ Underwriting Discount :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="90" width="100" height="30" uuid="335f7ff3-356a-4a24-8701-132a8d87b337"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[ Total Premium :]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="40" y="740" width="100" height="30" uuid="be2aea11-5fd2-46a7-ad10-b53e218da243"/>
+				<staticText>
+					<reportElement x="0" y="0" width="100" height="30" uuid="988d0811-2e18-46e6-8fa6-7fc8fd3cc593"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ NOTE :]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="40" y="770" width="920" height="90" uuid="836d0edd-b7fd-4fee-a837-5cbe12c00a3e"/>
+				<staticText>
+					<reportElement x="0" y="0" width="920" height="90" uuid="1f85cdf4-fbbe-4fbb-906d-d86741bd4426"/>
+					<textElement>
+						<font fontName="Trebuchet MS" size="12" isBold="false"/>
+					</textElement>
+					<text><![CDATA[ In the event of dishonor of cheque , this policy document automatically stands cancelled from inception, 
+ irrespective of whether a separate  communication is sent or  not.
+ This Policy has been issued based on the information provided by you on the proposal form. 
+ In case you find any discrepancy in  the   same,please contact us immediately.
+ For any assistance with claims or on the policy please contact us at the details mentioned above.
+ You may also email at help@insurance.com
+							
+ 		]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="40" y="880" width="280" height="30" uuid="a0e249ad-bf39-4269-ae2d-2bbb2a85e4e8"/>
+				<staticText>
+					<reportElement x="0" y="0" width="280" height="30" uuid="80b2ceb9-c498-44fb-be63-943549303b9f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
+					</textElement>
+					<text><![CDATA[ In witness, whereof this policy has been signed at ]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="530" y="950" width="428" height="30" uuid="cedd4831-201e-4c28-8c22-bbf0c0a536b1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[For and on behalf of Insurance Company Limited]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="530" y="1020" width="300" height="30" uuid="ab28a948-8716-4b19-8507-9af5ad0c18c2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Authorised Signatory]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="149" y="300" width="672" height="40" uuid="320efc4f-e6f9-48b6-b0ce-3580ac1ff9e7"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["jasperpdf/jasper/individuallife/policy/coverages.jasper"]]></subreportExpression>
+			</subreport>
 			<textField>
-				<reportElement x="186" y="22" width="100" height="20" uuid="22554e76-bc46-42f1-95f9-a17975fc8751"/>
+				<reportElement x="110" y="40" width="100" height="30" uuid="49f2bc02-18e4-4e30-b48f-30c9c7838a21"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="186" y="42" width="100" height="20" uuid="1929dae2-e3ac-4dbf-8707-84fc392e7e47"/>
+				<reportElement x="110" y="70" width="100" height="30" uuid="0086f168-cca7-4811-840c-76fb19e6fc96"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="633" y="22" width="100" height="20" uuid="8474eaa9-ea9e-41bf-9eb2-316f4ba78b51"/>
+				<reportElement x="700" y="40" width="100" height="30" uuid="80a20b15-6bb6-45fc-beec-c303e8233be5"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{contactNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="655" y="42" width="100" height="20" uuid="39252de2-3330-4455-9ab1-32da98481e27"/>
+				<reportElement x="710" y="70" width="100" height="30" uuid="9723c940-a8d4-4af9-a053-485fcb22267f"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{psOffice}]]></textFieldExpression>
 			</textField>
-			<rectangle>
-				<reportElement x="116" y="98" width="751" height="80" uuid="28dea15b-5fcb-4ce9-b002-785f9164a010"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="116" y="178" width="751" height="60" uuid="1ef83064-159a-4f3c-8245-149fba3df972"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="118" y="98" width="100" height="20" uuid="ca40fc19-430d-4aac-a60b-d19325d88183"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Policy Holder :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="118" y="118" width="55" height="20" uuid="0182c783-fe91-4df9-8c20-46513b6c6fe6"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Name :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="116" y="138" width="70" height="20" uuid="51cb987f-3ecd-460d-9976-bd32154bc0a7"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Address :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="116" y="158" width="119" height="20" uuid="1962ddfa-3200-4bbd-b3ec-30787da5ecef"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Telephone Number(s) :]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="186" y="118" width="100" height="20" uuid="f1392ed7-c983-41fd-9c56-7028d361b730"/>
+				<reportElement x="140" y="140" width="100" height="20" uuid="b581a1f0-cac8-4217-9cc2-9148001f9783"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="186" y="138" width="100" height="20" uuid="da6e5a55-630c-4b0c-b208-498d98847f95"/>
+				<reportElement x="140" y="160" width="100" height="20" uuid="43b29e70-74df-4f5b-97d9-dc4adfb0b1c2"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="229" y="158" width="122" height="20" uuid="69d61a41-c064-4fb5-b6d4-a06f2a45ca06"/>
+				<reportElement x="140" y="180" width="100" height="20" uuid="285f8280-8944-46f8-842f-7cb99c3ea486"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="116" y="178" width="100" height="20" uuid="d3e17c57-cc3f-4d0f-b64c-67b926807ba9"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Policy Details :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="118" y="198" width="100" height="20" uuid="a8d97a7b-da51-4b6e-adf9-f8a915bf2ed5"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Policy Number :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="117" y="218" width="100" height="20" uuid="79442ee6-7133-4e58-8b06-fe27c260875c"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Policy Period :]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="216" y="198" width="100" height="20" uuid="3a323d8f-def1-47d4-95d6-14f0069759c2"/>
+				<reportElement x="130" y="230" width="100" height="30" uuid="fe7e5790-e898-4654-9eda-a08a34a914ea"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{policyNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="251" y="218" width="100" height="20" uuid="08b3914e-8105-410b-aed3-4a444aec2895"/>
+				<reportElement x="150" y="260" width="100" height="21" uuid="b3a28127-e24f-4005-b280-53b28af89e79"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{policyStartDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="216" y="218" width="40" height="20" uuid="2444e730-f329-4d5f-93fb-20b86fc9d042"/>
-				<text><![CDATA[From :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="351" y="218" width="25" height="20" uuid="691e8873-6bd9-47be-878e-d40ffab50357"/>
-				<text><![CDATA[To :]]></text>
+				<reportElement x="270" y="260" width="30" height="21" uuid="1a6d0c8e-37ff-49b4-9319-b26c041f195f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS"/>
+				</textElement>
+				<text><![CDATA[ To :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="376" y="218" width="100" height="20" uuid="a1e58145-a774-4064-b5f1-24f71a4d2c6f"/>
+				<reportElement x="300" y="260" width="100" height="21" uuid="0fe570c6-b9c3-465f-83bd-a121583acad8"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{policyEndDate}]]></textFieldExpression>
 			</textField>
-			<subreport>
-				<reportElement positionType="Float" x="149" y="252" width="672" height="40" uuid="320efc4f-e6f9-48b6-b0ce-3580ac1ff9e7"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["jasperpdf/jasper/individuallife/policy/coverdetailsubreport.jasper"]]></subreportExpression>
-			</subreport>
+			<textField>
+				<reportElement x="320" y="880" width="100" height="30" uuid="6f62b832-f2a9-41b8-bd8e-0d25bec808a7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="118" y="499" width="142" height="20" uuid="6543c127-6910-495b-8777-6fa3eafd7610"/>
-				<text><![CDATA[Special Condtions (If Any) :]]></text>
+				<reportElement x="420" y="880" width="30" height="30" uuid="b12bde18-5201-495f-8c38-b52aec415973"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[On]]></text>
 			</staticText>
-			<subreport>
-				<reportElement x="118" y="578" width="672" height="27" uuid="dcd84270-fad9-430a-94f4-0fefb2f40fbe"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{premiumDetails})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["jasperpdf/jasper/individuallife/policy/premiumDetails.jasper"]]></subreportExpression>
-			</subreport>
+			<textField>
+				<reportElement x="450" y="880" width="100" height="30" uuid="a20efd44-d0cd-4f96-b122-e426145e38be"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="40" y="566" width="140" height="30" forecolor="#FFFFFF" uuid="60600160-794a-47c2-9cd0-0905690c8790"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="14"/>
+				</textElement>
+				<text><![CDATA[ Premium Details :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="513" width="160" height="30" uuid="59871c3d-e605-4863-880d-48bb12645316"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Special coditions (if any) :]]></text>
+			</staticText>
 			<rectangle>
-				<reportElement x="253" y="499" width="631" height="49" uuid="4a02be24-0959-42a7-9b87-9ef8fc6edb57"/>
+				<reportElement x="200" y="510" width="730" height="40" uuid="8491e01d-8671-4c5f-94c9-d70e75236a91"/>
 			</rectangle>
 		</band>
 	</detail>
@@ -225,8 +394,8 @@
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="265" y="0" width="366" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="a52e332d-c040-415d-a379-d4470c569c7d"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<reportElement mode="Opaque" x="351" y="6" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="a52e332d-c040-415d-a379-d4470c569c7d"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Professional Life Assurance Limited]]></text>

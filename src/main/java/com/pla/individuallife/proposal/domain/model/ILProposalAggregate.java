@@ -31,7 +31,7 @@ import java.util.Set;
 public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<ProposalId> {
 
     private final BigDecimal PERCENTAGE = new BigDecimal(100.00);
-    private ProposalSpecification specification=new ProposalSpecification();
+    private ProposalSpecification specification = new ProposalSpecification();
     private ProposedAssured proposedAssured;
     private Proposer proposer;
     private String proposalNumber;
@@ -81,7 +81,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         } else {
             assignProposedAssured(proposedAssured);
         }
-        specification.checkProposerAgainstPlan(minAge,maxAge,this.proposedAssured.getAgeNextBirthday());
+//        specification.checkProposerAgainstPlan(minAge,maxAge,this.proposedAssured.getAgeNextBirthday());
         this.proposalPlanDetail = proposalPlanDetail;
         this.proposalStatus = ILProposalStatus.DRAFT;
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());

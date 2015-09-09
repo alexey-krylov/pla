@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-09-07T17:24:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="900" pageHeight="500" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7eac5401-a67e-44d2-9810-556f68c0a117">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -18,7 +21,7 @@
 	<title>
 		<band height="39" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="612" height="37" backcolor="#002060" uuid="59281fe2-118a-4be6-920c-6bfc9763af82"/>
+				<reportElement mode="Opaque" x="0" y="0" width="612" height="39" backcolor="#002060" uuid="59281fe2-118a-4be6-920c-6bfc9763af82"/>
 				<box>
 					<topPen lineWidth="0.6"/>
 					<leftPen lineWidth="0.6"/>
@@ -42,9 +45,9 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="43" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="-1" width="321" height="44" forecolor="#FFFFFF" backcolor="#808080" uuid="612f3d0d-b9ee-490e-a6d4-fa16b77af2d4"/>
+				<reportElement mode="Opaque" x="0" y="0" width="321" height="44" forecolor="#FFFFFF" backcolor="#808080" uuid="612f3d0d-b9ee-490e-a6d4-fa16b77af2d4"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#030000"/>
 					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#030000"/>

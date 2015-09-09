@@ -82,8 +82,8 @@ public class GLEndorsementFinder {
         }
         Map<String,Object> policyDetailMap = Maps.newLinkedHashMap();
         policyDetailMap.put("policyHolderName",((Map) glEndorsement.get(0).get("policy")).get("policyHolderName"));
-        policyDetailMap.put("inceptionOn",glPolicy.get(0).get("inceptionOn"));
-        policyDetailMap.put("expiredOn",glPolicy.get(0).get("expiredOn"));
+        policyDetailMap.put("inceptionDate",glPolicy.get(0).get("inceptionOn"));
+        policyDetailMap.put("expiredDate",glPolicy.get(0).get("expiredOn"));
         return policyDetailMap;
     }
 }

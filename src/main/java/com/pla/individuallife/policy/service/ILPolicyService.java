@@ -43,6 +43,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -257,17 +258,23 @@ public class ILPolicyService {
     }
 
     public List<Map<String,Object>> ilPolicyDetailTransformMap(ILPolicyDto ilPolicyDto){
+        String agentId = getDominantAgentId(ilPolicyDto.getAgentCommissionDetails());
+        Map<String, Object> agentDetail = ilPolicyFinder.getAgentById(agentId);
+        checkArgument(agentDetail != null);
+        String branchName  = agentDetail.get("branchName") != null ? (String) agentDetail.get("branchName") : "";
+        String agentName =  agentDetail.get("firstName") != null ? (String) agentDetail.get("firstName") : "" + " " + agentDetail.get("lastName") != null ? (String) agentDetail.get("lastName") : "";
         Map<String,Object> ilPolicyDetailMap = Maps.newLinkedHashMap();
-        ilPolicyDetailMap.put("proposerName", ilPolicyDto.getProposer().getClientId() + " " + ilPolicyDto.getProposer().getFirstName() + " " + ilPolicyDto.getProposer().getSurname());
+        ilPolicyDetailMap.put("proposerName",  ilPolicyDto.getProposer().getFirstName() + " " + ilPolicyDto.getProposer().getSurname()!=null?ilPolicyDto.getProposer().getSurname():"");
         ilPolicyDetailMap.put("policyStartDate", ilPolicyDto.getInceptionOn());
-        ilPolicyDetailMap.put("agentCode", getDominantAgentId(ilPolicyDto.getAgentCommissionDetails()));
-        ilPolicyDetailMap.put("contactNumber", ilPolicyDto.getProposer().getMobileNumber());
-        ilPolicyDetailMap.put("psOffice", ilPolicyDto.getProposer().getResidentialAddress().getTown());
-        ilPolicyDetailMap.put("address", ilPolicyDto.getProposer().getResidentialAddress().getAddress1());
-        ilPolicyDetailMap.put("telephoneNumber", ilPolicyDto.getProposer().getResidentialAddress().getHomePhone());
+        ilPolicyDetailMap.put("psOffice", branchName);
+        ilPolicyDetailMap.put("agentName", agentName);
+        ilPolicyDetailMap.put("agentCode", agentId);
+        ilPolicyDetailMap.put("contactNumber",agentDetail.get("mobileNumber")!=null?agentDetail.get("mobileNumber"):"");
+        ilPolicyDetailMap.put("address", ilPolicyDto.getProposer().getResidentialAddress().getAddress1()+" "+ilPolicyDto.getProposer().getResidentialAddress().getAddress2());
+        ilPolicyDetailMap.put("telephoneNumber", ilPolicyDto.getProposer().getMobileNumber());
         ilPolicyDetailMap.put("policyNumber", ilPolicyDto.getPolicyNumber().getPolicyNumber());
         ilPolicyDetailMap.put("policyEndDate", ilPolicyDto.getExpiryDate());
-        ilPolicyDetailMap.put("issueBranch", ilPolicyDto.getProposer().getResidentialAddress().getTown());
+        ilPolicyDetailMap.put("issueBranch", branchName);
         ilPolicyDetailMap.put("issuanceDate", ilPolicyDto.getInceptionOn());
 
         List<Map<String,Object>> coverDetails =  ilPolicyDto.getProposalPlanDetail().getRiderDetails().parallelStream().map(new Function<ILRiderDetail, Map<String,Object>>() {
@@ -284,22 +291,22 @@ public class ILPolicyService {
         coverageSumAssured.put("planCoverageSumAssured", ilPolicyDto.getProposalPlanDetail().getSumAssured().toString());
         ilPolicyDetailMap.put("coverDetails", coverDetails);
 
-        List<Map<String,Object>> premiumList = Lists.newArrayList();
+        /*List<Map<String,Object>> premiumList = Lists.newArrayList();
         Map<String,Object> premiumMap = Maps.newLinkedHashMap();
         premiumMap.put("netPremium", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
         premiumMap.put("underWritingLoading", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
         premiumMap.put("underWritingDiscount", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
         premiumMap.put("totalPremium", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
         premiumList.add(premiumMap);
-        ilPolicyDetailMap.put("premiumDetails", premiumList);
+        ilPolicyDetailMap.put("premiumDetails", premiumList);*/
         return Lists.newArrayList(ilPolicyDetailMap);
     }
 
     private String getDominantAgentId(Set<AgentDetailDto> agentCommissionShares){
-       Optional<AgentDetailDto> agentCommissionShareOptional = agentCommissionShares.parallelStream().max(new Comparator<AgentDetailDto>() {
+        Optional<AgentDetailDto> agentCommissionShareOptional = agentCommissionShares.parallelStream().max(new Comparator<AgentDetailDto>() {
             @Override
             public int compare(AgentDetailDto agentLeft, AgentDetailDto agentRight) {
-                  return agentLeft.getCommission().compareTo(agentRight.getCommission());
+                return agentLeft.getCommission().compareTo(agentRight.getCommission());
             }
         });
         if (agentCommissionShareOptional.isPresent()){

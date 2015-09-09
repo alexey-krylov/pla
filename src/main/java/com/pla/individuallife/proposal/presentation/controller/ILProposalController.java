@@ -300,7 +300,7 @@ public class ILProposalController {
     }
 
     @RequestMapping(value = "/searchQuotation", method = RequestMethod.POST)
-       public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
+    public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlDto));
         modelAndView.addObject("searchCriteria", searchIlDto);
@@ -461,7 +461,7 @@ public class ILProposalController {
     @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
     @ResponseBody
     public List<RiderDetailDto> getRidersForPlan(@PathVariable("planId") String planId,@PathVariable("proposedAssuredDOB") Integer proposedAssuredDOB) {
-       return proposalFinder.findAllOptionalCoverages(planId,proposedAssuredDOB);
+        return proposalFinder.findAllOptionalCoverages(planId,proposedAssuredDOB);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllEmploymentType")
@@ -480,8 +480,8 @@ public class ILProposalController {
     }
 
     @RequestMapping(value = "/searchplan/{proposalId}", method = RequestMethod.GET)
-     @ResponseBody
-     public List<Map<String, Object>> searchPlan(@PathVariable("proposalId") String proposalId) {
+    @ResponseBody
+    public List<Map<String, Object>> searchPlan(@PathVariable("proposalId") String proposalId) {
         List<Map<String, Object>> planList = proposalFinder.getPlans(proposalId);
         return planList;
     }

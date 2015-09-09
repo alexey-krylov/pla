@@ -2,14 +2,12 @@ package com.pla.individuallife.policy.finder;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
-import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
-import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
-import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -42,13 +40,7 @@ public class ILPolicyFinder {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private IPremiumCalculator premiumCalculator;
-    @Autowired
-    private PremiumFinder premiumFinder;
-    @Autowired
     private PlanFinder planFinder;
-    @Autowired
-    private CoverageFinder coverageFinder;
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -57,6 +49,8 @@ public class ILPolicyFinder {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.mongoTemplate = mongoTemplate;
     }
+
+    public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
 
     public static final String FIND_AGENT_BY_ID_QUERY = "SELECT agent_id as agentId, first_name as firstName, last_name as lastName FROM agent WHERE agent_id=:agentId AND agent_status = 'ACTIVE'";
 
@@ -127,6 +121,13 @@ public class ILPolicyFinder {
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, IL_POLICY_COLLECTION_NAME);
         return proposal;
     }
+
+    public Map<String, Object> getAgentById(String agentId) {
+        Preconditions.checkArgument(isNotEmpty(agentId));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
+    }
+
 
     public String getAgentFullNameById(String agentId) {
         Preconditions.checkArgument(UtilValidator.isNotEmpty(agentId));

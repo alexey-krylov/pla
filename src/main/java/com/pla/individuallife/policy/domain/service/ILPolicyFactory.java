@@ -2,6 +2,7 @@ package com.pla.individuallife.policy.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.policy.domain.model.IndividualLifePolicy;
+import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
@@ -9,11 +10,13 @@ import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
+import org.apache.commons.beanutils.BeanUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +40,7 @@ public class ILPolicyFactory {
         this.ilPolicyNumberGenerator =  ilPolicyNumberGenerator;
     }
 
-    public IndividualLifePolicy createPolicy(ProposalId proposalId) {
+    public IndividualLifePolicy createPolicy(ProposalId proposalId) throws InvocationTargetException, IllegalAccessException {
         Map proposalMap = ilProposalFinder.getProposalByProposalId(proposalId.getProposalId());
         ProposedAssured proposedAssured = (ProposedAssured) proposalMap.get("proposedAssured");
         Proposer proposer = (Proposer) proposalMap.get("proposer");
@@ -47,6 +50,10 @@ public class ILPolicyFactory {
         FamilyPersonalDetail familyPersonalDetail  =(FamilyPersonalDetail) proposalMap.get("familyPersonalDetail");
         AdditionalDetails additionaldetails = (AdditionalDetails) proposalMap.get("additionalDetails");
         PremiumPaymentDetails premiumPaymentDetails = (PremiumPaymentDetails) proposalMap.get("premiumPaymentDetails");
+        PremiumDetailDto premiumDetailDto =  ilProposalFinder.getPremiumDetail(proposalId.getProposalId());
+        PremiumDetail premiumDetail = new PremiumDetail();
+        BeanUtils.copyProperties(premiumDetail, premiumDetailDto);
+        premiumPaymentDetails.setPremiumDetail(premiumDetail);
         List<ILProposerDocument> ilProposerDocuments = (List<ILProposerDocument>) proposalMap.get("proposalDocuments");
         ProposalPlanDetail proposalPlanDetail = (ProposalPlanDetail) proposalMap.get("proposalPlanDetail");
         ProposalNumber proposalNumber = new ProposalNumber((String)proposalMap.get("proposalNumber"));

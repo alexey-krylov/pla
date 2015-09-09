@@ -1,12 +1,9 @@
 package com.pla.core.presentation.controller;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.pla.core.application.producrclaim.CreateProductClaimCommand;
 import com.pla.core.application.producrclaim.UpdateProductClaimCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
-import com.pla.core.dto.CoverageClaimTypeDto;
 import com.pla.core.dto.ProductClaimTypeDto;
 import com.pla.core.query.ProductClaimMapperFinder;
 import com.pla.sharedkernel.domain.model.ClaimType;
@@ -27,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -66,7 +62,7 @@ public class ProductClaimSetUpController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ModelAndView searchQuotation(ProductClaimTypeDto productClaimTypeDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("searchResult", getProductClaim());
+        modelAndView.addObject("searchResult", productClaimMapperFinder.getAllProductClaimMapDetail());
         modelAndView.addObject("searchCriteria", productClaimTypeDto);
         modelAndView.setViewName("pla/core/productClaim/viewProductClaim");
         return modelAndView;
@@ -139,53 +135,9 @@ public class ProductClaimSetUpController {
 
     @RequestMapping(value = "/getproductclaimbyid/{productClaimId}",method = RequestMethod.GET)
     @ResponseBody
-    public ProductClaimTypeDto getProductClaimMappingDetailById(@PathVariable("productClaimId") String productClaimId){
-        return getProductClaim().get(0);
+    public List<Map<String, Object>> getProductClaimMappingDetailById(@PathVariable("productClaimId") String productClaimId){
+        return productClaimMapperFinder.getProductClaimMapDetailById(productClaimId);
     }
 
-
-    private List<ProductClaimTypeDto> getProductClaim(){
-        ProductClaimTypeDto productClaimTypeDto = new ProductClaimTypeDto("1","1001","55924fa7e4b01ecacd0635c2","Life Cover",LineOfBusinessEnum.GROUP_LIFE,
-                LineOfBusinessEnum.GROUP_LIFE.toString());
-        List<CoverageClaimTypeDto> coverageClaimType = Lists.newArrayList();
-        Set<String> claimTypeMap = Sets.newLinkedHashSet();
-        claimTypeMap.add("DEATH");
-        claimTypeMap.add("DISABILITY");
-        /*Map<String,Object> map = Maps.newLinkedHashMap();
-        map.put("claimType","DEATH");
-        map.put("description","Death");
-        claimTypeMap.add(map);
-        map = Maps.newLinkedHashMap();
-        map.put("claimType","DISABILITY");
-        map.put("description","Disability");
-        claimTypeMap.add(map);
-        map = Maps.newLinkedHashMap();
-        map.put("claimType","FUNERAL");
-        map.put("description","Funeral");
-        claimTypeMap.add(map);*/
-        CoverageClaimTypeDto coverageClaimTypeDto = new CoverageClaimTypeDto("BE58B478-DDED-47B7-8A8F-314B661E449F","Accidental Death Cover",claimTypeMap);
-        coverageClaimType.add(coverageClaimTypeDto);
-
-        /*List<Map<String,Object>>   claimTypeMap1 = Lists.newArrayList();
-        Map<String,Object> map1 = Maps.newLinkedHashMap();
-        map1.put("claimType","DEATH");
-        map1.put("description","Death");
-        claimTypeMap1.add(map1);
-        map1 = Maps.newLinkedHashMap();
-        map1.put("claimType","DISABILITY");
-        map1.put("description","Disability");
-        claimTypeMap1.add(map1);
-        map1 = Maps.newLinkedHashMap();
-        map1.put("claimType","FUNERAL");
-        map1.put("description","Funeral");
-        claimTypeMap1.add(map1);*/
-        Set<String> claimTypeMap1 = Sets.newLinkedHashSet();
-        claimTypeMap.add("DEATH");
-        claimTypeMap.add("DISABILITY");
-        CoverageClaimTypeDto  coverageClaimTypeDto1 = new CoverageClaimTypeDto("51427D70-3AEA-4B94-9184-A44E46BB45C5","Death Cover",claimTypeMap1);
-        coverageClaimType.add(coverageClaimTypeDto1);
-        productClaimTypeDto.setCoverageClaimType(coverageClaimType);
-        return Lists.newArrayList(productClaimTypeDto);
     }
 
-}
