@@ -1814,7 +1814,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
 
                     $scope.proposalPlanDetail.planId=newValue.description.plan_id;
-                    $http.get("getridersforplan/" + newValue.description.plan_id).success(function (response, status, headers, config) {
+                    $http.get("getridersforplan/" + newValue.description.plan_id+'/'+ $scope.proposedAssured.nextDob).success(function (response, status, headers, config) {
                         $scope.searchRiders = response;
                         $scope.proposalPlanDetail.riderDetails = response;
                         //console.log('Riders Details From Db is:' +JSON.stringify(response));

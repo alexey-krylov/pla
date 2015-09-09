@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.CoverageName;
+import com.pla.core.domain.model.plan.PlanCoverage;
+import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
@@ -18,6 +20,9 @@ import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.domain.model.CoverageType;
+import com.pla.sharedkernel.domain.model.PlanStatus;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
@@ -100,12 +105,47 @@ public class ILProposalFinder {
             return map.get("firstName").toString();
     }
 
-    public List<Map<String, Object>> findAllOptionalCoverages(String planId) {
+    public List<RiderDetailDto> findAllOptionalCoverages(String planId,int age) {
+        List<String> coverageIds = getCoverageIds(planId, age);
         // Query against the view
         List<Map<String, Object>> resultSet = namedParameterJdbcTemplate.queryForList("select DISTINCT * from plan_coverage where plan_id in (:planId) " +
                 "AND (optional = 1)", new MapSqlParameterSource().addValue("planId", planId.toString()));
-        return resultSet;
+        return resultSet.parallelStream().filter(new Predicate<Map<String, Object>>() {
+            @Override
+            public boolean test(Map<String, Object> coverageMap) {
+                return coverageIds.contains(coverageMap.get("coverage_id"));
+            }
+        }).map(new Function<Map<String, Object>, RiderDetailDto>() {
+            @Override
+            public RiderDetailDto apply(Map<String, Object> coverageMap) {
+                RiderDetailDto dto = new RiderDetailDto();
+                dto.setCoverageName(coverageMap.get("coverage_name").toString());
+                dto.setCoverageId(coverageMap.get("coverage_id").toString());
+                return dto;
+            }
+        }).collect(Collectors.toList());
     }
+
+    private List<String> getCoverageIds(String planId,int age){
+        Criteria planCriteria = Criteria.where("_id").is(planId);
+        Query query = new Query(planCriteria);
+        query.fields().include("coverages");
+        Map planMap = mongoTemplate.findOne(query, Map.class, "PLAN");
+        List<PlanCoverage> planCoverages = (List<PlanCoverage>) planMap.get("coverages");
+        return planCoverages.parallelStream().filter(new Predicate<PlanCoverage>() {
+            @Override
+            public boolean test(PlanCoverage planCoverage) {
+                return (planCoverage.getCoverageType().equals(CoverageType.OPTIONAL) && age >= planCoverage.getMinAge() && age <=planCoverage.getMaxAge());
+            }
+        }).map(new Function<PlanCoverage, String>() {
+            @Override
+            public String apply(PlanCoverage planCoverage) {
+                return planCoverage.getCoverageId().getCoverageId();
+            }
+        }).collect(Collectors.toList());
+    }
+
+
 
     public List<ILSearchProposalDto> searchProposalToApprove(ILSearchProposalForApprovalDto dto, String[] statuses) {
         Criteria criteria = Criteria.where("proposalStatus").in(statuses);
@@ -369,7 +409,54 @@ public class ILProposalFinder {
         List <String> agentIds = new ArrayList<String>();
         ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
-        return result;
+        List<String> planIds = getPlanIds(proposal);
+        return result.parallelStream().filter(new Predicate<Map<String, Object>>() {
+            @Override
+            public boolean test(Map<String, Object> planDetails) {
+                return  planIds.contains(planDetails.get("plan_id"));
+            }
+        }).map(new Function<Map<String,Object>, Map<String,Object>>() {
+            @Override
+            public Map<String, Object> apply(Map<String, Object> planDetailMap) {
+                return planDetailMap;
+            }
+        }).collect(Collectors.toList());
+    }
+
+    private List<String> getPlanIds(Map proposal){
+        Proposer proposer = (Proposer) proposal.get("proposer");
+        Boolean isProposedAssured =  proposer.getIsProposedAssured();
+        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
+        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
+        Criteria planCriteria = Criteria.where("status").nin(PlanStatus.WITHDRAWN, PlanStatus.DRAFT, PlanStatus.PREMIUM_CONFIGURED);
+        Query query = new Query(planCriteria);
+        List<Map> allPlans = mongoTemplate.find(query,Map.class, "PLAN");
+        return allPlans.parallelStream().filter(new Predicate<Map>() {
+            @Override
+            public boolean test(Map map) {
+                PlanDetail planDetail = (PlanDetail) map.get("planDetail");
+                int minEntryAge = planDetail.getMinEntryAge();
+                int maxEntryAge = planDetail.getMaxEntryAge();
+                Set<Relationship> relationships = planDetail.getApplicableRelationships();
+                Optional<Relationship> relationship = relationships.parallelStream().filter(new Predicate<Relationship>() {
+                    @Override
+                    public boolean test(Relationship relationship) {
+                        return relationship.equals(Relationship.SELF);
+                    }
+                }).findAny();
+                if (age >= minEntryAge && age <= maxEntryAge)
+                    if (isProposedAssured && relationship.isPresent())
+                        return true;
+                    else if (!isProposedAssured)
+                        return true;
+                return false;
+            }
+        }).map(new Function<Map, String>() {
+            @Override
+            public String apply(Map map) {
+                return  map.get("_id").toString();
+            }
+        }).collect(Collectors.toList());
     }
 
     public Map findProposalByQuotationNumber(String quotationNumber) {
@@ -379,7 +466,7 @@ public class ILProposalFinder {
         return proposalMap;
     }
 
-    public Map getProposalByProposalId(String proposalId){
+    public Map getProposalByProposalId(String proposalId) {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", proposalId);
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_proposal");
