@@ -517,7 +517,9 @@
                                                     style="display:inline;float:right;margin-right:5px;" ng-file-select=""
                                                     ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
                                             </button>
-                                            <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;" >{{document.documentAttached[0].name}} </label>
+                                            <input class="form-control input-sm" style="width:380px;"
+                                                   value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
 
                                         </div>
 
@@ -561,11 +563,13 @@
                                                                 style="display:inline;float:right;margin-right:5px;margin-top:20px;"
                                                                 ng-file-select="" ng-model="additionalDocument.documentAttached">Browse
                                                         </button>
-                                                        <label class="form-control input-sm" style="border:1px solid #ccc;width:380px;"  >{{additionalDocument.documentAttached[0].name}} </label>
+                                                        <input class="form-control input-sm" style="width:262px;"
+                                                               value="{{additionalDocument.documentAttached[0].name}}"
+                                                               readonly="true"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-8">
-                                                    <a  href="/pla/grouplife/endorsement/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;"   hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+                                                    <a  href="/pla/grouplife/endorsement/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;font-weight:bold;"   hg-show="!additionalDocument.submitted">{{additionalDocument.fileName | limitTo: 70}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -585,7 +589,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="backToApproverPortlet()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit</button>
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()" ng-disabled="isViewMode || !submittedButton">Submit</button>
                         </div>
                     </div>
                 </div>

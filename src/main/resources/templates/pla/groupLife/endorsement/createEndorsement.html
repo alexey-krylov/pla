@@ -627,7 +627,7 @@
                                                                 ng-model="additionalDocument.documentAttached"
                                                                 ng-disabled="!additionalDocument.documentId">Browse
                                                         </button>
-                                                        <input class="form-control input-sm" style="width:320px;"
+                                                        <input class="form-control input-sm" style="width:262px;"
                                                                value="{{additionalDocument.documentAttached[0].name}}"
                                                                readonly="true"/>
                                                     </div>
@@ -639,7 +639,7 @@
                                                             ng-disabled="isViewMode">Remove
                                                     </button>
                                                     <a href="/pla/grouplife/endorsement/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}"
-                                                       style="display:inline;" title="{{additionalDocument.fileName}}"
+                                                       style="display:inline;font-weight:bold;" title="{{additionalDocument.fileName}}"
                                                        hg-show="!additionalDocument.submitted">{{additionalDocument.fileName|
                                                         limitTo: 70}}</a>
 
@@ -667,7 +667,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="submitAdditionalDocument()" ng-disabled="isViewMode">Submit
+                                    ng-click="submitAdditionalDocument()" ng-disabled="isViewMode || !submittedButton">Submit
                             </button>
                         </div>
                     </div>

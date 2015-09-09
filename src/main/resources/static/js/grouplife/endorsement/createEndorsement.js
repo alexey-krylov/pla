@@ -11,19 +11,23 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.isEnableContactMode = false;
             $scope.isEnablePlanMode = false;
             $scope.isEnable = false;
+            $scope.submittedButton=false;
             $scope.disableProposerSaveButton = true;
             $scope.endorsementType=getQueryParameter("endorsementType");
             var enableTab = getQueryParameter("endorsementType");
             console.log(enableTab);
             if (enableTab == 'CHANGE_POLICY_HOLDER_NAME' || enableTab == 'Correction of Name - Policy Holder' ) {
+                $scope.submittedButton=false;
                 $scope.isEnablePolicyHolderMode = true;
                 $scope.isEnable = true;
                 $scope.disableProposerSaveButton = true;
             } else if (enableTab == 'CHANGE_POLICY_HOLDER_CONTACT_DETAIL' || enableTab == 'Change of Contact Details') {
+                $scope.submittedButton=false;
                 $scope.isEnableContactMode = true;
                 $scope.isEnable = true;
                 $scope.disableProposerSaveButton = true;
             } else{
+                $scope.submittedButton=false;
                 $scope.isEnablePlanMode = true;
                 $scope.isEnable = false;
             }
@@ -191,6 +195,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     {"endorsementId": $scope.endorsementId}))
                     .success(function (data) {
                         if (data.status == "200") {
+                            $scope.submittedButton=true;
                             saveStep();
                         }
                     });
@@ -204,6 +209,8 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status = "200") {
+                        $scope.submittedButton=true;
+
                         saveStep();
                        /* $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + $scope.proposalId)
                             .success(function () {
@@ -214,7 +221,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             };
             $scope.approveEndorsement = function(){
                 var request = angular.extend({comment: $scope.comment},
-                    {"proposalId": $scope.proposalId});
+                    {"endorsementId": $scope.endorsementId});
 
                 $http.post('/pla/grouplife/endorsement/approve', request).success(function (data) {
                     if(data.status==200){
@@ -227,7 +234,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             }
             $scope.comment='';
             $scope.returnEndorsement = function(){
-                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+                var request = angular.extend({comment: $scope.comment},{"endorsementId": $scope.endorsementId});
 
                 $http.post('/pla/grouplife/endorsement/return', request).success(function (data) {
                     if(data.status==200){
