@@ -134,7 +134,6 @@ public class ILPolicyController {
         outputStream.flush();
         outputStream.close();
     }
-
     @RequestMapping(value = "/printpolicy/{policyId}", method = RequestMethod.GET)
     public void downloadPlanDetail(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
         response.reset();

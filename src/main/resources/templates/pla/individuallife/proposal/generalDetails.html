@@ -93,11 +93,13 @@
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
-                                    <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date"/>-->
+                                    <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" ng-click="launchinceptionDateADob($event)" close-text="Close" onkeypress="return isNumeric(event)"
+                                           show-button-bar="false" datepicker-options="datePickerSettingsBDE.dateOptions"  max-date="todayDate"
+                                           datepicker-popup="dd/MM/yyyy" ng-init="dateFormatValidator(row.date)" contenteditable="updateFlag" ng-model="row.date"/>-->
 
-                                   <div class='input-group date'>
+                              <div class='input-group date'>
                                         <input type="text" class="form-control input-sm"
-                                               datepicker-popup="" view-enabled=""
+                                               datepicker-popup="dd/MM/yyyy" view-enabled=""
                                                ng-required="true"
                                                is-open="inceptionDateA"
                                                max-date="todayDate"
@@ -108,7 +110,6 @@
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
                                     </div>
-
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                             </tr>
@@ -295,7 +296,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid || generalDetailsSaveStatus == 'true' " ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid || allowSave() " ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>

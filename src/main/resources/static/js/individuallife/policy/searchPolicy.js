@@ -203,6 +203,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                             //console.log("Response of Policy: "+JSON.stringify(result));
                             $scope.rcvProposal = response;
                             console.log(response);
+                            console.log('PolicyDetails..'+JSON.stringify(response));
 
                             //console.log('additionalDetails..' +JSON.stringify($scope.rcvProposal.additionalDetails));
                             $scope.policyNumberDetails.policyNumber=response.policyNumber.policyNumber;
@@ -457,6 +458,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                                 $scope.premiumPaymentDetails.premiumFrequency=$scope.rcvProposal.premiumPaymentDetails.premiumFrequency;
                                 $scope.premiumPaymentDetails.premiumPaymentMethod=$scope.rcvProposal.premiumPaymentDetails.premiumPaymentMethod;
                                 $scope.premiumPaymentDetails.proposalSignDate=$scope.rcvProposal.premiumPaymentDetails.proposalSignDate;
+                                $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.rcvProposal.premiumPaymentDetails.premiumFrequencyPayable;
 
                                 if($scope.rcvProposal.premiumPaymentDetails.employerDetails !=null)
                                 {
@@ -469,14 +471,15 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                                 }
                             }
 
-                            if($scope.rcvProposal.premiumDetailDto!=null)
+                            if($scope.rcvProposal.premiumPaymentDetails.premiumDetail!=null)
                             {
-                                $scope.premiumResponse.planAnnualPremium=$scope.rcvProposal.premiumDetailDto.planAnnualPremium;
-                                $scope.premiumResponse.totalPremium=$scope.rcvProposal.premiumDetailDto.totalPremium;
+                                $scope.premiumResponse.planAnnualPremium=$scope.rcvProposal.premiumPaymentDetails.premiumDetail.planAnnualPremium;
+                                $scope.premiumResponse.totalPremium=$scope.rcvProposal.premiumPaymentDetails.premiumDetail.totalPremium;
                                 //$scope.premiumResponse.annualPremium1111=$scope.rcvProposal.premiumDetailDto.totalPremium;
-                                $scope.premiumResponse.riderPremiumDtos=$scope.rcvProposal.premiumDetailDto.riderPremiumDtos;
+                                $scope.premiumResponse.riderPremiums=$scope.rcvProposal.premiumPaymentDetails.premiumDetail.riderPremiums;
 
                             }
+
                             if($scope.rcvProposal.proposerDocuments!=null)
                             {
                                 $scope.documentList=$scope.rcvProposal.proposerDocuments;
@@ -2229,13 +2232,15 @@ var viewPolicyModule = (function () {
     };
     services.printPolicy = function () {
         var policyId = this.selectedItem;
-        //alert('Print.');
+        //alert('Print.'+policyId);
         //window.location.href = "/pla/individuallife/policy/viewpolicy?PrintId=" + policyId  + "&mode=view";
-        window.location.href = "/pla/individuallife/policy/printpolicy/ " + policyId;
+        window.location.href = "/pla/individuallife/policy/printpolicy/" + policyId;
     };
     services.emailPolicy = function () {
         var policyId = this.selectedItem;
-        window.location.href = "/pla/grouphealth/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
+        //alert('Email'+policyId);
+        //window.location.href = "/pla/individuallife/policy/emailpolicy?policyId=" + policyId  + "&mode=view";
+        window.location.href = "/pla/individuallife/policy/emailpolicy/" + policyId;
 
     };
     services.viewPolicy = function () {

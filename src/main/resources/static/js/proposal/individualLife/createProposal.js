@@ -272,8 +272,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 });
             }
 
-            $scope.getCoverageTermType = function (searchRider) {
+            /*$scope.dateFormatValidator=function(rcvDate)
+            {
+                //alert(rcvDate);
 
+                if (!moment(rcvDate,'DD/MM/YYYY').isValid()) {
+                    var newDateField = moment(rcvDate).format("DD/MM/YYYY");
+                    alert(newDateField);
+                    //$scope.row.date=newDateField;
+                }
+            }
+*/
+            $scope.getCoverageTermType = function (searchRider) {
                 alert(JSON.stringify(searchRider));
                 if ($scope.plan) {
                     //alert('Inside Plan..');
@@ -315,7 +325,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.replacement.answer = 'false';
                 }
             });*/
-
             $scope.cancelAll=function()
             {
                 window.location.href="/pla/individuallife/proposal/search"
@@ -492,7 +501,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     if($scope.rcvProposal.generalDetails != null)
                     {
-                        //console.log("generalDetails:-->"+JSON.stringify($scope.rcvProposal.generalDetails));
+                        console.log("generalDetails:-->"+JSON.stringify($scope.rcvProposal.generalDetails));
+
                         if($scope.rcvProposal.generalDetails.assuredByPLAL !=null)
                         {
                             if($scope.rcvProposal.generalDetails.assuredByPLAL.answer)
@@ -1653,7 +1663,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
 
                 //console.log('generalQuestion is: ' + JSON.stringify(generalQuestion));
-                //console.log('Final General is' + JSON.stringify(req));
+                console.log('Final General is' + JSON.stringify(req));
                 $http.post('/pla/individuallife/proposal/updategeneraldetails',req).success(function (response, status, headers, config) {
                     $scope.occupations = response;
                     //alert(JSON.stringify($scope.occupations));
@@ -2018,46 +2028,34 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
 
-                /*if ($scope.policyDetails.length == 0) {
-                 //console.log('Lenght is Null..');
-                 $scope.policyDetails.unshift(policy);
-                 }
-                 else {
-
-                 for (i in $scope.policyDetails) {
-                 if ($scope.policyDetails[i].policyOrProposalNumber == policy.policyOrProposalNumber) {
-                 //console.log('Failure..');
-                 alert("Particular PolicyNumber is Already Added..Please Choose different PolicyNumber");
-                 }
-                 else {
-                 $scope.policyDetails.unshift(policy);
-                 }
-                 }
-
-                 }*/
-
                 if($scope.policyDetails.length >0)
                 {
-                    if($scope.insurerDetails1.length>0)
-                    {
-                        if($scope.insurerDetails2.length>0)
-                        {
-                            if($scope.insurerDetails3.length>0)
-                            {
-                                $scope.generalDetailsSaveStatus='false';
-                            }
-                        }
-                    }
-                    //$scope.generalDetailsSaveStatus='false';
+                    $scope.tab1GeneralDetailsStatus=false;
                 }
                 else
                 {
-                    $scope.generalDetailsSaveStatus='true';
+                    $scope.tab1GeneralDetailsStatus=true;
                 }
 
                 $('#policyModal').modal('hide');
                 $scope.clear();
             };
+
+            $scope.allowSave=function(){
+                //if model1 && model2 && model3 && model4
+               // return true;
+               // else
+               // return false;
+                if($scope.tab1GeneralDetailsStatus || $scope.tab2GeneralDetailsStatus || $scope.tab3GeneralDetailsStatus || $scope.tab4GeneralDetailsStatus)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            };
+
 
             $scope.cancelModal=function()
             {
@@ -2094,26 +2092,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                 }
 
-                if($scope.insurerDetails1.length >0)
+                if($scope.insurerDetails1.length)
                 {
-                    //alert("Length.."+$scope.insurerDetails1.length);
-                    if($scope.insurerDetails2.length >0)
-                    {
-                        if($scope.insurerDetails3.length >0)
-                        {
-                            if($scope.policyDetails.length>0)
-                            {
-                                $scope.generalDetailsSaveStatus='false';
-                            }
-                        }
+                    $scope.tab2GeneralDetailsStatus=false;
 
-                    }
                     //$scope.generalDetailsSaveStatus='false';
                     //alert($scope.generalDetailsSaveStatus)
                 }
                 else
                 {
-                    $scope.generalDetailsSaveStatus='true';
+                    $scope.tab2GeneralDetailsStatus=true;
                 }
 
                 $('#assuredByOthersModal').modal('hide');
@@ -2173,21 +2161,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 if($scope.insurerDetails2.length >0)
                 {
-                    if($scope.insurerDetails1.length >0)
-                    {
-                        if($scope.insurerDetails3.length >0)
-                        {
-                            if($scope.policyDetails.length>0)
-                            {
-                                $scope.generalDetailsSaveStatus='false';
-                            }
-                        }
-                    }
+
+                    $scope.tab3GeneralDetailsStatus=false;
+
                     //$scope.generalDetailsSaveStatus='false';
                 }
                 else
                 {
-                    $scope.generalDetailsSaveStatus='true';
+                    $scope.tab3GeneralDetailsStatus=true;
                 }
                 $('#pendingInsuranceByOthersTpl').modal('hide');
                 $scope.clear();
@@ -2196,7 +2177,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.addaAssuranceDeclinedTpl = function (insurer3) {
                 //console.log('Inside  Add AssuranceDeclinedTpl..');
                 //console.log(JSON.stringify(insurer3));
-
                 if ($scope.insurerDetails3.length == 0) {
                     //console.log('Lenght is Null..');
                     //$scope.insurerDetails3.unshift(insurer3);
@@ -2226,22 +2206,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
 
+
                 if($scope.insurerDetails3.length > 0)
                 {
-                    if($scope.insurerDetails2.length > 0)
-                    {
-                        if($scope.insurerDetails1.length > 0)
-                        {
-                            if($scope.policyDetails.length>0)
-                            {
-                                $scope.generalDetailsSaveStatus='false';
-                            }
-                        }
-                    }
+                    $scope.tab4GeneralDetailsStatus=false;
+
                     //$scope.generalDetailsSaveStatus='false';
                 }
                 else{
-                    $scope.generalDetailsSaveStatus='true';
+                    $scope.tab4GeneralDetailsStatus=true;
                 }
                 $('#assuranceDeclinedTpl').modal('hide');
                 $scope.clear();
@@ -3406,21 +3379,70 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
             $scope.generalAnswer;
             $scope.generalAnswerList=[];
-            $scope.generalDetailsSaveStatus='false'; //meant for  saveButton Enable or Disable
+
+            $scope.generalDetailsSaveStatus=false; //meant for  saveButton Enable or Disable4
+
+            $scope.tab1GeneralDetailsStatus=false;
+            $scope.tab2GeneralDetailsStatus=false;
+            $scope.tab3GeneralDetailsStatus=false;
+            $scope.tab4GeneralDetailsStatus=false;
+
             $scope.openAccordion = function (status, tab) {
                 //alert(tab);
                 //console.log(status);
                 if (status === 'YES') {
                     $scope.generalAnswer = true;
-                    $scope.generalAnswerList.push($scope.generalAnswer);
+                    //alert(tab +$scope.generalAnswer)
+                    //$scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
                     $scope.accordionStatus.generalDetails[tab] = true;
-                    $scope.generalDetailsSaveStatus='true';
+                    //$scope.generalDetailsSaveStatus=true;
+                    if(tab == 'tab1')
+                    {
+                        $scope.tab1GeneralDetailsStatus=true;
+                        $scope.generalAnswerList[0]=$scope.generalAnswer;
+                    }
+                    else if(tab == 'tab2')
+                    {
+                        $scope.tab2GeneralDetailsStatus=true;
+                        $scope.generalAnswerList[1]=$scope.generalAnswer;
+                    }
+                    else if(tab == 'tab3')
+                    {
+                        $scope.tab3GeneralDetailsStatus=true;
+                        $scope.generalAnswerList[2]=$scope.generalAnswer;
+                    }
+                    else if(tab == 'tab4')
+                    {
+                        $scope.tab4GeneralDetailsStatus=true;
+                        $scope.generalAnswerList[3]=$scope.generalAnswer;
+                    }
+
                 } else {
-                    $scope.generalDetailsSaveStatus='false';
+                    //$scope.generalDetailsSaveStatus=false;
                     $scope.generalAnswer = false;
-                    $scope.generalAnswerList.push($scope.generalAnswer);
+                    //$scope.generalAnswerList.push($scope.generalAnswer);
                     //console.log('Checking Status is ' + $scope.generalAnswer);
+                    if(tab == 'tab1')
+                    {
+                        $scope.tab1GeneralDetailsStatus=false;
+                        $scope.generalAnswerList[0]=$scope.generalAnswer;
+                    }
+                    else if(tab == 'tab2')
+                    {
+                        $scope.tab2GeneralDetailsStatus=false;
+                        $scope.generalAnswerList[1]=$scope.generalAnswer;
+                    }
+                    else if(tab == 'tab3')
+                    {
+                        $scope.tab3GeneralDetailsStatus=false;
+                        $scope.generalAnswerList[2]=$scope.generalAnswer;
+                    }
+                    else if(tab == 'tab4')
+                    {
+                        $scope.tab4GeneralDetailsStatus=false;
+                        $scope.generalAnswerList[3]=$scope.generalAnswer;
+                    }
                     $scope.accordionStatus.generalDetails[tab] = false;
                     $scope.clearPopoUp(tab); //removing all the modal to  space
                 }
