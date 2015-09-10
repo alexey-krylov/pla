@@ -3,25 +3,33 @@ package com.pla.individuallife.policy.presentation.controller;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.individuallife.policy.finder.ILPolicyFinder;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
+import com.pla.individuallife.policy.presentation.dto.ILPolicyMailDto;
 import com.pla.individuallife.policy.presentation.dto.PolicyDetailDto;
 import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.policy.service.ILPolicyService;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.identifier.PolicyId;
+import com.pla.sharedkernel.service.EmailAttachment;
+import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.IOUtils;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -41,6 +49,8 @@ public class ILPolicyController {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     public ILPolicyController(ILPolicyService ilPolicyService) {
@@ -129,11 +139,51 @@ public class ILPolicyController {
     public void downloadPlanDetail(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
-        response.setHeader("content-disposition", "attachment; filename=" + "policy.pdf" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "IL_Policy.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
         outputStream.write(ilPolicyService.getPolicyDocument(new PolicyId(policyId)));
         outputStream.flush();
         outputStream.close();
 
+    }
+
+    @RequestMapping(value = "/emailpolicy/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView openEmail(@PathVariable("policyId") String policyId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/quotation/individuallife/emailQuotation");
+        modelAndView.addObject("mailContent", ilPolicyService.getPreScriptedEmail(policyId));
+        return modelAndView;
+    }
+
+    //TODO
+    /**
+     * Quotation Shared with Client (This status should be updated on first click for print/email Quotation and the date should also
+     * be updated.
+     * Subsequent clicks should have no impact the Status or the Date
+     */
+    @RequestMapping(value = "/emailpolicy", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailPolicy(@RequestBody ILPolicyMailDto mailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            byte[] policyData = ilPolicyService.getPolicyPDF(mailDto.getPolicyId());
+            String fileName = "QuotationNo-" + mailDto.getPolicyNumber() + ".pdf";
+            File file = new File(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(policyData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
+            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+            file.delete();
+            return Result.success("Email sent successfully");
+
+        } catch (Exception e) {
+            Result.failure(e.getMessage());
+        }
+        return Result.success("Email sent successfully");
     }
 }

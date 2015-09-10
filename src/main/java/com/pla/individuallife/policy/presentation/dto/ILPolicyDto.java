@@ -1,8 +1,8 @@
 package com.pla.individuallife.policy.presentation.dto;
 
-import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.presentation.dto.RiderDetailDto;
+import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.individuallife.sharedresource.model.vo.*;

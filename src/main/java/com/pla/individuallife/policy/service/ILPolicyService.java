@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.individuallife.policy.finder.ILPolicyFinder;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
+import com.pla.individuallife.policy.presentation.dto.ILPolicyMailDto;
 import com.pla.individuallife.policy.presentation.dto.PolicyDetailDto;
 import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
@@ -28,6 +29,7 @@ import com.pla.underwriter.exception.UnderWriterException;
 import com.pla.underwriter.finder.UnderWriterFinder;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.IOUtils;
+import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -36,6 +38,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -64,6 +67,9 @@ public class ILPolicyService {
 
     @Autowired
     private UnderWriterFinder underWriterFinder;
+
+    @Autowired
+    private VelocityEngine velocityEngine;
 
     private PolicyDetailDto transformToDto(Map policyMap) {
         DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime(policyMap.get("inceptionOn")) : null;
@@ -291,16 +297,34 @@ public class ILPolicyService {
         coverageSumAssured.put("planCoverageSumAssured", ilPolicyDto.getProposalPlanDetail().getSumAssured().toString());
         ilPolicyDetailMap.put("coverDetails", coverDetails);
 
-        /*List<Map<String,Object>> premiumList = Lists.newArrayList();
-        Map<String,Object> premiumMap = Maps.newLinkedHashMap();
-        premiumMap.put("netPremium", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
-        premiumMap.put("underWritingLoading", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
-        premiumMap.put("underWritingDiscount", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
-        premiumMap.put("totalPremium", ilPolicyDto.getPremiumPaymentDetails().getPremiumDetail().getTotalPremium().toString());
-        premiumList.add(premiumMap);
-        ilPolicyDetailMap.put("premiumDetails", premiumList);*/
         return Lists.newArrayList(ilPolicyDetailMap);
     }
+
+    public ILPolicyDto getPreScriptedEmail(String policyId) {
+        ILPolicyDto dto = ilPolicyFinder.getPolicyById(new PolicyId(policyId));
+        String subject = "PLA Insurance - Individual Life - Policy ID : " + dto.getPolicyNumber().getPolicyNumber();
+        String mailAddress = dto.getProposer().getEmailAddress();
+        mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
+        Map<String, Object> emailContent = Maps.newHashMap();
+        emailContent.put("mailSentDate", dto.getInceptionOn());
+        emailContent.put("contactPersonName", dto.getProposer().getFirstName());
+        emailContent.put("proposerName", dto.getProposer().getFirstName());
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/individuallife/quotation/individuallifePolicyTemplate.vm", emailContentMap);
+        ILPolicyMailDto ilPolicyMailDto = new ILPolicyMailDto(subject, emailBody, new String[]{mailAddress});
+        ilPolicyMailDto.setPolicyId(dto.getPolicyId());
+        ilPolicyMailDto.setPolicyNumber(dto.getPolicyNumber().getPolicyNumber());
+        return dto;
+    }
+
+    public byte[] getPolicyPDF(String policyId) throws IOException, JRException {
+        ILPolicyDto dto = ilPolicyFinder.getPolicyById(new PolicyId(policyId));
+        List<Map<String,Object>>  ilPolicyDetailTransformMap = ilPolicyDetailTransformMap(dto);
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ilPolicyDetailTransformMap, "jasperpdf/template/individuallife/policy/ilpolicy.jrxml");
+        return pdfData;
+    }
+
 
     private String getDominantAgentId(Set<AgentDetailDto> agentCommissionShares){
         Optional<AgentDetailDto> agentCommissionShareOptional = agentCommissionShares.parallelStream().max(new Comparator<AgentDetailDto>() {

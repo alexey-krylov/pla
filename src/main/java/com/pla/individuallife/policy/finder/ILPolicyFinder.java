@@ -12,6 +12,8 @@ import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
+import org.joda.time.DateTime;
+import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -107,10 +109,10 @@ public class ILPolicyFinder {
         dto.setAgentCommissionDetails(agentCommissionDetails);
         dto.setPolicyId(policyId.getPolicyId());
         dto.setPolicyStatus(policy.get("policyStatus").toString());
-        dto.setProposal((Proposal)policy.get("proposal"));
+        dto.setProposal((Proposal) policy.get("proposal"));
         dto.setPolicyNumber((PolicyNumber) policy.get("policyNumber"));
-        dto.setInceptionOn(policy.get("inceptionOn") != null ? policy.get("inceptionOn").toString() : "");
-        dto.setInceptionOn(policy.get("expiredOn") != null ? policy.get("expiredOn").toString() : "");
+        dto.setInceptionOn(policy.get("inceptionOn") != null ? AppUtils.toString(new DateTime(policy.get("inceptionOn"))): null);
+        dto.setInceptionOn(policy.get("expiredOn") != null ? AppUtils.toString(new DateTime(policy.get("inceptionOn"))) : null);
         dto.setProposerDocuments(policy.get("proposalDocuments") != null ? (List) policy.get("proposalDocuments") : Collections.EMPTY_LIST);
         return dto;
     }
