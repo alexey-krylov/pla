@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-08T20:52:59 -->
+<!-- 2015-09-10T10:56:06 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GHPolicy" pageWidth="960" pageHeight="1460" orientation="Landscape" columnWidth="960" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="632d0d79-4743-4a00-8577-9b9631ed5dd2">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -11,6 +11,9 @@
 	</field>
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
+	</field>
+	<field name="agentName" class="java.lang.String">
+		<fieldDescription><![CDATA[agentName]]></fieldDescription>
 	</field>
 	<field name="policyStartDate" class="java.lang.String">
 		<fieldDescription><![CDATA[policyStartDate]]></fieldDescription>
@@ -291,7 +294,7 @@
 			<textField>
 				<reportElement x="110" y="40" width="100" height="30" uuid="49f2bc02-18e4-4e30-b48f-30c9c7838a21"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="110" y="70" width="100" height="30" uuid="0086f168-cca7-4811-840c-76fb19e6fc96"/>

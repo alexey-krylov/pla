@@ -103,7 +103,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
 
-        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new ILQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(DateTime.now(), new ILQuotationReminderEvent(event.getQuotationId()));
         ScheduleToken purgeScheduleToken =  eventScheduler.schedule(purgeScheduleDateTime, new ILQuotationPurgeEvent(event.getQuotationId()));
         ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new ILQuotationClosureEvent(event.getQuotationId()));
         scheduledTokens.add(firstReminderScheduleToken);

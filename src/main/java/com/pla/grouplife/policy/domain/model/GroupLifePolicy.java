@@ -1,9 +1,7 @@
 package com.pla.grouplife.policy.domain.model;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
-import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -16,9 +14,12 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 7/7/2015.
@@ -83,6 +84,49 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
         this.premiumDetail = premiumDetail;
         return this;
     }
+
+    public BigDecimal getTotalBasicPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (Insured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+    public Integer getTotalNoOfLifeCovered() {
+        Integer totalNoOfLifeCovered = insureds.size();
+        Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
+            @Override
+            public int applyAsInt(Insured value) {
+                return isNotEmpty(value.getInsuredDependents()) ? value.getInsuredDependents().size() : 0;
+            }
+        }).sum();
+        totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
+        return totalNoOfLifeCovered;
+    }
+
+    public BigDecimal getTotalSumAssured() {
+        BigDecimal totalSumAssured = BigDecimal.ZERO;
+        if (isNotEmpty(insureds)) {
+            for (Insured insured : insureds) {
+                PlanPremiumDetail insuredPlanPremiumDetail = insured.getPlanPremiumDetail();
+                totalSumAssured = totalSumAssured.add(insuredPlanPremiumDetail.getSumAssured());
+                if (isNotEmpty(insured.getInsuredDependents())) {
+                    for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
+                        totalSumAssured = totalSumAssured.add(insuredDependent.getPlanPremiumDetail().getSumAssured());
+                    }
+                }
+            }
+        }
+        return totalSumAssured;
+    }
+
+
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
+      return premiumDetail.getAnnualPremiumAmount().setScale(2, BigDecimal.ROUND_CEILING);
+    }
+
+
 
     @Override
     public PolicyId getIdentifier() {

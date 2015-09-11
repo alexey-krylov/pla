@@ -92,6 +92,20 @@ public class ILPolicyService {
         return policyDetailDto;
     }
 
+    public List<PolicyDetailDto> findAllPolicy() {
+        List<Map> allPolicies = ilPolicyFinder.findAllPolicy();
+        if (isEmpty(allPolicies)) {
+            return Lists.newArrayList();
+        }
+        List<PolicyDetailDto> policies = allPolicies.stream().map(new Function<Map, PolicyDetailDto>() {
+            @Override
+            public PolicyDetailDto apply(Map map) {
+                PolicyDetailDto policyDetailDto = transformToDto(map);
+                return policyDetailDto;
+            }
+        }).collect(Collectors.toList());
+        return policies;
+    }
 
     public List<PolicyDetailDto> searchPolicy(SearchILPolicyDto searchILPolicyDto) {
         List<Map> searchedPolices = ilPolicyFinder.searchPolicy(searchILPolicyDto.getPolicyNumber(), searchILPolicyDto.getPolicyHolderName(),searchILPolicyDto.getProposalNumber());
@@ -300,7 +314,7 @@ public class ILPolicyService {
         return Lists.newArrayList(ilPolicyDetailMap);
     }
 
-    public ILPolicyDto getPreScriptedEmail(String policyId) {
+    public ILPolicyMailDto getPreScriptedEmail(String policyId) {
         ILPolicyDto dto = ilPolicyFinder.getPolicyById(new PolicyId(policyId));
         String subject = "PLA Insurance - Individual Life - Policy ID : " + dto.getPolicyNumber().getPolicyNumber();
         String mailAddress = dto.getProposer().getEmailAddress();
@@ -311,11 +325,11 @@ public class ILPolicyService {
         emailContent.put("proposerName", dto.getProposer().getFirstName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
-        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/individuallife/quotation/individuallifePolicyTemplate.vm", emailContentMap);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/individuallife/policy/individuallifePolicyTemplate.vm", emailContentMap);
         ILPolicyMailDto ilPolicyMailDto = new ILPolicyMailDto(subject, emailBody, new String[]{mailAddress});
         ilPolicyMailDto.setPolicyId(dto.getPolicyId());
         ilPolicyMailDto.setPolicyNumber(dto.getPolicyNumber().getPolicyNumber());
-        return dto;
+        return ilPolicyMailDto;
     }
 
     public byte[] getPolicyPDF(String policyId) throws IOException, JRException {

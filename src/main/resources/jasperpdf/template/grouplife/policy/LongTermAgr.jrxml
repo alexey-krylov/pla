@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-09-09T11:57:16 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LongTermAgr" pageWidth="710" pageHeight="895" orientation="Landscape" columnWidth="670" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6412dcb1-4ae1-4484-be30-eb5420565c39">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="propserName" class="java.lang.String">
+		<fieldDescription><![CDATA[propserName]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	</field>
+	<field name="policyTerm" class="java.lang.String">
+		<fieldDescription><![CDATA[policyTerm]]></fieldDescription>
+	</field>
+	<field name="policyInceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
+	</field>
+	<field name="policyHolderName" class="java.lang.String">
+		<fieldDescription><![CDATA[policyHolderName]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-2" y="0" width="672" height="60" uuid="b0179bdb-2a67-4c0b-8fe4-60d929f73029"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="110" y="0" width="450" height="60" uuid="7af4d464-eb8e-443c-bc14-95955f87e517"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[                               Header for the Policy Document]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="726" splitType="Stretch">
+			<staticText>
+				<reportElement x="270" y="0" width="230" height="30" uuid="90120630-53a7-4bec-a179-c7df2a09b3ab"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[ Long Term Aggrement]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="10" y="40" width="650" height="110" uuid="472583c5-e88a-4b9d-8c70-443c3d687f45"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="70" width="100" height="30" uuid="1157c15a-0939-4ae3-a0d0-000bb93f1c68"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="100" width="100" height="30" uuid="26cd70b7-8fd4-4af3-9112-3edd166e2773"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Address:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="130" width="140" height="20" uuid="a85210b5-a3e9-47ce-892c-817adfde9eb0"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Telephone Number(s):]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="9" y="160" width="650" height="560" uuid="d628a7c7-140c-4d55-a763-c7b1c4d1400f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="160" width="649" height="20" uuid="d25ab754-2be9-4020-9cba-8edd56abc6ec"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[ This long term insurance agreement (herein after referred to as the agreement) witnesses that the above named insured has agreed to place its    
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="210" width="650" height="30" uuid="94334388-b271-4dfd-9ca8-006df3fe641a"/>
+				<text><![CDATA[ Should the client cancel the agreement before the end of the agreed policy term, Professional Life will claw  back the premium arising from thediscounted premium.Dated the                                           day of                                       D28]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="250" width="650" height="20" uuid="d03c9bf5-d8d9-416a-b14f-0e876c727b18"/>
+				<text><![CDATA[ IN WITNESS  whereof the parties have hereunto affixed their hands and seals respectively:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="270" width="650" height="20" uuid="5de096d5-7e0f-4579-a3a0-da78ad2167fa"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[ SIGNED for and on behalf of Professional Life Assurance Limited ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="300" width="70" height="20" uuid="97bf232d-cf44-4721-a5c9-507fb4eca298"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Name   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="330" width="70" height="30" uuid="cb7bb478-63cc-4192-950d-258e5d177299"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="360" width="100" height="30" uuid="fef13cb0-b19d-40b8-8f19-1b4995c75616"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Position  :]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="375" width="63" height="1" uuid="7cd7d9af-7da2-4748-9625-cd70f799dd0a"/>
+			</line>
+			<line>
+				<reportElement x="10" y="315" width="63" height="1" uuid="e9baa539-a859-41ef-8f51-d592509b6031"/>
+			</line>
+			<line>
+				<reportElement x="10" y="345" width="63" height="1" uuid="085b67d6-d7f0-4a94-b7d4-95a128def74c"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="400" width="310" height="30" uuid="ff8fa82f-20db-41a0-a3d3-da45c27b0f3d"/>
+				<text><![CDATA[ WITNESSED by ...............................
+ duly authorized representative]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="440" width="150" height="20" uuid="c0f3a5c3-a989-48e2-bf58-cb078f0541d4"/>
+				<text><![CDATA[ SIGNED for and on behalf of ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="470" width="70" height="30" uuid="a2c78667-dd97-480c-8ec3-2e1190f7e45f"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Name   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="500" width="70" height="30" uuid="7812fff7-2e42-41dd-aecc-c27fcd644e39"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="540" width="100" height="30" uuid="468bad98-414b-4aff-9ef0-04b8804172c8"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Position  :]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="515" width="63" height="1" uuid="057555f8-812a-4b71-bfa3-2dd4b31ee11f"/>
+			</line>
+			<line>
+				<reportElement x="10" y="555" width="63" height="1" uuid="5403674a-8032-42ff-aa49-4f623ba359e8"/>
+			</line>
+			<staticText>
+				<reportElement x="9" y="580" width="310" height="30" uuid="01ed2563-82b7-4747-a2a2-e82f4fc1d329"/>
+				<text><![CDATA[ WITNESSED by ........................................
+ duly authorized representative]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="610" width="70" height="30" uuid="bb592a5f-c2ce-4da8-948f-3dcb6eb90e98"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Name   :]]></text>
+			</staticText>
+			<line>
+				<reportElement x="9" y="490" width="63" height="1" uuid="6354c5c3-0f85-4bf7-aca8-15da86915a03"/>
+			</line>
+			<line>
+				<reportElement x="10" y="625" width="63" height="1" uuid="98a2520d-bf41-46ca-a25c-a29c32483118"/>
+			</line>
+			<line>
+				<reportElement x="10" y="700" width="63" height="1" uuid="27b9ec48-8f75-42b1-9128-5f212552180d"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="680" width="100" height="23" uuid="2319c913-45dc-4cf2-b65f-f0d6cbd24b87"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Position  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="640" width="70" height="30" uuid="d912c374-823e-4072-9e58-d4b4cf7c825d"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[ Address:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="9" y="660" width="63" height="1" uuid="fe094a38-5d97-4448-8c33-43857e0a5840"/>
+			</line>
+			<line>
+				<reportElement x="670" y="1" width="2" height="724" uuid="ef0e38a0-e21f-47a8-ac1f-dba9cb12fba8"/>
+			</line>
+			<line>
+				<reportElement x="-2" y="1" width="1" height="724" uuid="cbfba32f-4c0a-4790-90ff-3303d04e8b06"/>
+			</line>
+			<rectangle>
+				<reportElement x="10" y="40" width="649" height="30" backcolor="#001963" uuid="6ebfa4e3-6fd0-4f1c-b893-e841980e39cd"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="40" width="520" height="30" forecolor="#FFFFFF" uuid="ab2b455f-b444-4eca-869d-2476cca7fe47"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="14"/>
+				</textElement>
+				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="70" width="100" height="30" uuid="fc417800-25c3-4184-82f2-b8ffc4dcf452"/>
+				<textFieldExpression><![CDATA[$F{propserName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="130" width="100" height="20" uuid="4690e90f-e599-4721-b1af-40f845b178dd"/>
+				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="100" width="100" height="30" uuid="ced2dd36-2e9d-4ec7-8798-88d38ac93185"/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="170" y="241" width="101" height="1" uuid="c50e5c3d-c561-4d1f-a3fd-16cd1bba572c"/>
+			</line>
+			<line>
+				<reportElement x="310" y="240" width="101" height="1" uuid="1f134fdb-ad69-42f3-bdba-423bbf915153"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="180" width="390" height="20" uuid="7b513cdb-0714-44f8-a2d3-97e596e0ca58"/>
+				<text><![CDATA[  Group Life Assurance portfolio with Professional Life Assurance Limited for a period of ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="400" y="181" width="70" height="18" uuid="7b6cea74-7924-411e-a323-0deb9229b1d8"/>
+				<textFieldExpression><![CDATA[$F{policyTerm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="182" width="90" height="20" uuid="d7820c8d-1008-41b3-9045-6267b7e39888"/>
+				<textFieldExpression><![CDATA[$F{policyInceptionDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="470" y="182" width="90" height="16" uuid="c53199a1-3a31-4541-a800-d8e68bfd995f"/>
+				<text><![CDATA[days commencing]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="160" y="441" width="150" height="18" uuid="229840be-b6b4-49c6-baaa-4d85790ce93f"/>
+				<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="69" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-2" y="-1" width="674" height="52" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="300" y="10" width="340" height="32" uuid="51da35f9-834d-4a5e-af1e-7173b0dea997"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Footer]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>
