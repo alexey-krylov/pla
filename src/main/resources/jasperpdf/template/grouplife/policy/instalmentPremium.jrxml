@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-09-09T16:12:47 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="instalmentPremium" pageWidth="1000" pageHeight="1700" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="707c3710-b1bb-4aa8-9e8e-b8add818e1b1">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="propserName" class="java.lang.String">
+		<fieldDescription><![CDATA[propserName]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="69" splitType="Stretch">
+			<rectangle>
+				<reportElement x="80" y="0" width="800" height="67" uuid="249a8195-bb70-4228-95fd-889fe4d42599"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="350" y="20" width="350" height="30" uuid="36afa83d-98df-43d9-af2e-e55f6d923262"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="16"/>
+				</textElement>
+				<text><![CDATA[Header for the Policy Document]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="1524" splitType="Stretch">
+			<staticText>
+				<reportElement x="220" y="10" width="500" height="30" uuid="92c9f170-2454-4815-9f0d-21dd9c3ec4cc"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="14"/>
+				</textElement>
+				<text><![CDATA[                         INSTALMENT PREMIUM PAYMENT AGREEMENT]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="110" y="50" width="740" height="150" uuid="5bc3ac9b-25d1-4633-986e-b9e5930a65a7"/>
+				<rectangle>
+					<reportElement x="0" y="0" width="740" height="150" uuid="816f0ed3-b799-468f-83ad-9685a7ad2cfe"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="0" y="0" width="739" height="60" backcolor="#00195F" uuid="158766e0-bb5c-48d8-be2e-b22b33c02cf4"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="10" y="10" width="650" height="35" forecolor="#FFFFFF" uuid="46bf37b6-5e96-4310-abc8-b73d8e7af029"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="14"/>
+					</textElement>
+					<text><![CDATA[Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="60" width="100" height="20" uuid="4074e5ab-f8c5-4bed-8ead-3c0de35bfa09"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[ Name:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="90" width="100" height="20" uuid="d2566333-8cc1-4777-95a1-2f1ef090774c"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[ Address:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="120" width="140" height="27" uuid="008a8740-476f-48d6-ad25-128e3d7e8242"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[ Telephone Number(s):]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="100" y="60" width="100" height="20" uuid="c81a7dd8-44c7-42f6-8f39-246b3d662336"/>
+					<textFieldExpression><![CDATA[$F{propserName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="85" width="100" height="30" uuid="f050d080-49df-4139-b540-6c4a10c8257f"/>
+					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="140" y="120" width="100" height="30" uuid="eeb35c7d-61fb-4cf4-95f5-93d956152455"/>
+					<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<rectangle>
+				<reportElement x="110" y="220" width="740" height="1280" uuid="1cda276d-f7ec-4c3f-ada9-6b195dcda6a2"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="110" y="230" width="730" height="50" uuid="294280b3-c395-4c92-a3f3-0a9238895fd1"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[This Installment Premium Payment Agreement (hereinafter referred to as the Agreement) witnesses that the insured named here above has agreed to pay insurance premiums in installments as per attached installment premium payment schedule and promises to settle installment insurance premiums on the due date.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="121" y="302" width="269" height="28" uuid="ad40bb4f-a8d1-4385-a5fb-8b6e36fd23a5"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="16"/>
+				</textElement>
+				<text><![CDATA[TERMS OF AGREEMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="340" width="710" height="20" uuid="ccd67636-b0c5-4d28-978a-7401a4bb4863"/>
+				<text><![CDATA[1.     The installment premiums are to be paid on the due dates.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="360" width="730" height="60" uuid="8ddb8ba0-d329-4ce1-84dc-04ace07f5d84"/>
+				<text><![CDATA[2.             Where an installment premium is not received on the due date, the insured shall have seven days from the due date in which to pay the outstanding installment premium.  If the premium is not received within seven days from the date the premium became due, the policy shall automatically lapse without further notice from the Company.  The insured shall have no legal or other recourse and as such lapsed Policy against any claim which may arise before or after the said date when Policy lapses.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="640" width="730" height="40" uuid="68fef650-0a7a-4c3f-b64d-c027c9afea38"/>
+				<text><![CDATA[7.             Premium adjustments arising from any variation shall be spread over the remaining installments.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="550" width="730" height="50" uuid="e0cd978a-4df8-48bb-b219-7af001c9e1c4"/>
+				<text><![CDATA[5. Subject to the terms and conditions of this Agreement, the Company undertakes to honour all valid claims arising during the agreed credit period. Warranted that premium payments will be made on the due dates and that if abrogated this agreement will become Void. In the event of a claim the entire premium becomes due and the Company reserves the right to deduct the outstanding balance from the claim, or call for settlement of balance ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="600" width="730" height="40" uuid="f2ebac14-5ec4-4da8-b1c8-3484f2231ec9"/>
+				<text><![CDATA[6.             It is warranted that this Agreement and Schedule shall be read in conjunction with, and form part of the Policy/contract of insurance and drawn in terms of S.76 (i) of the Insurance Act, 1997.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="480" width="730" height="60" uuid="199379e4-fdd3-4718-90f5-cd44fe344fc0"/>
+				<text><![CDATA[4.             Where the policy lapses in terms of Section 2 of this Agreement and the Insured fails to pay the outstanding premium for time on risk within sixty (60) days, the Company reserves the right to take legal action to recover the outstanding premium and legal costs/fees, withstanding the policy having lapsed, in view of Reinsurance commitments, administrative costs etc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="420" width="730" height="50" uuid="878776ed-78d5-4816-bd52-ca456ae938d6"/>
+				<text><![CDATA[3.             In case of default on the part of the client in respect of payment of the insurance premium due, cover shall automatically lapse and may be reinstated at any time during the insurance year upon payment of the arrears and penalties thereon.  Any claim arising during the lapsation period shall not be admissible for payment.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="680" width="730" height="60" uuid="1ec73cd5-a94f-41ad-8783-1b31fadce743"/>
+				<text><![CDATA[I/We accept the above mentioned terms and conditions which shall be binding on me/us throughout the term of the policy.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="790" width="730" height="80" uuid="700f1fed-c57d-4aba-a185-5deb0978d756"/>
+				<text><![CDATA[Witness ………………………………………………………..]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="740" width="710" height="50" uuid="8d048fec-1f4f-4281-a61b-6c6f4270a749"/>
+				<text><![CDATA[Signed for and on behalf of ……………………………….. Date …………………………….
+(Name of Policyholder)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="880" width="730" height="70" uuid="f689b22f-c8ff-408b-abc3-fd481303520d"/>
+				<text><![CDATA[Witness ………………………………………………………..]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="950" width="730" height="50" uuid="3a66ab84-d280-4927-b9c1-19582bbf4447"/>
+				<text><![CDATA[Signed for and on behalf of Professional life Assurance Limited       Date …………………………….
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="1010" width="730" height="80" uuid="ab502346-abd6-4cd9-b9b5-cad69e665931"/>
+				<text><![CDATA[………………………………                                                                                                                                                                      ………………………………..
+MANAGING DIRECTOR                                                                                                                                                                            Corporation Stamp
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="1100" width="730" height="70" uuid="4a6a8efa-78ce-4002-8bf5-f76db3c6d6c2"/>
+				<text><![CDATA[Witness ………………………………………………………..]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="1180" width="730" height="70" uuid="6654461c-c336-480e-bb83-15f2f4487ce4"/>
+				<text><![CDATA[Witness ………………………………………………………..]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="1260" width="350" height="40" uuid="93b80100-4e7b-4ec2-ac4d-86afa34ae532"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="16"/>
+				</textElement>
+				<text><![CDATA[ Installment Due Date]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="110" y="1310" width="730" height="150" uuid="9fa23052-fd4b-4aff-af05-2a7fd860fb06"/>
+			</rectangle>
+			<line>
+				<reportElement x="110" y="1370" width="730" height="1" uuid="8147c846-4b5f-4a07-8e09-acc03c58bc48"/>
+			</line>
+			<line>
+				<reportElement x="110" y="1340" width="730" height="1" uuid="8158f5eb-26e5-46f8-97ef-c24cdd5ef80b"/>
+			</line>
+			<line>
+				<reportElement x="270" y="1310" width="1" height="150" uuid="116572b4-b9bc-48a8-b505-24d37e70d140"/>
+			</line>
+			<line>
+				<reportElement x="110" y="1430" width="730" height="1" uuid="7180fefb-ac8d-450f-8cac-bad3367af24c"/>
+			</line>
+			<line>
+				<reportElement x="110" y="1400" width="730" height="1" uuid="cebb19a8-8ddb-44d9-96d7-685fc93b8f49"/>
+			</line>
+			<line>
+				<reportElement x="510" y="1310" width="1" height="150" uuid="0b320a04-b931-47e8-9c62-3f003f44020f"/>
+			</line>
+			<line>
+				<reportElement x="630" y="1310" width="1" height="150" uuid="9380a02d-87dd-47c7-a6af-4e235faf95eb"/>
+			</line>
+			<line>
+				<reportElement x="740" y="1310" width="1" height="150" uuid="533dde24-be1d-4f25-9ef3-d510fea92ddc"/>
+			</line>
+			<staticText>
+				<reportElement x="130" y="1310" width="130" height="27" uuid="1455b8a6-ecd0-4d83-9e90-2d49a77166fc"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Installments]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="1314" width="200" height="23" uuid="b742293a-4b29-4cf8-a2db-a3bc4e59d1af"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Due Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="1311" width="120" height="26" uuid="ae8e3227-db55-40c2-abb4-f47930908276"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Amount Due]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="1311" width="110" height="26" uuid="094bcf41-cb1b-4d7f-8569-359e356515bc"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Date Paid]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="741" y="1310" width="99" height="31" uuid="027a20af-ebeb-4e38-b60a-8394379ecd21"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Receipt No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="1470" width="210" height="30" uuid="92092b0b-0f50-44bb-90e9-0a89fe55c271"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="511" y="1460" width="100" height="30" uuid="4f4f2c59-c3c0-40f6-b744-922c07b9961b"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[K <>]]></text>
+			</staticText>
+			<line>
+				<reportElement x="880" y="-2" width="1" height="1522" uuid="1340da7e-f5b5-4cb3-b6ac-4b4d1c92f7ca"/>
+			</line>
+			<line>
+				<reportElement x="80" y="0" width="1" height="1520" uuid="270b5d6b-be88-4f46-b281-c61837d8fa52"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<rectangle>
+				<reportElement x="80" y="-20" width="800" height="74" uuid="9d0582a2-dadc-4b36-b8d4-cee80fe16c7b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="370" y="-10" width="220" height="64" uuid="672bd4ac-dc94-4f4f-9fda-d20ae690a4f1"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Footer]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

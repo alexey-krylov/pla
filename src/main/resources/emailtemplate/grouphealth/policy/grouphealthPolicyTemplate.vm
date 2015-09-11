@@ -34,7 +34,7 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
         <o:p></o:p>
     </p>
     <h3><span lang=EN-GB
-              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;font-size:11.0pt;font-family:"Tahoma","sans-serif"'>QUOTATION
+              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;font-size:11.0pt;font-family:"Tahoma","sans-serif"'>POLICY
 FOR GROUP HEALTH ASSURANCE - ${emailContent.proposerName}</span>
     </h3>
 
@@ -52,14 +52,14 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
             lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'>We have pleasure in submitting our quotation terms for
-Group Health Assurance.<br/><span style='mso-spacerun:yes'> </span>PFA the quotation detail.</span></p>
+mso-ansi-language:EN-GB'>We have pleasure in submitting our policy terms for
+Group Health Assurance.<br/><span style='mso-spacerun:yes'> </span>PFA the policy detail.</span></p>
 
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+    #*<p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
             lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
 mso-ansi-language:EN-GB'>We now look forward to hearing from you and will get
-in touch with you soon to make arrangements to conclude this business.<o:p></o:p></span></p>
+in touch with you soon to make arrangements to conclude this business.<o:p></o:p></span></p>*#
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span

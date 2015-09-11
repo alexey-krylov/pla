@@ -83,6 +83,11 @@ public class ILPolicyFinder {
         return mongoTemplate.find(query, Map.class, IL_POLICY_COLLECTION_NAME);
     }
 
+    public List<Map> findAllPolicy() {
+        return mongoTemplate.findAll(Map.class, IL_POLICY_COLLECTION_NAME);
+    }
+
+
     public ILPolicyDto getPolicyById(PolicyId policyId) {
         ILPolicyDto dto = new ILPolicyDto();
         Map policy = getPolicyByPolicyId(policyId);

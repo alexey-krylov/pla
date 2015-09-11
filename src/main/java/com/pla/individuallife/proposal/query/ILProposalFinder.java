@@ -373,8 +373,6 @@ public class ILProposalFinder {
                 }
             }).collect(Collectors.toSet()));
         }
-
-
         dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
         dto.setTotalBeneficiaryShare(new BigDecimal(proposal.get("totalBeneficiaryShare").toString()) );
         dto.setGeneralDetails((GeneralDetails) proposal.get("generalDetails"));
@@ -382,8 +380,8 @@ public class ILProposalFinder {
         dto.setFamilyPersonalDetail((FamilyPersonalDetail) proposal.get("familyPersonalDetail"));
         dto.setAdditionaldetails((AdditionalDetails) proposal.get("additionalDetails"));
         dto.setPremiumPaymentDetails((PremiumPaymentDetails) proposal.get("premiumPaymentDetails"));
-        if(dto.getProposalPlanDetail() != null)
-            dto.setPremiumDetailDto(getPremiumDetail(proposalId));
+        /*if(dto.getProposalPlanDetail() != null)
+            dto.setPremiumDetailDto(getPremiumDetail(proposalId));*/
         // TODO : need to set document details once it is ready
         AgentCommissionShareModel model = (AgentCommissionShareModel) proposal.get("agentCommissionShareModel");
 

@@ -1,15 +1,16 @@
 package com.pla.grouphealth.policy.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
+import com.pla.grouphealth.policy.presentation.dto.GHPolicyMailDto;
 import com.pla.grouphealth.policy.presentation.dto.PolicyDetailDto;
 import com.pla.grouphealth.policy.presentation.dto.SearchGHPolicyDto;
 import com.pla.grouphealth.policy.query.GHPolicyFinder;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.dto.AgentDetailDto;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
@@ -27,14 +28,19 @@ import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
+import com.pla.sharedkernel.util.PDFGeneratorUtils;
+import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.DateTime;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -68,6 +74,9 @@ public class GHPolicyService {
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    private VelocityEngine velocityEngine;
 
 
     public List<PolicyDetailDto> findAllPolicy() {
@@ -107,8 +116,8 @@ public class GHPolicyService {
     }
 
     private PolicyDetailDto transformToDto(Map policyMap) {
-        DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime((Date) policyMap.get("inceptionOn")) : null;
-        DateTime expiryDate = policyMap.get("expiredOn") != null ? new DateTime((Date) policyMap.get("expiredOn")) : null;
+        DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime(policyMap.get("inceptionOn")) : null;
+        DateTime expiryDate = policyMap.get("expiredOn") != null ? new DateTime(policyMap.get("expiredOn")) : null;
         GHProposer ghProposer = policyMap.get("proposer") != null ? (GHProposer) policyMap.get("proposer") : null;
         PolicyNumber policyNumber = policyMap.get("policyNumber") != null ? (PolicyNumber) policyMap.get("policyNumber") : null;//
         PolicyDetailDto policyDetailDto = new PolicyDetailDto();
@@ -349,5 +358,31 @@ public class GHPolicyService {
             }).collect(Collectors.toList());
         }
         return mandatoryDocumentDtos;
+    }
+
+
+    public GHPolicyMailDto getPreScriptedEmail(PolicyId policyId) {
+        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findOne(policyId);
+        String subject = "PLA Insurance - Group Health - Quotation ID : " + groupHealthPolicy.getPolicyNumber();
+        String mailAddress = groupHealthPolicy.getProposer().getContactDetail() != null ? groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail() : "";
+        mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
+        Map<String, Object> emailContent = Maps.newHashMap();
+        emailContent.put("mailSentDate", groupHealthPolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        emailContent.put("contactPersonName",
+                groupHealthPolicy.getProposer().getContactDetail() != null ? groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName() : "");
+        emailContent.put("proposerName", groupHealthPolicy.getProposer().getProposerName());
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/policy/grouphealthPolicyTemplate.vm", emailContentMap);
+        GHPolicyMailDto dto = new GHPolicyMailDto(subject, emailBody, new String[]{mailAddress});
+        dto.setPolicyId(policyId.getPolicyId());
+        dto.setPolicyNumber(groupHealthPolicy.getPolicyNumber().getPolicyNumber());
+        return dto;
+    }
+
+
+    public byte[] getPolicyPDF(String policyId) throws IOException, JRException {
+        byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Lists.newArrayList(), "jasperpdf/template/grouphealth/policy/GHPolicy.jrxml");
+        return pdfData;
     }
 }

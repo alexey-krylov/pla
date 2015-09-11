@@ -61,13 +61,14 @@ public class ILPolicyController {
     public ModelAndView openPolicySearchPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/policy/searchPolicy");
+        modelAndView.addObject("searchResult", ilPolicyService.findAllPolicy());
         modelAndView.addObject("searchCriteria", new SearchILPolicyDto());
         return modelAndView;
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-     @ResponseBody
-     public ModelAndView searchPolicy(SearchILPolicyDto searchILPolicyDto) {
+    @ResponseBody
+    public ModelAndView searchPolicy(SearchILPolicyDto searchILPolicyDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/policy/searchPolicy");
         List<PolicyDetailDto> policyDetailDtos = ilPolicyService.searchPolicy(searchILPolicyDto);
@@ -134,6 +135,24 @@ public class ILPolicyController {
         outputStream.flush();
         outputStream.close();
     }
+
+    @RequestMapping(value = "/openprintpolicy/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView openprintPage(@PathVariable("policyId") String policyId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/policy/printPolicy");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/emailpolicy/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView openEmail(@PathVariable("policyId") String policyId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individuallife/policy/emailPolicy");
+        modelAndView.addObject("mailContent", ilPolicyService.getPreScriptedEmail(policyId));
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/printpolicy/{policyId}", method = RequestMethod.GET)
     public void downloadPlanDetail(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
@@ -143,17 +162,9 @@ public class ILPolicyController {
         outputStream.write(ilPolicyService.getPolicyDocument(new PolicyId(policyId)));
         outputStream.flush();
         outputStream.close();
-
     }
 
-    @RequestMapping(value = "/emailpolicy/{policyId}", method = RequestMethod.GET)
-    @ResponseBody
-    public ModelAndView openEmail(@PathVariable("policyId") String policyId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/individuallife/emailQuotation");
-        modelAndView.addObject("mailContent", ilPolicyService.getPreScriptedEmail(policyId));
-        return modelAndView;
-    }
+
 
     //TODO
     /**
