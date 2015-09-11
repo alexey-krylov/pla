@@ -334,14 +334,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     //alert(status);
                     var result = response;
-                    //console.log('++++'+JSON.stringify(response));
-                    //console.log("called********************");
-                    //console.log(response.proposer);
-                    //console.log('After Proposer.. ****');
-                    //console.log(response);
-                    //alert(response.proposer.gender);
-                    //$scope.proposer.gender=response.proposer.gender;
-                    //console.log('proposalStatus***: '+ response.proposalStatus);
                     if(response.proposalStatus !=null)
                     {
                         if(response.proposalStatus == 'UNDERWRITING_LEVEL_ONE')
@@ -2776,7 +2768,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     //alert(newvalue);
 
-                    if((parseInt(newvalue) <= 18 ) || (parseInt(newvalue) >=60)){
+                    if((parseInt(newvalue) < 18 ) || (parseInt(newvalue) > 60)){
                         $scope.ageCalculateStatus=true;
                         //alert("Same1....");
                         //alert(parseInt(newvalue));
@@ -2981,12 +2973,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "agentCommissionDetails": $scope.agentDetails,
                         "quotationId": $scope.quotationIdDetails.quotationId
                     }
-
-                    //console.log('**** Saving QuotationId..');
-                    //console.log(JSON.stringify(request2));
-
-                    // QuotationID saving
-                    //alert('quid..')
                     $http.post('create', request2).success(function (response, status, headers, config) {
                         //alert('status'+response.status);
                         //console.log("QuotationDetails..."+JSON.stringify(response));
@@ -3010,7 +2996,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 //$scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
                                 if($scope.rcvProposal.proposedAssured !=null)
                                 {
-                                    ////alert("Yes");
                                     $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
                                     $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
                                     $scope.employment = $scope.rcvProposal.proposedAssured.employment;
@@ -3074,8 +3059,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             }).error(function (response, status, headers, config) {
 
                                 $scope.message = response.message;
-                                //$scope.showErrorAlert = true;
-                                //$scope.saveDisabled = false;
 
                             });
                         }
