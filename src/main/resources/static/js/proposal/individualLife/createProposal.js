@@ -43,15 +43,22 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
                             var maxMaturityAge = coverage.coverageTerm.maxMaturityAge;
+                            //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
+                            //console.log('maxMaturityAgeTd***'+JSON.stringify(maxMaturityAge));
                             $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
-                                return ageNextBirthday + term.text <= maxMaturityAge;
+                                console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
+                                console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
+                                return (term.text + ageNextBirthday) <= maxMaturityAge;
                             });
+
                         } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                             $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                 //console.log('CoverageTerm$scope.policyTerms**'+JSON.stringify($scope.policyTerms));
                                 //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
                                 //console.log('PolicyTermTd'+$scope.proposalPlanDetail.policyTerm);
-                                return term.text <= ageNextBirthday +$scope.proposalPlanDetail.policyTerm;
+                                console.log("term1**>>>>>>>>"+"("+term.text+"<="+ageNextBirthday+")+"+$scope.proposalPlanDetail.policyTerm);
+                                console.log('1**>>>>>>>>'+term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
+                                return term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm);
                             });
                         }
                         return coverage.coverageTermType;
@@ -141,10 +148,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             controller: ['$scope', function ($scope) {
                 $scope.getSumAssuredType = function (searchRider) {
                     if ($scope.plan) {
-                        console.log('Plan:-->'+JSON.stringify($scope.plan));
+                        //console.log('Plan:-->'+JSON.stringify($scope.plan));
                         $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
                         //console.log("COverage.."+JSON.stringify($scope.coverage));
-                        console.log('Coverage..'+JSON.stringify($scope.coverage));
+                        //console.log('Coverage..'+JSON.stringify($scope.coverage));
                         return $scope.coverage.coverageSumAssured.sumAssuredType;
 
                     }
