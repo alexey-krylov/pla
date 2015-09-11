@@ -314,7 +314,7 @@ public class ILPolicyService {
         return Lists.newArrayList(ilPolicyDetailMap);
     }
 
-    public ILPolicyDto getPreScriptedEmail(String policyId) {
+    public ILPolicyMailDto getPreScriptedEmail(String policyId) {
         ILPolicyDto dto = ilPolicyFinder.getPolicyById(new PolicyId(policyId));
         String subject = "PLA Insurance - Individual Life - Policy ID : " + dto.getPolicyNumber().getPolicyNumber();
         String mailAddress = dto.getProposer().getEmailAddress();
@@ -329,7 +329,7 @@ public class ILPolicyService {
         ILPolicyMailDto ilPolicyMailDto = new ILPolicyMailDto(subject, emailBody, new String[]{mailAddress});
         ilPolicyMailDto.setPolicyId(dto.getPolicyId());
         ilPolicyMailDto.setPolicyNumber(dto.getPolicyNumber().getPolicyNumber());
-        return dto;
+        return ilPolicyMailDto;
     }
 
     public byte[] getPolicyPDF(String policyId) throws IOException, JRException {

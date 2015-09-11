@@ -136,15 +136,15 @@ public class ILPolicyController {
         outputStream.close();
     }
 
-    @RequestMapping(value = "/openprintpolicy/{policyId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/openprintpolicy", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView openprintPage(@PathVariable("policyId") String policyId) {
+    public ModelAndView openPrintPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individuallife/policy/printPolicy");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/emailpolicy/{policyId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/openemailpolicy/{policyId}", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView openEmail(@PathVariable("policyId") String policyId) {
         ModelAndView modelAndView = new ModelAndView();
@@ -153,8 +153,8 @@ public class ILPolicyController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/printpolicy/{policyId}", method = RequestMethod.GET)
-    public void downloadPlanDetail(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
+    @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
+    public void downloadPlanDetail(@PathVariable("policyId") String policyId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "IL_Policy.pdf" + "");
@@ -180,7 +180,7 @@ public class ILPolicyController {
         }
         try {
             byte[] policyData = ilPolicyService.getPolicyPDF(mailDto.getPolicyId());
-            String fileName = "QuotationNo-" + mailDto.getPolicyNumber() + ".pdf";
+            String fileName = "PolicyNo-" + mailDto.getPolicyNumber() + ".pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(policyData);

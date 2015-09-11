@@ -2164,7 +2164,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
             };
             $scope.printPolicy = function () {
                 // alert("called");
-                window.location.href = '/pla/individuallife/policy/printpolicy/' + $scope.policyId + '/' + documents;
+                window.location.href = '/pla/individuallife/policy/printpolicy/' + $scope.policyId + '/' + $scope.documents;
             }
 
             $scope.printAllPolicy = function () {
@@ -2224,7 +2224,6 @@ var viewPolicyModule = (function () {
         this.selectedItem = $(ele).val();
 
         $(".btn-disabled").attr("disabled", false);
-
     };
 
     services.reload = function () {
@@ -2234,11 +2233,15 @@ var viewPolicyModule = (function () {
         var policyId = this.selectedItem;
         //alert('Print.');
         //window.location.href = "/pla/individuallife/policy/viewpolicy?PrintId=" + policyId  + "&mode=view";
-        window.location.href = "/pla/individuallife/policy/printpolicy/ " + policyId;
+      //  window.location.href = "/pla/individuallife/policy/printpolicy?policyId=" + policyId;
+        window.open('/pla/individuallife/policy/openprintpolicy?policyId='+policyId,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+
     };
     services.emailPolicy = function () {
         var policyId = this.selectedItem;
-        window.location.href = "/pla/grouphealth/policy/viewpolicy?policyId=" + policyId + "&mode=view";
+        window.open('/pla/individuallife/policy/openemailpolicy/'+policyId,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
 
     };
     services.viewPolicy = function () {
