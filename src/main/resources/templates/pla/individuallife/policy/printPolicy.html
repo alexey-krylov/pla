@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en" >
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<script>
+    requirejs.config({
+        paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt',
+            /* ilproposal_common: '/pla/js/proposal/individuallife/proposal.js?t=11221',*/
+            ilPolicy: '/pla/js/individuallife/policy/searchPolicy'
+        },
+        "shim": {"ilPolicy": ["angular", "angucomplete"]}
+    });
+
+    require(['ng-tags-input', 'checklistmodel', 'angular-ui-router'], function (a, b) {
+    });
+
+    requirejs(['main','angular-file-upload'], function () {
+        require(['ilPolicy', 'jquery'], function (app, $) {
+            angular.bootstrap(document, ['searchPolicy']);
+        });
+
+    });
+
+</script>
+<div class="container ng-cloak" ng-controller="viewPolicyCtrl">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span th:text="#{printPolicy}">Print Policy</span>
+                    <span style="float:right;font-weight: bold">Policy ID:12782323887237</span>
+
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-success btn-xs"
+                                    ng-click="printPolicy()" ng-disabled="!documents.length > 0">Print
+                            </button>
+                            <button type="button" class="btn btn-success btn-xs"
+                                    ng-click="printAllPolicy()">Print All
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6 required">
+                                <label class="control-label">Documents</label>
+                                <input type="hidden" name="documents" class="form-control input-lg"
+                                       ng-model="printPol.documents"
+                                       value="{{printPol.documents}}"/>
+
+                                <div ng-repeat="allDoc in mulSelect">
+                                    <div class="action-checkbox">
+                                        <input id="{{allDoc.documentCode}}" type="checkbox"
+                                               value="{{allDoc.documentCode}}"
+                                               ng-checked="printPol.documents.indexOf(allDoc.documentCode) > -1"
+                                               ng-click="toggleSelection(allDoc.documentCode)"/>
+                                        <label for="{{allDoc.documentCode}}"></label>
+                                        {{allDoc.documentName}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .bootstrap-tagsinput {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+
+    .table > tbody > tr > td {
+        padding: 3px;
+    !important;
+    }
+
+    .table tr td:nth-child(1) {
+        width: 7%;
+        background-color: rgba(189, 186, 179, 0.32);
+        color: #a19ba1;
+        font-weight: bold;
+    }
+
+    .table tr td:nth-child(2) {
+        width: 95%;
+    }
+</style>
+
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
