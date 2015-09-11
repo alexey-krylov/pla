@@ -255,7 +255,7 @@
 
            <div ng-switch-when="POLICY_TERM" >
                <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                      ng-disabled="mode=='new'||mode=='view'" name="sumAssured"   ng-model="searchRider.coverTerm" ng-required="true"/>
+                      ng-disabled="mode=='new'||mode=='view'" name="sumAssured" readonly="true" ng-model="searchRider.coverTerm" ng-required="true"/>
                 <!--<select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>-->
             </div>

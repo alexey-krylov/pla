@@ -34,32 +34,38 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.getCoverageTermType = function (searchRider) {
                     ////alert(JSON.stringify(searchRider));
                     if ($scope.plan) {
+                        //console.log("#########");
+                        //console.log('Plan:***'+JSON.stringify($scope.plan));
                         var coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
-                            console.log("Coverage Details in CoverageTermTd..."+JSON.stringify(coverage));
+                        //console.log("Coverage Details in CoverageTermTd..."+JSON.stringify(coverage));
+                        $scope.tempCoverages=coverage;
                         //var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                         var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
-                            var maxMaturityAge = coverage.coverageTerm.maxMaturityAge || 1000;
+                            var maxMaturityAge = coverage.coverageTerm.maxMaturityAge;
                             $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                 return ageNextBirthday + term.text <= maxMaturityAge;
                             });
                         } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                             $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
-                                return term.text > ageNextBirthday;
+                                //console.log('CoverageTerm$scope.policyTerms**'+JSON.stringify($scope.policyTerms));
+                                //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
+                                //console.log('PolicyTermTd'+$scope.proposalPlanDetail.policyTerm);
+                                return term.text <= ageNextBirthday +$scope.proposalPlanDetail.policyTerm;
                             });
                         }
-
-                        /* else if (coverage.coverageTermType === 'POLICY_TERM') {
-                         $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
-                         return term.text > ageNextBirthday;
-                         });
-                         }
-                         */
                         return coverage.coverageTermType;
                     } else {
                         return ""
                     }
                 }
+
+                $scope.$watch('proposalPlanDetail.policyTerm', function (newval) {
+                    if ($scope.tempCoverages && $scope.tempCoverages.coverageTermType === 'POLICY_TERM') {
+                        $scope.searchRider.coverTerm = newval;
+                    }
+
+                });
 
             }]
         };
@@ -135,8 +141,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             controller: ['$scope', function ($scope) {
                 $scope.getSumAssuredType = function (searchRider) {
                     if ($scope.plan) {
+                        console.log('Plan:-->'+JSON.stringify($scope.plan));
                         $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
-                        //alert("COverage.."+JSON.stringify($scope.coverage));
+                        //console.log("COverage.."+JSON.stringify($scope.coverage));
                         console.log('Coverage..'+JSON.stringify($scope.coverage));
                         return $scope.coverage.coverageSumAssured.sumAssuredType;
 
@@ -183,7 +190,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.quotationId = getQueryParameter('quotationId');
             $scope.proposalPlanDetail={};
             $scope.searchRider={};
-
+            $scope.tempCoverages={}; //meant For Temp
             $scope.premiumResponse={};
 
             $scope.quotationIdDetails =
@@ -3036,6 +3043,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
                                 $scope.searchRiders = $scope.rcvProposal.proposalPlanDetail.riderDetails;
                                 $scope.beneficiaries = $scope.rcvProposal.beneficiaries;
+
                                 if ($scope.proposedAssured.dateOfBirth) {
                                     $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                                 }
