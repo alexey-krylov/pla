@@ -243,7 +243,6 @@
 
     <script id="plan-coverage.tpl" type="text/ng-template">
         <div ng-switch="getCoverageTermType(searchRider)">
-           <!-- {{searchRider.coverTerm}}-->
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
@@ -256,8 +255,6 @@
            <div ng-switch-when="POLICY_TERM" >
                <input type="number" view-enabled="" class="form-control input-sm" min="0"
                       ng-disabled="mode=='new'||mode=='view'" name="sumAssured" readonly="true" ng-model="searchRider.coverTerm" ng-required="true"/>
-                <!--<select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
-                        ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>-->
             </div>
         </div>
     </script>

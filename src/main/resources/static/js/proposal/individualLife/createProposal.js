@@ -46,9 +46,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
                             //console.log('maxMaturityAgeTd***'+JSON.stringify(maxMaturityAge));
                             $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
-                                console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
-                                console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
-                                return (term.text + ageNextBirthday) <= maxMaturityAge;
+                                //console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
+                                //console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
+                                return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.proposalPlanDetail.policyTerm) ;
                             });
 
                         } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
@@ -56,8 +56,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 //console.log('CoverageTerm$scope.policyTerms**'+JSON.stringify($scope.policyTerms));
                                 //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
                                 //console.log('PolicyTermTd'+$scope.proposalPlanDetail.policyTerm);
-                                console.log("term1**>>>>>>>>"+"("+term.text+"<="+ageNextBirthday+")+"+$scope.proposalPlanDetail.policyTerm);
-                                console.log('1**>>>>>>>>'+term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
+                                //console.log("term1**>>>>>>>>"+"("+term.text+"<="+ageNextBirthday+")+"+$scope.proposalPlanDetail.policyTerm);
+                                //console.log('1**>>>>>>>>'+term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
                                 return term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm);
                             });
                         }
