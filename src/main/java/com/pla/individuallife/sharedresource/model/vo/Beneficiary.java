@@ -2,6 +2,7 @@ package com.pla.individuallife.sharedresource.model.vo;
 
 import com.google.common.base.Objects;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.TrusteeType;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -23,6 +24,8 @@ public class Beneficiary {
     private Gender gender;
     private String relationshipId;
     private BigDecimal share;
+    private TrusteeType trusteeType;
+    private TrusteeDetail trusteeDetail;
 
     @Override
     public boolean equals(Object o) {
