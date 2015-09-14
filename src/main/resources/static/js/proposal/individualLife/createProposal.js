@@ -2829,23 +2829,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
             }
-      /*      $scope.$watch('proposer.title', function (newVal, oldVal) {
-                if (newVal) {
-                    //alert(newVal);
-                    if(newVal == 'Mr.')
-                    {
-                        $scope.proposer.gender='MALE';
-                    }
-                    else if((newVal == 'Miss') || (newVal == 'Mrs.') )
-                    {
-                        $scope.proposer.gender ='FEMALE';
-                    }
-                    else
-                    {
-                        $scope.proposer.gender ='';
-                    }
-                }
-            });*/
 
             /**
              * Checking of  Occupation filed of  ProposedAssured Detail  to decide whether to display Employment Type Field
@@ -2866,8 +2849,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
             });
-            $scope.readOnlyStatusProposedAssured=false;
 
+            /**
+             * If  "Is Proposer the Proposed Assured"  True then ProposedAssured details filed are Readonly
+             * Else it is Editable
+             * */
+             $scope.readOnlyStatusProposedAssured=false;
             $scope.$watch('proposer.isProposedAssured',function(newVal,oldVal){
                     if(newVal) {
                         $scope.readOnlyStatusProposedAssured=true;
@@ -2897,24 +2884,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
             });
-
-
-            /*$scope.$watch('proposerEmployment.employmentType',function(newvalue,oldvalue){
-             if(newvalue){
-             //alert(newvalue);
-             //$scope.proposer.nextDob = moment().diff(new moment(new Date(newvalue)), 'years') + 1;
-             ////alert($scope.proposer.nextDob);
-
-             if(newvalue == 1)
-             {
-             $scope.proposerEmployment.employmentType="Permanent";
-             }
-             else
-             {
-             $scope.proposerEmployment.employmentType="Temporary";
-             }
-             }
-             });*/
 
             $scope.toggleAnimation = function () {
                 $scope.animationsEnabled = !$scope.animationsEnabled;
@@ -2952,13 +2921,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 if ($scope.quotationIdDetails.quotationId != null && $scope.quotationIdDetails.quotationId != " ") {
                     //alert("Quotation Save...");
-                    /* var request2 = {
-                     "proposedAssured": $scope.proposedAssured,
-                     "agentCommissionDetails": $scope.agentDetails,
-                     "quotationId": $scope.quotationIdDetails.quotationId
-                     }*/
-                    //alert('employment'+JSON.stringify($scope.proposerResidential));
-
                     var request2 = {
                         //"proposer": $scope.proposer,
                         //"agentCommissionDetails": $scope.agentDetails,
