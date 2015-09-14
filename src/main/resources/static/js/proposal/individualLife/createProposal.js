@@ -1352,7 +1352,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.addBeneficiaryStatusCheck=false;
                 //$scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
 
-                if(($scope.beneficiary.age >= 1) && ($scope.beneficiary.age <= 16))
+                if(($scope.beneficiary.age >= 0) && ($scope.beneficiary.age <= 16))
                 {
                     $scope.addBeneficiaryStatusCheck=false;
                 }

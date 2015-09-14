@@ -462,11 +462,12 @@
                                     <small ng-message="min">Minimum age allowed is 1.</small>
                                 </div>
 -->
-                                <div class="form-group required" ng-hide="!addBeneficiaryStatusCheck">
+                                <!--<div class="form-group required" ng-hide="!addBeneficiaryStatusCheck">
                                     <span style="color:red">Age should be in between 1 to 16</span>
-                                </div>
+                                </div>-->
 
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label">Relationship To Life Assured</label>
                                 <!--<input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationshipId"/>-->
@@ -495,7 +496,7 @@
                                            ng-required="true"
                                            is-open="launchdob4"
                                            max-date="todayDate"
-                                           ng-model="beneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-blur="showBeneficiaryDob(beneficiary.dateOfBirth)"/>
+                                           ng-model="beneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-change="showBeneficiaryDob(beneficiary.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchBeneficiaryDob($event)">
@@ -520,13 +521,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group required">
+                            <div class="form-group required" ng-if="!addBeneficiaryStatusCheck">
                                 <label class="control-label">Trustee Type</label>
                                 <!--<select type="text" class="form-control input-sm" name="share" ng-model="beneficiary.share">
                                     <option value="15">Select One</option>
                                 </select>-->
 
-                                <select class="form-control input-sm" name="trusteeType" ng-model="beneficiary.trusteeType" ng-disabled="mode=='new'||mode=='view'">
+                                <select class="form-control input-sm" name="trusteeType" ng-model="beneficiary.trusteeType" ng-disabled="mode=='new'||mode=='view'" ng-required="true">
                                     <option  value="INDIVIDUAL">Individual</option>
                                     <option  value="ORGANIZATION">Organization</option>
                                 </select>
@@ -539,7 +540,7 @@
                         </div>
                     </div>
 
-                    <div class="row" ng-if="beneficiary.trusteeType">
+                    <div class="row" ng-if="!addBeneficiaryStatusCheck">
                         <div class="panel panel-primary">
                             <div class="panel-heading" >
                                 <div class="row">
@@ -674,7 +675,7 @@
                                         </div>
 
                                         <div class="form-group required">
-                                            <label class="control-label"> Organization Name</label>
+                                            <label class="control-label">Name</label>
                                             <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="name" ng-pattern="/[a-zA-Z]/" ng-maxlength="40" ng-model="beneficiary.trusteeDetail.organizationName" ng-required="true"/>
 
                                             <div class="error" ng-messages="planBeneficiary.name.$error" ng-if="planBeneficiary.name.$dirty">
@@ -729,7 +730,7 @@
                                     <div class="col-md-6">
 
                                         <div class="form-group required">
-                                            <label class="control-label"> Contact Person Name</label>
+                                            <label class="control-label">Contact Person Name</label>
                                             <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="contactPersonName" ng-pattern="/[a-zA-Z]/" ng-maxlength="40" ng-model="beneficiary.trusteeDetail.contactPersonName" ng-required="true"/>
 
                                             <div class="error" ng-messages="planBeneficiary.contactPersonName.$error" ng-if="planBeneficiary.contactPersonName.$dirty">
@@ -742,7 +743,7 @@
                                         </div>
 
                                         <div class="form-group required">
-                                            <label class="control-label">Organization Phone Number</label>
+                                            <label class="control-label">Phone Number</label>
                                             <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="13" ng-disabled="mode=='new'||mode=='view'" maxlength="13" ng-maxLength="13" name="orgPhoneNumber" ng-pattern="/^\d+$/" ng-model="beneficiary.trusteeDetail.organizationPhoneNumber"/>
 
                                             <div class="error" ng-messages="planBeneficiary.orgPhoneNumber.$error" ng-if="planBeneficiary.orgPhoneNumber.$dirty">
@@ -791,7 +792,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid || addBeneficiaryStatusCheck" ng-click="addBeneficiary(beneficiary)">Add</button>
+                    <!--<button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid || addBeneficiaryStatusCheck" ng-click="addBeneficiary(beneficiary)">Add</button>-->
+                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid" ng-click="addBeneficiary(beneficiary)">Add</button>
                     <!--<button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add12</button>-->
                     <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
