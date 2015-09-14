@@ -1983,6 +1983,123 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.insurerDetails2 = [];
             $scope.insurerDetails3 = [];
 
+            $scope.isPolicyDetailsValid=false;
+
+            /***
+             * Testing if 1stPanel of General Details  is Empty or Not After Adding
+             */
+
+            $scope.policyDetailsListCheck=function(){
+                //alert('Testing..');
+                 var checkLoopNameStatus =false;
+                    for(i in $scope.policyDetails)
+                    {
+                        if($scope.policyDetails[i].policyOrProposalNumber =='' || $scope.policyDetails[i].amount ==''){
+                            checkLoopNameStatus=true;
+                            break;
+                            }
+                            else{
+                             checkLoopNameStatus=false;
+                             }
+                    }
+                                 if(checkLoopNameStatus) {
+                                    $scope.isPolicyDetailsValid=true;
+                                 }
+                                 else {
+                                 $scope.isPolicyDetailsValid=false;
+                                 }
+            }
+
+            $scope.isInsurerDetails1Valid=false;
+
+            /***
+             * Testing if 2ndPanel of General Details  is Empty or Not After Adding
+             */
+
+            $scope.insurerDetails1Check=function(){
+                //alert('Testing..');
+                var checkLoopNameStatus =false;
+                for(i in $scope.insurerDetails1)
+                {
+                    if($scope.insurerDetails1[i].policyOrProposalNumber =='' || $scope.insurerDetails1[i].amount == null || $scope.insurerDetails1[i].date ==null){
+                        checkLoopNameStatus=true;
+                        //alert('Testing..');
+                        break;
+                    }
+                    else{
+                        checkLoopNameStatus=false;
+                    }
+                }
+                if(checkLoopNameStatus) {
+                    $scope.isInsurerDetails1Valid=true;
+                }
+                else {
+                    $scope.isInsurerDetails1Valid=false;
+                }
+            }
+
+            /***
+             * Testing if 3rdPanel of General Details  is Empty or Not After Adding
+             */
+            $scope.isInsurerDetails2Valid=false;
+            $scope.insurerDetails2Check=function(){
+                //alert('Testing..');
+                var checkLoopNameStatus =false;
+                for(i in $scope.insurerDetails2)
+                {
+                    if($scope.insurerDetails2[i].policyOrProposalNumber =='' || $scope.insurerDetails2[i].amount == null || $scope.insurerDetails2[i].date ==null){
+                        checkLoopNameStatus=true;
+                        //alert('Testing..');
+                        break;
+                    }
+                    else{
+                        checkLoopNameStatus=false;
+                    }
+                }
+                if(checkLoopNameStatus) {
+                    $scope.isInsurerDetails2Valid=true;
+                }
+                else {
+                    $scope.isInsurerDetails2Valid=false;
+                }
+            }
+
+            /***
+             * Testing if 4thPanel of General Details  is Empty or Not After Adding
+             */
+            $scope.isInsurerDetails3Valid=false;
+            $scope.insurerDetails3Check=function(){
+                //alert('Testing..');
+                var checkLoopNameStatus =false;
+                for(i in $scope.insurerDetails3)
+                {
+                    if($scope.insurerDetails3[i].policyOrProposalNumber ==''){
+                        checkLoopNameStatus=true;
+                        //alert('Testing..');
+                        break;
+                    }
+                    else{
+                        checkLoopNameStatus=false;
+                    }
+                }
+                if(checkLoopNameStatus) {
+                    $scope.isInsurerDetails3Valid=true;
+                }
+                else {
+                    $scope.isInsurerDetails3Valid=false;
+                }
+            }
+
+            $scope.generalDetailAllPanelValid=function(){
+                /*{{isPolicyDetailsValid}} {{isInsurerDetails1Valid}} {{isInsurerDetails2Valid}} {{isInsurerDetails3Valid}}*/
+
+                if($scope.isPolicyDetailsValid || $scope.isInsurerDetails1Valid || $scope.isInsurerDetails2Valid || $scope.isInsurerDetails3Valid){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
 
             $scope.addPolicyDetails = function (policy) {
                 //console.log('Inside Add PolicyDetails..');

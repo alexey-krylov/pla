@@ -26,11 +26,11 @@
                             <tbody>
                                 <tr ng-repeat="row in policyDetails">
                                     <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}" ng-blur="test(row)" />
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}" ng-change="policyDetailsListCheck()" ng-blur="test(row)" />
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                     <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}"/>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" ng-change="policyDetailsListCheck()"/>
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                 </tr>
@@ -84,11 +84,11 @@
                                 <td>{{row.name}}</td>
                                 <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
                                 <td>
-                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.commission}}" />
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" ng-change="insurerDetails1Check()" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.commission}}" />
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
-                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}"  />
+                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" ng-change="insurerDetails1Check()" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}"  />
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
@@ -102,7 +102,7 @@
                                                ng-required="true"
                                                is-open="inceptionDateA"
                                                max-date="todayDate"
-                                               ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                               ng-change="insurerDetails1Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchinceptionDateADob($event)">
@@ -160,11 +160,11 @@
                                     <td>{{row.name}}</td>
                                     <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
                                     <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"  />
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="insurerDetails2Check()" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"  />
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                     <td>
-                                        <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" />
+                                        <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="insurerDetails2Check()" ng-model="row.amount" value="{{row.amount}}" />
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                     <td>
@@ -176,7 +176,7 @@
                                                    ng-required="true"
                                                    is-open="dateProposalA"
                                                    max-date="todayDate"
-                                                   ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                                   ng-change="insurerDetails2Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposalDateADob($event)">
@@ -231,7 +231,7 @@
                                 <tr ng-repeat="row in insurerDetails3">
                                     <td>{{row.name}}</td>
                                     <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
+                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" ng-change="insurerDetails3Check()" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
                                         <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                     </td>
                                 </tr>
@@ -295,7 +295,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid || allowSave() " ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid || allowSave() || generalDetailAllPanelValid()" ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>
