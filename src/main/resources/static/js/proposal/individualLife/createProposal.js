@@ -237,8 +237,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //console.log('****** Checking quotationDetails...' + $scope.rcvProposalDetailQid.quotationId.quotationId);
                     $scope.quotationIdDetails = $scope.rcvProposalDetailQid.quotationId;
                     //console.log('viewQuotationOutput' + JSON.stringify(viewQuotationOutput));
-
                     $scope.proposedAssured = $scope.rcvProposalDetailQid.proposedAssured || {};
+                    $scope.proposerEmployment.occupation=$scope.proposedAssured.occupation;
                     $scope.proposedAssured.nrc = $scope.rcvProposalDetailQid.proposedAssured.nrc || {};
                     $scope.proposedAssured.isProposer = $scope.rcvProposalDetailQid.assuredTheProposer;
 

@@ -74,15 +74,18 @@
                     $scope.getCoverageTermType = function (riderDetail) {
                         if ($scope.plan) {
                             var coverage = _.findWhere($scope.plan.coverages, {coverageId: riderDetail.coverageId});
+                            $scope.tempCoverages=coverage;
                             var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                             if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
                                 var maxMaturityAge = coverage.coverageTerm.maxMaturityAge || 1000;
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
-                                    return ageNextBirthday + term.text <= maxMaturityAge;
+                                    //return ageNextBirthday + term.text <= maxMaturityAge;
+                                    return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
                                 });
                             } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
-                                    return term.text > ageNextBirthday;
+                                    //return term.text > ageNextBirthday;
+                                    return term.text <= (ageNextBirthday +$scope.planDetailDto.policyTerm);
                                 });
                             }
                             return coverage.coverageTermType;
@@ -90,6 +93,13 @@
                             return ""
                         }
                     }
+
+                    $scope.$watch('planDetailDto.policyTerm', function (newval) {
+                        if ($scope.tempCoverages && $scope.tempCoverages.coverageTermType === 'POLICY_TERM') {
+                            $scope.rider.coverTerm = newval;
+                        }
+
+                    });
 
                 }]
             };
@@ -234,7 +244,7 @@
             'globalConstants', 'getQueryParameter', '$timeout', '$filter',
             function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter, $timeout, $filter) {
 
-
+                $scope.tempCoverages={};
                 var absUrl = $location.absUrl();
                 $scope.titleList = globalConstants.title;
                 $scope.mode = absUrl.indexOf('view') != -1 ? 'view' : null;
