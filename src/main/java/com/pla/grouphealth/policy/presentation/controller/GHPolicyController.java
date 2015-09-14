@@ -2,6 +2,7 @@ package com.pla.grouphealth.policy.presentation.controller;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.policy.application.service.GHPolicyService;
+import com.pla.grouphealth.policy.presentation.domain.GHPolicyDocument;
 import com.pla.grouphealth.policy.presentation.dto.GHPolicyMailDto;
 import com.pla.grouphealth.policy.presentation.dto.PolicyDetailDto;
 import com.pla.grouphealth.policy.presentation.dto.SearchGHPolicyDto;
@@ -18,7 +19,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.dom4j.DocumentException;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,11 +30,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -176,8 +173,8 @@ public class GHPolicyController {
             return Result.failure("Email cannot be sent due to wrong data");
         }
         try {
-            byte[] policyPDF = ghPolicyService.getPolicyPDF(mailDto.getPolicyId());
-            emailPolicy(policyPDF, mailDto);
+            List<EmailAttachment> emailAttachment = ghPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()));
+            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachment, mailDto.getRecipientMailAddress());
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
@@ -186,18 +183,25 @@ public class GHPolicyController {
         return Result.success("Email sent successfully");
     }
 
+    @RequestMapping(value = "/getpoilcydocument",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getPolicyDocument(){
+        return GHPolicyDocument.getDeclaredPolicyDocument();
+    }
+
     @RequestMapping(value = "/printquotation/{policyId}", method = RequestMethod.GET)
     public void printQuotation(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "GHPolicy.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
-        outputStream.write(ghPolicyService.getPolicyPDF(policyId));
+        ghPolicyService.getPolicyPDF(new PolicyId(policyId));
+//                outputStream.write();
         outputStream.flush();
         outputStream.close();
     }
 
-    private void emailPolicy(byte[] quotationData, GHPolicyMailDto mailDto) throws IOException, DocumentException {
+    /*private void emailPolicy(byte[] quotationData, GHPolicyMailDto mailDto) throws IOException, DocumentException {
         String fileName = "PolicyNo-" + mailDto.getPolicyNumber() + ".pdf";
         File file = new File(fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -207,6 +211,6 @@ public class GHPolicyController {
         EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
         mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
         file.delete();
-    }
+    }*/
 
 }

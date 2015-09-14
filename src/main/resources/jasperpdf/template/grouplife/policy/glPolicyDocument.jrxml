@@ -6,14 +6,14 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="propserName" class="java.lang.String">
-		<fieldDescription><![CDATA[propserName]]></fieldDescription>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-	<field name="address" class="java.lang.String">
-		<fieldDescription><![CDATA[address]]></fieldDescription>
+	<field name="proposerAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerAddress]]></fieldDescription>
 	</field>
-	<field name="telephoneNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	<field name="proposerPhoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
 	</field>
 	<field name="schemeName" class="java.lang.String">
 		<fieldDescription><![CDATA[schemeName]]></fieldDescription>
@@ -78,15 +78,15 @@
 				</staticText>
 				<textField>
 					<reportElement x="100" y="35" width="100" height="25" uuid="395dca75-5d00-498f-82c6-ddef90e39120"/>
-					<textFieldExpression><![CDATA[$F{propserName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="100" y="65" width="100" height="20" uuid="7a899ff8-4410-4580-a5ce-be167f035c93"/>
-					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="140" y="90" width="100" height="27" uuid="d960c2ce-150b-40b4-bda7-32506e8f01df"/>
-					<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<rectangle>

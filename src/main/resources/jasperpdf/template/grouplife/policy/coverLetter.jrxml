@@ -6,14 +6,14 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="propserName" class="java.lang.String">
-		<fieldDescription><![CDATA[propserName]]></fieldDescription>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-	<field name="address" class="java.lang.String">
-		<fieldDescription><![CDATA[address]]></fieldDescription>
+	<field name="proposerAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerAddress]]></fieldDescription>
 	</field>
-	<field name="telephoneNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	<field name="proposerPhoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
 	</field>
 	<field name="policyInceptionDate" class="java.lang.String">
 		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
@@ -167,11 +167,11 @@
 			</staticText>
 			<textField>
 				<reportElement x="100" y="90" width="100" height="30" uuid="83f35698-cd55-41bc-a646-aee086f0ae54"/>
-				<textFieldExpression><![CDATA[$F{propserName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="100" y="120" width="100" height="30" uuid="73ebbb60-bb5e-49e7-a3e0-965856539505"/>
-				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="800" width="100" height="-101" uuid="adef4c15-47f8-4c48-9d14-873148fdab79"/>
@@ -179,7 +179,7 @@
 			</textField>
 			<textField>
 				<reportElement x="120" y="157" width="100" height="30" uuid="80afb72d-33c9-4056-963b-af5ac0b73547"/>
-				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="275" width="203" height="20" uuid="30f38610-1013-4304-88a4-bd267cacc2a2"/>

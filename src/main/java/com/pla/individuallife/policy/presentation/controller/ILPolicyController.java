@@ -6,6 +6,7 @@ import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyMailDto;
 import com.pla.individuallife.policy.presentation.dto.PolicyDetailDto;
 import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
+import com.pla.individuallife.policy.presentation.model.ILPolicyDocument;
 import com.pla.individuallife.policy.service.ILPolicyService;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -151,6 +153,12 @@ public class ILPolicyController {
         modelAndView.setViewName("pla/individuallife/policy/emailPolicy");
         modelAndView.addObject("mailContent", ilPolicyService.getPreScriptedEmail(policyId));
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/getpoilcydocument",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String,Object>> getPolicyDocument(){
+        return ILPolicyDocument.getDeclaredPolicyDocument();
     }
 
     @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
