@@ -2849,7 +2849,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             /**
              * Checking of  Occupation filed of  ProposedAssured Detail  to decide whether to display Employment Type Field
-             * Address1, Address2 ,Province ,Work Phone & Postal CodeFields
+             * Address1, Address2 ,Province ,Work Phone & Postal CodeFields etc
              * */
 
             $scope.employmentTypeStaus=true;
@@ -2866,6 +2866,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                 }
             });
+            $scope.readOnlyStatusProposedAssured=false;
+
+            $scope.$watch('proposer.isProposedAssured',function(newVal,oldVal){
+                    if(newVal) {
+                        $scope.readOnlyStatusProposedAssured=true;
+                    }
+                    else {
+                        $scope.readOnlyStatusProposedAssured=false;
+                    }
+            });
+
 
             /**
              * Checking of  Occupation filed of  Proposer Detail  to decide whether to display Employment Type Field
