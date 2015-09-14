@@ -1406,18 +1406,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "beneficiaries": $scope.beneficiariesList,
                     "proposalId": $scope.proposal.proposalId
                 };
-                //console.log('Final to Plan DB..' + JSON.stringify(request));
+
+                console.log('Final to Plan DB..' + JSON.stringify(request));
 
                 $http.post('updateplan', request).success(function (response, status, headers, config) {
                     //alert('status'+status);
                     $scope.proposal = response;
                     $scope.proposal.proposalId=response.id;
                     //console.log("Response of PLan is:"+JSON.stringify(response));
-                    //alert('proposalId : ' + $scope.proposal.proposalId);
-
-                    //alert("Before GetPremium...");
-                    //Getting PremiumDetails Documents
-
                     $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         console.log('PremiumResponseRes'+JSON.stringify(response));
@@ -2784,13 +2780,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     if((parseInt(newvalue) < 18 ) || (parseInt(newvalue) > 60)){
                         $scope.ageCalculateStatus=true;
-                        //alert("Same1....");
-                        //alert(parseInt(newvalue));
                     }
                     else {
                         $scope.ageCalculateStatus=false;
-                        //alert("Not Same..");
-                        //alert(newvalue);
                     }
                 }
             });
