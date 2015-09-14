@@ -25,7 +25,7 @@ public class Beneficiary {
     private String relationshipId;
     private BigDecimal share;
     private TrusteeType trusteeType;
-    private TrusteeDetail trusteeDetail;
+        private TrusteeDetail trusteeDetail;
 
     @Override
     public boolean equals(Object o) {

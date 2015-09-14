@@ -1,6 +1,8 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -8,6 +10,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TrusteeDetail {
     private String tittle;
     private String firstName;
@@ -18,5 +22,10 @@ public class TrusteeDetail {
     private String nrc;
     private String mobileNumber;
     private String emailId;
-    private Address address;
+    private String address1;
+    private String address2;
+    private String postalCode;
+    private String province;
+    private String town;
+
 }
