@@ -247,20 +247,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.proposer = $scope.rcvProposalDetailQid.proposer || {};
                         $scope.proposer.isProposedAssured= response.assuredTheProposer
                         $scope.proposer.nrc = $scope.rcvProposalDetailQid.proposer.nrc || {};
-
-                        /*if($scope.rcvProposalDetailQid.proposer.employment != null)
-                         {
-                         $scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
-                         }
-                         else
-                         {
-                         $scope.proposerEmployment =" ";
-                         }
-
-                         //$scope.proposerEmployment = $scope.rcvProposalDetailQid.proposer.employment;
-                         $scope.proposerResidential = $scope.rcvProposalDetailQid.proposer.residentialAddress;
-                         $scope.proposerSpouse = $scope.rcvProposalDetailQid.proposer.spouse;*/
-
                         if ($scope.proposer.dateOfBirth) {
                             $scope.proposer.nextDob = moment().diff(new moment(new Date($scope.proposer.dateOfBirth)), 'years') + 1;
                         }

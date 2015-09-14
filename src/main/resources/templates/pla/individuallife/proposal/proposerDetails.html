@@ -54,7 +54,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Surname</label>
-                    <input type="text" class="form-control input-sm" name="surname" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="proposer.surname" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" name="surname" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="proposer.surname" ng-required="true"/>
 
                     <div class="error" ng-messages="proposerForm.surname.$error" ng-if="proposerForm.surname.$dirty">
                         <small class="error" ng-message="required">Please enter Surname.</small>
@@ -69,7 +69,7 @@
                     <div class="error" ng-messages="proposerForm.nrc.$error" ng-if="proposerForm.nrc.$dirty">
                         <small class="error" ng-message="required">Please enter NRC.</small>
                         <small ng-message="maxlength">Only 11 characters are allowed.</small>
-                        <small ng-message="pattern"> Follw Pattern 999999/99/1</small>
+                        <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -107,7 +107,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">First Name</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="firstName" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="proposer.firstName" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="firstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="proposer.firstName" ng-required="true"/>
 
                     <div class="error" ng-messages="proposerForm.firstName.$error" ng-if="proposerForm.firstName.$dirty">
                         <small class="error" ng-message="required">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Other Name</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" ng-model="proposer.otherName"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="proposer.otherName"/>
 
                     <div class="error" ng-messages="proposerForm.otherName.$error" ng-if="proposerForm.otherName.$dirty">
                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
@@ -203,7 +203,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Spouse's Surname</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseSurname" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="proposerSpouse.surname" ng-required="true"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseSurname" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="proposerSpouse.surname" ng-required="true"/>
 
                     <div class="error" ng-messages="proposerSpouseForm.spouseSurname.$error" ng-if="proposerSpouseForm.spouseSurname.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's Surname Name</small>
@@ -226,7 +226,7 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Spouse's First Name</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseFirstName" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" ng-model="proposerSpouse.firstName"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseFirstName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="proposerSpouse.firstName"/>
 
                     <div class="error" ng-messages="proposerSpouseForm.spouseFirstName.$error" ng-if="proposerSpouseForm.spouseFirstName.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's First Name</small>
