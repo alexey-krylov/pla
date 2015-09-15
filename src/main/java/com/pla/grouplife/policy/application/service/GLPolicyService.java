@@ -328,8 +328,27 @@ public class GLPolicyService {
 
     public List<EmailAttachment> getPolicyPDF(PolicyId policyId) throws IOException, JRException {
         GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId);
-      return GLPolicyDocument.getAllPolicyDocument(Arrays.asList(glPolicyDetailForPDF));
+        return GLPolicyDocument.getAllPolicyDocument(Arrays.asList(glPolicyDetailForPDF));
     }
+
+    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents) throws IOException, JRException {
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId);
+        return documents.parallelStream().map(new Function<String, EmailAttachment>() {
+            @Override
+            public EmailAttachment apply(String document) {
+                EmailAttachment emailAttachment = null;
+                try {
+                    emailAttachment =  GLPolicyDocument.valueOf(document).getPolicyDocumentInPDF(Arrays.asList(glPolicyDetailForPDF));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }
+                return emailAttachment;
+            }
+        }).collect(Collectors.toList());
+    }
+
 
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
