@@ -3069,7 +3069,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                         else
                         {
-                            $http.get("/pla/individuallife/proposal/getproposal/" +response.id + "?mode=view").success(function (response, status, headers, config) {
+                            $http.get("/pla/individuallife/proposal/getproposal/" +$scope.proposal.ProposalId + "?mode=view").success(function (response, status, headers, config) {
+                                alert(response.id);
                                 window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + $scope.proposal.ProposalId + "&mode=edit";
                                 var result = response;
                                 $scope.proposal.ProposalId=response.id;
