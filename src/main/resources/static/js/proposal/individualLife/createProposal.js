@@ -1338,7 +1338,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.addBeneficiaryStatusCheck=false;
                 //$scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
 
-                if(($scope.beneficiary.age >= 0) && ($scope.beneficiary.age <= 16))
+                if(($scope.beneficiary.age >= 0) && ($scope.beneficiary.age < 18))
                 {
                     $scope.addBeneficiaryStatusCheck=false;
                 }
@@ -3056,7 +3056,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "quotationId": $scope.quotationIdDetails.quotationId
                     }
                     $http.post('create', request2).success(function (response, status, headers, config) {
-                        //alert('status'+response.status);
+                        //console.log('status'+JSON.stringify(response));
+                        //alert(response.id);
+                        $scope.proposal.ProposalId=response.id;
                         //console.log("QuotationDetails..."+JSON.stringify(response));
 
                         if(response.status == '500')
