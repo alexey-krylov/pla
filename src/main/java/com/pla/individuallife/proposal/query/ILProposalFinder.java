@@ -30,6 +30,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
+import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -482,7 +483,7 @@ public class ILProposalFinder {
         @Override
         public ILSearchProposalDto apply(Map map) {
             String proposalId = map.get("_id").toString();
-            String submittedOn = map.get("submittedOn") != null ? map.get("submittedOn").toString() : "";
+            String submittedOn = map.get("submittedOn") != null ? AppUtils.toString(new DateTime(map.get("submittedOn"))): "";
             String proposalStatus = map.get("proposalStatus") != null ? ILProposalStatus.valueOf(map.get("proposalStatus").toString()).getDescription() : "";
             String proposalNumber = map.get("proposalNumber") != null ? (String) map.get("proposalNumber") : "";
             Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;

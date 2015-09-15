@@ -15,6 +15,7 @@ import com.pla.individuallife.quotation.application.service.ILQuotationAppServic
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.wordnik.swagger.annotations.ApiOperation;
+import lombok.Synchronized;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
@@ -228,6 +229,7 @@ public class ILProposalController {
         return new ResponseEntity(Result.success("Proposal updated with Premium Payment Details successfully",proposalId), HttpStatus.OK);
     }
 
+    @Synchronized
     @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity uploadMandatoryDocument(ILProposalDocumentCommand cmd, HttpServletRequest request) {
@@ -240,6 +242,7 @@ public class ILProposalController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
