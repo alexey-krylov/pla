@@ -2952,7 +2952,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              * Address1, Address2 ,Province ,Work Phone & Postal CodeFields etc
              * */
 
-            $scope.employmentTypeStaus=true;
+             $scope.employmentTypeStaus=true;
             $scope.$watch('employment.occupation', function (newVal, oldVal) {
                 if (newVal) {
                     //alert(newVal);
@@ -2963,6 +2963,20 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     else
                     {
                         $scope.employmentTypeStaus=true;
+                    }
+                }
+            });
+            $scope.proposerEmploymentTypeStaus=true;
+            $scope.$watch('proposerEmployment.occupation', function (newVal, oldVal) {
+                if (newVal) {
+                    //alert(newVal);
+                    if((newVal == 'Student') || (newVal == 'Housewives'))
+                    {
+                        $scope.proposerEmploymentTypeStaus=false;
+                    }
+                    else
+                    {
+                        $scope.proposerEmploymentTypeStaus=true;
                     }
                 }
             });
@@ -3056,11 +3070,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "quotationId": $scope.quotationIdDetails.quotationId
                     }
                     $http.post('create', request2).success(function (response, status, headers, config) {
-                        //console.log('status'+JSON.stringify(response));
-                        //alert(response.id);
-                        $scope.proposal.ProposalId=response.id;
-                        //console.log("QuotationDetails..."+JSON.stringify(response));
 
+                        $scope.proposal.ProposalId=response.id;
                         if(response.status == '500')
                         {
                             //alert('Return');
@@ -3069,11 +3080,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                         else
                         {
+                            alert($scope.proposal.ProposalId);
                             $http.get("/pla/individuallife/proposal/getproposal/" +$scope.proposal.ProposalId + "?mode=view").success(function (response, status, headers, config) {
-                                alert(response.id);
                                 window.location.href = "/pla/individuallife/proposal/edit?proposalId=" + $scope.proposal.ProposalId + "&mode=edit";
                                 var result = response;
-                                $scope.proposal.ProposalId=response.id;
+                                $scope.proposal=response;
+                                //$scope.proposal.ProposalId=response.id;
                                 $scope.rcvProposal = response;
                                 $scope.agentDetails=result.agentCommissionDetails;
                                 $scope.proposalNumberDetails.proposalNumber = $scope.rcvProposal.proposalNumber;

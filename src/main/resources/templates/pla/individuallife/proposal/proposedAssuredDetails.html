@@ -315,7 +315,7 @@
                 </div>
                 <div class="form-group" ng-if="employmentTypeStaus">
                     <label class="control-label">Work phone</label>
-                    <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="employment.workPhone"/>
+                    <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="employment.workPhone"/>
 
                     <div class="error" ng-messages="employmentDetails.workPhone.$error" ng-if="employmentDetails.workPhone.$dirty">
                         <small ng-message="maxlength">Only 10 Number are allowed.</small>
@@ -390,12 +390,12 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Home Phone</label>
-                    <input type="text" class="form-control input-sm" name="residentPhone" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
+                    <input type="text" class="form-control input-sm" name="residentPhone1" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-minlength="10" ng-maxlength="10" maxlength="10"  ng-pattern="/^\d+$/" ng-model="residentialAddress.homePhone"/>
 
-                    <div class="error" ng-messages="residentDetails.residentPhone.$error" ng-if="residentDetails.residentPhone.$dirty">
+                    <div class="error" ng-messages="residentDetails.residentPhone1.$error" ng-if="residentDetails.residentPhone1.$dirty">
+                        <small ng-message="pattern">Please enter a valid mobile number.</small>
                         <small ng-message="maxlength">Only 10 characters are allowed.</small>
-                        <!--<small ng-message="minlength">Minimum 10 Numbers are allowed.</small>-->
-                        <small ng-message="pattern">Only Numeric are allowed.</small>
+                        <small ng-message="minlength">Minimum 10 Numbers are allowed.</small>
                     </div>
 
                 </div>
