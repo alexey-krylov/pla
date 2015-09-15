@@ -207,6 +207,7 @@ public class GLPolicyController {
             outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
             outputStream.flush();
             outputStream.close();
+            deleteTempFileIfExists(emailAttachments);
             return;
         }
         response.reset();

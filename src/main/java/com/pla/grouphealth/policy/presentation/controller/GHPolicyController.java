@@ -1,5 +1,6 @@
 package com.pla.grouphealth.policy.presentation.controller;
 
+import com.google.common.io.Files;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.policy.application.service.GHPolicyService;
 import com.pla.grouphealth.policy.presentation.domain.GHPolicyDocument;
@@ -17,9 +18,11 @@ import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,6 +37,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Samir on 7/9/2015.
@@ -175,6 +182,7 @@ public class GHPolicyController {
         try {
             List<EmailAttachment> emailAttachment = ghPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()));
             mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachment, mailDto.getRecipientMailAddress());
+            deleteTempFileIfExists(emailAttachment);
             return Result.success("Email sent successfully");
 
         } catch (Exception e) {
@@ -189,28 +197,57 @@ public class GHPolicyController {
         return GHPolicyDocument.getDeclaredPolicyDocument();
     }
 
-    @RequestMapping(value = "/printquotation/{policyId}", method = RequestMethod.GET)
-    public void printQuotation(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException, JRException {
+
+    @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
+    public void printQuotation(@PathVariable("policyId") String policyId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
+        if (isEmpty(documents)){
+            return;
+        }
+        if (documents.size()==1){
+            response.reset();
+            response.setContentType("application/pdf");
+            response.setHeader("content-disposition", "attachment; filename=" + "GHPolicy.pdf" + "");
+            OutputStream outputStream = response.getOutputStream();
+            List<EmailAttachment> emailAttachments = ghPolicyService.getPolicyPDF(new PolicyId(policyId), documents);
+            outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
+            outputStream.flush();
+            outputStream.close();
+            deleteTempFileIfExists(emailAttachments);
+            return;
+        }
         response.reset();
-        response.setContentType("application/pdf");
-        response.setHeader("content-disposition", "attachment; filename=" + "GHPolicy.pdf" + "");
-        OutputStream outputStream = response.getOutputStream();
-        ghPolicyService.getPolicyPDF(new PolicyId(policyId));
-//                outputStream.write();
+        response.setContentType("application/zip");
+        OutputStream outputStream = null;
+        List<EmailAttachment> emailAttachments =   ghPolicyService.getPolicyPDF(new PolicyId(policyId),documents);
+        String zipFileName = "ghPolicy.zip";
+        ZipOutputStream zos = null;
+        response.addHeader("Content-Disposition", "attachment; filename =" + zipFileName);
+        if (UtilValidator.isNotEmpty(emailAttachments)){
+            outputStream = response.getOutputStream();
+            zos = new ZipOutputStream(outputStream);
+            for (EmailAttachment inputStreamMap : emailAttachments){
+                ZipEntry zipEntry = new ZipEntry(inputStreamMap.getFileName());
+                zos.putNextEntry(zipEntry);
+                IOUtils.copy(FileUtils.openInputStream(inputStreamMap.getFile()), zos);
+                zos.closeEntry();
+            }
+        }
         outputStream.flush();
+        if(zos!=null){
+            zos.flush();
+            zos.finish();
+            zos.close();
+        }
+        response.flushBuffer();
         outputStream.close();
+        deleteTempFileIfExists(emailAttachments);
     }
 
-    /*private void emailPolicy(byte[] quotationData, GHPolicyMailDto mailDto) throws IOException, DocumentException {
-        String fileName = "PolicyNo-" + mailDto.getPolicyNumber() + ".pdf";
-        File file = new File(fileName);
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        fileOutputStream.write(quotationData);
-        fileOutputStream.flush();
-        fileOutputStream.close();
-        EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
-        mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
-        file.delete();
-    }*/
+    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
+        for (EmailAttachment fileTobeDeleted : emailAttachments) {
+            fileTobeDeleted.getFile().delete();
+        }
+    }
+
 
 }
