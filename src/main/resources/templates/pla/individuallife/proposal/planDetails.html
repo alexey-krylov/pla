@@ -232,7 +232,6 @@
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.incomeMultiplier}}"
                        name="sumAssured"
                        ng-model="searchRider.sumAssured" ng-required="true"/>
-
                 <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
                     </small>
@@ -253,9 +252,9 @@
             </div>
 
            <div ng-switch-when="POLICY_TERM" >
-               <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                      ng-disabled="mode=='new'||mode=='view'" name="sumAssured" readonly="true" ng-model="searchRider.coverTerm" ng-required="true"/>
-            </div>
+            <input type="number" view-enabled="" class="form-control input-sm" min="0"
+                   ng-disabled="mode=='new'||mode=='view'" name="sumAssured" readonly="true" ng-model="searchRider.coverTerm" ng-required="true"/>
+        </div>
         </div>
     </script>
 

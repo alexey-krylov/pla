@@ -65,6 +65,12 @@ public class GHPolicyController {
         this.ghPolicyService = ghPolicyService;
     }
 
+    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
+        for (EmailAttachment fileTobeDeleted : emailAttachments) {
+            fileTobeDeleted.getFile().delete();
+        }
+    }
+
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
         ModelAndView modelAndView = new ModelAndView();
@@ -73,7 +79,6 @@ public class GHPolicyController {
         modelAndView.addObject("searchCriteria", new SearchGHPolicyDto());
         return modelAndView;
     }
-
 
     @RequestMapping(value = "/viewpolicy", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage(@RequestParam("policyId") String policyId) {
@@ -115,7 +120,6 @@ public class GHPolicyController {
         return ghPolicyService.getPremiumDetail(new PolicyId(policyId));
     }
 
-
     @RequestMapping(value = "/getproposerdetail/{policyId}")
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To get proposer detail from proposer")
@@ -135,7 +139,6 @@ public class GHPolicyController {
         outputStream.flush();
         outputStream.close();
     }
-
 
     @RequestMapping(value = "/getpolicynumber/{policyId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get Policy number for a given Policy ID")
@@ -168,7 +171,7 @@ public class GHPolicyController {
     @RequestMapping(value = "/openemailpolicy/{policyId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("policyId") String policyId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/quotation/emailQuotation");
+        modelAndView.setViewName("pla/grouphealth/policy/emailPolicy");
         modelAndView.addObject("mailContent", ghPolicyService.getPreScriptedEmail(new PolicyId(policyId)));
         return modelAndView;
     }
@@ -196,7 +199,6 @@ public class GHPolicyController {
     public List<Map<String,Object>> getPolicyDocument(){
         return GHPolicyDocument.getDeclaredPolicyDocument();
     }
-
 
     @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
     public void printQuotation(@PathVariable("policyId") String policyId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
@@ -243,10 +245,12 @@ public class GHPolicyController {
         deleteTempFileIfExists(emailAttachments);
     }
 
-    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
-        for (EmailAttachment fileTobeDeleted : emailAttachments) {
-            fileTobeDeleted.getFile().delete();
-        }
+    @RequestMapping(value = "/openprintpolicy", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView openPrintPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/policy/printPolicy");
+        return modelAndView;
     }
 
 

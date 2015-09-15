@@ -172,8 +172,6 @@ public class ILPolicyController {
         outputStream.close();
     }
 
-
-
     //TODO
     /**
      * Quotation Shared with Client (This status should be updated on first click for print/email Quotation and the date should also

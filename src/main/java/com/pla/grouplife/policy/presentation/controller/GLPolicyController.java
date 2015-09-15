@@ -62,6 +62,12 @@ public class GLPolicyController {
         this.glPolicyService = glPolicyService;
     }
 
+    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
+        for (EmailAttachment fileTobeDeleted : emailAttachments) {
+            fileTobeDeleted.getFile().delete();
+        }
+    }
+
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
         ModelAndView modelAndView = new ModelAndView();
@@ -70,7 +76,6 @@ public class GLPolicyController {
         modelAndView.addObject("searchCriteria", new SearchGLPolicyDto());
         return modelAndView;
     }
-
 
     @RequestMapping(value = "/viewpolicy", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage(@RequestParam("policyId") String policyId) {
@@ -111,7 +116,6 @@ public class GLPolicyController {
         return glPolicyService.getPremiumDetail(new PolicyId(policyId));
     }
 
-
     @RequestMapping(value = "/getproposerdetail/{policyId}")
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To get proposer detail from proposer")
@@ -131,7 +135,6 @@ public class GLPolicyController {
         outputStream.flush();
         outputStream.close();
     }
-
 
     @RequestMapping(value = "/getpolicynumber/{policyId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get Policy number for a given Policy ID")
@@ -164,11 +167,10 @@ public class GLPolicyController {
     @RequestMapping(value = "/openemailpolicy/{policyId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("policyId") String policyId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/quotation/groupLife/emailQuotation");
+             modelAndView.setViewName("pla/groupLife/policy/emailPolicy");
         modelAndView.addObject("mailContent", glPolicyService.getPreScriptedEmail(new PolicyId(policyId)));
         return modelAndView;
     }
-
 
     @RequestMapping(value = "/emailpolicy", method = RequestMethod.POST)
     @ResponseBody
@@ -242,15 +244,8 @@ public class GLPolicyController {
     @ResponseBody
     public ModelAndView openPrintPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individuallife/policy/printPolicy");
+        modelAndView.setViewName("pla/groupLife/policy/printPolicy");
         return modelAndView;
-    }
-
-
-    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
-        for (EmailAttachment fileTobeDeleted : emailAttachments) {
-            fileTobeDeleted.getFile().delete();
-        }
     }
 
 
