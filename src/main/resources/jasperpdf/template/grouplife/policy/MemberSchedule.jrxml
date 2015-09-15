@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-09-15T16:47:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="900" pageHeight="650" orientation="Landscape" columnWidth="860" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2b407c39-743b-4be1-a2b9-7c97f01cd410">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="propserName" class="java.lang.String">
+		<fieldDescription><![CDATA[propserName]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	</field>
+	<field name="schemeName" class="java.lang.String">
+		<fieldDescription><![CDATA[schemeName]]></fieldDescription>
+	</field>
+	<field name="policyID" class="java.lang.String">
+		<fieldDescription><![CDATA[PolicyID]]></fieldDescription>
+	</field>
+	<field name="policyPeriodFrom" class="java.lang.String">
+		<fieldDescription><![CDATA[policyPeriodFrom]]></fieldDescription>
+	</field>
+	<field name="policyPeriodTo" class="java.lang.String">
+		<fieldDescription><![CDATA[policyPeriodTo]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="459" splitType="Stretch">
+			<rectangle>
+				<reportElement x="49" y="10" width="771" height="30" uuid="6553a252-4ffb-492b-9d2f-5abe11b6ef9f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="300" y="19" width="180" height="21" uuid="c7f097d6-221f-47c5-92f2-613c763c1bd7"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="16"/>
+				</textElement>
+				<text><![CDATA[MemberSchedule]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="49" y="50" width="771" height="250" uuid="c4c4d5f5-c51b-4cc5-856f-fed3b924dccb"/>
+				<frame>
+					<reportElement x="0" y="0" width="771" height="250" uuid="8a45c6a0-4d6c-4a2f-9d1d-0394fd5ab0c5"/>
+					<rectangle>
+						<reportElement x="0" y="122" width="771" height="128" uuid="00026919-226c-406c-a7de-d792c19f09b8"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="120" width="771" height="26" backcolor="#00195F" uuid="bcdfa9f6-3809-47d0-be0b-452b71eacaaf"/>
+					</rectangle>
+					<frame>
+						<reportElement x="10" y="120" width="690" height="26" uuid="97150541-5e27-40b1-b8e1-465b241cfa36"/>
+						<staticText>
+							<reportElement x="0" y="0" width="690" height="26" forecolor="#FFFFFF" backcolor="#00195F" uuid="a4165dcb-3e96-4ab7-99a6-d96c7e5f8550"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="Trebuchet MS" size="14"/>
+							</textElement>
+							<text><![CDATA[Policy Details:]]></text>
+						</staticText>
+					</frame>
+					<textField>
+						<reportElement x="120" y="148" width="100" height="26" uuid="4ddc7b14-2f36-4a25-a16e-94d978985922"/>
+						<textFieldExpression><![CDATA[$F{schemeName}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="140" y="176" width="100" height="34" uuid="b2292f63-f76b-483a-a3dd-19155b3d890f"/>
+						<textFieldExpression><![CDATA[$F{policyID}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="190" y="217" width="120" height="33" uuid="e37a1aa0-e035-4ae5-9e58-621a0b4fdfa0"/>
+						<textFieldExpression><![CDATA[$F{policyPeriodFrom}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="485" y="220" width="100" height="30" uuid="84c14d4e-a1f1-4caa-8ebb-bc71f80b509e"/>
+						<textFieldExpression><![CDATA[$F{policyPeriodTo}]]></textFieldExpression>
+					</textField>
+					<rectangle>
+						<reportElement x="0" y="0" width="771" height="110" uuid="5a552a8b-671c-45e1-ad25-887580368281"/>
+					</rectangle>
+					<frame>
+						<reportElement x="0" y="-7" width="771" height="117" uuid="acbd1b3c-99a5-41ce-b0b5-ea2f4848e9d5"/>
+						<staticText>
+							<reportElement x="0" y="40" width="100" height="20" uuid="4fbf579c-8c7a-412e-937f-ced4f5d71861"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<text><![CDATA[ Name:]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="0" y="65" width="100" height="20" uuid="dad67c88-7104-4f64-b7ae-882deb7d3dbf"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<text><![CDATA[ Address:]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="0" y="90" width="140" height="27" uuid="73d25708-ca8b-493d-b72c-3fb01858476f"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<text><![CDATA[ Telephone Number(s):]]></text>
+						</staticText>
+						<rectangle>
+							<reportElement x="0" y="0" width="771" height="35" backcolor="#00195F" uuid="c25afde5-16a7-4913-8781-6585d03bba97"/>
+						</rectangle>
+						<staticText>
+							<reportElement x="0" y="0" width="730" height="32" forecolor="#FFFFFF" uuid="e07f1be7-0319-4bec-b72d-4da345e012e2"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="Trebuchet MS" size="14"/>
+							</textElement>
+							<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
+						</staticText>
+						<textField>
+							<reportElement x="100" y="35" width="100" height="25" uuid="0b7632ef-bc45-4fee-84f0-ba1e179302f0"/>
+							<textFieldExpression><![CDATA[$F{propserName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="100" y="65" width="100" height="20" uuid="ce120566-e3e4-4838-a339-81d10536d235"/>
+							<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="140" y="90" width="100" height="27" uuid="8e2e63b4-a37e-4215-80bd-ac1d062da1fc"/>
+							<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+						</textField>
+					</frame>
+					<staticText>
+						<reportElement x="340" y="217" width="145" height="33" uuid="9b23ce08-0983-4da2-8417-b68ef19b6a2f"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12"/>
+						</textElement>
+						<text><![CDATA[To DD/MM/YY]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="146" width="120" height="30" uuid="7d2e8140-4261-4ec9-803c-fcde06e05df7"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12"/>
+						</textElement>
+						<text><![CDATA[Scheme Name]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="180" width="140" height="30" uuid="998fa269-f466-42b1-ab62-1031e378e999"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="14"/>
+						</textElement>
+						<text><![CDATA[Master Policy Number: ]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="217" width="190" height="30" uuid="ffc5c70a-f08a-4158-b3a1-92e4b5996d2a"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12"/>
+						</textElement>
+						<text><![CDATA[Policy Period: From:DD/MM/YYYY]]></text>
+					</staticText>
+				</frame>
+			</frame>
+			<rectangle>
+				<reportElement x="49" y="310" width="771" height="130" uuid="c2902560-f9e8-444c-8659-90e7a5ea714f"/>
+			</rectangle>
+			<line>
+				<reportElement x="10" y="0" width="1" height="458" uuid="fef5e1a6-8ebe-4bfa-9727-ea2cda223762"/>
+			</line>
+			<line>
+				<reportElement x="850" y="0" width="1" height="459" uuid="4bd2ed41-f584-4a47-875b-0cc4c72b8e4c"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

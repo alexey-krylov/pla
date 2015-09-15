@@ -43,6 +43,8 @@ public class GHQuotationDetailDto {
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
 
+    private String policyInceptionDate;
+    private String policyExpiryDate;
 
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;

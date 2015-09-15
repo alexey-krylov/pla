@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-09-15T17:51:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GHPolicyDoc" pageWidth="842" pageHeight="672" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="af162d2e-b31e-4b56-b93f-89b3f8d1b596">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
+	</field>
+
+	<field name="policyInceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
+	</field>
+	<field name="policyExpiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyExpiryDate]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="145" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="145" uuid="b5368a84-60a9-42f0-8fb4-08b9463b327e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="70" width="280" height="45" uuid="7a048411-5e6b-4f31-8164-2acb77bec750"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Promed Insured Policy]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="386" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="083d150f-b11c-40e9-b3e2-a446a1b85027"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="386" uuid="f7cd0533-2cb2-416e-aaa5-5dd76616e081"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.   Contract	
+
+2.	Definitions 
+
+3.	Terms and conditions
+
+	3.1 Policy period
+	3.2 Eligibility Conditions 
+	3.3 Member Enrolments
+	3.4 Addition and deletion of members 
+	3.5 Premiums
+      3.6 Renewal
+	3.7 Policy Alterations 
+	3.8 Policy termination 
+	3.9 General Limitations
+	3.10 Medical records
+      3.11 Recovery 
+      3.12 Subrogation 
+      3.13 Currency 
+      3.14 Expert opinion and Arbitration 
+      3.15 Governing law 
+      3.16 Legal status
+      3.17 National statutes 
+      3.18 Enforcement 
+      3.19 Penalties 
+      3.20 Assignment
+      3.21 Clerical Error
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="385">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="370" uuid="0a6c7c0d-283a-4cc0-9662-4525c9adcb5d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="7" y="240" width="792" height="50" uuid="93172116-23a2-4678-bdd4-e54c96c56392"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.2	The information provided to the Company by or on behalf of the Policyholder, Primary insured and/or their Dependants on the Proposal form and Policy addenda thereto is the basis of this contract and is deemed to be incorporated in this Policy. The truth of the information and answers in the Proposal form shall be conditions precedent to the Company’s liability to make payment under this Policy.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="290" width="785" height="45" uuid="afdfb3d3-9d2e-49d6-883d-6558570851e9"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.3	The cover provided shall be determined by applying the rules defined herein together with the Policy schedule, Table of benefits and Membership cards issued to the Policyholder. Any benefit not shown in the Policy schedule, Table of benefits and Membership cards is not provided for under this Policy. The Policyholder shall examine the Policy, Policy schedule, Table of benefits and Membership cards carefully to make sure the required protection has been provided.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="340" width="792" height="30" uuid="ae4fd777-ca22-4ecd-8b1c-b8a43ef5550f"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.4	In consideration of the Policyholder’s payment of Premium in full, and upon the receipt of proof of Claim, the Company undertakes to pay for all Eligible medical expenses of acute phases of illnesses or Accidents incurred by Insured members during the Policy period, subject to the terms, conditions and exclusions of this Policy.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="160" width="710" height="15" uuid="12f28761-bbb3-445b-9581-3a9c1e139170"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[This Policy is a contract of insurance between Professional Life Assurance Limited (hereinafter referred to as “the Company”) and ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="717" y="160" width="85" height="15" uuid="c80b8f41-d9ce-4416-b9d7-87fac0f64110"/>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="180" width="794" height="60" uuid="ff27a282-59d5-48dd-a8d8-814efc81587b"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[(hereinafter referred to as “the Policyholder”). The Proposal form, Policy schedule, Table of benefits, Membership cards issued and any endorsements, amendments and attaching papers(if any)  form part of the contract and must be read together with this Policy. Any word or expression to which a specific meaning has been attached shall bear that specific meaning wherever it may appear. No change in this Policy shall be valid unless approved by both parties and evidenced by endorsement or amendment thereon or attached thereto.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="0" width="420" height="160" uuid="eb36f0cd-4b3f-4de5-bbc6-385f8a171203"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[4.	Benefit Exclusions 
+
+5.	Claim Administration 
+
+	5.1 Notice of claim
+	5.2 Settlement of claim 
+	5.3 Claim Details 
+	5.4 Appeals on claim Denials
+	5.5 Pre-authorization
+      5.6 Prescriptions 
+      5.7 Contribution
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="35047185-def3-4abb-9c3f-827b5b16bbea"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="90" width="400" height="30" uuid="ff914730-a152-4369-94a5-1300b8ec8d23"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[For and on behalf of PROFESSIONAL LIFE 		for and on behalf of 
+ASSURANCE LIMITED                                                  
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="70" width="792" height="20" uuid="8ca4a114-b262-4f3c-b5ec-3352ecf80591"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[SIGNED by _______________________		SIGNED by ___________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="50" width="792" height="20" uuid="9712dd09-140b-484b-a2cd-f0bb08bc5657"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Both parties hereto have executed and delivered this Policy as of the Commencement date, stated in the Policy schedule.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="10" width="787" height="30" uuid="60b61c3d-ef77-461e-8302-b34d99ade56e"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.5	For the entirety of this Policy, the use of masculine pronouns shall be deemed to indicate both masculine and feminine and the singular shall be deemed to include the plural and vice versa, where appropriate.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="120" width="792" height="15" uuid="86158692-60b8-4d56-adec-dcc80aaf4e27"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Designation:						 Designation:
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="140" width="792" height="20" uuid="320bc6a1-40e9-4582-9ed1-a0354407e8bc"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Witness:						 Witness:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="160" width="792" height="30" uuid="84aaac2d-8d0f-494c-a0f9-c87db2f01456"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Signature:						 Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="190" width="792" height="20" uuid="6a54520a-6c9f-421d-a86e-a58e5bd3e50f"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Occupation:						 Occupation:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="220" width="792" height="30" uuid="6d1e56d0-5ba6-4f8d-a88f-d378832ee121"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Date:                                                                                             Date: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="250" width="792" height="130" uuid="5ad42921-2e2c-49e8-9ead-c22c9253212a"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[2.1	Abuse means the excessive use of a substance including but not limited to alcohol and drugs. As regard to drugs, this includes use of a reason other than that which it was intended for or in a manner other than as directed or prescribed on medical authority 
+2.2	Accident means any sudden and unforeseen event that occurs beyond the Insured member's control during the Policy period, resulting in bodily injury. This excludes accidental illness, surgical procedures and aggravation of a Pre-existing condition.
+2.3	Acute phase of an illness means an event characterized by a single episode of fairly short duration, requiring Treatment for normally less than fourteen (14) days, and from which the patient can be expected to return to his normal or previous state and level of activity.
+2.4	Allopathic medicine means type of medical care that uses substances, surgery, and Treatments specifically targeted against the Illness and intended to cure the Illness. This term is generally used to describe the conventional (or Western) approach to medicine.
+2.5	Alternative medicine means types of medical care that are alternative to the Conventional Allopathic medicine covered under this Policy.
+
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="410" y="90" width="210" height="30" uuid="853d359a-6f7e-4f95-b6c8-172163476dca"/>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="385">
+			<frame>
+				<reportElement x="0" y="0" width="802" height="385" uuid="469e84cc-493a-49c8-a7a5-9c2ec0b86380"/>
+				<rectangle>
+					<reportElement x="0" y="0" width="802" height="380" uuid="c04f94b4-c86d-4adb-991f-ac45690734db"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="10" y="0" width="792" height="370" uuid="fd332d32-5ada-4a78-9d64-360b0c663664"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Trebuchet MS" size="12"/>
+					</textElement>
+					<text><![CDATA[2.6	Annual maximum Limits means total amounts that may be claimed in anyone (1) Policy period by an Insured member. These limits are shown in the Table of benefits
+2.7	Birth defect means any deformity/abnormal condition of a person arising during the antenatal stages of pregnancy or caused by/or during childbirth
+2.8	Bodily injury means an injury which is sustained while this Policy is in force and which occurs anywhere in the world; and which solely and independently of any other cause, results in the insured requiring and/or seeking medical care.
+2.9	Chronic condition means an Illness that fails to respond effectively to treatment or is ongoing or consistently recurring or requires Maintenance treatment (palliative treatment) and/or may require long periods of supervision
+2.10	Claim form means a document issued by the Company which shall be used by the Insured member to set information in respect of the Claim incurred 
+2.11	Commencement date means the date, shown in the Policy schedule and the Membership card on which cover under this Policy commences.
+2.12	Company means Professional Life Assurance Limited.
+2.13	Consultant means a Secondary care specialist duly registered and licensed by the Medical Council of Zambia and who, in carrying out such specialist treatment, is practicing within the scope of his licensing and training.
+2.14	Consultation means any medical advice from or encounter with a Physician or Consultant including the issue of any prescriptions for investigations, medications and physiotherapy
+2.15	Dentist	means a registered or licensed dental practitioner who is legally authorized to practice dentistry by the Medical Council of Zambia.
+2.16	Dependant means Primary insured's spouse, children and step children who are eligible for coverage according to the Eligibility conditions set forth in this Policy.
+2.17	Designated Providers means Hospitals, clinics, laboratories, diagnostic centers and pharmacies with whom the Company has agreements to provide covered benefits, in accordance with the terms of the Policy, to the Insured members and are included under the list of Registered Healthcare providers attached to the Policy schedule.
+2.18	Diagnostic procedures means any tests for diagnosing Illness, including pathology, laboratory, x-ray, ECG, medical scanning and imaging techniques and interpretation of the results by a Physician or Consultant.
+2.19	Due date/Renewal date means the date of renewal of cover as shown on the Policy schedule and the Membership card, or the date on which any subsequent installment of Premium falls due.
+]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="1212e01c-b1cc-4b69-bca4-ac0ee0aeb485"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="8" y="0" width="794" height="386" uuid="f8ecc349-689d-439d-9c3c-60d0b0f3c82d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[2.20	Eligible medical expenses means medical, surgical, or any other expenses necessarily incurred by an Insured member and are in relation to benefits, as being eligible for coverage under this Policy. These could involve specified medical services' fees or Reasonable and customary charges.
+2.21	Emergency means an injury or Illness which happens suddenly and whose acute symptoms are of such severity that the absence of Treatment within twenty four (24) hours is medically expected to result in a serious threat to the life, health, bodily function and/or organ of the patient.
+2.22	Endorsement means a contractual document issued by the Company subsequent to this Policy, introducing alterations to this Policy in full conformity with its provisions.
+2.23	Excess	means a specific amount or percentage of Eligible medical expenses that must be incurred and paid for by the Insured member before benefits are payable under this Policy.
+2.24	Expiry date means the date, shown in the Policy schedule and the Membership card on which cover under this Policy ceases.
+2.25	General exclusions means excluded Illnesses, items, Treatments, procedures and =their related or consequential expenses, which are not covered under this Policy. These exclusions are shown in the General exclusions list.
+2.26	Hospital means any institution established for inpatient and/or outpatient treatment of sickness and injuries and which has been registered as a Hospital or clinic or nursing home with the Medical Council of Zambia and is under the supervision of a registered and qualified Medical Practitioner; and maintains permanent and full-time facilities; and has diagnostic and therapeutic facilities for major surgical and medical diagnosis and treatment and provided nursing service on a 24 hour basis. This shall not include an establishment which is convalescent home, place of rest, place for the aged, a place for drug addicts or a place for alcoholics, a hotel or similar place.
+2.27	Illness means any kind of health condition not otherwise excluded by the Policy which is sustained by an Insured member during the Policy period and occasions the necessity for the Insured member to receive care and attendance from a Physician or Consultant.
+2.28	Inpatient treatment means Treatment where the Insured member requires hospitalization for a minimum of one (1) night, for specialized medical attention and care, before, during and after the Treatment. Such Treatments cannot be performed on an Outpatient basis.
+2.29	Insured member means any Primary insured or his Dependants who has fulfilled the Eligibility conditions and is named in the Policy schedule and Membership card.
+2.30	Join date means the date, shown on the Policy schedule on which an Insured member was included under this Policy and becomes eligible for cover.
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="bb806d40-87b3-4bc1-b645-d0b4d3b7acdf"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="170" uuid="42d9f074-6cd4-40a6-9409-631a8a978f91"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[2.31	Maintenance treatment means any Treatment or procedure, the primary purpose of which is to offer temporary relief or control of Illness of symptoms rather than to cure the Illness causing the symptoms.
+2.32	Medical Expenses means all medically necessary and reasonable expenses incurred in respect of medical, surgical and remedial treatment as directed by the medical Practitioner including laboratory, x-rays and other diagnostic charges
+2.33	Medical Practitioners means Medical Practitioners who are duly registered and licensed by the Medical Council of Zambia and are practicing within the scope of their license and are appointed by the Company
+2.34	Medically necessary treatment any medical, surgical or other service that an Insured member requires provided such services are:
+i.	Essential and related to the Illness presented
+ii.	Rendered in accordance with generally accepted medical practice and professionally recognized standards
+iii.	Not Treatments that are generally considered as experimental or unproven
+
+2.35	Membership card means a personalized card issued by the Company in the name of each Insured member, identifying him as an Insured member and facilitating his access to the benefits covered under this Policy and provided by designated providers.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="180" width="792" height="200" uuid="ac3a0c7c-9702-4fa7-9cbc-fe7eb2177db4"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[2.36	Moratorium period means the period an Insured member has to wait before he becomes eligible for a benefit. The Moratorium period is determined by the date the Insured becomes a member.
+2.37	Non-designated providers means Hospitals, clinics, laboratories, diagnostic centers and pharmacies with whom the Company has no agreement to provide covered benefits, in accordance with the terms and conditions of this Policy, to the Insured members and/or are not included under the list of Designated providers in the Policy schedule. Benefits received at such Providers will be on reimbursement basis subject to prior approval from the Company.
+2.38	Outpatient treatment means all medically necessary treatments and services that do not require hospitalization during the day or overnight nor necessitate specialized medical attention.
+2.39	Outpatient claim form means a pre-printed Claim form used for Outpatient and Emergency Treatments. It is also used for Pre-authorization of Treatment requests, as required under the terms and conditions of this Policy.
+2.40	Overall limit means the maximum amount that an Insured member may Claim during the Policy period for all the benefits covered under the Policy.
+2.41	Physician means a registered medical practitioner who is legally licensed to practice Allopathic medicine by the medical Council of Zambia and who in carrying out such Treatment, is practicing within the scope of his licensing and training.
+2.42	Physiotherapist means a qualified, registered practitioner of physiotherapy.
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="e5f66b42-c7e7-4a60-82ba-b92554459a2e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="386" uuid="410f84e3-9887-495a-b06c-35dc3854cd10"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[2.43	Policy means the document evidencing the terms, conditions, benefits and price of the cover applicable to the Insured member(s). The Policy constitutes of:
+i.	The Proposal form(s) duly completed and signed by the Insured member(s)
+ii.	The Policy schedule
+iii.	The Table of benefits and General exclusions
+iv.	The general terms and conditions
+v.	Membership cards
+vi.	Endorsements to any of the aforementioned
+2.44	Policyholder means the applicant for the insurance coverage, acting in the name of the Primary insured and their Dependants, whose application is formally accepted by the Company and protection is provided under this Policy.
+2.45	Policy period the period of this Policy stated in the Policy schedule and the Membership card from the Commencement date to the Expiry date.
+2.46	Policy schedule a list issued by the Company in which information on the contractual parties are specified, together with the specific conditions of this Policy including but not limited to both parties data, the Commencement date, the Expiry date, Policy name and number, Premium and Premium payment details, benefits details (including Annual maximum limits and benefits annual Sub-limits, Excess amount and percentage of Coinsurance, if applicable), Designated providers list, membership list including Insured members details (name, date of birth, gender and Insured members' Join dates), and the Policy's special conditions, if any.
+2.47	Pre-authorization means review and approval of Treatments by the Company prior to or concurrent with the Treatment date to ensure that they are undertaken within the scope of cover of the Policy terms and conditions, benefits and exclusions
+2.48	Pre-existing condition means any bodily injury or illness or its related condition that medically exists prior to the enrolment date of the Insured member, whether it is known or not known to him, and necessitates the Insured member to receive care or Treatment.
+2.49	Pre-hospitalization means Medically necessary expenses incurred during the period up to seven (7) days prior to hospitalization on disease/illness/injury sustained which will be considered as part of claim under hospitalization.
+2.50	Post-hospitalization means medically necessary expenses incurred during the period up to seven (7) days after hospitalization on disease/illness/injury sustained which will be considered as part of claim under hospitalization
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="88e42c1c-e62d-4a97-93f2-d257847ab529"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="270" uuid="402a9ce1-5a52-49fd-b93f-02f3863680a0"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[2.51	Primary insured means an employee of the Policyholder or any member of a legally established non-profit organization (e.g. association, union and the like) who has fulfilled the Eligibility conditions and is named in the Policy schedule and Membership card.
+2.52	Proposal form means a signed statement of facts made by the applicant for insurance, on the basis of which the Company carries out an underwriting in full accordance with the terms and 
+conditions of this Policy. The Proposal form becomes part of the contract when the Policy is issued.
+2.53	Provider means any person (Physician or nurse) or institution (Hospital, clinic, medical center, pharmacy, laboratory, physiotherapy center or other paramedical institution) that is licensed to provide Allopathic medicine.
+2.54	Related condition means any Illness considered to be either an underlying cause of or directly attributable to another specific Illness
+2.55	Secondary care	means Treatment delivered by a Consultant following referral for further Treatment from a Physician.
+2.56	Secondary Claim form means a Claim form used for Daycare and Inpatient treatments (Hospital admissions) and surgical operations. It is generated by the Company’s computer system when a request for Pre-authorizing Treatment is approved.
+2.57	Surgical Operation means manual and/or operative procedures for correction of deformities and defects, setting right of injuries, diagnosis and cure of diseases, relief of suffering and prolongation of life.
+2.58	Table of benefits means a schedule issued by the Company showing the extent and nature of benefits, Excess amount and percentages of Coinsurance applicable under this Policy
+2.59	Territorial limit means the geographical limits within which Treatment may be received and are stated in the Policy schedule and Table of benefits.
+2.60	Treatment means a medical or surgical procedure, the sole purpose of which is to cure an Illness and not to alleviate long-term chronic condition.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="270" width="707" height="20" uuid="0df1cb05-6a6f-4fbf-8452-9c61e2260106"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.1.1	This Policy is an annual contract. Subject to the Policyholder’s payment of the required premium it shall commence on the ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="10" y="290" width="150" height="20" uuid="0afb7508-0f36-4b92-8749-ce12524a6cc7"/>
+				<textFieldExpression><![CDATA[$F{policyInceptionDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="160" y="290" width="180" height="20" uuid="b84fc63d-dcc1-4137-a6d1-52cc937d3d26"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[and terminate at the Expiry date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="340" y="290" width="100" height="20" uuid="cd5d4ddb-d591-4923-9784-0dfbace1a7f2"/>
+				<textFieldExpression><![CDATA[$F{policyExpiryDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="310" width="787" height="76" uuid="af8c0715-a3a5-4ae9-ab33-9b2aadfb48ea"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[specified in the Policy schedule. The policy may be renewed for a further one year period subject to the Company’s consent and the Policyholder’s payment of the annual premium.]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="906025ed-d91c-4ae6-8963-2a0723daac1c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="110" uuid="fbc3dfd1-682d-4c18-914d-29e24aaebcd4"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.2.1	Primary insured: all the Policyholder’s full-time permanent employees residing in the republic of Zambia, subject to:
+
+i.	the employee being actively at work or on normal annual leave, (at the time of his Joining the scheme). If the employee is absent from work due to injury or   Illness, his cover will commence   after he has been actively at work for a period  of two (2) consecutive weeks
+
+ii.	 the employee having attained the age not more  sixty five (65) years(at their first Join date). Following attainment of age of sixty five (65) the Primary Insured shall only continue in force upon submission of satisfactory medical evidence or at the Company’s discretion and/or terms
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="110" width="792" height="160" uuid="c56ce1a2-82ca-4b6c-9450-3af1554b6923"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.2.2 	Dependants: The Dependants of the Primary insured are eligible for coverage under this Policy, 
+	provided they are:
+
+i.	The legal spouse of the Primary insured who is less than sixty five (65) years (at his Join date) and is residing with the Primary insured. Coverage of an insured spouse ends on the date of divorce
+ii.	The unmarried children, step children and legally adopted children of the Primary insured  provided they are aged, at their Join date fourteen (14) days minimum and eighteen (18) years maximum, are resident with the Primary insured and are dependent upon him for support. The children above eighteen (18) years shall only be eligible if they are full-time students at a school, college or university and are not beyond twenty two (22) years of age, subject to submission of relevant program of education
+iii.	 A Dependant eligible to participate as a Primary insured under this Policy shall not be a dependant for the purpose of this Policy.
+iv.	When both spouses are insured as Primary insured, any children shall be eligible only as Dependants of the husband
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="280" width="792" height="106" uuid="b6b65d7a-2abe-4d1d-b0db-a418ca102095"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.3	Members Enrollments
+
+3.3.1	Primary Insured: Existing Primary insured's cover begins with the commencement of this Policy.
+
+3.3.2	Dependants: Primary insured’s' Dependants are eligible for coverage on the commencement date of the Policy. The Policyholder shall enroll with the Company all its existing Dependants from the commencement date of the Policy, otherwise the Dependants not declared will not be eligible for coverage until the next renewal of the Policy.
+
+3.4	Adding and deleting insured persons
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="5f7bbacb-f471-4790-8a6c-5881d45ff1fc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="270" uuid="98931a28-43e5-4538-946e-7e6d9d84595a"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.4.1 	Addition: The Policyholder may at any time, upon completing and sending to the Company the duly completed Proposal form (Member Application form), add new Primary insured and his Dependants or new Dependants of existing Primary insured to the Policy.
+
+Such new Primary insured and/or Dependants shall become eligible for coverage from the date of the receipt of addition request. 
+	
+	A new born child can be covered from birth or from the date the adoption is made 
+	final, as the case may be, provided one or both parents are covered concurrently in the
+existing Policy. The Company will normally allow the Policyholder to do so without filling out details of their medical history, provided they are added within 14 days from the birth date. The Company do not, however, allow this concession if the child was born as a result of any method of assisted conception or if they have been adopted. In such case the Policyholder will be required to submit full particulars of such child, including the child’s full medical history, where The Company will, provided it is satisfactory that the conditions for cover as herein contained have been met, extend cover to such child.
+
+3.4.1 	Deletion: The Policyholder may at any time delete Primary insured and their Dependants from the Policy subject to:
+
+i.	 a written request for deletion of member or dependant  
+ii. 	 Return of Membership cards and other materials facilitating Treatment prior
+             to the deletion date
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="280" width="802" height="50" uuid="c0f467fd-c037-44c9-94bc-1b897b9d621d"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[The deletion shall be effected from the date of the receipt of request for deletion from the Policyholder.
+
+The Premium refund relating to any approved deletion shall be calculated in accordance with the following conditions:
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="330" width="802" height="50" uuid="88bcfa75-1f7b-4083-a032-1710cf74eebe"/>
+				<textElement>
+					<font fontName="SansSerif" size="12"/>
+				</textElement>
+				<text><![CDATA[a. 	No refund will be payable for deleted Insured members who have registered any Claim with the Company. Insured members who did not report any Claim prior to their deletion date will be refunded proportionately for the period remaining from the deletion date until the Expiry date of the Policy. The Company shall pay the refund after sixty (60) days from the deletion date provided no Claims were reported within this period.]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="bd04ac46-0ef7-4413-bb3c-d4e83e42fb69"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="310" uuid="e529f88c-6ad0-40b9-9f7c-78241548928a"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[b. 	No refund will be payable if Membership cards and other materials facilitating Treatment are not returned. The amount of refund will be reduced proportionately if the return of Membership cards and other materials facilitating Treatment are delayed. In addition, the Policyholder will be the sole and fully liable party towards the Provider and/or the Company in respect of any expenses incurred by the deleted Insured member from his deletion date, until the Membership card and other materials facilitating Treatment are returned.
+
+c. 	Covered benefits arising from Accident or Illness occurring during the Policy period for Insured member shall cease immediately upon his deletion from the Policy.
+
+3.5	Premiums
+
+3.5.1	All Premiums stated in the Policy schedule are payable to the Company in advance of the Renewal dates as shown in the Policy schedule. The company reserves the right to revise the premium if claims experience is unfavorable. 
+
+3.5.2	 Payment of the Premium is the Policyholder’s responsibility. If the Policyholder does not make payment on or before the Renewal date, the Company has the right to withhold payment of the Insured members' Claims and/or access to Treatment, or terminate the Policy with effect from the Renewal date.
+
+3.5.3 	The Policyholder shall not offset against Premiums due any amount owed by or Claimed
+	from the Company under this Policy or any other agreement.
+
+3.5.4	Days of grace: Fifteen (15) days of grace period shall be allowed for payment of premiums from the day they fall due. If premiums due are not paid within the period of grace, the Policy shall lapse except as provided under policy revival. 
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="310" width="792" height="70" uuid="3c8d3531-4459-4779-8eb2-c3204358c27c"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Policy Revival: If this insurance policy lapses as stated under Days of grace the Policy may be revived subject to the following:
+
+i)	at any time within three (3) calendar months of the date upon which the first unpaid premium or installment premium fell due; and/or
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="fa466c41-b766-4f85-9b12-20428b94a659"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="70" uuid="4d7f2710-fea0-409d-ab4c-8f28e6df16d2"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[ii)	exclusion of any insured with any physical defect, infirmity or illness which occurs during the period of lapsation to the date of this Policy
+	
+	Where an Insured is excluded on the revived Policy as a result of any physical defect, infirmity or illness suffered during the period of lapsation, cover shall attach after thirty (30) days from the date of revival of this Policy upon submission of proof of continued good health of that Insured; and/or
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="70" width="792" height="310" uuid="3cf14a4a-f18b-4d23-bdb2-a06b1285bc78"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[iii)	Upon payment of the overdue premium or premiums together with such interest thereon as may be required by the Company.
+
+3.5.6	Administration Charge: We reserve the right to make an administration charge for the replacement or re-issue of policy documents and/or membership cards
+
+3.6	Renewal 
+
+3.6.1	The Policyholder may continue to renew the scheme each year. The renewals will be subject to the Policy in force at the time of each renewal and receipt of renewal premium on or before the renewal date.
+
+3.6.2	Renewal notice: The Policyholder will be issued with renewal terms and instructions of how to proceed with the policy renewal, at least six weeks prior to the renewal date.
+
+3.6.3 	Disclosure: The disclosure of material facts arises on each renewal
+
+3.6.4	The Policy will not be renewed automatically upon expiry 
+
+3.6.5	If the Policyholder does not wish to renew the Policy, this must be confirmed to the Company in writing prior to renewal date.
+
+3.7	Policy Alteration
+
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="1c40c1ea-0080-4945-b4ea-4e5ac888a5b6"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="300" uuid="67adfb4d-884e-473f-9848-f0154a728a36"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.7.1	The Policyholder’s suggestion to alter any terms and conditions of this Policy other than the ones clearly defined under Article 3.4 will be considered for incorporation only at the renewal of the Policy.
+
+3.7.2	 At renewal of the Policy, the Company also may add or alter any terms and conditions of this Policy including the Premiums or any administration procedures, as may deem appropriate. However, the Company will only make alterations to reflect any past and foreseeable changes in the medical insurance practice or procedures and the nature and extent of claims made or likely to be made generally under the insurance cover. The purpose of such alteration will be to seek, so far as possible, to maintain the same level and type of insurance cover in place whilst ensuring that the Medical Insurance remains affordable. The Company can also increase the premium if any tax levy is imposed.  
+
+3.7.3 	The Company reserves the right to change the terms and conditions of, or cancel, the Policy at any time notwithstanding any other provision of this Policy if the Policyholder or any Insured member has:
+
+i.	Not acted in good faith or has mislead the Company by withholding any fact material to this Policy
+ii	Breached the terms and conditions of this Policy
+iii	Not paid the Premiums due
+
+3.7.4 	No variation in terms and conditions of this policy either by endorsement or 
+	otherwise, shall bind the Company in any way unless it is made by a duly authorized officer of 
+	the Company.
+
+3.8	Policy Termination
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="300" width="792" height="80" uuid="1657bb53-e6a2-46c3-b820-7f55bcde6715"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.8.1	The Policy will automatically terminate upon non-payment of Premium on the Renewal date, although the Company may at its discretion reinstate the Policy if the Premium is paid within thirty (30) days of its Renewal date.]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="377a8152-ddf0-4ca0-a5a4-308080987b9e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="386" uuid="b46e697d-2961-4a62-9b6b-65b7f10c0b4a"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.8.2	Cover in respect of Insured shall terminate immediately on the first of the following events:
+
+	i)	On the death of the Insured; or
+	ii)	when an insured ceases to be the Spouse of the Employee; or
+	iii)	upon non-payment of premium except as provided under Days of Grace; or
+iv)	when the insured ceases to be an employee of the Policyholder (in such an event, the Insured’s family members will also cease to be Insured under this Policy; or
+           v)	On the day before the Insured attains the age of 65 years except for an existing Insured who attains the age of 65 years whilst the Policy is in force who can be continued to be covered at the Company’s discretion and/or terms
+           vi)	Upon discovery of chronic illness and/or HIV virus for in-patient treatment except that cover shall continue if the admission has already occurred to the end of the admission subject to the terms and conditions of cover applicable
+ 	
+3.8.3	Either party may terminate the Policy at any time, by giving sixty (60) days notice of their intention of terminating the Policy by registered letter to the other party, in case of the Policyholder, to its last known address and in case of the Company, to the address herein provided, subject to proportionate refund of the Premiums for the remaining period until the Expiry date, less twenty percent (20%) of annual Premium for all Insured members who have not registered any Claims with the Company. No refund will be payable for Insured members who have registered Claims with the Company.
+
+3.8.4 	The Policyholder shall return all Membership cards and other materials facilitating the 
+treatment before the termination date. If the Policyholder does not return the Membership cards, he will be the sole and fully liable party towards the Provider and/or the Company in respect of any expenses incurred by the Insured members from the termination date of this Policy.
+
+3.8.5	If any of the Insured members makes false or fraudulent Claims or acts fraudulently
+or in purposeful breaches the terms and conditions of the Policy, then the Company has the right to terminate the Policy or delete the Insured member, with immediate effect and forfeit all the benefits and Premiums without prejudice to the Company’s other rights.
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="a55dbc8b-a881-482f-9e38-9bec55afabd0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="220" uuid="ec68d3bd-cc0d-4b53-9375-3426ec0b0a3d"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.8.6 	Covered benefits arising from Accident or Illness occurring during the Policy period 
+	shall cease immediately upon the termination or non-renewal of this Policy.
+
+3.8.7	Effective time of termination: This policy and all insurance there under shall terminate at 00.01 hours Zambian time of the Expiry date of the Policy shown in the Policy Schedule 
+
+3.9	General Limitations
+
+3.9.1	Annual Maximum limits: The Company’s liability is limited in amount to the Overall limits and Sub-limits stated on the Policy schedule and Table of benefits.
+
+3.9.2 	Cost of Medical Expenses: The Company’s liability with respect to the cost of Eligible medical 
+expenses hereunder claimed is limited to the actual cost or the Reasonable and customary charges, whichever is less.
+The Company shall be the sole arbiter of what constitutes "Reasonable and customary charges". Insured members in doubt shall submit to the Company a quotation for the cost of Treatment and seek Pre-authorization before the Treatment is undertaken.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="220" width="792" height="160" uuid="8e984d85-039b-41c7-9376-aa3433cfcf28"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.9.3 	Territorial Limits: This Policy shall apply to Eligible medical expenses incurred
+	within the Republic of Zambia.
+
+3.10	Medical Records
+
+3.10.1	In compliance with applicable laws and regulations concerning medical records, on behalf of the Primary insured and their Dependants, the Policyholder authorizes the Company to have physical access, including copies of their records which are maintained by the treating Provider, in respect of Treatments incurred under the terms of this Policy.
+
+3.10.2 	The Company agrees to maintain strict confidentiality of such records.
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="dfb26ee4-6881-4910-a540-ea3e85b4173e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="386" uuid="ee0c4d1e-4050-4b81-be32-ce0753bf21bb"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.11	Recovery
+
+3.11.1	In accordance with the terms of this Policy, the Policyholder is liable for all Claims paid by the Company to the providers, for Insured members under the following conditions:
+
+i.	 For excluded Treatments
+ii.	 Claims paid for Insured members who are no longer eligible for cover
+iii.	 Claims paid for Insured members during any period when Premiums are in arrears
+iv.	 Claims paid for Insured members beyond member benefit limits as stated in the table of   
+	 benefits
+iv. 	 Fraudulent use of Membership cards by any of the Insured members
+
+	The Company shall exercise its rights to recover from the Policyholder amounts paid to 
+	Hospital/Clinic 	on behalf of the insured from which the Company would have otherwise not 
+	paid. 
+
+3.12	Subrogation
+
+3.12.1	The Policyholder/insured must give the Company written notification without delay of any claim or right of action against any third party arising out of any circumstances which gave rise to a claim under this policy and must continue to keep the Company informed in writing and take all steps the Company reasonably require in making a claim upon that other party  
+
+3.12.2	 The Company has full rights of subrogation and may take proceedings in any of the Insured member's name, at its expense, to recover for its benefit the amount of any payment made under this Policy due from any third party responsible for the Eligible medical expenses incurred.
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="db65127a-c50e-40e9-8c9a-d921f8e480ac"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="160" uuid="81358584-f1e5-43b1-a194-ddb7e3dd9b9d"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.13	Currency
+
+3.13.1 	Premiums and benefits payable under this Policy shall be paid in Zambia and in Zambia Kwacha. Amounts paid or received by the Company in any other currency shall be converted to that currency at the prevailing market rate of exchange at the date such transaction is entered on the Company’s books.
+
+
+3.14	Expert Opinion and Arbitration
+
+3.14.1	Any differences in respect of medical opinion in connection with the results of an Accident or Illness shall be referred to two (2) medical experts appointed in writing by the two (2) parties to the ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="160" width="792" height="220" uuid="635d2252-ebef-4f76-99d2-14e2adba9296"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[dispute, one to be appointed by each party. If the two (2) experts are unanimous in the opinion, then it shall be binding on both parties. If they are not unanimous in their opinion, then the matter shall be referred to arbitration as herein below.
+
+3.14.2 	Subject to Article 3.13.1, any dispute or difference between the parties in respect of this Policy shall be referred to a sole arbitrator mutually agreed, failing which, appointed by the Zambian Court. The decision rendered by such arbitrator shall be final and binding.
+
+3.15	Governing Law
+
+3.15.1	This Policy shall be governed by and construed in accordance with the laws of Zambia.
+
+3.16	Legal Status
+
+3.16.1	This Policy is not valid unless accompanied by a stamped and signed Policy Schedule issued by the Company.
+
+3.17	National Statutes
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="d7c421b6-46a3-4b5d-ad3c-4b29b7a30a96"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="280" uuid="6fdcbbbd-07ea-4c16-9477-5d8fda51752d"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[3.17.1	Any provision of this Policy which, on its Commencement date, is in conflict with the Laws of Zambia, is amended to conform to the minimum requirements of such laws
+
+3.18	Enforcement
+
+3.18.1	The Company and the Policyholder are the only parties to this Policy. Other Insured members 
+will have no right to enforce this Policy or any part of it. No variation in terms and conditions of this Policy either by endorsement of otherwise, shall bind the Company in any way unless it is made by an Officer duly authorized by the Company.
+
+3.19	Penalties 
+
+3.19.1 	This policy shall not cover any penalties in whatsoever nature.
+
+3.20	Assignment
+
+3.20.1	Under no circumstances shall this Policy be assignable
+
+3.21	Clerical Error
+
+3.21.1	A clerical error by the Company shall not invalidate insurance otherwise validly in force
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="280" width="792" height="106" uuid="214cbfdf-1ee1-400a-9b30-8cf4e48288b6"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[4.	Benefit Exclusions
+
+Although most medical conditions are covered, this Policy does not cover claims arising from or connected with the following benefit exclusions unless specified in the Table of benefits, in any written endorsement to the Policy, or agreed by the Company in writing:
+
+PE1	A pre-existing medical condition that, within 24 month period prior to the inception date of the policy or date of joining of the member, has one or more of the following
+	
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="5e5d57f7-822e-4053-b938-78b459c0c88a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="50" uuid="eb055a2d-147e-4a0b-a427-87d5b6ea67ad"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Characteristics:
+	·         was foreseeable,
+	·         manifested itself,
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="60" width="792" height="320" uuid="01f560a9-7ebc-4e58-a85b-8785fdd7bed8"/>
+				<textElement>
+					<font fontName="SansSerif" size="12"/>
+				</textElement>
+				<text><![CDATA[·         the insured person has signs or symptoms of,
+	·         the insured person sought advice of,
+	·         the insured person received treatment for, or
+	·         to the best of the insured person's knowledge, was aware existed
+	After a period of 12 months continuous insurance under the policy, pre-existing conditions may be become eligible for benefit, subject to our terms and conditions.
+PE2	A benefit limit of the insured person as detailed on the Table of benefits, being exceeded
+PE3	A benefit waiting period, as detailed on the Table of benefits, not being satisfied 
+PE4	Abuse of alcohol, drug or any other intoxicating substance or any addictive condition of any kind and any medical condition arising directly or indirectly from any such abuse or addiction
+PE5	A medical condition due to an insured person being under the influence of alcohol, drug or any other intoxicating substance
+PE6	Any type of Infertility treatment, contraception, sterilization or fertilization, treatment for sexual problems (including impotence, whatever the cause), sex changes, assisted reproduction
+	(e.g. IVF treatment) and any pregnancy, including surrogacy, resulting from such treatment
+PE7	Tests and treatment because of venereal and sexually transmitted diseases
+PE8	Experimental or unproven treatment, unless we have given specific pre-authorization 
+PE9	Organ transplant and its related expenses
+PE10	Cryopreservation, implantation or re-implantation of living cells or living tissue, whether autologous or provided by a donor
+PE11	Foetal treatment
+PE12	Congenital abnormalities or birth defects
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="2e258fb2-1713-4305-afd7-de0ef05c38b0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="380" uuid="47b50c98-2d55-41de-89a4-356f734a14a0"/>
+				<textElement>
+					<font fontName="SansSerif" size="12"/>
+				</textElement>
+				<text><![CDATA[PE13	Injury or Illness caused by, contributed to, or resulting from suicide, attempted suicide, self-infliction or willful exposure to danger, except in an attempt to save human life
+PE14	Medical conditions sustained by military, naval or air force personnel resulting from participation in any military, naval or air force operation or exercise
+PE15	Participation in war, riots, strikes, lock-outs, civil commotion, rebellion, revolution, insurrection, terrorism, military or usurped power or any illegal/criminal act, including resulting 
+	Imprisonment
+PE16	The release of weapon/s of mass destruction, (nuclear, biological or chemical) whether such involves an explosive sequence/s or not  
+PE17	Contamination from chemical, biological and nuclear materials, including waste products from the combustion of nuclear fuel
+PE18	Medical Conditions due to the participation in professional and hazardous sports including but not limited to scuba diving, sky diving, parachuting, paragliding, mountaineering and martial 
+	arts, or use of weapons or firearms
+PE19	Sleep apnoea, sleep related breathing disorders, snoring, or insomnia 
+PE20	Learning difficulties and/or disorders, developmental disorders and speech/or voice problems
+PE21	Cosmetic, reconstructive, or remedial disorders, whether or not for psychological reasons, and/or any complications arising thereafter, unless required as the direct result of a covered 
+	medical condition. 
+PE22	Routine medical examinations and regular check-ups
+PE23	Circumcision unless medically necessary for the treatment of disease/injury not excluded in the policy
+PE24	Admissions for rehabilitation and isolation purposes
+PE25	Vaccinations 
+PE26	Any treatment or test for HIV/AIDS (Acquired Immune Deficiency Syndrome) and related conditions, if NOT listed in the Table of Benefits
+PE27	Psychiatric or mental disorders without demonstrable organic origin
+PE28	Removal of fat from any part of the body, hormones replacement therapy, use of steroids and organic preparations (unless medically necessary), breast reduction or breast enlargement  
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="6dfea665-5aee-49f9-8724-6aa578c0744b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="-1" width="792" height="371" uuid="bb47f81b-2f34-4e81-966d-379cdff14b0e"/>
+				<textElement>
+					<font fontName="SansSerif" size="12"/>
+				</textElement>
+				<text><![CDATA[PE29	Treatment in any quarantine/isolation or rest home, spa, hydro-clinic, health resorts, massage centers, sanatorium or long-term care facility that is not a Hospital. 
+PE30	Abortion due to voluntary, psychological or social reasons, and its consequences
+PE31	Elective caesarean deliveries, if not medically necessary
+PE32	Sunglasses, photo chromatic lenses and contact lenses  
+PE33	Preventative sight and hearing examinations
+PE34	Natural or non-medical degenerative sight defects, non-medical or natural degenerative hearing defects, aids to assist eye sight and hearing, contact lens
+PE35	Ear or body piercing and tattooing, and any treatment required following these
+PE36	Preventative dental examinations, prophylaxis treatment, scraping, scaling, cleaning, polishing, dentures, false teeth, dental implants and/or orthodontic treatment
+PE37	Compulsive or addictive eating disorders and/or homesickness
+PE38	Obesity, special diet or weight control
+PE39	Children's food, baby supplies, vitamin, mineral or organic supplements, products that can be purchased without a doctor's prescription such as, but not limited to, mouthwash, toothpaste, antiseptic lozenges or sprays, shampoo, sunscreen, etc
+PE40	Supplying, maintaining or fitting any external prostheses or appliances, rental or purchase of crutches, wheelchairs or other equipments, medical or otherwise. We will pay for spinal 	support, knee brace, collar brace, etc if it is part of a surgical operation and/or integral to the treatment of a covered medical condition 
+PE41	Charges or fees incurred for the completion of Medical claims forms and any provider registration fees and medical report charges unless requested by us
+PE42	Treatment after the expiry date of the policy or after the expiry date of the insured person’s cover, whichever occurs first, unless the policy or the insured person’s cover has been	renewed and the premium paid and the treatment is eligible
+PE43	Any treatment relating to a hospital admission at the time of the insured person's commencement date, which was not disclosed to us, and accepted by us]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="ee309f2c-8e48-466d-8c7b-4263806d6990"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="300" uuid="41c26db1-a6f9-463a-8eb4-4324af987ba6"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[PE44	Any treatment relating to a planned hospital admission that the insured person was aware of at the commencement date, which was not disclosed to us, and accepted by us
+PE45	Medication, drugs and dressings which are not recognized by the pharmaceuticals board or are available without prescription from a medical practitioner, specialist/consultant, 	registered nurse or therapist
+PE46	Treatment as a result of proven medical negligence or malpractice 
+PE47	Medical certificates and examinations for residence, employment or travel 
+PE48	All transportation costs occurring during trips specifically made for the purpose of obtaining Treatment
+PE49	Payment of any excess/deductible applicable to the policy
+	
+	Legal Expenses Policy exclusions:
+	
+PEL1 	All costs relating to appointments not kept or cancelled by the Insured or Insured Dependants
+PEL2	All costs relating to interest charged and legal fees arising out of overdue medical expenses
+PEL3	Any costs incurred in the pursuit of any legal action against us.
+
+
+
+
+5.	Claims Administration
+
+5.1	Notice of Claim
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="320" width="792" height="40" uuid="20c5c894-766f-4515-ad93-5616d9c30ffb"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[5.1.1	Notice of any Claim must be submitted on a fully completed Claim form along with other supporting documents within a maximum of thirty (30) days from the Treatment date. Supporting documents shall include the following:]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="5bca772c-7d19-475d-b847-eeaf0ab0173c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="386" uuid="06a688ba-4bed-4e45-b055-de5b2383223d"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[i.	Original prescription
+ii.	Original detailed and dated receipt
+iii.	Pre-authorization form, if applicable
+iv.	Full and detailed medical and diagnostic reports
+v.	Any other medical information that may be deemed necessary by the Company
+
+5.2	Settlement of Claims
+
+5.2.1	Direct Billing: The Company has an arrangement that allows for direct submission of Claims by the designated providers. Insured members shall use the facilities of the designated providers, by presenting their Membership cards to the Providers at the time of their visits. If an Insured member pays for the Treatment at a designated provider, the Company shall only reimburse the Policyholder the agreed charges between the Company and the designated provider.
+
+5.2.2	Reimbursement: If an Insured member receives Treatment at a Provider other than the Company’s Designated providers, the Company shall reimburse the Policyholder the cost of Eligible medical expenses within fourteen (14) working days, provided completed Claim form along with any other document to support the Claim, as specified under Article 5.1.1 are submitted to the Company within a period of thirty (30) days from the Treatment date. The amount paid will be the Reasonable and customary charges for the medically necessary treatments, less any applicable Excess and/or Coinsurance, as specified in the Policy schedule and Table of benefits.
+
+5.3	Claim Denials
+
+5.3.1	The Company has the right to decline or return submitted Claims, under the following conditions:
+
+i.	Submitting incomplete Claim form
+ii.	Attaching photocopies of receipts, prescriptions, diagnostic services or others
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="952bd229-bfdb-486d-b033-81bb39ea205c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="280" uuid="97e331bf-64a6-4557-9af7-d68d6975aa90"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[iii.	Member and/or treating Physician's signature and seal is not on the Claim form
+iv.	Tests, drugs and Treatments not prescribed by Physicians
+v.	Diagnosis and Treatment are not medically relevant
+vi.	Tests or Treatments for which Pre-authorization is required in accordance with the terms and conditions of this policy, but for which                  the Pre¬-authorization has not been obtained
+vii.	 Services received are within the General exclusions of the Policy
+viii.	Tests, drugs and Treatments not Medically necessary for the conditions presented
+ix.	Expenses in excess of the Reasonable and customary charges (as agreed with Provider)
+x.	Claims are submitted after thirty (30) days from the date of Treatment
+xi.	Expenses exceeding Annual maximum limits
+xii.	Treatments after the Policy has expired
+xiii.	Treatment was before the Insured member's Join date or before the commencement date
+
+
+
+
+5.4	Appeals on Claim Denials
+
+5.4.1	Settlement of eligible Claims shall be considered final unless objections along with supporting justifications are received in writing along with relevant reports and facts within a maximum of sixty ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="280" width="792" height="80" uuid="d0fec2c4-89aa-48a8-b4e9-fa27919c298d"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[(60) days from the date of receiving the payment. The Company reserves the right to deny any objections received after the said period. 
+
+5.4.2 	The Company shall review the justifications received and payments for any approved Claims will be made within thirty (30) days from the date the justifications were received.
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="0083a6c5-936c-43c5-a1fc-2cd15210792a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="370" uuid="141df47d-0d50-41cc-a52b-ee1e57d0e234"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[5.5	Pre-authorization
+
+5.5.1	The Company shall require Pre-authorization before the Insured member undertakes any Treatment for the following services:
+
+i.	All Inpatient and Daycare treatments and services, as specified in the table of benefits
+ii.	All major Surgical operations, as specified in the table of benefits 
+iii.	Computerized tomography (CT Scan) and magnetic resonance imaging (MRI) 
+iv.	Physiotherapy sessions 
+v.	Long term medications (more than one month)
+vi.	Maternity Treatments (Inpatient only)
+
+5.5.2	For Emergency Treatments, an Insured member must notify the Company within forty-eight (48) hours of his admission or prior to his discharge, whichever is earlier. The Company reserves the right to deny the request for Pre-authorization of the Emergency Treatment, beyond the said forty-eight (48) hours period, if such notice is not provided.
+
+5.5.3	Pre-authorization is valid for a maximum period of fourteen (14) days from the date of issue. The Insured member shall obtain a new Pre-authorization, if he does not utilize it within the said fourteen (14) days period.
+
+5.5.4	Notwithstanding Article 5.5.3, the Pre-authorization shall expire automatically on the Insured member's deletion date or with the termination of the Policy.
+
+5.5.5	Pre-authorization does not guarantee either payment or the amount of Claims. Eligibility for and payment of Claims are subject to review of detailed medical reports, investigation results, diagnostic results, discharge summary, Medically necessary treatment and all the terms, conditions, provisions and exclusions of the Policy.
+
+5.6	Prescriptions
+
+]]></text>
+			</staticText>
+		</band>
+		<band height="386">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="386" uuid="8d226e10-cd75-43b4-a127-49db686e7ff7"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="0" width="792" height="160" uuid="09fb1ca4-3d93-4d70-80a1-6fa9719f9fc2"/>
+				<textElement textAlignment="Left">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[5.6.1	Where necessary and when the treating Medical Practitioner does not have the prescribed medicines, the Hospital/Clinic shall provide prescription to the Insured to procure such medicines from a Pharmacy/Chemist registered with the Company.
+
+5.7	Contribution
+
+5.7.1	If at any time, any claim arises under this policy and there be any other insurance covering the Insured for medical expenses, the  Company shall not be liable to pay or contribute more than its rateable proportion of any such claim in connection therewith. 
+
+]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="100" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="801" height="100" uuid="2f29ec21-34b5-46aa-a335-2732a2aeb2f2"/>
+			</rectangle>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="799" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="63e77aae-a107-4fe8-abcb-f33aae4ccad6"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="be7e6431-6813-49a5-9458-134f83f43bbd"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Professional Life Assurance Limited]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="0" y="40" width="234" height="56" forecolor="#0000CC" uuid="025023f3-0773-4236-9e0e-c9017eaf9234"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Head Office
+  Finsbury Park, Cairo Road,
+  North End ,P.O.Box 31357,Lusaka-Zambia
+  Tel : 021-1-222233,366704,Fax: 021-1-220128
+  email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="42" width="127" height="52" forecolor="#0000CC" uuid="0f267657-e6bd-4b61-b18b-ae756444a2b9"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  KITWE Branch
+  17,Kanyanta Road
+  P.O.Box 20564
+  Kitwe - Zambia
+  Tel : 021-2-224270,225611]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="40" width="220" height="52" forecolor="#3300CC" uuid="58cf5a04-2d1f-4341-ab82-af95426625e5"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Ndola Branch
+  1stFloor, Finance House,President Avenue,
+  P.O.Box:71177,Ndola,Zambia
+  Tel - 021-2-612466
+  Fax-021-2-612466]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>
