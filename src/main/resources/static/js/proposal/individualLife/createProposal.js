@@ -3125,11 +3125,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                     $scope.proposerSpouse={};
                                 }
 
-                                /* $scope.proposer = $scope.rcvProposal.proposer || {};
-                                 $scope.proposerEmployment = $scope.proposer.employment;
-                                 $scope.proposerResidential = $scope.proposer.residentialAddress;
-                                 $scope.proposerSpouse = $scope.proposer.spouse;*/
-
                                 $scope.proposalPlanDetail = $scope.rcvProposal.proposalPlanDetail;
                                 $scope.searchRiders = $scope.rcvProposal.proposalPlanDetail.riderDetails;
                                 $scope.beneficiaries = $scope.rcvProposal.beneficiaries;
@@ -3143,30 +3138,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
                                 $scope.employment = $scope.rcvProposal.proposedAssured.employment;
                                 $scope.residentialAddress = $scope.rcvProposal.proposedAssured.residentialAddress;
-                                //$scope.agentDetails = $scope.rcvProposal.agentCommissionDetails;
-                                //$scope.familyPersonalDetail = $scope.rcvProposal.familyPersonalDetail;
-                                ////console.log('FamilyHistory..' + $scope.rcvProposal.familyPersonalDetail.familyHistory.father);
-                                //$scope.familyHistory = $scope.rcvProposal.familyPersonalDetail.familyHistory;
-                                //$scope.habit = $scope.rcvProposal.familyPersonalDetail.habit;
-                                //$scope.habits = $scope.rcvProposal.familyPersonalDetail.habit;
-                                //$scope.questionList = $scope.rcvProposal.familyPersonalDetail.habit.questions;
-                                //$scope.build = $scope.rcvProposal.familyPersonalDetail.build;
-                                //$scope.compulsoryHealthDetails = $scope.rcvProposal.compulsoryHealthStatement;
-
-
                             }).error(function (response, status, headers, config) {
 
                                 $scope.message = response.message;
 
                             });
                         }
-                        //$scope.proposal = response;
-
-                        //alert("ProposalId Check"+JSON.stringify(response));
-                        //alert('Proposal..'+JSON.stringify($scope.proposal.ProposalId));
-                        //    console.log('Retrieving Proposal Number@###..');
-
-                        //Testing
                     }).error(function (response, status, headers, config) {
                         alert(status);
                     });
