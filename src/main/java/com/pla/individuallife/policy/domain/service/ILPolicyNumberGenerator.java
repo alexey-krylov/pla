@@ -27,8 +27,10 @@ public class ILPolicyNumberGenerator {
     public String getPolicyNumber(Class clazz, AgentId agentId) {
         String sequence = sequenceGenerator.getSequence(clazz);
         Map<String, Object> agentMap = ilProposalFinder.getAgentByAgentId(agentId.getAgentId());
-        String branchCode = (String) agentMap.get("branchCode");
-        branchCode = branchCode.replaceAll("[aA-zZ]", "");
+        String branchCode = agentMap.get("branchCode") != null ? (String) agentMap.get("branchCode") : "BB";
+        if (agentMap.get("branchCode") != null) {
+            branchCode = branchCode.replaceAll("[aA-zZ]", "");
+        }
         String policyNumber = "2" + "-" + "09" + "-" + branchCode + "-" + sequence;
         return policyNumber;
     }
