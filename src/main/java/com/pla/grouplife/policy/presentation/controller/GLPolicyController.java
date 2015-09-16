@@ -203,9 +203,9 @@ public class GLPolicyController {
         if (documents.size()==1){
             response.reset();
             response.setContentType("application/pdf");
-            response.setHeader("content-disposition", "attachment; filename=" + "GHPolicy.pdf" + "");
             OutputStream outputStream = response.getOutputStream();
             List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(policyId), documents);
+            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName() + ".pdf");
             outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
             outputStream.flush();
             outputStream.close();
