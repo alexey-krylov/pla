@@ -22,7 +22,7 @@ public enum GLPolicyDocument {
     ACTIVE_AT_WORK("Active at work Declaration Form") {
         @Override
         public EmailAttachment getPolicyDocumentInPDF(List<GLPolicyMailDetailDto> glQuotationDetailDto) throws IOException, JRException {
-            byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(glQuotationDetailDto, "jasperpdf/template/grouplife/policy/coverLetter.jrxml");
+            byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(glQuotationDetailDto, "jasperpdf/template/grouplife/policy/ActiveAtWorkDeclaretionForm.jrxml");
             String fileName = "Active at work Declaration Form.pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);

@@ -46,7 +46,7 @@ public class GLPolicyMailDetailDto {
     private boolean showLoading;
     private String optionalCoverName;
     private String additionalDocument;
-private String optionalSumAssured;
+    private String optionalSumAssured;
 
     private String policyInceptionDate;
     private String numberOfLifeAssured;

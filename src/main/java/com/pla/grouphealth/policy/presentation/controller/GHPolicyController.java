@@ -1,5 +1,6 @@
 package com.pla.grouphealth.policy.presentation.controller;
 
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.policy.application.service.GHPolicyService;
@@ -189,10 +190,16 @@ public class GHPolicyController {
         return Result.success("Email sent successfully");
     }
 
-    @RequestMapping(value = "/getpoilcydocument",method = RequestMethod.GET)
+    @RequestMapping(value = "/getpoilcydocument/{policyId}",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getPolicyDocument(){
-        return GHPolicyDocument.getDeclaredPolicyDocument();
+    public Map<String, Object> getPolicyDocument(@PathVariable("policyId") String policyId){
+        List<Map<String,Object>> ghPolicyDocument  = GHPolicyDocument.getDeclaredPolicyDocument();
+        Map policyMap = ghPolicyFinder.findPolicyById(policyId);
+        String policyNumber = policyMap.get("policyNumber") != null ? ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber() : "";
+        Map<String,Object> policyNumberMap = Maps.newLinkedHashMap();
+        policyNumberMap.put("policyNumber",policyNumber);
+        policyNumberMap.put("ghPolicyDocument", ghPolicyDocument);
+        return policyNumberMap;
     }
 
     @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)

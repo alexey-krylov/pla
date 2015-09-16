@@ -1,5 +1,6 @@
 package com.pla.grouplife.policy.presentation.controller;
 
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
@@ -167,7 +168,7 @@ public class GLPolicyController {
     @RequestMapping(value = "/openemailpolicy/{policyId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("policyId") String policyId) {
         ModelAndView modelAndView = new ModelAndView();
-             modelAndView.setViewName("pla/groupLife/policy/emailPolicy");
+        modelAndView.setViewName("pla/groupLife/policy/emailPolicy");
         modelAndView.addObject("mailContent", glPolicyService.getPreScriptedEmail(new PolicyId(policyId)));
         return modelAndView;
     }
@@ -189,10 +190,16 @@ public class GLPolicyController {
         return Result.success("Email sent successfully");
     }
 
-    @RequestMapping(value = "/getpoilcydocument",method = RequestMethod.GET)
+    @RequestMapping(value = "/getpoilcydocument/{policyId}",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getPolicyDocument(){
-        return GLPolicyDocument.getDeclaredPolicyDocument();
+    public Map<String, Object> getPolicyDocument(@PathVariable("policyId") String policyId){
+        List<Map<String,Object>> glPolicyDocument= GLPolicyDocument.getDeclaredPolicyDocument();
+        Map policyMap = glPolicyFinder.findPolicyById(policyId);
+        String policyNumber =  policyMap.get("policyNumber") != null ? ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber() : "";
+        Map<String,Object> policyNumberMap = Maps.newLinkedHashMap();
+        policyNumberMap.put("policyNumber",policyNumber);
+        policyNumberMap.put("glPolicyDocument", glPolicyDocument);
+        return policyNumberMap;
     }
 
     @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
