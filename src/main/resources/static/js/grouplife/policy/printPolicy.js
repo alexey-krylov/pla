@@ -9,14 +9,14 @@
         //alert('PrintJS...');
         $scope.policyId=getQueryParameter('policyId');
         $scope.mulSelect=[];
-
         //getting Details:-
         if($scope.policyId)
         {
             // Call Server Details..
-            $http.get("/pla/grouplife/policy/getpoilcydocument/").success(function (policyDocumentResponse, status, headers, config) {
-                console.log(JSON.stringify(policyDocumentResponse));
-                $scope.mulSelect=policyDocumentResponse;
+            $http.get("/pla/grouplife/policy/getpoilcydocument/"+$scope.policyId).success(function (policyDocumentResponse, status, headers, config) {
+                console.log("policyDocumentResponse"+JSON.stringify(policyDocumentResponse));
+                $scope.mulSelect=policyDocumentResponse.glPolicyDocument;
+                $scope.policyNumber=policyDocumentResponse.policyNumber;
 
             });
         }
