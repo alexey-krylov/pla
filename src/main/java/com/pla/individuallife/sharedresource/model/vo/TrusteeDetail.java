@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 /**
  * Created by Admin on 9/14/2015.
@@ -21,6 +23,8 @@ public class TrusteeDetail {
     private String organizationPhoneNumber;
     private String nrc;
     private String mobileNumber;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime dateOfBirth;
     private String emailId;
     private String address1;
     private String address2;

@@ -455,17 +455,6 @@
                                 <label class="control-label required">Age</label>
                                 <input type="number" class="form-control input-sm" name="beneficiaryAge1"  ng-model="beneficiary.age"
                                         ng-required="true" ng-readonly="true"/>
-
-                                <!--<div class="error" ng-messages="planBeneficiary.beneficiaryAge1.$error" ng-if="planBeneficiary.beneficiaryAge1.$dirty">
-                                    <small class="error" ng-message="required">Please specify the Age of Beneficiary.</small>
-                                    <small ng-message="max">Maximum age allowed is 16.</small>
-                                    <small ng-message="min">Minimum age allowed is 1.</small>
-                                </div>
--->
-                                <!--<div class="form-group required" ng-hide="!addBeneficiaryStatusCheck">
-                                    <span style="color:red">Age should be in between 1 to 16</span>
-                                </div>-->
-
                             </div>
 
                             <div class="form-group required">
@@ -676,6 +665,37 @@
                                                 <small class="error" ng-message="required">Please enter Town</small>
                                             </div>
                                         </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Date Of Birth</label>
+                                            <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       datepicker-popup="" view-enabled=""
+                                                       ng-required="true"
+                                                       is-open="trusteeDobLaunch"
+                                                       max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
+                                                       ng-model="beneficiary.trusteeDetail.dateOfBirth" name="trusteeDob"
+                                                        ng-change="showTrusteeAge(beneficiary.trusteeDetail.dateOfBirth)"/>
+                                                    <span class="input-group-btn">
+                                                    <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
+                                                            ng-click="launchTrusteeDob($event)">
+                                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                                  </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label required">Age</label>
+                                            <input type="text" class="form-control input-sm" name="beneficiaryAge1"  ng-model="beneficiary.trusteeDetail.age"
+                                                   ng-required="true" ng-readonly="true"/>
+
+                                            <p style="color:red" ng-hide="isTrusteeValid">
+                                               Age of Trustee Should  18 year or more.
+                                            </p>
+
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -806,7 +826,7 @@
                 </div>
                 <div class="modal-footer">
                     <!--<button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid || addBeneficiaryStatusCheck" ng-click="addBeneficiary(beneficiary)">Add</button>-->
-                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid" ng-click="addBeneficiary(beneficiary)">Add</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="planBeneficiary.$invalid || !isTrusteeValid" ng-click="addBeneficiary(beneficiary)">Add</button>
                     <!--<button class="btn btn-default" data-dismiss="modal" ng-click="addBeneficiary(beneficiary)">Add12</button>-->
                     <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>

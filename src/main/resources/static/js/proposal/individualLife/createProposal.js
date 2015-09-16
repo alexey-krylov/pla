@@ -1328,6 +1328,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 ////console.log('DOB Show is'+$scope.proposedAssured.nextDob);
             };
 
+            $scope.addBeneficiaryStatusCheck=true;
             $scope.showBeneficiaryDob = function (dob) {
                 //console.log('Dob Calculation..');
                 //console.log('DOB' + JSON.stringify(dob));
@@ -1348,7 +1349,28 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             };
 
-            $scope.addBeneficiaryStatusCheck=true;
+            $scope.isTrusteeValid=true;
+            $scope.showTrusteeAge = function (dob) {
+                if(dob != null)
+                {
+                    $scope.beneficiary.trusteeDetail.age = moment().diff(new moment(new Date(dob)), 'years');
+                }
+                $scope.isTrusteeValid=false;
+                //$scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
+
+                if($scope.beneficiary.trusteeDetail.age < 18)
+                {
+                    $scope.isTrusteeValid=false;
+                }
+                else
+                {
+                    $scope.isTrusteeValid=true;
+                }
+            };
+
+
+
+
 
             $scope.showProposerDob = function (dob) {
                 //console.log('Dob Calculation..');
@@ -1757,6 +1779,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.launchdob4 = true;
+            };
+
+            $scope.launchTrusteeDob = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.trusteeDobLaunch = true;
             };
 
             $scope.selectPlanResponse=false;
@@ -3021,7 +3049,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
             $scope.saveProposerDetails = function () {
-
                 //ProposalService.saveProposedAssured($scope.proposedAssured, $scope.proposedAssuredSpouse, $scope.paemployment, $scope.paresidential, proposedAssuredAsProposer, null);
 
                 ////console.log('modeType' + $scope.mode);

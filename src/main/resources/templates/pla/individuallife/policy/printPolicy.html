@@ -33,17 +33,17 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span th:text="#{printPolicy}">Print Policy</span>
-                    <span style="float:right;font-weight: bold">Policy ID:12782323887237</span>
+                    <span style="float:right;font-weight: bold">Policy ID:{{policyId}}</span>
 
                 </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
                             <button type="button" class="btn btn-success btn-xs"
-                                    ng-click="printPolicy()" ng-disabled="!documents.length > 0">Print
+                                    ng-click="printPolicy()" ng-disabled="!documents.length || mulSelect.length == documents.length > 0">Print
                             </button>
                             <button type="button" class="btn btn-success btn-xs"
-                                    ng-click="printAllPolicy()">Print All
+                                    ng-disabled="mulSelect.length !=documents.length" ng-click="printAllPolicy()">Print All
                             </button>
                         </div>
 

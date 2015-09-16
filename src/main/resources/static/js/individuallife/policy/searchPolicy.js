@@ -190,11 +190,15 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
 
 
             if ($scope.policyId) {
-                //alert('PolicyId');
-                //alert($scope.statusPrint);
-                //alert("Policy Id :+" + $scope.policyId);
-                //$scope.selectPlanResponse=true;
 
+                    // Method For Getting Document List for Printing Policy
+                    $http.get("/pla/individuallife/policy/getpoilcydocument/").success(function (policyDocumentResponse, status, headers, config) {
+                        //console.log(JSON.stringify(policyDocumentResponse));
+                        $scope.mulSelect=policyDocumentResponse;
+
+                    });
+
+                //Displaying the Page Content
                 $http.get("/pla/individuallife/policy/getpolicy/" + $scope.policyId + "?mode=view")
                     .success(function (response, status, headers, config) {
                         var result = response;
@@ -2121,24 +2125,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
 
             $scope.openBeneficiaryModal
             $scope.printPol = {};
-            $scope.mulSelect = [
-                {
-                    "documentName": "Address Proof",
-                    "documentCode": "ADDRESS_PROOF"
-                },
-                {
-                    "documentName": "Any clinical abstracts/records if available",
-                    "documentCode": "ANY_CLINICAL_ABSTRACTS_RECORDS_IF_AVAILABLE"
-                },
-                {
-                    "documentName": "Brought in dead (BID) certificate",
-                    "documentCode": "BROUGHT_IN_DEAD_(BID)_CERTIFICATE"
-                },
-                {
-                    "documentName": "Burial Certificate",
-                    "documentCode": "BURIAL_CERTIFICATE"
-                }
-            ];
+            $scope.mulSelect=[];
             $scope.printPol.documents = [];
             $scope.documents = [];
             $scope.checkboxValues = false;
