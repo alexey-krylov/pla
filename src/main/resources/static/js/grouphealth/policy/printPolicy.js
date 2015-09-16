@@ -14,9 +14,12 @@
         if($scope.policyId)
         {
             // Call Server Details..
-            $http.get("/pla/grouphealth/policy/getpoilcydocument/").success(function (policyDocumentResponse, status, headers, config) {
+            $http.get("/pla/grouphealth/policy/getpoilcydocument/"+$scope.policyId).success(function (policyDocumentResponse, status, headers, config) {
                 console.log(JSON.stringify(policyDocumentResponse));
-                $scope.mulSelect=policyDocumentResponse;
+                //$scope.mulSelect=policyDocumentResponse;
+
+                $scope.mulSelect=policyDocumentResponse.ghPolicyDocument;
+                $scope.policyNumber=policyDocumentResponse.policyNumber;
 
             });
         }
