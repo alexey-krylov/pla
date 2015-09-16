@@ -23,7 +23,7 @@ public enum GHPolicyDocument {
     POLICY("Policy Sample") {
         @Override
         public EmailAttachment getPolicyDocumentInPDF(List<GHQuotationDetailDto> ghQuotationDetailDtos) throws IOException, JRException {
-            byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghQuotationDetailDtos, "jasperpdf/template/grouphealth/policy/GHPolicy.jrxml");
+            byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghQuotationDetailDtos, "jasperpdf/template/grouphealth/policy/ghPolicy.jrxml");
             String fileName = "Policy Sample.pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);

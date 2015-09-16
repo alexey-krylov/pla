@@ -12,20 +12,20 @@
 	<field name="agentCode" class="java.lang.String">
 		<fieldDescription><![CDATA[agentCode]]></fieldDescription>
 	</field>
-	<field name="agentMobielNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[agentMobielNumber]]></fieldDescription>
+	<field name="agentMobileNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[agentMobileNumber]]></fieldDescription>
 	</field>
 	<field name="agentBranch" class="java.lang.String">
 		<fieldDescription><![CDATA[agentBranch]]></fieldDescription>
 	</field>
-	<field name="propserName" class="java.lang.String">
-		<fieldDescription><![CDATA[propserName]]></fieldDescription>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-	<field name="address" class="java.lang.String">
-		<fieldDescription><![CDATA[address]]></fieldDescription>
+	<field name="proposerAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerAddress]]></fieldDescription>
 	</field>
-	<field name="telephoneNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
+	<field name="proposerPhoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
 	</field>
 	<field name="policyID" class="java.lang.String">
 		<fieldDescription><![CDATA[policyID]]></fieldDescription>
@@ -45,14 +45,14 @@
 	<field name="category" class="java.lang.String">
 		<fieldDescription><![CDATA[category]]></fieldDescription>
 	</field>
-	<field name="reletionship" class="java.lang.String">
-		<fieldDescription><![CDATA[reletionship]]></fieldDescription>
+	<field name="relationship" class="java.lang.String">
+		<fieldDescription><![CDATA[relationship]]></fieldDescription>
 	</field>
 	<field name="planName" class="java.lang.String">
 		<fieldDescription><![CDATA[planName]]></fieldDescription>
 	</field>
-	<field name="planSumAssured" class="java.lang.String">
-		<fieldDescription><![CDATA[planSumAssured]]></fieldDescription>
+	<field name="totalSumAssured" class="java.lang.String">
+		<fieldDescription><![CDATA[totalSumAssured]]></fieldDescription>
 	</field>
 	<field name="optionalCoverName" class="java.lang.String">
 		<fieldDescription><![CDATA[optionalCoverName]]></fieldDescription>
@@ -63,14 +63,14 @@
 	<field name="netPremium" class="java.lang.String">
 		<fieldDescription><![CDATA[netPremium]]></fieldDescription>
 	</field>
-	<field name="addOnBenifit" class="java.lang.String">
-		<fieldDescription><![CDATA[addOnBenifit]]></fieldDescription>
+	<field name="addOnBenefits" class="java.lang.String">
+		<fieldDescription><![CDATA[addOnBenefits]]></fieldDescription>
 	</field>
-	<field name="waiverOfLoading" class="java.lang.String">
-		<fieldDescription><![CDATA[waiverOfLoading]]></fieldDescription>
+	<field name="waiverOfExcessLoadings" class="java.lang.String">
+		<fieldDescription><![CDATA[waiverOfExcessLoadings]]></fieldDescription>
 	</field>
-	<field name="profitLoading" class="java.lang.String">
-		<fieldDescription><![CDATA[profitLoading]]></fieldDescription>
+	<field name="profitAndSolvencyLoading" class="java.lang.String">
+		<fieldDescription><![CDATA[profitAndSolvencyLoading]]></fieldDescription>
 	</field>
 	<field name="serviceTax" class="java.lang.String">
 		<fieldDescription><![CDATA[serviceTax]]></fieldDescription>
@@ -146,7 +146,7 @@
 			</textField>
 			<textField>
 				<reportElement x="690" y="45" width="120" height="25" uuid="7a76437e-1b5b-41a7-b4a2-46e4cf7cc0ca"/>
-				<textFieldExpression><![CDATA[$F{agentMobielNumber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="710" y="78" width="100" height="24" uuid="e7d32500-afa0-46a0-ab9d-8e13bfa08989"/>
@@ -190,15 +190,15 @@
 				</staticText>
 				<textField>
 					<reportElement x="120" y="60" width="100" height="30" uuid="54942371-8ba1-4e7d-bdae-a4a48b5ae8a4"/>
-					<textFieldExpression><![CDATA[$F{propserName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="130" y="90" width="100" height="30" uuid="5e9de079-224c-4c5e-ac91-3ce4c0205861"/>
-					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="120" y="120" width="100" height="30" uuid="603cf9cc-8e69-42f4-bce0-c090030c27b9"/>
-					<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<rectangle>
@@ -437,7 +437,7 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 			<staticText>
 				<reportElement x="95" y="1410" width="100" height="30" uuid="c22d6c0e-508b-49bc-bc0b-45d6681be409"/>
 				<textElement>
-					<font fontName="Yu Mincho" size="12" isBold="true"/>
+					<font  size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NOTE:]]></text>
 			</staticText>
@@ -481,15 +481,15 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 			</textField>
 			<textField>
 				<reportElement x="580" y="970" width="150" height="30" uuid="93f9312d-eefe-45b5-a4ed-7467ddc69f85"/>
-				<textFieldExpression><![CDATA[$F{addOnBenifit}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="580" y="1000" width="150" height="30" uuid="6097ceba-356e-4c93-aa05-0aed2956b6ab"/>
-				<textFieldExpression><![CDATA[$F{waiverOfLoading}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="580" y="1030" width="150" height="30" uuid="580c7895-3141-456c-800b-4e31ae15c1be"/>
-				<textFieldExpression><![CDATA[$F{profitLoading}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{profitAndSolvencyLoading}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="580" y="1060" width="150" height="30" uuid="be7c3344-1052-4f7f-a7ec-3967e2c294b2"/>
@@ -528,7 +528,7 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 			</textField>
 			<textField>
 				<reportElement x="550" y="592" width="100" height="25" uuid="551fad81-9496-4766-8486-95f97ee44cd2"/>
-				<textFieldExpression><![CDATA[$F{reletionship}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="240" y="622" width="280" height="28" uuid="09bde7d1-1c45-436d-aff1-500ddf9084a9"/>
@@ -536,7 +536,7 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 			</textField>
 			<textField>
 				<reportElement x="521" y="624" width="259" height="26" uuid="65b2ccbe-97f4-4542-aa8c-855911384ffd"/>
-				<textFieldExpression><![CDATA[$F{planSumAssured}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="240" y="650" width="250" height="30" uuid="23b4cb1c-26b4-4d60-875d-8dbee6edd4a6"/>
@@ -548,13 +548,11 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 			</textField>
 			<subreport>
 				<reportElement x="240" y="1550" width="197" height="20" uuid="ea9126f7-2e9d-4ecf-87c4-a7ce19949632"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA["GlAssurancePolicys.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/policy/GlArticleTwo.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="240" y="1580" width="200" height="16" uuid="2caed89f-1c08-46e9-869b-8059793e178f"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA["MemberSchedule.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/policy/MemberSchedule.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

@@ -44,18 +44,27 @@ public class GLPolicyMailDetailDto {
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
     private boolean showLoading;
+    private String optionalCoverName;
+    private String additionalDocument;
+private String optionalSumAssured;
 
     private String policyInceptionDate;
+    private String numberOfLifeAssured;
+    private String policyID;
     private String policyTerm;
     private String policyHolderName;
     private String issueBranch;
     private String schemeName;
     private String masterPolicyNumber;
     private String issueDate;
+    private String issuranceDate;
     private String policyPeriodFrom;
     private String policyPeriodTo;
+    private String lifeAssured;
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;
+    private String relationship;
+    private String category;
 
     @Getter
     @Setter

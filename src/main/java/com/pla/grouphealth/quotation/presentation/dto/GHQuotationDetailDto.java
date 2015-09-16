@@ -45,7 +45,7 @@ public class GHQuotationDetailDto {
 
     private String policyInceptionDate;
     private String policyExpiryDate;
-
+    private String policyNumber;
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;
     private boolean showLoading;

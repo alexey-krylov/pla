@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-11T14:34:53 -->
+<!-- 2015-09-16T10:19:56 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -46,8 +46,8 @@
 	<field name="agentName" class="java.lang.String">
 		<fieldDescription><![CDATA[agentName]]></fieldDescription>
 	</field>
-	<field name="quotationDate" class="java.lang.String">
-		<fieldDescription><![CDATA[quotationDate]]></fieldDescription>
+	<field name="policyInceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
 	</field>
 	<field name="showLoading" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
@@ -73,11 +73,11 @@
 	<field name="proposerPhoneNumber" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
 	</field>
-	<field name="quotationNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[quotationNumber]]></fieldDescription>
+	<field name="policyNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[policyNumber]]></fieldDescription>
 	</field>
-	<field name="coveragePeriod" class="java.lang.String">
-		<fieldDescription><![CDATA[coveragePeriod]]></fieldDescription>
+	<field name="policyExpiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[policyExpiryDate]]></fieldDescription>
 	</field>
 	<field name="totalLivesCovered" class="java.lang.String">
 		<fieldDescription><![CDATA[totalLivesCovered]]></fieldDescription>
@@ -157,14 +157,14 @@
 					<textElement verticalAlignment="Top">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{quotationNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{policyNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="667" y="12" width="100" height="29" uuid="778b5ab9-f57e-4f75-9f11-47c729323f10"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{quotationDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{policyInceptionDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="622" y="12" width="45" height="29" uuid="b5dc7f01-f7c0-49ac-8d4b-04eb5561233c"/>
@@ -325,30 +325,30 @@
 						<textElement>
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[  Quotation Details:]]></text>
+						<text><![CDATA[  Policy Details:]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="85" y="35" width="123" height="19" uuid="bc10e285-9c9f-41f0-8cbe-c2ed5516cf80"/>
+						<reportElement x="40" y="35" width="168" height="19" uuid="bc10e285-9c9f-41f0-8cbe-c2ed5516cf80"/>
 						<textElement textAlignment="Right">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Quotation Number :]]></text>
+						<text><![CDATA[Master Policy Number :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement mode="Opaque" x="212" y="37" width="100" height="17" backcolor="#808080" uuid="5f3ccd72-3e34-419f-b9c2-c67064e6cf69"/>
-						<textFieldExpression><![CDATA[$F{quotationNumber}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{policyNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="60" y="54" width="150" height="16" uuid="8e0b6ea3-945f-4623-b81e-91c3ba55144d"/>
+						<reportElement x="59" y="58" width="150" height="16" uuid="8e0b6ea3-945f-4623-b81e-91c3ba55144d"/>
 						<textElement textAlignment="Right">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Proposed Cover Period :]]></text>
+						<text><![CDATA[Policy Period :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="211" y="54" width="100" height="16" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="351" y="58" width="100" height="16" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Top"/>
-						<textFieldExpression><![CDATA[$F{coveragePeriod}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{policyExpiryDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="69" y="76" width="140" height="20" uuid="dcea3cfd-918d-4d7d-8c16-d8d6e0021a94"/>
@@ -374,6 +374,16 @@
 						<textElement verticalAlignment="Middle"/>
 						<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 					</textField>
+					<textField>
+						<reportElement x="213" y="55" width="100" height="21" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
+						<textElement verticalAlignment="Middle"/>
+						<textFieldExpression><![CDATA[$F{policyInceptionDate}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="321" y="56" width="20" height="21" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<textElement verticalAlignment="Middle"/>
+						<text><![CDATA[TO]]></text>
+					</staticText>
 				</frame>
 				<frame>
 					<reportElement positionType="Float" x="135" y="414" width="722" height="155" uuid="1b0278c2-f175-414f-85b5-895178227955"/>

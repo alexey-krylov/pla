@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-15T17:51:21 -->
+<!-- 2015-09-16T10:54:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GHPolicyDoc" pageWidth="842" pageHeight="672" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="af162d2e-b31e-4b56-b93f-89b3f8d1b596">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -9,7 +9,6 @@
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-
 	<field name="policyInceptionDate" class="java.lang.String">
 		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
 	</field>
@@ -20,18 +19,29 @@
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="145" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<rectangle>
-				<reportElement x="0" y="0" width="802" height="145" uuid="b5368a84-60a9-42f0-8fb4-08b9463b327e"/>
+				<reportElement x="-2" y="0" width="802" height="80" uuid="b5368a84-60a9-42f0-8fb4-08b9463b327e"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="70" width="280" height="45" uuid="7a048411-5e6b-4f31-8164-2acb77bec750"/>
+				<reportElement x="0" y="35" width="181" height="45" uuid="7a048411-5e6b-4f31-8164-2acb77bec750"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Promed Insured Policy]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="181" y="35" width="180" height="45" uuid="63116001-2638-4574-b739-ac735c9c05c9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="361" y="10" width="333" height="60" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<detail>
