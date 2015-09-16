@@ -65,11 +65,6 @@ public class GHPolicyController {
         this.ghPolicyService = ghPolicyService;
     }
 
-    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
-        for (EmailAttachment fileTobeDeleted : emailAttachments) {
-            fileTobeDeleted.getFile().delete();
-        }
-    }
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
@@ -208,9 +203,9 @@ public class GHPolicyController {
         if (documents.size()==1){
             response.reset();
             response.setContentType("application/pdf");
-            response.setHeader("content-disposition", "attachment; filename=" + "GHPolicy.pdf" + "");
             OutputStream outputStream = response.getOutputStream();
             List<EmailAttachment> emailAttachments = ghPolicyService.getPolicyPDF(new PolicyId(policyId), documents);
+            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName() + ".pdf");
             outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
             outputStream.flush();
             outputStream.close();
@@ -253,5 +248,10 @@ public class GHPolicyController {
         return modelAndView;
     }
 
+    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
+        for (EmailAttachment fileTobeDeleted : emailAttachments) {
+            fileTobeDeleted.getFile().delete();
+        }
+    }
 
 }
