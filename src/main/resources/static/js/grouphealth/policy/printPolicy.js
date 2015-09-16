@@ -47,6 +47,12 @@
         }
 
         $scope.printAllPolicy=function(){
+            $scope.documentsIdList=[];
+            angular.forEach($scope.mulSelect, function (allDoc) {
+                allDoc.Selected=true;
+                $scope.documentsIdList.push(allDoc.documentCode);
+            });
+
             //alert('PrintPolicy'+$scope.policyId);
             window.location.href = '/pla/grouphealth/policy/printpolicy/' + $scope.policyId + '/' + $scope.documentsIdList;
         }
