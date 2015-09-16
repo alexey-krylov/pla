@@ -96,9 +96,11 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             $scope.changeAgent = false;
             console.log($scope.policyDetails.basic['active']);
             if (!$scope.policyDetails.basic['active']) {
-                $('#agentModal').modal('show');
-                $scope.changeAgent = true;
-                $scope.stepsSaved["2"] = !$scope.changeAgent;
+               // $('#agentModal').modal('show');
+               // $scope.changeAgent = true;
+                //$scope.stepsSaved["2"] = !$scope.changeAgent;
+                $scope.stepsSaved["2"] = true;
+
             }
 
             $scope.policyDetails.proposer = policyDetails;
