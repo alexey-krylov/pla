@@ -31,7 +31,6 @@ function IsValidEmail(email) {
     return regex.test(email);
 }
 function sendEmail() {
-    alert('SendEmailMethod..');
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
     var mailContent = $('#mailContent').val();
