@@ -2156,10 +2156,16 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
 
             $scope.printAllPolicy = function () {
                 var documents = [];
-                for (var i = 0; i < $scope.mulSelect.length; i++) {
-                    documents.push($scope.mulSelect[i].documentCode);
 
-                }
+                /*for (var i = 0; i < $scope.mulSelect.length; i++) {
+                    documents.push($scope.mulSelect[i].documentCode);
+                }*/
+
+                angular.forEach($scope.mulSelect, function (allDoc) {
+                    allDoc.Selected=true;
+                    documents.push(allDoc.documentCode);
+                });
+
                 window.location.href = '/pla/individuallife/policy/printpolicy/' + $scope.policyId + '/' + documents;
             }
 

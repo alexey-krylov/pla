@@ -42,8 +42,9 @@
                             <button type="button" class="btn btn-success btn-xs"
                                     ng-click="printPolicy()" ng-disabled="!documents.length || mulSelect.length == documents.length > 0">Print
                             </button>
+
                             <button type="button" class="btn btn-success btn-xs"
-                                    ng-disabled="mulSelect.length !=documents.length" ng-click="printAllPolicy()">Print All
+                                    ng-model="selectedAll" ng-click="printAllPolicy()">Print All
                             </button>
                         </div>
 
@@ -61,7 +62,7 @@
                                         <input id="{{allDoc.documentCode}}" type="checkbox"
                                                value="{{allDoc.documentCode}}"
                                                ng-checked="printPol.documents.indexOf(allDoc.documentCode) > -1"
-                                               ng-click="toggleSelection(allDoc.documentCode)"/>
+                                               ng-model="allDoc.Selected" ng-click="toggleSelection(allDoc.documentCode)"/>
                                         <label for="{{allDoc.documentCode}}"></label>
                                         {{allDoc.documentName}}
                                     </div>
