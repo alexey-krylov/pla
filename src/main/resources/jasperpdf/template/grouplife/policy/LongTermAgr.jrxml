@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-09-09T11:57:16 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LongTermAgr" pageWidth="710" pageHeight="895" orientation="Landscape" columnWidth="670" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6412dcb1-4ae1-4484-be30-eb5420565c39">
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-09-16T16:36:05 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LongTermAgr" pageWidth="710" pageHeight="930" orientation="Landscape" columnWidth="670" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="20" uuid="6412dcb1-4ae1-4484-be30-eb5420565c39">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
 		<![CDATA[]]>
@@ -21,9 +21,6 @@
 	<field name="policyInceptionDate" class="java.lang.String">
 		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
 	</field>
-	<field name="policyHolderName" class="java.lang.String">
-		<fieldDescription><![CDATA[policyHolderName]]></fieldDescription>
-	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -32,23 +29,20 @@
 			<rectangle>
 				<reportElement x="-2" y="0" width="672" height="60" uuid="b0179bdb-2a67-4c0b-8fe4-60d929f73029"/>
 			</rectangle>
-			<staticText>
-				<reportElement x="110" y="0" width="450" height="60" uuid="7af4d464-eb8e-443c-bc14-95955f87e517"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<text><![CDATA[                               Header for the Policy Document]]></text>
-			</staticText>
+			<image>
+				<reportElement x="220" y="10" width="200" height="40" uuid="671eca74-e750-4c2b-a85f-38b663995d3d"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<detail>
 		<band height="726" splitType="Stretch">
 			<staticText>
 				<reportElement x="270" y="0" width="230" height="30" uuid="90120630-53a7-4bec-a179-c7df2a09b3ab"/>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="16"/>
 				</textElement>
-				<text><![CDATA[ Long Term Aggrement]]></text>
+				<text><![CDATA[ Long Term Agreement]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="10" y="40" width="650" height="110" uuid="472583c5-e88a-4b9d-8c70-443c3d687f45"/>
@@ -86,7 +80,7 @@
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="210" width="650" height="30" uuid="94334388-b271-4dfd-9ca8-006df3fe641a"/>
-				<text><![CDATA[ Should the client cancel the agreement before the end of the agreed policy term, Professional Life will claw  back the premium arising from thediscounted premium.Dated the                                           day of                                       D28]]></text>
+				<text><![CDATA[ Should the client cancel the agreement before the end of the agreed policy term, Professional Life will claw  back the premium arising from thediscounted premium.Dated the                                           day of                                       ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="250" width="650" height="20" uuid="d03c9bf5-d8d9-416a-b14f-0e876c727b18"/>
@@ -211,7 +205,7 @@
 				<reportElement x="10" y="40" width="649" height="30" backcolor="#001963" uuid="6ebfa4e3-6fd0-4f1c-b893-e841980e39cd"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="10" y="40" width="520" height="30" forecolor="#FFFFFF" uuid="ab2b455f-b444-4eca-869d-2476cca7fe47"/>
+				<reportElement x="10" y="40" width="649" height="30" forecolor="#FFFFFF" uuid="ab2b455f-b444-4eca-869d-2476cca7fe47"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14"/>
 				</textElement>
@@ -219,14 +213,17 @@
 			</staticText>
 			<textField>
 				<reportElement x="110" y="70" width="100" height="30" uuid="fc417800-25c3-4184-82f2-b8ffc4dcf452"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="150" y="130" width="100" height="20" uuid="4690e90f-e599-4721-b1af-40f845b178dd"/>
+				<reportElement x="150" y="130" width="190" height="20" uuid="4690e90f-e599-4721-b1af-40f845b178dd"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="110" y="100" width="100" height="30" uuid="ced2dd36-2e9d-4ec7-8798-88d38ac93185"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
 			</textField>
 			<line>
@@ -244,7 +241,7 @@
 				<textFieldExpression><![CDATA[$F{policyTerm}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="560" y="182" width="90" height="20" uuid="d7820c8d-1008-41b3-9045-6267b7e39888"/>
+				<reportElement x="560" y="182" width="99" height="20" uuid="d7820c8d-1008-41b3-9045-6267b7e39888"/>
 				<textFieldExpression><![CDATA[$F{policyInceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -253,21 +250,63 @@
 			</staticText>
 			<textField>
 				<reportElement x="160" y="441" width="150" height="18" uuid="229840be-b6b4-49c6-baaa-4d85790ce93f"/>
-				<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="69" splitType="Stretch">
+		<band height="94" splitType="Stretch">
 			<rectangle>
-				<reportElement x="-2" y="-1" width="674" height="52" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
+				<reportElement x="-2" y="-1" width="674" height="89" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
 			</rectangle>
+			<frame>
+				<reportElement mode="Opaque" x="-1" y="0" width="673" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="1ac5b9dc-5a64-4ed9-9786-a90ceb7c11c9"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="5bde2870-01fd-4ceb-b817-7c6fc4cc86e1"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Professional Life Assurance Limited]]></text>
+				</staticText>
+			</frame>
 			<staticText>
-				<reportElement x="300" y="10" width="340" height="32" uuid="51da35f9-834d-4a5e-af1e-7173b0dea997"/>
+				<reportElement x="0" y="40" width="234" height="54" forecolor="#0000CC" uuid="fe452f64-ec7f-427e-a19f-42f6d9ca8c5c"/>
 				<textElement>
-					<font size="16"/>
+					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Footer]]></text>
+				<text><![CDATA[  Head Office
+  Finsbury Park, Cairo Road,
+  North End ,P.O.Box 31357,Lusaka-Zambia
+  Tel : 021-1-222233,366704,Fax: 021-1-220128
+  email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="40" width="127" height="46" forecolor="#0000CC" uuid="18027e95-4f20-4245-bd33-81602da32c6f"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  KITWE Branch
+  17,Kanyanta Road
+  P.O.Box 20564
+  Kitwe - Zambia
+  Tel : 021-2-224270,225611]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="40" width="212" height="46" forecolor="#3300CC" uuid="31d88046-a04d-4207-89e5-696e500c3b8a"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Ndola Branch
+  1stFloor, Finance House,President Avenue,
+  P.O.Box:71177,Ndola,Zambia
+  Tel - 021-2-612466
+  Fax-021-2-612466]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

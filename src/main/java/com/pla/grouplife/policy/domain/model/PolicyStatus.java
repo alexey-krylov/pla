@@ -5,5 +5,5 @@ package com.pla.grouplife.policy.domain.model;
  */
 public enum PolicyStatus {
 
-    IN_FORCE;
+    IN_FORCE,LAPSED,EXPIRED;
 }

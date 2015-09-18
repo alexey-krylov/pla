@@ -46,7 +46,7 @@ public enum GLPolicyDocument {
     },GL_POLICY_DOCUMENT("Group Life Policy Document") {
         @Override
         public EmailAttachment getPolicyDocumentInPDF(List<GLPolicyMailDetailDto> glQuotationDetailDto) throws IOException, JRException {
-            byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(glQuotationDetailDto, "jasperpdf/template/grouplife/policy/glPolicyDocument.jrxml");
+            byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(glQuotationDetailDto, "jasperpdf/template/grouplife/policy/demo.jrxml");
             String fileName = "Group Life Policy Document.pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);

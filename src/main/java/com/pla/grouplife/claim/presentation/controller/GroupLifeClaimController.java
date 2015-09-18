@@ -3,6 +3,7 @@ package com.pla.grouplife.claim.presentation.controller;
 import com.pla.grouplife.claim.application.command.GLClaimIntimationCommand;
 import com.pla.grouplife.claim.application.service.GLClaimService;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
+import com.pla.sharedkernel.domain.model.ClaimType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mirror on 8/6/2015.
@@ -57,12 +61,11 @@ public class GroupLifeClaimController {
         modelAndView.addObject("searchCriteria", searchGLPolicyDto);
         return modelAndView;
     }
-/*
+
     @RequestMapping(value = "/getclaimtype",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, String>> getClaimType(){
-        return null;
+    public List<Map<String, Object>> getClaimType(){
+        return ClaimType.getAllClaimType();
     }
 
-   */
 }
