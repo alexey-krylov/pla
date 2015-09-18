@@ -210,7 +210,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.changeAgent = false;
             console.log($scope.proposalDetails.basic['active']);
-            if (!$scope.proposalDetails.basic['active'] && status != 'return' && method != 'approval') {
+            if (!$scope.proposalDetails.basic['active'] && status != 'return' && method != 'approval' && mode!='view' ) {
                 if(!$scope.isViewMode){
                     $('#agentModal').modal('show');
                 }
@@ -218,6 +218,10 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $scope.changeAgent = true;
                 $scope.stepsSaved["1"] = !$scope.changeAgent;
                // alert("hi");
+            }else if (!$scope.proposalDetails.basic['active'] && mode=='view' ) {
+
+                $scope.stepsSaved["1"] = true;
+                // alert("hi");
             }
             if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
 
