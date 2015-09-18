@@ -6,6 +6,7 @@ import com.pla.core.application.producrclaim.UpdateProductClaimCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.dto.ProductClaimTypeDto;
 import com.pla.core.query.ProductClaimMapperFinder;
+import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -63,6 +64,16 @@ public class ProductClaimSetUpController {
     public List<Map<String,Object>> getProcessByLineOfBusiness(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness){
         return productClaimMapperFinder.getPlanDetailBy(lineOfBusiness);
     }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public ModelAndView searchQuotation(ProductClaimTypeDto searchIlDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("searchResult", productClaimMapperFinder.searchProductClaimMap(searchIlDto.getLineOfBusiness(),searchIlDto.getPlanName()));
+        modelAndView.addObject("searchCriteria", searchIlDto);
+        modelAndView.setViewName("pla/core/productClaim/viewProductClaim");
+        return modelAndView;
+    }
+
 
     @RequestMapping(value = "/getclaimtypebylob/{lineOfBusiness}",method = RequestMethod.GET)
     @ResponseBody
@@ -125,12 +136,5 @@ public class ProductClaimSetUpController {
     public ProductClaimTypeDto getProductClaimMappingDetailById(@PathVariable("productClaimId") String productClaimId){
         return productClaimMapperFinder.getProductClaimMapDetailById(productClaimId);
     }
-
-     @RequestMapping(value="/search" ,method=RequestMethod.GET)
-     @ResponseBody
-         public List<ProductClaimTypeDto> search(@RequestParam(value = "lineOfBusiness",required = false) LineOfBusinessEnum lineOfBusiness, @RequestParam(value = "planName",required = false) String planName){
-          return productClaimMapperFinder.searchProductClaimMap(lineOfBusiness, planName);
-     }
-
 
 }

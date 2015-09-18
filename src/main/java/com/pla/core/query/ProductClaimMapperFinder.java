@@ -23,25 +23,17 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 @Service
 public class ProductClaimMapperFinder {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     public static final String getPlanDetailsByLineOfBusiness = " SELECT DISTINCT p.plan_code planCode,p.plan_id planId, p.plan_name planName FROM " +
             " plan_coverage_benefit_assoc p " +
             " WHERE p.line_of_business=  :lineOfBusiness  ";
-
-
     public static final String getAllProductClaimMappingDetails = " SELECT * FROM product_claim_map_view ";
-
     public static final String getProductClaimMapDetailByProductClaimId = " SELECT * FROM product_claim_map_view WHERE productClaimId=:productClaimId ";
-
-
     public static final String getAllCoveragesDetailByPlanCode = "SELECT DISTINCT p.coverageName, p.coverageId " +
             "from  product_claim_map_view p where planCode=:planCode";
-
     public static final String getAllClaimTypesDetailByCoverageId = "SELECT p.claimType  from product_claim_map_view p where coverageId=:coverageId";
-
     public static final String getAllProductClaimMappingDetailsByLineOfBusinessAndPlanName = "SELECT * FROM product_claim_map_view WHERE lineOfBusiness=:lineOfBusiness OR " +
             " planName=:planName ";
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -75,7 +67,7 @@ public class ProductClaimMapperFinder {
     public List<ProductClaimTypeDto> searchProductClaimMap(LineOfBusinessEnum lineOfBusinessEnum, String planName) {
         //adding parameters to sqlParameterSource
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue("lineOfBusiness", lineOfBusinessEnum != null ? lineOfBusinessEnum.name() : "").addValue("planName", planName);
-        List<Map<String, Object>> productClaimDetail = namedParameterJdbcTemplate.query(getAllProductClaimMappingDetailsByLineOfBusinessAndPlanName, sqlParameterSource, new ColumnMapRowMapper());
+         List<Map<String, Object>> productClaimDetail = namedParameterJdbcTemplate.query(getAllProductClaimMappingDetailsByLineOfBusinessAndPlanName, sqlParameterSource, new ColumnMapRowMapper());
         return mapAllProductClaimDetail(productClaimDetail);
 
 
