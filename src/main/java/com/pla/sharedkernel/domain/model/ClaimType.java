@@ -14,7 +14,7 @@ public enum ClaimType {
 
     private String description;
 
-    ClaimType(String description) {
+     ClaimType(String description) {
         this.description = description;
     }
 

@@ -31,4 +31,9 @@ public class ProductClaimTypeDto {
         this.lineOfBusinessDescription = lineOfBusinessDescription;
     }
 
+    public   ProductClaimTypeDto updateWithCoverageClaimDto(List<CoverageClaimTypeDto> claimTypeList){
+        this.coverageClaimType=claimTypeList;
+        return this;
+    }
+
 }

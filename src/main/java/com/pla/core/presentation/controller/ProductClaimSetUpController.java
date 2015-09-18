@@ -58,16 +58,6 @@ public class ProductClaimSetUpController {
         return modelAndView;
     }
 
-
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView searchQuotation(ProductClaimTypeDto productClaimTypeDto) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("searchResult", productClaimMapperFinder.getAllProductClaimMapDetail());
-        modelAndView.addObject("searchCriteria", productClaimTypeDto);
-        modelAndView.setViewName("pla/core/productClaim/viewProductClaim");
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/getplanbylob/{lineOfBusiness}",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String,Object>> getProcessByLineOfBusiness(@PathVariable("lineOfBusiness") LineOfBusinessEnum lineOfBusiness){
@@ -124,20 +114,23 @@ public class ProductClaimSetUpController {
         return new ResponseEntity(Result.success("Product Claim Mapping Updated successfully"), HttpStatus.OK);
     }
 
-
     @RequestMapping(value = "/getallproductclaimmap",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getProductClaimMappingDetail(){
+    public List<ProductClaimTypeDto> getProductClaimMappingDetail(){
         return productClaimMapperFinder.getAllProductClaimMapDetail();
     }
 
-
-
     @RequestMapping(value = "/getproductclaimbyid/{productClaimId}",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> getProductClaimMappingDetailById(@PathVariable("productClaimId") String productClaimId){
+    public ProductClaimTypeDto getProductClaimMappingDetailById(@PathVariable("productClaimId") String productClaimId){
         return productClaimMapperFinder.getProductClaimMapDetailById(productClaimId);
     }
 
-    }
+     @RequestMapping(value="/search" ,method=RequestMethod.GET)
+     @ResponseBody
+         public List<ProductClaimTypeDto> search(@RequestParam(value = "lineOfBusiness",required = false) LineOfBusinessEnum lineOfBusiness, @RequestParam(value = "planName",required = false) String planName){
+          return productClaimMapperFinder.searchProductClaimMap(lineOfBusiness, planName);
+     }
 
+
+}

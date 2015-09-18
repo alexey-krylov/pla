@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by Mirror on 8/6/2015.
  */
@@ -60,12 +57,12 @@ public class GroupLifeClaimController {
         modelAndView.addObject("searchCriteria", searchGLPolicyDto);
         return modelAndView;
     }
-
+/*
     @RequestMapping(value = "/getclaimtype",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, String>> getClaimType(){
         return null;
     }
 
-
+   */
 }
