@@ -1369,8 +1369,101 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             };
 
 
+            /**
+             *
+             * Chceking the FirstName of Beneficiary and Trustee FirstName Same or Not
+             */
+            $scope.isBeneficiaryTrusteeNameSame=false;
+            $scope.$watch('beneficiary.trusteeDetail.firstName',function(newVal,oldVal){
 
+                if(newVal)
+                {
+                    if(newVal == $scope.beneficiary.firstName)
+                    {
+                        //alert('both are Same');
+                        $scope.isBeneficiaryTrusteeNameSame=true;
+                    }
+                    else
+                    {
+                        $scope.isBeneficiaryTrusteeNameSame=false;
+                    }
+                }
 
+            });
+            $scope.$watch('beneficiary.firstName',function(newVal,oldVal){
+                 if(newVal){
+
+                     if(newVal == $scope.beneficiary.trusteeDetail.firstName){
+                         //alert('Both Are Same..');
+                         $scope.isBeneficiaryTrusteeNameSame=true;
+                     }
+                     else
+                     {
+                         $scope.isBeneficiaryTrusteeNameSame=false;
+                     }
+                 }
+            });
+            /**
+             *
+             * Chceking the NRC Number of Beneficiary and Trustee are  Same or Not
+             */
+            $scope.isBeneficiaryTrusteeNRCSame=false;
+
+            $scope.$watch('beneficiary.nrc',function(newVal,oldVal){
+                if(newVal){
+
+                    if(newVal == $scope.beneficiary.trusteeDetail.nrc)
+                    {
+                        //alert('Both Are  Same..');
+                        $scope.isBeneficiaryTrusteeNRCSame=true;
+                    }
+                    else
+                    {
+                        $scope.isBeneficiaryTrusteeNRCSame=false;
+                    }
+                }
+            });
+            $scope.$watch('beneficiary.trusteeDetail.nrc',function(newVal,oldVal){
+                if(newVal){
+
+                    if(newVal == $scope.beneficiary.nrc)
+                    {
+                        //alert('Both Are Same..');
+                        $scope.isBeneficiaryTrusteeNRCSame=true;
+                    }
+                    else
+                    {
+                        $scope.isBeneficiaryTrusteeNRCSame=false;
+                    }
+                }
+            })
+            $scope.isBeneficiaryTrusteeDOBSame=false;
+            $scope.$watch('beneficiary.trusteeDetail.dateOfBirth',function(newVal,oldVal){
+
+                if(newVal){
+                    if(newVal == $scope.beneficiary.dateOfBirth){
+                        //alert('Both Are Same..');
+                        $scope.isBeneficiaryTrusteeDOBSame=true;
+                    }
+                    else
+                    {
+                        $scope.isBeneficiaryTrusteeDOBSame=false;
+                    }
+                }
+            });
+            $scope.$watch('beneficiary.dateOfBirth',function(newVal,oldVal){
+
+                if(newVal){
+                    if(newVal == $scope.beneficiary.trusteeDetail.dateOfBirth){
+                        //alert('Both Arew Same..');
+                        $scope.isBeneficiaryTrusteeDOBSame=true;
+                    }
+                    else
+                    {
+                        $scope.isBeneficiaryTrusteeDOBSame=false;
+                    }
+                }
+            });
 
             $scope.showProposerDob = function (dob) {
                 //console.log('Dob Calculation..');
@@ -2918,7 +3011,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             });
 
-            $scope.beneficiary={};
+            $scope.beneficiary={"trusteeDetail":{}};
             $scope.$watch('beneficiary.title', function (newVal, oldVal) {
                 if (newVal) {
                     //alert(newVal);

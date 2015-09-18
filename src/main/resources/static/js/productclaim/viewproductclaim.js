@@ -3,7 +3,7 @@ require(['jquery','bootstrap','datatables'],function() {
 });
 
 var updateProductClaim = function(claimId){
-    alert("Test..."+claimId);
+    //alert("Test..."+claimId);
 
     //window.location.href = "proposal/edit?proposalId=" + proposalId + "&mode=view";
 

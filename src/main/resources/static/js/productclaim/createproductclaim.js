@@ -2,7 +2,7 @@
 (function (angular) {
     "use strict";
 
-    var app = angular.module('createProductClaim', ['ngRoute','commonServices','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert']);
+    var app = angular.module('createProductClaim', ['ngRoute','common','commonServices','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert','ngMessages']);
 
     app.controller('CreateProductClaimCtrl', ['$scope', '$http', '$location','getQueryParameter', function ($scope, $http, $location, getQueryParameter) {
         $scope.CoverageSample= "coverages..";
@@ -19,7 +19,6 @@
         $scope.mode = getQueryParameter('mode');
 
         //alert("claimId.."+$scope.productClaimId);
-
         $scope.getPlan=function()
         {
             //alert($scope.mapping.lineOfBusiness);
@@ -62,14 +61,23 @@
         $scope.submitProductClaim=function()
         {
             //console.log('Submit Data:-'+JSON.stringify($scope.coverageClaimType));
+            /**
+             * "$scope.mapping.planCode":- Here plan Id has assigend
+             */
+             var provinceDetails = _.findWhere($scope.businessPlans, {planId: $scope.mapping.planCode});
+            console.log('provinceDetails'+JSON.stringify(provinceDetails));
+
             var submitproductClaimReq={
                 "coverageClaimType":$scope.coverageClaimType,
-                "planCode":$scope.mapping.planCode,
+                "planCode":provinceDetails.planCode,
+                //"planId":provinceDetails.planId,
                 "lineOfBusiness":$scope.mapping.lineOfBusiness
             };
-            //console.log('Submit Data:-'+JSON.stringify(submitproductClaimReq));
+            console.log('Submit Data:-'+JSON.stringify(submitproductClaimReq));
 
-            $http.post('/pla/core/productclaimmap/create',submitproductClaimReq).success(function (claimresponse, status, headers, config) {
+
+            $http.post('/pla/core/productclaimmap/create',submitproductClaimReq).success(function (response, status, headers, config) {
+                console.log(response);
             }).error(function (response, status, headers, config) {
             });
         }

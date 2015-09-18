@@ -40,7 +40,12 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{lineOfBusiness}">Line Of Business</label>
-                    <input type="text" class="form-control input-sm" name="lineOfBusiness" ng-model="lineOfBusiness" />
+                    <!--<input type="text" class="form-control input-sm" name="lineOfBusiness" ng-model="lineOfBusiness" />-->
+                    <select class="form-control input-sm" name="lineOfBusiness" ng-model="lineOfBusiness">
+                        <option value="">--Select One--</option>
+                        <option value="GROUP_LIFE" th:value="GROUP_LIFE"> Group Life</option>
+                        <option value="INDIVIDUAL_LIFE" th:value="INDIVIDUAL_LIFE">Individual Life</option>
+                    </select>
                 </div>
             </div>
             <div class="col-md-2">
@@ -73,19 +78,23 @@
                             <th th:text="#{productMappingPlanName}">
                                 Plan Name
                             </th>
-                            <th th:text="#{coverageClaimType}">
+                            <!--<th th:text="#{coverageClaimType}">
                                 Coverage Claim Type
-                            </th>
+                            </th>-->
                             <th th:text="#{actions}">
                                 Actions
                             </th>
                         </tr>
                         </thead>
                         <tbody >
+
                         <tr th:each="productClaim : ${searchResult}">
-                            <td th:text="${{productClaim.lineOfBusiness}}" ></td>
+                            <p th:text="${productClaim.coverageClaimType}"></p>
+
+                            <td th:text="${{productClaim.lineOfBusinessDescription}}" ></td>
                             <td th:text="${{productClaim.planName}}" ></td>
-                            <td style="text-align:center" class="pop" >
+
+                            <!--<td style="text-align:center" class="pop" >
                                 <button href="#" class="details-box btn btn-primary btn-xs" rel="popover"  data-content="" > CoverageClaimType
                                     <div class="popover-body" style="display:none;">
                                         <ul  type="square"    th:each="claimType : ${productClaim.coverageClaimType}" >
@@ -93,7 +102,7 @@
                                         </ul>
                                     </div>
                                 </button>
-                            </td>
+                            </td>-->
                            <td style="text-align:center;width:15%">
                                 <button type="button" class="btn btn-default btn-xs" th:onclick="'updateProductClaim(\''+ ${productClaim.productClaimId} + '\');'">Update</button>
                                 <!--<button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>-->
