@@ -35,6 +35,8 @@ public class ProductClaimMapperFinder {
             " planName=:planName ";
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public static final String getNumberOfPlanCode="SELECT COUNT(planCode) FROM product_claim_map_view WHERE planCode=:planCode";
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -72,6 +74,14 @@ public class ProductClaimMapperFinder {
 
 
     }
+    public boolean getNumberOfPlanCodeCount(String planCode){
+        //Number planCount=namedParameterJdbcTemplate.queryForObject(getNumberOfPlanCode,new MapSqlParameterSource().addValue("planCode",planCode),Number.class);
+        Integer planCount=namedParameterJdbcTemplate.queryForObject(getNumberOfPlanCode,new MapSqlParameterSource().addValue("planCode",planCode),Integer.class);
+         return planCount.intValue()!=0;
+
+    }
+
+
 
     private List<ProductClaimTypeDto> mapAllProductClaimDetail(List<Map<String, Object>> productClaimDetail){
 

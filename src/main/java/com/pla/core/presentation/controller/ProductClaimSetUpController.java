@@ -6,7 +6,6 @@ import com.pla.core.application.producrclaim.UpdateProductClaimCommand;
 import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.dto.ProductClaimTypeDto;
 import com.pla.core.query.ProductClaimMapperFinder;
-import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -97,6 +96,14 @@ public class ProductClaimSetUpController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(Result.failure("Error in creating Product Claim Mapping", bindingResult.getAllErrors()), HttpStatus.OK);
         }
+        /*
+        *  check for duplicate product claim mapping
+        * */
+        boolean planCodeCount = productClaimMapperFinder.getNumberOfPlanCodeCount(createProductClaimCommand.getPlanCode());
+        if (planCodeCount){
+            LOGGER.error("Product Claim Record with this Plan Code already exist ..Try with another PlanCode");
+            return new ResponseEntity(Result.failure("Product Claim Record with this Plan Code already exist ..Try with another PlanCode"), HttpStatus.OK);
+        }
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             createProductClaimCommand.setUserDetails(userDetails);
@@ -136,5 +143,12 @@ public class ProductClaimSetUpController {
     public ProductClaimTypeDto getProductClaimMappingDetailById(@PathVariable("productClaimId") String productClaimId){
         return productClaimMapperFinder.getProductClaimMapDetailById(productClaimId);
     }
+
+     @RequestMapping(value="/search" ,method=RequestMethod.GET)
+     @ResponseBody
+         public List<ProductClaimTypeDto> search(@RequestParam(value = "lineOfBusiness",required = false) LineOfBusinessEnum lineOfBusiness, @RequestParam(value = "planName",required = false) String planName){
+          return productClaimMapperFinder.searchProductClaimMap(lineOfBusiness, planName);
+     }
+
 
 }
