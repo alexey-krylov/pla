@@ -11,7 +11,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
             } else if (mode == 'edit') {
-                $scope.isEditMode = true;
+                $scope.isEditMode = false;
             }
             $scope.isReturnStatus = false;
 
@@ -55,7 +55,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             var method = getQueryParameter("method");
             if (method == 'approval') {
                 $scope.isViewMode = true;
-
+                $scope.stepsSaved["1"] =true;
                 $http.get("/pla/grouplife/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
                     // console.log(data);
                     $scope.approvalCommentList=data;
@@ -208,7 +208,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.changeAgent = false;
             console.log($scope.proposalDetails.basic['active']);
-            if (!$scope.proposalDetails.basic['active']) {
+            if (!$scope.proposalDetails.basic['active'] && status != 'return' && method != 'approval') {
                 if(!$scope.isViewMode){
                     $('#agentModal').modal('show');
                 }

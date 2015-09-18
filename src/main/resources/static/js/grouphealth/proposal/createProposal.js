@@ -11,7 +11,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
             } else if (mode == 'edit') {
-                $scope.isEditMode = true;
+                $scope.isEditMode = false;
             }
             $scope.isReturnStatus = false;
 
@@ -54,6 +54,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             var method = getQueryParameter("method");
             if (method == 'approval') {
                 $scope.isViewMode = true;
+                $scope.stepsSaved["1"] =true;
+
 
                 $http.get("/pla/grouphealth/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
                     // console.log(data);
@@ -74,6 +76,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             if (status == 'return') {
                 $scope.stepsSaved["1"] =true;
             }
+
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);
                 for (var i = 0; i < $scope.documentList.length; i++) {
@@ -207,19 +210,21 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.changeAgent = false;
             console.log($scope.proposalDetails.basic['active']);
-            if (!$scope.proposalDetails.basic['active']) {
+            if (!$scope.proposalDetails.basic['active'] && status != 'return' && method != 'approval') {
                 if(!$scope.isViewMode){
                     $('#agentModal').modal('show');
                 }
 
                 $scope.changeAgent = true;
                 $scope.stepsSaved["1"] = !$scope.changeAgent;
+               // alert("hi");
             }
             if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
+
                 if(!$scope.isViewMode){
                     $('#agentModal').modal('show');
                 }
-                $scope.changeAgent = true;
+               $scope.changeAgent = true;
                 $scope.stepsSaved["2"] = !$scope.changeAgent;
             }
             console.log(' $scope.changeAgent ' + $scope.changeAgent);
