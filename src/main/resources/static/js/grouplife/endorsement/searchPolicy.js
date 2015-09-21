@@ -44,21 +44,18 @@ var viewEndorsementModule = (function () {
                 url: "opencreateendorsementpage?policyId=" + policyId + "&endorsementType=" + selectValue
             }).done(function (data) {
                 console.log(JSON.stringify(data));
+                if (selectValue == 'CHANGE_POLICY_HOLDER_NAME' || selectValue == 'CHANGE_POLICY_HOLDER_CONTACT_DETAIL' ) {
+                    window.location.href = "editEndorsement?endorsementId=" + data.id + "&endorsementType=" + selectValue;
+                }else{
+                    window.location.href = "editEndorsementUpload?endorsementId=" + data.id + "&endorsementType=" + selectValue;
 
-                window.location.href = "editEndorsement?endorsementId=" + data.id +"&endorsementType=" + selectValue;
-            });//.error(function () {
-              //  $('#proposalConfirm').modal('show');
-
-            //});
+                }
+            });
         }
-
     };
-
     services.modifyEndorsement =function(){
         var policyId = this.selectedItem;
         window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
-
-
     };
  /*   services.createEndorsement = function () {
         var policyId = this.selectedItem;

@@ -78,18 +78,15 @@
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Comments<span class="chevron"></span>
                 </li>
-                <li data-step="2"><span class="badge badge-info">2</span>Basic<span class="chevron"></span></li>
-                <li data-step="3"><span class="badge">3</span>Agent<span class="chevron"></span></li>
-                <li data-step="4"><span class="badge">4</span>Proposer<span class="chevron"></span></li>
-                <li data-step="5"><span class="badge">5</span>Plan<span class="chevron"></span></li>
-                <li data-step="6"><span class="badge">6</span>Premium<span class="chevron"></span></li>
-                <li data-step="7"><span class="badge">7</span>Documents<span class="chevron"></span></li>
+                <li data-step="2"><span class="badge badge-info">2</span>Basic Details<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>PolicyHolder Details<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Documents<span class="chevron"></span></li>
             </ul>
 
 
             <div class="actions">
                 <span style="font-weight: bold;color: #999">Endorsement Request Number: <span
-                        style="font-size: 13px;color: #3a87ad;">{{endorsementNumber}}</span></span><!--{{endorsementNumber}}-->
+                        style="font-size: 13px;color: #3a87ad;">{{endorsementNumber}}</span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
                 </button>
@@ -147,7 +144,7 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group required">
-                                        <label class="control-label">Inception Date</label>
+                                        <label class="control-label">Policy Inception Date</label>
                                         <input type="text" class="form-control input-sm" name="inceptionDate"
                                                ng-model="policyDetails.basicDetails.inceptionDate"
                                                ng-required="true" ng-disabled="true"/>
@@ -157,7 +154,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group required">
-                                        <label class="control-label">Expiry Date</label>
+                                        <label class="control-label">Policy Expiry Date</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true"
                                                ng-required="true" name="expiryDate"
                                                ng-model="policyDetails.basicDetails.expiryDate"/>
@@ -166,12 +163,37 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group required">
-                                        <label class="control-label">Issuance Date</label>
-                                        <input type="text" class="form-control input-sm" name="inceptionDate"
+                                        <label class="control-label">Policy Issuance Date</label>
+                                        <input type="text" class="form-control input-sm" name="issuanceDate"
                                                ng-model="policyDetails.basicDetails.inceptionDate"
                                                ng-required="true" ng-disabled="true"/>
                                     </div>
                                 </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Scheme Name</label>
+                                        <input type="text" class="form-control input-sm" name="schemeName"
+                                               ng-required="true"
+                                               ng-disabled="true"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Endorsement Effective Date</label>
+                                        <input type="text" class="form-control input-sm" name="effectiveDate"
+                                               ng-required="true"
+                                               ng-disabled="true"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Endorsement Type</label>
+                                        <input type="text" class="form-control input-sm" name="endorsementType"
+                                               ng-required="true"
+                                               ng-disabled="true"/>
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>
@@ -185,73 +207,6 @@
                 </div>
                 <div class="step-pane" data-step="3">
                     <ng-form name="step3">
-                        <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
-                            <div class="alert alert-info" ng-show="agentNotFound">
-                                <strong>Agent Not Found.Please try again</strong>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group required">
-                                        <label class="control-label">Agent ID</label>
-
-                                        <div class="input-group">
-                                            <input type="text" class="form-control input-sm" name="agentId"
-                                                   ng-model="policyDetails.basic.agentId" ng-required="true"
-                                                   ng-change="clearAgentDetails()"
-                                                   ng-disabled="true"/>
-
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-default btn-sm"
-                                                        ng-click="searchAgent()"
-                                                        ng-disabled="!policyDetails.basic.agentId || isEditMode ||!changeAgent">
-                                                    <span class="glyphicon glyphicon-search"></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group required">
-                                        <label class="control-label">Proposer Name</label>
-                                        <input type="text" class="form-control input-sm" name="proposerName"
-                                               ng-model="policyDetails.proposer.proposerName"
-                                               ng-required="true" ng-disabled="true"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group required">
-                                        <label class="control-label">Agent Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true"
-                                               ng-required="true" name="agentName"
-                                               ng-model="policyDetails.basic.agentName"/>
-                                    </div>
-                                    <div class="form-group " ng-hide="!policyDetails.basic.branchName">
-                                        <label class="control-label">Branch Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true"
-                                               name="branchName" ng-model="policyDetails.basic.branchName"/>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6" ng-hide="!policyDetails.basic.teamName">
-                                    <div class="form-group ">
-                                        <label class="control-label">Team Name</label>
-                                        <input type="text" class="form-control input-sm" ng-readonly="true"
-                                               name="teamName" ng-model="policyDetails.basic.teamName"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-form>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="step-pane" data-step="4">
-                    <ng-form name="step4">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatus.proposer">
                                 <accordion-heading>
@@ -340,12 +295,12 @@
                                                ng-required="true" ng-pattern="numberPattern"
                                                ng-model="policyDetails.proposer.contactPersonMobileNumber"/>
 
-                                        <div ng-show="step4.mobileNumber.$invalid &amp;&amp; step4.mobileNumber.$dirty">
+                                        <div ng-show="step3.mobileNumber.$invalid &amp;&amp; step3.mobileNumber.$dirty">
                                             <small class="error"
-                                                   ng-show="!step4.mobileNumber.$error.pattern &amp;&amp; step4.mobileNumber.$error.minlength">
+                                                   ng-show="!step3.mobileNumber.$error.pattern &amp;&amp; step3.mobileNumber.$error.minlength">
                                                 Please enter a valid mobile number.
                                             </small>
-                                            <small class="error" ng-show="step4.mobileNumber.$error.pattern">
+                                            <small class="error" ng-show="step3.mobileNumber.$error.pattern">
                                                 Only numbers are allowed.
                                             </small>
                                         </div>
@@ -357,8 +312,8 @@
                                         <input type="email" class="form-control input-sm" name="email"
                                                ng-model="policyDetails.proposer.contactPersonEmail"/>
 
-                                        <div ng-show="step4.email.$invalid &amp;&amp; step4.email.$dirty">
-                                            <small class="error" ng-show="step4.email.$error.email">
+                                        <div ng-show="step3.email.$invalid &amp;&amp; step3.email.$dirty">
+                                            <small class="error" ng-show="step3.email.$error.email">
                                                 Please enter a valid emailId.
                                             </small>
                                         </div>
@@ -370,12 +325,12 @@
                                                ng-pattern="numberPattern"
                                                ng-model="policyDetails.proposer.contactPersonWorkPhoneNumber"/>
 
-                                        <div ng-show="step4.workPhone.$invalid &amp;&amp; step4.workPhone.$dirty">
+                                        <div ng-show="step3.workPhone.$invalid &amp;&amp; step3.workPhone.$dirty">
                                             <small class="error"
-                                                   ng-show="!step4.workPhone.$error.pattern &amp;&amp; step4.workPhone.$error.minlength">
+                                                   ng-show="!step3.workPhone.$error.pattern &amp;&amp; step3.workPhone.$error.minlength">
                                                 Please enter a valid mobile number.
                                             </small>
-                                            <small class="error" ng-show="step4.workPhone.$error.pattern">
+                                            <small class="error" ng-show="step3.workPhone.$error.pattern">
                                                 Only numbers are allowed.
                                             </small>
                                         </div>
@@ -390,204 +345,14 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveProposerDetails()" ng-disabled="(step4.$invalid)" ng-if="isEnable">
+                                    ng-click="saveProposerDetails()" ng-disabled="(step3.$invalid)" ng-if="isEnable">
                                 Save
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="5">
-                    <div class="row " disable-all-fields="!isEnablePlanMode">
-                        <div class="col-lg-3 col-lg-offset-3">
-                            <input type="checkbox" ng-model="policyDetails.plan.samePlanForAllRelation"/><span
-                                class="checkbox-label"
-                                style="position: relative;top:-1px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
-
-                            <!-- <div class="checkbox">
-                                 <label class="checkbox-custom" data-initialize="checkbox">
-                                     <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="policyDetails.plan.samePlanForAllRelation"/>
-                                     <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Relationships</span>
-                                 </label>
-                             </div>-->
-                        </div>
-                        <div class="col-lg-3">
-                            <input type="checkbox" ng-model="policyDetails.plan.samePlanForAllCategory"/><span
-                                class="checkbox-label"
-                                style="position: relative;top:-1px;font-weight: bold;color:#000000;margin-left:5px">Same Plan for all Categories</span>
-
-                            <!--  <div class="checkbox" style="display: inline-block;">
-                                  <label class="checkbox-custom" data-initialize="checkbox">
-                                      <input class="sr-only" type="checkbox" ng-true-value="true" ng-false-value="false" name="planChoice" ng-model="policyDetails.plan.samePlanForAllCategory"/>
-                                      <span class="checkbox-label" style="position: relative;top:5px;font-weight: bold;color:#000000;margin-left: 5px">Same Plan for all Categories</span>
-                                  </label>
-                              </div>-->
-                        </div>
-                        <div class="col-lg-3">
-                            <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x"
-                                    bs-dropdown="dropdown">Downloads
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 5px">
-                        <div class="col-lg-6 col-lg-offset-3">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-sm" ng-model="fileName"
-                                       style="width: 62%;display: inline-block" ng-readonly="true"/>
-                                <button type="file" class="btn btn-default btn-sm" ng-file-select=""
-                                        ng-model="fileSaved" ng-disabled="!isEnablePlanMode">Browse
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-disabled="!fileSaved" ng-if="isEnablePlanMode" ng-click="savePlanDetails()">
-                                Upload &amp; Save
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="step-pane" data-step="6">
-                    <div class="col-lg-9" disable-all-fields="isViewMode">
-                        <div class="bs-callout  bs-callout-info">
-                            <ng-form name="premiumForm" novalidate="true">
-                                <div class="row">
-                                    <div class="col-lg-6" disable-all-fields="isViewMode">
-                                        <div class="form-group required">
-                                            <label class="control-label">Add-On Benefits</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" name="addOnBenefits"
-                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                                   ng-model="policyDetails.premium.addOnBenefit"
-                                                   ng-blur="recalculatePremium();" value="0" ng-disabled="true"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Profit and Solvency Loading</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="profitAndSolvencyLoading"
-                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                                   ng-model="policyDetails.premium.profitAndSolvencyLoading"
-                                                   ng-blur="recalculatePremium();"  ng-disabled="true" value="0"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">HIV Discounts</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="hivDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                                   ng-model="policyDetails.premium.hivDiscount"
-                                                   ng-blur="recalculatePremium();" ng-disabled="true" value="0"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Valued Client Discounts</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="valuedClientDiscount" ng-disabled="true"
-                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                                   ng-model="policyDetails.premium.valuedClientDiscount"
-                                                   ng-blur="recalculatePremium();" value="0"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Long Term Discounts</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="longTermDiscount" ng-disabled="true"
-                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                                   ng-model="policyDetails.premium.longTermDiscount"
-                                                   ng-blur="recalculatePremium();" value="0"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6" disable-all-fields="isViewMode">
-                                        <div class="form-group">
-                                            <label>Policy Term Value (Days)</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" ng-model="policyDetails.premium.policyTermValue"
-                                                   ng-blur="recalculatePremium(); " ng-disabled="true"/>
-                                            <small class="error" ng-show="inappropriatePolicyTerm">
-                                                Please enter a number between 30 and 9999.
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
-                                        <div class="col-lg-6" disable-all-fields="isViewMode">
-                                            <div class="form-group required">
-                                                <label class="control-label">Number Of Installments</label>
-                                                <select class="form-control" ng-model="selectedInstallment"
-                                                        ng-change="setSelectedInstallment(selectedInstallment)"
-                                                        name="installments" ng-required="true" ng-disabled="true"
-                                                        ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6" disable-all-fields="isViewMode">
-                                            <div class="form-group"
-                                                 ng-class="selectedInstallment.installmentAmount==null?'hide':''">
-                                                <label>Installment Amount</label>
-                                                <input class="form-control input-sm" type="text" readonly="true"
-                                                       ng-model="selectedInstallment.installmentAmount"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ng-form>
-                        </div>
-
-                    </div>
-                    <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm"
-                         disable-all-fields="isViewMode">
-                        <div class="form-group">
-                            <label><input type="radio" class="" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="ANNUALLY" style="margin-right:5px;" ng-disabled="true"/>Annual Payment</label>
-
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.annualPremium" ng-disabled="true"/>
-                        </div>
-                        <div class="form-group">
-                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="SEMI_ANNUALLY" style="margin-right:5px;" ng-disabled="true"/>Semi-Annual Payment</label>
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.semiannualPremium" ng-disabled="true"/>
-                        </div>
-                        <div class="form-group">
-                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="QUARTERLY" style="margin-right:5px;" ng-disabled="true"/>Quarterly Payment</label>
-
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.quarterlyPremium" ng-disabled="true"/>
-                        </div>
-                        <div class="form-group">
-                            <label> <input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                           value="MONTHLY" style="margin-right:5px;" ng-disabled="true"/>Monthly Payment</label>
-
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.monthlyPremium" ng-disabled="true"/>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 5px">
-                        <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
-                            <div class="form-group">
-                                <label>Total Premium payable</label>
-                                <input type="input" readonly="true" class="form-control input-sm"
-                                       ng-model="policyDetails.premium.totalPremium" ng-disabled="true"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-if="!isViewMode"
-                                    ng-click="savePremiumDetails()"
-                                    ng-disabled="(!disableSaveButton)">Save
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="step-pane" data-step="7">
-                    <ng-form name="step7" >
+                <div class="step-pane" data-step="4">
+                    <ng-form name="step4" >
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
@@ -696,7 +461,7 @@
                             <div class="form-group col-md-11 required">
                                 <label class="control-label">Comments</label>
                                 <textarea  class="form-control input-sm " rows="4" cols="50"
-                                           ng-required="true" name="comment" id="comment" onkeypress="return isEnterKey(event)"
+                                           ng-required="true" name="comment" id="comment"
                                            ng-model="comment"/>
 
                             </div>

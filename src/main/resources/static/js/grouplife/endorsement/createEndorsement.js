@@ -11,6 +11,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.isEnableContactMode = false;
             $scope.isEnablePlanMode = false;
             $scope.isEnable = false;
+            $scope.calculatePlan=false;
             $scope.submittedButton=false;
             $scope.disableProposerSaveButton = true;
             $scope.endorsementType=getQueryParameter("endorsementType");
@@ -210,7 +211,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 }).success(function (data, status, headers, config) {
                     if (data.status = "200") {
                         $scope.submittedButton=true;
-
+                        $scope.calculatePlan=true;
                         saveStep();
                        /* $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + $scope.proposalId)
                             .success(function () {
@@ -338,9 +339,10 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.changeAgent = false;
             console.log($scope.policyDetails.basic['active']);
             if (!$scope.policyDetails.basic['active']) {
-                $('#agentModal').modal('show');
-                $scope.changeAgent = true;
-                $scope.stepsSaved["2"] = !$scope.changeAgent;
+              //  $('#agentModal').modal('show');
+              //  $scope.changeAgent = true;
+              //  $scope.stepsSaved["2"] = !$scope.changeAgent;
+                $scope.stepsSaved["2"] = true;
             }
 
             $scope.policyDetails.proposer = policyDetails;
