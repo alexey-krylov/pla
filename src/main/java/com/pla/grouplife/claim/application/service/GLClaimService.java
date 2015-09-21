@@ -12,7 +12,6 @@ import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.sharedkernel.domain.model.FamilyId;
-import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Relationship;
 import org.joda.time.DateTime;
@@ -81,35 +80,32 @@ public class GLClaimService {
 
     public List<GLInsuredDetailDto> assuredSearch(AssuredSearchDto assuredSearchDto){
         List<Map> assuredSearchList = glFinder.assuredSearch(assuredSearchDto.getPolicyNumber());
-        List<InsuredDependent> insuredDependentList = null;
+        List<InsuredDependent> insuredDependentList = Lists.newArrayList();
         for(Map assuredSearchMap  : assuredSearchList){
             List<Insured> insureds = (List<Insured>) assuredSearchMap.get("insureds");
             for (Insured insured :  insureds){
                 Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
-                insuredDependentList =  insuredDependents.parallelStream().filter(new Predicate<InsuredDependent>() {
-                    @Override
-                    public boolean test(InsuredDependent insuredDependent) {
-                        String category = insuredDependent.getCategory() != null ? insuredDependent.getCategory() : "";
-                        String relationship = insuredDependent.getRelationship() != null ? insuredDependent.getRelationship().description : "";
-                        return (category.equals(assuredSearchDto.getCategory()) && relationship.equals(assuredSearchDto.getRelationShip()));
+                for (InsuredDependent insuredDependent : insuredDependents){
+                    String category = insuredDependent.getCategory() != null ? insuredDependent.getCategory() : "";
+                    String relationship = insuredDependent.getRelationship() != null ? insuredDependent.getRelationship().description : "";
+                    if (category.equals(assuredSearchDto.getCategory()) && relationship.equals(assuredSearchDto.getRelationShip())){
+                        insuredDependentList.add(insuredDependent);
                     }
-                }).collect(Collectors.toList());
+                }
             }
         }
 
-        Set<Map> insureds = assuredSearchList.parallelStream().filter(new Predicate<Map>() {
-            @Override
-            public boolean test(Map insuredMap) {
-                List<Insured> insureds = (List<Insured>) insuredMap.get("insureds");
-                for (Insured insured : insureds) {
-                    String category  = insured.getCategory()!=null?insured.getCategory():"";
-                    String relationship  = insured.getRelationship()!=null?insured.getRelationship().description: Relationship.SELF.description;
-                    return (category.equals(assuredSearchDto.getCategory()) && relationship.equals(assuredSearchDto.getRelationShip()));
+        List<Insured> insureds = Lists.newArrayList();
+        for (Map insuredMap : assuredSearchList){
+            List<Insured> insuredsList = (List<Insured>) insuredMap.get("insureds");
+            for (Insured insured : insuredsList) {
+                String category  = insured.getCategory()!=null?insured.getCategory():"";
+                String relationship  = insured.getRelationship()!=null?insured.getRelationship().description: Relationship.SELF.description;
+                if (category.equals(assuredSearchDto.getCategory()) && relationship.equals(assuredSearchDto.getRelationShip())){
+                    insureds.add(insured);
                 }
-                return false;
             }
-        }).collect(Collectors.toSet());
-
+        }
         List searchList = Lists.newArrayList();
         for (InsuredDependent insuredDependent : insuredDependentList){
             GLInsuredDetailDto glInsuredDetailDto = new GLInsuredDetailDto(insuredDependent.getFirstName(),insuredDependent.getLastName(),
@@ -117,16 +113,10 @@ public class GLClaimService {
                     insuredDependent.getManNumber(),insuredDependent.getFamilyId()!=null?insuredDependent.getFamilyId().getFamilyId():"");
             searchList.add(glInsuredDetailDto);
         }
-        for (Map insured : insureds){
-            String firstName = insured.get("firstName")!=null?insured.get("firstName").toString():"";
-            String lastName = insured.get("lastName")!=null?insured.get("lastName").toString():"";
-            String gender = insured.get("gender")!=null? Gender.valueOf(insured.get("gender").toString()).name():"";
-            String nrcNumber = insured.get("nrcNumber")!=null?insured.get("nrcNumber").toString():"";
-            String manNumber = insured.get("manNumber")!=null?insured.get("manNumber").toString():"";
-            String clientId = insured.get("familyId")!=null?insured.get("familyId").toString():"";
-            String dateOfBirth = insured.get("dateOfBirth")!=null?new DateTime(insured.get("dateOfBirth")).toString(AppConstants.DD_MM_YYY_FORMAT):"";
-            GLInsuredDetailDto glInsuredDetailDto = new GLInsuredDetailDto(firstName,lastName,
-                    dateOfBirth,gender,nrcNumber,manNumber,clientId);
+        for (Insured insured : insureds){
+            GLInsuredDetailDto glInsuredDetailDto = new GLInsuredDetailDto(insured.getFirstName(),insured.getLastName(),
+                    insured.getDateOfBirth()!=null? insured.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):"",insured.getGender()!=null?insured.getGender().name():"",insured.getNrcNumber(),
+                    insured.getManNumber(),insured.getFamilyId()!=null?insured.getFamilyId().getFamilyId():"");
             searchList.add(glInsuredDetailDto);
         }
         return searchList;
