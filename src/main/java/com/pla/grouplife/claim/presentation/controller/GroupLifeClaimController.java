@@ -2,16 +2,15 @@ package com.pla.grouplife.claim.presentation.controller;
 
 import com.pla.grouplife.claim.application.command.GLClaimIntimationCommand;
 import com.pla.grouplife.claim.application.service.GLClaimService;
+import com.pla.grouplife.claim.presentation.dto.AssuredSearchDto;
+import com.pla.grouplife.claim.presentation.dto.GLInsuredDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -42,8 +41,6 @@ public class GroupLifeClaimController {
         return modelAndView;
     }
 
-
-
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView searchPolicy() {
         ModelAndView modelAndView = new ModelAndView();
@@ -53,13 +50,24 @@ public class GroupLifeClaimController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    @ResponseBody
     public ModelAndView searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouplife/claim/searchPolicy");
         modelAndView.addObject("searchResult", glClaimService.searchPolicy(searchGLPolicyDto));
         modelAndView.addObject("searchCriteria", searchGLPolicyDto);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/getrelationshipandcategory/{policyId}",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getConfiguredRelationshipAndCategory(@PathVariable("policyId") String policyId){
+        return glClaimService.getConfiguredRelationShipAndCategory(policyId);
+    }
+
+    @RequestMapping(value = "/assuredsearch",method = RequestMethod.POST)
+    @ResponseBody
+    public List<GLInsuredDetailDto> assuredSearch(@RequestBody AssuredSearchDto assuredSearchDto){
+        return glClaimService.assuredSearch(assuredSearchDto);
     }
 
     @RequestMapping(value = "/getclaimtype",method = RequestMethod.GET)

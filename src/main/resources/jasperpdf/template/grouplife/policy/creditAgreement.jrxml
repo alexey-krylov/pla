@@ -9,11 +9,11 @@
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-	<field name="proposerAddress" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerAddress]]></fieldDescription>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
 	</field>
-	<field name="proposerPhoneNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -83,11 +83,11 @@
 				</textField>
 				<textField>
 					<reportElement x="100" y="85" width="100" height="30" uuid="f050d080-49df-4139-b540-6c4a10c8257f"/>
-					<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="140" y="120" width="100" height="30" uuid="eeb35c7d-61fb-4cf4-95f5-93d956152455"/>
-					<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<rectangle>

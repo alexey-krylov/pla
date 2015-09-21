@@ -36,23 +36,20 @@
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-	<field name="proposerAddress" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerAddress]]></fieldDescription>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
 	</field>
-	<field name="proposerPhoneNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
-	</field>
-	<field name="schemeName" class="java.lang.String">
-		<fieldDescription><![CDATA[schemeName]]></fieldDescription>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
 	</field>
 	<field name="masterPolicyNumber" class="java.lang.String">
 		<fieldDescription><![CDATA[masterPolicyNumber]]></fieldDescription>
 	</field>
-	<field name="policyPeriodFrom" class="java.lang.String">
-		<fieldDescription><![CDATA[policyPeriodFrom]]></fieldDescription>
+	<field name="inceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
 	</field>
-	<field name="policyPeriodTo" class="java.lang.String">
-		<fieldDescription><![CDATA[policyPeriodTo]]></fieldDescription>
+	<field name="expiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -134,11 +131,11 @@
 			</textField>
 			<textField>
 				<reportElement x="160" y="60" width="100" height="20" uuid="26627d0a-1f54-4b3b-a58b-8754b09d4359"/>
-				<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="90" width="100" height="20" uuid="0bbb7c4b-9f53-47ed-8b19-31ced15dd275"/>
-				<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="60" y="120" width="740" height="30" backcolor="#001941" uuid="fc937e16-707d-4341-b9eb-e0203f5f0dab"/>
@@ -157,21 +154,18 @@
 				</textElement>
 				<text><![CDATA[To:DD/MM/YYYY]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="160" y="150" width="100" height="30" uuid="094e2c64-1a14-4218-98f6-2dc3cb4d48a4"/>
-				<textFieldExpression><![CDATA[$F{schemeName}]]></textFieldExpression>
-			</textField>
+
 			<textField>
 				<reportElement x="230" y="180" width="140" height="24" uuid="e29566d2-78ec-4f7a-9556-4be9df56be85"/>
 				<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="470" y="215" width="100" height="21" uuid="7915df9a-8bed-4f7c-8925-2d6b0a325f98"/>
-				<textFieldExpression><![CDATA[$F{policyPeriodTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="250" y="210" width="100" height="26" uuid="d7fadad8-a409-498c-ac9f-ebe64be7822e"/>
-				<textFieldExpression><![CDATA[$F{policyPeriodFrom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

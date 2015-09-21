@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -179,4 +180,16 @@ public class GLFinder {
     public Map findPolicyById(String policyId) {
         return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GL_POLICY_COLLECTION_NAME);
     }
+
+    public List<Map> assuredSearch(String policyNumber) {
+        if (isEmpty(policyNumber)) {
+            return Collections.EMPTY_LIST;
+        }
+        Criteria criteria = Criteria.where("policyNumber.policyNumber").is(policyNumber);
+        Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
+        return mongoTemplate.find(query, Map.class, GL_POLICY_COLLECTION_NAME);
+    }
+
+
 }

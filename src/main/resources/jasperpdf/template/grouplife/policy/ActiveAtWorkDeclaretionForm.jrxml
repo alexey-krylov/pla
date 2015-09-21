@@ -9,17 +9,14 @@
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
-	<field name="proposerAddress" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerAddress]]></fieldDescription>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
 	</field>
-	<field name="policyInceptionDate" class="java.lang.String">
-		<fieldDescription><![CDATA[policyInceptionDate]]></fieldDescription>
+	<field name="inceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
 	</field>
-	<field name="policyPeriodTo" class="java.lang.String">
-		<fieldDescription><![CDATA[policyPeriodTo]]></fieldDescription>
-	</field>
-	<field name="proposerPhoneNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerPhoneNumber]]></fieldDescription>
+	<field name="telephoneNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -137,12 +134,12 @@
 			<textField>
 				<reportElement x="120" y="130" width="200" height="30" uuid="f3562621-3a7b-47ce-bd33-10e44752d932"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{proposerAddress}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="160" y="160" width="132" height="30" uuid="7ca4cf30-5222-4e51-bddf-4b24dba9d4a1"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{proposerPhoneNumber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="292" y="410" width="478" height="100" uuid="8d9401c5-d847-4ca2-ae2b-9320a1e7e4d1"/>
@@ -177,7 +174,7 @@
 			<textField>
 				<reportElement x="150" y="547" width="100" height="30" uuid="af7c004d-85c0-4f45-b41a-2e6689ffaca2"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{policyInceptionDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="250" y="547" width="39" height="30" uuid="b31706ec-0369-4769-aaf4-449185858651"/>
@@ -187,7 +184,7 @@
 			<textField>
 				<reportElement x="280" y="547" width="100" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{policyPeriodTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

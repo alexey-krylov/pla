@@ -1,4 +1,4 @@
-package com.pla.grouplife.policy.presentation.dto;
+package com.pla.grouphealth.policy.presentation.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,45 +8,43 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Created by Admin on 9/14/2015.
+ * Created by Admin on 9/20/2015.
  */
 @Getter
 @Setter
-public class GLPolicyMailDetailDto {
+public class GHPolicyDetailDto {
 
-
-    private String proposerName;
-    private String policyHolderName;
-    private String address;
-    private String telephoneNumber;
-    private String inceptionDate;
-    private String expiryDate;
     private String agentName;
     private String agentBranch;
     private String agentCode;
     private String agentMobileNumber;
-    private String masterPolicyNumber;
-    private String totalSumAssured;
+
+    private String proposerName;
+    private String address;
+    private String telephoneNumber;
     private String totalLivesCovered;
+    private String inceptionDate;
+    private String expiryDate;
+    private String policyTerm;
+
+    private String masterPolicyNumber;
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;
+    private String showLoading;
     private String specialConditions;
 
+    private String planName;
     private String netPremium;
+    private String totalSumAssured;
     private String profitAndSolvencyLoading;
+    private String additionalDiscountLoading;
     private String serviceTax;
     private String totalPremium;
     private String addOnBenefits;
     private String addOnBenefitsPercentage;
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
-    private String hivDiscount;
-    private String valuedClientDiscount;
-    private String longTermDiscount;
 
-    private String issueBranch;
-    private String issuanceDate;
-    private String policyTerm;
 
 
     @Getter
@@ -90,8 +88,11 @@ public class GLPolicyMailDetailDto {
         private String age;
         private String annualIncome;
         private String basicPremium;
+        private String planPremium;
+        private String visibleCoveragePremium;
 
-        public Annexure(String insuredName, String nrc, String sex, String dob, String category, String status, String age, String annualIncome, String basicPremium) {
+
+        public Annexure(String insuredName, String nrc, String sex, String dob, String category, String status, String age, String annualIncome, String basicPremium, String planPremium, String visibleCoveragePremium) {
             this.insuredName = insuredName;
             this.nrc = nrc;
             this.sex = sex;
@@ -101,7 +102,9 @@ public class GLPolicyMailDetailDto {
             this.age = age;
             this.annualIncome = annualIncome;
             this.basicPremium = basicPremium;
+            this.planPremium = planPremium;
+            this.visibleCoveragePremium = visibleCoveragePremium;
         }
     }
-
 }
+

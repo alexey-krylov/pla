@@ -364,25 +364,26 @@ public class GLPolicyService {
         Proposer proposer = groupLifePolicy.getProposer();
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
-        glQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
+        glQuotationDetailDto.setTelephoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
         Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
         Map<String, Object> townGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
-        glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
-        glQuotationDetailDto.setQuotationNumber(groupLifePolicy.getPolicyNumber().getPolicyNumber());
-
+        glQuotationDetailDto.setAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
+        glQuotationDetailDto.setMasterPolicyNumber(groupLifePolicy.getPolicyNumber().getPolicyNumber());
+        glQuotationDetailDto.setInceptionDate(groupLifePolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        glQuotationDetailDto.setExpiryDate(groupLifePolicy.getExpiredOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         PremiumDetail premiumDetail = groupLifePolicy.getPremiumDetail();
-        glQuotationDetailDto.setCoveragePeriod(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
+        glQuotationDetailDto.setPolicyTerm(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
         glQuotationDetailDto.setProfitAndSolvencyLoading((premiumDetail.getProfitAndSolvency() != null) ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
         glQuotationDetailDto.setHivDiscount(premiumDetail.getHivDiscount() != null ? premiumDetail.getHivDiscount().toString() + " %" : "");
         glQuotationDetailDto.setValuedClientDiscount(premiumDetail.getValuedClientDiscount() != null ? premiumDetail.getValuedClientDiscount().toString() + " %" : "");
         glQuotationDetailDto.setLongTermDiscount(premiumDetail.getLongTermDiscount() != null ? premiumDetail.getLongTermDiscount().toString() + " %" : "");
-        glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
-        glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null ) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null ) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
         glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
         BigDecimal totalPremiumAmount = groupLifePolicy.getNetAnnualPremiumPaymentAmount(premiumDetail);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
-        BigDecimal netPremiumOfInsured = groupLifePolicy.getNetAnnualPremiumPaymentAmount(premiumDetail);
+        BigDecimal netPremiumOfInsured = groupLifePolicy.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail);
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);
         glQuotationDetailDto.setNetPremium(netPremiumOfInsured.toPlainString());
         glQuotationDetailDto.setTotalPremium(totalPremiumAmount.toPlainString());
@@ -456,7 +457,6 @@ public class GLPolicyService {
         return glQuotationDetailDto;
     }
 
-
     private List<GLPolicyMailDetailDto.CoverDetail> unifyCoverDetails(List<GLPolicyMailDetailDto.CoverDetail> coverDetails, GLPolicyMailDetailDto glQuotationDetailDto) {
         Map<GLPolicyMailDetailDto.CoverDetail, List<GLPolicyMailDetailDto.CoverDetail>> coverDetailsMap = Maps.newLinkedHashMap();
         for (GLPolicyMailDetailDto.CoverDetail coverDetail : coverDetails) {
@@ -484,6 +484,7 @@ public class GLPolicyService {
         }).collect(Collectors.toList());
         return unifiedCoverDetails;
     }
+
 
     public GLPolicyMailDto getPreScriptedEmail(PolicyId policyId) {
         GroupLifePolicy groupLifePolicy = glPolicyRepository.findOne(policyId);

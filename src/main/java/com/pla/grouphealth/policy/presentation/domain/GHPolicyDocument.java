@@ -1,7 +1,7 @@
 package com.pla.grouphealth.policy.presentation.domain;
 
 import com.google.common.collect.Maps;
-import com.pla.grouphealth.quotation.presentation.dto.GHQuotationDetailDto;
+import com.pla.grouphealth.policy.presentation.dto.GHPolicyDetailDto;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -22,8 +22,8 @@ public enum GHPolicyDocument {
 
     POLICY("Policy Sample") {
         @Override
-        public EmailAttachment getPolicyDocumentInPDF(List<GHQuotationDetailDto> ghQuotationDetailDtos) throws IOException, JRException {
-            byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghQuotationDetailDtos, "jasperpdf/template/grouphealth/policy/ghPolicy.jrxml");
+        public EmailAttachment getPolicyDocumentInPDF(List<GHPolicyDetailDto> ghPolicyDetailDtoList) throws IOException, JRException {
+            byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghPolicyDetailDtoList, "jasperpdf/template/grouphealth/policy/ghPolicy.jrxml");
             String fileName = "Policy Sample.pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -34,8 +34,8 @@ public enum GHPolicyDocument {
         }
     },GH_POLICY_DOC("Group Health Policy") {
         @Override
-        public EmailAttachment getPolicyDocumentInPDF(List<GHQuotationDetailDto> ghQuotationDetailDtos) throws IOException, JRException {
-            byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghQuotationDetailDtos, "jasperpdf/template/grouphealth/policy/GHPolicyDoc.jrxml");
+        public EmailAttachment getPolicyDocumentInPDF(List<GHPolicyDetailDto> ghPolicyDetailDtoList) throws IOException, JRException {
+            byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghPolicyDetailDtoList, "jasperpdf/template/grouphealth/policy/GHPolicyDoc.jrxml");
             String fileName = "Group Health Policy.pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -72,7 +72,7 @@ public enum GHPolicyDocument {
     }
 
 
-    public static List<EmailAttachment> getAllPolicyDocument(List<GHQuotationDetailDto> ghQuotationDetailDtos){
+    public static List<EmailAttachment> getAllPolicyDocument(List<GHPolicyDetailDto> ghQuotationDetailDtos){
         return Arrays.asList(GHPolicyDocument.values()).parallelStream().map(new Function<GHPolicyDocument, EmailAttachment>() {
             @Override
             public EmailAttachment apply(GHPolicyDocument ghPolicyDocument) {
@@ -89,5 +89,5 @@ public enum GHPolicyDocument {
         }).collect(Collectors.toList());
     }
 
-    public abstract EmailAttachment getPolicyDocumentInPDF(List<GHQuotationDetailDto> ghQuotationDetailDtos) throws IOException, JRException;
+    public abstract EmailAttachment getPolicyDocumentInPDF(List<GHPolicyDetailDto> ghPolicyDetailDtoList) throws IOException, JRException;
 }
