@@ -108,6 +108,14 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/createEndorsement");
         return modelAndView;
     }
+    @RequestMapping(value = "/editEndorsementUpload", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit Endorsement upload page")
+    private ModelAndView openCreateEndorsementUpload() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/endorsement/createEndorsementUpload");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/editEndorsementReturnStatus", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open edit endorsement page")
     public ModelAndView gotoCreateEndorsementReturnStatus() {
@@ -116,11 +124,25 @@ public class GroupLifeEndorsementController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/editEndorsementReturnStatusUpload", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open edit endorsement page")
+    public ModelAndView gotoCreateEndorsementReturnStatusUpload() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/endorsement/createEndorsementUploadReturnStatus");
+        return modelAndView;
+    }
     @RequestMapping(value = "/viewApprovalEndorsement", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open Approval endorsement page in view Mode")
     public ModelAndView gotoApprovalEndorsement() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/endorsement/createApprovalEndorsement");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/viewUploadApprovalEndorsement", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval endorsement page in view Mode")
+    public ModelAndView gotoUploadApprovalEndorsement() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/endorsement/createUploadApprovalEndorsement");
         return modelAndView;
     }
 
