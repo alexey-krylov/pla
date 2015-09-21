@@ -49,7 +49,7 @@
                                 </select>
                             </div>
 
-                            <div ng-show="mode=='update' || mod== 'view'" class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
+                            <div ng-show="mode=='update' || mode== 'view'" class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Plan</label>
                                 <input type="text" class="form-control input-sm" name="planCode" ng-disabled="mode=='update'||mode=='view'" ng-model="mapping.planName" ng-required="true"/>
                             </div>
@@ -66,44 +66,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                 <!--   <tr ng-repeat="row in insurerDetails3">
-                                        <td>{{row.name}}</td>
-                                        <td>
-                                            <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
-                                            &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
-                                        </td>
-                                    </tr>-->
                                     <tr ng-repeat="coverageClaim in coverageClaimType">
                                         <!--<td>{{CoverageSample}}</td>-->
                                         <td>{{coverageClaim.coverageName}}</td>
-                                        <td>
+                                        <td ng-if="allSelect">
                                             <!--<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>-->
 
                                             <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="coverageClaim.claimTypes" max-length="0"
-                                                    data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" />
+                                                    ng-required="true" ng-disabled="mode== 'view'" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" />
                                                 <!--Action <span class="caret"></span>-->
                                         </td>
+                                        <td ng-if="!allSelect">
+                                            <select class="form-control input-sm" ng-model="coverageClaim.claimTypesIL" name="checkBenefits" ng-change="setClaimTypes(coverageClaim,coverageClaim.claimTypesIL)" id="checkBenefitsIL" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" ng-disabled="mode=='view'" ng-required="true">
+                                                <option value="">--Select One--</option>
+                                            </select>
+                                        </td>
                                     </tr>
-                                 <!--<tr>
-                                     <td>{{CoverageSample}}</td>
-                                     <td>
-                                         &lt;!&ndash;<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>&ndash;&gt;
-
-                                         <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="benefitIds" max-length="0"
-                                                 data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="benefit.id as benefit.label for benefit in example1data" />
-                                         &lt;!&ndash;Action <span class="caret"></span>&ndash;&gt;
-                                     </td>
-                                 </tr>
-                                 <tr>
-                                     <td>{{CoverageSample}}</td>
-                                     <td>
-                                         &lt;!&ndash;<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>&ndash;&gt;
-
-                                         <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="benefitIds" max-length="0"
-                                                 data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="benefit.id as benefit.label for benefit in example1data" />
-                                         &lt;!&ndash;Action <span class="caret"></span>&ndash;&gt;
-                                     </td>
-                                 </tr>-->
                                     </tbody>
                                 </table>
 
@@ -112,16 +90,15 @@
 
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
-
                                 <button type="button" class="btn btn-default" style="float:right;"
-                                        ng-hide="mode == 'update' " ng-click="submitProductClaim()">Save
+                                        ng-hide="mode == 'update'  || mode == 'view' " ng-click="submitProductClaim()">Save
                                 </button>
 
                                 <button type="button" class="btn btn-default" style="float:right;"
                                         ng-show="mode== 'update' " ng-click="updateProductClaim()">Update
                                 </button>
 
-                                <a class="btn btn-default" th:href="@{/core/branch/view}" style="float:left;">Cancel</a>
+                                <a class="btn btn-default" th:href="@{/core/productclaimmap/openviewproductclaim}" style="float:left;">Cancel</a>
 
                             </div>
                         </div>

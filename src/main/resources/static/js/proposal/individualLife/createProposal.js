@@ -3037,15 +3037,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert(newVal);
                     if(newVal == 'Mr.')
                     {
-                        $scope.proposedAssuredDetails.gender='MALE';
+                        $scope.proposedAssured.gender='MALE';
                     }
                     else if((newVal == 'Miss') || (newVal == 'Mrs.') )
                     {
-                        $scope.proposedAssuredDetails.gender ='FEMALE';
+                        $scope.proposedAssured.gender ='FEMALE';
                     }
                     else
                     {
-                        $scope.proposedAssuredDetails.gender ='';
+                        $scope.proposedAssured.gender ='';
                     }
                 }
             }

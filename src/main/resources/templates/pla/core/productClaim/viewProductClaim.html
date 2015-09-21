@@ -89,8 +89,6 @@
                         <tbody >
 
                         <tr th:each="productClaim : ${searchResult}">
-                            <p th:text="${productClaim.coverageClaimType}"></p>
-
                             <td th:text="${{productClaim.lineOfBusinessDescription}}" ></td>
                             <td th:text="${{productClaim.planName}}" ></td>
 

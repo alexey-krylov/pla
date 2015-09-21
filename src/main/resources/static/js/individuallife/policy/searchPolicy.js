@@ -202,7 +202,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                 $http.get("/pla/individuallife/policy/getpolicy/" + $scope.policyId + "?mode=view")
                     .success(function (response, status, headers, config) {
                         var result = response;
-                        //console.log("Response of Policy: "+JSON.stringify(result));
+                       // console.log("Response of Policy: "+JSON.stringify(result));
                         $scope.rcvProposal = response;
                         console.log(response);
 
@@ -413,6 +413,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                             $scope.premiumPaymentDetails.premiumFrequency = $scope.rcvProposal.premiumPaymentDetails.premiumFrequency;
                             $scope.premiumPaymentDetails.premiumPaymentMethod = $scope.rcvProposal.premiumPaymentDetails.premiumPaymentMethod;
                             $scope.premiumPaymentDetails.proposalSignDate = $scope.rcvProposal.premiumPaymentDetails.proposalSignDate;
+                            $scope.premiumPaymentDetails.premiumFrequencyPayable=$scope.rcvProposal.premiumPaymentDetails.premiumFrequencyPayable;
 
                             if ($scope.rcvProposal.premiumPaymentDetails.employerDetails != null) {
                                 $scope.premiumEmployerDetails = $scope.rcvProposal.premiumPaymentDetails.employerDetails;
@@ -421,15 +422,21 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                             if ($scope.rcvProposal.premiumPaymentDetails.bankDetails != null) {
                                 $scope.bankDetails = $scope.rcvProposal.premiumPaymentDetails.bankDetails;
                             }
+                                if($scope.rcvProposal.premiumPaymentDetails.premiumDetail != null){
+                                    $scope.premiumResponse.planAnnualPremium = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.planAnnualPremium;
+                                    $scope.premiumResponse.totalPremium = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.totalPremium;
+                                    $scope.premiumResponse.riderPremiums = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.riderPremiums;
+                                }
+
                         }
 
-                        if ($scope.rcvProposal.premiumDetailDto != null) {
+                        /*if ($scope.rcvProposal.premiumDetailDto != null) {
                             $scope.premiumResponse.planAnnualPremium = $scope.rcvProposal.premiumDetailDto.planAnnualPremium;
                             $scope.premiumResponse.totalPremium = $scope.rcvProposal.premiumDetailDto.totalPremium;
                             //$scope.premiumResponse.annualPremium1111=$scope.rcvProposal.premiumDetailDto.totalPremium;
                             $scope.premiumResponse.riderPremiumDtos = $scope.rcvProposal.premiumDetailDto.riderPremiumDtos;
 
-                        }
+                        }*/
                         if ($scope.rcvProposal.proposerDocuments != null) {
                             $scope.documentList = $scope.rcvProposal.proposerDocuments;
                             //alert('DocumentList:'+JSON.stringify($scope.documentList));
