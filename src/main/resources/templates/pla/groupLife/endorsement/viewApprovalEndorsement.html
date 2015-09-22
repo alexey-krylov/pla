@@ -25,15 +25,15 @@
         if (require.defined("basic")) {
             requirejs(['/pla/js/grouplife/endorsement/searchEndorsement.js'], function () {
                 $(document).ready(function () {
-                    $("input[type='text']").keyup(function () {
-                        var isDisabled = true;
-                        $('#searchEndorsementforGLPolicy *').filter(':text').each(function (key, value) {
-                            if ($(value).val().trim().length != 0) {
-                                isDisabled = false;
-                            }
-                        });
-                        $("#search").prop("disabled", isDisabled);
-                    });
+                    /*  $("input[type='text']").keyup(function () {
+                     var isDisabled = true;
+                     $('#searchEndorsementforGLPolicy *').filter(':text').each(function (key, value) {
+                     if ($(value).val().trim().length != 0) {
+                     isDisabled = false;
+                     }
+                     });
+                     $("#search").prop("disabled", isDisabled);
+                     });*/
 
                     $('#searchEndorsement-table').dataTable({
                         "fnDrawCallback": function () {
@@ -74,8 +74,12 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{endorsementType}">Endorsement Type</label>
-                    <select  class="btn btn-default btn-sm"  style=" text-align: left;width:170px;">
-                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}"></option>
+                    <select class="btn btn-default btn-sm" th:field="*{searchCriteria.endorsementType}"
+                            style=" text-align: left;width:170px;background-color:#fff;">
+                        <option value="">------------Select------------</option>
+                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}"
+                                name="code" th:value="${{endorsementType.code}}"
+                                th:text="${endorsementType.description}"></option>
                     </select>
                 </div>
             </div>
@@ -83,7 +87,7 @@
                 <div class="form-group">
                     <label th:text="#{endorsementRequestNumber}">Endorsement request Number</label>
                     <input type="text" class="form-control input-sm" name="endorsementNumber"
-                           th:value="${searchCriteria.endorsementNumber}"    /><!--th:value="${searchCriteria.endorsementRequestNumber}"-->
+                           th:value="${searchCriteria.endorsementNumber}"/><!--th:value="${searchCriteria.endorsementRequestNumber}"-->
                 </div>
             </div>
 
