@@ -605,7 +605,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             //alert('Bank Details..');
                             $scope.bankDetails= $scope.rcvProposal.premiumPaymentDetails.bankDetails;
                             //$scope.bankDetails.bankAccountNumber=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankAccountNumber;
-                            //$scope.bankDetails.bankBranchName=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankBranchName;
+                            $scope.bankDetails.bankBranchName=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankBranchName;
                         }
                     }
 
@@ -779,28 +779,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
             $scope.bankCodeDetails=[];
 
-            /*$scope.getBankSortCode=function(newvalue)
-            {
-                if(newvalue){
-                    //alert("//alert in bankCode"+newvalue);
-                    //alert('branchName'+newvalue);
-                    //$scope.bankDetails.bankBranchName=newvalue;
-                    var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
-                    //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
-                    //$scope.bankBranchDetails=bankBranchNames;
-                    ////alert("bankBranchName"+JSON.stringify($scope.bankBranchNames));
-                    //console.log("Branch Details.."+JSON.stringify($scope.bankBranchNames))
-                    if(bankBranchNames)
-                    {
-                        $scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
-                    }
-                }
-            }*/
-
-
             $scope.$watch('bankDetails.bankBranchName',function(newvalue,oldvalue){
                 if(newvalue){
-                    //alert("//alert in bankCode"+newvalue);
                     //alert('branchName'+newvalue);
                     //$scope.bankDetails.bankBranchName=newvalue;
                     var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
