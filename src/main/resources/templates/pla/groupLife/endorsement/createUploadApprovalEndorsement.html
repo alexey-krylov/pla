@@ -70,8 +70,6 @@
                 <li data-step="5"><span class="badge">5</span>Premium<span class="chevron"></span></li>
 
             </ul>
-
-
             <div class="actions">
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Endorsement Request Number: <span
                         style="font-size: 13px;color: #3a87ad;">{{endorsementNumber}}</span></span>
@@ -83,8 +81,6 @@
                 <!-- -->
             </div>
             <div class="step-content ng-cloak">
-
-
                 <div class="step-pane active" data-step="1">
                     <div style="height:300px;overflow-y:scroll;border:1px solid grey;margin-top:10px;margin-bottom: 10px;">
                         <table class="table table-striped table-bordered" style="margin-top:5px; ">
@@ -101,8 +97,6 @@
                                 <td>{{approvalComment.modifiedBy}}</td>
                                 <td>{{approvalComment.id.time | date:'dd/MM/yyyy h:mm a'}}</td>
                                 <td style="width:75%;">{{approvalComment.comment}}</td>
-
-
                             </tr>
                             </tbody>
                         </table>
@@ -116,7 +110,6 @@
                                     <textarea rows="4" cols="50" ng-required="true" name="comments"
                                               ng-model="comment"/>
                                 </div>
-
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group required">
@@ -153,7 +146,6 @@
                                                ng-disabled="true"/>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">Policy Inception Date</label>
@@ -171,7 +163,6 @@
                                                name="expiryDate" ng-required="true"
                                                ng-model="policyDetails.basicDetails.expiryDate"/>
                                     </div>
-
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group required">
@@ -214,10 +205,8 @@
                                 Cancel
                             </button>
                         </div>
-
                     </div>
                 </div>
-
                 <div class="step-pane" data-step="3">
                     <div class="row " disable-all-fields="isViewMode">
                         <div class="col-lg-3 col-lg-offset-3">
@@ -257,8 +246,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="step-pane" data-step="5">
                     <div class="col-lg-9" disable-all-fields="isViewMode">
                         <div class="bs-callout  bs-callout-info">
@@ -305,7 +292,7 @@
                                 <div class="row">
                                     <div class="col-lg-6" disable-all-fields="isViewMode">
                                         <div class="form-group">
-                                            <label>Policy Term Value (Days)</label>
+                                            <label>Balance Policy Term (Days)</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true" ng-model="policyDetails.premium.policyTermValue"
                                                    ng-blur="recalculatePremium();"/>
@@ -313,67 +300,41 @@
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6" ng-if="!(!isPolicyTermNot365 || inappropriatePolicyTerm)">
-                                        <div class="col-lg-6" disable-all-fields="isViewMode">
-                                            <div class="form-group required">
-                                                <label class="control-label">Number Of Installments</label>
-                                                <select class="form-control" ng-model="selectedInstallment"
-                                                        ng-change="setSelectedInstallment(selectedInstallment)"
-                                                        name="installments" ng-required="true"
-                                                        ng-options="installment as installment.installmentNo for installment in installments track by installment.installmentNo"></select>
-                                            </div>
+                                        <div class="form-group">
+                                            <label>Policy Term Expired Till Date (Days)</label>
+                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                   ng-required="true"
+                                                   ng-model="policyDetails.premium.policyTermExpiredDate"
+                                                   ng-blur="recalculatePremium(); " ng-disabled="true"/>
+                                            <small class="error" ng-show="inappropriatePolicyTerm">
+                                                Please enter a number between 30 and 9999.
+                                            </small>
                                         </div>
-                                        <div class="col-lg-6" disable-all-fields="isViewMode">
-                                            <div class="form-group"
-                                                 ng-class="selectedInstallment.installmentAmount==null?'hide':''">
-                                                <label>Installment Amount</label>
-                                                <input class="form-control input-sm" type="text" readonly="true"
-                                                       ng-model="selectedInstallment.installmentAmount"/>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </ng-form>
                         </div>
-
                     </div>
                     <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm"
                          disable-all-fields="isViewMode">
                         <div class="form-group">
-                            <label><input type="radio" class="" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="ANNUALLY" style="margin-right:5px;"/>Annual Payment</label>
-
+                            <label>Endorsement Charges</label>
                             <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.annualPremium"/>
-                        </div>
-                        <div class="form-group">
-                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="SEMI_ANNUALLY" style="margin-right:5px;"/>Semi-Annual Payment</label>
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.semiannualPremium"/>
-                        </div>
-                        <div class="form-group">
-                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                          value="QUARTERLY" style="margin-right:5px;"/>Quarterly Payment</label>
-
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.quarterlyPremium"/>
-                        </div>
-                        <div class="form-group">
-                            <label> <input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
-                                           value="MONTHLY" style="margin-right:5px;"/>Monthly Payment</label>
-
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.monthlyPremium"/>
+                                   ng-model="policyDetails.premium.endorsementCharges" ng-disabled="true"/>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
                             <div class="form-group">
-                                <label>Total Premium payable</label>
+                                <label>Total Endorsement Premium payable</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
-                                       ng-model="policyDetails.premium.totalPremium"/>
+                                       ng-model="policyDetails.premium.totalPremium" ng-disabled="true"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Refundable Amount</label>
+                                <input type="input" readonly="true" class="form-control input-sm"
+                                       ng-model="policyDetails.premium.totalRefundedPremium" ng-disabled="true"/>
                             </div>
                         </div>
                     </div>
@@ -390,7 +351,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="step-pane" data-step="4">
                     <ng-form name="step4" disable-all-fields="isViewMode">
                         <accordion close-others="true">
@@ -420,7 +380,6 @@
                                                    readonly="true"/>
 
                                         </div>
-
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
                                          ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All
@@ -482,7 +441,6 @@
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
                                             ng-click="uploadAdditionalDocument()" ng-hide="isViewMode">Upload
                                     </button>
-
                                 </div>
                             </accordion-group>
                         </accordion>

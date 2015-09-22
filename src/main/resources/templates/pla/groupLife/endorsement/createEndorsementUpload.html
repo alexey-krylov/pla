@@ -74,7 +74,8 @@
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
                 <li data-step="2"><span class="badge">2</span>Endorsement Details<span class="chevron"></span></li>
                 <li data-step="3"><span class="badge">3</span>Documents<span class="chevron"></span></li>
-                <li data-step="4" ng-show="calculatePlan"><span class="badge">4</span>Premium<span class="chevron"></span></li>
+                <li data-step="4" class="ng-cloak" ng-show="calculatePlan"><span class="badge">4</span>Premium<span
+                        class="chevron"></span></li>
 
             </ul>
 
@@ -270,17 +271,18 @@
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
-
                                     </div>
                                 </div>
                             </ng-form>
                         </div>
-
                     </div>
-                    <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm"
+                    <div class="col-lg-3" ng-hide="inappriatePooprlicyTerm"
                          disable-all-fields="isViewMode">
-
-
+                        <div class="form-group">
+                            <label>Endorsement Charges</label>
+                            <input type="number" readonly="true" class="form-control input-sm"
+                                   ng-model="policyDetails.premium.endorsementCharges" ng-disabled="true"/>
+                        </div>
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
@@ -296,18 +298,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-if="!isViewMode"
-                                    ng-click="savePremiumDetails()"
-                                    ng-disabled="(!disableSaveButton)">Save
-                            </button>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="step-pane" data-step="3">
                     <ng-form name="step3">
