@@ -162,11 +162,9 @@
                 <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
                     <label class="control-label">Bank Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankName" ng-disabled="mode=='new'||mode=='view'" name="bankName"/>-->
-                   <!-- <select class="form-control input-sm" name="bankName" ng-disabled="mode=='new'||mode=='view'" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
+                    <select class="form-control input-sm" name="bankName" ng-disabled="mode=='new'||mode=='view'" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
                             ng-model="bankDetails.bankName"  ng-required="true">{{bankDetail.bankName}}
-                    </select>-->
-
-                    <input type="text" class="form-control input-sm" ng-model=bankDetails.bankName" ng-disabled="mode=='new'||mode=='view'" name="bankName"/>
+                    </select>
                     <div class="error" ng-messages="premiumBankDetail.bankName.$error" ng-if="premiumBankDetail.bankName.$dirty">
                         <small class="error" ng-message="required">Please specify Bank Name.</small>
                     </div>
