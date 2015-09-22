@@ -16,7 +16,39 @@
 </script>
 
 <div class="container ng-cloak" ng-Controller="CreateProductClaimCtrl">
-    <div class="row">
+
+   <!--<div modal="showModal" close="cancel()">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+            <p>Example paragraph with some text.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" ng-click="ok()">Okay</button>
+            <button class="btn" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>-->
+
+    <div class="modal fade" id="claimAlert" tabindex="-1" role="dialog" aria-labelledby="claimAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p style="color:red">
+                        Choose Claim Types.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-form="productClaimForm">
         <div class="col-lg-10" style="right:100px;position:absolute;">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -29,7 +61,7 @@
                     </div>
                 </div>
                 <div class="panel-body ng-cloak">
-                    <form novalidate="true" class="css-form" name="productClaimForm">
+                    <form novalidate="true" class="css-form">
                         <nth-alert></nth-alert>
                         <div class="row">
                             <div class="form-group control-group required col-md-6" style="margin: auto;margin-top:10px;" >
@@ -40,18 +72,25 @@
                                     <option value="INDIVIDUAL_LIFE">Individual Life</option>
                                     <!--<option value="GROUP_HEALTH">Group Health</option>-->
                                 </select>
+                                <div class="error" ng-messages="productClaimForm.lineOfBusiness.$error" ng-if="productClaimForm.lineOfBusiness.$dirty">
+                                    <small class="error" ng-message="required">Please Select Line of Business.</small>
+                                </div>
                             </div>
 
                             <div ng-hide="mode=='update' || mode== 'view' " class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Plan</label>
-                                <select class="form-control input-sm" ng-model="mapping.planCode" ng-options="plan.planId as plan.planName for plan in businessPlans" ng-change="getCoverageClaimType()">
+                                <select class="form-control input-sm" ng-model="mapping.planCode" ng-required="true" name="plan" ng-options="plan.planId as plan.planName for plan in businessPlans" ng-change="getCoverageClaimType()">
                                     <option value="">--Select One--</option>
                                 </select>
+
+                                <div class="error" ng-messages="productClaimForm.plan.$error" ng-if="productClaimForm.plan.$dirty">
+                                    <small class="error" ng-message="required">Please Select Plan.</small>
+                                </div>
                             </div>
 
                             <div ng-show="mode=='update' || mode== 'view'" class="form-group control-group required col-md-6 " style="margin: auto;margin-top:10px;">
                                 <label class="control-label">Plan</label>
-                                <input type="text" class="form-control input-sm" name="planCode" ng-disabled="mode=='update'||mode=='view'" ng-model="mapping.planName" ng-required="true"/>
+                                <input type="text" class="form-control input-sm" name="planCode" ng-disabled="mode=='update'||mode=='view'" ng-model="mapping.planName"/>
                             </div>
                         </div>
 
@@ -73,11 +112,11 @@
                                             <!--<div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>-->
 
                                             <button type="button" class="btn btn-default bs-select" name="checkBenefits" id="checkBenefits"  ng-model="coverageClaim.claimTypes" max-length="0"
-                                                    ng-required="true" ng-disabled="mode== 'view'" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" />
+                                                    ng-disabled="mode== 'view'" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Claim Type" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" />
                                                 <!--Action <span class="caret"></span>-->
                                         </td>
                                         <td ng-if="!allSelect">
-                                            <select class="form-control input-sm" ng-model="coverageClaim.claimTypesIL" name="checkBenefits" ng-change="setClaimTypes(coverageClaim,coverageClaim.claimTypesIL)" id="checkBenefitsIL" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" ng-disabled="mode=='view'" ng-required="true">
+                                            <select class="form-control input-sm" ng-model="coverageClaim.claimTypesIL" name="checkBenefits" ng-change="setClaimTypes(coverageClaim,coverageClaim.claimTypesIL)" id="checkBenefitsIL" ng-options="claimType.claimType as claimType.description for claimType in claimTypes" ng-disabled="mode=='view'">
                                                 <option value="">--Select One--</option>
                                             </select>
                                         </td>
@@ -91,7 +130,7 @@
                         <div class="row">
                             <div class="col-lg-12" style="text-align: center;margin-top:10px;">
                                 <button type="button" class="btn btn-default" style="float:right;"
-                                        ng-hide="mode == 'update'  || mode == 'view' " ng-click="submitProductClaim()">Save
+                                        ng-disabled="productClaimForm.$invalid" ng-hide="mode == 'update'  || mode == 'view' " ng-click="submitProductClaim()">Save
                                 </button>
 
                                 <button type="button" class="btn btn-default" style="float:right;"

@@ -11,7 +11,9 @@ var updateProductClaim = function(claimId){
 
     window.location.href= "opencreateproductclaim?productClaimId="+claimId + "&mode=update";
 }
-
+var viewProductClaim = function(claimId){
+    window.location.href= "opencreateproductclaim?productClaimId="+claimId + "&mode=view";
+}
 /*
 $('#productClaim-table').dataTable({
 

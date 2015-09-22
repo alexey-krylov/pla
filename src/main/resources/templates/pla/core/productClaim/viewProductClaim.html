@@ -102,6 +102,7 @@
                                 </button>
                             </td>-->
                            <td style="text-align:center;width:15%">
+                               <button type="button" class="btn btn-default btn-xs" th:onclick="'viewProductClaim(\''+ ${productClaim.productClaimId} + '\');'">View</button>
                                 <button type="button" class="btn btn-default btn-xs" th:onclick="'updateProductClaim(\''+ ${productClaim.productClaimId} + '\');'">Update</button>
                                 <!--<button type="button" class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#alert-modal" th:onclick="'inactivate(&quot;'+${coverage.coverageId}+'&quot;,&quot;save&quot;)'" >Inactivate</button>-->
                             </td>

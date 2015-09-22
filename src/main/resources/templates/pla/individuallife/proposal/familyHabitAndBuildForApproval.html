@@ -513,8 +513,8 @@
             </accordion>
         </accordion-group>
 
-    <strong>For Female Applicants</strong>
-    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+    <strong ng-if="proposedAssured.gender == 'FEMALE'">For Female Applicants</strong>
+    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="proposedAssured.gender == 'FEMALE'">
         <div class="col-md-2 form-group required">
             <label class="control-label"> Are you now pregnant?</label>
         </div>

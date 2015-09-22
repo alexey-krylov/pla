@@ -2,7 +2,7 @@
 (function (angular) {
     "use strict";
 
-    var app = angular.module('createProductClaim', ['ngRoute','common','commonServices','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert','ngMessages']);
+    var app = angular.module('createProductClaim', ['ngRoute','ui.bootstrap.modal','common','commonServices','ui.bootstrap','ngSanitize','mgcrea.ngStrap.select','mgcrea.ngStrap','mgcrea.ngStrap.alert','ngMessages']);
 
     app.controller('CreateProductClaimCtrl', ['$scope', '$http', '$location','getQueryParameter', function ($scope, $http, $location, getQueryParameter) {
         $scope.CoverageSample= "coverages..";
@@ -72,7 +72,10 @@
 
             for(var i=0;i<$scope.coverageClaimType.length;i++)
             {
-                if($scope.coverageClaimType[i].claimTypes.length >0){
+                /*if($scope.coverageClaimType[i].claimTypes.length >0){
+                    checkLoopNameStatus = "false";
+                }*/
+                if($scope.coverageClaimType[i].claimTypes){
                     checkLoopNameStatus = "false";
                 }
                 else{
@@ -86,6 +89,27 @@
                return false;
             }
         }
+
+        $scope.checkUpdateValid=function()
+        {
+            var checkLoopNameStatus = "true";
+
+            for(var i=0;i<$scope.coverageClaimType.length;i++)
+            {
+                if($scope.coverageClaimType[i].claimTypes.length >0){
+                 checkLoopNameStatus = "false";
+                 }
+                else{
+                    checkLoopNameStatus = "true";
+                }
+            }
+
+            if(checkLoopNameStatus == "true") {
+                return true;
+            } else {
+                return false;
+            }
+        }
         //$scope.coverageClaim={"claimTypes":[]};
         //Setting ClaimTypes INIL
 
@@ -95,11 +119,31 @@
                 $scope.arrayList.push(claimTypesIL);
             }
             else{
-                alert('Please Select ClaimType..');
+                //alert('Please Select ClaimType..');
             }
             coverageClaim.claimTypes=$scope.arrayList;
         };
 
+
+        /***
+         * Modal Window Controller Logic
+         */
+/*
+        $scope.open = function() {
+            $scope.showModal = true;
+        };
+
+        $scope.ok = function() {
+            $scope.showModal = false;
+        };
+
+        $scope.cancel = function() {
+            $scope.showModal = false;
+        };*/
+
+        $scope.showClaimAlert = function () {
+            $('#claimAlert').modal('show');
+        };
 
         $scope.submitProductClaim=function()
         {
@@ -107,6 +151,11 @@
             /**
              * "$scope.mapping.planCode":- Here plan Id has assigend
              */
+            if($scope.checkSaveOrUpdateValid()){
+                //alert('Provide Claim Types');
+                $scope.showClaimAlert();
+                return;
+            }
              var provinceDetails = _.findWhere($scope.businessPlans, {planId: $scope.mapping.planCode});
             console.log('provinceDetails'+JSON.stringify(provinceDetails));
 
@@ -183,6 +232,11 @@
         $scope.updateProductClaim=function()
         {
             //alert('updateProductClaim..');
+            if($scope.checkUpdateValid()){
+                //alert('Provide Claim Types');
+                $scope.showClaimAlert();
+                return;
+            }
             var updateproductClaimReq={
                 "coverageClaimType":$scope.coverageClaimType,
                 "planCode":$scope.mapping.planCode,
