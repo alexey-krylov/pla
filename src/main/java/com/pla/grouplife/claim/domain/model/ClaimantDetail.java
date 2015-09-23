@@ -1,14 +1,19 @@
 package com.pla.grouplife.claim.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-
-import java.math.BigDecimal;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 /**
  * Created by Mirror on 8/19/2015.
  */
+@ValueObject
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-public class PolicyHolderDetail {
+@Setter(value = AccessLevel.PACKAGE)
+public class ClaimantDetail {
 
     private String proposerName;
 
@@ -28,8 +33,8 @@ public class PolicyHolderDetail {
 
     private String workPhone;
 
-   public PolicyHolderDetail(String proposerName, String addressLine1, String addressLine2, String postalCode, String province,
-                             String town, String emailId, String mobileNumber, String workPhone){
+   public ClaimantDetail(String proposerName, String addressLine1, String addressLine2, String postalCode, String province,
+                         String town, String emailId, String mobileNumber, String workPhone){
 
        this.proposerName=proposerName;
        this.addressLine1=addressLine1;

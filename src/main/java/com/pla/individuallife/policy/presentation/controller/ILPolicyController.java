@@ -1,5 +1,6 @@
 package com.pla.individuallife.policy.presentation.controller;
 
+import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.individuallife.policy.finder.ILPolicyFinder;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
@@ -9,6 +10,7 @@ import com.pla.individuallife.policy.presentation.dto.SearchILPolicyDto;
 import com.pla.individuallife.policy.presentation.model.ILPolicyDocument;
 import com.pla.individuallife.policy.service.ILPolicyService;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.service.MailService;
@@ -155,10 +157,16 @@ public class ILPolicyController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getpoilcydocument",method = RequestMethod.GET)
+    @RequestMapping(value = "/getpoilcydocument/{policyId}",method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getPolicyDocument(){
-        return ILPolicyDocument.getDeclaredPolicyDocument();
+    public Map<String,Object> getPolicyDocument(@PathVariable("policyId") String policyId){
+        Map policyMap = ilPolicyFinder.findPolicyById(policyId);
+        List<Map<String,Object>> ilPolicyDocument = ILPolicyDocument.getDeclaredPolicyDocument();
+        String policyNumber = policyMap.get("policyNumber") != null ? ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber() : "";
+        Map<String,Object> policyNumberMap = Maps.newLinkedHashMap();
+        policyNumberMap.put("policyNumber",policyNumber);
+        policyNumberMap.put("ilPolicyDocument", ilPolicyDocument);
+        return policyNumberMap;
     }
 
     @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)

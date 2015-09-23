@@ -1,27 +1,50 @@
 package com.pla.grouplife.claim.domain.model;
 
 import com.pla.sharedkernel.domain.model.FamilyId;
-import lombok.Getter;
-import org.joda.time.DateTime;
+import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.Relationship;
+import lombok.*;
+import org.joda.time.LocalDate;
+import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import java.math.BigDecimal;
 
 /**
  * Created by Mirror on 8/21/2015.
  */
+@ValueObject
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
+@Setter(value = AccessLevel.PACKAGE)
 public class AssuredDetail {
 
-    private FamilyId familyId;
+    private String companyName;
+
+    private String manNumber;
+
+    private String nrcNumber;
+
+    private String salutation;
 
     private String firstName;
 
     private String lastName;
 
-    private DateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
-    public AssuredDetail(FamilyId familyId,String firstName,String lastName,DateTime dateOfBirth) {
-        this.familyId=familyId;
-        this.firstName=firstName;
-        this.lastName=lastName;
-        this.dateOfBirth=dateOfBirth;
-    }
+    private Gender gender;
+
+    private String category;
+
+    private BigDecimal annualIncome;
+
+    private String occupationClass;
+
+    private String occupationCategory;
+
+    private Integer noOfAssured;
+
+    private FamilyId familyId;
+
+    private Relationship relationship;
 }

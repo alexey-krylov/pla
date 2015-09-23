@@ -22,6 +22,7 @@ public class GLPolicyMailDetailDto {
     private String inceptionDate;
     private String expiryDate;
     private String agentName;
+    private String showLoading;
     private String agentBranch;
     private String agentCode;
     private String agentMobileNumber;
