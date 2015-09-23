@@ -182,6 +182,15 @@ public class GLPolicyController {
         try {
             List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()));
             mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachments, mailDto.getRecipientMailAddress());
+        /*
+        * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
+        * */
+            System.gc();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             deleteTempFileIfExists(emailAttachments);
             return Result.success("Email sent successfully");
         } catch (Exception e) {
@@ -212,7 +221,7 @@ public class GLPolicyController {
             response.setContentType("application/pdf");
             OutputStream outputStream = response.getOutputStream();
             List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(policyId), documents);
-            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName() + ".pdf");
+            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName());
             outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
             outputStream.flush();
             outputStream.close();
@@ -244,6 +253,15 @@ public class GLPolicyController {
         }
         response.flushBuffer();
         outputStream.close();
+        /*
+        * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
+        * */
+        System.gc();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         deleteTempFileIfExists(emailAttachments);
     }
 

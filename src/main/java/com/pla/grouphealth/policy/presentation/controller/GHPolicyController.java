@@ -181,6 +181,15 @@ public class GHPolicyController {
         try {
             List<EmailAttachment> emailAttachment = ghPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()));
             mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachment, mailDto.getRecipientMailAddress());
+        /*
+        * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
+        * */
+            System.gc();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             deleteTempFileIfExists(emailAttachment);
             return Result.success("Email sent successfully");
 
@@ -212,7 +221,7 @@ public class GHPolicyController {
             response.setContentType("application/pdf");
             OutputStream outputStream = response.getOutputStream();
             List<EmailAttachment> emailAttachments = ghPolicyService.getPolicyPDF(new PolicyId(policyId), documents);
-            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName() + ".pdf");
+            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName());
             outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
             outputStream.flush();
             outputStream.close();
@@ -244,6 +253,15 @@ public class GHPolicyController {
         }
         response.flushBuffer();
         outputStream.close();
+        /*
+        * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
+        * */
+        System.gc();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         deleteTempFileIfExists(emailAttachments);
     }
 
