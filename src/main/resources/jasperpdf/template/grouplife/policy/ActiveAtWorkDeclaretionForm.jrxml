@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-16T14:39:23 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActiveAtWorkDeclaretionForm" pageWidth="842" pageHeight="895" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a82936ad-329a-41e0-8cc9-5895000baa71">
+<!-- 2015-09-22T18:34:05 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActiveAtWorkDeclaretionForm" pageWidth="842" pageHeight="855" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a82936ad-329a-41e0-8cc9-5895000baa71">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
 		<![CDATA[]]>
@@ -33,7 +33,7 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="633" splitType="Stretch">
+		<band height="614" splitType="Stretch">
 			<staticText>
 				<reportElement x="20" y="340" width="100" height="30" uuid="61919a28-f951-45b9-9677-7e15aca01afb"/>
 				<textElement>
@@ -49,7 +49,7 @@
 				<text><![CDATA[Address:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="0" y="0" width="803" height="633" uuid="8c485aca-700f-4284-aaba-40aaece926f9">
+				<reportElement x="0" y="0" width="802" height="614" uuid="8c485aca-700f-4284-aaba-40aaece926f9">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
@@ -60,25 +60,25 @@
 				<reportElement x="20" y="50" width="750" height="153" uuid="168662c1-9bb2-47df-8eec-ede2ebeb2ccc"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="100" width="100" height="30" uuid="caee3921-73ee-4598-82ba-99e56f3b06be"/>
+				<reportElement x="20" y="100" width="60" height="30" uuid="caee3921-73ee-4598-82ba-99e56f3b06be"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Name:]]></text>
+				<text><![CDATA[ Name:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="130" width="100" height="30" uuid="8d58711f-47fe-472a-83b1-9d177d439f50"/>
+				<reportElement x="20" y="130" width="60" height="30" uuid="8d58711f-47fe-472a-83b1-9d177d439f50"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Address:]]></text>
+				<text><![CDATA[ Address:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="160" width="140" height="40" uuid="16d8e45a-696d-43ea-8a57-5c78aebffd03"/>
+				<reportElement x="20" y="160" width="130" height="40" uuid="16d8e45a-696d-43ea-8a57-5c78aebffd03"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Telephone Number(s):]]></text>
+				<text><![CDATA[ Telephone Number(s):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="120" y="0" width="565" height="40" uuid="c38e606f-0f76-4a78-b4c1-abd3fab48504"/>
@@ -110,12 +110,6 @@
 				</textElement>
 				<text><![CDATA[Names of all Employees who engage in aviation flights other than licensed public passenger services and operated by a regular air line on published schedule flight over a regular air route as a ticket holding  passenger (Please attach a list)]]></text>
 			</staticText>
-			<line>
-				<reportElement x="802" y="0" width="1" height="626" uuid="7a04acf4-c613-4477-a066-3f86380e2157"/>
-			</line>
-			<line>
-				<reportElement x="1" y="0" width="1" height="626" uuid="540a00dc-fc3a-4908-a273-abbb0dc2e1f4"/>
-			</line>
 			<rectangle>
 				<reportElement x="20" y="50" width="750" height="50" backcolor="#00195F" uuid="a4330936-55a6-4396-ace6-ae6d13090348"/>
 			</rectangle>
@@ -127,18 +121,24 @@
 				<text><![CDATA[Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="100" width="190" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="80" y="100" width="190" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="120" y="130" width="200" height="30" uuid="f3562621-3a7b-47ce-bd33-10e44752d932"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="80" y="130" width="200" height="30" uuid="f3562621-3a7b-47ce-bd33-10e44752d932"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="160" y="160" width="132" height="30" uuid="7ca4cf30-5222-4e51-bddf-4b24dba9d4a1"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="150" y="160" width="132" height="40" uuid="7ca4cf30-5222-4e51-bddf-4b24dba9d4a1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<rectangle>
@@ -172,18 +172,24 @@
 				<text><![CDATA[Year commencing from]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="150" y="547" width="100" height="30" uuid="af7c004d-85c0-4f45-b41a-2e6689ffaca2"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="150" y="547" width="70" height="30" uuid="af7c004d-85c0-4f45-b41a-2e6689ffaca2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="250" y="547" width="39" height="30" uuid="b31706ec-0369-4769-aaf4-449185858651"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="220" y="547" width="19" height="30" uuid="b31706ec-0369-4769-aaf4-449185858651"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[To]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="280" y="547" width="100" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="240" y="547" width="80" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -191,10 +197,10 @@
 	<pageFooter>
 		<band height="110" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="802" height="110" uuid="3a2793bc-6b5c-4980-b35f-77e4dee45ac3"/>
+				<reportElement x="0" y="0" width="803" height="110" uuid="3a2793bc-6b5c-4980-b35f-77e4dee45ac3"/>
 			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="1" y="0" width="670" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="24924b5b-fa69-49c1-92be-7a2fe46c53f2"/>
+				<reportElement mode="Opaque" x="1" y="0" width="802" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="24924b5b-fa69-49c1-92be-7a2fe46c53f2"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>
@@ -221,7 +227,7 @@
   email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="260" y="40" width="127" height="70" forecolor="#0000CC" uuid="6ae2b884-60c4-4298-aa00-e340d568927f"/>
+				<reportElement x="370" y="40" width="127" height="70" forecolor="#0000CC" uuid="6ae2b884-60c4-4298-aa00-e340d568927f"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
@@ -232,7 +238,7 @@
   Tel : 021-2-224270,225611]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="41" width="220" height="69" forecolor="#3300CC" uuid="bebbcc08-f502-4bab-b251-aa03535a83eb"/>
+				<reportElement x="570" y="40" width="220" height="69" forecolor="#3300CC" uuid="bebbcc08-f502-4bab-b251-aa03535a83eb"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
