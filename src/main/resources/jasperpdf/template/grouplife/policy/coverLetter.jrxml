@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-22T17:35:47 -->
+<!-- 2015-09-23T12:26:18 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="700" pageHeight="930" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc47796d-11f2-4054-910b-4c89fed0a700">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -152,7 +152,7 @@
 				<text><![CDATA[In the event of a member dying during the period of cover, the Company reserves the right to call for payment of any premium due to the Corporation before settlement of the claim.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="620" width="264" height="30" uuid="d4574482-9111-4fde-b4c4-961cc07f863b"/>
+				<reportElement x="6" y="620" width="274" height="30" uuid="d4574482-9111-4fde-b4c4-961cc07f863b"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -178,13 +178,15 @@
 			<staticText>
 				<reportElement x="6" y="49" width="654" height="31" forecolor="#FFFFFF" backcolor="#00195F" uuid="0a7169c8-5c9c-47d6-a0a7-3d9687110090"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="12"/>
+					<font fontName="Trebuchet MS" size="14"/>
 				</textElement>
 				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="289" y="623" width="80" height="30" uuid="48359963-9310-4e3e-ae1b-9d340f1bc839"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="287" y="620" width="80" height="30" uuid="48359963-9310-4e3e-ae1b-9d340f1bc839"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -200,8 +202,10 @@
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="390" y="620" width="100" height="30" uuid="ec4dde9e-7e64-4527-9ce5-775adeaca419"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="390" y="619" width="100" height="30" uuid="ec4dde9e-7e64-4527-9ce5-775adeaca419"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -219,7 +223,7 @@
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="370" y="621" width="20" height="29" uuid="cc55b610-917a-4553-9f1a-ef276a0efb15"/>
+				<reportElement x="370" y="620" width="20" height="29" uuid="cc55b610-917a-4553-9f1a-ef276a0efb15"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[On]]></text>
 			</staticText>

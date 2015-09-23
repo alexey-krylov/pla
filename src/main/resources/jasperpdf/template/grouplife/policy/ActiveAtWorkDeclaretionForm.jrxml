@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-22T18:34:05 -->
+<!-- 2015-09-23T12:19:29 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActiveAtWorkDeclaretionForm" pageWidth="842" pageHeight="855" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a82936ad-329a-41e0-8cc9-5895000baa71">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -57,10 +57,10 @@
 				</reportElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="20" y="50" width="750" height="153" uuid="168662c1-9bb2-47df-8eec-ede2ebeb2ccc"/>
+				<reportElement x="20" y="50" width="760" height="153" uuid="168662c1-9bb2-47df-8eec-ede2ebeb2ccc"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="100" width="60" height="30" uuid="caee3921-73ee-4598-82ba-99e56f3b06be"/>
+				<reportElement x="20" y="100" width="50" height="30" uuid="caee3921-73ee-4598-82ba-99e56f3b06be"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -88,30 +88,30 @@
 				<text><![CDATA[          EMPLOYER'S ACTIVE AT WORK DECLAREATION]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="20" y="210" width="272" height="100" uuid="dfe9d884-93bf-46e1-9357-af3aa1f8b400"/>
+				<reportElement x="20" y="210" width="290" height="100" uuid="dfe9d884-93bf-46e1-9357-af3aa1f8b400"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="210" width="270" height="100" uuid="665b04d5-7c33-4b80-83d1-ebc2b7392d01"/>
+				<reportElement x="30" y="210" width="270" height="100" uuid="665b04d5-7c33-4b80-83d1-ebc2b7392d01"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Names of all Employees who were absent on the day of eligibility of joining the scheme and reasons (Please attach a list of those members who were absent on the date of eligibility)]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="292" y="310" width="478" height="100" uuid="dfa888d1-2b9a-42bc-8634-fb5933387208"/>
+				<reportElement x="310" y="310" width="470" height="100" uuid="dfa888d1-2b9a-42bc-8634-fb5933387208"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="20" y="410" width="272" height="100" uuid="fe187af0-848d-4305-9629-44b535789ed9"/>
+				<reportElement x="20" y="410" width="290" height="100" uuid="fe187af0-848d-4305-9629-44b535789ed9"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="410" width="272" height="97" uuid="48639409-f07e-4667-80e3-c94636f89b1c"/>
+				<reportElement x="30" y="410" width="270" height="97" uuid="48639409-f07e-4667-80e3-c94636f89b1c"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Names of all Employees who engage in aviation flights other than licensed public passenger services and operated by a regular air line on published schedule flight over a regular air route as a ticket holding  passenger (Please attach a list)]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="20" y="50" width="750" height="50" backcolor="#00195F" uuid="a4330936-55a6-4396-ace6-ae6d13090348"/>
+				<reportElement x="20" y="50" width="760" height="50" backcolor="#00195F" uuid="a4330936-55a6-4396-ace6-ae6d13090348"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="20" y="50" width="520" height="47" forecolor="#FFFFFF" uuid="5b8e3e75-caca-4b0b-b1e7-6b7a2699d838"/>
@@ -121,7 +121,7 @@
 				<text><![CDATA[Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="80" y="100" width="190" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>
+				<reportElement x="70" y="100" width="190" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -142,23 +142,23 @@
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="292" y="410" width="478" height="100" uuid="8d9401c5-d847-4ca2-ae2b-9320a1e7e4d1"/>
+				<reportElement x="310" y="410" width="470" height="100" uuid="8d9401c5-d847-4ca2-ae2b-9320a1e7e4d1"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="292" y="210" width="478" height="100" uuid="28934011-9137-4b38-b172-8ffdd8e10771"/>
+				<reportElement x="310" y="210" width="470" height="100" uuid="28934011-9137-4b38-b172-8ffdd8e10771"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="20" y="310" width="272" height="100" uuid="37b4aaf7-cd90-4427-a08f-6000057a530e"/>
+				<reportElement x="20" y="310" width="290" height="100" uuid="37b4aaf7-cd90-4427-a08f-6000057a530e"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="310" width="272" height="100" uuid="2a149ea3-56df-4e82-9d2e-e8527841d32c"/>
+				<reportElement x="30" y="310" width="272" height="100" uuid="2a149ea3-56df-4e82-9d2e-e8527841d32c"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Names of all Employees who were absent on the day of being awarded a pay increase (apart from general inflationary increases awarded to all staff.) Please attach a list.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="520" width="750" height="27" uuid="cdfca5bf-7d59-4cbc-9545-1de79bfcd9e3"/>
+				<reportElement x="20" y="520" width="760" height="27" uuid="cdfca5bf-7d59-4cbc-9545-1de79bfcd9e3"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
