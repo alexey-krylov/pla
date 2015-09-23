@@ -188,6 +188,11 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                 "policyNumber": null
             };
 
+            $scope.cancelAll=function()
+            {
+                //alert('cancel');
+                window.location.href="/pla/individuallife/policy/openpolicysearchpage"
+            }
 
             if ($scope.policyId) {
 

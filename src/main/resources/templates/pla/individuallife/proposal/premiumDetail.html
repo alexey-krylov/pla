@@ -39,7 +39,7 @@
                                    ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
             </accordion-heading>
             <div class="col-md-6">
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
+                <div class="form-group" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Employee No</label>
                     <input type="text" class="form-control input-sm" ng-maxlength="15" name="employeeNumber" ng-model="premiumEmployerDetails.employeeId" ng-disabled="mode=='new'||mode=='view'"
                            />
@@ -78,10 +78,10 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
+                <div class="form-group" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Man No</label>
                     <input type="text" class="form-control input-sm"  ng-model="premiumEmployerDetails.manNumber" ng-disabled="mode=='new' || mode=='view'" name="manNo"
-                           ng-maxlength="15" ng-required="true"/>
+                           ng-maxlength="15"/>
 
                     <div class="error" ng-messages="premiumEmpDetails.manNo.$error" ng-if="premiumEmpDetails.manNo.$dirty">
                         <small class="error" ng-message="maxlength">Upto 15 Character allowed.</small>
@@ -91,9 +91,10 @@
 
                 <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Basic Salary</label>
-                    <input type="number" class="form-control input-sm" name="basicSalary" ng-model="premiumEmployerDetails.basicSalary" max="{{getMax()}}" ng-disabled="mode=='new'||mode=='view'"  />
+                    <input type="number" class="form-control input-sm" name="basicSalary" ng-required="true" ng-model="premiumEmployerDetails.basicSalary" min="0" max="9999999.99" ng-disabled="mode=='new'||mode=='view'"  />
 
                     <div class="error" ng-messages="premiumEmpDetails.basicSalary.$error" ng-if="premiumEmpDetails.basicSalary.$dirty">
+                        <small class="error" ng-message="required">Please specify Basic Salary.</small>
                         <small class="error" ng-message="max">Upto 9999999.99 allowed.</small>
                     </div>
 

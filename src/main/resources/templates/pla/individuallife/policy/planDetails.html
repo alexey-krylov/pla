@@ -11,7 +11,7 @@
                     <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
                     {{planSelected}}
                     <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
-                         selected-object="planSelected" disable-input="uneditable"
+                         selected-object="planSelected" disable-input="true"
                          remote-url="/pla/individuallife/proposal/searchplan/{{proposal.proposalId}}?q=" field-required="true"
                          remote-url-data-field="" title-field="plan_name"
                          initial-value="selectedPlan.title"
@@ -118,7 +118,7 @@
             </accordion-heading>
             <div class="row" style="margin: 0px">
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-default btn-xs pull-right"
+                    <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
                             data-toggle="modal" data-target="#beneficialModal"
                             style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
                     <table class="table table-bordered">
@@ -152,7 +152,7 @@
     </accordion>
     <div class="row">
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm">Cancel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
