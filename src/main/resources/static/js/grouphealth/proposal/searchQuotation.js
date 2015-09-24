@@ -21,8 +21,15 @@ var viewProposalModule = (function () {
                 window.location.href = "editProposal?proposalId=" + data.id;
             }).error(function (msg) {
                // console.log(msg.responseJSON);
-                $('#inactivate-alert-danger').text(msg.responseJSON.message).show();
-                $('#proposalConfirm').modal('show');
+                if(msg.responseJSON.data == true){
+                    $('#okButton').hide();
+                    $('#inactivate-alert-danger').text(msg.responseJSON.message).show();
+                    $('#proposalConfirm').modal('show');
+
+                }else {
+                    $('#inactivate-alert-danger').text(msg.responseJSON.message).show();
+                    $('#proposalConfirm').modal('show');
+                }
 
             });
         }

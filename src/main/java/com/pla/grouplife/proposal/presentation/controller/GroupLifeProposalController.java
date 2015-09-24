@@ -78,7 +78,7 @@ public class GroupLifeProposalController {
     @RequestMapping(value = "/opengrouplifeproposal/{quotationId}", method = RequestMethod.GET)
     public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId, HttpServletRequest request) {
         if (!glProposalService.isAgentActive(quotationId)) {
-            return new ResponseEntity(Result.failure("The Agent is Inactive"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure("The Agent is Inactive",Boolean.TRUE), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (glProposalService.hasProposalForQuotation(quotationId)) {
@@ -267,6 +267,7 @@ public class GroupLifeProposalController {
     @RequestMapping(value = "/downloadplandetail/{proposalId}", method = RequestMethod.GET)
     public void downloadPlanDetail(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
+       // System.out.println("****************************************CALLED*********************************************");
         response.setContentType("application/pdf");
         response.setHeader("content-disposition", "attachment; filename=" + "planReadyReckoner.pdf" + "");
         OutputStream outputStream = response.getOutputStream();
@@ -304,7 +305,7 @@ public class GroupLifeProposalController {
     public void downloadErrorInsuredTemplate(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "GLInsuredTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "insuredTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         File errorTemplateFile = new File(proposalId);
         InputStream inputStream = new FileInputStream(errorTemplateFile);

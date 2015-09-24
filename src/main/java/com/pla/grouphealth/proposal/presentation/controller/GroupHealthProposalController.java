@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
+import org.apache.xpath.operations.Bool;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +75,15 @@ public class GroupHealthProposalController {
     @RequestMapping(value = "/opengrouphealthproposal/{quotationId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To create proposal from quotation")
     public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId) {
-        if (ghProposalService.isAgentActive(quotationId)) {
-            return new ResponseEntity(Result.failure("The Agent is Inactive"), HttpStatus.INTERNAL_SERVER_ERROR);
+        /*
+        * Disable OK BUTTON IN ui WHEN Agent is inactive
+        * */
+        if (!ghProposalService.isAgentActive(quotationId)) {
+            return new ResponseEntity(Result.failure("The Agent is Inactive", Boolean.TRUE), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (ghProposalService.hasProposalForQuotation(quotationId)) {
-            return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure("Proposal Already Exists..Do you want to override the same?"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         String proposalId = commandGateway.sendAndWait(new GHQuotationToProposalCommand(quotationId));
         return new ResponseEntity(Result.success("", proposalId), HttpStatus.OK);
@@ -462,7 +466,7 @@ public class GroupHealthProposalController {
     public ResponseEntity uploadMandatoryDocument(GHProposalDocumentCommand ghProposalDocumentCommand, HttpServletRequest request) {
         ghProposalDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
-            commandGateway.sendAndWait(ghProposalDocumentCommand);
+            commandGateway.send(ghProposalDocumentCommand);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
