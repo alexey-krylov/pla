@@ -77,6 +77,10 @@ public class GroupLifeProposalController {
 
     @RequestMapping(value = "/opengrouplifeproposal/{quotationId}", method = RequestMethod.GET)
     public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId, HttpServletRequest request) {
+        if (!glProposalService.isAgentActive(quotationId)) {
+            return new ResponseEntity(Result.failure("The Agent is Inactive"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         if (glProposalService.hasProposalForQuotation(quotationId)) {
             return new ResponseEntity(Result.failure("Proposal Already Exists..Do you want to override the same?"), HttpStatus.INTERNAL_SERVER_ERROR);
         }

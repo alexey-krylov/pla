@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
-import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposalStatusAudit;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
@@ -48,7 +47,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -89,6 +91,7 @@ public class GLProposalService {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
+
     @Autowired
     public GLProposalService(GLFinder glFinder, GLProposalFinder glProposalFinder, IPlanAdapter planAdapter,
                              GlProposalRepository groupLifeProposalRepository, GLInsuredExcelParser glInsuredExcelParser, GLInsuredExcelGenerator glInsuredExcelGenerator, GLQuotationFinder glQuotationFinder) {
@@ -106,6 +109,13 @@ public class GLProposalService {
         String quotationNumber = (String) quotationMap.get("quotationNumber");
         Map proposalMap = glProposalFinder.findProposalByQuotationNumber(quotationNumber);
         return proposalMap != null;
+    }
+
+    public boolean isAgentActive(String quotationId){
+        Map quotationMap = glFinder.searchQuotationById(new QuotationId(quotationId));
+        AgentId agentId = (AgentId) quotationMap.get("agentId");
+        Map<String, Object> agentCount =  glFinder.getAgentById(agentId.getAgentId());
+        return isNotEmpty(agentCount)?true:false;
     }
 
     public List<GlQuotationDto> searchGeneratedQuotation(String quotationNumber) {

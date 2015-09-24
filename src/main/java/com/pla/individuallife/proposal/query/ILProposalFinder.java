@@ -354,25 +354,27 @@ public class ILProposalFinder {
 
         dto.setProposalPlanDetail((ProposalPlanDetail) proposal.get("proposalPlanDetail"));
         if (dto.getProposalPlanDetail() != null) {
-            List<Map<String,Object>> coverageNameList = planFinder.findAllOptionalCoverage(dto.getProposalPlanDetail().getPlanId());
-            dto.getProposalPlanDetail().setPlanName(planFinder.getPlanName(new PlanId(dto.getProposalPlanDetail().getPlanId())));
-            ProposalPlanDetail proposalPlanDetail = dto.getProposalPlanDetail();
-            proposalPlanDetail.setRiderDetails(proposalPlanDetail.getRiderDetails().parallelStream().map(new Function<ILRiderDetail, ILRiderDetail>() {
-                @Override
-                public ILRiderDetail apply(ILRiderDetail ilRiderDetail) {
-                    Optional<Map<String, Object>> coverageNameMap = coverageNameList.parallelStream().filter(new Predicate<Map<String, Object>>() {
-                        @Override
-                        public boolean test(Map<String, Object> coverageNameMap) {
-                            return ilRiderDetail.getCoverageId().equals(coverageNameMap.get("coverageId"));
+            if (dto.getProposalPlanDetail().getSumAssured() != null) {
+                List<Map<String, Object>> coverageNameList = planFinder.findAllOptionalCoverage(dto.getProposalPlanDetail().getPlanId());
+                dto.getProposalPlanDetail().setPlanName(planFinder.getPlanName(new PlanId(dto.getProposalPlanDetail().getPlanId())));
+                ProposalPlanDetail proposalPlanDetail = dto.getProposalPlanDetail();
+                proposalPlanDetail.setRiderDetails(proposalPlanDetail.getRiderDetails().parallelStream().map(new Function<ILRiderDetail, ILRiderDetail>() {
+                    @Override
+                    public ILRiderDetail apply(ILRiderDetail ilRiderDetail) {
+                        Optional<Map<String, Object>> coverageNameMap = coverageNameList.parallelStream().filter(new Predicate<Map<String, Object>>() {
+                            @Override
+                            public boolean test(Map<String, Object> coverageNameMap) {
+                                return ilRiderDetail.getCoverageId().equals(coverageNameMap.get("coverageId"));
+                            }
+                        }).findAny();
+                        if (coverageNameMap.isPresent()) {
+                            String coverageName = (String) coverageNameMap.get().get("coverageName");
+                            ilRiderDetail.setCoverageName(coverageName);
                         }
-                    }).findAny();
-                    if (coverageNameMap.isPresent()){
-                        String coverageName = (String) coverageNameMap.get().get("coverageName");
-                        ilRiderDetail.setCoverageName(coverageName);
+                        return ilRiderDetail;
                     }
-                    return ilRiderDetail;
-                }
-            }).collect(Collectors.toSet()));
+                }).collect(Collectors.toSet()));
+            }
         }
         dto.setBeneficiaries((List<Beneficiary>) proposal.get("beneficiaries"));
         dto.setTotalBeneficiaryShare(new BigDecimal(proposal.get("totalBeneficiaryShare").toString()) );
@@ -403,12 +405,12 @@ public class ILProposalFinder {
         return proposal.get("proposalNumber").toString();
     }
 
-    public List<Map<String, Object>> getPlans(String proposalId) {
-        Map proposal = getProposalByProposalId(proposalId);
-        List <String> agentIds = new ArrayList<String>();
-        ((AgentCommissionShareModel) proposal.get("agentCommissionShareModel")).getCommissionShare().stream().forEach(x -> agentIds.add(x.getAgentId().toString()));
+    public List<Map<String, Object>> getPlans(List<String> agentIds,Integer proposedAssuredAge) {
         List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
-        List<String> planIds = getPlanIds(proposal);
+        if (proposedAssuredAge==null || proposedAssuredAge==0){
+            return result;
+        }
+        List<String> planIds = getPlanIds(proposedAssuredAge);
         return result.parallelStream().filter(new Predicate<Map<String, Object>>() {
             @Override
             public boolean test(Map<String, Object> planDetails) {
@@ -422,11 +424,7 @@ public class ILProposalFinder {
         }).collect(Collectors.toList());
     }
 
-    private List<String> getPlanIds(Map proposal){
-        Proposer proposer = (Proposer) proposal.get("proposer");
-        Boolean isProposedAssured =  proposer.getIsProposedAssured();
-        DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
-        Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
+    private List<String> getPlanIds(Integer age ){
         Criteria planCriteria = Criteria.where("status").nin(PlanStatus.WITHDRAWN, PlanStatus.DRAFT, PlanStatus.PREMIUM_CONFIGURED);
         Query query = new Query(planCriteria);
         List<Map> allPlans = mongoTemplate.find(query,Map.class, "PLAN");
@@ -444,9 +442,7 @@ public class ILProposalFinder {
                     }
                 }).findAny();
                 if (age >= minEntryAge && age <= maxEntryAge)
-                    if (isProposedAssured && relationship.isPresent())
-                        return true;
-                    else if (!isProposedAssured)
+                    if (relationship.isPresent())
                         return true;
                 return false;
             }

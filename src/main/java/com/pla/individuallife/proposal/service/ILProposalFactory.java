@@ -69,7 +69,7 @@ public class ILProposalFactory {
             }
             agentCommissionShareModel = withAgentCommissionShareModel(cmd.getAgentCommissionDetails());
             proposer =  withProposer(cmd.getProposer());
-            aggregate = new ILProposalAggregate(cmd.getProposalId(), proposalNumber, proposer,agentCommissionShareModel);
+            aggregate = new ILProposalAggregate(cmd.getProposalId(), proposalNumber, proposer,agentCommissionShareModel,cmd.getPlanDetail());
         }
         return aggregate;
     }

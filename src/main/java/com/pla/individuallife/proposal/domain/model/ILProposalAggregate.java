@@ -6,6 +6,7 @@ import com.pla.individuallife.proposal.domain.event.ILProposalSubmitEvent;
 import com.pla.individuallife.sharedresource.event.ILProposalToPolicyEvent;
 import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposalEvent;
 import com.pla.individuallife.sharedresource.model.vo.*;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -20,6 +21,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -58,8 +60,9 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         agentCommissionShareModel = new AgentCommissionShareModel();
     }
 
-    public ILProposalAggregate(String proposalId, String proposalNumber, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
+    public ILProposalAggregate(String proposalId, String proposalNumber, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel,ProposalPlanDetail proposalPlanDetail) {
         this.proposalNumber = proposalNumber;
+        this.proposalPlanDetail = proposalPlanDetail;
         this.proposalId = new ProposalId(proposalId);
         if(proposer.getIsProposedAssured()) {
             assignProposedAssured(proposer);
@@ -78,10 +81,13 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         assignAgents(agentCommissionShareModel);
         if(proposer.getIsProposedAssured()) {
             assignProposedAssured(proposer);
-        } else {
+            specification.checkProposerAgainstPlan(minAge,maxAge,proposedAssured.getAgeNextBirthday());
+        } else if (proposedAssured!=null){
             assignProposedAssured(proposedAssured);
         }
-//        specification.checkProposerAgainstPlan(minAge,maxAge,this.proposedAssured.getAgeNextBirthday());
+        else {
+            this.proposedAssured = null;
+        }
         this.proposalPlanDetail = proposalPlanDetail;
         this.proposalStatus = ILProposalStatus.DRAFT;
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());
@@ -90,6 +96,9 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     public ILProposalAggregate updateWithProposer(Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
         if(proposer.getIsProposedAssured()) {
             assignProposedAssured(proposer);
+        }
+        else {
+            this.proposedAssured = null;
         }
         assignProposer(proposer);
         assignAgents(agentCommissionShareModel);
@@ -144,9 +153,12 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         BigDecimal newTotal = totalBeneficiaryShare.add(beneficiary.getShare());
         Preconditions.checkArgument(newTotal.compareTo(PERCENTAGE) <= 0, "Total share exceeds 100%. Cannot add any more beneficiary.");
         boolean sameBeneficiaryExists = beneficiaries.parallelStream().anyMatch(each -> (each.equals(beneficiary)));
+        boolean fatherMotherRelationExists = beneficiaries.parallelStream().anyMatch(each->(each.equals(beneficiary.getRelationshipId()) && Arrays.asList(Relationship.FATHER.name(),Relationship.MOTHER.name(),Relationship.MOTHER_IN_LAW.name(),Relationship.FATHER_IN_LAW.name()).contains(beneficiary.getRelationshipId())));
+        boolean childAgeValidation = (DateTime.now().minusYears(beneficiary.getDateOfBirth().getYear()).getYear()<=16 && !Arrays.asList(Relationship.SON.name(),Relationship.DAUGHTER.name(),Relationship.STEP_SON.name(),Relationship.STEP_DAUGHTER.name()).contains(beneficiary.getRelationshipId()));
         Preconditions.checkArgument(!sameBeneficiaryExists, "Beneficiary already exists.");
+        Preconditions.checkArgument(!fatherMotherRelationExists, "Father or Mother relation is already exists.");
+        Preconditions.checkArgument(!childAgeValidation, "For Child Relation the Age should be less than 16");
         beneficiaries.add(beneficiary);
-        totalBeneficiaryShare = newTotal;
     }
 
     public ILProposalAggregate updateWithProposedAssuredAndAgentDetails(ProposedAssured proposedAssured) {

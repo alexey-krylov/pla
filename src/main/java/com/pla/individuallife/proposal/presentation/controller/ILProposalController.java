@@ -482,10 +482,10 @@ public class ILProposalController {
         return agentDetail;
     }
 
-    @RequestMapping(value = "/searchplan/{proposalId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> searchPlan(@PathVariable("proposalId") String proposalId) {
-        List<Map<String, Object>> planList = proposalFinder.getPlans(proposalId);
+    public List<Map<String, Object>> searchPlan(@RequestParam(value = "agentIds",required = false)List<String> agentIds,@RequestParam(value = "proposedAssuredAge",required = false) Integer proposedAssuredAge) {
+        List<Map<String, Object>> planList = proposalFinder.getPlans(agentIds,proposedAssuredAge);
         return planList;
     }
 

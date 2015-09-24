@@ -74,6 +74,10 @@ public class GroupHealthProposalController {
     @RequestMapping(value = "/opengrouphealthproposal/{quotationId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To create proposal from quotation")
     public ResponseEntity createProposal(@PathVariable("quotationId") String quotationId) {
+        if (ghProposalService.isAgentActive(quotationId)) {
+            return new ResponseEntity(Result.failure("The Agent is Inactive"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         if (ghProposalService.hasProposalForQuotation(quotationId)) {
             return new ResponseEntity(Result.failure("Proposal already exists for the selected quotation"), HttpStatus.INTERNAL_SERVER_ERROR);
         }

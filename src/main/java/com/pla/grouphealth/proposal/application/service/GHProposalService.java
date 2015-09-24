@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouphealth.proposal.application.command.GHProposalRecalculatedInsuredPremiumCommand;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposalStatusAudit;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalDto;
@@ -45,7 +44,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -102,6 +104,13 @@ public class GHProposalService {
         String quotationNumber = (String) quotationMap.get("quotationNumber");
         Map proposalMap = ghProposalFinder.findProposalByQuotationNumber(quotationNumber);
         return proposalMap != null;
+    }
+
+    public boolean isAgentActive(String quotationId){
+        Map quotationMap = ghFinder.searchQuotationById(new QuotationId(quotationId));
+        AgentId agentId = (AgentId) quotationMap.get("agentId");
+        Map<String, Object> agentCount =  ghFinder.getAgentById(agentId.getAgentId());
+        return isNotEmpty(agentCount)?true:false;
     }
 
     public List<GlQuotationDto> searchGeneratedQuotation(String quotationNumber) {

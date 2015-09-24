@@ -182,9 +182,9 @@ public class GLPolicyController {
         try {
             List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()));
             mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachments, mailDto.getRecipientMailAddress());
-        /*
-        * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
-        * */
+           /*
+           * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
+           * */
             System.gc();
             try {
                 Thread.sleep(100);
