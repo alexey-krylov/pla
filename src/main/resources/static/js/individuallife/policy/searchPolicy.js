@@ -197,9 +197,13 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
             if ($scope.policyId) {
 
                     // Method For Getting Document List for Printing Policy
-                    $http.get("/pla/individuallife/policy/getpoilcydocument/").success(function (policyDocumentResponse, status, headers, config) {
-                        //console.log(JSON.stringify(policyDocumentResponse));
-                        $scope.mulSelect=policyDocumentResponse;
+                    $http.get("/pla/individuallife/policy/getpoilcydocument/"+$scope.policyId).success(function (policyDocumentResponse, status, headers, config) {
+
+                        console.log(JSON.stringify(policyDocumentResponse));
+
+                        //$scope.mulSelect=policyDocumentResponse;
+                        $scope.mulSelect=policyDocumentResponse.ilPolicyDocument;
+                        $scope.policyNumberPrint=policyDocumentResponse.policyNumber;
 
                     });
 
