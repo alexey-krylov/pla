@@ -152,8 +152,10 @@
                 <h3 class="modal-title">Confirmation</h3>
             </div>
             <div class="modal-body">
-                <h4 class="text-danger">Proposal already exists for the selected quotation. Do you want to
-                    override?</h4>
+              <!--  <h4 class="text-danger">Proposal already exists for the selected quotation. Do you want to
+                    override?</h4>-->
+                <h4 class="text-danger" hidden="true" id="inactivate-alert-danger"></h4>
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" onclick="viewProposalModule.onConfirmation()">OK</button>

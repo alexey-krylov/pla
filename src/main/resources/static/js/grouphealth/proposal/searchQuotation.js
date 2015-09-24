@@ -19,7 +19,9 @@ var viewProposalModule = (function () {
             }).done(function (data) {
                 console.log(JSON.stringify(data));
                 window.location.href = "editProposal?proposalId=" + data.id;
-            }).error(function () {
+            }).error(function (msg) {
+               // console.log(msg.responseJSON);
+                $('#inactivate-alert-danger').text(msg.responseJSON.message).show();
                 $('#proposalConfirm').modal('show');
 
             });
