@@ -85,6 +85,12 @@ public final class Result {
         return new Result(message, RESULT_TYPE.SUCCESS, id);
     }
 
+    public static Result failure(String message, Object data) {
+        Result result = new Result(message, RESULT_TYPE.SUCCESS);
+        result.data = data;
+        return result;
+    }
+
     public static Result failure(String message) {
         return new Result(message, RESULT_TYPE.ERROR);
     }
