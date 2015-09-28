@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -484,8 +485,8 @@ public class ILProposalController {
 
     @RequestMapping(value = "/searchplan", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>> searchPlan(@RequestParam(value = "agentIds",required = false)List<String> agentIds,@RequestParam(value = "proposedAssuredAge",required = false) Integer proposedAssuredAge) {
-        List<Map<String, Object>> planList = proposalFinder.getPlans(agentIds,proposedAssuredAge);
+    public Set<Map<String, Object>> searchPlan(@RequestParam(value = "agentIds",required = false)List<String> agentIds,@RequestParam(value = "proposedAssuredAge",required = false) Integer proposedAssuredAge) {
+        Set<Map<String, Object>> planList = proposalFinder.getPlans(agentIds,proposedAssuredAge);
         return planList;
     }
 
@@ -510,19 +511,24 @@ public class ILProposalController {
         return ilProposalService.findApproverComments(proposalId);
     }
 
-    @RequestMapping(value = "/getallrelations", method = RequestMethod.GET)
+    @RequestMapping(value = "/getallrelations/{age}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list all the relations")
-    public List<Map<String,Object>> getAllRelationShip() {
-        return Arrays.asList(Relationship.values()).parallelStream().map(new Function<Relationship, Map<String,Object>>() {
+    public List<Map<String,Object>> getAllRelationShip(@PathVariable("age") Integer age) {
+        if (age<=16) {
+            return Arrays.asList(Relationship.values()).parallelStream().filter(new Predicate<Relationship>() {
+                @Override
+                public boolean test(Relationship relationship) {
+                    return Arrays.asList(Relationship.DAUGHTER,Relationship.SON,Relationship.STEP_DAUGHTER,Relationship.STEP_SON).contains(relationship);
+                }
+            }).map(new RelationTransformer()).collect(Collectors.toList());
+        }
+        return Arrays.asList(Relationship.values()).parallelStream().filter(new Predicate<Relationship>() {
             @Override
-            public  Map<String,Object> apply(Relationship relationship) {
-                Map<String,Object> relationMap = Maps.newLinkedHashMap();
-                relationMap.put("relationCode",relationship.name());
-                relationMap.put("description",relationship.description);
-                return relationMap;
+            public boolean test(Relationship relationship) {
+                return !(Arrays.asList(Relationship.DAUGHTER, Relationship.SON, Relationship.STEP_DAUGHTER, Relationship.STEP_SON).contains(relationship));
             }
-        }).collect(Collectors.toList());
+        }).map(new RelationTransformer()).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
@@ -535,5 +541,14 @@ public class ILProposalController {
         IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
         outputStream.flush();
         outputStream.close();
+    }
+
+    private class RelationTransformer implements Function<Relationship, Map<String,Object>> {
+        public Map<String, Object> apply(Relationship relationship) {
+            Map<String, Object> relationMap = Maps.newLinkedHashMap();
+            relationMap.put("relationCode", relationship.name());
+            relationMap.put("description", relationship.description);
+            return relationMap;
+        }
     }
 }

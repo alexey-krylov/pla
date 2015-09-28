@@ -1,6 +1,8 @@
 package org.nthdimenzion.presentation;
 
 import com.google.common.collect.Lists;
+import com.pla.sharedkernel.service.EmailAttachment;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -14,6 +16,7 @@ import org.nthdimenzion.common.AppConstants;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -106,6 +109,12 @@ public class AppUtils {
 
     public static void main(String[] args) {
         System.out.println(getAgeOnNextBirthDate(new LocalDate(1985, 11, 05)));
+    }
+
+    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments) throws IOException {
+        for (EmailAttachment fileTobeDeleted : emailAttachments) {
+            FileUtils.forceDelete(fileTobeDeleted.getFile());
+        }
     }
 }
 

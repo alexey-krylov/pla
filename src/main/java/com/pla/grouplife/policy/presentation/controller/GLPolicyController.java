@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static org.nthdimenzion.presentation.AppUtils.deleteTempFileIfExists;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
@@ -61,12 +62,6 @@ public class GLPolicyController {
     @Autowired
     public GLPolicyController(GLPolicyService glPolicyService) {
         this.glPolicyService = glPolicyService;
-    }
-
-    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
-        for (EmailAttachment fileTobeDeleted : emailAttachments) {
-            fileTobeDeleted.getFile().delete();
-        }
     }
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
@@ -272,6 +267,7 @@ public class GLPolicyController {
         modelAndView.setViewName("pla/groupLife/policy/printPolicy");
         return modelAndView;
     }
+
 
 
 }

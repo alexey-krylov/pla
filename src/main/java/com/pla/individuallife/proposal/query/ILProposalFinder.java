@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.plan.PlanCoverage;
@@ -262,6 +263,11 @@ public class ILProposalFinder {
         if (planDetail==null){
             return new PremiumDetailDto();
         }
+        if (planDetail!=null){
+            if (planDetail.getSumAssured()==null){
+                return new PremiumDetailDto();
+            }
+        }
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
@@ -405,23 +411,15 @@ public class ILProposalFinder {
         return proposal.get("proposalNumber").toString();
     }
 
-    public List<Map<String, Object>> getPlans(List<String> agentIds,Integer proposedAssuredAge) {
-        List<Map<String, Object>>  result =  namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentIds).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
-        if (proposedAssuredAge==null || proposedAssuredAge==0){
-            return result;
-        }
-        List<String> planIds = getPlanIds(proposedAssuredAge);
-        return result.parallelStream().filter(new Predicate<Map<String, Object>>() {
+    public Set<Map<String, Object>> getPlans(List<String> agentIds,Integer proposedAssuredAge) {
+        List<List<Map<String ,Object>>> agentAuthorisedPlan = agentIds.parallelStream().map(new Function<String, List<Map<String,Object>>>() {
             @Override
-            public boolean test(Map<String, Object> planDetails) {
-                return  planIds.contains(planDetails.get("plan_id"));
-            }
-        }).map(new Function<Map<String,Object>, Map<String,Object>>() {
-            @Override
-            public Map<String, Object> apply(Map<String, Object> planDetailMap) {
-                return planDetailMap;
+            public List<Map<String, Object>> apply(String agentId) {
+                return namedParameterJdbcTemplate.query(SEARCH_PLAN_BY_AGENT_IDS, new MapSqlParameterSource().addValue("agentIds", agentId).addValue("lineOfBusiness", "Individual Life"), new ColumnMapRowMapper());
             }
         }).collect(Collectors.toList());
+        return findCommonAuthorisedPlanByAgent(agentAuthorisedPlan, proposedAssuredAge);
+
     }
 
     private List<String> getPlanIds(Integer age ){
@@ -488,6 +486,31 @@ public class ILProposalFinder {
             ILSearchProposalDto ilSearchProposalDto = new ILSearchProposalDto(proposalNumber, proposerName, "NRCNumber", agentNames, "Agent Code", proposalId, submittedOn, proposalStatus);
             return ilSearchProposalDto;
         }
+    }
+
+    private Set<Map<String ,Object>> findCommonAuthorisedPlanByAgent(List<List<Map<String, Object>>> agentAuthorisedPlan, Integer proposedAssuredAge){
+        if (isEmpty(agentAuthorisedPlan)){
+            return Collections.EMPTY_SET;
+        }
+        Set<Map<String ,Object>> commonAuthorisedPlan = Sets.newHashSet(agentAuthorisedPlan.get(0));
+        for (List<Map<String,Object>> agentPlanList : agentAuthorisedPlan) {
+            commonAuthorisedPlan = Sets.intersection(commonAuthorisedPlan, Sets.newHashSet(agentPlanList));
+        }
+        if (proposedAssuredAge==null || proposedAssuredAge==0){
+            return commonAuthorisedPlan;
+        }
+        List<String> planIds = getPlanIds(proposedAssuredAge);
+        return commonAuthorisedPlan.parallelStream().filter(new Predicate<Map<String, Object>>() {
+            @Override
+            public boolean test(Map<String, Object> planDetails) {
+                return  planIds.contains(planDetails.get("plan_id"));
+            }
+        }).map(new Function<Map<String,Object>, Map<String,Object>>() {
+            @Override
+            public Map<String, Object> apply(Map<String, Object> planDetailMap) {
+                return planDetailMap;
+            }
+        }).collect(Collectors.toSet());
     }
 
 

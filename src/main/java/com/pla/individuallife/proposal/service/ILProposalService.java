@@ -128,6 +128,10 @@ public class ILProposalService {
         if (planDetail==null){
             return Collections.EMPTY_LIST;
         }
+        if (planDetail!=null){
+            if (planDetail.getSumAssured()==null)
+                return Collections.EMPTY_LIST;
+        }
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
         Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;

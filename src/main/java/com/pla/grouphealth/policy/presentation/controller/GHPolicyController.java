@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static org.nthdimenzion.presentation.AppUtils.deleteTempFileIfExists;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
@@ -272,11 +273,4 @@ public class GHPolicyController {
         modelAndView.setViewName("pla/grouphealth/policy/printPolicy");
         return modelAndView;
     }
-
-    public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments){
-        for (EmailAttachment fileTobeDeleted : emailAttachments) {
-            fileTobeDeleted.getFile().delete();
-        }
-    }
-
 }
