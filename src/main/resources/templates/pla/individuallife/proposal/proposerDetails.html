@@ -137,12 +137,17 @@
                                ng-required="true"
                                is-open="launchdob2"
                                max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                               ng-model="proposer.dateOfBirth" name="dob"/>
+                               ng-change="clearPlanId()" ng-model="proposer.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDate($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
+                    </div>
+                    <div class="error" ng-messages="proposerForm.dob.$error" ng-if="proposerForm.dob.$dirty">
+                        <small ng-message="required">Please enter Date of Birth.</small>
+                        <small ng-message="date">Invalid Date.</small>
+
                     </div>
                 </div>
                 <div class="form-group required">
@@ -466,12 +471,13 @@
             <div class="form-group required">
                 <label class="control-label">Plan</label>
                 <select ng-if="!isPlanTextField" class="form-control input-sm" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planId" ng-change="setProposerPlanName(ProposerplanDetail.planId)" ng-options="proposalPlan.plan_id as proposalPlan.plan_name for proposalPlan in proposalPlanList">
+                    <option value="">Select Plan</option>
                 </select>
 
                 <input type="text" class="form-control input-sm" readonly="true" ng-if="isPlanTextField" name="proposerPlan" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planName"/>
 
                 <div class="error" ng-messages="step1.proposerPlan.$error" ng-if="step1.proposerPlan.$dirty">
-                    <small ng-message="required">Please enter Title</small>
+                    <small class="error" ng-message="required">Please enter Plan</small>
                 </div>
             </div>
 
@@ -505,7 +511,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus || ProposerplanDetail.planId == null" ng-click="saveProposerDetails()">Save</button>
         </div>
     </div>
 </ng-form>

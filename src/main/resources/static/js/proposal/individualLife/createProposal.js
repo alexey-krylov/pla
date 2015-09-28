@@ -765,9 +765,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             });
                         }
 
-
-
-
                         $scope.spouse = $scope.rcvProposal.proposedAssured.spouse;
                         ////alert($scope.rcvProposal.proposedAssured.employment);
                         $scope.employment = $scope.rcvProposal.proposedAssured.employment;
@@ -3153,7 +3150,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              $scope.agent//alert = true;
              }*//*
              };*/
+            $scope.clearPlanId=function()
+            {
+                //alert('change..');
+                $scope.ProposerplanDetail.planId=null;
 
+            }
             $scope.getProposerPlan=function()
             {
                 if(($scope.proposer.nextDob && $scope.proposer.isProposedAssured) ||($scope.proposer.nextDob && $scope.proposer.isProposedAssured == false) )
@@ -3383,6 +3385,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 {
                     "proposer": $scope.proposer,
                     "agentCommissionDetails": $scope.agentDetails,
+                    "planDetail":$scope.ProposerplanDetail,
                     "proposalId": $scope.proposal.proposalId
                 }
 
