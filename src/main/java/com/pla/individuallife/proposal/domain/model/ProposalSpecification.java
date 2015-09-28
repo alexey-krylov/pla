@@ -27,12 +27,14 @@ public class ProposalSpecification {
         Preconditions.checkArgument(proposedAssured.getDateOfBirth() != null, "Please specify Date of Birth.");
 
         Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getOccupationClass() != null, "Please specify Occupation.");
-        Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getEmployer() != null, "Please specify Employer.");
-        Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getEmploymentDate() != null, "Please specify Employment Date.");
-        Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getEmploymentTypeId() != null, "Please specify Employment Type.");
-        Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getAddress().getAddress1() != null, "Please specify Employment Address1.");
-        Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getAddress().getProvince() != null, "Please specify Employment Province.");
-        Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getAddress().getTown() != null, "Please specify Employment Town.");
+        if (!proposedAssured.getEmploymentDetail().getOccupationClass().equals("Housewives")) {
+            Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getEmployer() != null, "Please specify Employer.");
+            Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getEmploymentDate() != null, "Please specify Employment Date.");
+            Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getEmploymentTypeId() != null, "Please specify Employment Type.");
+            Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getAddress().getAddress1() != null, "Please specify Employment Address1.");
+            Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getAddress().getProvince() != null, "Please specify Employment Province.");
+            Preconditions.checkArgument(proposedAssured.getEmploymentDetail().getAddress().getTown() != null, "Please specify Employment Town.");
+        }
 
 //        Preconditions.checkArgument(proposedAssured.getResidentialAddress().getAddress1() != null, "Please specify Residential Address1.");
 //        Preconditions.checkArgument(proposedAssured.getResidentialAddress().getProvince() != null, "Please specify Residential Province.");
@@ -59,12 +61,14 @@ public class ProposalSpecification {
         Preconditions.checkArgument(proposer.getGender() != null, "Please specify Sex.");
         Preconditions.checkArgument(proposer.getDateOfBirth() != null, "Please specify Date of Birth.");
         Preconditions.checkArgument(proposer.getEmploymentDetail().getOccupationClass() != null, "Please specify Occupation.");
-        Preconditions.checkArgument(proposer.getEmploymentDetail().getEmployer() != null, "Please specify Employer.");
-        Preconditions.checkArgument(proposer.getEmploymentDetail().getEmploymentDate() != null, "Please specify Employment Date.");
-        Preconditions.checkArgument(proposer.getEmploymentDetail().getEmploymentTypeId() != null, "Please specify Employment Type.");
-        Preconditions.checkArgument(proposer.getEmploymentDetail().getAddress().getAddress1() != null, "Please specify Employment Address1.");
-        Preconditions.checkArgument(proposer.getEmploymentDetail().getAddress().getProvince() != null, "Please specify Employment Province.");
-        Preconditions.checkArgument(proposer.getEmploymentDetail().getAddress().getTown() != null, "Please specify Employment Town.");
+        if (!proposer.getEmploymentDetail().getOccupationClass().equals("Housewives")) {
+            Preconditions.checkArgument(proposer.getEmploymentDetail().getEmployer() != null, "Please specify Employer.");
+            Preconditions.checkArgument(proposer.getEmploymentDetail().getEmploymentDate() != null, "Please specify Employment Date.");
+            Preconditions.checkArgument(proposer.getEmploymentDetail().getEmploymentTypeId() != null, "Please specify Employment Type.");
+            Preconditions.checkArgument(proposer.getEmploymentDetail().getAddress().getAddress1() != null, "Please specify Employment Address1.");
+            Preconditions.checkArgument(proposer.getEmploymentDetail().getAddress().getProvince() != null, "Please specify Employment Province.");
+            Preconditions.checkArgument(proposer.getEmploymentDetail().getAddress().getTown() != null, "Please specify Employment Town.");
+        }
 
 //        Preconditions.checkArgument(proposer.getResidentialAddress().getAddress1() != null, "Please specify Residential Address1.");
 //        Preconditions.checkArgument(proposer.getResidentialAddress().getProvince() != null, "Please specify Residential Province.");
