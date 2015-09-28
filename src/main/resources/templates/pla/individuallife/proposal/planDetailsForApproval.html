@@ -10,7 +10,7 @@
                     <label class="control-label">Plan</label>
                     <!--<input type="text" class="form-control input-sm" name="plan" ng-blur="searchRiders()" ng-model="proposalPlanDetail.planId"/>-->
                     <div data-angucomplete-alt="" id="searchPlan" placeholder="Search Plans" pause="500"
-                         selected-object="planSelected" disable-input="uneditable"
+                         selected-object="planSelected" disable-input="true"
                          remote-url="/pla/individuallife/proposal/searchplan/{{proposal.proposalId}}?q=" field-required="true"
                          remote-url-data-field="" title-field="plan_name"
                          initial-value="selectedPlan.title"
@@ -200,8 +200,7 @@
         <div ng-switch="getSumAssuredType(searchRider)">
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select view-enabled="" class="form-control input-sm" ng-model="searchRider.sumAssured" name="sumAssured"
-                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"
-                        ng-required="true"></select>
+                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"></select>
             </div>
 
             <div ng-switch-when="RANGE">
@@ -209,7 +208,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm"
                        ng-disabled="mode=='new'||mode=='view'" min="{{coverage.sumAssured.minSumInsured}}"
                        name="sumAssured"
-                       max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured" ng-required="true"/>
+                       max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured"/>
                 <div class="error" ng-messages="step3.sumAssured.$error">
                     <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
@@ -220,7 +219,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.maxLimit}}"
                        name="sumAssured"
-                       ng-model="searchRider.sumAssured" ng-required="true"/>
+                       ng-model="searchRider.sumAssured"/>
 
                 <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
@@ -232,7 +231,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.incomeMultiplier}}"
                        name="sumAssured"
-                       ng-model="searchRider.sumAssured" ng-required="true"/>
+                       ng-model="searchRider.sumAssured"/>
 
                 <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
@@ -247,16 +246,16 @@
             <!-- {{searchRider.coverTerm}}-->
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
-                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms"></select>
             </div>
             <div ng-switch-when="AGE_DEPENDENT">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
-                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms"></select>
             </div>
 
             <div ng-switch-when="POLICY_TERM" >
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                       ng-disabled="mode=='new'||mode=='view'" name="sumAssured"   ng-model="searchRider.coverTerm" ng-required="true"/>
+                       ng-disabled="mode=='new'||mode=='view'" name="sumAssured"   ng-model="searchRider.coverTerm"/>
                 <!--<select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>-->
             </div>

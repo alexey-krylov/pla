@@ -469,7 +469,7 @@
                                 <label class="control-label">Relationship To Life Assured</label>
                                 <!--<input type="text" class="form-control input-sm" name="relationship" ng-model="beneficiary.relationshipId"/>-->
 
-                                <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="beneficiary.relationshipId" ng-options="applicableRelationship for applicableRelationship in applicableRelationships">
+                                <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="beneficiary.relationshipId" ng-options="applicableRelationship.relationCode as applicableRelationship.description for applicableRelationship in applicableRelationships">
                                 </select>
 
                                 <div class="error" ng-messages="planBeneficiary.relationship.$error" ng-if="planBeneficiary.relationship.$dirty">

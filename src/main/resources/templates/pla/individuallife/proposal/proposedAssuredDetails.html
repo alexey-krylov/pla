@@ -39,7 +39,20 @@
             </div>
                 <div class="form-group required">
                     <label class="control-label">Age Next Birthday</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="ageNextBirthday" ng-model="proposedAssured.nextDob"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true"
+                           validate-proposed-dob="" name="ageNextBirthday" ng-model="proposedAssured.nextDob"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.ageNextBirthday.$error" ng-if="proposedAssuredDetails.$dirty">
+                        <small ng-message="invalidProposedMinAge">Minimum Entry Age For Proposed Assured
+                            is
+                            {{plan.planDetail.minEntryAge}} years.
+                        </small>
+                        <small ng-message="invalidProposedMaxAge">Maximum Entry Age For Proposed Assured
+                            is
+                            {{plan.planDetail.maxEntryAge}} Years.
+                        </small>
+                    </div>
+
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Mobile Number</label>
@@ -148,7 +161,10 @@
 
                 <div class="form-group" >
                     <label class="control-label">Relationship with Proposer</label>
-                    <select class="form-control input-sm" name="relation" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-options="relation.relationCode as relation.description for relation in relationshipList"
+                    <!--<select class="form-control input-sm" name="relation" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-options="relation.relationCode as relation.description for relation in relationshipList"
+                            ng-model="proposedAssured.relationshipId" >
+                    </select>-->
+                    <select class="form-control input-sm" name="relation" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-options="relation as relation for relation in relationshipList"
                             ng-model="proposedAssured.relationshipId" >
                     </select>
 
@@ -226,7 +242,7 @@
                         <small class="error" ng-message="required">Please enter Occupation</small>
                     </div>
                 </div>
-                <div class="form-group required">
+                <div class="form-group required" ng-if="employmentTypeStaus">
                     <label class="control-label">Employment Date</label>
                     <div class='input-group date'>
                         <input type="text" class="form-control input-sm"
@@ -276,7 +292,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" ng-if="employmentTypeStaus">
                 <div class="form-group required">
                     <label class="control-label">Employer</label>
                     <input type="text" class="form-control input-sm" name="employer" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-required="true" ng-maxlength="30" ng-model="employment.employer"/>
