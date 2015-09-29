@@ -473,8 +473,7 @@
                 <select ng-if="!isPlanTextField" class="form-control input-sm" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planId" ng-change="setProposerPlanName(ProposerplanDetail.planId)" ng-options="proposalPlan.plan_id as proposalPlan.plan_name for proposalPlan in proposalPlanList">
                     <option value="">Select Plan</option>
                 </select>
-
-                <input type="text" class="form-control input-sm" readonly="true" ng-if="isPlanTextField" name="proposerPlan" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planName"/>
+                <input type="text" class="form-control input-sm" readonly="true" ng-if="isPlanTextField" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planName"/>
 
                 <div class="error" ng-messages="step1.proposerPlan.$error" ng-if="step1.proposerPlan.$dirty">
                     <small class="error" ng-message="required">Please enter Plan</small>
@@ -511,7 +510,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus || ProposerplanDetail.planId == null" ng-click="saveProposerDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid || statusCount ||mode=='new'||mode=='view'|| ageCalculateStatus" ng-click="saveProposerDetails()">Save</button>
         </div>
     </div>
 </ng-form>
