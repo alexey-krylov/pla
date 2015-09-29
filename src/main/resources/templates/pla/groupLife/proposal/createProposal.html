@@ -23,7 +23,7 @@
         }
 
 
-        if (charCode > 31 && charCode != 8 && charCode != 0 && charCode != 46 &&(charCode < 48 || charCode > 57 ))
+        if (charCode > 31 && charCode != 8 && charCode != 0 && charCode != 46 && (charCode < 48 || charCode > 57 ))
             return false;
         return true;
     }
@@ -56,7 +56,8 @@
     </ol>
     </p>
     <nth-alert></nth-alert>
-    <form name="quotationForm" novalidate="true" class="container css-form ng-cloak" method="post" enctype="multipart/form-data">
+    <form name="quotationForm" novalidate="true" class="container css-form ng-cloak" method="post"
+          enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
@@ -202,7 +203,8 @@
                                     <div class="form-group required">
                                         <label class="control-label">Proposer Code</label>
                                         <input type="text" class="form-control input-sm" ng-required="true"
-                                               name="proposerCode" ng-disabled="true" onkeypress="return isEnterKey(event)"
+                                               name="proposerCode" ng-disabled="true"
+                                               onkeypress="return isEnterKey(event)"
                                                ng-model="proposalDetails.proposer.proposerCode"/>
                                     </div>
                                     <div class="form-group">
@@ -215,7 +217,8 @@
                                         <label class="control-label">Province</label>
                                         <select class="form-control input-sm" ng-required="true" name="province"
                                                 ng-model="proposalDetails.proposer.province"
-                                                ng-options="province.provinceId  as province.provinceName for province in provinces" ng-change="getCurrentVal(proposalDetails.proposer.province)">
+                                                ng-options="province.provinceId  as province.provinceName for province in provinces"
+                                                ng-change="getCurrentVal(proposalDetails.proposer.province)">
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -350,6 +353,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-lg-4 col-lg-offset-3">
+                            <div class="form-group ">
+                                <label class="control-label">FCL</label>
+                                <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                        name="freeCoverLimit" readonly="true"
+                                        ng-pattern="/^(^[0-9]{1,7})+(\.[0-9]{1,2})?$/"
+                                       ng-model="proposalDetails.plan.freeCoverLimit"/>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
@@ -371,14 +386,16 @@
                                         <div class="form-group required">
                                             <label class="control-label">Add-On Benefits</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" name="addOnBenefits" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   ng-required="true" name="addOnBenefits"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="proposalDetails.premium.addOnBenefit"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Profit and Solvency Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="profitAndSolvencyLoading" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   name="profitAndSolvencyLoading"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="proposalDetails.premium.profitAndSolvencyLoading"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
@@ -392,14 +409,16 @@
                                         <div class="form-group">
                                             <label class="control-label">Valued Client Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="valuedClientDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   name="valuedClientDiscount"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="proposalDetails.premium.valuedClientDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Long Term Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="longTermDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   name="longTermDiscount"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="proposalDetails.premium.longTermDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
@@ -487,7 +506,7 @@
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
                                     ng-if="!isViewMode"
-                                     ng-click="savePremiumDetails()"
+                                    ng-click="savePremiumDetails()"
                                     ng-disabled="(!disableSaveButton)">Save
                             </button>
                         </div>
@@ -568,7 +587,7 @@
                                                                 ng-model="additionalDocument.documentAttached"
                                                                 ng-disabled="!additionalDocument.documentId">Browse
                                                         </button>
-                                                        <input class="form-control input-sm" style="width:320px;"
+                                                        <input class="form-control input-sm" style="width:263px;"
                                                                value="{{additionalDocument.documentAttached[0].name}}"
                                                                readonly="true"/>
                                                     </div>
