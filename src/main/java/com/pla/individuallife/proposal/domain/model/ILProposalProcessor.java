@@ -27,8 +27,8 @@ public class ILProposalProcessor {
         return proposalAggregate.updateWithProposedAssuredAndAgentDetails(proposedAssured);
     }
 
-    public ILProposalAggregate updateWithProposer(ILProposalAggregate aggregate, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
-        return aggregate.updateWithProposer(proposer,agentCommissionShareModel);
+    public ILProposalAggregate updateWithProposer(ILProposalAggregate aggregate, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel, ProposalPlanDetail planDetail) {
+        return aggregate.updateWithProposer(proposer,agentCommissionShareModel,planDetail);
     }
 
     public ILProposalAggregate updateGeneralDetails(ILProposalAggregate aggregate, GeneralDetails generalDetails) {

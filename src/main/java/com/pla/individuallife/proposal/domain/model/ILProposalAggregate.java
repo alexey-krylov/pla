@@ -93,7 +93,8 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());
     }
 
-    public ILProposalAggregate updateWithProposer(Proposer proposer, AgentCommissionShareModel agentCommissionShareModel) {
+    public ILProposalAggregate updateWithProposer(Proposer proposer, AgentCommissionShareModel agentCommissionShareModel, ProposalPlanDetail planDetail) {
+        this.proposalPlanDetail = planDetail;
         if(proposer.getIsProposedAssured()) {
             assignProposedAssured(proposer);
         }
