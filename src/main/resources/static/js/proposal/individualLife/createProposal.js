@@ -1417,10 +1417,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             checkLoopNameStatus = "false";
                             break;
                         } else if( ($scope.beneficiariesList[i].firstName == beneficiary.firstName) &&
-                            ($scope.beneficiariesList[i].gender == beneficiary.gender) && ($scope.beneficiariesList[i].dateOfBirth == beneficiary.dateOfBirth) &&
-                            ($scope.beneficiariesList[i].relationshipId == beneficiary.relationshipId)) {
+                            ($scope.beneficiariesList[i].gender == beneficiary.gender) && ($scope.beneficiariesList[i].dateOfBirth == beneficiary.dateOfBirth)) {
                             checkLoopNameStatus = "false";
                             break;
+                        }else if(beneficiary.relationshipId !='SON' && beneficiary.relationshipId != 'DAUGHTER' && beneficiary.relationshipId !='STEP_SON' && beneficiary.relationshipId !='STEP_DAUGHTER'){
+                            //alert(beneficiary.relationshipId);
+                            if(($scope.beneficiariesList[i].relationshipId == beneficiary.relationshipId)){
+                                checkLoopNameStatus = "false";
+                                break;
+                            }
                         }
                     }
 
