@@ -256,6 +256,18 @@
                     $scope.occupations = response;
                 });
 
+                //Geting All ConfiguredPlan
+                $scope.cfgPlanList=[];
+                $scope.getBasicPlanDetails=function(){
+                     $http.get('/pla/core/agent/searchplan?agentId='+$scope.quotation.agentId).success(function (response, status, headers, config) {
+                     //console.log('SearchPlanScreen'+JSON.stringify(response));
+                         $scope.cfgPlanList=response;
+                     }).error(function (response, status, headers, config) {
+                     });
+
+                }
+
+
                 $scope.todayDate = new Date();
                 $scope.todayDate.setDate($scope.todayDate.getDate() - 1);
 
@@ -326,9 +338,11 @@
 
                             //This is for making the default selection during edit
                             var selectedPlan = {};
-                            selectedPlan.title = response.planDetail.planDetail.planName || '';
-                            selectedPlan.description = response.planDetail;
+                            //selectedPlan.title = response.planDetail.planDetail.planName || '';
 
+                            //selectedPlan.description = response.planDetail;
+                            selectedPlan=response.planDetail.planDetail;
+                            //console.log('selectedPlan1'+JSON.stringify(selectedPlan));
                             $scope.selectedPlan = selectedPlan;
 
                             $scope.planDetailDto = response.planDetailDto;
@@ -367,8 +381,17 @@
                         $scope.quotation.agentId = $scope.agent["agent_id"];
                     }
                 });
+                $scope.getPlanDetails=function(newval)
+                {
+                    $http.get('/pla/core/plan/getPlanById/' + newval)
+                        .success(function (response) {
+                            console.log('PlanQuotation'+JSON.stringify(response));
+                            $scope.plan = response;
+                        });
+                }
 
-                $scope.$watch('selectedPlan', function (newval, oldval) {
+                /*$scope.$watch('selectedPlan', function (newval, oldval) {
+                    console.log('SelectedPlan'+JSON.stringify(newval));
                     if (newval && newval.description && newval.description.plan_id) {
                         var plan = newval.description;
                         $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
@@ -377,7 +400,7 @@
                             });
 
                     }
-                });
+                });*/
 
                 $scope.$watch('plan.planId', function (newval) {
                     if (newval && !$scope.quotationId) {
@@ -414,7 +437,7 @@
                             agentId: $scope.quotation.agentId,
                             planId: $scope.plan.planId
                         }))
-                        .success(function (data) {
+                       .success(function (data) {
                             if (data.id)
                                 $window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
