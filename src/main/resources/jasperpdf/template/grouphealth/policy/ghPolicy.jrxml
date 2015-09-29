@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-16T10:19:56 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
+<!-- 2015-09-29T10:47:46 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="demo" pageWidth="1000" pageHeight="1550" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40bbb3cc-8b6a-4816-96e5-850e29f26fa2">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="66"/>
-	<property name="ireport.y" value="460"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -43,24 +40,6 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="agentName" class="java.lang.String">
-		<fieldDescription><![CDATA[agentName]]></fieldDescription>
-	</field>
-	<field name="inceptionDate" class="java.lang.String">
-		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
-	</field>
-	<field name="showLoading" class="java.lang.Boolean">
-		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
-	</field>
-	<field name="agentMobileNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[agentMobileNumber]]></fieldDescription>
-	</field>
-	<field name="agentCode" class="java.lang.String">
-		<fieldDescription><![CDATA[agentCode]]></fieldDescription>
-	</field>
-	<field name="agentBranch" class="java.lang.String">
-		<fieldDescription><![CDATA[agentBranch]]></fieldDescription>
-	</field>
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
@@ -70,11 +49,23 @@
 	<field name="telephoneNumber" class="java.lang.String">
 		<fieldDescription><![CDATA[telephoneNumber]]></fieldDescription>
 	</field>
+	<field name="agentName" class="java.lang.String">
+		<fieldDescription><![CDATA[agentName]]></fieldDescription>
+	</field>
+	<field name="agentCode" class="java.lang.String">
+		<fieldDescription><![CDATA[agentCode]]></fieldDescription>
+	</field>
+	<field name="agentBranch" class="java.lang.String">
+		<fieldDescription><![CDATA[agentBranch]]></fieldDescription>
+	</field>
+	<field name="agentMobileNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[agentMobileNumber]]></fieldDescription>
+	</field>
+	<field name="coverDetails" class="java.util.List">
+		<fieldDescription><![CDATA[coverDetails]]></fieldDescription>
+	</field>
 	<field name="masterPolicyNumber" class="java.lang.String">
 		<fieldDescription><![CDATA[masterPolicyNumber]]></fieldDescription>
-	</field>
-	<field name="expiryDate" class="java.lang.String">
-		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
 	</field>
 	<field name="totalLivesCovered" class="java.lang.String">
 		<fieldDescription><![CDATA[totalLivesCovered]]></fieldDescription>
@@ -82,14 +73,17 @@
 	<field name="totalSumAssured" class="java.lang.String">
 		<fieldDescription><![CDATA[totalSumAssured]]></fieldDescription>
 	</field>
-	<field name="planName" class="java.lang.String">
-		<fieldDescription><![CDATA[planName]]></fieldDescription>
+	<field name="inceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
 	</field>
-	<field name="coverDetails" class="java.util.List">
-		<fieldDescription><![CDATA[coverDetails]]></fieldDescription>
+	<field name="expiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
 	</field>
-	<field name="annexure" class="java.util.List">
-		<fieldDescription><![CDATA[annexure]]></fieldDescription>
+	<field name="specialConditions" class="java.lang.String">
+		<fieldDescription><![CDATA[specialConditions]]></fieldDescription>
+	</field>
+	<field name="showLoading" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
 	</field>
 	<field name="netPremium" class="java.lang.String">
 		<fieldDescription><![CDATA[netPremium]]></fieldDescription>
@@ -97,17 +91,11 @@
 	<field name="profitAndSolvencyLoading" class="java.lang.String">
 		<fieldDescription><![CDATA[profitAndSolvencyLoading]]></fieldDescription>
 	</field>
-	<field name="additionalDiscountLoading" class="java.lang.String">
-		<fieldDescription><![CDATA[additionalDiscountLoading]]></fieldDescription>
-	</field>
 	<field name="serviceTax" class="java.lang.String">
 		<fieldDescription><![CDATA[serviceTax]]></fieldDescription>
 	</field>
 	<field name="totalPremium" class="java.lang.String">
 		<fieldDescription><![CDATA[totalPremium]]></fieldDescription>
-	</field>
-	<field name="specialConditions" class="java.lang.String">
-		<fieldDescription><![CDATA[specialConditions]]></fieldDescription>
 	</field>
 	<field name="addOnBenefits" class="java.lang.String">
 		<fieldDescription><![CDATA[addOnBenefits]]></fieldDescription>
@@ -121,506 +109,802 @@
 	<field name="waiverOfExcessLoadingsPercentage" class="java.lang.String">
 		<fieldDescription><![CDATA[waiverOfExcessLoadingsPercentage]]></fieldDescription>
 	</field>
+	<field name="issueBranch" class="java.lang.String">
+		<fieldDescription><![CDATA[issueBranch]]></fieldDescription>
+	</field>
+	<field name="issuanceDate" class="java.lang.String">
+		<fieldDescription><![CDATA[issuanceDate]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="119" splitType="Stretch">
-			<subreport>
-				<reportElement x="50" y="0" width="568" height="119" uuid="fa6a7357-91e7-4f4b-8661-21c0b790e5ef"/>
-				<subreportExpression><![CDATA["jasperpdf/jasper/header.jasper"]]></subreportExpression>
-			</subreport>
+		<band height="92" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="960" height="92" uuid="71626a4e-72be-465d-ad23-01d874a4a883"/>
+			</rectangle>
+			<image>
+				<reportElement x="350" y="16" width="261" height="60" uuid="6eed6dea-01c4-4f78-96b8-187933b64f38"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch">
+	<detail>
+		<band height="1320" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<rectangle>
+				<reportElement key="" isPrintRepeatedValues="false" x="0" y="0" width="960" height="1320" uuid="6d92ebd8-a8fd-4c0e-a271-bd17a78f3079"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="260" y="20" width="387" height="40" uuid="af6082e7-f317-4924-a591-4d0655cfed61"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GROUP LIFE ASSURANCE POLICY  - Article ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="" x="34" y="180" width="896" height="40" backcolor="#002060" uuid="3d54feae-d1ec-4b3d-b066-aac10eafe437"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="34" y="180" width="896" height="40" forecolor="#FFFFFF" uuid="16511ca9-9c15-4ec6-9154-1c6891cc1a04"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="34" y="220" width="896" height="90" uuid="5305c2df-6e92-4746-9b5f-ff5abaa1f58a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="34" y="220" width="56" height="30" uuid="5699715a-be02-4803-bb28-570ba8ab5f18"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="250" width="66" height="30" uuid="ccd18ef9-9030-4b3a-ba13-fd94428fd7d9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Address :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="280" width="130" height="30" uuid="7c124d94-87ed-41e9-82bd-d22b5fb1cc9c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Telephone Number(s) :]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="34" y="340" width="896" height="30" backcolor="#002060" uuid="2a36b739-66a3-4ecd-8b51-77e7e284537a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="34" y="370" width="896" height="300" uuid="c85ab0b2-9293-471b-811f-0be28745d41e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="34" y="340" width="896" height="30" forecolor="#FFFFFF" uuid="d3868b65-823f-4d1e-aa9e-9b87dd3a2074"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16"/>
+				</textElement>
+				<text><![CDATA[ Policy Details :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="370" width="100" height="30" uuid="6a558a8d-ec59-45b2-805b-c8af1933e9a1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Scheme Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="400" width="86" height="30" uuid="80bb0ea9-823e-42d9-b908-90ec4926752f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Master Policy Number :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="430" width="126" height="30" uuid="0740358e-6b93-47e5-975b-d53d825d8385"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Policy Period From :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="460" width="266" height="30" uuid="9c49387f-77eb-4f04-985d-f0fa65595225"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Assured Details(as an annexure to the Policy)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="490" width="896" height="30" uuid="d4f559f6-767c-4a1b-8707-4a4365f0bab5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See   Special Provisions No. 12)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="521" width="896" height="30" uuid="0d63368c-b724-48bf-bb17-7b0c7ad726fe"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Event of happening upon which the sum assured in respect of a particular life becomes payable : Death]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="551" width="126" height="30" uuid="836f564a-72af-49f8-9633-ac69f5e2817c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total Lives Covered:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="581" width="126" height="30" uuid="440fe21e-dc88-4cdf-ada9-40e094215ecc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ Total Sum Assured: 
+]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table" style="table" positionType="Float" stretchType="RelativeToTallestObject" x="374" y="580" width="476" height="50" uuid="5efcc67b-70bb-431a-8855-43495a9a987d">
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="$F{planCoverageName}"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="130" uuid="319b4282-f0f9-4c25-bb4d-c30bacd599cb">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="54288609-a1e6-49a9-9dbe-857bc8a6ec04"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Plan/CoverageName]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true" pattern="">
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="130" height="20" isPrintWhenDetailOverflows="true" uuid="4681c041-f341-4714-9109-d47e7d128251"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="167" uuid="5052b2f4-b79f-452a-8031-74838d7b966b">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="dacc1d28-d8d6-4137-92ef-a1d9918bd0dc"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Sum Assured]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="167" height="20" uuid="fcde6f8a-0da2-4b3b-8bc3-b99b4332f43d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{planCoverageSumAssured}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="fdebfe64-4624-4d9b-9328-06b1370dd52b">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="bd535f4c-9ac7-4d77-82a8-cd2f129c7936"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Category]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="90" height="20" uuid="94c5bc59-79b3-4a43-80bb-ecb5d8762422"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="b3afab25-c398-426a-b4a1-fbe6aefda4cb">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="999a7856-ec04-4433-8281-b0b22f6eb0c0"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Relationship]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="90" height="20" uuid="f68d44a3-e747-44ba-ad74-55155f6ca0c1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 			<frame>
-				<reportElement x="0" y="0" width="960" height="60" uuid="4d727345-90bd-4816-8cd8-c980e20542a0"/>
-				<box>
-					<topPen lineWidth="0.6" lineStyle="Double"/>
-					<leftPen lineWidth="0.6" lineStyle="Double"/>
-					<bottomPen lineWidth="0.6" lineStyle="Double"/>
-					<rightPen lineWidth="0.6" lineStyle="Double"/>
+				<reportElement x="34" y="690" width="185" height="129" uuid="522673b7-b5fb-4b9c-9964-d177c4479839"/>
+				<box padding="1" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement x="319" y="11" width="186" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
-					<textElement textAlignment="Center" verticalAlignment="Top">
-						<font fontName="Arial" size="14" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Group Health Policy - ]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="498" y="12" width="124" height="29" uuid="3ea7fd38-9694-486c-ae4f-f6349f15d8fe"/>
-					<textElement verticalAlignment="Top">
+					<reportElement x="9" y="41" width="152" height="30" uuid="7b0f1d81-d5c1-4223-877b-e7c065f1f144"/>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="667" y="12" width="100" height="29" uuid="778b5ab9-f57e-4f75-9f11-47c729323f10"/>
-					<textElement>
-						<font size="12" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="622" y="12" width="45" height="29" uuid="b5dc7f01-f7c0-49ac-8d4b-04eb5561233c"/>
-					<textElement>
-						<font size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[ Date : ]]></text>
+					<text><![CDATA[ Special Provisions]]></text>
 				</staticText>
 			</frame>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="776" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="960" height="675" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
-				<box>
-					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+				<reportElement x="220" y="690" width="699" height="129" uuid="66aed320-4fcb-47ac-9710-93d7f30a86e9"/>
+				<box padding="1" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement x="127" y="19" width="80" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
-					<box>
-						<topPen lineColor="#F22522"/>
-						<leftPen lineColor="#F22522"/>
-						<bottomPen lineColor="#F22522"/>
-						<rightPen lineColor="#F22522"/>
-					</box>
-					<textElement verticalAlignment="Middle" markup="none">
-						<font fontName="Arial" size="12" isBold="true"/>
+					<reportElement x="9" y="9" width="686" height="107" uuid="613ce449-81b3-4804-8f52-d72b13077771"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Unless it shall be otherwise agreed by Professional Life assurance Limited in respect of every member on entry into the scheme and when he qualifies for an increase in  the sum assured, there shall be furnished to Professional Life Assurance a proposal and declaration signed by him/or the employer and such other evidence of his health as Professional Life may require. If in the opinion of Professional Life there is any special hazard in respect of any member, special restrictions may be imposed or an extra premium charged. If the evidence of health is not to the satisfaction of Professional Life, the sum assured may be modified as Professional Life, at its absolute discretion thinks fit						
+]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" x="34" y="850" width="896" height="210" uuid="1b0278c2-f175-414f-85b5-895178227955"/>
+				<box>
+					<topPen lineWidth="0.6" lineColor="#000000"/>
+					<leftPen lineWidth="0.6" lineColor="#000000"/>
+					<bottomPen lineWidth="0.6" lineColor="#000000"/>
+					<rightPen lineWidth="0.6" lineColor="#000000"/>
+				</box>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="896" height="25" forecolor="#FFFFFF" backcolor="#002060" uuid="9fc95520-2ad3-4d6d-a408-8f575331f23c"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[  Premium Details:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="4" y="100" width="131" height="22" uuid="39d325e7-cf87-49d5-ab3c-cca1cae7b5c4"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Net Premium :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="3" y="152" width="169" height="18" uuid="d2516138-805c-4cc3-a038-18db74f33f73"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Service Tax/VAT:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="142" y="104" width="83" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="185" y="154" width="146" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{serviceTax}]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement mode="Opaque" x="2" y="172" width="894" height="38" backcolor="#C4BD97" uuid="bba4e95b-2016-4cac-a25d-7d9176ec453a"/>
+					<staticText>
+						<reportElement x="0" y="9" width="100" height="20" uuid="b2daf5b4-4ba2-41df-b744-072bb9e1e741"/>
+						<textElement textAlignment="Left" verticalAlignment="Middle">
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Total Premum :]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="107" y="10" width="192" height="20" uuid="14061e33-0219-4b7a-9c53-5fa39020eefe"/>
+						<textElement verticalAlignment="Middle">
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<staticText>
+					<reportElement x="361" y="103" width="178" height="30" uuid="61834d43-98e1-4fda-b625-95b737fec7b7"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Add On Benefits (HIV/AIDS) :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="362" y="131" width="203" height="30" uuid="55936983-1b55-43b2-8b4a-89dc9326edb3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Profit and solvency Loading :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="2" y="125" width="189" height="30" uuid="cab012f0-bf92-4b7f-afa9-e9664aac2348"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Waiver of Excess Loadings :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="2" y="26" width="668" height="24" uuid="fee6e850-8c31-4831-94bf-6305d5b7ccb6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[ Aggregate Premium Amount : To be calculated from year to year in respect of each of the Lives Assured
+
+
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="51" width="667" height="28" uuid="b625522a-5887-4ba2-8d8b-3720b89efd18"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[ How payable: Annually in advance
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="3" y="79" width="667" height="24" uuid="17546374-c098-4887-aa45-29e167e45976"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[ Period during which payable :  During the currency of the Policy                      
+]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="187" y="131" width="144" height="20" uuid="c1983b1f-34be-4d4c-8198-1d5d1d478bcf"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="540" y="109" width="150" height="20" uuid="ed825f55-be9d-4791-805d-30025302136b"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="571" y="137" width="83" height="20" uuid="d229ef15-6bd8-4777-90a4-42d077038e44"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{profitAndSolvencyLoading}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement x="20" y="1100" width="896" height="160" uuid="d6742381-a00d-4a92-9a19-64bcee3dbc31"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[The Professional Life Assurance Limited (hereinafter called Professional Life) agrees to pay the benefits shown in Article 1 hereof in accordance with the terms and provisions of this policy, which must then be in force.
+This Policy is issued in consideration of the proposal thereof, a copy of which is hereto attached and made a part hereof and shall take effect on the inception date as stated in Article 1 but not prior to the payment of the first aggregate premium as stated on the REGISTER OF LIVES assured. This policy shall be maintained in force by payment in advance of the subsequent premiums as stated herein.
+The provisions and benefits set forth in Article 2 form part of the contract as fully as if they were recorded at length over the signature hereto affixed.
+
+						
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="1270" width="292" height="30" uuid="3356f071-efa5-4f34-9bcd-0cdb49244e51"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[In witness, whereof this policy has been signed at 
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="322" y="1270" width="100" height="30" uuid="6b265093-8e32-40e3-90b1-6639556ed528"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="422" y="1270" width="40" height="30" uuid="8de2dfd3-cd97-469e-b5b7-477d9d35a5ad"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[On]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="462" y="1270" width="100" height="30" uuid="95665232-a6fb-47e1-b558-c23af3588158"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="220" width="100" height="30" uuid="6d8a20bf-2e10-41c1-a076-b9433e17d447"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="250" width="100" height="30" uuid="21c5389d-a4ab-4ba8-9ef6-28bc9b8561ad"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="280" width="100" height="30" uuid="80505e4f-ef06-4403-a067-2dc9673ea990"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="240" y="430" width="35" height="30" uuid="b569751f-648f-439e-adfe-66c00f3da0cd"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="400" width="150" height="30" uuid="ba212c77-78b1-458e-82bc-18927250a1ae"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="430" width="100" height="30" uuid="b9553d35-2edc-400b-9d4f-b392d6aff7cb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="430" width="84" height="30" uuid="a02506d0-b82d-4ce5-a4b2-3c105ceed1f7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="550" width="132" height="30" uuid="e9d87444-10ac-46c4-85fa-a4ea1401d7a4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="581" width="84" height="30" uuid="978c5bcf-e245-44af-87c1-ade7a5d54d37"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement x="34" y="80" width="860" height="66" uuid="08f9dd9d-e9aa-49a8-910e-38c026ad5e16"/>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="80" height="30" isRemoveLineWhenBlank="true" uuid="b5eed3b8-8fae-4030-bf28-2155111681cb"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
 					</textElement>
 					<text><![CDATA[Agent Name :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="220" y="21" width="131" height="21" uuid="25ea9c54-ed97-4601-a698-b5f99234ae2d">
-						<property name="local_mesure_unitx" value="pixel"/>
-					</reportElement>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="36" width="80" height="30" isRemoveLineWhenBlank="true" uuid="49c4dc1e-c44a-4e4f-a427-1ec8f3232e90"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Agent Code:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="80" y="0" width="100" height="30" uuid="e974efc5-f89e-4867-a2e2-80deac9debcb"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="567" y="18" width="110" height="24" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Contact  Number :]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="677" y="20" width="144" height="22" uuid="0322030b-07a7-45db-88b8-421304a6343d"/>
+				<textField>
+					<reportElement x="80" y="36" width="100" height="30" uuid="f8dbe20f-082c-47f3-9afc-c0f18a8e182f"/>
 					<textElement verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="677" y="60" width="144" height="15" uuid="c0ac43ee-f6a4-47f3-9e99-b14baefecac1"/>
+				<textField>
+					<reportElement x="740" y="30" width="100" height="30" uuid="da2e5557-b7eb-43b0-916f-39252af71b96"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentBranch}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="537" y="56" width="140" height="20" uuid="ac1b81a8-9484-4246-b06f-dc2cf3c4c4f3"/>
+					<reportElement stretchType="RelativeToBandHeight" x="629" y="0" width="100" height="30" isRemoveLineWhenBlank="true" uuid="6b675558-2184-4063-a431-6a47045a1640"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font size="12"/>
 					</textElement>
-					<text><![CDATA[Policy Servicing Office :]]></text>
+					<text><![CDATA[Contact Number:]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="219" y="60" width="100" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
+				<textField>
+					<reportElement x="729" y="0" width="100" height="30" uuid="553ef311-b760-4494-9069-e8d4768c717f"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="120" y="56" width="87" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
+					<reportElement stretchType="RelativeToBandHeight" x="613" y="30" width="127" height="30" isRemoveLineWhenBlank="true" uuid="106ea817-2cc5-4a61-a2bb-7b172a115c0e"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font size="12"/>
 					</textElement>
-					<text><![CDATA[  Agent Code :]]></text>
-				</staticText>
-				<frame>
-					<reportElement x="114" y="87" width="704" height="89" uuid="0e3101b6-cec3-4a28-b43d-c6f61a07c359"/>
-					<box>
-						<topPen lineWidth="0.6" lineStyle="Solid"/>
-						<leftPen lineWidth="0.6" lineStyle="Solid"/>
-						<bottomPen lineWidth="0.6" lineStyle="Solid"/>
-						<rightPen lineWidth="0.6" lineStyle="Solid"/>
-					</box>
-					<staticText>
-						<reportElement x="171" y="30" width="42" height="19" uuid="b92c29e1-9ebb-4736-89cd-638bacb56c51"/>
-						<box>
-							<topPen lineColor="#F22522"/>
-							<leftPen lineColor="#F22522"/>
-							<bottomPen lineColor="#F22522"/>
-							<rightPen lineColor="#F22522"/>
-						</box>
-						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Arial" size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Name :]]></text>
-					</staticText>
-					<staticText>
-						<reportElement mode="Opaque" x="0" y="0" width="704" height="20" forecolor="#FFFFFF" backcolor="#002060" uuid="e95c1610-70b6-4204-be32-c867179840b7"/>
-						<textElement>
-							<font size="14" isBold="true"/>
-						</textElement>
-						<text><![CDATA[   Proposer Detail]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="304" y="30" width="73" height="19" uuid="2bfc2cde-678f-4609-8f89-b86c401df6df"/>
-						<box>
-							<topPen lineColor="#F22522"/>
-							<leftPen lineColor="#F22522"/>
-							<bottomPen lineColor="#F22522"/>
-							<rightPen lineColor="#F22522"/>
-						</box>
-						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Arial" size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[  Address :]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="216" y="32" width="76" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
-					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="371" y="30" width="320" height="20" uuid="2f0cfc46-a16c-42f9-bd02-3752c890cc7c"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
-					</textField>
-					<staticText>
-						<reportElement x="98" y="62" width="123" height="15" uuid="8be7f033-0783-4099-a616-37c35562a8fe"/>
-						<box>
-							<topPen lineColor="#F22522"/>
-							<leftPen lineColor="#F22522"/>
-							<bottomPen lineColor="#F22522"/>
-							<rightPen lineColor="#F22522"/>
-						</box>
-						<textElement markup="none">
-							<font fontName="Arial" size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Telephone Number :]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="217" y="64" width="80" height="14" uuid="36cd901e-43d2-44a7-ae37-2c26f2aeb94a"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
-					</textField>
-				</frame>
-				<frame>
-					<reportElement x="116" y="183" width="704" height="140" uuid="30c76c21-9cdb-4914-be15-fa66a41532c0"/>
-					<box>
-						<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<staticText>
-						<reportElement mode="Opaque" x="0" y="1" width="704" height="24" forecolor="#FFFFFF" backcolor="#002060" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
-						<textElement>
-							<font size="14" isBold="true"/>
-						</textElement>
-						<text><![CDATA[  Policy Details:]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="40" y="35" width="168" height="19" uuid="bc10e285-9c9f-41f0-8cbe-c2ed5516cf80"/>
-						<textElement textAlignment="Right">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Master Policy Number :]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement mode="Opaque" x="212" y="37" width="100" height="17" backcolor="#808080" uuid="5f3ccd72-3e34-419f-b9c2-c67064e6cf69"/>
-						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
-					</textField>
-					<staticText>
-						<reportElement x="59" y="58" width="150" height="16" uuid="8e0b6ea3-945f-4623-b81e-91c3ba55144d"/>
-						<textElement textAlignment="Right">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Policy Period :]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="351" y="58" width="100" height="16" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
-						<textElement verticalAlignment="Top"/>
-						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
-					</textField>
-					<staticText>
-						<reportElement x="69" y="76" width="140" height="20" uuid="dcea3cfd-918d-4d7d-8c16-d8d6e0021a94"/>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Total Lives Covered :]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="210" y="77" width="100" height="20" uuid="bebde990-cbb1-4832-a73b-15c51cac0635"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
-					</textField>
-					<staticText>
-						<reportElement x="69" y="101" width="140" height="16" uuid="32ad4a4e-c806-488d-9c19-920ff9932f44"/>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Total Sum Assured :]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="210" y="101" width="100" height="15" uuid="55e7cd55-8851-4e98-aab1-9b85679d0931"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="213" y="55" width="100" height="21" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
-					</textField>
-					<staticText>
-						<reportElement x="321" y="56" width="20" height="21" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
-						<textElement verticalAlignment="Middle"/>
-						<text><![CDATA[TO]]></text>
-					</staticText>
-				</frame>
-				<frame>
-					<reportElement positionType="Float" x="135" y="414" width="722" height="155" uuid="1b0278c2-f175-414f-85b5-895178227955"/>
-					<box>
-						<topPen lineWidth="0.6" lineColor="#000000"/>
-						<leftPen lineWidth="0.6" lineColor="#000000"/>
-						<bottomPen lineWidth="0.6" lineColor="#000000"/>
-						<rightPen lineWidth="0.6" lineColor="#000000"/>
-					</box>
-					<staticText>
-						<reportElement mode="Opaque" x="0" y="0" width="722" height="25" forecolor="#FFFFFF" backcolor="#002060" uuid="9fc95520-2ad3-4d6d-a408-8f575331f23c"/>
-						<textElement>
-							<font size="14" isBold="true"/>
-						</textElement>
-						<text><![CDATA[  Premium Details:]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="381" y="53" width="189" height="22" uuid="139c374a-b01d-49ea-95da-8d30ef42ca19">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-							<paragraph lineSpacing="Single" lineSpacingSize="1.0"/>
-						</textElement>
-						<text><![CDATA[Add On Benefits (HIV/AIDS) :]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="85" y="49" width="132" height="22" uuid="39d325e7-cf87-49d5-ab3c-cca1cae7b5c4"/>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Net Premium :]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="31" y="74" width="182" height="21" uuid="6ba3e743-3fec-459c-8944-85490abf6845">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Waiver of Excess Loadings :]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="381" y="80" width="189" height="18" uuid="a125feeb-520c-4597-b633-6370894afb21">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Profit and solvency Loading :]]></text>
-					</staticText>
-					<staticText>
-						<reportElement x="45" y="98" width="170" height="18" uuid="d2516138-805c-4cc3-a038-18db74f33f73"/>
-						<textElement textAlignment="Right" verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Service Tax/VAT:]]></text>
-					</staticText>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="221" y="51" width="84" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
-						<textElement textAlignment="Left" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
-					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="223" y="99" width="147" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
-						<textElement textAlignment="Left" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{serviceTax}]]></textFieldExpression>
-					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="581" y="81" width="51" height="17" uuid="a481f5df-2207-4868-9e9c-bb8f6ed66c31">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement textAlignment="Left" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{profitAndSolvencyLoading}]]></textFieldExpression>
-					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="571" y="51" width="100" height="20" uuid="3e9a580a-3d7f-4c28-aed5-74cdc6da912f">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement verticalAlignment="Bottom">
-							<font isBold="false"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
-					</textField>
-					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="75" width="88" height="22" uuid="63983f1c-55d3-40b5-81fa-68203e120ef7">
-							<printWhenExpression><![CDATA[$F{showLoading}]]></printWhenExpression>
-						</reportElement>
-						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
-					</textField>
-					<frame>
-						<reportElement mode="Opaque" x="0" y="124" width="722" height="31" backcolor="#C4BD97" uuid="bba4e95b-2016-4cac-a25d-7d9176ec453a"/>
-						<staticText>
-							<reportElement x="113" y="0" width="100" height="20" uuid="b2daf5b4-4ba2-41df-b744-072bb9e1e741"/>
-							<textElement textAlignment="Right" verticalAlignment="Middle">
-								<font size="12" isBold="true"/>
-							</textElement>
-							<text><![CDATA[Total Premum :]]></text>
-						</staticText>
-						<textField>
-							<reportElement x="221" y="0" width="100" height="20" uuid="14061e33-0219-4b7a-9c53-5fa39020eefe"/>
-							<textElement verticalAlignment="Middle">
-								<font size="12" isBold="true"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
-						</textField>
-					</frame>
-				</frame>
-				<subreport>
-					<reportElement positionType="Float" x="18" y="581" width="755" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
-					<subreportExpression><![CDATA["jasperpdf/jasper/grouphealth/quotation/insureddetailsubreport.jasper"]]></subreportExpression>
-				</subreport>
-				<frame>
-					<reportElement positionType="Float" x="118" y="357" width="686" height="38" uuid="324eb248-9474-4785-aaee-76fce2d99143"/>
-					<staticText>
-						<reportElement x="2" y="4" width="175" height="21" uuid="e3afab02-7622-405a-b5f1-9db2c23532f6"/>
-						<textElement>
-							<font size="14" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Special conditions if any:]]></text>
-					</staticText>
-					<frame>
-						<reportElement x="178" y="4" width="490" height="27" uuid="a55f16a7-1741-46b0-ba39-9146034d82f4"/>
-						<box>
-							<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-							<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-							<bottomPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-							<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
-						</box>
-						<textField isStretchWithOverflow="true">
-							<reportElement x="0" y="3" width="410" height="21" uuid="a31c84ce-b33a-493c-9126-81533ae3631c"/>
-							<textElement verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[$F{specialConditions}]]></textFieldExpression>
-						</textField>
-					</frame>
-				</frame>
-				<componentElement>
-					<reportElement key="table" style="table" x="262" y="334" width="360" height="23" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
-					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
-						</datasetRun>
-						<jr:column width="130" uuid="319b4282-f0f9-4c25-bb4d-c30bacd599cb">
-							<jr:columnHeader style="table" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="54288609-a1e6-49a9-9dbe-857bc8a6ec04"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Plan/CoverageName]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="130" height="20" uuid="4681c041-f341-4714-9109-d47e7d128251"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="167" uuid="5052b2f4-b79f-452a-8031-74838d7b966b">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="dacc1d28-d8d6-4137-92ef-a1d9918bd0dc"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Sum Assured]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="167" height="20" uuid="fcde6f8a-0da2-4b3b-8bc3-b99b4332f43d"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{planCoverageSumAssured}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="90" uuid="fdebfe64-4624-4d9b-9328-06b1370dd52b">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="bd535f4c-9ac7-4d77-82a8-cd2f129c7936"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Category]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="90" height="20" uuid="94c5bc59-79b3-4a43-80bb-ecb5d8762422"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="90" uuid="b3afab25-c398-426a-b4a1-fbe6aefda4cb">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="999a7856-ec04-4433-8281-b0b22f6eb0c0"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Relationship]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="90" height="20" uuid="f68d44a3-e747-44ba-ad74-55155f6ca0c1"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-					</jr:table>
-				</componentElement>
-			</frame>
-			<frame>
-				<reportElement positionType="FixRelativeToBottom" x="2" y="675" width="958" height="100" uuid="c5a12892-372b-4548-b6c6-44e151377510"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Double"/>
-					<leftPen lineWidth="1.0" lineStyle="Double"/>
-					<bottomPen lineWidth="1.0" lineStyle="Double"/>
-					<rightPen lineWidth="1.0" lineStyle="Double"/>
-				</box>
-				<staticText>
-					<reportElement x="38" y="10" width="692" height="80" uuid="5979e608-1ef8-4ffb-a8c5-92693a6d5225"/>
-					<text><![CDATA[Note:                                                                                                                                                                                                                                                                                                          1.  Cover is granted subject to completion of an 'Active at Work' declaration.
-2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum assured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives assured showing a breakdown of the premium for each life assured will be provided with the policy document.
-]]></text>
+					<text><![CDATA[Policy Servicing Office:]]></text>
 				</staticText>
 			</frame>
 		</band>
+		<band height="1324">
+			<staticText>
+				<reportElement x="30" y="60" width="100" height="20" uuid="276aa4b3-61e0-41db-a933-b4d46049032a"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.CONTRACT ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="190" width="170" height="20" uuid="e5ed1995-0617-4574-ae33-6e2fff4be15f"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[2.      INCONTESTABLE]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="-1" y="0" width="961" height="1320" uuid="cc19fdff-dac6-4425-a876-554d17dc06fa"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="210" width="906" height="20" uuid="9ef3500c-8387-49b2-992e-1cbb15658c6e"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[This policy shall be irrevocable except on non payment of premium and deliberate misstatement of age.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="230" width="177" height="20" uuid="4f68dfc6-69ff-433a-bcb8-82a0d41270c4"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[3. LIVES ASSURED.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="250" width="947" height="60" uuid="48c56117-a028-47ab-9dae-fc6ace3c583c"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[The persons to be assured under this policy are such persons as described or defined in the first article on whose death the Policy holder is liable to pay a death benefit in accordance with the Rules and conditions of the Scheme or arrangements as stated in the said article. It is a condition of the continuance of the Policy that each such person shall be assured hereunder for an amount neither more nor less than the death benefit which the Policy holder is liable to pay and that no other persons shall be assured hereunder unless with the consent of Professional Life.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="320" width="137" height="20" uuid="c3170d58-86ee-480f-bfc5-83b184591f05"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[4. ELIGIBILITY.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="340" width="947" height="50" uuid="a9bc9f34-2f54-47f7-8fc2-e18e4eaf39b3"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Such persons proposed by the Policy holder who have fulfilled the underwriting requirements of Professional Life and whose lives the latter has agreed to assure. Any proposal which Professional Life declines to accept at the ordinary rate of premium may be accepted on such special terms and conditions as Professional Life and the Policy holder may agree.]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="0" width="960" height="43" backcolor="#19197D" uuid="f6eed462-422a-44f2-9148-de8952a089d4"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="20" y="10" width="171" height="20" forecolor="#FFFFFF" uuid="3521cec0-0c1b-4b1a-a86a-c2fb02aedaeb"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="14"/>
+				</textElement>
+				<text><![CDATA[ GENERAL CONDITIONS :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="50" width="100" height="20" uuid="bee1f851-a23e-406c-a88e-b5e739e48cc4"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[1.CONTRACT ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="80" width="950" height="100" uuid="b2f0809d-a1b5-48a3-b652-85ddb78284f6"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[This policy and the proposal thereof a copy of which is attached hereto and made a part hereof, as well as the duly attested entries in the Register of Lives Assured (Costing Schedule) shall constitute the entire contract between the parties. All statements made by the Policy holder or made by a life assured where these are different persons shall in the absence of fraud be deemed representations and not warranties. No such statement shall void this policy or be used in defence of a claim hereunder, unless such statement is contained in the said proposal and a copy thereof is attached to the policy when issued. Special provisions shall be valid only when endorsed on this policy or confirmed in writing by Professional Life. No agent but only a duly authorised officer of Professional Life has the power on behalf of the assurance Company to extend the time for the payment of premium or in any way to modify this contract. Any payment in respect of this policy whether of premium, sum assured or otherwise shall be made in Zambian currency at Professional Life Assurance Head Office in Lusaka.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="190" width="170" height="20" uuid="259381d7-9378-4915-9c1f-f1bf6ac2ed7f"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[2. INCONTESTABLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="390" width="326" height="20" uuid="5e2b3eed-dcda-4db8-82c8-3eb77deea2ae"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[5. REGISTER OF LIVES ASSURED.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="410" width="946" height="40" uuid="47813195-72f3-4233-a107-1f1d73cd42c6"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Professional Life shall prepare and maintain a REGISTER OF LIVES assured (Costing Schedule) containing details of the name, date of birth of each life assured the amount for which he is assured together with the date of commencement of his assurance. A copy of the Register shall be kept by the Policy holder.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="450" width="320" height="20" uuid="9ed290a9-fc8a-4c0e-bc76-dd19bcc44c75"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[6. INFORMATION ABOUT LIVES ASSURED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="580" width="945" height="50" uuid="e62b7274-8195-441d-85a0-0e5b53e5b805"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[A grace period of thirty days is granted for the payment of any premium after the first during which period this policy will continue in full force. This policy shall lapse if any premium remains unpaid after the days of grace but it may be revived within thirty days on payment of the outstanding premium together with interest to be decided Professional Life.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="470" width="947" height="30" uuid="2efa837e-7d31-4ac2-b59d-a1b7989a5085"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[The Policy holder shall notify Professional Life in writing of all increases or decreases in the sums assured taking effect during the policy year. No assurance shall be granted for a member of the Scheme or for an increase in a sum assured for which no information has been notified as aforesaid]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="510" width="330" height="20" uuid="fd312a27-c3a6-4518-9f13-f5e8a632b6d4"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[7. PAYMENT OF PREMIUM.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="530" width="900" height="20" uuid="a4fcdc0f-af85-47f2-9593-ff548ebecd1f"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Premiums are payable annually in advance. All premiums are payable to Professional Life in full.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="560" width="358" height="20" uuid="d01d3ab8-b3d2-4666-8aed-4450b30bfc0f"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[8.      GRACE PERIOD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="640" width="356" height="20" uuid="64312823-e064-4241-be93-9f3a1f687519"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[9. COMMENCEMENT OF ASSURANCE. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="670" width="947" height="30" uuid="db694926-cfb7-4b2a-a654-20ef526c3606"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[The assurance granted under this policy in respect of a life assured shall commence on the date on which he first becomes eligible to join the Scheme according to Article 2.4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="730" width="947" height="60" uuid="61f2e9eb-07d9-4dc0-ae86-be89dbbf9abc"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[The assurance granted under this policy in respect of a life assured shall terminate on the earliest of the following dates.
+• The date on which the life assured reaches the age of Fifty-five (55).
+• The date on which the life assured leaves the service of the employer or otherwise ceases to be eligible for membership of the scheme.
+• The date on which premium in respect of the life assured ceases to be paid.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="710" width="294" height="20" uuid="50a26f91-b968-4725-b6fa-0222432233b7"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[10. TERMINATION OF ASSURANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="800" width="220" height="20" uuid="5cd92aec-a75f-4008-ad6e-b5534e242931"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[11. MISSTATEMENT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="830" width="947" height="34" uuid="32640811-4f7f-496c-b944-5f99edb453f8"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[If the date of birth notified to Professional Life Limited  in respect of any life assured proves to be incorrect no greater benefit shall be payable by Professional Life than would have been received had the premiums paid in respect of such life assured had the or date of birth been correctly stated at the outset.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="870" width="160" height="20" uuid="58320123-cf7b-4315-876e-a3af43d0fa7a"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[12.      NOTICE OF CLAIM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="890" width="947" height="30" uuid="9926ac4a-5620-4e36-947e-31d5b49ece77"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Notice of any claim under this policy together with such reasonable proof as Professional Life may require shall be given to Professional Life at its Head Office in Lusaka as soon as practicable but in any event within thirty days of the happening of the event on which each Sum Assured will become payable. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="920" width="170" height="20" uuid="72bf03e2-96b0-43a6-9089-5f8c50a040aa"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[13. EXCLUSIONS.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="940" width="947" height="60" uuid="befd0fdf-8d3d-46ef-839d-899083db285b"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[If the death of the Life Assured should result directly or indirectly from:-
+• Participation in war, whether declared or not, war-like action, civil war, insurrection, riot, civil commotion or other acts of violence.
+• Engaging in aviation other than as a fare paying passenger on a regular route of a recognised airline. 
+ No sum assured hereunder on that person's life shall be payable by Professional Life.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="1010" width="340" height="20" uuid="9eb2f335-4f32-4302-86c8-bf076e70d7e3"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[14. AMENDMENT OR TERMINATION OF CONTRACT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="1040" width="900" height="50" uuid="06437a97-4e95-4454-b2a6-a3d7927bc759"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[By giving three months' notice in writing to the Policy holder, Professional Life may, as from any renewal date:
+• Amend the terms of this policy
+• Terminate the Policy.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="1100" width="269" height="20" uuid="c4241675-7a6f-4540-b56c-0ad2221a4045"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[15. RENEWAL AND REINSTATEMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="1130" width="947" height="60" uuid="82f04043-7d68-4c09-a451-52fe46381d72"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Subject to the provisions of these general conditions, this policy shall continue for a period of one year from the date of commencement of the risk as stated in the schedule and shall be renewable annually at the option of the Policy holder on each subsequent policy anniversary. If the Policy holder does not renew this policy on any policy anniversary or shall fail to pay the aggregate premium payable hereunder on its due date or within the period of grace the Policy holder shall be deemed to have discontinued payment of premiums hereunder and shall not be entitled to resume payment of premiums except with the consent of Professional Life.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="1190" width="150" height="20" uuid="a9eab0bb-f78b-4e57-a108-3b7e7e6326a0"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[16.  ASSIGNMENT. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="1210" width="886" height="20" uuid="99493cac-0470-4e2a-88b7-087e3665ec26"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[The benefits received by this policy are neither assignable nor chargeable by the lives assured.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="1230" width="420" height="20" uuid="6ef96ab6-96bd-4bd0-be45-4123833b3d7d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[17. ARBITRATION. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="1250" width="946" height="50" uuid="219ed15d-e4b2-472f-8870-7633f9071cce"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Should any dispute arise between Professional Life Assurance and the Policy holders touching the meaning of this Policy or as to the rights, obligations or liability of either party under this Policy, the same shall be referred to arbitration in accordance with the statutory provisions for the time being in force applicable hereto.]]></text>
+			</staticText>
+		</band>
 	</detail>
 	<pageFooter>
-		<band height="99" splitType="Stretch">
+		<band height="94" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-1" y="-1" width="961" height="89" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
+			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="2" y="0" width="958" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="637e6dff-f1d1-4607-8eaf-5ae8dc827bf8"/>
+				<reportElement mode="Opaque" x="-1" y="0" width="961" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="1ac5b9dc-5a64-4ed9-9786-a90ceb7c11c9"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>
@@ -628,49 +912,46 @@
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="351" y="6" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="a52e332d-c040-415d-a379-d4470c569c7d"/>
+					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="5bde2870-01fd-4ceb-b817-7c6fc4cc86e1"/>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Professional Life Assurance Limited]]></text>
 				</staticText>
 			</frame>
-			<frame>
-				<reportElement mode="Transparent" x="2" y="34" width="958" height="64" forecolor="#000000" uuid="d5cbf125-30ef-479a-8a2a-4f1c56956b0d"/>
-				<staticText>
-					<reportElement x="24" y="10" width="234" height="54" forecolor="#0000CC" uuid="d47b89e3-3f66-4413-b84e-9d6365673e9a"/>
-					<textElement>
-						<font fontName="Arial" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[  Head Office
+			<staticText>
+				<reportElement x="0" y="40" width="234" height="48" forecolor="#0000CC" uuid="fe452f64-ec7f-427e-a19f-42f6d9ca8c5c"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Head Office
   Finsbury Park, Cairo Road,
   North End ,P.O.Box 31357,Lusaka-Zambia
   Tel : 021-1-222233,366704,Fax: 021-1-220128
   email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="380" y="12" width="127" height="52" forecolor="#0000CC" uuid="7655170f-4879-4465-a4b7-deb6c48b03a6"/>
-					<textElement>
-						<font fontName="Arial" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[  KITWE Branch
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="40" width="127" height="46" forecolor="#0000CC" uuid="18027e95-4f20-4245-bd33-81602da32c6f"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  KITWE Branch
   17,Kanyanta Road
   P.O.Box 20564
   Kitwe - Zambia
   Tel : 021-2-224270,225611]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="620" y="12" width="212" height="52" forecolor="#3300CC" uuid="d29f730e-4e4d-4e16-86ae-40116d67747d"/>
-					<textElement>
-						<font fontName="Arial" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[  Ndola Branch
+			</staticText>
+			<staticText>
+				<reportElement x="718" y="40" width="212" height="46" forecolor="#3300CC" uuid="31d88046-a04d-4207-89e5-696e500c3b8a"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Ndola Branch
   1stFloor, Finance House,President Avenue,
   P.O.Box:71177,Ndola,Zambia
   Tel - 021-2-612466
   Fax-021-2-612466]]></text>
-				</staticText>
-			</frame>
+			</staticText>
 		</band>
 	</pageFooter>
 </jasperReport>

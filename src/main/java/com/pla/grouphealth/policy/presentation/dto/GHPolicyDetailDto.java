@@ -26,7 +26,8 @@ public class GHPolicyDetailDto {
     private String inceptionDate;
     private String expiryDate;
     private String policyTerm;
-
+    private String issueBranch;
+    private String issuanceDate;
     private String masterPolicyNumber;
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;

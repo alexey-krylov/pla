@@ -77,10 +77,10 @@ public class GroupLifeClaimController {
     }
 
 
-    @RequestMapping(value = "/claimintimationdetail/{policyNumber}/{clientId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/claimintimationdetail/{policyNumber}",method = RequestMethod.GET)
     @ResponseBody
-    public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@PathVariable("policyNumber")String policyNumber,@PathVariable("clientId") String clientId){
-        return glClaimService.getClaimIntimationDetail(policyNumber,clientId);
+    public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@PathVariable("policyNumber")String policyNumber){
+        return glClaimService.getClaimIntimationDetail(policyNumber);
     }
 
 

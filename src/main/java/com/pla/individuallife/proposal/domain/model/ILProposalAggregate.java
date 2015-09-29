@@ -8,6 +8,7 @@ import com.pla.individuallife.sharedresource.event.ILQuotationConvertedToProposa
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.sharedkernel.event.GLProposerAddedEvent;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
@@ -207,6 +208,12 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), this.proposalStatus, submittedBy, comment, submittedOn));
         if (this.quotation != null)
             registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
+        if (this.proposer != null && this.proposer.getResidentialAddress() != null) {
+            ResidentialAddress residentialAddress = this.proposer.getResidentialAddress();
+            registerEvent(new GLProposerAddedEvent(proposer.getFirstName(), proposer.getTitle(),
+                    residentialAddress.getAddress().getAddress1(), residentialAddress.getAddress().getAddress2(), residentialAddress.getAddress().getPostalCode(),
+                    residentialAddress.getAddress().getProvince(), residentialAddress.getAddress().getTown(), this.proposer.getEmailAddress()));
+        }
         return this;
     }
 

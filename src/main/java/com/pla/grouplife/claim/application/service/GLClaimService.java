@@ -53,7 +53,7 @@ public class GLClaimService {
         return transformedPolicies;
     }
 
-    public List<ClaimIntimationDetailDto> getClaimIntimationDetail(String policyNumber, String clientId){
+    public List<ClaimIntimationDetailDto> getClaimIntimationDetail(String policyNumber){
         List<Map> assuredSearchList = glFinder.assuredSearch(policyNumber);
         return assuredSearchList.parallelStream().map(new Function<Map, ClaimIntimationDetailDto>() {
             @Override
@@ -61,7 +61,7 @@ public class GLClaimService {
                 ClaimIntimationDetailDto claimIntimationDetailDto = new ClaimIntimationDetailDto();
                 Proposer proposer = (Proposer) map.get("proposer");
                 claimIntimationDetailDto.withProposer(proposer);
-                List<InsuredDependent> insuredDependentList = Lists.newArrayList();
+               /* List<InsuredDependent> insuredDependentList = Lists.newArrayList();
                 List<Insured> insureds = (List<Insured>) map.get("insureds");
                 for (Insured insured : insureds) {
                     Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
@@ -84,7 +84,7 @@ public class GLClaimService {
                 }
                 if (isNotEmpty(insuredsList)) {
                     claimIntimationDetailDto.withInsuredAssuredDetail(insuredsList.get(0));
-                }
+                }*/
                 return claimIntimationDetailDto;
             }
         }).collect(Collectors.toList());
