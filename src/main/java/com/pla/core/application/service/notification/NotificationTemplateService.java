@@ -217,7 +217,8 @@ public class NotificationTemplateService {
             System.out.println("\n\n\n\n\n\n\nConverting the docx to html");
         }
         System.out.println("\n\n\n\n\n\n\nConverting the docx to html");
-        File tempFile  = new File("./src/main/resources/emailtemplate/notification_"+requestNumber+".docx");
+        File tempFile  = new File("notification_"+requestNumber+".docx");
+        System.out.println("\n\n\n\n\n\n\nFile Got created"+tempFile);
         Files.write(templateFile, tempFile);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(tempFile);
         VariablePrepare.prepare(wordMLPackage);
