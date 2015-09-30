@@ -46,16 +46,18 @@ public class NotificationCommandHandler {
     @CommandHandler
     public void createQuotationNotification(CreateQuotationNotificationCommand createQuotationNotificationCommand) throws Exception {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("In Create Quotation Command", createQuotationNotificationCommand);
+            System.out.println("In Create Quotation Command");
         }
+        System.out.println("\n\n\n\n\nIn Create Quotation Command");
         checkArgument(createQuotationNotificationCommand!=null,"Create Quotation command cannot be empty");
         JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
         HashMap<String,String> quotationNotificationDetailMap =   notificationTemplateService.getQuotationNotificationTemplateData(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getQuotationId().getQuotationId());
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findNotification(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getProcessType(), createQuotationNotificationCommand.getWaitingFor(), createQuotationNotificationCommand.getReminderType());
         checkArgument(notificationTemplate != null, "Notification Template is not uploaded");
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("\n\n\n\n\n\nCalling the generate Notification method");
+            System.out.println("\n\n\n\n\n\nCalling the generate Notification method");
         }
+        System.out.println("\n\n\n\n\n\nCalling the generate Notification method");
         NotificationBuilder notificationBuilder =  notificationTemplateService.generateNotification(createQuotationNotificationCommand.getLineOfBusiness(), createQuotationNotificationCommand.getProcessType(), createQuotationNotificationCommand.getWaitingFor(),
                 createQuotationNotificationCommand.getReminderType(), createQuotationNotificationCommand.getQuotationId().getQuotationId(), createQuotationNotificationCommand.getRoleType(), notificationTemplate.getReminderFile(), quotationNotificationDetailMap);
         NotificationId notificationId = new NotificationId(idGenerator.nextId());

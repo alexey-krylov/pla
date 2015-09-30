@@ -195,8 +195,9 @@ public class NotificationTemplateService {
     public NotificationBuilder generateNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process, WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
                                                     String requestNumber, String roleType, byte[] templateFile, HashMap<String, String> notificationDetail) throws Exception {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("\n\n\n\n\n\n\nInside the generate Notification method");
+            System.out.println("\n\n\n\n\n\n\nInside the generate Notification method");
         }
+        System.out.println("\n\n\n\n\n\n\nInside the generate Notification method");
         checkArgument(notificationDetail !=null,"Notification details cannot be empty");
         checkArgument(templateFile != null, "Notification Template is not uploaded");
         NotificationBuilder notificationBuilder = Notification.builder();
@@ -213,24 +214,27 @@ public class NotificationTemplateService {
 
     public byte[] convert(byte[] templateFile,HashMap<String,String> notificationMap,LineOfBusinessEnum lineOfBusiness,String requestNumber) throws Exception {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("\n\n\n\n\n\n\nConverting the docx to html");
+            System.out.println("\n\n\n\n\n\n\nConverting the docx to html");
         }
+        System.out.println("\n\n\n\n\n\n\nConverting the docx to html");
         File tempFile  = new File("./src/main/resources/emailtemplate/notification_"+requestNumber+".docx");
         Files.write(templateFile, tempFile);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(tempFile);
         VariablePrepare.prepare(wordMLPackage);
         MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("\n\n\n\n\n\n\nReplacing the placeholder in the docx");
+            System.out.println("\n\n\n\n\n\n\nReplacing the placeholder in the docx");
         }
+        System.out.println("\n\n\n\n\n\n\nReplacing the placeholder in the docx");
         notificationMap.put("systemDate", LocalDate.now().toString(AppConstants.DD_MM_YYY_FORMAT));
         notificationMap.put("lineOfBusiness",lineOfBusiness.toString());
         documentPart.variableReplace(notificationMap);
         wordMLPackage.save(tempFile);
         String htmlContent = convertDocxToHtml(tempFile);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("\n\n\n\n\n\n\nFinished coverting the docx to html");
+            System.out.println("\n\n\n\n\n\n\nFinished coverting the docx to html");
         }
+        System.out.println("\n\n\n\n\n\n\nFinished coverting the docx to html");
         return htmlContent.getBytes();
     }
 
