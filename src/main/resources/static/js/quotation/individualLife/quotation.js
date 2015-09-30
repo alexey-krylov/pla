@@ -590,7 +590,11 @@ var viewILQuotationModule = (function () {
     }
 
     services.emailQuotation = function () {
-        window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;
+       /* window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;*/
+
+        window.open('/pla/individuallife/quotation/emailQuotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+
     }
 
     services.modifyQuotation = function () {
