@@ -137,7 +137,7 @@
                                ng-required="true"
                                is-open="launchdob2"
                                max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                               ng-model="proposer.dateOfBirth" name="dob"/>
+                               ng-change="clearPlanId()" ng-model="proposer.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
                                             ng-click="launchProposerDate($event)">
@@ -237,7 +237,7 @@
                         <small class="error" ng-message="required">Please enter Occupation</small>
                     </div>
                 </div>
-                <div class="form-group required">
+                <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Employment Date</label>
                     <div class='input-group date'>
                         <input type="text" class="form-control input-sm"
@@ -260,7 +260,7 @@
                 </div>
 
 
-                <div class="form-group required">
+                <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label" ng-if="proposerEmploymentTypeStaus">Address Line 1</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="proposerEmployment.address1" ng-required="true"/>
 
@@ -289,7 +289,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group required">
+                <div class="form-group required" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Employer</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="employer" ng-maxlength="30" ng-model="proposerEmployment.employer"/>
 
@@ -308,8 +308,8 @@
                         <small class="error" ng-message="required">Please enter Employment Type</small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label" ng-if="proposerEmploymentTypeStaus">Address Line 2</label>
+                <div class="form-group" ng-if="proposerEmploymentTypeStaus">
+                    <label class="control-label">Address Line 2</label>
                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="proposerEmployment.address2"/>
 
                     <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
@@ -422,7 +422,7 @@
             </div>
         </accordion-group>
     </accordion>
-    <div class="form-group required">
+    <!--<div class="form-group required">
         <label class="control-label" style="margin-right: 25px">Is Proposer the Proposed Assured?</label>
         <label class="radio-inline">
             <input type="radio" name="proposedAssuredAsProposer"  value="true" ng-value="true"  ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposer.isProposedAssured"/> Yes
@@ -434,7 +434,41 @@
         <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
             <small class="error" ng-message="required">Please select one.</small>
         </div>
+    </div>-->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group required">
+                <label class="control-label" style="margin-right: 25px">Is Proposer the Proposed Assured?</label>
+                <label class="radio-inline">
+                    <input type="radio" ng-change="clearPlanId()" name="proposedAssuredAsProposer"  value="true" ng-value="true"  ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposer.isProposedAssured"/> Yes
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" ng-change="clearPlanId()" name="proposedAssuredAsProposer"  value="false" ng-value="false"   ng-required="true" ng-model="proposer.isProposedAssured"/> No
+                </label>
+
+                <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
+                    <small class="error" ng-message="required">Please select one.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group required">
+                <label class="control-label">Plan</label>
+
+                <select class="form-control input-sm" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planId" ng-change="setProposerPlanName(ProposerplanDetail.planId)" ng-options="proposalPlan.plan_id as proposalPlan.plan_name for proposalPlan in proposalPlanList">
+                    <option value="">Select Plan</option>
+                </select>
+                <!--<input type="text" class="form-control input-sm" readonly="true" ng-if="isPlanTextField" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planName"/>-->
+
+                <div class="error" ng-messages="step1.proposerPlan.$error" ng-if="step1.proposerPlan.$dirty">
+                    <small class="error" ng-message="required">Please enter Plan</small>
+                </div>
+            </div>
+        </div>
+
     </div>
+
     <div class="row">
         <!--{{statusCount}}-->
         <div class="col-sm-6">

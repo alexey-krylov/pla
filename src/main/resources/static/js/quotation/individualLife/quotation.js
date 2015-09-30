@@ -520,7 +520,6 @@
                             $scope.stepsSaved[$scope.selectedItem] = true;
                             $scope.stepsSaved["5"] = true;
                             $scope.quotationId = data.id;
-
                         });
                 };
 
