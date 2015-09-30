@@ -456,10 +456,10 @@
             <div class="form-group required">
                 <label class="control-label" style="margin-right: 25px">Is Proposer the Proposed Assured?</label>
                 <label class="radio-inline">
-                    <input type="radio" name="proposedAssuredAsProposer"  value="true" ng-value="true"  ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposer.isProposedAssured"/> Yes
+                    <input type="radio" ng-change="clearPlanId()" name="proposedAssuredAsProposer"  value="true" ng-value="true"  ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposer.isProposedAssured"/> Yes
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="proposedAssuredAsProposer"  value="false" ng-value="false"   ng-required="true" ng-model="proposer.isProposedAssured"/> No
+                    <input type="radio" ng-change="clearPlanId()" name="proposedAssuredAsProposer"  value="false" ng-value="false"   ng-required="true" ng-model="proposer.isProposedAssured"/> No
                 </label>
 
                 <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
