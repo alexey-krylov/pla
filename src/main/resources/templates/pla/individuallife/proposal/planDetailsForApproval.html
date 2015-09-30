@@ -141,6 +141,9 @@
             </accordion-heading>
             <div class="row" style="margin: 0px">
                 <div class="col-md-12">
+                    <p style="color:red" ng-show="commisionMessage">
+                        Sum of share % is not 100..Please update share % to ensure it should be 100
+                    </p>
                     <button type="button" class="btn btn-default btn-xs pull-right"
                             data-toggle="modal" data-target="#beneficialModal"
                             ng-disabled="mode=='new'||mode=='view'" style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
@@ -164,7 +167,7 @@
                             <td>{{beneficiary.relationshipId}}</td>
                             <!--<td>{{beneficiary.share}}</td>-->
                             <td>
-                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="shareSumTest()" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
                             </td>
                         </tr>
                         </tbody>
