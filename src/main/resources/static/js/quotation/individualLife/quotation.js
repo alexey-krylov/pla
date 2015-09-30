@@ -315,6 +315,7 @@
                     $http.get('/pla/individuallife/quotation/getquotation/' + $scope.quotationId)
                         .success(function (response) {
                             $scope.quotation = response;
+                            console.log('QuotationResponse..'+JSON.stringify(response));
                             $scope.proposedAssured = $scope.quotation.proposedAssured || {};
                             $scope.proposer = $scope.quotation.proposer || {};
                             $scope.originalProposer = $scope.quotation.proposer || {};
@@ -381,11 +382,16 @@
                         $scope.quotation.agentId = $scope.agent["agent_id"];
                     }
                 });
+
+                /**
+                 *
+                 * Retriving the Plan
+                 *
+                 */
                 $scope.getPlanDetails=function(newval)
                 {
                     $http.get('/pla/core/plan/getPlanById/' + newval)
                         .success(function (response) {
-                            console.log('PlanQuotation'+JSON.stringify(response));
                             $scope.plan = response;
                         });
                 }
@@ -567,7 +573,7 @@ var viewILQuotationModule = (function () {
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('input[type=hidden]').val();
         $(".btn-disabled").attr("disabled", false);
-        if (this.status == 'GENERATED') {
+        if (this.status == 'GENERATED' || this.status == 'SHARED') {
             $('#emailaddress').attr('disabled', false);
             $('#print').attr('disabled', false);
         } else {

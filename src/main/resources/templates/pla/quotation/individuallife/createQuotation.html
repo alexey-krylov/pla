@@ -719,16 +719,15 @@
     <div ng-switch="getSumAssuredType(rider)">
         <div ng-switch-when="SPECIFIED_VALUES">
             <select view-enabled="" class="form-control input-sm" ng-model="rider.sumAssured" name="sumAssured"
-                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"
-                    ng-required="true"></select>
+                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"></select>
         </div>
         <div ng-switch-when="RANGE">
             <input type="number" view-enabled="" class="form-control input-sm"
                    min="{{coverage.coverageSumAssured.minSumInsured}}"
                    name="sumAssuredPlanRider"
-                   max="{{coverage.coverageSumAssured.maxSumInsured}}" ng-model="rider.sumAssured" ng-required="true"/>
+                   max="{{coverage.coverageSumAssured.maxSumInsured}}" ng-model="rider.sumAssured"/>
 
-            <div class="error" ng-messages="step4.sumAssuredPlanRider.$error">
+            <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
                 <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
                 <small ng-message="max">Sum Assured cannot be more than {{coverage.coverageSumAssured.maxSumInsured}}.</small>
                 <small ng-message="invalidMultiple">Please enter multiples of {{coverage.coverageSumAssured.multiplesOf}}</small>
@@ -738,7 +737,7 @@
             <input type="number" view-enabled="" class="form-control input-sm" min="0"
                    max="{{coverage.sumAssured.maxLimit}}"
                    name="sumAssured"
-                   ng-model="rider.sumAssured" ng-required="true"/>
+                   ng-model="rider.sumAssured"/>
 
             <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
                 <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
@@ -749,7 +748,7 @@
             <input type="number" view-enabled="" class="form-control input-sm" min="0"
                    max="{{coverage.sumAssured.incomeMultiplier}}"
                    name="sumAssured"
-                   ng-model="rider.sumAssured" ng-required="true"/>
+                   ng-model="rider.sumAssured"/>
 
             <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">
                 <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
@@ -774,16 +773,16 @@
     <div ng-switch="getCoverageTermType(rider)">
         <div ng-switch-when="SPECIFIED_VALUES">
             <select class="form-control input-sm" view-enabled="" ng-model="rider.coverTerm" name="policyTerm"
-                    ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+                    ng-options="value.text as value.text for value in policyTerms"></select>
         </div>
         <div ng-switch-when="AGE_DEPENDENT">
             <select class="form-control input-sm" view-enabled="" ng-model="rider.coverTerm" name="policyTerm"
-                    ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>
+                    ng-options="value.text as value.text for value in policyTerms"></select>
         </div>
 
         <div ng-switch-when="POLICY_TERM" >
             <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                   ng-disabled="mode=='new'||mode=='view'" name="sumAssured" readonly="true" ng-model="rider.coverTerm" ng-required="true"/>
+                   ng-disabled="mode=='new'||mode=='view'" name="sumAssured" readonly="true" ng-model="rider.coverTerm"/>
         </div>
 
     </div>
