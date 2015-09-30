@@ -1413,20 +1413,27 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert('Length is greater Then 0');
                     var checkLoopNameStatus = "true";
                     for (i in $scope.beneficiariesList) {
-                        if ($scope.beneficiariesList[i].nrc == beneficiary.nrc) {
+                        if (beneficiary.nrc && $scope.beneficiariesList[i].nrc == beneficiary.nrc) {
                             checkLoopNameStatus = "false";
                             break;
                         } else if( ($scope.beneficiariesList[i].firstName == beneficiary.firstName) &&
                             ($scope.beneficiariesList[i].gender == beneficiary.gender) && ($scope.beneficiariesList[i].dateOfBirth == beneficiary.dateOfBirth)) {
                             checkLoopNameStatus = "false";
                             break;
-                        }else if(beneficiary.relationshipId !='SON' && beneficiary.relationshipId != 'DAUGHTER' && beneficiary.relationshipId !='STEP_SON' && beneficiary.relationshipId !='STEP_DAUGHTER'){
+                        }else if(beneficiary.relationshipId =='FATHER_IN_LAW' || beneficiary.relationshipId == 'MOTHER_IN_LAW' || beneficiary.relationshipId =='FATHER' || beneficiary.relationshipId =='MOTHER'){
                             //alert(beneficiary.relationshipId);
                             if(($scope.beneficiariesList[i].relationshipId == beneficiary.relationshipId)){
                                 checkLoopNameStatus = "false";
                                 break;
                             }
                         }
+                        /*else if(beneficiary.relationshipId !='SON' && beneficiary.relationshipId != 'DAUGHTER' && beneficiary.relationshipId !='STEP_SON' && beneficiary.relationshipId !='STEP_DAUGHTER'){
+                            //alert(beneficiary.relationshipId);
+                            if(($scope.beneficiariesList[i].relationshipId == beneficiary.relationshipId)){
+                                checkLoopNameStatus = "false";
+                                break;
+                            }
+                        }*/
                     }
 
                     if(checkLoopNameStatus == "true") {
@@ -1435,7 +1442,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         //$scope.clear();
                         // $('#beneficiaryModal').modal('hide');
                     } else {
-                        alert("All Are Same...");
+                        alert("This record is already existing");
                         //$scope.clear();
                         // $('#beneficiaryModal').modal('hide');
                     }
