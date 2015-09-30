@@ -2,12 +2,11 @@ package com.pla.core.application.service.notification;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
-import com.pla.core.domain.model.notification.*;
+import com.pla.core.domain.model.notification.Notification;
+import com.pla.core.domain.model.notification.NotificationBuilder;
+import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.query.NotificationFinder;
 import com.pla.core.repository.NotificationHistoryRepository;
-import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
-import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
-import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -15,6 +14,9 @@ import com.pla.sharedkernel.domain.model.ReminderTypeEnum;
 import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
+import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
+import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xwpf.converter.core.FileURIResolver;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
@@ -25,8 +27,6 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -51,8 +51,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Service
 public class NotificationTemplateService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationTemplateService.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -194,10 +192,6 @@ public class NotificationTemplateService {
 
     public NotificationBuilder generateNotification(LineOfBusinessEnum lineOfBusiness, ProcessType process, WaitingForEnum waitingFor, ReminderTypeEnum reminderType,
                                                     String requestNumber, String roleType, byte[] templateFile, HashMap<String, String> notificationDetail) throws Exception {
-        if (LOGGER.isDebugEnabled()) {
-            System.out.println("\n\n\n\n\n\n\nInside the generate Notification method");
-        }
-        System.out.println("\n\n\n\n\n\n\nInside the generate Notification method");
         checkArgument(notificationDetail !=null,"Notification details cannot be empty");
         checkArgument(templateFile != null, "Notification Template is not uploaded");
         NotificationBuilder notificationBuilder = Notification.builder();
@@ -213,29 +207,16 @@ public class NotificationTemplateService {
     }
 
     public byte[] convert(byte[] templateFile,HashMap<String,String> notificationMap,LineOfBusinessEnum lineOfBusiness,String requestNumber) throws Exception {
-        if (LOGGER.isDebugEnabled()) {
-            System.out.println("\n\n\n\n\n\n\nConverting the docx to html");
-        }
-        System.out.println("\n\n\n\n\n\n\nConverting the docx to html");
         File tempFile  = new File("notification_"+requestNumber+".docx");
-        System.out.println("\n\n\n\n\n\n\nFile Got created"+tempFile);
         Files.write(templateFile, tempFile);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(tempFile);
         VariablePrepare.prepare(wordMLPackage);
         MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
-        if (LOGGER.isDebugEnabled()) {
-            System.out.println("\n\n\n\n\n\n\nReplacing the placeholder in the docx");
-        }
-        System.out.println("\n\n\n\n\n\n\nReplacing the placeholder in the docx");
         notificationMap.put("systemDate", LocalDate.now().toString(AppConstants.DD_MM_YYY_FORMAT));
         notificationMap.put("lineOfBusiness",lineOfBusiness.toString());
         documentPart.variableReplace(notificationMap);
         wordMLPackage.save(tempFile);
         String htmlContent = convertDocxToHtml(tempFile);
-        if (LOGGER.isDebugEnabled()) {
-            System.out.println("\n\n\n\n\n\n\nFinished coverting the docx to html");
-        }
-        System.out.println("\n\n\n\n\n\n\nFinished coverting the docx to html");
         return htmlContent.getBytes();
     }
 
