@@ -1417,7 +1417,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             checkLoopNameStatus = "false";
                             break;
                         } else if( ($scope.beneficiariesList[i].firstName == beneficiary.firstName) &&
-                            ($scope.beneficiariesList[i].gender == beneficiary.gender) && ($scope.beneficiariesList[i].dateOfBirth == beneficiary.dateOfBirth)) {
+                            ($scope.beneficiariesList[i].gender == beneficiary.gender) && ((moment($scope.beneficiariesList[i].dateOfBirth).diff(moment(beneficiary.dateOfBirth),'days'))== 0)) {
                             checkLoopNameStatus = "false";
                             break;
                         }else if(beneficiary.relationshipId =='FATHER_IN_LAW' || beneficiary.relationshipId == 'MOTHER_IN_LAW' || beneficiary.relationshipId =='FATHER' || beneficiary.relationshipId =='MOTHER'){
@@ -2680,7 +2680,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.commisionStatus=true;
             $scope.commisionMessage=false;
 
-
             $scope.shareSumTest = function () {
                 var sum = 0;
                 for (i in $scope.beneficiariesList) {
@@ -2690,11 +2689,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('sum: ' + sum);
                 if (sum == 100.00) {
                     $scope.commisionStatus = false;
-                    //$scope.commisionMessage=false;
+                    $scope.commisionMessage=false;
                 }
                 else {
                     $scope.commisionStatus = true;
-                    //$scope.commisionMessage=true;
+                    $scope.commisionMessage=true;
                 }
             };
 

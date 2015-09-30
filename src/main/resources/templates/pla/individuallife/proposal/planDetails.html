@@ -111,7 +111,7 @@
                         </td>-->
 
                         <td>
-                            <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-init="shareSumTest()" ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
+                            <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
                             <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                         </td>
                     </tr>
@@ -141,6 +141,10 @@
             </accordion-heading>
             <div class="row" style="margin: 0px">
                 <div class="col-md-12">
+                    <p style="color:red" ng-show="commisionMessage">
+                        Sum of share % is not 100..Please update share % to ensure it should be 100
+                    </p>
+
                     <button type="button" class="btn btn-default btn-xs pull-right"
                             data-toggle="modal" data-target="#beneficialModal"
                             style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
