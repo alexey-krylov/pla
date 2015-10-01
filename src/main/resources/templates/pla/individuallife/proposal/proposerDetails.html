@@ -184,7 +184,7 @@
                 </div>-->
 
                 <div class="form-group">
-                    <label class="control-label">Client Id</label>
+                    <label class="control-label">Client ID</label>
                     <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.clientId"/>
 
                     <div class="error" ng-messages="proposerForm.clientId.$error"  ng-if="proposerForm.clientId.$dirty">
