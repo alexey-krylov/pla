@@ -1945,7 +1945,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
             });
 
 
-            $scope.$watch('proposedAssured.title', function (newVal, oldVal) {
+           /* $scope.$watch('proposedAssured.title', function (newVal, oldVal) {
                 if (newVal) {
                     //alert(newVal);
                     if (newVal == 'Mr.') {
@@ -1958,10 +1958,10 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                         $scope.proposedAssured.gender = '';
                     }
                 }
-            });
+            });*/
 
 
-            $scope.$watch('proposer.title', function (newVal, oldVal) {
+      /*      $scope.$watch('proposer.title', function (newVal, oldVal) {
                 if (newVal) {
                     //alert(newVal);
                     if (newVal == 'Mr.') {
@@ -1974,7 +1974,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                         $scope.proposer.gender = '';
                     }
                 }
-            });
+            });*/
 
             /**
              * Checking of  Occupation filed of  ProposedAssured Detail  to decide whether to display Employment Type Field
