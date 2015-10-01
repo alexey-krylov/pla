@@ -214,6 +214,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                        // console.log("Response of Policy: "+JSON.stringify(result));
                         $scope.rcvProposal = response;
                         console.log(response);
+                        console.log('PolicyResponse..'+JSON.stringify(response));
 
                         //console.log('additionalDetails..' +JSON.stringify($scope.rcvProposal.additionalDetails));
                         $scope.policyNumberDetails.policyNumber = response.policyNumber.policyNumber;

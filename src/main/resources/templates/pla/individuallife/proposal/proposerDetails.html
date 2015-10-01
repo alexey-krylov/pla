@@ -377,9 +377,9 @@
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="control-label">Address Line 1</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentAddress1" ng-maxlength="100" ng-model="proposerResidential.address1"/>
+                    <input type="text" class="form-control input-sm" ng-required="true" ng-disabled="mode=='new'||mode=='view'" name="residentAddress1" ng-maxlength="100" ng-model="proposerResidential.address1"/>
 
-                    <div class="error" ng-messages="proposerResidentForm.residentAddress1.$error">
+                    <div class="error" ng-messages="proposerResidentForm.residentAddress1.$error" ng-if="proposerResidentForm.residentAddress1.$dirty">
                         <small class="error" ng-message="required">Please enter Address Line 1</small>
                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                     </div>
