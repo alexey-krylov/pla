@@ -1,15 +1,8 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
-import com.pla.individuallife.quotation.domain.model.ILQuotation;
-import com.pla.individuallife.quotation.domain.model.ProposedAssured;
-import com.pla.individuallife.quotation.domain.model.Proposer;
-import com.pla.individuallife.quotation.domain.model.RiderDetail;
-import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
-import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
-import com.pla.individuallife.sharedresource.dto.ILQuotationDto;
-import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
-import com.pla.individuallife.sharedresource.dto.ProposerDto;
+import com.pla.individuallife.quotation.domain.model.*;
+import com.pla.individuallife.sharedresource.dto.*;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -22,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -47,12 +39,16 @@ public class ILQuotationFinder {
             " FROM individual_life_quotation " +
             " WHERE quotation_id =:quotationId";
 
-    public static final String QUOTATION_SEARCH_QUERY = "SELECT DISTINCT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ',   " +
-            "   COALESCE(surname,'')) AS proposedName,CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName,   " +
-            "   il_quotation_status AS quotationStatus, quotation_id AS quotation_id, quotation_number AS quotationNumber,    " +
-            "   generated_on AS generatedOn,version_number AS versionNumber,COALESCE(p.plan_name,'') planName FROM individual_life_quotation IL LEFT JOIN agent A   ON IL.agent_id = A.agent_id   " +
-            "   LEFT JOIN plan_coverage_benefit_assoc p ON p.plan_id = IL.plan_id WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
+    private static String findQuotation = "SELECT DISTINCT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ', " +
+            "   COALESCE(surname,'')) AS proposedName,CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName,  " +
+            "   il_quotation_status AS quotationStatus, quotation_id AS quotation_id, quotation_number AS quotationNumber, " +
+            "   generated_on AS generatedOn,version_number AS versionNumber,COALESCE(p.plan_name,'') planName FROM individual_life_quotation IL LEFT JOIN agent A   ON IL.agent_id = A.agent_id " +
+            "   LEFT JOIN plan_coverage_benefit_assoc p ON p.plan_id = IL.plan_id ";
+
+    public static final String QUOTATION_SEARCH_QUERY = findQuotation +" WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
             " OR IL.proposer_nrc_number= :nrcNumber OR il.agent_id = :agentCode OR IL.il_quotation_status=:quotationStatus order by version_number desc";
+
+    public static final String findSharedQuotationByQuotationNumberQuery = findQuotation +" WHERE  IL.quotation_number= :quotationNumber  AND IL.il_quotation_status= '"+ ILQuotationStatus.SHARED.name()+"' ORDER BY version_number desc";
 
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
 
@@ -140,9 +136,6 @@ public class ILQuotationFinder {
             Map m = coverageReferenceMap.get(coverageId);
             riderDetailDto.setCoverageName(m.get("coverage_name").toString());
             riderDetailDto.setCoverageId(coverageId);
-            riderDetailDto.setCoverTerm(0);
-            riderDetailDto.setSumAssured(BigDecimal.ZERO);
-            riderDetailDto.setWaiverOfPremium(0);
             riderDetailDtoList.add(riderDetailDto);
         }
         planDetailDto.setRiderDetails(new HashSet<RiderDetailDto>(riderDetailDtoList));
@@ -163,6 +156,11 @@ public class ILQuotationFinder {
         SqlParameterSource sqlParameterSource  = new MapSqlParameterSource("quotationNumber",quotationNumber).addValue("proposerName",proposerName)
                 .addValue("nrcNumber",proposerNrcNumber).addValue("quotationStatus",quotationStatus).addValue("agentCode",agentCode);
         return namedParameterJdbcTemplate.query(QUOTATION_SEARCH_QUERY,sqlParameterSource, new BeanPropertyRowMapper(ILSearchQuotationResultDto.class));
+    }
+
+    public List<ILSearchQuotationResultDto> findSharedQuotationByQuotationNumber(String quotationNumber) {
+        SqlParameterSource sqlParameterSource  = new MapSqlParameterSource("quotationNumber",quotationNumber);
+        return namedParameterJdbcTemplate.query(findSharedQuotationByQuotationNumberQuery,sqlParameterSource, new BeanPropertyRowMapper(ILSearchQuotationResultDto.class));
     }
 
     public List<ILQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus) {

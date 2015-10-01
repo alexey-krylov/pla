@@ -160,11 +160,16 @@ public class ILQuotationAppService {
         return searchQuotations;
     }
 
-    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
 
+    public List<ILSearchQuotationResultDto> getSharedQuotationByQuotationNumber(String quotationNumber) {
+        List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.findSharedQuotationByQuotationNumber(quotationNumber);
+        return searchQuotations;
+    }
+
+
+    public byte[] getQuotationPDF(String quotationId) throws IOException, JRException {
         ILQuotationDetailDto ilQuotationDetailDto = getIlQuotationDetailForPDF(quotationId);
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(Arrays.asList(ilQuotationDetailDto), "jasperpdf/template/individuallife/quotation/ilQuotation.jrxml");
-
         return pdfData;
     }
 
@@ -200,6 +205,9 @@ public class ILQuotationAppService {
 
 
         for (RiderDetailDto riderDetailDto : quotationMap.getPlanDetailDto().getRiderDetails()) {
+            if (riderDetailDto.getSumAssured()==null){
+                continue;
+            }
             assuredPlanCoverDetail = ilQuotationDetailDto.new CoverDetail(riderDetailDto.getCoverageName(), riderDetailDto.getSumAssured().setScale(2, BigDecimal.ROUND_CEILING).toPlainString(), riderDetailDto.getCoverTerm());
             coverDetails.add(assuredPlanCoverDetail);
         }

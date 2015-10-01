@@ -306,7 +306,7 @@ public class ILProposalController {
     @RequestMapping(value = "/searchQuotation", method = RequestMethod.POST)
     public ModelAndView searchQuotation(ILSearchQuotationDto searchIlDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(searchIlDto));
+        modelAndView.addObject("searchResult", ilQuotationService.getSharedQuotationByQuotationNumber(searchIlDto.getQuotationNumber()));
         modelAndView.addObject("searchCriteria", searchIlDto);
         modelAndView.setViewName("pla/individuallife/proposal/searchQuotationforIlProposal");
         return modelAndView;
