@@ -1945,36 +1945,6 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
             });
 
 
-           /* $scope.$watch('proposedAssured.title', function (newVal, oldVal) {
-                if (newVal) {
-                    //alert(newVal);
-                    if (newVal == 'Mr.') {
-                        $scope.proposedAssured.gender = 'MALE';
-                    }
-                    else if ((newVal == 'Miss') || (newVal == 'Mrs.')) {
-                        $scope.proposedAssured.gender = 'FEMALE';
-                    }
-                    else {
-                        $scope.proposedAssured.gender = '';
-                    }
-                }
-            });*/
-
-
-      /*      $scope.$watch('proposer.title', function (newVal, oldVal) {
-                if (newVal) {
-                    //alert(newVal);
-                    if (newVal == 'Mr.') {
-                        $scope.proposer.gender = 'MALE';
-                    }
-                    else if ((newVal == 'Miss') || (newVal == 'Mrs.')) {
-                        $scope.proposer.gender = 'FEMALE';
-                    }
-                    else {
-                        $scope.proposer.gender = '';
-                    }
-                }
-            });*/
 
             /**
              * Checking of  Occupation filed of  ProposedAssured Detail  to decide whether to display Employment Type Field
