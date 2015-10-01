@@ -88,7 +88,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()">Submit</button>
+            <button type="button" ng-disabled="mode=='new'||mode=='view'" class="btn btn-default btn-sm" style="float: right" ng-click="submitAdditionalDocument()">Submit</button>
         </div>
     </div>
 </ng-form>

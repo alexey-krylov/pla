@@ -1925,7 +1925,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
             });
 
             $scope.ageCalculateStatus = false;
-            $scope.$watch('proposer.nextDob', function (newvalue, oldvalue) {
+            /*$scope.$watch('proposer.nextDob', function (newvalue, oldvalue) {
                 //$scope.ageCalculate=0;
                 if (newvalue) {
 
@@ -1942,7 +1942,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                         //alert(newvalue);
                     }
                 }
-            });
+            });*/
 
 
 
