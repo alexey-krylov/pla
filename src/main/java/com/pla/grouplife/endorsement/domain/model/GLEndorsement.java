@@ -1,12 +1,9 @@
 package com.pla.grouplife.endorsement.domain.model;
 
-import com.google.common.collect.Lists;
 import lombok.Getter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.List;
-
-import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Samir on 8/3/2015.
@@ -15,7 +12,7 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 @ValueObject
 public class GLEndorsement {
 
-    private List<GLMemberEndorsement> memberEndorsements;
+    private GLMemberEndorsement memberEndorsement;
 
     private GLSumAssuredEndorsement sumAssuredEndorsement;
 
@@ -24,6 +21,8 @@ public class GLEndorsement {
     private GLAssuredNameEndorsement assuredNameEndorsement;
 
     private GLPremiumEndorsement premiumEndorsement;
+
+    private List<GLMemberDeletionEndorsement> memberDeletionEndorsements;
 
     private List<GLAssuredDOBEndorsement> dobEndorsements;
 
@@ -34,15 +33,17 @@ public class GLEndorsement {
     private List<GLAssuredMANNumberEndorsement> manNumberEndorsements;
 
     public GLEndorsement addMemberEndorsement(GLMemberEndorsement memberEndorsement) {
-        if (isEmpty(this.memberEndorsements)) {
-            this.memberEndorsements = Lists.newArrayList();
-        }
-        this.memberEndorsements.add(memberEndorsement);
+        this.memberEndorsement = memberEndorsement;
         return this;
     }
 
     public GLEndorsement addSAEndorsement(GLSumAssuredEndorsement sumAssuredEndorsement) {
         this.sumAssuredEndorsement = sumAssuredEndorsement;
+        return this;
+    }
+
+    public GLEndorsement addMemberDeletionEndorsement(List<GLMemberDeletionEndorsement> glMemberDeletionEndorsements) {
+        this.memberDeletionEndorsements = glMemberDeletionEndorsements;
         return this;
     }
 

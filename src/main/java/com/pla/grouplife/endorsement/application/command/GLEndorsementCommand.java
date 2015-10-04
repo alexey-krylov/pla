@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.application.command;
 
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
+import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +11,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class GLMemberAdditionEndorsementCommand {
+public class GLEndorsementCommand {
 
     private GLEndorsementInsuredDto glEndorsementInsuredDto;
 
     private EndorsementId endorsementId;
+
+    private GLEndorsementType glEndorsementType;
 }

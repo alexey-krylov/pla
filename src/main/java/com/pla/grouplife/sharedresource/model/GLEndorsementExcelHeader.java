@@ -272,6 +272,9 @@ public enum GLEndorsementExcelHeader {
 
         @Override
         public InsuredDto populate(InsuredDto insuredDto, String value) {
+            if (isNotEmpty(value)) {
+                insuredDto.setRelationship(value);
+            }
             return insuredDto;
         }
 

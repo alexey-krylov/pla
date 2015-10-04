@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.pla.core.query.MasterFinder;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
-import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -28,9 +27,6 @@ public class GLMemberAdditionEndorsementExcelGenerator extends AbstractGLEndorse
 
     @Autowired
     private MasterFinder masterFinder;
-
-    @Autowired
-    private GLFinder glFinder;
 
 
     @Override

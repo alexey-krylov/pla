@@ -1,14 +1,19 @@
 package com.pla.grouplife.endorsement.application.command;
 
 import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
+import com.pla.grouplife.endorsement.domain.model.GLMemberDeletionEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
+import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.InsuredBuilder;
 import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.model.vo.InsuredDependentBuilder;
+import com.pla.sharedkernel.domain.model.FamilyId;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
@@ -19,6 +24,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 8/27/2015.
@@ -45,13 +52,36 @@ public class GLEndorsementCommandHandler {
     }
 
     @CommandHandler
-    public String handle(GLMemberAdditionEndorsementCommand glMemberAdditionEndorsementCommand) {
-        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(glMemberAdditionEndorsementCommand.getEndorsementId());
+    public String handle(GLEndorsementCommand glEndorsementCommand) {
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(glEndorsementCommand.getEndorsementId());
         GLEndorsement glEndorsement = groupLifeEndorsement.getEndorsement() != null ? groupLifeEndorsement.getEndorsement() : new GLEndorsement();
-        GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glMemberAdditionEndorsementCommand.getGlEndorsementInsuredDto().getInsureds()));
-        glEndorsement.addMemberEndorsement(glMemberEndorsement);
+        glEndorsement = populateGLEndorsement(glEndorsement, glEndorsementCommand.getGlEndorsementInsuredDto(), glEndorsementCommand.getGlEndorsementType());
         groupLifeEndorsement.updateWithEndorsementDetail(glEndorsement);
         return groupLifeEndorsement.getEndorsementId().getEndorsementId();
+    }
+
+    private GLEndorsement populateGLEndorsement(GLEndorsement glEndorsement, GLEndorsementInsuredDto glEndorsementInsuredDto, GLEndorsementType glEndorsementType) {
+        if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(glEndorsementType)) {
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            glEndorsement.addMemberEndorsement(glMemberEndorsement);
+        }
+        if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
+            glEndorsement.addMemberDeletionEndorsement(createGLMemberDeletionEndorsement(glEndorsementInsuredDto));
+        }
+        return glEndorsement;
+    }
+
+    private List<GLMemberDeletionEndorsement> createGLMemberDeletionEndorsement(GLEndorsementInsuredDto glEndorsementInsuredDto) {
+        List<GLMemberDeletionEndorsement> glMemberDeletionEndorsements = glEndorsementInsuredDto.getInsureds().stream().map(new Function<InsuredDto, GLMemberDeletionEndorsement>() {
+            @Override
+            public GLMemberDeletionEndorsement apply(InsuredDto insuredDto) {
+                GLMemberDeletionEndorsement glMemberDeletionEndorsement = new GLMemberDeletionEndorsement(insuredDto.getCategory(),
+                        isNotEmpty(insuredDto.getRelationship()) ? Relationship.getRelationship(insuredDto.getRelationship()) : null,
+                        insuredDto.getNoOfAssured(), insuredDto.getFamilyId() != null ? new FamilyId(insuredDto.getFamilyId()) : null);
+                return glMemberDeletionEndorsement;
+            }
+        }).collect(Collectors.toList());
+        return glMemberDeletionEndorsements;
     }
 
 

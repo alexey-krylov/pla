@@ -54,6 +54,8 @@ public class InsuredDto {
 
     private String familyId;
 
+    private String relationship;
+
     public InsuredDto addInsuredDependent(Set<InsuredDependentDto> insuredDependentDtos){
         this.insuredDependents=insuredDependentDtos;
         return this;

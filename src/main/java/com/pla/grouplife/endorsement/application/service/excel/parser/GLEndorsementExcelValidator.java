@@ -41,7 +41,21 @@ public class GLEndorsementExcelValidator {
 
 
     public boolean isValidCategory(Row row, String value, List<String> excelHeaders) {
-        return true;
+        if (isEmpty(value)) {
+            return true;
+        }
+        List<String> categoriesExistInPolicy = Lists.newArrayList();
+        policyAssureds.forEach(insured -> {
+            if (isNotEmpty(insured.getCategory())) {
+                categoriesExistInPolicy.add(insured.getCategory());
+            }
+            insured.getInsuredDependents().forEach(insuredDependent -> {
+                if (isNotEmpty(insured.getCategory())) {
+                    categoriesExistInPolicy.add(insuredDependent.getCategory());
+                }
+            });
+        });
+        return categoriesExistInPolicy.contains(value);
     }
 
 
@@ -292,7 +306,7 @@ public class GLEndorsementExcelValidator {
         return true;
     }
 
-    private boolean isValidClientId(List<Insured> insureds, String clientId) {
+    protected boolean isValidClientId(List<Insured> insureds, String clientId) {
         final boolean[] isValidClientId = {insureds.stream().filter(insured -> (insured.getFamilyId() != null && clientId.equals(insured.getFamilyId().getFamilyId()))).findAny().isPresent()};
         if (isValidClientId[0]) {
             return isValidClientId[0];

@@ -2,7 +2,7 @@ package com.pla.grouplife.endorsement.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.application.command.GLCreateEndorsementCommand;
-import com.pla.grouplife.endorsement.application.command.GLMemberAdditionEndorsementCommand;
+import com.pla.grouplife.endorsement.application.command.GLEndorsementCommand;
 import com.pla.grouplife.endorsement.application.command.SubmitGLEndorsementCommand;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
@@ -301,10 +301,11 @@ public class GroupLifeEndorsementController {
                 return Result.failure("Uploaded template is not valid.Please download to check the errors");
             }
             GLEndorsementInsuredDto glEndorsementInsuredDto = glEndorsementService.parseExcel(uploadInsuredDetailDto.getEndorsementType(), insuredTemplateWorkbook, new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
-            GLMemberAdditionEndorsementCommand glMemberAdditionEndorsementCommand = new GLMemberAdditionEndorsementCommand();
-            glMemberAdditionEndorsementCommand.setEndorsementId(new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
-            glMemberAdditionEndorsementCommand.setGlEndorsementInsuredDto(glEndorsementInsuredDto);
-            String endorsementId = commandGateway.sendAndWait(glMemberAdditionEndorsementCommand);
+            GLEndorsementCommand glEndorsementCommand = new GLEndorsementCommand();
+            glEndorsementCommand.setGlEndorsementType(uploadInsuredDetailDto.getEndorsementType());
+            glEndorsementCommand.setEndorsementId(new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
+            glEndorsementCommand.setGlEndorsementInsuredDto(glEndorsementInsuredDto);
+            String endorsementId = commandGateway.sendAndWait(glEndorsementCommand);
             return Result.success("Insured detail uploaded successfully", endorsementId);
         } catch (Exception e) {
             e.printStackTrace();

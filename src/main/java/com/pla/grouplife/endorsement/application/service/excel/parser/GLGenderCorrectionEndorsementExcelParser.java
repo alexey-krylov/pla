@@ -20,11 +20,11 @@ public class GLGenderCorrectionEndorsementExcelParser extends AbstractGLEndorsem
 
     @Override
     public boolean isValidExcel(HSSFWorkbook workbook, PolicyId policyId) {
-        return false;
+        return true;
     }
 
     @Override
     public GLEndorsementInsuredDto transformExcelToGLEndorsementDto(HSSFWorkbook workbook, PolicyId policyId) {
-        return null;
+        return new GLEndorsementInsuredDto();
     }
 }
