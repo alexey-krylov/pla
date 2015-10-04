@@ -65,6 +65,14 @@ public class GLEndorsementExcelValidator {
 
 
     public boolean isValidMainAssuredClientId(Row row, String value, List<String> excelHeaders) {
+        Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relationShipValue = getCellValue(relationshipCell);
+        if ("Self".equals(relationShipValue) && isNotEmpty(value)) {
+            return false;
+        }
+        if (!"Self".equals(relationShipValue) && isEmpty(value)) {
+            return false;
+        }
         return isValidClientId(policyAssureds, value);
     }
 

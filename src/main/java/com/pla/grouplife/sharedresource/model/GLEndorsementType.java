@@ -28,17 +28,13 @@ public enum GLEndorsementType {
     }, ASSURED_MEMBER_DELETION("Member Deletion") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
-            return Arrays.asList(GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.CATEGORY, GLEndorsementExcelHeader.RELATIONSHIP
-                    , GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME, GLEndorsementExcelHeader.GENDER,
-                    GLEndorsementExcelHeader.DATE_OF_BIRTH, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.NO_OF_ASSURED, GLEndorsementExcelHeader.ANNUAL_INCOME);
+            return Arrays.asList(GLEndorsementExcelHeader.CATEGORY, GLEndorsementExcelHeader.RELATIONSHIP
+                    , GLEndorsementExcelHeader.NO_OF_ASSURED, GLEndorsementExcelHeader.CLIENT_ID);
         }
     }, MEMBER_PROMOTION("Member Promotion") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
-            return Arrays.asList(GLEndorsementExcelHeader.OLD_CATEGORY, GLEndorsementExcelHeader.NEW_CATEGORY, GLEndorsementExcelHeader.RELATIONSHIP, GLEndorsementExcelHeader.NO_OF_ASSURED,
-                    GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.OLD_ANNUAL_INCOME, GLEndorsementExcelHeader.NEW_ANNUAL_INCOME,
-                    GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME, GLEndorsementExcelHeader.DATE_OF_BIRTH,
-                    GLEndorsementExcelHeader.GENDER, GLEndorsementExcelHeader.OCCUPATION);
+            return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.OLD_ANNUAL_INCOME, GLEndorsementExcelHeader.NEW_ANNUAL_INCOME);
         }
     },
     NEW_CATEGORY_RELATION("New Category Relationship") {

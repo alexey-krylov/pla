@@ -11,8 +11,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,15 @@ public class GLEndorsementFinder {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
     public Map findEndorsementById(String endorsementId) {
         BasicDBObject query = new BasicDBObject();
@@ -85,5 +98,9 @@ public class GLEndorsementFinder {
         policyDetailMap.put("inceptionDate",glPolicy.get(0).get("inceptionOn"));
         policyDetailMap.put("expiredDate",glPolicy.get(0).get("expiredOn"));
         return policyDetailMap;
+    }
+
+    public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
+        return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
     }
 }

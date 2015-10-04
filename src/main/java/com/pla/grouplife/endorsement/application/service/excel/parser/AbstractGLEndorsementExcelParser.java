@@ -106,4 +106,9 @@ public abstract class AbstractGLEndorsementExcelParser implements GLEndorsementE
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         return rowIterator;
     }
+
+    protected Cell getCellByName(Row row, List<String> headers, String cellName) {
+        int cellNumber = headers.indexOf(cellName);
+        return row.getCell(cellNumber);
+    }
 }

@@ -23,7 +23,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -134,8 +133,8 @@ public class GLEndorsementService {
         return policyId;
     }
 
-    public Map<String, Object> getPolicyDetail(String endorsementId){
-      return glEndorsementFinder.getPolicyDetail(endorsementId);
+    public Map<String, Object> getPolicyDetail(String endorsementId) {
+        return glEndorsementFinder.getPolicyDetail(endorsementId);
     }
 
 }

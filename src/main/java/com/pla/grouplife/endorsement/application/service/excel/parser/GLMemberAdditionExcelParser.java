@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.application.service.excel.parser;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
@@ -8,6 +9,7 @@ import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,14 +17,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 
 /**
@@ -72,7 +73,34 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
 
     @Override
     public GLEndorsementInsuredDto transformExcelToGLEndorsementDto(HSSFWorkbook workbook, PolicyId policyId) {
-        return null;
+        List<Row> dataRows = getDataRowsFromExcel(workbook);
+        List<String> headers = getHeaders(workbook);
+        Map<Row, List<Row>> datRowMap = groupByRelationship(dataRows, headers);
+
+        GLEndorsementInsuredDto glEndorsementInsuredDto = new GLEndorsementInsuredDto();
+        return glEndorsementInsuredDto;
+    }
+
+    private Map<Row, List<Row>> groupByRelationship(List<Row> dataRows, List<String> headers) {
+        Iterator<Row> rowIterator = dataRows.iterator();
+        Map<Row, List<Row>> categoryRowMap = Maps.newLinkedHashMap();
+        Row selfRelationshipRow = null;
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
+            Cell relationshipCell = getCellByName(row, headers, GLEndorsementExcelHeader.RELATIONSHIP.getDescription());
+            Cell mainAssuredClientIdCell = getCellByName(row, headers, GLEndorsementExcelHeader.MAIN_ASSURED_CLIENT_ID.getDescription());
+            String relationship = getCellValue(relationshipCell);
+            String mainAssuredClientId = getCellValue(mainAssuredClientIdCell);
+            if (Relationship.SELF.description.equals(relationship) || isNotEmpty(mainAssuredClientId)) {
+                selfRelationshipRow = row;
+                categoryRowMap.put(selfRelationshipRow, new ArrayList<>());
+            } else {
+                List<Row> rows = categoryRowMap.get(selfRelationshipRow);
+                rows.add(row);
+                categoryRowMap.put(selfRelationshipRow, rows);
+            }
+        }
+        return categoryRowMap;
     }
 
     @Override

@@ -52,6 +52,7 @@ public class InsuredDto {
 
     private List<CoveragePremiumDetailDto> coveragePremiumDetails;
 
+    private String familyId;
 
     public InsuredDto addInsuredDependent(Set<InsuredDependentDto> insuredDependentDtos){
         this.insuredDependents=insuredDependentDtos;
@@ -106,6 +107,8 @@ public class InsuredDto {
         private List<CoveragePremiumDetailDto> coveragePremiumDetails;
 
         private Integer noOfAssured;
+
+        private String familyId;
 
         public InsuredDependentDto addPlanPremiumDetail(PlanPremiumDetailDto planPremiumDetailDto) {
             this.planPremiumDetail = planPremiumDetailDto;
