@@ -79,7 +79,9 @@ public class Insured {
         this.occupationClass = insuredBuilder.getOccupation();
         this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
         this.noOfAssured = insuredBuilder.getNoOfAssured();
-
+        if (isNotEmpty(insuredBuilder.getFamilyId())) {
+            this.familyId = new FamilyId(insuredBuilder.getFamilyId());
+        }
     }
 
     public static InsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {

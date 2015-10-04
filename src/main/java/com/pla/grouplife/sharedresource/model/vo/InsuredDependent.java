@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
@@ -73,6 +74,9 @@ public class InsuredDependent {
         this.coveragePremiumDetails = insuredDependentBuilder.getCoveragePremiumDetails();
         this.occupationClass = insuredDependentBuilder.getOccupationClass();
         this.noOfAssured = insuredDependentBuilder.getNoOfAssured();
+        if (isNotEmpty(insuredDependentBuilder.getFamilyId())) {
+            this.familyId = new FamilyId(insuredDependentBuilder.getFamilyId());
+        }
     }
 
     public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {

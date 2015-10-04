@@ -51,6 +51,7 @@ public class GLEndorsementExcelValidator {
         }
         List<String> relationsExistInPolicy = Lists.newArrayList();
         policyAssureds.forEach(insured -> {
+            relationsExistInPolicy.add("Self");
             insured.getInsuredDependents().forEach(insuredDependent -> {
                 relationsExistInPolicy.add(insuredDependent.getRelationship().description);
             });
@@ -60,9 +61,19 @@ public class GLEndorsementExcelValidator {
 
 
     public boolean isValidNumberOfAssured(Row row, String value, List<String> excelHeaders) {
+        Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relationShipValue = getCellValue(relationshipCell);
+        if (isNotEmpty(relationShipValue) && isNotEmpty(value)) {
+            return false;
+        }
+        if (isEmpty(relationShipValue) && isEmpty(value)) {
+            return false;
+        }
+        if (isNotEmpty(relationShipValue) && isEmpty(value)) {
+            return true;
+        }
         return (isNotEmpty(value) && Double.valueOf(value) < 0);
     }
-
 
     public boolean isValidMainAssuredClientId(Row row, String value, List<String> excelHeaders) {
         Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
@@ -70,12 +81,11 @@ public class GLEndorsementExcelValidator {
         if ("Self".equals(relationShipValue) && isNotEmpty(value)) {
             return false;
         }
-        if (!"Self".equals(relationShipValue) && isEmpty(value)) {
-            return false;
+        if ("Self".equals(relationShipValue) && isEmpty(value)) {
+            return true;
         }
         return isValidClientId(policyAssureds, value);
     }
-
 
     public boolean isValidMANNumber(Row row, String value, List<String> excelHeaders) {
         return true;
@@ -88,6 +98,9 @@ public class GLEndorsementExcelValidator {
 
 
     public boolean isValidAnnualIncome(Row row, String value, List<String> excelHeaders) {
+        if (isEmpty(value)) {
+            return true;
+        }
         Cell incomeMultiplierCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.INCOME_MULTIPLIER.getDescription()));
         Cell annualIncomeCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.ANNUAL_INCOME.getDescription()));
         String incomeMultiplier = getCellValue(incomeMultiplierCell);
@@ -126,9 +139,8 @@ public class GLEndorsementExcelValidator {
         if (isEmpty(value)) {
             return true;
         }
-        return !isValidDate(value);
+        return isValidDate(value);
     }
-
 
     public boolean isValidGender(Row row, String value, List<String> excelHeaders) {
         Cell noOfSumAssuredCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.NO_OF_ASSURED.getDescription()));

@@ -3,7 +3,7 @@ package com.pla.grouplife.endorsement.domain.model;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import lombok.Getter;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Samir on 8/4/2015.
@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 public class GLMemberEndorsement {
 
-    private List<Insured> insureds;
+    private Set<Insured> insureds;
 
-    public GLMemberEndorsement(List<Insured> insureds) {
+    public GLMemberEndorsement(Set<Insured> insureds) {
         this.insureds = insureds;
     }
 }

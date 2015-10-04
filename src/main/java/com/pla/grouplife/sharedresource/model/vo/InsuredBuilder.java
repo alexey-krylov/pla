@@ -12,7 +12,6 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
@@ -50,10 +49,10 @@ public class InsuredBuilder {
 
     private Integer noOfAssured;
 
+    private String familyId;
+
     InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(insuredPlan != null);
-        checkArgument(isNotEmpty(planCode));
-        checkArgument(premiumAmount != null);
         PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured);
         this.planPremiumDetail = planPremiumDetail;
     }
@@ -115,6 +114,11 @@ public class InsuredBuilder {
         return this;
     }
 
+
+    public InsuredBuilder withFamilyId(String familyId) {
+        this.familyId = familyId;
+        return this;
+    }
     public InsuredBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured) {
         CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium, sumAssured);
         if (isEmpty(this.coveragePremiumDetails)) {

@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
@@ -76,9 +79,73 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         List<Row> dataRows = getDataRowsFromExcel(workbook);
         List<String> headers = getHeaders(workbook);
         Map<Row, List<Row>> datRowMap = groupByRelationship(dataRows, headers);
-
         GLEndorsementInsuredDto glEndorsementInsuredDto = new GLEndorsementInsuredDto();
+        List<InsuredDto> insuredDtos = buildInsuredDetail(datRowMap, headers, policyId);
+        glEndorsementInsuredDto.setInsureds(insuredDtos);
         return glEndorsementInsuredDto;
+    }
+
+    private List<InsuredDto> buildInsuredDetail(Map<Row, List<Row>> excelRowsGroupedByRelationship, List<String> excelHeaders, PolicyId policyId) {
+        List<InsuredDto> insuredDtoList = excelRowsGroupedByRelationship.entrySet().stream().map(new Function<Map.Entry<Row, List<Row>>, InsuredDto>() {
+            @Override
+            public InsuredDto apply(Map.Entry<Row, List<Row>> rowListEntry) {
+                Row insuredRow = rowListEntry.getKey();
+                List<Row> dependentRows = rowListEntry.getValue();
+                InsuredDto insuredDto = createInsuredDto(insuredRow, excelHeaders);
+                Cell relationshipCell = getCellByName(insuredRow, excelHeaders, GLEndorsementExcelHeader.RELATIONSHIP.getDescription());
+                String relationship = getCellValue(relationshipCell);
+                if (insuredDto.getPlanPremiumDetail() == null) {
+                    insuredDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
+                }
+                insuredDto.getPlanPremiumDetail().setPlanId(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship)));
+                Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
+                    @Override
+                    public InsuredDto.InsuredDependentDto apply(Row row) {
+                        InsuredDto.InsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders);
+                        Cell relationshipCell = getCellByName(insuredRow, excelHeaders, GLEndorsementExcelHeader.RELATIONSHIP.getDescription());
+                        String relationship = getCellValue(relationshipCell);
+                        if (insuredDependentDto.getPlanPremiumDetail() == null) {
+                            insuredDependentDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
+                        }
+                        insuredDependentDto.getPlanPremiumDetail().setPlanId(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship)));
+                        return insuredDependentDto;
+                    }
+                }).collect(Collectors.toSet());
+                insuredDto.setInsuredDependents(insuredDependentDtoSet);
+                return insuredDto;
+            }
+        }).collect(Collectors.toList());
+        return insuredDtoList;
+    }
+
+    private InsuredDto createInsuredDto(Row excelRow, List<String> excelHeaders) {
+        final InsuredDto[] insuredDto = {new InsuredDto()};
+        excelHeaders.forEach(excelHeader -> {
+            int cellNumber = excelHeaders.indexOf(excelHeader);
+            Cell cell = excelRow.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            GLEndorsementExcelHeader glEndorsementExcelHeader = GLEndorsementExcelHeader.findGLEndorsementExcelHeaderTypeFromDescription(excelHeader);
+            insuredDto[0] = glEndorsementExcelHeader.populate(insuredDto[0], cellValue);
+        });
+        return insuredDto[0];
+    }
+
+    private InsuredDto.InsuredDependentDto createInsuredDependentDto(Row excelRow, List<String> excelHeaders) {
+        final InsuredDto.InsuredDependentDto[] insuredDependentDto = {new InsuredDto.InsuredDependentDto()};
+        excelHeaders.forEach(excelHeader -> {
+            int cellNumber = excelHeaders.indexOf(excelHeader);
+            Cell cell = excelRow.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            GLEndorsementExcelHeader glEndorsementExcelHeader = GLEndorsementExcelHeader.findGLEndorsementExcelHeaderTypeFromDescription(excelHeader);
+            insuredDependentDto[0] = glEndorsementExcelHeader.populate(insuredDependentDto[0], cellValue);
+        });
+        return insuredDependentDto[0];
+    }
+
+
+    //TODO populate plan and sum assured detail
+    private String findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship) {
+        return null;
     }
 
     private Map<Row, List<Row>> groupByRelationship(List<Row> dataRows, List<String> headers) {

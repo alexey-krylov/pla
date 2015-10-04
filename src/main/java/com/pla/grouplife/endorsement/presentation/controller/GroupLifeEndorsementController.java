@@ -2,8 +2,10 @@ package com.pla.grouplife.endorsement.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.application.command.GLCreateEndorsementCommand;
+import com.pla.grouplife.endorsement.application.command.GLMemberAdditionEndorsementCommand;
 import com.pla.grouplife.endorsement.application.command.SubmitGLEndorsementCommand;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
+import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
@@ -20,6 +22,7 @@ import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +94,22 @@ public class GroupLifeEndorsementController {
         outputStream.close();
     }
 
+
+    @RequestMapping(value = "/downloaderrortemplate/{endorsementId}", method = RequestMethod.GET)
+    public void downloadErrorInsuredTemplate(@PathVariable("endorsementId") String endorsementId, HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/msexcel");
+        response.setHeader("content-disposition", "attachment; filename=" + "errorInsuredTemplate.xls" + "");
+        OutputStream outputStream = response.getOutputStream();
+        File errorTemplateFile = new File(endorsementId);
+        InputStream inputStream = new FileInputStream(errorTemplateFile);
+        outputStream.write(IOUtils.toByteArray(inputStream));
+        outputStream.flush();
+        outputStream.close();
+        errorTemplateFile.delete();
+    }
+
+
     @RequestMapping(value = "/opencreateendorsementpage", method = RequestMethod.GET)
     public ResponseEntity createEndorsement(@RequestParam(value = "policyId", required = true) String policyId, @RequestParam(value = "endorsementType", required = true) GLEndorsementType endorsementType, HttpServletRequest request) {
         UserDetails userDetails = getLoggedInUserDetail(request);
@@ -108,6 +126,7 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/createEndorsement");
         return modelAndView;
     }
+
     @RequestMapping(value = "/editEndorsementUpload", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open edit Endorsement upload page")
     private ModelAndView openCreateEndorsementUpload() {
@@ -131,6 +150,7 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/createEndorsementUploadReturnStatus");
         return modelAndView;
     }
+
     @RequestMapping(value = "/viewApprovalEndorsement", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open Approval endorsement page in view Mode")
     public ModelAndView gotoApprovalEndorsement() {
@@ -138,6 +158,7 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/createApprovalEndorsement");
         return modelAndView;
     }
+
     @RequestMapping(value = "/viewUploadApprovalEndorsement", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open Approval endorsement page in view Mode")
     public ModelAndView gotoUploadApprovalEndorsement() {
@@ -188,7 +209,7 @@ public class GroupLifeEndorsementController {
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
         modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
-            return modelAndView;
+        return modelAndView;
     }
 
 
@@ -269,9 +290,22 @@ public class GroupLifeEndorsementController {
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
+        boolean isValidExcel = glEndorsementService.isValidExcel(uploadInsuredDetailDto.getEndorsementType(), insuredTemplateWorkbook, new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
         try {
-
-            return Result.success("Insured detail uploaded successfully");
+            if (!isValidExcel) {
+                File insuredTemplateWithError = new File(uploadInsuredDetailDto.getEndorsementId());
+                FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
+                insuredTemplateWorkbook.write(fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                return Result.failure("Uploaded template is not valid.Please download to check the errors");
+            }
+            GLEndorsementInsuredDto glEndorsementInsuredDto = glEndorsementService.parseExcel(uploadInsuredDetailDto.getEndorsementType(), insuredTemplateWorkbook, new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
+            GLMemberAdditionEndorsementCommand glMemberAdditionEndorsementCommand = new GLMemberAdditionEndorsementCommand();
+            glMemberAdditionEndorsementCommand.setEndorsementId(new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
+            glMemberAdditionEndorsementCommand.setGlEndorsementInsuredDto(glEndorsementInsuredDto);
+            String endorsementId = commandGateway.sendAndWait(glMemberAdditionEndorsementCommand);
+            return Result.success("Insured detail uploaded successfully", endorsementId);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());

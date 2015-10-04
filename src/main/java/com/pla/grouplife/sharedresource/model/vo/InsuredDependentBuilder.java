@@ -13,7 +13,6 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/8/2015.
@@ -49,10 +48,10 @@ public class InsuredDependentBuilder {
 
     private Integer noOfAssured;
 
+    private String familyId;
+
     InsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(planId != null);
-        checkArgument(isNotEmpty(planCode));
-        checkArgument(premiumAmount != null);
         PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(planId, planCode, premiumAmount, sumAssured);
         this.planPremiumDetail = planPremiumDetail;
     }
@@ -109,8 +108,13 @@ public class InsuredDependentBuilder {
         return this;
     }
 
-    public InsuredDependentBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium,BigDecimal sumAssured) {
-        CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium,sumAssured);
+    public InsuredDependentBuilder withFamilyId(String familyId) {
+        this.familyId = familyId;
+        return this;
+    }
+
+    public InsuredDependentBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured) {
+        CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium, sumAssured);
         if (isEmpty(this.coveragePremiumDetails)) {
             this.coveragePremiumDetails = new HashSet<>();
         }

@@ -3,6 +3,7 @@ package com.pla.grouplife.endorsement.application.service;
 import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.application.service.excel.generator.GLEndorsementExcelGenerator;
 import com.pla.grouplife.endorsement.application.service.excel.parser.GLEndorsementExcelParser;
+import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
@@ -90,10 +91,27 @@ public class GLEndorsementService {
 
     public HSSFWorkbook generateEndorsementExcel(GLEndorsementType endorsementType, EndorsementId endorsementId) {
         GLEndorsementExcelGenerator glEndorsementExcelGenerator = excelGenerators.get(endorsementType);
+        PolicyId policyId = findPolicyIdFromEndorsement(endorsementId);
+        return glEndorsementExcelGenerator.generate(policyId, endorsementId);
+    }
+
+    private PolicyId findPolicyIdFromEndorsement(EndorsementId endorsementId) {
         Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId.getEndorsementId());
         Policy policy = glEndorsementMap != null ? (Policy) glEndorsementMap.get("policy") : null;
         PolicyId policyId = policy != null ? policy.getPolicyId() : null;
-        return glEndorsementExcelGenerator.generate(policyId, endorsementId);
+        return policyId;
+    }
+
+    public boolean isValidExcel(GLEndorsementType glEndorsementType, HSSFWorkbook workbook, EndorsementId endorsementId) {
+        GLEndorsementExcelParser glEndorsementExcelParser = excelParsers.get(glEndorsementType);
+        PolicyId policyId = findPolicyIdFromEndorsement(endorsementId);
+        return glEndorsementExcelParser.isValidExcel(workbook, policyId);
+    }
+
+    public GLEndorsementInsuredDto parseExcel(GLEndorsementType glEndorsementType, HSSFWorkbook workbook, EndorsementId endorsementId) {
+        GLEndorsementExcelParser glEndorsementExcelParser = excelParsers.get(glEndorsementType);
+        PolicyId policyId = findPolicyIdFromEndorsement(endorsementId);
+        return glEndorsementExcelParser.transformExcelToGLEndorsementDto(workbook, policyId);
     }
 
     public List<GLEndorsementDto> searchEndorsement(SearchGLEndorsementDto searchGLEndorsementDto, String[] statuses) {
