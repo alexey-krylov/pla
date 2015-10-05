@@ -70,6 +70,8 @@
                     <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured" ng-model="proposedAssured.maritalStatus" name="maritalStatus" ng-required="true" ng-init="selectSpouse(proposedAssured.maritalStatus)" ng-change="selectSpouse(proposedAssured.maritalStatus)">
                         <option value="MARRIED">Married</option>
                         <option value="UNMARRIED">UnMarried</option>
+                        <option value="DIVORCED">Divorced</option>
+                        <option value="WIDOW">Widow</option>
                     </select>
 
                     <div class="error" ng-messages="proposedAssuredDetails.maritalStatus.$error" ng-if="proposedAssuredDetails.maritalStatus.$dirty">

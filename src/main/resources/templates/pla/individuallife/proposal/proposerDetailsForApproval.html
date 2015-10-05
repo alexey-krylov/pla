@@ -97,6 +97,8 @@
                     <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.maritalStatus" name="maritalStatus" ng-init="selectSpouse(proposer.maritalStatus)" ng-change="selectSpouse(proposer.maritalStatus)" ng-required="true">
                         <option value="MARRIED">Married</option>
                         <option value="UNMARRIED">UnMarried</option>
+                        <option value="DIVORCED">Divorced</option>
+                        <option value="WIDOW">Widow</option>
                     </select>
 
                     <div class="error" ng-messages="proposerForm.maritalStatus.$error" ng-if="proposerForm.maritalStatus.$dirty">
