@@ -307,6 +307,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 {val: 'STEP_DAUGHTER', desc: 'Step Daughter'},
                 {val: 'STEP_SON', desc: 'Step Son'}];
 
+/*
             $scope.premiumTermTypeList = [{
                 premiumTermType: "REGULAR",
                 description: "Regular"
@@ -314,6 +315,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 premiumTermType: "SPECIFIED_VALUES",
                 description: "Specified Values"
             }, {premiumTermType: "SPECIFIED_AGES", description: "Specified Ages"}];
+*/
 
 
 

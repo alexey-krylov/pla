@@ -544,16 +544,16 @@
                             <label class="control-label" for="groupTerm">Premium Payment Term Type</label>
 
                             <div class="controls">
-                                <button type="button" class="btn btn-default bs-select"   required="true" name="premiumTermType1" id="premiumTermType1"  ng-model="plan.premiumPaymentTermType" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="-------- Select --------" ng-options="premiumType.premiumTermType as premiumType.description for premiumType in premiumTermTypeList | orderBy:'description'"  >
+                             <!--   <button type="button" class="btn btn-default bs-select"   required="true" name="premiumTermType1" id="premiumTermType1"  ng-model="plan.premiumPaymentTermType" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="-------- Select --------" ng-options="premiumType.premiumTermType as premiumType.description for premiumType in premiumTermTypeList | orderBy:'description'"  >
                                     Action <span class="caret"></span>
-                                </button>
+                                </button>-->
 
-                                <!--  <select ng-model="plan.premiumTermType" class="form-control input-sm  col-sm-3" ng-disabled="premiumPaymentTermReadonly">
+                                 <select ng-model="plan.premiumTermType" class="form-control input-sm  col-sm-3" ng-disabled="premiumPaymentTermReadonly">
                                       <option value="REGULAR">Regular</option>
                                       <option value="SINGLE">Single</option>
                                       <option value="SPECIFIED_VALUES">Specified Values</option>
                                       <option value="SPECIFIED_AGES">Specified Ages</option>
-                                  </select>-->
+                                  </select>
                             </div>
                         </div>
                     </div>
