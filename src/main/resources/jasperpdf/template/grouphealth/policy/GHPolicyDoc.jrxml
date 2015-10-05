@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-29T17:33:20 -->
+<!-- 2015-10-05T15:44:01 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GHPolicyDoc" pageWidth="842" pageHeight="672" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="af162d2e-b31e-4b56-b93f-89b3f8d1b596">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -51,6 +51,9 @@
 				<reportElement x="270" y="40" width="280" height="130" uuid="c0c05580-6d4e-4a95-90c8-c8a0c5cd9cc6"/>
 				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
+			<break>
+				<reportElement x="0" y="407" width="100" height="1" uuid="69fc2cbd-2ba8-41dd-ba2d-bdb2639c5c72"/>
+			</break>
 		</band>
 	</title>
 	<pageHeader>
