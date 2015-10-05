@@ -26,6 +26,18 @@
     });
 
 </script>
+<style>
+    .angucomplete-dropdown {
+        overflow-y: auto;
+        max-height: 300px;
+        width:400px;
+        position:unset;
+        margin-top:-4px;
+        border-width:0px;
+        overflow-scrolling: auto;
+    }
+</style>
+
 <div class="container-fluid" ng-controller="QuotationController" id="quotationForm">
     <nth-alert></nth-alert>
     <form novalidate="true" name="quotationForm">
@@ -62,7 +74,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group required">
                                     <label class="control-label">Agent ID</label>
-                                    <div data-angucomplete-alt="" id="ex5" placeholder="Search Agents" pause="500"
+                                    <div class="angucomplete-dropdown" data-angucomplete-alt="" id="ex5" placeholder="Search Agents" pause="500"
                                          selected-object="selectedAgent" disable-input="uneditable"
                                          remote-url="/pla/core/agent/search/" field-required="true"
                                          initial-value="selectedAgent.title"
@@ -522,7 +534,7 @@
                                                 proposedAssured="proposedAssured"></policyterm>
                                 </div>
                                 <table class="table table-bordered">
-                                    <thead>
+                                    <thead ng-if="planDetailDto.riderDetails.length >0">
                                     <tr>
                                         <th>Optional Cover</th>
                                         <th>Optional Cover Sum Assured *</th>

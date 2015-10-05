@@ -33,7 +33,7 @@
                                 proposedAssured="proposedAssured"></policyterm>
 
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="proposalPlanDetail.riderDetails.length >0">
                 <label class="control-label">Riders Applied For</label>
                 <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
 
@@ -46,7 +46,7 @@
 
             </div>
                 <table class="table table-bordered">
-                    <thead>
+                    <thead ng-if="proposalPlanDetail.riderDetails.length >0">
                     <tr>
                         <th>
                             Optional Cover Name
