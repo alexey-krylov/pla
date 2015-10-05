@@ -22,7 +22,7 @@
                     <option value="CASH" >CASH</option>
                     <option value="STOP_ORDER">Stop Order</option>
                     <option value="DEBIT_ORDER">Bank Debit Order</option>
-                    <option value="CHEQUE"> Cheque</option>
+                    <!--<option value="CHEQUE"> Cheque</option>-->
                 </select>
                 <div class="error" ng-messages="step9.methodOfPremium.$error" ng-if="step9.methodOfPremium.$dirty">
                     <small class="error" ng-message="required">Please specify methodOfPremium</small>
@@ -122,7 +122,7 @@
                     <label class="control-label">Bank Branch Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
                     <select ng-if="mode=='edit'" class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.branchName as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
-                            ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" ng-required="true">
+                            ng-model="bankDetails.bankBranchName" ng-required="true">
                     </select>
 
                     <input ng-if="mode!='edit'" type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>
@@ -163,7 +163,7 @@
                     <label class="control-label">Bank Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankName" ng-disabled="mode=='new'||mode=='view'" name="bankName"/>-->
                     <select class="form-control input-sm" name="bankName" ng-disabled="mode=='new'||mode=='view'" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
-                            ng-model="bankDetails.bankName"  ng-required="true">{{bankDetail.bankName}}
+                            ng-change="clearBankBranchName()" ng-model="bankDetails.bankName"  ng-required="true">{{bankDetail.bankName}}
                     </select>
 
                     <div class="error" ng-messages="premiumBankDetail.bankName.$error" ng-if="premiumBankDetail.bankName.$dirty">

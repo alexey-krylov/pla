@@ -723,6 +723,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         {
                             //alert('Bank Details..');
                             $scope.bankDetails= $scope.rcvProposal.premiumPaymentDetails.bankDetails;
+                            if($scope.bankDetails)
+                            {
+                                var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: $scope.bankDetails.bankName});
+                                if (bankCode){
+                                    $http.get('/pla/individuallife/proposal/getAllBankBranchNames/'+bankCode.bankCode).success(function (response, status, headers, config) {
+                                        $scope.bankBranchDetails= response;
+                                        //console.log("Bank Details :"+JSON.stringify(response));
+                                    }).error(function (response, status, headers, config) {
+                                    });
+
+                                    // http://localhost:6443/pla/individuallife/proposal/getAllBankBranchNames/BAN
+                                }
+                            }
                             //$scope.bankDetails.bankAccountNumber=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankAccountNumber;
                             $scope.bankDetails.bankBranchName=$scope.rcvProposal.premiumPaymentDetails.bankDetails.bankBranchName;
                         }
@@ -905,6 +918,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             }*/
 
+            $scope.clearBankBranchName=function()
+            {
+                //alert('Hii');
+                $scope.bankDetails.bankBranchName=null;
+            }
             $scope.$watch('bankDetails.bankName',function(newvalue,oldvalue){
                 if(newvalue){
                     //console.log(newvalue);
@@ -3963,6 +3981,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
                 else
                 {
+                    $scope.compulsoryHealthDetails[arrySeq].answerResponse=null;
                     $scope.accordionStatus.healthDetailsPart1[tab] = false;
                 }
             };
@@ -3978,10 +3997,24 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
                 else
                 {
+                    $scope.compulsoryHealthDetails[arrySeq].answerResponse=null;
                     $scope.accordionStatus.healthDetailsPart2[tab] = false;
                 }
             };
 
+            $scope.openAccordionoveradditionalDetail=function(qId,status)
+            {
+                $scope.replacement.questionId=qId;
+                if(status == 'true')
+                {
+
+                }
+                else
+                {
+                    $scope.replacement.answerResponse1=null;
+                    $scope.replacement.answerResponse2=null;
+                }
+            }
             $scope.openAccordionFamilyQuestion=function(status,tab,arrySeq,qId)
             {
                 //answer,'tab1',2,13
@@ -3993,6 +4026,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
                 else
                 {
+                    $scope.questionList[arrySeq].answerResponse=null;
                     $scope.accordionStatus.familyHabitAndBuild[tab] = false;
                 }
             };
@@ -4007,6 +4041,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
                 else
                 {
+                    $scope.build.overWeightQuestion.answerResponse=null;
                     $scope.accordionStatus.familyHabitAndBuild[tab] = false;
                 }
             };

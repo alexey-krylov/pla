@@ -84,7 +84,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="replacement.questionId='22' ">
+                <!--<select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="replacement.questionId='22' ">-->
+               <select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="openAccordionoveradditionalDetail('22',replacement.answer)">
                 <!--<select class="form-control input-sm"  ng-required="true" name="additionadetailQuestion1" ng-disabled="mode=='new'||mode=='view'" ng-model="replacement.answer" ng-change="openAccordionAdditionalQuestion(replacement.answer,'tab1')">-->
                     <option value="">--Select One--</option>
                     <option  value="true">Yes</option>

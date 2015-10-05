@@ -191,7 +191,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal">
+    <!--<div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -217,9 +217,49 @@
                 </div>
             </div>
         </div>
+    </div>-->
+
+    <div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModal" ng-form="PLANPLAL">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Policy Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="number" name="policyNumber" class="form-control input-sm" ng-model="policy.policyOrProposalNumber" ng-maxLength="13" ng-required="true"/>
+
+                                <div class="error" ng-messages="PLANPLAL.policyNumber.$error" ng-if="PLANPLAL.policyNumber.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Policy Number.</small>
+                                    <small ng-message="maxlength">Only 13 number are allowed.</small>
+                                </div>
+
+                            </div>
+                            <div class="form-group required">
+                                <!--<label class="control-label">Sum Assured</label>-->
+                                <label class="control-label">Amount of Insurance </label>
+                                <input type="number" class="form-control input-sm" name="sumAssured" ng-model="policy.amount" ng-required="true" max="{{getMax()}}"/>
+
+                                <div class="error" ng-messages="PLANPLAL.sumAssured.$error" ng-if="PLANPLAL.sumAssured.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Amount of Insurance for the existing policies with PLA.</small>
+                                    <small ng-message="max">Upto 999999.99  are allowed.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-disabled="PLANPLAL.$invalid" ng-click="addPolicyDetails(policy)">Add</button>
+                    <button class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="modal fade" id="assuredByOthersModal" tabindex="-1" role="dialog" aria-labelledby="assuredByOthersModal">
+<!--    <div class="modal fade" id="assuredByOthersModal" tabindex="-1" role="dialog" aria-labelledby="assuredByOthersModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -245,7 +285,7 @@
 
                             <div class="form-group required">
                                 <label class="control-label">Policy Inception Date</label>
-                                <!--<input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.date"/>-->
+                                &lt;!&ndash;<input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.date"/>&ndash;&gt;
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup="" view-enabled=""
@@ -269,9 +309,84 @@
                 </div>
             </div>
         </div>
+    </div>-->
+    <div class="modal fade" id="assuredByOthersModal" tabindex="-1" role="dialog" aria-labelledby="assuredByOthersModal" ng-form="otherInsurerPlan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer1.name" ng-required="true" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" />
+
+                                <div class="error" ng-messages="otherInsurerPlan.assuredName.$error" ng-if="otherInsurerPlan.assuredName.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Name Of Assurer for the existing Policies.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Policy Number</label>
+                                <input type="text" class="form-control input-sm" name="policyNumber" ng-model="insurer1.policyOrProposalNumber" ng-required="true" ng-maxlength="20"/>
+
+                                <div class="error" ng-messages="otherInsurerPlan.policyNumber.$error" ng-if="otherInsurerPlan.policyNumber.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Policy Number.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Amount of Insurance</label>
+                                <input type="number" class="form-control input-sm" name="insuranceAmount" ng-model="insurer1.amount" ng-required="true" max="{{getMax()}}" />
+
+                                <div class="error" ng-messages="otherInsurerPlan.insuranceAmount.$error" ng-if="otherInsurerPlan.insuranceAmount.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Amount of Insurance for the existing policies.</small>
+                                    <small ng-message="max">Upto 999999.99  are allowed.</small>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group required">
+                                <label class="control-label">Policy Inception Date</label>
+                                <!--<input type="text" class="form-control input-sm" name="inceptionPolicyDate" ng-model="insurer1.date"/>-->
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="launchinceptionDate"
+                                           max-date="todayDate"
+                                           ng-model="insurer1.date" name="policyInceptionDate" ng-disabled="mode=='new'||mode=='view'" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+										<span class="input-group-btn">
+										<button type="button" class="btn btn-default btn-sm"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="launchassuredByOthersDate($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+									  </span>
+                                </div>
+
+                                <div class="error" ng-messages="otherInsurerPlan.policyInceptionDate.$error" ng-if="otherInsurerPlan.policyInceptionDate.$dirty">
+                                    <small ng-message="required">Please specify the Policy Inception Date for the existing Policies.</small>
+                                    <small ng-message="date">Invalid Date.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-disabled="otherInsurerPlan.$invalid" ng-click="addAssuredByOthers(insurer1)">Add</button>
+                    <button class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="modal fade" id="pendingInsuranceByOthersTpl" tabindex="-1" role="dialog" aria-labelledby="pendingInsuranceByOthersTpl">
+  <!--  <div class="modal fade" id="pendingInsuranceByOthersTpl" tabindex="-1" role="dialog" aria-labelledby="pendingInsuranceByOthersTpl">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -296,7 +411,7 @@
                             </div>
                             <div class="form-group required">
                                 <label class="control-label">Date of Proposal</label>
-                                <!-- <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>-->
+                                &lt;!&ndash; <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>&ndash;&gt;
 
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
@@ -321,9 +436,86 @@
                 </div>
             </div>
         </div>
+    </div>-->
+    <div class="modal fade" id="pendingInsuranceByOthersTpl" tabindex="-1" role="dialog" aria-labelledby="pendingInsuranceByOthersTpl" ng-form="otherInsurersByOtherTplPlan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="assuredName" ng-model="insurer2.name" ng-required="true" ng-maxlength="20" ng-pattern="/[a-zA-Z]/" />
+
+                                <div class="error" ng-messages="otherInsurersByOtherTplPlan.assuredName.$error" ng-if="otherInsurersByOtherTplPlan.assuredName.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Name Of Assurer/Insurer for the existing proposals.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+
+                            </div>
+                            <div class="form-group required">
+                                <!-- <label class="control-label">Policy Number</label>-->
+                                <label class="control-label">Proposal Number</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer2.policyOrProposalNumber" ng-required="true" ng-maxlength="20"/>
+
+                                <div class="error" ng-messages="otherInsurersByOtherTplPlan.proposalNumber.$error" ng-if="otherInsurersByOtherTplPlan.proposalNumber.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Proposal Number.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Amount of Insurance</label>
+                                <input type="number" class="form-control input-sm" name="insuranceAmount" ng-model="insurer2.amount" ng-required="true" max="{{getMax()}}"/>
+
+                                <div class="error" ng-messages="otherInsurersByOtherTplPlan.insuranceAmount.$error" ng-if="otherInsurersByOtherTplPlan.insuranceAmount.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Amount of Insurance for the existing policies.</small>
+                                    <small ng-message="max">Upto 999999.99  are allowed.</small>
+                                </div>
+
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Date of Proposal</label>
+                                <!-- <input type="text" class="form-control input-sm" name="proposalDate" ng-model="insurer2.date"/>-->
+
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup="" view-enabled=""
+                                           ng-required="true"
+                                           is-open="pendingDate"
+                                           max-date="todayDate"
+                                           ng-model="insurer2.date" name="proposalDate" ng-disabled="mode=='new'||mode=='view'"/>
+										<span class="input-group-btn">
+										<button type="button" class="btn btn-default btn-sm"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="pendingInsuranceByOthersTplDate($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+									  </span>
+                                </div>
+
+                                <div class="error" ng-messages="otherInsurersByOtherTplPlan.proposalDate.$error" ng-if="otherInsurersByOtherTplPlan.proposalDate.$dirty">
+                                    <small ng-message="required">Please specify the Policy Inception Date for the existing Policies.</small>
+                                    <small ng-message="date">Invalid Date.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-disabled="otherInsurersByOtherTplPlan.$invalid" ng-click="addPendingInsuranceByOthersTpl(insurer2)">Add</button>
+                    <button class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="modal fade" id="assuranceDeclinedTpl" tabindex="-1" role="dialog" aria-labelledby="assuranceDeclinedTpl">
+<!--    <div class="modal fade" id="assuranceDeclinedTpl" tabindex="-1" role="dialog" aria-labelledby="assuranceDeclinedTpl">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -346,6 +538,46 @@
                 <div class="modal-footer">
                     <button class="btn btn-default" ng-click="addaAssuranceDeclinedTpl(insurer3)">Add This TPL</button>
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="modal fade" id="assuranceDeclinedTpl" tabindex="-1" role="dialog" aria-labelledby="assuranceDeclinedTpl" ng-form="assuranceDeclinedTplPlan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Assurer/Insurer Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label">Name of Assurer/Insurer</label>
+                                <input type="text" class="form-control input-sm" name="name" ng-model="insurer3.name" ng-required="true" ng-maxlength="20" ng-pattern="/[a-zA-Z]/"/>
+
+                                <div class="error" ng-messages="assuranceDeclinedTplPlan.name.$error" ng-if="assuranceDeclinedTplPlan.name.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Name Of Assurer/Insurer for the existing proposals.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                </div>
+
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Proposal Number</label>
+                                <input type="text" class="form-control input-sm" name="proposalNumber" ng-model="insurer3.policyOrProposalNumber" ng-required="true" ng-maxlength="20"/>
+
+                                <div class="error" ng-messages="assuranceDeclinedTplPlan.proposalNumber.$error" ng-if="assuranceDeclinedTplPlan.proposalNumber.$dirty">
+                                    <small class="error" ng-message="required">Please specify the Name Of Assurer/Insurer for the existing proposals.</small>
+                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" ng-disabled="assuranceDeclinedTplPlan.$invalid" ng-click="addaAssuranceDeclinedTpl(insurer3)">Add</button>
+                    <button class="btn btn-default" ng-click="cancelModal()">Cancel</button>
                 </div>
             </div>
         </div>

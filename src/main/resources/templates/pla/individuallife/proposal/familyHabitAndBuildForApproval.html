@@ -44,7 +44,7 @@
                             <td>
                                 <!--<input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.father.isAlive" name="fatherhealthState" ng-maxlength="50" ng-model="familyHistory.father.healthState"/>-->
                                 <textarea class="form-control" name="fatherhealthState" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.father.isAlive " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.father.healthState" ng-required="true" ng-maxlength="50" placeholder="Please give Father HealthState"></textarea>
-                                <div class="error" ng-messages="step7.fatherhealthState.$error" ng-if="step7.fatherhealthState.$dirty">
+                                <div class="error" ng-messages="step8.fatherhealthState.$error" ng-if="step8.fatherhealthState.$dirty">
                                     <small ng-message="maxlength">Only 50 characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -62,7 +62,7 @@
                                 <!--<input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="fatherDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="!familyHistory.father.isAlive"  ng-maxlength="20" ng-model="familyHistory.father.deathCause"/>-->
                                 <textarea class="form-control" name="fatherDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="!familyHistory.father.isAlive " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.father.deathCause" ng-required="true" ng-maxlength="20" placeholder="Please give Father Death Cause"></textarea>
 
-                                <div class="error" ng-messages="step7.fatherDeathCause.$error" ng-if="step7.fatherDeathCause.$dirty">
+                                <div class="error" ng-messages="step8.fatherDeathCause.$error" ng-if="step8.fatherDeathCause.$dirty">
                                     <small ng-message="maxlength">Only 20 characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -83,7 +83,7 @@
                                 <!--<input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="motherHealthState" ng-if="familyHistory.mother.isAlive"  ng-pattern="/[a-zA-Z]/" ng-maxlength="50" ng-model="familyHistory.mother.healthState"/>-->
                                 <textarea class="form-control" name="motherHealthState" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.mother.isAlive " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.mother.healthState" ng-required="true" ng-maxlength="50" placeholder="Please give Mother Health State"></textarea>
 
-                                <div class="error" ng-messages="step7.motherHealthState.$error" ng-if="step7.motherHealthState.$dirty">
+                                <div class="error" ng-messages="step8.motherHealthState.$error" ng-if="step8.motherHealthState.$dirty">
                                     <small ng-message="maxlength">Only 50 characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -99,7 +99,7 @@
                             <td>
                                 <!--<input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-if="!familyHistory.mother.isAlive"  name="motherDeathCause" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="familyHistory.mother.deathCause"/>-->
                                 <textarea class="form-control" name="motherDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="!familyHistory.mother.isAlive " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.mother.deathCause" ng-required="true" ng-maxlength="20" placeholder="Please give Mother Death Cause"></textarea>
-                                <div class="error" ng-messages="step7.motherDeathCause.$error" ng-if="step7.motherDeathCause.$dirty">
+                                <div class="error" ng-messages="step8.motherDeathCause.$error" ng-if="step8.motherDeathCause.$dirty">
                                     <small ng-message="maxlength">Only 20 characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -148,7 +148,7 @@
                             <td>
                                 <input type="number" class="form-control input-sm" name="NoBrotherDeath" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.brother.death"/>
 
-                                <div class="error" ng-messages="step7.NoBrotherDeath.$error" ng-if="step7.NoBrotherDeath.$dirty">
+                                <div class="error" ng-messages="step8.NoBrotherDeath.$error" ng-if="step8.NoBrotherDeath.$dirty">
                                     <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
                                     <small ng-message="pattern">Only Numerics are allowed.</small>
                                 </div>
@@ -158,7 +158,7 @@
                                 <!--<input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/" ng-disabled="mode=='new'||mode=='view'" ng-if="familyHistory.brother.alive > 0 " ng-maxlength="50" name="brotherHealthState" ng-model="familyHistory.brother.healthState"/>-->
                                 <textarea class="form-control" name="brotherHealthState" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.brother.alive > 0 " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.brother.healthState" ng-required="true" ng-maxlength="50" placeholder="Please give Brother/s HealthState"></textarea>
 
-                                <div class="error" ng-messages="step7.brotherHealthState.$error" ng-if="step7.brotherHealthState.$dirty">
+                                <div class="error" ng-messages="step8.brotherHealthState.$error" ng-if="step8.brotherHealthState.$dirty">
                                     <small ng-message="maxlength">Only 50 Characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -173,7 +173,7 @@
                             <td>
                                 <!--<input type="text" class="form-control input-sm" name="brotherDeathCause" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.brother.death > 0 " ng-maxlength="20" ng-model="familyHistory.brother.deathCause"/>-->
                                 <textarea class="form-control" name="brotherDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.brother.death > 0 " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.brother.deathCause" ng-required="true" ng-maxlength="50" placeholder="Please give Brother/s DeathCause"></textarea>
-                                <div class="error" ng-messages="step7.brotherDeathCause.$error" ng-if="step7.brotherDeathCause.$dirty">
+                                <div class="error" ng-messages="step8.brotherDeathCause.$error" ng-if="step8.brotherDeathCause.$dirty">
                                     <small ng-message="maxlength">Only 20 Characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -183,14 +183,14 @@
                             <td>Sisters</td>
                             <td><input type="number" class="form-control input-sm" name="NoSisterAlive" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.sister.alive"/>
 
-                                <div class="error" ng-messages="step7.NoSisterAlive.$error" ng-if="step7.NoSisterAlive.$dirty">
+                                <div class="error" ng-messages="step8.NoSisterAlive.$error" ng-if="step8.NoSisterAlive.$dirty">
                                     <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
                                     <small ng-message="pattern">Only Numerics are allowed.</small>
                                 </div>
                             </td>
                             <td><input type="number" class="form-control input-sm" name="NoSisterDeath" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/^\d+$/" ng-maxlength="2" ng-model="familyHistory.sister.death"/>
 
-                                <div class="error" ng-messages="step7.NoSisterDeath.$error" ng-if="step7.NoSisterDeath.$dirty">
+                                <div class="error" ng-messages="step8.NoSisterDeath.$error" ng-if="step8.NoSisterDeath.$dirty">
                                     <small ng-message="maxlength">Only 2 Numbers are allowed.</small>
                                     <small ng-message="pattern">Only Numerics are allowed.</small>
                                 </div>
@@ -199,9 +199,9 @@
                             </td>
                             <td>
                                 <!--<input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/" ng-disabled="mode=='new'||mode=='view'" ng-if="familyHistory.sister.alive > 0 " ng-maxlength="50" name="sisterHealthState" ng-model="familyHistory.sister.healthState"/>-->
-                                <textarea class="form-control" name="sisterDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.sister.alive > 0 " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.sister.healthState" ng-required="true" ng-maxlength="50" placeholder="Please give Sister/s HealthState"></textarea>
+                                <textarea class="form-control" name="sisterHealthState" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.sister.alive > 0 " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.sister.healthState" ng-required="true" ng-maxlength="50" placeholder="Please give Sister/s HealthState"></textarea>
 
-                                <div class="error" ng-messages="step7.sisterHealthState.$error" ng-if="step7.sisterHealthState.$dirty">
+                                <div class="error" ng-messages="step8.sisterHealthState.$error" ng-if="step8.sisterHealthState.$dirty">
                                     <small ng-message="maxlength">Only 50 Characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -217,7 +217,7 @@
                                 <!--<input type="text" class="form-control input-sm" name="sisterDeathCause" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.sister.death > 0 " ng-maxlength="20" ng-model="familyHistory.sister.deathCause"/>-->
                                 <textarea class="form-control" name="sisterDeathCause" ng-pattern="/[a-zA-Z]/" ng-if="familyHistory.sister.death > 0 " ng-disabled="mode=='new'||mode=='view'" ng-model="familyHistory.sister.deathCause" ng-required="true" ng-maxlength="20" placeholder="Please give Sister/s DeathCause"></textarea>
 
-                                <div class="error" ng-messages="step7.sisterDeathCause.$error" ng-if="step7.sisterDeathCause.$dirty">
+                                <div class="error" ng-messages="step8.sisterDeathCause.$error" ng-if="step8.sisterDeathCause.$dirty">
                                     <small ng-message="maxlength">Only 20 Characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -271,21 +271,21 @@
                             <td>
                                 <input type="text" class="form-control input-sm" name="wine" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" ng-model="habits.wine"/>
 
-                                <div class="error" ng-messages="step7.wine.$error" ng-if="step7.wine.$dirty">
+                                <div class="error" ng-messages="step8.wine.$error" ng-if="step8.wine.$dirty">
                                     <small ng-message="maxlength">Upto 15 characters are allowed.</small>
                                 </div>
 
                             </td>
                             <td>
                                 <input type="text" class="form-control input-sm" name="beer" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" ng-model="habits.beer"/>
-                                <div class="error" ng-messages="step7.beer.$error" ng-if="step7.beer.$dirty">
+                                <div class="error" ng-messages="step8.beer.$error" ng-if="step8.beer.$dirty">
                                     <small ng-message="maxlength">Upto 15 characters are allowed.</small>
                                 </div>
                             </td>
                             <td>
                                 <input type="text" class="form-control input-sm" name="spirits" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" ng-model="habits.spirit"/>
 
-                                <div class="error" ng-messages="step7.spirits.$error" ng-if="step7.spirits.$dirty">
+                                <div class="error" ng-messages="step8.spirits.$error" ng-if="step8.spirits.$dirty">
                                     <small ng-message="maxlength">Upto 15 characters are allowed.</small>
                                 </div>
 
@@ -302,7 +302,7 @@
                 <div class="form-group required col-md-2">
                     <input type="text" class="form-control input-sm" name="smokeDetail" ng-maxlength="15" ng-model="habits.smokePerDay"/>
 
-                    <div class="error" ng-messages="step7.smokeDetail.$error" ng-if="step7.smokeDetail.$dirty">
+                    <div class="error" ng-messages="step8.smokeDetail.$error" ng-if="step8.smokeDetail.$dirty">
                         <small ng-message="maxlength">Only 15 characters are allowed.</small>
                     </div>
 
@@ -323,8 +323,8 @@
                                               name="familyResponse1" ng-maxlength="100" placeholder="Please give full details  e.g. name and address of attending doctor, diagnosis etc">
                                     </textarea>
 
-                                    <div class="error" ng-messages="step7.familyResponse1.$error" ng-if="step7.familyResponse1.$dirty">
-                                        <small class="error" ng-message="required">Please answer</small>
+                                    <div class="error" ng-messages="step8.familyResponse1.$error" ng-if="step8.familyResponse1.$dirty">
+                                        <small class="error" ng-message="required">Please give full details  e.g. name and address of attending doctor, diagnosis etc</small>
                                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                                     </div>
 
@@ -342,8 +342,8 @@
                                 <option   value="false">No</option>
                             </select>
 
-                            <div class="error" ng-messages="step7.familyQuestion1.$error" ng-if="step7.familyQuestion1.$dirty">
-                                <small class="error" ng-message="required">Please answer familyQuestion1</small>
+                            <div class="error" ng-messages="step8.familyQuestion1.$error" ng-if="step8.familyQuestion1.$dirty">
+                                <small class="error" ng-message="required">Please answer </small>
                             </div>
                         </div>
                     </div>
@@ -360,8 +360,8 @@
                                     <textarea class="form-control" ng-model="questionList[1].answerResponse"
                                               name="familyResponse2" ng-maxlength="100" ng-required="true" placeholder="Please give full details  "></textarea>
 
-                                    <div class="error" ng-messages="step7.familyResponse2.$error" ng-if="step7.familyResponse2.$dirty">
-                                        <small class="error" ng-message="required">Please answer</small>
+                                    <div class="error" ng-messages="step8.familyResponse2.$error" ng-if="step8.familyResponse2.$dirty">
+                                        <small class="error" ng-message="required">Please give full details</small>
                                         <small ng-message="maxlength">Only 100 characters are allowed.</small>
                                     </div>
 
@@ -379,8 +379,8 @@
                                 <option value="false">No</option>
                             </select>
 
-                            <div class="error" ng-messages="step7.familyQuestion2.$error" ng-if="step7.familyQuestion2.$dirty">
-                                <small class="error" ng-message="required">Please answer familyQuestion2</small>
+                            <div class="error" ng-messages="step8.familyQuestion2.$error" ng-if="step8.familyQuestion2.$dirty">
+                                <small class="error" ng-message="required">Please answer </small>
                             </div>
                         </div>
                     </div>
@@ -396,8 +396,8 @@
                                 <div class="form-group required col-md-12" ng-if="questionList[2].answer == 'true'">
                                     <textarea class="form-control" name="familyResponse3" ng-required="true" ng-model="questionList[2].answerResponse" ng-maxlength="15" ng-disabled="mode=='new'||mode=='view'" placeholder="Please give full details  "></textarea>
 
-                                    <div class="error" ng-messages="step7.familyResponse3.$error" ng-if="step7.familyResponse3.$dirty">
-                                        <small class="error" ng-message="required">Please answer</small>
+                                    <div class="error" ng-messages="step8.familyResponse3.$error" ng-if="step8.familyResponse3.$dirty">
+                                        <small class="error" ng-message="required">Please give full details</small>
                                         <small ng-message="maxlength">Only 15 characters are allowed.</small>
                                     </div>
                                 </div>
@@ -413,8 +413,8 @@
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
-                            <div class="error" ng-messages="step7.familyQuestion3.$error" ng-if="step7.familyQuestion3.$dirty">
-                                <small class="error" ng-message="required">Please answer familyQuestion3</small>
+                            <div class="error" ng-messages="step8.familyQuestion3.$error" ng-if="step8.familyQuestion3.$dirty">
+                                <small class="error" ng-message="required">Please answer </small>
                             </div>
                         </div>
                     </div>
@@ -430,8 +430,8 @@
                                 <div class="col-md-12" ng-if="questionList[3].answer == 'true'">
                                     <textarea class="form-control" name="familyResponse4" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="15" placeholder="Please give full details " ng-model="questionList[3].answerResponse" ></textarea>
 
-                                    <div class="error" ng-messages="step7.familyResponse4.$error" ng-if="step7.familyResponse4.$dirty">
-                                        <small class="error" ng-message="required">Please answer</small>
+                                    <div class="error" ng-messages="step8.familyResponse4.$error" ng-if="step8.familyResponse4.$dirty">
+                                        <small class="error" ng-message="required">Please give full details</small>
                                         <small ng-message="maxlength">Only 15 characters are allowed.</small>
                                     </div>
 
@@ -448,8 +448,8 @@
                                 <option value="false">No</option>
                             </select>
 
-                            <div class="error" ng-messages="step7.familyQuestion4.$error" ng-if="step7.familyQuestion4.$dirty">
-                                <small class="error" ng-message="required">Please answer familyQuestion4</small>
+                            <div class="error" ng-messages="step8.familyQuestion4.$error" ng-if="step8.familyQuestion4.$dirty">
+                                <small class="error" ng-message="required">Please answer </small>
                             </div>
 
                         </div>
@@ -518,7 +518,7 @@
                                           name="familyResponse5" ng-maxlength="50" placeholder="state whether increase or decrease, by how much, reason and for long present weight has remained constant."></textarea>
 
                                 <div class="error" ng-messages="familyBuild.familyResponse5.$error" ng-if="familyBuild.familyResponse5.$dirty">
-                                    <small class="error" ng-message="required">Please answer</small>
+                                    <small class="error" ng-message="required">Please provide state whether increase or decrease, by how much, reason and for long present weight has remained constant</small>
                                     <small ng-message="maxlength">Only 50 characters are allowed.</small>
                                 </div>
 
@@ -535,8 +535,8 @@
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                         </select>
-                        <div class="error" ng-messages="step7.familyQuestion5.$error" ng-if="step7.familyQuestion5.$dirty">
-                            <small class="error" ng-message="required">Please answer familyQuestion5</small>
+                        <div class="error" ng-messages="step8.familyQuestion5.$error" ng-if="step8.familyQuestion5.$dirty">
+                            <small class="error" ng-message="required">Please answer </small>
                         </div>
 
                     </div>
@@ -556,7 +556,7 @@
                     <option value="false">No</option>
                 </select>
 
-                <div class="error" ng-messages="step7.isPregnant.$error" ng-if="step7.isPregnant.$dirty">
+                <div class="error" ng-messages="step8.isPregnant.$error" ng-if="step8.isPregnant.$dirty">
                     <small class="error" ng-message="required">Please provide Details</small>
                 </div>
             </div>
@@ -565,7 +565,7 @@
                     <label class="control-label">If <strong>Yes</strong> how many months?</label>
                     <input type="number" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="2" name="pregnencyMonth" ng-required="true" ng-model="familyPersonalDetail.pregnancyMonth"/>
 
-                    <div class="error" ng-messages="step7.pregnencyMonth.$error" ng-if="step7.pregnencyMonth.$dirty">
+                    <div class="error" ng-messages="step8.pregnencyMonth.$error" ng-if="step8.pregnencyMonth.$dirty">
                         <small class="error" ng-message="required">Please answer pregnencyMonth</small>
                         <small class="error" ng-message="maxlength">Allow upto two digit</small>
                         <!--<small class="error" ng-message="max">Allowed Upto 10 months</small>-->
@@ -581,7 +581,7 @@
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                    ng-disabled="step7.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveFamilyHistory()">Save</button>
+                    ng-disabled="step8.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveFamilyHistory()">Save</button>
         </div>
     </div>
 </ng-form>
