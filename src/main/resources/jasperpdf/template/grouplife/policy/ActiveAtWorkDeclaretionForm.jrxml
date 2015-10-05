@@ -31,7 +31,7 @@
 			</rectangle>
 			<image>
 				<reportElement x="330" y="10" width="333" height="70" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
-				<imageExpression><![CDATA["static/images/plal_logo.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
