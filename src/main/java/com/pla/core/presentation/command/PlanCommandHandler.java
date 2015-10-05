@@ -7,6 +7,7 @@ import com.pla.core.domain.model.plan.*;
 import com.pla.core.specification.PlanCodeSpecification;
 import com.pla.sharedkernel.domain.model.CoverageTermType;
 import com.pla.sharedkernel.domain.model.PolicyTermType;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.util.SequenceGenerator;
@@ -136,7 +137,9 @@ public class PlanCommandHandler {
                         command.getPolicyTerm().getMaturityAges() : command.getPolicyTerm().getValidTerms(),
                 command.getPolicyTerm().getMaxMaturityAge(), command.getPolicyTerm().getGroupTerm());
         System.out.println(command.getPremiumTerm());
-        planBuilder.withPremiumTerm(command.getPremiumTermType(), command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
+
+        planBuilder.withPremiumTerm(command.getPremiumTermType(),
+                command.getPremiumTermType().equals(PremiumTermType.SPECIFIED_AGES)?command.getPremiumTerm().getMaturityAges():command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
         return planBuilder;
     }
