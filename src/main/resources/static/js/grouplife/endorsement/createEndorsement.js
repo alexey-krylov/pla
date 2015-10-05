@@ -88,6 +88,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.endorsementNumber = endorsementNumber;
             // console.log(endorsementNumber);
             $scope.provinces = provinces;
+            $scope.showDownload = true;
 
             $scope.documentList = documentList;
             $scope.stepsSaved["3"] = false
@@ -219,12 +220,12 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
-                    url: '/pla/grouplife/endorsement/uploadinsureddetail?endorsementId=' + $scope.endorsementId,
+                    url: '/pla/grouplife/endorsement/uploadinsureddetail?endorsementType=' + $scope.endorsementType + "&endorsementId=" + $scope.endorsementId,
                     headers: {'Authorization': 'xxx'},
                     fields: $scope.policyDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                    if (data.status = "200") {
+                    if (data.status == "200") {
                         $scope.submittedButton = true;
                         $scope.calculatePlan = true;
                         $scope.stepsSaved["3"] = true;
@@ -234,6 +235,10 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                          .success(function () {
 
                          })*/
+
+                        $scope.showDownload = true;
+                    }else{
+                        $scope.showDownload = false;
                     }
                 });
             };
@@ -368,6 +373,32 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     "href": "/pla/grouplife/endorsement/downloadtemplatebyendorsementtype/" + $scope.endorsementType + "/" + $scope.endorsementId
                 }
             ];
+            $scope.$watchCollection('[endorsementId,showDownload]', function (n) {
+                if (n[0]) {
+                  //  $scope.qId = n[0];
+                    //  console.log(n[0]);
+                    // console.log(n[1]);
+                    if (n[1]) {
+                        $scope.dropdown = [
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                                "href": "/pla/grouplife/endorsement/downloadtemplatebyendorsementtype/" + $scope.endorsementType + "/" + $scope.endorsementId
+                            }
+                        ];
+                    } else {
+                        $scope.dropdown = [
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+                                "href": "/pla/grouplife/endorsement/downloadtemplatebyendorsementtype/" + $scope.endorsementType + "/" + $scope.endorsementId
+                            },
+                            {
+                                "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
+                                "href": "/pla/grouplife/endorsement/downloaderrortemplate/" + $scope.endorsementId
+                            }
+                        ];
+                    }
+                }
+            });
 
             $scope.$watch('policyDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {

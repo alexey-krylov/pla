@@ -8,7 +8,7 @@ var searchEndorsementModule = (function () {
 
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('.endorsementStatus').val();
-        this.endorsementType = $(ele).parent().find('.endorsementType').val();
+        this.endorsementType = $(ele).parent().find('.endorsementCode').val();
 
         // console.log("***********************");
         // console.log(this.status);
@@ -28,11 +28,11 @@ var searchEndorsementModule = (function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
         //window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + selectValue + "&mode=update";
-        if ((this.status == 'Returned' && endorsementType=="Change of Contact Details") || (this.status == 'Returned' && endorsementType=="Correction of Name - Policy Holder")) {
+        if ((this.status == 'Returned' && endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (this.status == 'Returned' && endorsementType=="CHANGE_POLICY_HOLDER_NAME")) {
 
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
 
-        }else if ((this.status == 'Returned' && endorsementType!="Change of Contact Details") || (this.status == 'Returned' && endorsementType!="Correction of Name - Policy Holder")) {
+        }else if ((this.status == 'Returned' && endorsementType!="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (this.status == 'Returned' && endorsementType!="CHANGE_POLICY_HOLDER_NAME")) {
 
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatusUpload?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
 
@@ -50,17 +50,17 @@ var searchEndorsementModule = (function () {
 
                         }
                     }
-                    if ((services.statusValue == false && endorsementType=="Change of Contact Details") || (services.statusValue == false && endorsementType=="Correction of Name - Policy Holder")) {
+                    if ((services.statusValue == false && endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == false && endorsementType=="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=edit";
 
-                    } else if ((services.statusValue == true && endorsementType=="Change of Contact Details") || (services.statusValue == true && endorsementType=="Correction of Name - Policy Holder")) {
+                    } else if ((services.statusValue == true && endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == true && endorsementType=="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
 
 
-                    }else if ((services.statusValue == false && endorsementType!="Change of Contact Details") || (services.statusValue == false && endorsementType!="Correction of Name - Policy Holder")) {
+                    }else if ((services.statusValue == false && endorsementType!="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == false && endorsementType!="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementUpload?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=edit";
 
-                    }else if ((services.statusValue == true && endorsementType!="Change of Contact Details") || (services.statusValue == true && endorsementType!="Correction of Name - Policy Holder")) {
+                    }else if ((services.statusValue == true && endorsementType!="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == true && endorsementType!="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatusUpload?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=edit" + "&status=return";
 
                     }
@@ -74,11 +74,11 @@ var searchEndorsementModule = (function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
 
-        if ((this.status == 'Returned' && endorsementType=="Change of Contact Details") || (this.status == 'Returned' && endorsementType=="Correction of Name - Policy Holder")) {
+        if ((this.status == 'Returned' && endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (this.status == 'Returned' && endorsementType=="CHANGE_POLICY_HOLDER_NAME")) {
 
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view" + "&status=return";
 
-        }else if ((this.status == 'Returned' && endorsementType!="Change of Contact Details") || (this.status == 'Returned' && endorsementType!="Correction of Name - Policy Holder")) {
+        }else if ((this.status == 'Returned' && endorsementType!="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (this.status == 'Returned' && endorsementType!="CHANGE_POLICY_HOLDER_NAME")) {
 
             window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatusUpload?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view" + "&status=return";
 
@@ -96,17 +96,17 @@ var searchEndorsementModule = (function () {
 
                         }
                     }
-                    if ((services.statusValue == false && endorsementType=="Change of Contact Details") || (services.statusValue == false && endorsementType=="Correction of Name - Policy Holder")) {
+                    if ((services.statusValue == false && endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == false && endorsementType=="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view";
 
-                    }else if ((services.statusValue == true && endorsementType=="Change of Contact Details") || (services.statusValue == true && endorsementType=="Correction of Name - Policy Holder")) {
+                    }else if ((services.statusValue == true && endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == true && endorsementType=="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatus?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType+ "&mode=edit" + "&status=return";
 
 
-                    }else if ((services.statusValue == false && endorsementType!="Change of Contact Details") || (services.statusValue == false && endorsementType!="Correction of Name - Policy Holder")) {
+                    }else if ((services.statusValue == false && endorsementType!="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == false && endorsementType!="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementUpload?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view";
 
-                    }else if ((services.statusValue == true && endorsementType!="Change of Contact Details") || (services.statusValue == true && endorsementType!="Correction of Name - Policy Holder")) {
+                    }else if ((services.statusValue == true && endorsementType!="CHANGE_POLICY_HOLDER_CONTACT_DETAIL") || (services.statusValue == true && endorsementType!="CHANGE_POLICY_HOLDER_NAME")) {
                         window.location.href = "/pla/grouplife/endorsement/editEndorsementReturnStatusUpload?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&mode=view"+ "&status=return";
 
                     }
@@ -120,7 +120,7 @@ var searchEndorsementModule = (function () {
     services.viewApprovalEndorsement = function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
-        if (endorsementType=="Change of Contact Details" || endorsementType=="Correction of Name - Policy Holder") {
+        if (endorsementType=="CHANGE_POLICY_HOLDER_CONTACT_DETAIL" || endorsementType=="CHANGE_POLICY_HOLDER_NAME") {
             window.location.href = "/pla/grouplife/endorsement/viewApprovalEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&method=approval";
         }else{
             window.location.href = "/pla/grouplife/endorsement/viewUploadApprovalEndorsement?endorsementId=" + endorsementId + "&endorsementType=" + endorsementType + "&method=approval";

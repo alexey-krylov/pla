@@ -64,8 +64,6 @@
         <li>Group Life</li>
     </ol>
     </p>
-
-
     <nth-alert></nth-alert>
     <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
@@ -362,7 +360,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Document Title</label>
                                                         <input type="text" class="form-control input-sm"
-                                                               name="documentTitle"
+                                                               name="documentTitle" ng-disabled="isViewMode"
                                                                onkeypress="return isEnterKey(event)"
                                                                ng-model="additionalDocument.documentId"/>
                                                     </div>
@@ -398,15 +396,12 @@
 
                                             </div>
                                         </div>
-
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
                                             ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached"
                                             ng-hide="(additionalDocumentList.length &lt;  1)">Upload
                                     </button>
-
-
                                 </div>
                             </accordion-group>
                         </accordion>

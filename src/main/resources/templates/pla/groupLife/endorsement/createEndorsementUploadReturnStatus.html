@@ -396,7 +396,6 @@
                                         </button>
                                     </div>
                                     <br/><br/>
-
                                     <div class="row">
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
                                             <div class="row">
@@ -404,14 +403,13 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Document Title</label>
                                                         <input type="text" class="form-control input-sm"
-                                                               name="documentTitle"
+                                                               name="documentTitle" ng-disabled="isViewMode"
                                                                onkeypress="return isEnterKey(event)"
                                                                ng-model="additionalDocument.documentId"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4" ng-hide="isViewMode">
                                                     <div class="form-group">
-
                                                         <label class="control-label">Browse File</label>
                                                         <button class="btn btn-default"
                                                                 style="display:inline;float:right;margin-top:20px;"
@@ -423,7 +421,6 @@
                                                                value="{{additionalDocument.documentAttached[0].name}}"
                                                                readonly="true"/>
                                                     </div>
-
                                                 </div>
                                                 <div class="col-lg-5">
                                                     <button class="btn btn-default" style="margin-top:20px;"
@@ -435,40 +432,29 @@
                                                        title="{{additionalDocument.fileName}}"
                                                        hg-show="!additionalDocument.submitted">{{additionalDocument.fileName|
                                                         limitTo: 70}}</a>
-
                                                 </div>
-
                                             </div>
                                         </div>
-
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
                                             ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached"
                                             ng-hide="(additionalDocumentList.length &lt;  1)">Upload
                                     </button>
-
-
                                 </div>
                             </accordion-group>
                         </accordion>
                         <div class="row" ng-hide="isViewMode">
-
                             <div class="form-group col-md-11 required">
                                 <label class="control-label">Comments</label>
                                 <textarea class="form-control input-sm " rows="4" cols="50"
                                           ng-required="true" name="comment" id="comment"
                                           ng-model="comment"/>
-
                             </div>
-
-
                         </div>
-
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
-
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
@@ -484,7 +470,6 @@
     <form method="POST" action="searchendorsement" id="searchForm">
         <input type="hidden" id="searchFormEndorsement" name="policyId"/>
     </form>
-
     <style>
 
         .fuelux .checkbox-custom:before {
@@ -518,7 +503,6 @@
 <div class="ng-view container-fluid">
 
 </div>
-
 
 <div class="modal fade" id="agentModal">
     <div class="modal-dialog">

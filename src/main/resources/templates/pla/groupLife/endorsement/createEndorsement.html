@@ -321,10 +321,8 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                         >
-
                                     <div class="form-group " ng-repeat="document in documentList">
                                         <label class="col-sm-3 control-label">{{document.documentName}}</label>
-
                                         <div class="input-group">
                                             <a href="/pla/grouplife/endorsement/downloadmandatorydocument/{{document.gridFsDocId}}"
                                                style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName
@@ -338,9 +336,7 @@
                                             <input class="form-control input-sm" style="width:380px;"
                                                    value="{{document.documentAttached[0].name}}"
                                                    readonly="true"/>
-
                                         </div>
-
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
                                          ng-click="uploadDocumentFiles()"
@@ -356,7 +352,6 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
                                         >
-
                                     <div class="row">
                                         <button class="btn btn-default"
                                                 style="display:inline;float:left;margin-right:5px;"
@@ -364,7 +359,6 @@
                                         </button>
                                     </div>
                                     <br/><br/>
-
                                     <div class="row">
                                         <div ng-repeat="additionalDocument in additionalDocumentList">
                                             <div class="row">
@@ -372,7 +366,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Document Title</label>
                                                         <input type="text" class="form-control input-sm"
-                                                               name="documentTitle"
+                                                               name="documentTitle" ng-disabled="isViewMode"
                                                                onkeypress="return isEnterKey(event)"
                                                                ng-model="additionalDocument.documentId"/>
                                                     </div>
@@ -391,7 +385,6 @@
                                                                value="{{additionalDocument.documentAttached[0].name}}"
                                                                readonly="true"/>
                                                     </div>
-
                                                 </div>
                                                 <div class="col-lg-5">
                                                     <button class="btn btn-default" style="margin-top:20px;"
@@ -404,18 +397,14 @@
                                                         limitTo: 70}}</a>
 
                                                 </div>
-
                                             </div>
                                         </div>
-
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
                                             ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached"
                                             ng-hide="(additionalDocumentList.length &lt;  1)">Upload
                                     </button>
-
-
                                 </div>
                             </accordion-group>
                         </accordion>
