@@ -30,9 +30,9 @@ font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Attention: ${emailCon
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify'>Dear Sir/Madam,
-        <o:p></o:p>
-    </p>
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'>Dear Sir/Madam,<br/></span></p>
     <h3><span lang=EN-GB
               style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;font-size:11.0pt;font-family:"Tahoma","sans-serif"'>POLICY
 FOR GROUP HEALTH ASSURANCE - ${emailContent.proposerName}</span>
@@ -72,7 +72,7 @@ font-family:"Tahoma","sans-serif";font-weight:normal'>Yours Faithfully,<o:p></o:
     <p class=MsoNormal style='margin-right:-.25in;text-align:justify;tab-stops:
 -.5in'><b style='mso-bidi-font-weight:normal'>
         <span lang=EN-GB
-              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>Fridah Mandanji</span></b><span
+              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'></span></b><span
             lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
 mso-ansi-language:EN-GB'><o:p></o:p></span></p>
 

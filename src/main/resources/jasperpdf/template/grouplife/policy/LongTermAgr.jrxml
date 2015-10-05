@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-23T13:41:50 -->
+<!-- 2015-10-01T11:16:03 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LongTermAgr" pageWidth="840" pageHeight="980" orientation="Landscape" columnWidth="800" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="20" uuid="6412dcb1-4ae1-4484-be30-eb5420565c39">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -27,11 +27,11 @@
 	<pageHeader>
 		<band height="60" splitType="Stretch">
 			<rectangle>
-				<reportElement x="-2" y="0" width="812" height="60" uuid="b0179bdb-2a67-4c0b-8fe4-60d929f73029"/>
+				<reportElement x="-3" y="0" width="813" height="60" uuid="b0179bdb-2a67-4c0b-8fe4-60d929f73029"/>
 			</rectangle>
 			<image>
-				<reportElement x="220" y="10" width="200" height="40" uuid="671eca74-e750-4c2b-a85f-38b663995d3d"/>
-				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+				<reportElement x="326" y="5" width="200" height="50" uuid="671eca74-e750-4c2b-a85f-38b663995d3d"/>
+				<imageExpression><![CDATA["static/images/plal_logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -40,7 +40,7 @@
 			<staticText>
 				<reportElement x="270" y="0" width="230" height="30" uuid="90120630-53a7-4bec-a179-c7df2a09b3ab"/>
 				<textElement verticalAlignment="Middle">
-					<font size="16"/>
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Long Term Agreement]]></text>
 			</staticText>
@@ -50,21 +50,21 @@
 			<staticText>
 				<reportElement x="10" y="80" width="60" height="20" uuid="1157c15a-0939-4ae3-a0d0-000bb93f1c68"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Name:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="110" width="62" height="20" uuid="26cd70b7-8fd4-4af3-9112-3edd166e2773"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Address:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="9" y="140" width="140" height="20" uuid="a85210b5-a3e9-47ce-892c-817adfde9eb0"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Telephone Number(s):]]></text>
 			</staticText>
@@ -74,7 +74,7 @@
 			<staticText>
 				<reportElement x="11" y="180" width="786" height="20" uuid="d25ab754-2be9-4020-9cba-8edd56abc6ec"/>
 				<textElement textAlignment="Justified">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[This long term insurance agreement (herein after referred to as the agreement) witnesses that the above named insured has agreed to  place its    
 
@@ -83,42 +83,42 @@
 			<staticText>
 				<reportElement x="14" y="240" width="776" height="40" uuid="94334388-b271-4dfd-9ca8-006df3fe641a"/>
 				<textElement textAlignment="Justified">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Should the client cancel the agreement before the end of the agreed policy term, Professional Life will claw  back the premium arising from thediscounted premium.Dated the                                           day of                                       ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="290" width="720" height="20" uuid="d03c9bf5-d8d9-416a-b14f-0e876c727b18"/>
+				<reportElement x="16" y="280" width="720" height="20" uuid="d03c9bf5-d8d9-416a-b14f-0e876c727b18"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ IN WITNESS  whereof the parties have hereunto affixed their hands and seals respectively:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="310" width="710" height="20" uuid="5de096d5-7e0f-4579-a3a0-da78ad2167fa"/>
 				<textElement textAlignment="Justified">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ SIGNED for and on behalf of Professional Life Assurance Limited ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="340" width="70" height="20" uuid="97bf232d-cf44-4721-a5c9-507fb4eca298"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Name   :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="365" width="70" height="25" uuid="cb7bb478-63cc-4192-950d-258e5d177299"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Address]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="11" y="390" width="96" height="30" uuid="fef13cb0-b19d-40b8-8f19-1b4995c75616"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Position  :]]></text>
 			</staticText>
@@ -134,7 +134,7 @@
 			<staticText>
 				<reportElement x="14" y="430" width="406" height="40" uuid="ff8fa82f-20db-41a0-a3d3-da45c27b0f3d"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[WITNESSED by ...............................
 duly authorized representative]]></text>
@@ -142,28 +142,28 @@ duly authorized representative]]></text>
 			<staticText>
 				<reportElement x="14" y="490" width="160" height="20" uuid="c0f3a5c3-a989-48e2-bf58-cb078f0541d4"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ SIGNED for and on behalf of ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="510" width="74" height="30" uuid="a2c78667-dd97-480c-8ec3-2e1190f7e45f"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Name   :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="550" width="96" height="30" uuid="7812fff7-2e42-41dd-aecc-c27fcd644e39"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Address]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="12" y="590" width="100" height="30" uuid="468bad98-414b-4aff-9ef0-04b8804172c8"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[  Position  :]]></text>
 			</staticText>
@@ -176,7 +176,7 @@ duly authorized representative]]></text>
 			<staticText>
 				<reportElement x="14" y="640" width="310" height="40" uuid="01ed2563-82b7-4747-a2a2-e82f4fc1d329"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[WITNESSED by ........................................
 duly authorized representative]]></text>
@@ -184,7 +184,7 @@ duly authorized representative]]></text>
 			<staticText>
 				<reportElement x="14" y="680" width="90" height="16" uuid="bb592a5f-c2ce-4da8-948f-3dcb6eb90e98"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Name   :]]></text>
 			</staticText>
@@ -197,14 +197,14 @@ duly authorized representative]]></text>
 			<staticText>
 				<reportElement x="13" y="730" width="93" height="23" uuid="2319c913-45dc-4cf2-b65f-f0d6cbd24b87"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Position  :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="700" width="90" height="21" uuid="d912c374-823e-4072-9e58-d4b4cf7c825d"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[  Address:]]></text>
 			</staticText>
@@ -218,33 +218,33 @@ duly authorized representative]]></text>
 				<reportElement x="-3" y="0" width="1" height="776" uuid="cbfba32f-4c0a-4790-90ff-3303d04e8b06"/>
 			</line>
 			<rectangle>
-				<reportElement x="10" y="40" width="787" height="30" backcolor="#001963" uuid="6ebfa4e3-6fd0-4f1c-b893-e841980e39cd"/>
+				<reportElement x="10" y="40" width="790" height="30" backcolor="#001963" uuid="6ebfa4e3-6fd0-4f1c-b893-e841980e39cd"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="13" y="45" width="730" height="20" forecolor="#FFFFFF" uuid="ab2b455f-b444-4eca-869d-2476cca7fe47"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="14"/>
+					<font fontName="Trebuchet MS" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="70" width="100" height="30" uuid="fc417800-25c3-4184-82f2-b8ffc4dcf452"/>
+				<reportElement x="70" y="70" width="300" height="30" uuid="fc417800-25c3-4184-82f2-b8ffc4dcf452"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="153" y="140" width="190" height="20" uuid="4690e90f-e599-4721-b1af-40f845b178dd"/>
+				<reportElement x="153" y="140" width="307" height="20" uuid="4690e90f-e599-4721-b1af-40f845b178dd"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="73" y="100" width="100" height="30" uuid="ced2dd36-2e9d-4ec7-8798-88d38ac93185"/>
+				<reportElement x="73" y="100" width="270" height="30" uuid="ced2dd36-2e9d-4ec7-8798-88d38ac93185"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
@@ -255,37 +255,37 @@ duly authorized representative]]></text>
 				<reportElement x="430" y="269" width="131" height="1" uuid="1f134fdb-ad69-42f3-bdba-423bbf915153"/>
 			</line>
 			<staticText>
-				<reportElement x="14" y="210" width="476" height="20" uuid="7b513cdb-0714-44f8-a2d3-97e596e0ca58"/>
+				<reportElement x="14" y="210" width="466" height="20" uuid="7b513cdb-0714-44f8-a2d3-97e596e0ca58"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Group Life Assurance portfolio with Professional Life Assurance Limited for a period of ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="490" y="210" width="50" height="18" uuid="7b6cea74-7924-411e-a323-0deb9229b1d8"/>
+				<reportElement x="480" y="210" width="30" height="18" uuid="7b6cea74-7924-411e-a323-0deb9229b1d8"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{policyTerm}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="631" y="210" width="99" height="20" uuid="d7820c8d-1008-41b3-9045-6267b7e39888"/>
+				<reportElement x="610" y="210" width="99" height="20" uuid="d7820c8d-1008-41b3-9045-6267b7e39888"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="540" y="212" width="90" height="16" uuid="c53199a1-3a31-4541-a800-d8e68bfd995f"/>
+				<reportElement x="510" y="209" width="100" height="20" uuid="c53199a1-3a31-4541-a800-d8e68bfd995f"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[days commencing]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="174" y="491" width="176" height="18" uuid="229840be-b6b4-49c6-baaa-4d85790ce93f"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
@@ -297,7 +297,7 @@ duly authorized representative]]></text>
 	<pageFooter>
 		<band height="94" splitType="Stretch">
 			<rectangle>
-				<reportElement x="-2" y="-1" width="812" height="89" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
+				<reportElement x="-3" y="-1" width="813" height="89" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
 			</rectangle>
 			<frame>
 				<reportElement mode="Opaque" x="-1" y="0" width="811" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="1ac5b9dc-5a64-4ed9-9786-a90ceb7c11c9"/>
@@ -309,8 +309,8 @@ duly authorized representative]]></text>
 				</box>
 				<staticText>
 					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="5bde2870-01fd-4ceb-b817-7c6fc4cc86e1"/>
-					<textElement textAlignment="Center" verticalAlignment="Top">
-						<font fontName="Arial" size="14" isBold="true"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Professional Life Assurance Limited]]></text>
 				</staticText>

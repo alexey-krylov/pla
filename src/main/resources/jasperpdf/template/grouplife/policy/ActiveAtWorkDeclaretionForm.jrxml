@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-23T12:19:29 -->
+<!-- 2015-10-01T16:35:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActiveAtWorkDeclaretionForm" pageWidth="842" pageHeight="855" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a82936ad-329a-41e0-8cc9-5895000baa71">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -11,6 +11,9 @@
 	</field>
 	<field name="address" class="java.lang.String">
 		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="expiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
 	</field>
 	<field name="inceptionDate" class="java.lang.String">
 		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
@@ -27,8 +30,8 @@
 				<reportElement x="0" y="0" width="802" height="90" uuid="dda4400b-0e22-40bd-a303-66824a44c0f5"/>
 			</rectangle>
 			<image>
-				<reportElement x="230" y="20" width="333" height="60" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
-				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+				<reportElement x="330" y="10" width="333" height="70" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
+				<imageExpression><![CDATA["static/images/plal_logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -62,30 +65,30 @@
 			<staticText>
 				<reportElement x="20" y="100" width="50" height="30" uuid="caee3921-73ee-4598-82ba-99e56f3b06be"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[ Name:]]></text>
+				<text><![CDATA[  Name:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="130" width="60" height="30" uuid="8d58711f-47fe-472a-83b1-9d177d439f50"/>
+				<reportElement x="20" y="140" width="60" height="30" uuid="8d58711f-47fe-472a-83b1-9d177d439f50"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[ Address:]]></text>
+				<text><![CDATA[  Address:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="160" width="130" height="40" uuid="16d8e45a-696d-43ea-8a57-5c78aebffd03"/>
+				<reportElement x="20" y="170" width="130" height="30" uuid="16d8e45a-696d-43ea-8a57-5c78aebffd03"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[ Telephone Number(s):]]></text>
+				<text><![CDATA[  Telephone Number(s):]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="0" width="565" height="40" uuid="c38e606f-0f76-4a78-b4c1-abd3fab48504"/>
+				<reportElement x="200" y="0" width="565" height="40" uuid="c38e606f-0f76-4a78-b4c1-abd3fab48504"/>
 				<textElement verticalAlignment="Middle">
-					<font size="20"/>
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[          EMPLOYER'S ACTIVE AT WORK DECLAREATION]]></text>
+				<text><![CDATA[          EMPLOYER'S ACTIVE AT WORK DECLARATION]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="20" y="210" width="290" height="100" uuid="dfe9d884-93bf-46e1-9357-af3aa1f8b400"/>
@@ -111,33 +114,33 @@
 				<text><![CDATA[Names of all Employees who engage in aviation flights other than licensed public passenger services and operated by a regular air line on published schedule flight over a regular air route as a ticket holding  passenger (Please attach a list)]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="20" y="50" width="760" height="50" backcolor="#00195F" uuid="a4330936-55a6-4396-ace6-ae6d13090348"/>
+				<reportElement x="20" y="50" width="760" height="40" backcolor="#00195F" uuid="a4330936-55a6-4396-ace6-ae6d13090348"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="50" width="520" height="47" forecolor="#FFFFFF" uuid="5b8e3e75-caca-4b0b-b1e7-6b7a2699d838"/>
+				<reportElement x="20" y="50" width="643" height="40" forecolor="#FFFFFF" uuid="5b8e3e75-caca-4b0b-b1e7-6b7a2699d838"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="100" width="190" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>
+				<reportElement x="150" y="100" width="510" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="130" width="200" height="30" uuid="f3562621-3a7b-47ce-bd33-10e44752d932"/>
+				<reportElement x="150" y="140" width="510" height="30" uuid="f3562621-3a7b-47ce-bd33-10e44752d932"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="150" y="160" width="132" height="40" uuid="7ca4cf30-5222-4e51-bddf-4b24dba9d4a1"/>
+				<reportElement x="150" y="170" width="460" height="30" uuid="7ca4cf30-5222-4e51-bddf-4b24dba9d4a1"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
@@ -181,16 +184,16 @@
 			<staticText>
 				<reportElement x="220" y="547" width="19" height="30" uuid="b31706ec-0369-4769-aaf4-449185858651"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[To]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="240" y="547" width="80" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
+				<reportElement x="240" y="547" width="280" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -208,7 +211,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="c42b5e15-22e8-47df-8fe6-db725119f4ec"/>
+					<reportElement mode="Opaque" x="181" y="6" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="c42b5e15-22e8-47df-8fe6-db725119f4ec"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>

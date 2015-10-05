@@ -195,7 +195,7 @@ public class ILProposalCommandHandler {
             documents = Sets.newHashSet();
         }
         String gridFsDocId = gridFsTemplate.store(cmd.getFile().getInputStream(),fileName,cmd.getFile().getContentType()).getId().toString();
-        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType(),cmd.isMandatory(),cmd.getIsApproved());
+        ILProposerDocument currentDocument = new ILProposerDocument(cmd.getDocumentId(), cmd.getFilename(), gridFsDocId, cmd.getFile().getContentType(),cmd.isMandatory(),true);
         if (!documents.add(currentDocument)) {
             ILProposerDocument existingDocument = documents.stream().filter(new Predicate<ILProposerDocument>() {
                 @Override

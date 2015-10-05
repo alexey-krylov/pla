@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-30T14:49:22 -->
+<!-- 2015-10-01T17:25:11 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="demo" pageWidth="1000" pageHeight="1550" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40bbb3cc-8b6a-4816-96e5-850e29f26fa2">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
@@ -115,7 +115,6 @@
 	<field name="issuanceDate" class="java.lang.String">
 		<fieldDescription><![CDATA[issuanceDate]]></fieldDescription>
 	</field>
-
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -140,7 +139,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[GROUP LIFE ASSURANCE POLICY  - Article ]]></text>
+				<text><![CDATA[GROUP LIFE ASSURANCE POLICY  - Article 1]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement key="" x="34" y="180" width="896" height="40" backcolor="#002060" uuid="3d54feae-d1ec-4b3d-b066-aac10eafe437"/>
@@ -150,7 +149,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
+				<text><![CDATA[ Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="34" y="220" width="896" height="90" uuid="5305c2df-6e92-4746-9b5f-ff5abaa1f58a"/>
@@ -180,7 +179,7 @@
 				<reportElement x="34" y="340" width="896" height="30" backcolor="#002060" uuid="2a36b739-66a3-4ecd-8b51-77e7e284537a"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="34" y="370" width="896" height="300" uuid="c85ab0b2-9293-471b-811f-0be28745d41e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="34" y="370" width="896" height="300" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="c85ab0b2-9293-471b-811f-0be28745d41e"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="34" y="340" width="896" height="30" forecolor="#FFFFFF" uuid="d3868b65-823f-4d1e-aa9e-9b87dd3a2074"/>
@@ -247,8 +246,9 @@
 ]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement key="table" style="table" positionType="Float" stretchType="RelativeToTallestObject" x="374" y="580" width="476" height="50" uuid="5efcc67b-70bb-431a-8855-43495a9a987d">
+				<reportElement key="table" style="table" stretchType="RelativeToTallestObject" x="248" y="610" width="476" height="50" uuid="5efcc67b-70bb-431a-8855-43495a9a987d">
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="$F{planCoverageName}"/>
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
@@ -377,7 +377,7 @@
 					<text><![CDATA[  Premium Details:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="4" y="100" width="131" height="22" uuid="39d325e7-cf87-49d5-ab3c-cca1cae7b5c4"/>
+					<reportElement x="7" y="104" width="131" height="22" uuid="39d325e7-cf87-49d5-ab3c-cca1cae7b5c4"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -388,16 +388,20 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Service Tax/VAT:]]></text>
+					<text><![CDATA[ Service Tax/VAT:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="142" y="104" width="83" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<reportElement x="192" y="106" width="83" height="20" uuid="89fb0baf-1f19-435b-8a08-422ad8f89845"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="185" y="154" width="146" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<reportElement x="192" y="154" width="146" height="17" uuid="c0f7417e-2640-4e6b-a364-eff91e4b09df"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{serviceTax}]]></textFieldExpression>
 				</textField>
 				<frame>
@@ -410,7 +414,7 @@
 						<text><![CDATA[Total Premum :]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="107" y="10" width="192" height="20" uuid="14061e33-0219-4b7a-9c53-5fa39020eefe"/>
+						<reportElement x="189" y="10" width="192" height="20" uuid="14061e33-0219-4b7a-9c53-5fa39020eefe"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -436,7 +440,7 @@
 					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Waiver of Excess Loadings :]]></text>
+					<text><![CDATA[ Waiver of Excess Loadings :]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="2" y="26" width="668" height="24" uuid="fee6e850-8c31-4831-94bf-6305d5b7ccb6"/>
@@ -465,19 +469,25 @@
 ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="187" y="131" width="144" height="20" uuid="c1983b1f-34be-4d4c-8198-1d5d1d478bcf"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="540" y="109" width="150" height="20" uuid="ed825f55-be9d-4791-805d-30025302136b"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<reportElement x="566" y="107" width="150" height="20" uuid="ed825f55-be9d-4791-805d-30025302136b"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement x="571" y="137" width="83" height="20" uuid="d229ef15-6bd8-4777-90a4-42d077038e44"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{profitAndSolvencyLoading}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="194" y="127" width="146" height="30" uuid="97d0b609-4ad7-48b3-a4a7-893ecd8b9575"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>
@@ -516,12 +526,12 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 				<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="90" y="220" width="100" height="30" uuid="6d8a20bf-2e10-41c1-a076-b9433e17d447"/>
+				<reportElement x="170" y="220" width="100" height="30" uuid="6d8a20bf-2e10-41c1-a076-b9433e17d447"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="103" y="250" width="100" height="30" uuid="21c5389d-a4ab-4ba8-9ef6-28bc9b8561ad"/>
+				<reportElement x="169" y="250" width="100" height="30" uuid="21c5389d-a4ab-4ba8-9ef6-28bc9b8561ad"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
@@ -587,29 +597,29 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 					<text><![CDATA[Agent Code:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="80" y="0" width="100" height="30" uuid="e974efc5-f89e-4867-a2e2-80deac9debcb"/>
+					<reportElement x="80" y="0" width="270" height="30" uuid="e974efc5-f89e-4867-a2e2-80deac9debcb"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="80" y="36" width="100" height="30" uuid="f8dbe20f-082c-47f3-9afc-c0f18a8e182f"/>
+					<reportElement x="80" y="36" width="270" height="30" uuid="f8dbe20f-082c-47f3-9afc-c0f18a8e182f"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="740" y="30" width="100" height="30" uuid="da2e5557-b7eb-43b0-916f-39252af71b96"/>
+					<reportElement x="740" y="30" width="116" height="30" uuid="da2e5557-b7eb-43b0-916f-39252af71b96"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentBranch}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement stretchType="RelativeToBandHeight" x="629" y="0" width="100" height="30" isRemoveLineWhenBlank="true" uuid="6b675558-2184-4063-a431-6a47045a1640"/>
+					<reportElement stretchType="RelativeToBandHeight" x="613" y="0" width="100" height="30" isRemoveLineWhenBlank="true" uuid="6b675558-2184-4063-a431-6a47045a1640"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12"/>
 					</textElement>
 					<text><![CDATA[Contact Number:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="729" y="0" width="100" height="30" uuid="553ef311-b760-4494-9069-e8d4768c717f"/>
+					<reportElement x="740" y="0" width="116" height="30" uuid="553ef311-b760-4494-9069-e8d4768c717f"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 				</textField>
@@ -621,6 +631,11 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 					<text><![CDATA[Policy Servicing Office:]]></text>
 				</staticText>
 			</frame>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="223" y="1080" width="144" height="20" uuid="c1983b1f-34be-4d4c-8198-1d5d1d478bcf"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="1324">
 			<staticText>
@@ -936,14 +951,14 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 					<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="101" y="55" width="100" height="25" uuid="0b49ac35-94de-4844-bbe5-1c71f7115cd2"/>
+					<reportElement x="146" y="50" width="100" height="25" uuid="0b49ac35-94de-4844-bbe5-1c71f7115cd2"/>
 					<textElement>
 						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="103" y="85" width="100" height="20" uuid="9bf0b87d-b8c7-47f0-ba1c-85843cebd6d4"/>
+					<reportElement x="146" y="80" width="100" height="20" uuid="9bf0b87d-b8c7-47f0-ba1c-85843cebd6d4"/>
 					<textElement>
 						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
@@ -961,10 +976,10 @@ The provisions and benefits set forth in Article 2 form part of the contract as 
 				<reportElement x="0" y="190" width="954" height="180" uuid="eb11affc-f40c-4de3-9bd2-4cb8dc81e954"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="0" y="190" width="954" height="46" backcolor="#00195F" uuid="7c5f3eb8-bddf-4b5d-8afd-2c54cb045d90"/>
+				<reportElement x="0" y="190" width="954" height="40" backcolor="#00195F" uuid="7c5f3eb8-bddf-4b5d-8afd-2c54cb045d90"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="200" width="690" height="36" forecolor="#FFFFFF" backcolor="#00195F" uuid="1aaf0e35-58d3-428d-aa97-8e475d6dada7"/>
+				<reportElement x="4" y="192" width="690" height="36" forecolor="#FFFFFF" backcolor="#00195F" uuid="1aaf0e35-58d3-428d-aa97-8e475d6dada7"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14" isBold="true"/>
 				</textElement>

@@ -303,6 +303,8 @@ public class ILProposalFinder {
 
         if (riderList != null) {
             for (ILRiderDetail rider : riderList) {
+                if (rider.getSumAssured()==null)
+                    continue;
                 if ((new BigDecimal(rider.getSumAssured().toString()).compareTo(new BigDecimal("0.0")) != 0) || (rider.getCoverTerm() != 0)) {
                     premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
                     premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(rider.getCoverageId()));

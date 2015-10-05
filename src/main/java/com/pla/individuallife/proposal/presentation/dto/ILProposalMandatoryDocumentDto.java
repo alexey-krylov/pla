@@ -42,7 +42,7 @@ public class ILProposalMandatoryDocumentDto {
     }
 
     public ILProposalMandatoryDocumentDto updateWithContent(byte[] content) {
-        this.content = content;
+        this.content = null;
         this.submitted = true;
         return this;
     }

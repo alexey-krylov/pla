@@ -519,7 +519,7 @@ public class ILProposalController {
             return Arrays.asList(Relationship.values()).parallelStream().filter(new Predicate<Relationship>() {
                 @Override
                 public boolean test(Relationship relationship) {
-                    return Arrays.asList(Relationship.DAUGHTER,Relationship.SON,Relationship.STEP_DAUGHTER,Relationship.STEP_SON).contains(relationship);
+                    return Arrays.asList(Relationship.DAUGHTER,Relationship.SON,Relationship.STEP_DAUGHTER,Relationship.STEP_SON,Relationship.SISTER,Relationship.BROTHER).contains(relationship);
                 }
             }).map(new RelationTransformer()).collect(Collectors.toList());
         }

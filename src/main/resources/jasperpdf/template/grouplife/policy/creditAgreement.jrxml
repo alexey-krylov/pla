@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-23T13:21:41 -->
+<!-- 2015-10-01T16:57:49 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="instalmentPremium" pageWidth="1000" pageHeight="1760" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="707c3710-b1bb-4aa8-9e8e-b8add818e1b1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -24,7 +24,7 @@
 				<reportElement x="80" y="2" width="800" height="79" uuid="249a8195-bb70-4228-95fd-889fe4d42599"/>
 			</rectangle>
 			<image>
-				<reportElement x="355" y="10" width="256" height="44" uuid="7b9b54d7-6eb8-4e19-9818-86d297f6e9c8"/>
+				<reportElement x="410" y="10" width="256" height="60" uuid="7b9b54d7-6eb8-4e19-9818-86d297f6e9c8"/>
 				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 		</band>
@@ -33,8 +33,8 @@
 		<band height="1538" splitType="Stretch">
 			<staticText>
 				<reportElement x="220" y="10" width="500" height="30" uuid="92c9f170-2454-4815-9f0d-21dd9c3ec4cc"/>
-				<textElement>
-					<font fontName="Trebuchet MS" size="14"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[                         INSTALMENT PREMIUM PAYMENT AGREEMENT]]></text>
 			</staticText>
@@ -44,10 +44,10 @@
 					<reportElement x="0" y="0" width="740" height="150" uuid="816f0ed3-b799-468f-83ad-9685a7ad2cfe"/>
 				</rectangle>
 				<rectangle>
-					<reportElement x="0" y="0" width="739" height="60" backcolor="#00195F" uuid="158766e0-bb5c-48d8-be2e-b22b33c02cf4"/>
+					<reportElement x="0" y="0" width="739" height="40" backcolor="#00195F" uuid="158766e0-bb5c-48d8-be2e-b22b33c02cf4"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="10" y="10" width="650" height="35" forecolor="#FFFFFF" uuid="46bf37b6-5e96-4310-abc8-b73d8e7af029"/>
+					<reportElement x="8" y="5" width="650" height="35" forecolor="#FFFFFF" uuid="46bf37b6-5e96-4310-abc8-b73d8e7af029"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="14"/>
 					</textElement>
@@ -55,43 +55,43 @@
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="60" width="50" height="20" uuid="4074e5ab-f8c5-4bed-8ead-3c0de35bfa09"/>
-					<textElement>
-						<font size="12"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<text><![CDATA[ Name:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="90" width="60" height="20" uuid="d2566333-8cc1-4777-95a1-2f1ef090774c"/>
-					<textElement>
-						<font size="12"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<text><![CDATA[ Address:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="123" width="130" height="24" uuid="008a8740-476f-48d6-ad25-128e3d7e8242"/>
-					<textElement>
-						<font size="12"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<text><![CDATA[ Telephone Number(s):]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="50" y="60" width="130" height="25" uuid="c81a7dd8-44c7-42f6-8f39-246b3d662336"/>
-					<textElement>
-						<font size="12"/>
+					<reportElement x="133" y="60" width="377" height="25" uuid="c81a7dd8-44c7-42f6-8f39-246b3d662336"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="60" y="90" width="120" height="30" uuid="f050d080-49df-4139-b540-6c4a10c8257f"/>
-					<textElement>
-						<font size="12"/>
+					<reportElement x="133" y="90" width="367" height="30" uuid="f050d080-49df-4139-b540-6c4a10c8257f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="130" y="123" width="150" height="27" uuid="eeb35c7d-61fb-4cf4-95f5-93d956152455"/>
-					<textElement>
-						<font size="12"/>
+					<reportElement x="130" y="123" width="297" height="27" uuid="eeb35c7d-61fb-4cf4-95f5-93d956152455"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 				</textField>
@@ -102,126 +102,118 @@
 			<staticText>
 				<reportElement x="118" y="230" width="730" height="50" uuid="294280b3-c395-4c92-a3f3-0a9238895fd1"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[This Installment Premium Payment Agreement (hereinafter referred to as the Agreement) witnesses that the insured named here above has agreed to pay insurance premiums in installments as per attached installment premium payment schedule and promises to settle installment insurance premiums on the due date.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="118" y="340" width="710" height="20" uuid="ccd67636-b0c5-4d28-978a-7401a4bb4863"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[1.  The installment premiums are to be paid on the due dates.]]></text>
+				<text><![CDATA[1.The installment premiums are to be paid on the due dates.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="360" width="730" height="60" uuid="8ddb8ba0-d329-4ce1-84dc-04ace07f5d84"/>
+				<reportElement x="120" y="360" width="730" height="50" uuid="8ddb8ba0-d329-4ce1-84dc-04ace07f5d84"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[2.  Where an installment premium is not received on the due date, the insured shall have seven days from the due date in which to pay the outstanding installment premium.  If the premium is not received within seven days from the date the premium became due, the policy shall automatically lapse without further notice from the Company.  The insured shall have no legal or other recourse and as such lapsed Policy against any claim which may arise before or after the said date when Policy lapses.]]></text>
+				<text><![CDATA[2.Where an installment premium is not received on the due date, the insured shall have seven days from the due date in which to pay the outstanding installment premium.  If the premium is not received within seven days from the date the premium became due, the policy shall automatically lapse without further notice from the Company.  The insured shall have no legal or other recourse and as such lapsed Policy against any claim which may arise before or after the said date when Policy lapses.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="121" y="640" width="730" height="30" uuid="68fef650-0a7a-4c3f-b64d-c027c9afea38"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[7.  Premium adjustments arising from any variation shall be spread over the remaining installments.]]></text>
+				<text><![CDATA[7.Premium adjustments arising from any variation shall be spread over the remaining installments.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="121" y="530" width="730" height="70" uuid="e0cd978a-4df8-48bb-b219-7af001c9e1c4"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[5. Subject to the terms and conditions of this Agreement, the Company undertakes to honour all valid claims arising during the agreed credit period. Warranted that premium payments will be made on the due dates and that if abrogated this agreement will become Void. In the event of a claim the entire premium becomes due and the Company reserves the right to deduct the outstanding balance from the claim, or call for settlement of balance ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="121" y="600" width="730" height="40" uuid="f2ebac14-5ec4-4da8-b1c8-3484f2231ec9"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[6. It is warranted that this Agreement and Schedule shall be read in conjunction with, and form part of the Policy/contract of insurance and drawn in terms of S.76 (i) of the Insurance Act, 1997.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="120" y="480" width="730" height="50" uuid="199379e4-fdd3-4718-90f5-cd44fe344fc0"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[4.   Where the policy lapses in terms of Section 2 of this Agreement and the Insured fails to pay the outstanding premium for time on risk within sixty (60) days, the Company reserves the right to take legal action to recover the outstanding premium and legal costs/fees, withstanding the policy having lapsed, in view of Reinsurance commitments, administrative costs etc.]]></text>
+				<text><![CDATA[4.Where the policy lapses in terms of Section 2 of this Agreement and the Insured fails to pay the outstanding premium for time on risk within sixty (60) days, the Company reserves the right to take legal action to recover the outstanding premium and legal costs/fees, withstanding the policy having lapsed, in view of Reinsurance commitments, administrative costs etc.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="121" y="430" width="730" height="50" uuid="878776ed-78d5-4816-bd52-ca456ae938d6"/>
+				<reportElement x="118" y="420" width="730" height="50" uuid="878776ed-78d5-4816-bd52-ca456ae938d6"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[3.  In case of default on the part of the client in respect of payment of the insurance premium due, cover shall automatically lapse and may be reinstated at any time during the insurance year upon payment of the arrears and penalties thereon.  Any claim arising during the lapsation period shall not be admissible for payment.]]></text>
+				<text><![CDATA[3.In case of default on the part of the client in respect of payment of the insurance premium due, cover shall automatically lapse and may be reinstated at any time during the insurance year upon payment of the arrears and penalties thereon.  Any claim arising during the lapsation period shall not be admissible for payment.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="670" width="730" height="60" uuid="1ec73cd5-a94f-41ad-8783-1b31fadce743"/>
+				<reportElement x="120" y="670" width="730" height="30" uuid="1ec73cd5-a94f-41ad-8783-1b31fadce743"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[I/We accept the above mentioned terms and conditions which shall be binding on me/us throughout the term of the policy.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="790" width="730" height="80" uuid="700f1fed-c57d-4aba-a185-5deb0978d756"/>
+				<reportElement x="120" y="920" width="730" height="40" uuid="700f1fed-c57d-4aba-a185-5deb0978d756"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Witness ………………………………………………………..]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="740" width="710" height="50" uuid="8d048fec-1f4f-4281-a61b-6c6f4270a749"/>
+				<reportElement x="120" y="740" width="710" height="40" uuid="8d048fec-1f4f-4281-a61b-6c6f4270a749"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Signed for and on behalf of ……………………………….. Date …………………………….
 (Name of Policyholder)
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="880" width="730" height="70" uuid="f689b22f-c8ff-408b-abc3-fd481303520d"/>
+				<reportElement x="120" y="980" width="730" height="50" uuid="f689b22f-c8ff-408b-abc3-fd481303520d"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Witness ………………………………………………………..]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="950" width="730" height="50" uuid="3a66ab84-d280-4927-b9c1-19582bbf4447"/>
+				<reportElement x="120" y="1050" width="730" height="40" uuid="3a66ab84-d280-4927-b9c1-19582bbf4447"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Signed for and on behalf of Professional life Assurance Limited       Date …………………………….
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="121" y="1010" width="730" height="80" uuid="ab502346-abd6-4cd9-b9b5-cad69e665931"/>
+				<reportElement x="120" y="800" width="500" height="30" uuid="ab502346-abd6-4cd9-b9b5-cad69e665931"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[………………………………                                                                                                                                                                      ………………………………..
-MANAGING DIRECTOR                                                                                                                                                                            Corporation Stamp
-]]></text>
+				<text><![CDATA[…………………………………….......Company Stamp
+													]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="1100" width="730" height="70" uuid="4a6a8efa-78ce-4002-8bf5-f76db3c6d6c2"/>
+				<reportElement x="120" y="1200" width="730" height="50" uuid="4a6a8efa-78ce-4002-8bf5-f76db3c6d6c2"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Witness ………………………………………………………..]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="1180" width="730" height="70" uuid="6654461c-c336-480e-bb83-15f2f4487ce4"/>
+				<reportElement x="121" y="1110" width="730" height="50" uuid="6654461c-c336-480e-bb83-15f2f4487ce4"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[Witness ………………………………………………………..]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="110" y="1260" width="350" height="40" uuid="93b80100-4e7b-4ec2-ac4d-86afa34ae532"/>
-				<textElement>
-					<font fontName="Trebuchet MS" size="16"/>
-				</textElement>
-				<text><![CDATA[ Installment Due Date]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="110" y="1310" width="730" height="150" uuid="9fa23052-fd4b-4aff-af05-2a7fd860fb06"/>
@@ -251,51 +243,51 @@ MANAGING DIRECTOR                                                               
 				<reportElement x="740" y="1310" width="1" height="150" uuid="533dde24-be1d-4f25-9ef3-d510fea92ddc"/>
 			</line>
 			<staticText>
-				<reportElement x="130" y="1310" width="130" height="27" uuid="1455b8a6-ecd0-4d83-9e90-2d49a77166fc"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="160" y="1312" width="100" height="27" uuid="1455b8a6-ecd0-4d83-9e90-2d49a77166fc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Installments]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="1314" width="200" height="23" uuid="b742293a-4b29-4cf8-a2db-a3bc4e59d1af"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="350" y="1314" width="100" height="23" uuid="b742293a-4b29-4cf8-a2db-a3bc4e59d1af"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Due Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="510" y="1311" width="120" height="26" uuid="ae8e3227-db55-40c2-abb4-f47930908276"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="530" y="1314" width="90" height="26" uuid="ae8e3227-db55-40c2-abb4-f47930908276"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Amount Due]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="630" y="1311" width="110" height="26" uuid="094bcf41-cb1b-4d7f-8569-359e356515bc"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="650" y="1312" width="80" height="26" uuid="094bcf41-cb1b-4d7f-8569-359e356515bc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Date Paid]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="741" y="1310" width="99" height="31" uuid="027a20af-ebeb-4e38-b60a-8394379ecd21"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="760" y="1310" width="68" height="31" uuid="027a20af-ebeb-4e38-b60a-8394379ecd21"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Receipt No.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="110" y="1480" width="210" height="30" uuid="92092b0b-0f50-44bb-90e9-0a89fe55c271"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ TOTAL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="511" y="1480" width="100" height="30" uuid="4f4f2c59-c3c0-40f6-b744-922c07b9961b"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Trebuchet MS" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[K <>]]></text>
 			</staticText>
@@ -306,24 +298,41 @@ MANAGING DIRECTOR                                                               
 				<reportElement x="80" y="0" width="1" height="1538" uuid="270b5d6b-be88-4f46-b281-c61837d8fa52"/>
 			</line>
 			<rectangle>
-				<reportElement x="120" y="295" width="330" height="33" backcolor="#19197D" uuid="d6441f91-417d-46f6-80da-21112070d47f"/>
+				<reportElement x="110" y="295" width="740" height="33" backcolor="#19197D" uuid="d6441f91-417d-46f6-80da-21112070d47f"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="130" y="300" width="269" height="28" forecolor="#FFFFFF" uuid="7f34842d-1bd6-4f12-83c2-4dd12cbb3136"/>
-				<textElement>
+				<reportElement x="118" y="300" width="269" height="28" forecolor="#FFFFFF" uuid="7f34842d-1bd6-4f12-83c2-4dd12cbb3136"/>
+				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14"/>
 				</textElement>
 				<text><![CDATA[TERMS OF AGREEMENT]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="110" y="1260" width="738" height="40" backcolor="#19197D" uuid="1c07b0c5-513c-46a2-b833-21d20dff805c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="120" y="1270" width="350" height="20" forecolor="#FFFFFF" uuid="d2d75f03-c84e-42be-b015-9ce7397d2038"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Installment Due Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="850" width="689" height="40" uuid="1fab714c-a256-450e-b010-5ecec70d4f2b"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="12"/>
+				</textElement>
+				<text><![CDATA[Authorised Signature]]></text>
 			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="100" splitType="Stretch">
 			<rectangle>
-				<reportElement x="80" y="0" width="801" height="100" uuid="a6352940-3749-4347-89c6-e8f48efcea0c"/>
+				<reportElement x="80" y="0" width="800" height="100" uuid="a6352940-3749-4347-89c6-e8f48efcea0c"/>
 			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="81" y="0" width="797" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="7cfd28f6-f539-4a5d-bb4e-b988c96f4774"/>
+				<reportElement mode="Opaque" x="80" y="0" width="801" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="7cfd28f6-f539-4a5d-bb4e-b988c96f4774"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>
@@ -333,7 +342,7 @@ MANAGING DIRECTOR                                                               
 				<staticText>
 					<reportElement mode="Opaque" x="221" y="6" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="40236e94-95ad-4499-b645-2f7f12dd2165"/>
 					<textElement textAlignment="Center" verticalAlignment="Top">
-						<font fontName="Arial" size="14" isBold="true"/>
+						<font fontName="Trebuchet MS" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Professional Life Assurance Limited]]></text>
 				</staticText>
@@ -361,7 +370,7 @@ MANAGING DIRECTOR                                                               
   Tel : 021-2-224270,225611]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="572" y="40" width="212" height="50" forecolor="#3300CC" uuid="4f26ac66-1214-4c21-930c-9ee5e332a619"/>
+				<reportElement x="630" y="40" width="212" height="50" forecolor="#3300CC" uuid="4f26ac66-1214-4c21-930c-9ee5e332a619"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
