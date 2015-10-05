@@ -23,6 +23,8 @@ public class GLEndorsementDto {
 
     private String endorsementType;
 
+    private String endorsementCode;
+
     private DateTime effectiveDate;
 
     private String policyHolderName;

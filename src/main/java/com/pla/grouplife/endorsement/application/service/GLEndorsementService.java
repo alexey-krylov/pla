@@ -13,10 +13,7 @@ import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
-import com.pla.sharedkernel.domain.model.EndorsementNumber;
-import com.pla.sharedkernel.domain.model.EndorsementStatus;
-import com.pla.sharedkernel.domain.model.Policy;
-import com.pla.sharedkernel.domain.model.PolicyNumber;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -131,13 +128,16 @@ public class GLEndorsementService {
                 String policyHolderName = policy != null ? policy.getPolicyHolderName() : "";
                 String endorsementTypeInString = map.get("endorsementType") != null ? (String) map.get("endorsementType") : "";
                 String endorsementStatus = map.get("status") != null ? (String) map.get("status") : "";
+                String endorsementCode = "";
                 if (isNotEmpty(endorsementTypeInString)) {
-                    endorsementTypeInString = GLEndorsementType.valueOf(endorsementTypeInString).getDescription();
+                    GLEndorsementType endorsementType = GLEndorsementType.valueOf(endorsementTypeInString);
+                    endorsementTypeInString = endorsementType.getDescription();
+                    endorsementCode = endorsementType.name();
                 }
                 if (isNotEmpty(endorsementStatus)) {
                     endorsementStatus = EndorsementStatus.valueOf(endorsementStatus).getDescription();
                 }
-                GLEndorsementDto glEndorsementDto = new GLEndorsementDto(endorsementId, endorsementNumber, policyNumber, endorsementTypeInString, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
+                GLEndorsementDto glEndorsementDto = new GLEndorsementDto(endorsementId, endorsementNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
                 return glEndorsementDto;
             }
         }).collect(Collectors.toList());
