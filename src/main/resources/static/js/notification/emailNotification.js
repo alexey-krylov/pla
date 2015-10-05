@@ -46,7 +46,6 @@ function printNotification() {
 
 function sendEmail() {
     $('#loading').show();
-
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
    // var emailBody = $('#emailBody').val();

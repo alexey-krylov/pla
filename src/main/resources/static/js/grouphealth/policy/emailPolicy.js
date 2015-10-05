@@ -31,6 +31,7 @@ function IsValidEmail(email) {
     return regex.test(email);
 }
 function sendEmail() {
+    $('#loading').show();
     var toAddress = $('#to').val();
     var subject = $('#subject').val();
     var mailContent = $('#mailContent').val();
@@ -59,6 +60,7 @@ function sendEmail() {
         contentType: 'application/json; charset=utf-8',
         success: function (msg) {
             if (msg.status == '200') {
+                $('#loading').hide();
                 $('#alert-modal-success').modal('show');
 
                 $('#alert-modal-success').on('hidden.bs.modal', function (){
