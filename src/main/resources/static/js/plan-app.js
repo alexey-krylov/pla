@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute']);
+var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute','mgcrea.ngStrap.select','ngSanitize','mgcrea.ngStrap']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -137,7 +137,6 @@ app.controller('PlanListController', ['$scope', 'planList', function ($scope, pl
 }
 ]);
 
-
 app.directive('sumassuredCheck', function () {
     return {
         // restrict to an attribute type.
@@ -246,6 +245,7 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
             return '';
         };
 
+
         $scope.getBenefitName = function (coverageId, benefitId) {
             var coverage = _.findWhere($scope.coverages, {coverageId: coverageId});
             if (coverage) {
@@ -290,6 +290,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.minDate = new Date();
             $scope.productName;
+
             $scope.planSetUpForm = {};
             $scope.relations = [
                 {val: 'BROTHER', desc: 'Brother'},
@@ -306,6 +307,15 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 {val: 'STEP_DAUGHTER', desc: 'Step Daughter'},
                 {val: 'STEP_SON', desc: 'Step Son'}];
 
+            $scope.premiumTermTypeList = [{
+                premiumTermType: "REGULAR",
+                description: "Regular"
+            }, {premiumTermType: "SINGLE", description: "Single"}, {
+                premiumTermType: "SPECIFIED_VALUES",
+                description: "Specified Values"
+            }, {premiumTermType: "SPECIFIED_AGES", description: "Specified Ages"}];
+
+
 
             $scope.initEndorsements = function () {
                 var list = _.filter(endorsementTypes, function (each) {
@@ -321,7 +331,10 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.initEndorsements();
 
-            $scope.sumAssuredTypesOriginal = [{val: 'RANGE', desc: 'Specified Range'}, {val: 'SPECIFIED_VALUES', desc: 'Specified Values'}];
+            $scope.sumAssuredTypesOriginal = [{val: 'RANGE', desc: 'Specified Range'}, {
+                val: 'SPECIFIED_VALUES',
+                desc: 'Specified Values'
+            }];
             $scope.sumAssuredTypes = [];
 
             $scope.resetPlanSumAssured = function () {
@@ -564,29 +577,29 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
              * @param coverage
              */
             $scope.removePlanCoverage = function (index) {
-                    $modal.open({
-                        backdrop: true,
-                        windowClass: 'modal',
-                        size: 'sm',
-                        templateUrl: 'coverageConfirmation.html',
-                        controller: function ($scope, $modalInstance, $log, plan) {
-                            $scope.plan = plan;
+                $modal.open({
+                    backdrop: true,
+                    windowClass: 'modal',
+                    size: 'sm',
+                    templateUrl: 'coverageConfirmation.html',
+                    controller: function ($scope, $modalInstance, $log, plan) {
+                        $scope.plan = plan;
 
-                            $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
-                            };
-                            $scope.ok = function () {
-                                if ($scope.plan.coverages)
-                                    $scope.plan.coverages.splice(index, 1);
-                                $scope.cancel();
-                            };
-                        },
-                        resolve: {
-                            plan: function () {
-                                return $scope.plan;
-                            }
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                        $scope.ok = function () {
+                            if ($scope.plan.coverages)
+                                $scope.plan.coverages.splice(index, 1);
+                            $scope.cancel();
+                        };
+                    },
+                    resolve: {
+                        plan: function () {
+                            return $scope.plan;
                         }
-                    });
+                    }
+                });
             };
 
             /**
