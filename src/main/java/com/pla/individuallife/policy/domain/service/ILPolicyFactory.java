@@ -1,15 +1,18 @@
 package com.pla.individuallife.policy.domain.service;
 
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.individuallife.policy.domain.model.IndividualLifePolicy;
 import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.sharedresource.model.vo.*;
+import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
+import com.pla.sharedkernel.util.SequenceGenerator;
 import org.apache.commons.beanutils.BeanUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
@@ -17,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -31,6 +31,9 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 public class ILPolicyFactory {
 
     private ILProposalFinder ilProposalFinder;
+
+    @Autowired
+    private SequenceGenerator sequenceGenerator;
 
     private ILPolicyNumberGenerator ilPolicyNumberGenerator;
 
@@ -99,6 +102,21 @@ public class ILPolicyFactory {
             return agentCommissionShareOptional.get().getAgentId();
         }
         return null;
+    }
+
+    private Set<GHInsured> populateFamilyId(Set<GHInsured> insureds) {
+        Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(GHInsured.class);
+        final Integer[] sequenceNumber = {((Integer) entitySequenceMap.get("sequenceNumber")) + 1};
+        insureds.forEach(insured -> {
+            if (insured.getNoOfAssured() == null) {
+                String selfFamilySequence = sequenceNumber[0] + "01";
+                sequenceNumber[0] = sequenceNumber[0] + 1;
+                FamilyId familyId = new FamilyId(selfFamilySequence);
+                insured = insured.updateWithFamilyId(familyId);
+            }
+        });
+        sequenceGenerator.updateSequence(sequenceNumber[0], (Integer) entitySequenceMap.get("sequenceId"));
+        return insureds;
     }
 
 }

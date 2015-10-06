@@ -1,8 +1,6 @@
 package com.pla.individuallife.quotation.application.command;
 
 import com.pla.core.domain.model.agent.AgentId;
-import com.pla.grouplife.quotation.application.command.ShareGLQuotationCommand;
-import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.domain.service.ILQuotationRoleAdapter;
@@ -71,7 +69,6 @@ public class ILQuotationCommandHandler {
         if (quotation.requireVersioning()) {
             QuotationId newQuotationId = quotationService.updateProposerWithVersion(quotationProcessor, quotation, proposer);
             return newQuotationId;
-
         } else {
             quotation.updateWithProposer(quotationProcessor, proposer);
             return new QuotationId(cmd.getQuotationId());
@@ -81,7 +78,7 @@ public class ILQuotationCommandHandler {
     @CommandHandler
     public QuotationId updateProposedAssuredDetail(ILUpdateQuotationWithAssuredCommand cmd) {
 
-        ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
+            ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
         ProposedAssuredDto dto = cmd.getProposedAssured();
         ProposedAssured proposedAssured = ProposedAssured.proposedAssuredBuilder()

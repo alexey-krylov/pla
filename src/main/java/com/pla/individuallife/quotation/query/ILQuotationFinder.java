@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -52,6 +53,8 @@ public class ILQuotationFinder {
 
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
 
+    public static final String  findQuotationByQuotationNumberQuery = " SELECT * FROM individual_life_quotation WHERE parent_quotation_id=:parentQuotationId ";
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
@@ -73,7 +76,7 @@ public class ILQuotationFinder {
 
     public List<Map<String, Object>> getQuotationForPremiumWithRiderById(String quotationId) {
         return namedParameterJdbcTemplate.queryForList(FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY,
-                new MapSqlParameterSource().addValue("quotationId", quotationId));
+                 new MapSqlParameterSource().addValue("quotationId", quotationId));
     }
 
     public ILQuotationDto getQuotationById(String quotationId) {
@@ -166,5 +169,10 @@ public class ILQuotationFinder {
     public List<ILQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus) {
         SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("quotationNumber",quotationNumber).addValue("quotationId",quotationId.getQuotationId()).addValue("quotationStatus",quotationStatus);
         return namedParameterJdbcTemplate.query(findILQuotationByQuotationNumberQuery,sqlParameterSource,new BeanPropertyRowMapper<>(ILQuotation.class));
+    }
+
+    public List<Map<String,Object>> getChildQuotations(String parentQuotationId) {
+        SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("parentQuotationId",parentQuotationId);
+        return namedParameterJdbcTemplate.query(findQuotationByQuotationNumberQuery, sqlParameterSource, new ColumnMapRowMapper());
     }
 }
