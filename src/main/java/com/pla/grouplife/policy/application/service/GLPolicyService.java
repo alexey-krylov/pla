@@ -360,6 +360,7 @@ public class GLPolicyService {
         glQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         glQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
         glQuotationDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
+        glQuotationDetailDto.setIssueBranch(isNotEmpty(agentDetailDto.getBranchName()) ? agentDetailDto.getBranchName() : "");
 
         Proposer proposer = groupLifePolicy.getProposer();
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
@@ -370,6 +371,7 @@ public class GLPolicyService {
         glQuotationDetailDto.setAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
         glQuotationDetailDto.setMasterPolicyNumber(groupLifePolicy.getPolicyNumber().getPolicyNumber());
         glQuotationDetailDto.setInceptionDate(groupLifePolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        glQuotationDetailDto.setIssuanceDate(groupLifePolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         glQuotationDetailDto.setExpiryDate(groupLifePolicy.getExpiredOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         PremiumDetail premiumDetail = groupLifePolicy.getPremiumDetail();
         glQuotationDetailDto.setPolicyTerm(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");

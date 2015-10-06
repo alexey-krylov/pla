@@ -426,6 +426,9 @@ public class GHPolicyService {
         ghPolicyDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
         ghPolicyDetailDto.setAgentMobileNumber(agentDetailDto.getAgentMobileNumber());
         ghPolicyDetailDto.setInceptionDate(groupHealthPolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        ghPolicyDetailDto.setExpiryDate(groupHealthPolicy.getExpiredOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        ghPolicyDetailDto.setIssueBranch(isEmpty(agentDetailDto.getBranchName()) ? "" : agentDetailDto.getBranchName());
+        ghPolicyDetailDto.setIssuanceDate(groupHealthPolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
 
         GHProposer proposer = groupHealthPolicy.getProposer();
         ghPolicyDetailDto.setProposerName(proposer.getProposerName());
