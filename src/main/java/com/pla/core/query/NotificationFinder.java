@@ -72,12 +72,12 @@ public class NotificationFinder {
     public static final String findAllNotification = "SELECT n.notification_id notificationId,n.generated_on generatedOn,n.line_of_business lineOfBusiness, " +
             " n.process_type processType,n.reminder_type reminderType,n.request_number requestNumber, " +
             " n.waiting_for waitingFor FROM notification n INNER JOIN notification_role nr " +
-            " ON n.role_type=nr.role_type WHERE n.role_type in (:authorities)  GROUP BY n.line_of_business";
+            " ON n.role_type=nr.role_type WHERE n.role_type in (:authorities)  GROUP BY n.notification_id";
 
 
-    public static final String findILQuotationProposerDetailQuery = "SELECT p.plan_name planName,il.proposer_email_address emailAddress,il.proposer_first_name firstName, il.proposer_surname surName, " +
-            " il.proposer_title salutation,il.quotation_number requestNumber,il.shared_on sharedOn FROM individual_life_quotation il INNER JOIN plan_coverage_benefit_assoc p " +
-            " ON il.plan_id = p.plan_id WHERE il.quotation_id=:quotationId";
+    public static final String findILQuotationProposerDetailQuery = "SELECT p.plan_name planName,il.proposer_email_address emailAddress,CONCAT(il.proposer_title,' ',il.proposer_first_name,' ',il.proposer_surname) proposerName ,il.proposer_first_name firstName, il.proposer_surname surName,  \n" +
+            "             il.proposer_title salutation,il.quotation_number requestNumber,il.shared_on sharedOn FROM individual_life_quotation il INNER JOIN plan_coverage_benefit_assoc p  \n" +
+            "             ON il.plan_id = p.plan_id WHERE il.quotation_id =:quotationId";
 
     public static final String findEmailNotificationContentQuery = "SELECT email_address emailId,generated_on generatedOn,line_of_business lineOfBusiness,process_type processType, " +
             " reminder_template reminderTemplate,reminder_type reminderType,request_number requestNumber,waiting_for waitingFor FROM notification " +
@@ -231,6 +231,7 @@ public class NotificationFinder {
             ilQuotationProposerMap.put("firstName", ilQuotationMap.get("firstName")!=null?ilQuotationMap.get("firstName").toString():"");
             ilQuotationProposerMap.put("surName",  ilQuotationMap.get("surName")!=null?ilQuotationMap.get("surName").toString():"");
             ilQuotationProposerMap.put("salutation", ilQuotationMap.get("salutation")!=null?ilQuotationMap.get("salutation").toString():"");
+            ilQuotationProposerMap.put("proposerName", ilQuotationMap.get("proposerName")!=null?ilQuotationMap.get("proposerName").toString():"");
             ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
 //            ilQuotationProposerMap.put("sharedOn",  ilQuotationMap.get("sharedOn")!=null? ilQuotationMap.get("sharedOn").toString():"");
             ilQuotationProposerMap.put("surName", ilQuotationMap.get("surName")!=null?ilQuotationMap.get("surName").toString():"");
