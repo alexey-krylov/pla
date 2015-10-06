@@ -44,7 +44,11 @@ function sendEmail() {
     var recipientMailAddress=toAddress.split(';');
     var i=0;
     for(;i<recipientMailAddress.length;i++){
-        if(!IsValidEmail(recipientMailAddress[i])){
+        /*if(!IsValidEmail(recipientMailAddress[i])){
+            alert('Please enter a valid email address.');
+            return;
+        }*/
+        if(!IsValidEmail(emailAddress)){
             alert('Please enter a valid email address.');
             return;
         }

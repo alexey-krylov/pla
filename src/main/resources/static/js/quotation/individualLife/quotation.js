@@ -489,6 +489,7 @@
                         .success(function (data) {
                             $scope.stepsSaved[$scope.selectedItem] = true;
                             $scope.quotationId = data.id;
+                            $scope.stepsSaved["5"] = true;
                             //$window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
                 };
@@ -503,6 +504,7 @@
                         .success(function (data) {
                             $scope.stepsSaved[$scope.selectedItem] = true;
                             $scope.quotationId = data.id;
+                            $scope.stepsSaved["5"] = true;
                         });
                 };
 

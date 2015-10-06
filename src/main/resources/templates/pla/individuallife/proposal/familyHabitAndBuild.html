@@ -233,7 +233,8 @@
                     If not already stated, is any close blood relative suffering from (or has any one had) diabetes, heart disease, high blood pressure, mental illness etc.
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="familyHistory.closeRelative.questionId='16'">
+                    <!--<select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="familyHistory.closeRelative.questionId='16'">-->
+                    <select class="form-control input-sm" ng-model="familyHistory.closeRelative.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="openAccordionoverFamilyQuestion(familyHistory.closeRelative.answer)">
                         <option value="">--Select One--</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>

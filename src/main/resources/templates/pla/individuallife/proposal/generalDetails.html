@@ -102,7 +102,7 @@
                                                ng-required="true"
                                                is-open="inceptionDateA"
                                                max-date="todayDate"
-                                               ng-change="insurerDetails1Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                               ng-init="policyInceptionDateModifier(row.date,row)" ng-change="insurerDetails1Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchinceptionDateADob($event)">
@@ -176,7 +176,7 @@
                                                    ng-required="true"
                                                    is-open="dateProposalA"
                                                    max-date="todayDate"
-                                                   ng-change="insurerDetails2Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                                   ng-init="proposalDateModifier(row.date,row)" ng-change="insurerDetails2Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposalDateADob($event)">

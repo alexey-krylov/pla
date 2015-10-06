@@ -797,6 +797,16 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.familyPersonalDetail = $scope.rcvProposal.familyPersonalDetail;
                         //console.log('FamilyHistory..' + $scope.rcvProposal.familyPersonalDetail.familyHistory.father);
                         $scope.familyHistory = $scope.rcvProposal.familyPersonalDetail.familyHistory;
+                        if($scope.familyHistory)
+                        {
+                            if($scope.familyHistory.closeRelative.answer){
+                                $scope.familyHistory.closeRelative.answer='true';
+                            }
+                            else
+                            {
+                                $scope.familyHistory.closeRelative.answer='false';
+                            }
+                        }
                         $scope.habit = $scope.rcvProposal.familyPersonalDetail.habit;
                         $scope.habits = $scope.rcvProposal.familyPersonalDetail.habit;
 
@@ -1613,8 +1623,19 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.isBeneficiaryTrusteeDOBSame=false;
             $scope.$watch('beneficiary.trusteeDetail.dateOfBirth',function(newVal,oldVal){
 
-                if(newVal){
+                /*if(newVal){
                     if(newVal == $scope.beneficiary.dateOfBirth){
+                        //alert('Both Are Same..');
+                        $scope.isBeneficiaryTrusteeDOBSame=true;
+                    }
+                    else
+                    {
+                        $scope.isBeneficiaryTrusteeDOBSame=false;
+                    }
+                }*/
+
+                if(newVal){
+                    if(((moment(newVal).diff(moment($scope.beneficiary.dateOfBirth),'days'))== 0)){
                         //alert('Both Are Same..');
                         $scope.isBeneficiaryTrusteeDOBSame=true;
                     }
@@ -2456,6 +2477,45 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 }
             };
 
+            $scope.policyInceptionDateModifier=function(date,row){
+                console.log('date'+date);
+                var date1=null;
+                //moment().format('mm/dd/yyyy);
+                if( !moment(date, 'DD/MM/YYYY').isValid() )
+                {
+                    //alert('Not Formatted..');
+                    //date1=moment(date, "DD/MM/YYYY");
+                    date1= moment(date).format('DD/MM/YYYY');
+                    alert(date1);
+                    for(i in $scope.insurerDetails1)
+                    {
+                        if($scope.insurerDetails1[i].policyOrProposalNumber == row.policyOrProposalNumber)
+                        {
+                            $scope.insurerDetails1[i].date=date1;
+                        }
+                    }
+                }
+            }
+
+            $scope.proposalDateModifier=function(date,row){
+                //alert('date'+date);
+                var date1=null;
+                //moment().format('mm/dd/yyyy);
+                if( !moment(date, 'DD/MM/YYYY').isValid() )
+                {
+                    alert('Not Formatted..');
+                    //date1=moment(date, "DD/MM/YYYY");
+                    date1= moment(date).format('DD/MM/YYYY');
+                    alert(date1);
+                    for(i in $scope.insurerDetails2)
+                    {
+                        if($scope.insurerDetails2[i].policyOrProposalNumber == row.policyOrProposalNumber)
+                        {
+                            $scope.insurerDetails2[i].date=date1;
+                        }
+                    }
+                }
+            }
 
             $scope.cancelModal=function()
             {
@@ -4045,6 +4105,22 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $scope.accordionStatus.familyHabitAndBuild[tab] = false;
                 }
             };
+
+            $scope.openAccordionoverFamilyQuestion=function(status)
+            {
+                $scope.familyHistory.closeRelative.questionId='16';
+                //alert('****'+ status);
+                if(status == 'true')
+                {
+
+                }
+                else
+                {
+                    $scope.familyHistory.closeRelative.answerResponse=null;
+                    //$scope.accordionStatus.familyHabitAndBuild[tab] = false;
+                }
+            };
+
 
             /*$scope.openAccordionAdditionalQuestion=function(status,tab)
             {
