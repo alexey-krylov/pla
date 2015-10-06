@@ -24,11 +24,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Getter
 public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
+    private final BigDecimal PERCENTAGE = new BigDecimal(100.00);
     @Id
     @AggregateIdentifier
     private PolicyId  policyId;
-
-    private final BigDecimal PERCENTAGE = new BigDecimal(100.00);
     private Proposal proposal;
     private PolicyNumber policyNumber;
     private ProposedAssured proposedAssured;
@@ -60,12 +59,12 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
         this.expiredOn = expiredOn;
         this.proposal = proposal;
         this.policyStatus = PolicyStatus.IN_FORCE;
-        ResidentialAddress proposerContactDetail = proposer.getResidentialAddress();
-        if (this.proposer != null && this.proposer.getResidentialAddress() != null) {
+//        ResidentialAddress proposerContactDetail = proposer.getResidentialAddress();
+       /* if (this.proposer != null && this.proposer.getResidentialAddress() != null) {
             registerEvent(new GHProposerAddedEvent(proposer.getFirstName(), proposer.getTitle(),
                     proposerContactDetail.getAddress().getAddress1(), proposerContactDetail.getAddress().getAddress2(), proposerContactDetail.getAddress().getPostalCode(),
                     proposerContactDetail.getAddress().getProvince(), proposerContactDetail.getAddress().getTown(), proposerContactDetail.getEmailAddress()));
-        }
+        }*/
     }
 
     public static IndividualLifePolicy createPolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime policyInceptionDate, DateTime policyExpireDate) {
