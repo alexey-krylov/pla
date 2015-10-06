@@ -18,14 +18,17 @@ public class ILPolicyMailDto {
 
     private String[] recipientMailAddress;
 
+    private String emailAddress;
+
     private String policyId;
 
     private String policyNumber;
 
-    public ILPolicyMailDto(String subject, String mailContent, String[] recipientMailAddress) {
+    public ILPolicyMailDto(String subject, String mailContent, String[] recipientMailAddress,String emailAddress) {
         this.subject = subject;
         this.mailContent = mailContent;
         this.recipientMailAddress = recipientMailAddress;
+        this.emailAddress = emailAddress;
     }
 
 }

@@ -375,7 +375,7 @@ public class GHPolicyService {
 
     public GHPolicyMailDto getPreScriptedEmail(PolicyId policyId) {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findOne(policyId);
-        String subject = "PLA Insurance - Group Health - Quotation ID : " + groupHealthPolicy.getPolicyNumber();
+        String subject = "PLA Insurance - Group Health - Quotation ID : " + groupHealthPolicy.getPolicyNumber().getPolicyNumber();
         String mailAddress = groupHealthPolicy.getProposer().getContactDetail() != null ? groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail() : "";
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
@@ -386,7 +386,7 @@ public class GHPolicyService {
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
         String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/policy/grouphealthPolicyTemplate.vm", emailContentMap);
-        GHPolicyMailDto dto = new GHPolicyMailDto(subject, emailBody, new String[]{mailAddress});
+        GHPolicyMailDto dto = new GHPolicyMailDto(subject, emailBody, new String[]{mailAddress},mailAddress);
         dto.setPolicyId(policyId.getPolicyId());
         dto.setPolicyNumber(groupHealthPolicy.getPolicyNumber().getPolicyNumber());
         return dto;

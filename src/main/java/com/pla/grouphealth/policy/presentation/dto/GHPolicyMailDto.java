@@ -17,14 +17,17 @@ public class GHPolicyMailDto {
 
     private String[] recipientMailAddress;
 
+    private String emailAddress;
+
     private String policyId;
 
     private String policyNumber;
 
-    public GHPolicyMailDto(String subject, String mailContent, String[] recipientMailAddress) {
+    public GHPolicyMailDto(String subject, String mailContent, String[] recipientMailAddress,String emailAddress) {
         this.subject = subject;
         this.mailContent = mailContent;
         this.recipientMailAddress = recipientMailAddress;
+        this.emailAddress = emailAddress;
     }
 
 }
