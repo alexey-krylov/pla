@@ -39,6 +39,12 @@
 <div class="container fuelux" ng-controller="createProposalCtrl">
     <nth-alert></nth-alert>
     <form>
+        <div class="alert alert-danger" role="alert" ng-show="serverError">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{serverErrMsg}}
+        </div>
+
         <div class="wizard fuelux-wizard" selected-item="selectedWizard">
             <ul class="steps" style="margin-left: 0">
 

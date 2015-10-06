@@ -40,6 +40,13 @@
     <nth-alert></nth-alert>
     <form>
         <div class="wizard fuelux-wizard" selected-item="selectedWizard">
+
+            <div class="alert alert-danger" role="alert" ng-show="serverError">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{serverErrMsg}}
+            </div>
+
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1">
                     <span class="badge badge-info">A</span><span class="chevron"></span>
