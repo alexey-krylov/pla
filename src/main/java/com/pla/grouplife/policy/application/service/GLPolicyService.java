@@ -401,7 +401,7 @@ public class GLPolicyService {
                 List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
                 BigDecimal insuredPlanSA = insuredPremiumDetail.getSumAssured();
                 insuredPlanSA = insuredPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                GLPolicyMailDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", planCoverageDetailDtoList.get(0).getPlanName(), insuredPlanSA);
+                GLPolicyMailDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", isNotEmpty(planCoverageDetailDtoList)?planCoverageDetailDtoList.get(0).getPlanName():"", insuredPlanSA);
                 coverDetails.add(insuredPlanCoverDetail);
                 if (isNotEmpty(insured.getCoveragePremiumDetails())) {
                     for (CoveragePremiumDetail coveragePremiumDetail : insured.getCoveragePremiumDetails()) {
