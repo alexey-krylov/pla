@@ -2,10 +2,10 @@
     <strong>Medical Attendant</strong>
     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
         <div class="row form-group">
-            <div class="control-label col-md-10">
+            <div class="control-label col-md-7">
                 State name and address of your usual medical attendant(s)/Clinic Hospital
             </div>
-            <div class="form-group  col-md-2">
+            <div class="form-group  col-md-5">
                 <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="medicalAttendantDetails" ng-maxlength="100" ng-model="medicalAttendant.medicalAttendantDetails"/>
 
                 <div class="error" ng-messages="step8.medicalAttendantDetails.$error" ng-if="step8.medicalAttendantDetails.$dirty">
@@ -15,10 +15,10 @@
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-10">
+            <div class="col-md-7">
                 For how long has he/she been your medical attendant?
             </div>
-            <div class="col-md-2">
+            <div class="col-md-5">
                 <input type="text" ng-disabled="mode=='new'||mode=='view'"  ng-maxlength="8" name="medicalAttendantDuration" class="form-control input-sm" ng-model="medicalAttendant.medicalAttendantDuration"/>
 
                 <div class="error" ng-messages="step8.medicalAttendantDuration.$error" ng-if="step8.medicalAttendantDuration.$dirty">
@@ -28,10 +28,10 @@
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-10">
+            <div class="col-md-7">
                 Date and reason for most recent consultation. (i.e. during the last 5 years)
             </div>
-            <div class="col-md-2">
+            <div class="col-md-5">
                 <input type="text" ng-disabled="mode=='new'||mode=='view'" name="dateAndReason"  ng-maxlength="50" class="form-control input-sm" ng-model="medicalAttendant.dateAndReason"/>
 
                 <div class="error" ng-messages="step8.dateAndReason.$error" ng-if="step8.dateAndReason.$dirty">
@@ -46,8 +46,8 @@
     <accordion close-others="true">
         <div class="row" style="margin-bottom: 5px">
             <div class="form-group required col-md-10">
-                <accordion-group is-open="accordionStatus.additionalDetail.tab1">
-               <!-- <accordion-group is-open="replacement.answer == 'true'">-->
+                <!--<accordion-group is-open="accordionStatus.additionalDetail.tab1">-->
+                <accordion-group is-open="replacement.answer == 'true'">
                     <accordion-heading>
                         <strong  class="control-label" style="font-size: 11px">Is this proposal to replace the whole or part of any other proposal to this or any other office, or to replace all or any part of your existing insurance with any life office (where replacement is to occur immediately or to replace an insurance discontinued within the past six months or to be discontinued within the next six months)?</strong>
                         <i class="pull-right glyphicon"
@@ -70,7 +70,6 @@
                             <div class="col-md-6">
                                 <div class="form-group required">
                                     <label class="control-label">Policy Number</label>
-                                    {{replacement.answerResponse2}}
                                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'"  ng-required="true" name="answerResponse2" ng-maxlength="7" ng-model="replacement.answerResponse2"/>
 
                                     <div class="error" ng-messages="step8.answerResponse2.$error" ng-if="step8.answerResponse2.$dirty">
@@ -85,7 +84,8 @@
                 </accordion-group>
             </div>
             <div class="form-group required col-md-2">
-                <select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="replacement.questionId='22' ">
+                <!--<select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="replacement.questionId='22' ">-->
+                <select class="form-control input-sm" ng-required="true" name="additionadetailQuestion1" ng-model="replacement.answer" ng-disabled="mode=='new'||mode=='view'" ng-change="openAccordionoveradditionalDetail('22',replacement.answer)">
                     <!--<select class="form-control input-sm"  ng-required="true" name="additionadetailQuestion1" ng-disabled="mode=='new'||mode=='view'" ng-model="replacement.answer" ng-change="openAccordionAdditionalQuestion(replacement.answer,'tab1')">-->
                     <option value="">--Select One--</option>
                     <option  value="true">Yes</option>
