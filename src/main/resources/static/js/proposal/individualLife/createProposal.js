@@ -88,12 +88,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                 //console.log('CoverageTerm$scope.policyTerms**'+JSON.stringify($scope.policyTerms));
                                 //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
-                                console.log('PolicTerm'+$scope.proposalPlanDetail.policyTerm);
-                                console.log('maturityAges'+term.text);
-                                console.log('***********');
-                                console.log(term.text + '<='+(ageNextBirthday +$scope.proposalPlanDetail.policyTerm) + term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
-                                console.log("term <=" +"(ageNextBirthday +$scope.proposalPlanDetail.policyTerm)");
-                                console.log("term **"+ term.text +" <= "+ (ageNextBirthday )+" +"+($scope.proposalPlanDetail.policyTerm) +"--> "+ (term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm)));
+                                //console.log('PolicTerm'+$scope.proposalPlanDetail.policyTerm);
+                                //console.log('maturityAges'+term.text);
+                                //console.log('***********');
+                                //console.log(term.text + '<='+(ageNextBirthday +$scope.proposalPlanDetail.policyTerm) + term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
+                                //console.log("term <=" +"(ageNextBirthday +$scope.proposalPlanDetail.policyTerm)");
+                                //console.log("term **"+ term.text +" <= "+ (ageNextBirthday )+" +"+($scope.proposalPlanDetail.policyTerm) +"--> "+ (term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm)));
                                 //console.log('condition'+ term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
                                 return (term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
                             });
@@ -542,11 +542,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
                         $scope.premiumResponse=response;
                         console.log('PremiumResponseRes'+JSON.stringify(response));
-                        if($scope.premiumResponse != null)
+                        /*if($scope.premiumResponse != null)
                         {
                             ////alert('Premium is Present');
 
-                        }
+                        }*/
                     }).error(function (response, status, headers, config) {
                     });
 
@@ -1719,19 +1719,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
                     }).error(function (response, status, headers, config) {
                     });
-
-                  /* $http.get("getpremiumdetail/"+$scope.proposal.proposalId).success(function (response, status, headers, config) {
-                       console.log(response);
-                        $scope.premiumResponse=response;
-                       console.log('PremiumResponse..'+JSON.stringify($scope.premiumResponse));
-                        if($scope.premiumResponse != null)
-                        {
-                            ////alert('Premium is Present');
-
-                        }
-                    }).error(function (response, status, headers, config) {
-                    });*/
-
                     $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposal.proposalId).success(function (planResponse, status, headers, config) {
                         var result = planResponse;
                         console.log('planResponse:' + JSON.stringify(planResponse));
@@ -1921,6 +1908,49 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.saveGeneralDetails = function () {
                 //console.log('Inside saveGeneraLDetails Method..');
                 //console.log('Checking GeneralStatus:--> '+$scope.generalAnswer);
+                var dateConvert=null;
+
+                for(i in $scope.insurerDetails1){
+
+                    alert(moment($scope.insurerDetails1[i].date, moment.ISO_8601));
+                    console.log('Testing..'+moment($scope.insurerDetails1[i].date, moment.ISO_8601));
+                    console.log('Date'+$scope.insurerDetails1[i].date);
+
+                    if(moment($scope.insurerDetails1[i].date,'dd/mm/yyyy').isValid()){
+
+                        //alert(moment($scope.insurerDetails1[i].date, moment.ISO_8601));
+                        //alert('if..');
+                        //date1= moment($scope.insurerDetails1[i].date).format('DD/MM/YYYY');
+                        //dateConvert=moment($scope.insurerDetails1[i].date).toISOString();
+                        //alert('dateConverted is'+dateConvert);
+                        $scope.insurerDetails1[i].date=moment($scope.insurerDetails1[i].date).format('YYYY-MM-DDTHH:mm:ss+0530')
+                    }
+                    else
+                    {
+                        //alert('No..');
+                    }
+                }
+
+                for(i in $scope.insurerDetails2){
+
+                    alert(moment($scope.insurerDetails2[i].date, moment.ISO_8601));
+                    console.log('Testing..'+moment($scope.insurerDetails2[i].date, moment.ISO_8601));
+                    console.log('Date'+$scope.insurerDetails2[i].date);
+
+                    if(moment($scope.insurerDetails2[i].date,'dd/mm/yyyy').isValid()){
+
+                        //alert(moment($scope.insurerDetails1[i].date, moment.ISO_8601));
+                        //alert('if..');
+                        //date1= moment($scope.insurerDetails1[i].date).format('DD/MM/YYYY');
+                        //dateConvert=moment($scope.insurerDetails1[i].date).toISOString();
+                        //alert('dateConverted is'+dateConvert);
+                        $scope.insurerDetails2[i].date=moment($scope.insurerDetails2[i].date).format('YYYY-MM-DDTHH:mm:ss+0530')
+                    }
+                    else
+                    {
+                        //alert('No..');
+                    }
+                }
 
                 var assuredByPLAL =
                 {
@@ -2486,7 +2516,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //alert('Not Formatted..');
                     //date1=moment(date, "DD/MM/YYYY");
                     date1= moment(date).format('DD/MM/YYYY');
-                    alert(date1);
+                    //alert(date1);
                     for(i in $scope.insurerDetails1)
                     {
                         if($scope.insurerDetails1[i].policyOrProposalNumber == row.policyOrProposalNumber)
@@ -2503,10 +2533,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //moment().format('mm/dd/yyyy);
                 if( !moment(date, 'DD/MM/YYYY').isValid() )
                 {
-                    alert('Not Formatted..');
+                    //alert('Not Formatted..');
                     //date1=moment(date, "DD/MM/YYYY");
                     date1= moment(date).format('DD/MM/YYYY');
-                    alert(date1);
+                    //alert(date1);
                     for(i in $scope.insurerDetails2)
                     {
                         if($scope.insurerDetails2[i].policyOrProposalNumber == row.policyOrProposalNumber)

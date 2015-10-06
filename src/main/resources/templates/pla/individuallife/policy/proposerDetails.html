@@ -43,6 +43,19 @@
                            ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposer, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposer}"></i>
             </accordion-heading>
             <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Client ID</label>
+                    <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.clientId"/>
+
+                    <div class="error" ng-messages="proposerForm.clientId.$error"  ng-if="proposerForm.clientId.$dirty">
+                        <!--<small class="error" ng-message="required">Please enter  Client Id. </small>-->
+                        <small class="error" ng-message="maxlength">Upto 12 numerics are allowed.</small>
+                        <small class="error" ng-message="minlength">Minimum 12 numerics are allowed.</small>
+                        <small class="error" ng-message="pattern">Follow ddmmyyXXXXXX Pattern Only</small>
+                    </div>
+
+                </div>
+
                 <div class="form-group required">
                     <label class="control-label">Title</label>
                     <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles" ng-change="getProposerGender(proposer.title)">
@@ -90,19 +103,6 @@
                         <small ng-message="pattern">Only numeric are allowed.</small>
                         <small ng-message="maxlength">Only 10 number are allowed.</small>
                         <small ng-message="minlength">Minimum 10 number are allowed.</small>
-                    </div>
-                </div>
-                <div class="form-group required">
-                    <label class="control-label">Marital Status</label>
-                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.maritalStatus" name="maritalStatus" ng-init="selectSpouse(proposer.maritalStatus)" ng-change="selectSpouse(proposer.maritalStatus)" ng-required="true">
-                        <option value="MARRIED">Married</option>
-                        <option value="UNMARRIED">UnMarried</option>
-                        <option value="DIVORCED">Divorced</option>
-                        <option value="WIDOW">Widow</option>
-                    </select>
-
-                    <div class="error" ng-messages="proposerForm.maritalStatus.$error" ng-if="proposerForm.maritalStatus.$dirty">
-                        <small class="error" ng-message="required">Please enter Marital Status</small>
                     </div>
                 </div>
             </div>
@@ -169,18 +169,18 @@
                     </div>
 
                 </div>
+                <div class="form-group required">
+                    <label class="control-label">Marital Status</label>
+                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.maritalStatus" name="maritalStatus" ng-init="selectSpouse(proposer.maritalStatus)" ng-change="selectSpouse(proposer.maritalStatus)" ng-required="true">
+                        <option value="MARRIED">Married</option>
+                        <option value="UNMARRIED">UnMarried</option>
+                        <option value="DIVORCED">Divorced</option>
+                        <option value="WIDOW">Widow/Widower</option>
+                    </select>
 
-                <div class="form-group">
-                    <label class="control-label">Client ID</label>
-                    <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.clientId"/>
-
-                    <div class="error" ng-messages="proposerForm.clientId.$error"  ng-if="proposerForm.clientId.$dirty">
-                        <!--<small class="error" ng-message="required">Please enter  Client Id. </small>-->
-                        <small class="error" ng-message="maxlength">Upto 12 numerics are allowed.</small>
-                        <small class="error" ng-message="minlength">Minimum 12 numerics are allowed.</small>
-                        <small class="error" ng-message="pattern">Follow ddmmyyXXXXXX Pattern Only</small>
+                    <div class="error" ng-messages="proposerForm.maritalStatus.$error" ng-if="proposerForm.maritalStatus.$dirty">
+                        <small class="error" ng-message="required">Please enter Marital Status</small>
                     </div>
-
                 </div>
 
             </div>
@@ -474,7 +474,7 @@
                 <!--<select class="form-control input-sm" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.planId" ng-change="setProposerPlanName(ProposerplanDetail.planId)" ng-options="proposalPlan.plan_id as proposalPlan.plan_name for proposalPlan in proposalPlanList">
                     <option value="">Select Plan</option>
                 </select>-->
-               <input type="text" class="form-control input-sm" readonly="true" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.planName"/>
+                <input type="text" class="form-control input-sm" readonly="true" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.planName"/>
 
                 <div class="error" ng-messages="step1.proposerPlan.$error" ng-if="step1.proposerPlan.$dirty">
                     <small class="error" ng-message="required">Please enter Plan</small>

@@ -1,10 +1,10 @@
 <ng-form name="step4">
     <accordion close-others="true">
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class=" form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.generalDetails.tab1" is-part="part.isPart">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Is your life already assured by PLAL ?</strong>
+                        <strong class="control-label" style="font-size: 11px">Is your life already assured by PLAL ?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab1, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab1}"></i>
                     </accordion-heading>
@@ -19,40 +19,46 @@
                             <thead>
                             <tr>
                                 <th>Policy Number</th>
-                                <th>Sum Assured</th>
+                                <th>Amount of Insurance</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                                <tr ng-repeat="row in policyDetails">
-                                    <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}" ng-blur="test(row)" />
-                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
-                                    </td>
-                                    <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}"/>
-                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
-                                    </td>
-                                </tr>
+                            <tr ng-repeat="row in policyDetails">
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}" ng-change="policyDetailsListCheck()" ng-blur="test(row)" />
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" ng-change="policyDetailsListCheck()"/>
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="assuredByPlalList" ng-change="openAccordion(assuredByPlalList,'tab1')">
+            <div class="form-group col-md-2 required">
+                <!--{{generalAnswerList}} {{assuredByPlalList}}-->
+                <select class="form-control input-sm"  ng-required="true" name="lifeAssuredPLAL" ng-disabled="mode=='new'||mode=='view'" ng-model="assuredByPlalList" ng-change="openAccordion(assuredByPlalList,'tab1')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
                 </select>
+
+                <div class="error" ng-messages="step4.lifeAssuredPLAL.$error" ng-if="step4.lifeAssuredPLAL.$dirty">
+                    <small class="error" ng-message="required">Please Answer.</small>
+                </div>
+
             </div>
 
         </div>
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.generalDetails.tab2">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Have any policies been issued on your life in the last 12 months by  any other insurer?</strong>
+                        <strong  class="control-label" style="font-size: 11px">Have any policies been issued on your life in the last 12 months by  any other insurer?</strong>
 
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab2, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab2}"></i>
@@ -73,21 +79,36 @@
                                 <th>Policy Inception Date</th>
                             </tr>
                             </thead>
-
                             <tbody>
                             <tr ng-repeat="row in insurerDetails1">
                                 <td>{{row.name}}</td>
                                 <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
                                 <td>
-                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.commission}}" ng-blur="test(row)" />
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" ng-change="insurerDetails1Check()" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.commission}}" />
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
-                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}" ng-blur="test(row)" />
+                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" ng-change="insurerDetails1Check()" contenteditable="updateFlag" ng-model="row.amount" value="{{row.commission}}"  />
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                                 <td>
-                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.commission}}" ng-blur="test(row)" />
+                                    <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" ng-click="launchinceptionDateADob($event)" close-text="Close" onkeypress="return isNumeric(event)"
+                                           show-button-bar="false" datepicker-options="datePickerSettingsBDE.dateOptions"  max-date="todayDate"
+                                           datepicker-popup="dd/MM/yyyy" ng-init="dateFormatValidator(row.date)" contenteditable="updateFlag" ng-model="row.date"/>-->
+
+                                    <div class='input-group date'>
+                                        <input type="text" class="form-control input-sm"
+                                               datepicker-popup="dd/MM/yyyy" view-enabled=""
+                                               ng-required="true"
+                                               is-open="inceptionDateA"
+                                               max-date="todayDate"
+                                               ng-init="policyInceptionDateModifier(row.date,row)" ng-change="insurerDetails1Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchinceptionDateADob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                    </div>
                                     <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
                                 </td>
                             </tr>
@@ -97,19 +118,23 @@
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="assuredByOthers" ng-change="openAccordion(assuredByOthers,'tab2')">
+            <div class="form-group col-md-2 required">
+                <select class="form-control input-sm"  name="assuredByOthersQuestion" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="assuredByOthers" ng-change="openAccordion(assuredByOthers,'tab2')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
                 </select>
+
+                <div class="error" ng-messages="step4.assuredByOthersQuestion.$error" ng-if="step4.assuredByOthersQuestion.$dirty">
+                    <small class="error" ng-message="required">Please answer</small>
+                </div>
             </div>
         </div>
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.generalDetails.tab3">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Are any proposals for Life Assurance on your life pending with Professional Life Assurance Limited or any other insurer ?</strong>
+                        <strong  class="control-label" style="font-size: 11px">Are any proposals for Life Assurance on your life pending with Professional Life Assurance Limited or any other insurer ?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab3, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab3}"></i>
                     </accordion-heading>
@@ -124,47 +149,67 @@
                             <thead>
                             <tr>
                                 <th>Name of Assurer/Insurer</th>
-                                <th>Policy Number</th>
+                                <!-- <th>Policy Number</th>-->
+                                <th>Proposal Number</th>
                                 <th>Amount of Insurance</th>
                                 <th>Date of Proposal</th>
                             </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="row in insurerDetails2">
-                                    <td>{{row.name}}</td>
-                                    <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
-                                    <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"  />
-                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
-                                    </td>
-                                    <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.amount" value="{{row.amount}}" />
-                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
-                                    </td>
-                                    <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.date}}"  />
-                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
-                                    </td>
-                                </tr>
+                            <tr ng-repeat="row in insurerDetails2">
+                                <td>{{row.name}}</td>
+                                <!--<td contenteditable="true" ng-model ="row.commission" >{{row.commission}}</td>-->
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="insurerDetails2Check()" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"  />
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                                <td>
+                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="insurerDetails2Check()" ng-model="row.amount" value="{{row.amount}}" />
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                                <td>
+                                    <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.date" value="{{row.date}}"  />-->
+
+                                    <div class='input-group date'>
+                                        <input type="text" class="form-control input-sm"
+                                               datepicker-popup="" view-enabled=""
+                                               ng-required="true"
+                                               is-open="dateProposalA"
+                                               max-date="todayDate"
+                                               ng-init="proposalDateModifier(row.date,row)" ng-change="insurerDetails2Check()" ng-model="row.date" name="inceptionDate" ng-disabled="mode=='new'||mode=='view'"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposalDateADob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                    </div>
+
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                            </tr>
                             </tbody>
 
                         </table>
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="pendingInsuranceByOthers" ng-change="openAccordion(pendingInsuranceByOthers,'tab3')">
+            <div class="form-group col-md-2 required">
+                <select class="form-control input-sm"  name="pendingInsuranceByOthersQuestion" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="pendingInsuranceByOthers" ng-change="openAccordion(pendingInsuranceByOthers,'tab3')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
                 </select>
+
+                <div class="error" ng-messages="step4.pendingInsuranceByOthersQuestion.$error" ng-if="step4.pendingInsuranceByOthersQuestion.$dirty">
+                    <small class="error" ng-message="required">Please Answer</small>
+                </div>
             </div>
         </div>
         <div class="row" style="margin-bottom: 5px">
-            <div class="col-md-10">
+            <div class="form-group required col-md-10">
                 <accordion-group is-open="accordionStatus.generalDetails.tab4">
                     <accordion-heading>
-                        <strong style="font-size: 11px">Has an application for assurance on your life ever been declined, deferred, not proceeded with, loaded or accepted other than as submitted ?</strong>
+                        <strong  class="control-label" style="font-size: 11px">Has an application for assurance on your life ever been declined, deferred, not proceeded with, loaded or accepted other than as submitted ?</strong>
                         <i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.generalDetails.tab4, 'glyphicon-chevron-right': !accordionStatus.generalDetails.tab4}"></i>
                     </accordion-heading>
@@ -183,52 +228,66 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="row in insurerDetails3">
-                                    <td>{{row.name}}</td>
-                                    <td>
-                                        <input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
-                                        <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
-                                    </td>
-                                </tr>
+                            <tr ng-repeat="row in insurerDetails3">
+                                <td>{{row.name}}</td>
+                                <td>
+                                    <input type="text" ng-disabled="mode=='new'||mode=='view'" ng-change="insurerDetails3Check()" contenteditable="updateFlag" ng-model="row.policyOrProposalNumber" value="{{row.policyOrProposalNumber}}"/>
+                                    <!-- <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>-->
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </accordion-group>
             </div>
-            <div class="col-md-2">
-                <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="assuranceDeclined" ng-change="openAccordion(assuranceDeclined,'tab4')">
+            <div class="form-group required col-md-2">
+                <select class="form-control input-sm required"  name="assuranceDeclinedQuestion" ng-disabled="mode=='new'||mode=='view'" ng-model="assuranceDeclined" ng-required="true" ng-change="openAccordion(assuranceDeclined,'tab4')">
                     <option value="">--Select One--</option>
                     <option value="YES">Yes</option>
                     <option value="NO">No</option>
                 </select>
+
+                <div class="error" ng-messages="step4.assuranceDeclinedQuestion.$error" ng-if="step4.assuranceDeclinedQuestion.$dirty">
+                    <small class="error" ng-message="required">Please Answer.</small>
+                </div>
+
             </div>
         </div>
     </accordion>
 
     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
-        <div class="col-md-10">
-            <strong>Have you ever been or have you any intention of being engaged or employed at a mine of any sort?</strong>
+        <div class="form-group required col-md-10">
+            <strong  class="control-label">Have you ever been or have you any intention of being engaged or employed at a mine of any sort?</strong>
         </div>
-        <div class="col-md-2">
-            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='5'">
+        <div class="form-group required col-md-2">
+            <select class="form-control input-sm"  name="generalQuestion" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="generalQuestion[0].answer" ng-change="generalQuestion[0].questionId='5'">
                 <option value="">--Select One--</option>
-                <option ng-value="true" value="true">Yes</option>
-                <option ng-value="false" value="false">No</option>
+                <option  value="true">Yes</option>
+                <option  value="false">No</option>
             </select>
+
+            <div class="error" ng-messages="step4.generalQuestion.$error" ng-if="step4.generalQuestion.$dirty">
+                <small class="error" ng-message="required">Please Answer.</small>
+            </div>
+
         </div>
     </div>
 
     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
 
-        <div class="col-md-10">
-            <strong>Have you ever been or have you any intention of being engaged or employed In aviation other than as a fare paying passenger on a regular airline?</strong>
+        <div class="form-group required col-md-10">
+            <strong  class="control-label">Have you ever been or have you any intention of being engaged or employed In aviation other than as a fare paying passenger on a regular airline?</strong>
         </div>
-        <div class="col-md-2">
-            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='6'">
+        <div class="form-group required col-md-2">
+            <select class="form-control input-sm"  ng-disabled="mode=='new'||mode=='view'" name="generalQuestion1" ng-required="true" ng-model="generalQuestion[1].answer" ng-change="generalQuestion[1].questionId='6'">
                 <option value="">--Select One--</option>
                 <option ng-value="true" value="true">Yes</option>
                 <option ng-value="false" value="false">No</option>
             </select>
+
+            <div class="error" ng-messages="step4.generalQuestion1.$error" ng-if="step4.generalQuestion1.$dirty">
+                <small class="error" ng-message="required">Please Answer.</small>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -236,7 +295,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid || allowSave() || generalDetailAllPanelValid()" ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>

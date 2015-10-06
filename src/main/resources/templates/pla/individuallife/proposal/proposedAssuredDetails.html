@@ -8,6 +8,18 @@
                                     ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.proposedAssured}"></i>
             </accordion-heading>
             <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Client Id</label>
+                    <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured" ng-model="proposedAssured.clientId"/>
+
+                    <div class="error" ng-messages="proposedAssuredDetails.clientId.$error"  ng-if="proposedAssuredDetails.clientId.$dirty">
+                        <!--<small class="error" ng-message="required">Please enter  Client Id. </small>-->
+                        <small class="error" ng-message="maxlength">Upto 12 numerics are allowed.</small>
+                        <small class="error" ng-message="minlength">Minimum 12 numerics are allowed.</small>
+                        <small class="error" ng-message="pattern">Follow ddmmyyXXXXXX Pattern Only</small>
+                    </div>
+                </div>
+
                 <div class="form-group required">
                     <label class="control-label">Title</label>
                     <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured" ng-required="true" ng-change="getProposedAssuredGender(proposedAssured.title)" ng-model="proposedAssured.title" ng-options="title as title for title in titles">
@@ -78,21 +90,6 @@
                         <small class="error" ng-message="required">Please enter Marital Status</small>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label">Client Id</label>
-                    <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured" ng-model="proposedAssured.clientId"/>
-
-                    <div class="error" ng-messages="proposedAssuredDetails.clientId.$error"  ng-if="proposedAssuredDetails.clientId.$dirty">
-                        <!--<small class="error" ng-message="required">Please enter  Client Id. </small>-->
-                        <small class="error" ng-message="maxlength">Upto 12 numerics are allowed.</small>
-                        <small class="error" ng-message="minlength">Minimum 12 numerics are allowed.</small>
-                        <small class="error" ng-message="pattern">Follow ddmmyyXXXXXX Pattern Only</small>
-                    </div>
-
-                </div>
-
-
             </div>
             <div class="col-md-6">
                 <div class="form-group required">
