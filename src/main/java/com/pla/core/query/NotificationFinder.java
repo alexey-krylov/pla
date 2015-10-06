@@ -72,7 +72,7 @@ public class NotificationFinder {
     public static final String findAllNotification = "SELECT n.notification_id notificationId,n.generated_on generatedOn,n.line_of_business lineOfBusiness, " +
             " n.process_type processType,n.reminder_type reminderType,n.request_number requestNumber, " +
             " n.waiting_for waitingFor FROM notification n INNER JOIN notification_role nr " +
-            " ON n.role_type=nr.role_type WHERE n.role_type in (:authorities) ";
+            " ON n.role_type=nr.role_type WHERE n.role_type in (:authorities)  GROUP BY n.line_of_business";
 
 
     public static final String findILQuotationProposerDetailQuery = "SELECT p.plan_name planName,il.proposer_email_address emailAddress,il.proposer_first_name firstName, il.proposer_surname surName, " +
