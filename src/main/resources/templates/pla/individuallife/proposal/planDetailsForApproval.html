@@ -212,7 +212,7 @@
                        ng-disabled="mode=='new'||mode=='view'" min="{{coverage.sumAssured.minSumInsured}}"
                        name="sumAssured"
                        max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured"/>
-                <div class="error" ng-messages="step3.sumAssured.$error">
+                <div class="error" ng-messages="step4.sumAssured.$error">
                     <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
                 </div>
@@ -224,7 +224,7 @@
                        name="sumAssured"
                        ng-model="searchRider.sumAssured"/>
 
-                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step4.sumAssured.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
                     </small>
                 </div>
@@ -236,7 +236,7 @@
                        name="sumAssured"
                        ng-model="searchRider.sumAssured"/>
 
-                <div class="error" ng-messages="step3.sumAssured.$error" ng-if="step3.sumAssured.$dirty">
+                <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step4.sumAssured.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
                     </small>
                 </div>
@@ -277,7 +277,7 @@
                 <input type="number" view-enabled="" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
                        name="plansumAssured" validate-sumassured=""
                        ng-disabled="mode=='new'||mode=='view'" max="{{plan.sumAssured.maxSumInsured}}" ng-model="proposalPlanDetail.sumAssured" ng-required="true"/>
-                <div class="error" ng-messages="step3.plansumAssured.$error" ng-if="step3.plansumAssured.$dirty">
+                <div class="error" ng-messages="step4.plansumAssured.$error" ng-if="step4.plansumAssured.$dirty">
                     <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
                     <small ng-message="invalidMultiple">Invalid Multiples.</small>
@@ -289,7 +289,7 @@
                        name="plansumAssured1"
                        ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured" ng-required="true"/>
 
-                <div class="error" ng-messages="step3.plansumAssured1.$error" ng-if="step3.plansumAssured1.$dirty">
+                <div class="error" ng-messages="step4.plansumAssured1.$error" ng-if="step4.plansumAssured1.$dirty">
                     <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
                     </small>
                 </div>

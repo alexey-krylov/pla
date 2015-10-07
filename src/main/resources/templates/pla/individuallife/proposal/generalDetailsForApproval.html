@@ -48,7 +48,7 @@
                     <option value="NO">No</option>
                 </select>
 
-                <div class="error" ng-messages="step4.lifeAssuredPLAL.$error" ng-if="step4.lifeAssuredPLAL.$dirty">
+                <div class="error" ng-messages="step5.lifeAssuredPLAL.$error" ng-if="step5.lifeAssuredPLAL.$dirty">
                     <small class="error" ng-message="required">Please Answer.</small>
                 </div>
 
@@ -126,7 +126,7 @@
                     <option value="NO">No</option>
                 </select>
 
-                <div class="error" ng-messages="step4.assuredByOthersQuestion.$error" ng-if="step4.assuredByOthersQuestion.$dirty">
+                <div class="error" ng-messages="step5.assuredByOthersQuestion.$error" ng-if="step5.assuredByOthersQuestion.$dirty">
                     <small class="error" ng-message="required">Please answer</small>
                 </div>
             </div>
@@ -201,7 +201,7 @@
                     <option value="NO">No</option>
                 </select>
 
-                <div class="error" ng-messages="step4.pendingInsuranceByOthersQuestion.$error" ng-if="step4.pendingInsuranceByOthersQuestion.$dirty">
+                <div class="error" ng-messages="step5.pendingInsuranceByOthersQuestion.$error" ng-if="step5.pendingInsuranceByOthersQuestion.$dirty">
                     <small class="error" ng-message="required">Please Answer</small>
                 </div>
             </div>
@@ -248,7 +248,7 @@
                     <option value="NO">No</option>
                 </select>
 
-                <div class="error" ng-messages="step4.assuranceDeclinedQuestion.$error" ng-if="step4.assuranceDeclinedQuestion.$dirty">
+                <div class="error" ng-messages="step5.assuranceDeclinedQuestion.$error" ng-if="step5.assuranceDeclinedQuestion.$dirty">
                     <small class="error" ng-message="required">Please Answer.</small>
                 </div>
 
@@ -267,7 +267,7 @@
                 <option  value="false">No</option>
             </select>
 
-            <div class="error" ng-messages="step4.generalQuestion.$error" ng-if="step4.generalQuestion.$dirty">
+            <div class="error" ng-messages="step5.generalQuestion.$error" ng-if="step5.generalQuestion.$dirty">
                 <small class="error" ng-message="required">Please Answer.</small>
             </div>
 
@@ -286,7 +286,7 @@
                 <option ng-value="false" value="false">No</option>
             </select>
 
-            <div class="error" ng-messages="step4.generalQuestion1.$error" ng-if="step4.generalQuestion1.$dirty">
+            <div class="error" ng-messages="step5.generalQuestion1.$error" ng-if="step5.generalQuestion1.$dirty">
                 <small class="error" ng-message="required">Please Answer.</small>
             </div>
         </div>
@@ -296,7 +296,7 @@
             <button type="button" class="btn btn-default btn-sm" ng-click="cancelAll()">Cancel</button>
         </div>
         <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step4.$invalid" ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step5.$invalid || allowSave() || generalDetailAllPanelValid()" ng-hide="mode=='new'||mode=='view'"  ng-click="saveGeneralDetails()">Save</button>
         </div>
     </div>
 </ng-form>

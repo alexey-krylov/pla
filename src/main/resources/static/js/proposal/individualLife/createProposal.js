@@ -523,48 +523,48 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
                     $scope.serverErrMsg = "";
                     //$scope.$on('changed.fu.wizard', function (name, event, data) {
-                        //$scope.selectedItem = data.step;
-                        $scope.selectedWizard = 1;
-                        $scope.serverError=false;
+                    //$scope.selectedItem = data.step;
+                    $scope.selectedWizard = 1;
+                    $scope.serverError=false;
 
-                        if ($scope.selectedWizard == 1) {
-                            $http.get('getpremiumdetail/' + $scope.proposal.proposalId)
-                                .success(function (response) {
-                                    console.log('success ***');
-                                    $scope.premiumResponse = response;
-                                    $scope.serverErrMsg = response.message;
-                                    //$scope.serverError=true;
-                                  //  alert($scope.serverErrMsg);
-                                }).error(function (response) {
-                                    //$scope.stepsSaved["5"] = false;
-                                    //$scope.serverError = true;
-                                    $scope.serverErrMsg = response.message;
-                                    $scope.serverErrMsg = response.message;
-                                    $scope.serverError=true;
-                                });
-                        }
+                    if ($scope.selectedWizard == 1) {
+                        $http.get('getpremiumdetail/' + $scope.proposal.proposalId)
+                            .success(function (response) {
+                                console.log('success ***');
+                                $scope.premiumResponse = response;
+                                $scope.serverErrMsg = response.message;
+                                //$scope.serverError=true;
+                                //  alert($scope.serverErrMsg);
+                            }).error(function (response) {
+                                //$scope.stepsSaved["5"] = false;
+                                //$scope.serverError = true;
+                                $scope.serverErrMsg = response.message;
+                                $scope.serverErrMsg = response.message;
+                                $scope.serverError=true;
+                            });
+                    }
                     //});
 
                     /*$http.get("getpremiumdetail/" + $scope.proposal.proposalId).success(function (response, status, headers, config) {
-                        $scope.premiumResponse = response;
-                        console.log('PremiumResponseRes' + JSON.stringify(response));
-                        if (status == 200) {
-                            alert(response.message);
-                            $scope.message=response.message;
-                        } else {
-                           alert(response.message);
-                            //$scope.message=response.message;
-                            $scope.serverErrMsg = response.message;
+                     $scope.premiumResponse = response;
+                     console.log('PremiumResponseRes' + JSON.stringify(response));
+                     if (status == 200) {
+                     alert(response.message);
+                     $scope.message=response.message;
+                     } else {
+                     alert(response.message);
+                     //$scope.message=response.message;
+                     $scope.serverErrMsg = response.message;
 
-                        }
-                        *//*if($scope.premiumResponse != null)
-                         {
-                         ////alert('Premium is Present');
+                     }
+                     *//*if($scope.premiumResponse != null)
+                     {
+                     ////alert('Premium is Present');
 
-                         }*//*
-                    }).error(function (response, status, headers, config) {
+                     }*//*
+                     }).error(function (response, status, headers, config) {
 
-                    });*/
+                     });*/
 
                     if ($scope.rcvProposal.proposer != null) {
                         //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
@@ -1268,7 +1268,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             url: '/pla/individuallife/proposal/uploadmandatorydocument',
                             file: files,
                             fields: {
-                                documentId: document.documentName,
+                                //documentId: document.documentName,
+                                documentId: document.documentId,
                                 proposalId: $scope.proposal.proposalId,
                                 mandatory: false
                             },
@@ -1657,14 +1658,14 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     //console.log("Response of PLan is:"+JSON.stringify(response));
 
                     /*$http.get("getpremiumdetail/" + $scope.proposal.proposalId).success(function (response, status, headers, config) {
-                        $scope.premiumResponse = response;
-                        console.log('PremiumResponseRes' + JSON.stringify(response));
-                        if ($scope.premiumResponse != null) {
-                            ////alert('Premium is Present');
+                     $scope.premiumResponse = response;
+                     console.log('PremiumResponseRes' + JSON.stringify(response));
+                     if ($scope.premiumResponse != null) {
+                     ////alert('Premium is Present');
 
-                        }
-                    }).error(function (response, status, headers, config) {
-                    });*/
+                     }
+                     }).error(function (response, status, headers, config) {
+                     });*/
 
                     $http.get('getpremiumdetail/' + $scope.proposal.proposalId)
                         .success(function (response) {
@@ -1887,7 +1888,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 for (i in $scope.insurerDetails2) {
 
-                    alert(moment($scope.insurerDetails2[i].date, moment.ISO_8601));
+                    //alert(moment($scope.insurerDetails2[i].date, moment.ISO_8601));
                     console.log('Testing..' + moment($scope.insurerDetails2[i].date, moment.ISO_8601));
                     console.log('Date' + $scope.insurerDetails2[i].date);
 

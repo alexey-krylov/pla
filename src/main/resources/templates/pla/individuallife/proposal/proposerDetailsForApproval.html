@@ -473,7 +473,7 @@
                     <input type="radio" ng-change="clearPlanId()" name="proposedAssuredAsProposer"  value="false" ng-value="false"   ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="proposer.isProposedAssured"/> No
                 </label>
 
-                <div class="error" ng-messages="step1.proposedAssuredAsProposer.$error" ng-if="step1.proposedAssuredAsProposer.$pristine">
+                <div class="error" ng-messages="step2.proposedAssuredAsProposer.$error" ng-if="step2.proposedAssuredAsProposer.$pristine">
                     <small class="error" ng-message="required">Please select one.</small>
                 </div>
             </div>
@@ -488,7 +488,7 @@
                 </select>
                 <!--<input type="text" class="form-control input-sm" readonly="true" ng-if="isPlanTextField" name="proposerPlan" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ProposerplanDetail.planName"/>-->
 
-                <div class="error" ng-messages="step1.proposerPlan.$error" ng-if="step1.proposerPlan.$dirty">
+                <div class="error" ng-messages="step2.proposerPlan.$error" ng-if="step2.proposerPlan.$dirty">
                     <small class="error" ng-message="required">Please enter Plan</small>
                 </div>
             </div>
