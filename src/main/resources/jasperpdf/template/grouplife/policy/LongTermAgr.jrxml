@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-05T10:24:38 -->
+<!-- 2015-10-07T16:45:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LongTermAgr" pageWidth="840" pageHeight="980" orientation="Landscape" columnWidth="800" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="20" uuid="6412dcb1-4ae1-4484-be30-eb5420565c39">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -69,7 +69,7 @@
 				<text><![CDATA[ Telephone Number(s):]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="9" y="160" width="791" height="614" uuid="d628a7c7-140c-4d55-a763-c7b1c4d1400f"/>
+				<reportElement x="9" y="160" width="791" height="600" uuid="d628a7c7-140c-4d55-a763-c7b1c4d1400f"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="14" y="180" width="783" height="20" uuid="d25ab754-2be9-4020-9cba-8edd56abc6ec"/>
