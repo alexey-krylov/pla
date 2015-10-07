@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-06T11:18:25 -->
+<!-- 2015-10-07T18:53:35 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActiveAtWorkDeclaretionForm" pageWidth="842" pageHeight="855" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a82936ad-329a-41e0-8cc9-5895000baa71">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -175,21 +175,21 @@
 				<text><![CDATA[Year commencing from]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="150" y="547" width="60" height="30" uuid="af7c004d-85c0-4f45-b41a-2e6689ffaca2"/>
+				<reportElement x="150" y="547" width="100" height="30" uuid="af7c004d-85c0-4f45-b41a-2e6689ffaca2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="210" y="547" width="20" height="30" uuid="b31706ec-0369-4769-aaf4-449185858651"/>
+				<reportElement x="250" y="550" width="20" height="30" uuid="b31706ec-0369-4769-aaf4-449185858651"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[To]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="230" y="547" width="290" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
+				<reportElement x="280" y="550" width="290" height="30" uuid="13cbf736-ff99-43d1-a1b3-71b914daa94e"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>

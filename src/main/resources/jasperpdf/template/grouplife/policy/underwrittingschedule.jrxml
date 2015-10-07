@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-01T11:17:47 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="895" orientation="Landscape" columnWidth="860" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
+<!-- 2015-10-07T18:56:04 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="895" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -36,6 +36,9 @@
 	<field name="proposerName" class="java.lang.String">
 		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
+	<field name="annexure" class="java.util.List">
+		<fieldDescription><![CDATA[annexure]]></fieldDescription>
+	</field>
 	<field name="address" class="java.lang.String">
 		<fieldDescription><![CDATA[address]]></fieldDescription>
 	</field>
@@ -60,21 +63,21 @@
 				<reportElement x="60" y="0" width="799" height="88" uuid="bc444dc5-31bf-48c0-acd7-f66d36df06d4"/>
 			</rectangle>
 			<image>
-				<reportElement x="364" y="10" width="200" height="70" uuid="671eca74-e750-4c2b-a85f-38b663995d3d"/>
+				<reportElement x="400" y="9" width="200" height="70" uuid="671eca74-e750-4c2b-a85f-38b663995d3d"/>
 				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="669" splitType="Stretch">
+		<band height="410" splitType="Stretch">
 			<rectangle>
-				<reportElement x="60" y="0" width="800" height="669" uuid="8b526497-a828-47e2-955d-468b48480049"/>
+				<reportElement x="60" y="0" width="800" height="410" uuid="8b526497-a828-47e2-955d-468b48480049"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="75" y="50" width="775" height="139" uuid="0c84312b-5446-4faf-a1e6-bd32f5b2cd7d"/>
+				<reportElement x="75" y="50" width="777" height="139" uuid="0c84312b-5446-4faf-a1e6-bd32f5b2cd7d"/>
 			</rectangle>
 			<textField>
-				<reportElement x="130" y="100" width="310" height="20" uuid="7d50d6c6-9b6c-432e-affa-92a309f2346a"/>
+				<reportElement x="210" y="100" width="325" height="20" uuid="7d50d6c6-9b6c-432e-affa-92a309f2346a"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -88,7 +91,7 @@
 				<text><![CDATA[ Address:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="140" y="130" width="380" height="20" uuid="21cc45f0-61b0-46ed-a8a8-1e1b8a33eb59"/>
+				<reportElement x="210" y="130" width="410" height="20" uuid="21cc45f0-61b0-46ed-a8a8-1e1b8a33eb59"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -116,7 +119,7 @@
 				<text><![CDATA[ Name:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="75" y="200" width="775" height="159" uuid="e6eef619-3a9b-45f8-b6f0-94dcd312f72c"/>
+				<reportElement x="75" y="189" width="777" height="161" uuid="e6eef619-3a9b-45f8-b6f0-94dcd312f72c"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="80" y="240" width="100" height="30" uuid="0052b977-4803-4e50-b417-b8fe0eec6a8e"/>
@@ -147,29 +150,26 @@
 				<text><![CDATA[ Policy Period: From:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="310" width="60" height="25" uuid="f804a0e1-156f-4ba4-b079-8b992751624b"/>
+				<reportElement x="210" y="310" width="70" height="25" uuid="f804a0e1-156f-4ba4-b079-8b992751624b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="260" y="311" width="30" height="24" uuid="b9ef9dd1-8b29-43c5-b785-48b156a55e94"/>
+				<reportElement x="280" y="310" width="30" height="24" uuid="b9ef9dd1-8b29-43c5-b785-48b156a55e94"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[To:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="290" y="310" width="290" height="26" uuid="96b872ba-7bf6-42ba-9fb1-65afd1eac9ba"/>
+				<reportElement x="310" y="309" width="300" height="26" uuid="96b872ba-7bf6-42ba-9fb1-65afd1eac9ba"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 			</textField>
-			<rectangle>
-				<reportElement x="75" y="370" width="775" height="279" uuid="734bd3c7-0e26-4119-afd6-1b75a1eba7a6"/>
-			</rectangle>
 			<rectangle>
 				<reportElement x="75" y="50" width="775" height="36" backcolor="#19197D" uuid="4951941d-49cb-4573-b16e-25c76bb780d1"/>
 			</rectangle>
@@ -181,15 +181,20 @@
 				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="75" y="200" width="775" height="34" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431"/>
+				<reportElement x="77" y="189" width="775" height="31" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="80" y="202" width="600" height="30" forecolor="#FFFFFF" uuid="777d8888-8a00-4b15-a562-d6c04675accd"/>
+				<reportElement x="75" y="189" width="605" height="30" forecolor="#FFFFFF" uuid="777d8888-8a00-4b15-a562-d6c04675accd"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14"/>
 				</textElement>
-				<text><![CDATA[Policy Details:]]></text>
+				<text><![CDATA[ Policy Details:]]></text>
 			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="60" y="360" width="770" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/insureddetailsubreport.jasper"]]></subreportExpression>
+			</subreport>
 			<staticText>
 				<reportElement x="290" y="0" width="400" height="41" uuid="fb37d579-0233-4931-928d-eecd877b5711"/>
 				<textElement verticalAlignment="Middle">
@@ -214,7 +219,7 @@
 				</box>
 				<staticText>
 					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="2a15b000-4aa0-49fe-ba67-e4f2737c9a52"/>
-					<textElement textAlignment="Center" verticalAlignment="Top">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Professional Life Assurance Limited]]></text>
