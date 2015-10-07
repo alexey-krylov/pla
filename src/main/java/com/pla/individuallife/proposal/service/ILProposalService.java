@@ -28,6 +28,7 @@ import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.exception.UnderWriterException;
 import com.pla.underwriter.finder.UnderWriterFinder;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -37,6 +38,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
@@ -93,7 +95,11 @@ public class ILProposalService {
                     mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
                     mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
                     mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
-                    mandatoryDocumentDto.setSubmitted(true);
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     return mandatoryDocumentDto;
                 }
             }).collect(Collectors.toSet());
