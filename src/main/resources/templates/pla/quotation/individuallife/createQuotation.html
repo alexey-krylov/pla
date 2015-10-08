@@ -355,7 +355,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group required">
-                                    <label>Title</label>
+                                    <label class="control-label">Title</label>
                                     <select class="form-control input-sm" name="ptitle"
                                             ng-model="proposer.title" view-enabled=""
                                             ng-disabled="proposerSameAsProposedAssured" ng-required="true"
@@ -445,7 +445,7 @@
                                         <small ng-message="pattern">Only alphabets are allowed.</small>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <label class="control-label">NRC</label>
                                     <input type="text" class="form-control input-sm" name="nrc"
                                            ng-disabled="proposerSameAsProposedAssured" view-enabled=""

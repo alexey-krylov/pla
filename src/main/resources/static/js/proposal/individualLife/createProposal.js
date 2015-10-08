@@ -185,7 +185,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             controller: ['$scope', function ($scope) {
                 $scope.getSumAssuredType = function (searchRider) {
                     if ($scope.plan) {
-                        //console.log('Plan:-->'+JSON.stringify($scope.plan));
+                        //console.log('Plan Optional SumAssured Type..:-->'+JSON.stringify($scope.plan));
                         $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: searchRider.coverageId});
                         //console.log("COverage.."+JSON.stringify($scope.coverage));
                         //console.log('Coverage..'+JSON.stringify($scope.coverage));
@@ -221,6 +221,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         function ($scope, resources, getQueryParameter, $bsmodal, $http, $window, globalConstants, ProposalService, $upload, $route) {
 
             //console.log('create proposal');
+            $scope.stepsSaved = {"1": false, "2": false, "3": false, "4": false, "5": false,"6":false,"7":false,"8":false,"9":false,"10":false};
 
             $scope.employmentTypes = [];
             $scope.checkEmpTypes = null;
@@ -236,6 +237,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.searchRider = {};
             $scope.tempCoverages = {}; //meant For Temp
             $scope.premiumResponse = {};
+
+            $scope.isBrowseDisable=function(document)
+            {
+                if(document.fileName == null && document.submitted)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
             $scope.quotationIdDetails =
             {
@@ -376,6 +389,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     //alert(status);
+                    $scope.selectedWizard = 1;
+
                     var result = response;
                     console.log("ProposalReceive.." + JSON.stringify(response));
 
@@ -567,6 +582,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                      });*/
 
                     if ($scope.rcvProposal.proposer != null) {
+                        $scope.stepsSaved["1"] = true;
                         //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
                         $scope.proposer = $scope.rcvProposal.proposer;
                         console.log($scope.rcvProposal);
@@ -618,10 +634,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     //$scope.selectedPlan=$scope.rcvProposal.proposalPlanDetail;
                     if ($scope.rcvProposal.beneficiaries != null) {
+                        $scope.stepsSaved["3"] = true;
                         $scope.beneficiariesList = $scope.rcvProposal.beneficiaries;
                     }
 
                     if ($scope.rcvProposal.generalDetails != null) {
+                        $scope.stepsSaved["4"] = true;
                         console.log("generalDetails:-->" + JSON.stringify($scope.rcvProposal.generalDetails));
 
                         if ($scope.rcvProposal.generalDetails.assuredByPLAL != null) {
@@ -681,6 +699,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
 
                     if ($scope.rcvProposal.additionaldetails != null) {
+
+                        $scope.stepsSaved["8"] = true;
+
                         $scope.medicalAttendant.medicalAttendantDetails = $scope.rcvProposal.additionaldetails.medicalAttendantDetails;
                         $scope.medicalAttendant.medicalAttendantDuration = $scope.rcvProposal.additionaldetails.medicalAttendantDuration;
                         $scope.medicalAttendant.dateAndReason = $scope.rcvProposal.additionaldetails.dateAndReason;
@@ -698,6 +719,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
 
                     if ($scope.rcvProposal.premiumPaymentDetails != null) {
+
+                        $scope.stepsSaved["9"] = true;
+
                         $scope.premiumPaymentDetails.premiumFrequency = $scope.rcvProposal.premiumPaymentDetails.premiumFrequency;
                         $scope.premiumPaymentDetails.premiumPaymentMethod = $scope.rcvProposal.premiumPaymentDetails.premiumPaymentMethod;
                         $scope.premiumPaymentDetails.proposalSignDate = $scope.rcvProposal.premiumPaymentDetails.proposalSignDate;
@@ -728,6 +752,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
 
                     if ($scope.rcvProposal.proposedAssured != null) {
+
+                        $scope.stepsSaved["2"] = true;
 
                         $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
                         if ($scope.proposedAssured.dateOfBirth) {
@@ -770,6 +796,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.agentDetails = $scope.rcvProposal.agentCommissionDetails;
                     }
                     if ($scope.rcvProposal.familyPersonalDetail != null) {
+                            $scope.stepsSaved["7"] = true;
+
                         if ($scope.rcvProposal.familyPersonalDetail.isPregnant) {
                             $scope.rcvProposal.familyPersonalDetail.isPregnant = "true";
                         }
@@ -815,6 +843,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         //$scope.build = $scope.rcvProposal.familyPersonalDetail.build;
                     }
                     if ($scope.rcvProposal.compulsoryHealthStatement != null) {
+                        if($scope.rcvProposal.compulsoryHealthStatement.length <=7){
+                            $scope.stepsSaved["5"] = true;
+                        }
+                        else
+                        {
+                            $scope.stepsSaved["5"] = true;
+                            $scope.stepsSaved["6"] = true;
+                        }
+
                         for (i in $scope.rcvProposal.compulsoryHealthStatement) {
                             if ($scope.rcvProposal.compulsoryHealthStatement[i].answer) {
                                 $scope.rcvProposal.compulsoryHealthStatement[i].answer = "true";
@@ -1024,6 +1061,9 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('premiumRequest' +JSON.stringify(premiumRequest));
 
                 $http.post('updatepremiumpaymentdetails', premiumRequest).success(function (response, status, headers, config) {
+
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
+
                     $scope.proposal.proposalId = response.id;
                 }).error(function (response, status, headers, config) {
                 });
@@ -1653,6 +1693,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                 $http.post('updateplan', request).success(function (response, status, headers, config) {
                     //alert('status'+status);
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
                     $scope.proposal = response;
                     $scope.proposal.proposalId = response.id;
                     //console.log("Response of PLan is:"+JSON.stringify(response));
@@ -1689,6 +1730,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         //console.log(planResponse);
 
                         if ($scope.rcvProposal.proposer != null) {
+                            $scope.stepsSaved["1"] = true;
                             //console.log('Proposer: '+JSON.stringify($scope.rcvProposal.proposer || {}));
                             $scope.proposer = $scope.rcvProposal.proposer;
                             //console.log($scope.rcvProposal);
@@ -1710,6 +1752,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }
 
                         if ($scope.rcvProposal.proposedAssured != null) {
+                            $scope.stepsSaved["2"] = true;
                             $scope.proposedAssured = $scope.rcvProposal.proposedAssured || {};
                             if ($scope.proposedAssured.dateOfBirth) {
                                 $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
@@ -1850,9 +1893,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "proposalId": $scope.proposal.proposalId
                 };
                 //console.log('Json to save to DB is:' + JSON.stringify(request));
+                console.log('Length..'+$scope.compulsoryHealthDetails.length);
                 $http.post('/pla/individuallife/proposal/updatecompulsoryhealthstatement', request).success(function (response, status, headers, config) {
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
                     //$scope.proposal.proposalId=response.id;
                     //alert("ProposalId"+$scope.proposal.proposalId);
+
                 }).error(function (response, status, headers, config) {
                 });
 
@@ -1947,6 +1993,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('generalQuestion is: ' + JSON.stringify(generalQuestion));
                 console.log('Final General is' + JSON.stringify(req));
                 $http.post('/pla/individuallife/proposal/updategeneraldetails', req).success(function (response, status, headers, config) {
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
                     $scope.occupations = response;
                     //alert(JSON.stringify($scope.occupations));
                     $scope.proposal.proposalId = response.id;
@@ -1985,6 +2032,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 };
                 //console.log('request ' + JSON.stringify(request));
                 $http.post('/pla/individuallife/proposal/updatefamily', request).success(function (response, status, headers, config) {
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
                     $scope.proposal.proposalId = response.id;
                 }).error(function (response, status, headers, config) {
                 });
@@ -2841,6 +2889,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 //console.log('RequiredJson:' + JSON.stringify(requestAddDetails));
 
                 $http.post('/pla/individuallife/proposal/updateadditionaldetails', requestAddDetails).success(function (response, status, headers, config) {
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
                     $scope.proposal.proposalId = response.id;
                 }).error(function (response, status, headers, config) {
                 });
@@ -2878,6 +2927,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 ////console.log('Save Proposer'+JSON.stringify(request1));
 
                 $http.post('updateproposedassuredandagent', prorequest).success(function (response, status, headers, config) {
+                    $scope.stepsSaved[$scope.selectedWizard] = true;
                     $scope.proposal = response;
                     $scope.proposal.proposalId = response.id;
 

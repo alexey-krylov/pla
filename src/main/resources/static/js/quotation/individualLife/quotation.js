@@ -417,7 +417,6 @@
                     }
                 });
 
-
                 $scope.$watchGroup(['proposedAssured.dateOfBirth', 'proposer.dateOfBirth'], function (newval, oldval) {
                     if (newval) {
                         if (newval[0]) {
@@ -472,7 +471,9 @@
                         return;
 
                     if (!newval) {
-                        $scope.proposer = angular.copy($scope.originalProposer);
+                        //$scope.proposer = angular.copy($scope.originalProposer);
+                        $scope.proposer=null;
+                        $scope.proposerAge=null;
                     } else {
                         $scope.proposer = $scope.proposedAssured;
                     }

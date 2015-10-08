@@ -18,7 +18,7 @@
 
                         <button class="btn btn-default"
                                 style="display:inline;float:right;margin-right:5px;" ng-file-select=""
-                                ng-hide="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse
+                                ng-hide="mode=='new'||mode=='view'" ng-model="document.documentAttached" ng-disabled="isBrowseDisable(document)">Browse
                         </button>
                         <input type="checkbox" data-toggle="tooltip" ng-hide="mode == 'edit'" ng-model="document.isApproved" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted || !document.fileName"/>
                     </div>

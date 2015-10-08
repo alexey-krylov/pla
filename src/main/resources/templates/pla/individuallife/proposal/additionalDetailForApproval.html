@@ -21,7 +21,7 @@
             <div class="col-md-5">
                 <input type="text" ng-disabled="mode=='new'||mode=='view'"  ng-maxlength="8" name="medicalAttendantDuration" class="form-control input-sm" ng-model="medicalAttendant.medicalAttendantDuration"/>
 
-                <div class="error" ng-messages="step8.medicalAttendantDuration.$error" ng-if="step8.medicalAttendantDuration.$dirty">
+                <div class="error" ng-messages="step9.medicalAttendantDuration.$error" ng-if="step9.medicalAttendantDuration.$dirty">
                     <small ng-message="maxlength">Only 8 characters are allowed.</small>
                 </div>
 
@@ -34,7 +34,7 @@
             <div class="col-md-5">
                 <input type="text" ng-disabled="mode=='new'||mode=='view'" name="dateAndReason"  ng-maxlength="50" class="form-control input-sm" ng-model="medicalAttendant.dateAndReason"/>
 
-                <div class="error" ng-messages="step8.dateAndReason.$error" ng-if="step8.dateAndReason.$dirty">
+                <div class="error" ng-messages="step9.dateAndReason.$error" ng-if="step9.dateAndReason.$dirty">
                     <small ng-message="maxlength">Only 50 characters are allowed.</small>
                 </div>
 
@@ -60,7 +60,7 @@
                                     <label class="control-label">Name Of Office</label>
                                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'"  ng-required="true" name="answerResponse1" ng-maxlength="20" ng-model="replacement.answerResponse1"/>
 
-                                    <div class="error" ng-messages="step8.answerResponse1.$error" ng-if="step8.answerResponse1.$dirty">
+                                    <div class="error" ng-messages="step9.answerResponse1.$error" ng-if="step9.answerResponse1.$dirty">
                                         <small class="error" ng-message="required">Please provide Details</small>
                                         <small ng-message="maxlength">Only 50 characters are allowed.</small>
                                     </div>
@@ -72,7 +72,7 @@
                                     <label class="control-label">Policy Number</label>
                                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'"  ng-required="true" name="answerResponse2" ng-maxlength="7" ng-model="replacement.answerResponse2"/>
 
-                                    <div class="error" ng-messages="step8.answerResponse2.$error" ng-if="step8.answerResponse2.$dirty">
+                                    <div class="error" ng-messages="step9.answerResponse2.$error" ng-if="step9.answerResponse2.$dirty">
                                         <small class="error" ng-message="required">Please provide Details</small>
                                         <small ng-message="maxlength">Only 7 characters are allowed.</small>
                                     </div>
@@ -92,7 +92,7 @@
                     <option  value="false">No</option>
                 </select>
 
-                <div class="error" ng-messages="step8.additionadetailQuestion1.$error" ng-if="step5.additionadetailQuestion1.$dirty">
+                <div class="error" ng-messages="step9.additionadetailQuestion1.$error" ng-if="step9.additionadetailQuestion1.$dirty">
                     <small class="error" ng-message="required">Please answer compulsoryHealthDetailsQuestion7</small>
                 </div>
             </div>
@@ -105,7 +105,7 @@
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                    ng-disabled="step8.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveAdditionalDetail()">Save</button>
+                    ng-disabled="step9.$invalid" ng-hide="mode=='new'||mode=='view'" ng-click="saveAdditionalDetail()">Save</button>
         </div>
     </div>
 </ng-form>
