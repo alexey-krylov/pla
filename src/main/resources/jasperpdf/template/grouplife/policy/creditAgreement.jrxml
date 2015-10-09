@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-05T10:13:17 -->
+<!-- 2015-10-08T15:56:01 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="instalmentPremium" pageWidth="1000" pageHeight="1760" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="707c3710-b1bb-4aa8-9e8e-b8add818e1b1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -32,7 +32,7 @@
 	<detail>
 		<band height="1538" splitType="Stretch">
 			<staticText>
-				<reportElement x="220" y="10" width="500" height="30" uuid="92c9f170-2454-4815-9f0d-21dd9c3ec4cc"/>
+				<reportElement x="200" y="10" width="500" height="30" uuid="92c9f170-2454-4815-9f0d-21dd9c3ec4cc"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
@@ -51,7 +51,7 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="14"/>
 					</textElement>
-					<text><![CDATA[ Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
+					<text><![CDATA[  Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="60" width="50" height="20" uuid="4074e5ab-f8c5-4bed-8ead-3c0de35bfa09"/>
@@ -170,7 +170,7 @@
 				<text><![CDATA[Witness ………………………………………………………..]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="740" width="710" height="40" uuid="8d048fec-1f4f-4281-a61b-6c6f4270a749"/>
+				<reportElement x="120" y="740" width="360" height="40" uuid="8d048fec-1f4f-4281-a61b-6c6f4270a749"/>
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
@@ -305,7 +305,7 @@
 			<staticText>
 				<reportElement x="118" y="1280" width="350" height="30" forecolor="#FFFFFF" uuid="d2d75f03-c84e-42be-b015-9ce7397d2038"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="16" isBold="true"/>
+					<font fontName="Trebuchet MS" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Installment Due Date]]></text>
 			</staticText>
@@ -317,7 +317,7 @@
 				<text><![CDATA[Authorised Signature]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="380" y="790" width="185" height="30" uuid="64d1d1ff-1a78-4ba8-8a41-e488b586a129"/>
+				<reportElement x="480" y="740" width="185" height="43" uuid="64d1d1ff-1a78-4ba8-8a41-e488b586a129"/>
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
@@ -331,7 +331,7 @@
 				<reportElement x="80" y="0" width="800" height="100" uuid="a6352940-3749-4347-89c6-e8f48efcea0c"/>
 			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="81" y="0" width="800" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="7cfd28f6-f539-4a5d-bb4e-b988c96f4774"/>
+				<reportElement mode="Opaque" x="81" y="0" width="797" height="30" forecolor="#FFFFFF" backcolor="#003399" uuid="7cfd28f6-f539-4a5d-bb4e-b988c96f4774"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-07T18:56:04 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="895" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
+<!-- 2015-10-08T17:26:38 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="695" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -69,9 +69,9 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="410" splitType="Stretch">
+		<band height="400" splitType="Prevent">
 			<rectangle>
-				<reportElement x="60" y="0" width="800" height="410" uuid="8b526497-a828-47e2-955d-468b48480049"/>
+				<reportElement x="60" y="0" width="798" height="360" uuid="8b526497-a828-47e2-955d-468b48480049"/>
 			</rectangle>
 			<rectangle>
 				<reportElement x="75" y="50" width="777" height="139" uuid="0c84312b-5446-4faf-a1e6-bd32f5b2cd7d"/>
@@ -119,7 +119,9 @@
 				<text><![CDATA[ Name:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="75" y="189" width="777" height="161" uuid="e6eef619-3a9b-45f8-b6f0-94dcd312f72c"/>
+				<reportElement x="75" y="189" width="775" height="161" uuid="e6eef619-3a9b-45f8-b6f0-94dcd312f72c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 			</rectangle>
 			<staticText>
 				<reportElement x="80" y="240" width="100" height="30" uuid="0052b977-4803-4e50-b417-b8fe0eec6a8e"/>
@@ -181,7 +183,10 @@
 				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="77" y="189" width="775" height="31" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431"/>
+				<reportElement x="75" y="189" width="777" height="36" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 			</rectangle>
 			<staticText>
 				<reportElement x="75" y="189" width="605" height="30" forecolor="#FFFFFF" uuid="777d8888-8a00-4b15-a562-d6c04675accd"/>
@@ -190,11 +195,6 @@
 				</textElement>
 				<text><![CDATA[ Policy Details:]]></text>
 			</staticText>
-			<subreport>
-				<reportElement positionType="Float" x="60" y="360" width="770" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/insureddetailsubreport.jasper"]]></subreportExpression>
-			</subreport>
 			<staticText>
 				<reportElement x="290" y="0" width="400" height="41" uuid="fb37d579-0233-4931-928d-eecd877b5711"/>
 				<textElement verticalAlignment="Middle">
@@ -202,10 +202,20 @@
 				</textElement>
 				<text><![CDATA[Underwriting Schedule - Above Free Cover Limit]]></text>
 			</staticText>
+			<frame>
+				<reportElement x="60" y="360" width="798" height="40" uuid="2d14ec7f-8b11-4560-910e-70b0f55076bd"/>
+				<subreport runToBottom="false">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="798" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="77c4157c-864d-4d50-9e7c-b445f4f2d8de">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
+					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/policy/insureddetailsubreport.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="96" splitType="Stretch">
+		<band height="96">
 			<rectangle>
 				<reportElement x="60" y="0" width="800" height="90" uuid="d0b5f077-2325-4977-8c10-f92b7a97754a"/>
 			</rectangle>

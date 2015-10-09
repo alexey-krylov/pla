@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-07T16:45:25 -->
+<!-- 2015-10-08T17:23:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LongTermAgr" pageWidth="840" pageHeight="980" orientation="Landscape" columnWidth="800" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="20" uuid="6412dcb1-4ae1-4484-be30-eb5420565c39">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -38,14 +38,16 @@
 	<detail>
 		<band height="776" splitType="Stretch">
 			<staticText>
-				<reportElement x="270" y="0" width="230" height="30" uuid="90120630-53a7-4bec-a179-c7df2a09b3ab"/>
+				<reportElement x="288" y="0" width="310" height="30" uuid="90120630-53a7-4bec-a179-c7df2a09b3ab"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Long Term Agreement]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="9" y="40" width="791" height="120" uuid="472583c5-e88a-4b9d-8c70-443c3d687f45"/>
+				<reportElement x="9" y="35" width="791" height="125" uuid="472583c5-e88a-4b9d-8c70-443c3d687f45">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
 			</rectangle>
 			<staticText>
 				<reportElement x="10" y="80" width="60" height="20" uuid="1157c15a-0939-4ae3-a0d0-000bb93f1c68"/>
@@ -174,7 +176,7 @@ duly authorized representative]]></text>
 				<reportElement x="14" y="605" width="63" height="1" uuid="5403674a-8032-42ff-aa49-4f623ba359e8"/>
 			</line>
 			<staticText>
-				<reportElement x="14" y="640" width="310" height="40" uuid="01ed2563-82b7-4747-a2a2-e82f4fc1d329"/>
+				<reportElement x="13" y="630" width="310" height="30" uuid="01ed2563-82b7-4747-a2a2-e82f4fc1d329"/>
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
@@ -182,7 +184,7 @@ duly authorized representative]]></text>
 duly authorized representative]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="680" width="90" height="16" uuid="bb592a5f-c2ce-4da8-948f-3dcb6eb90e98"/>
+				<reportElement x="14" y="670" width="90" height="20" uuid="bb592a5f-c2ce-4da8-948f-3dcb6eb90e98"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
@@ -192,24 +194,24 @@ duly authorized representative]]></text>
 				<reportElement x="17" y="530" width="63" height="1" uuid="6354c5c3-0f85-4bf7-aca8-15da86915a03"/>
 			</line>
 			<line>
-				<reportElement x="14" y="700" width="63" height="1" uuid="98a2520d-bf41-46ca-a25c-a29c32483118"/>
+				<reportElement x="17" y="690" width="63" height="1" uuid="98a2520d-bf41-46ca-a25c-a29c32483118"/>
 			</line>
 			<staticText>
-				<reportElement x="13" y="730" width="93" height="23" uuid="2319c913-45dc-4cf2-b65f-f0d6cbd24b87"/>
+				<reportElement x="13" y="727" width="93" height="23" uuid="2319c913-45dc-4cf2-b65f-f0d6cbd24b87"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[ Position  :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="700" width="90" height="21" uuid="d912c374-823e-4072-9e58-d4b4cf7c825d"/>
+				<reportElement x="10" y="700" width="90" height="20" uuid="d912c374-823e-4072-9e58-d4b4cf7c825d"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
 				<text><![CDATA[  Address:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="14" y="720" width="63" height="1" uuid="fe094a38-5d97-4448-8c33-43857e0a5840"/>
+				<reportElement x="14" y="715" width="63" height="1" uuid="fe094a38-5d97-4448-8c33-43857e0a5840"/>
 			</line>
 			<line>
 				<reportElement x="810" y="1" width="1" height="773" uuid="ef0e38a0-e21f-47a8-ac1f-dba9cb12fba8"/>
@@ -218,7 +220,7 @@ duly authorized representative]]></text>
 				<reportElement x="-3" y="0" width="1" height="776" uuid="cbfba32f-4c0a-4790-90ff-3303d04e8b06"/>
 			</line>
 			<rectangle>
-				<reportElement x="10" y="40" width="790" height="30" backcolor="#001963" uuid="6ebfa4e3-6fd0-4f1c-b893-e841980e39cd"/>
+				<reportElement x="10" y="35" width="790" height="35" backcolor="#001963" uuid="6ebfa4e3-6fd0-4f1c-b893-e841980e39cd"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="13" y="45" width="730" height="20" forecolor="#FFFFFF" uuid="ab2b455f-b444-4eca-869d-2476cca7fe47"/>
@@ -300,7 +302,9 @@ duly authorized representative]]></text>
 				<reportElement x="-3" y="-1" width="813" height="89" uuid="c2e4a8f4-fc25-4344-8a88-0c6cf0353a5c"/>
 			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="808" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="1ac5b9dc-5a64-4ed9-9786-a90ceb7c11c9"/>
+				<reportElement mode="Opaque" x="-3" y="-2" width="813" height="36" forecolor="#FFFFFF" backcolor="#003399" uuid="1ac5b9dc-5a64-4ed9-9786-a90ceb7c11c9">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>
@@ -308,7 +312,7 @@ duly authorized representative]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="181" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="5bde2870-01fd-4ceb-b817-7c6fc4cc86e1"/>
+					<reportElement mode="Opaque" x="181" y="1" width="366" height="35" forecolor="#FFFFFF" backcolor="#003399" uuid="5bde2870-01fd-4ceb-b817-7c6fc4cc86e1"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="14" isBold="true"/>
 					</textElement>

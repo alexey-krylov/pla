@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-07T11:12:53 -->
+<!-- 2015-10-08T16:03:41 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="1000" pageHeight="930" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc47796d-11f2-4054-910b-4c89fed0a700">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -36,7 +36,7 @@
 				<reportElement x="-11" y="5" width="891" height="85" uuid="ee743606-0efb-41ba-b833-695b1176867e"/>
 			</rectangle>
 			<image>
-				<reportElement x="370" y="17" width="333" height="60" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
+				<reportElement x="400" y="20" width="333" height="60" uuid="d92a575b-0386-46ae-857a-56c0b8ea4043"/>
 				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 		</band>
@@ -78,7 +78,7 @@
 				<text><![CDATA[ Telephone Number(s):]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="205" y="10" width="305" height="30" uuid="cace8147-a564-4671-b946-2580cb27c1ba"/>
+				<reportElement x="260" y="10" width="320" height="30" uuid="cace8147-a564-4671-b946-2580cb27c1ba"/>
 				<textElement>
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -203,9 +203,9 @@
 				<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="330" y="580" width="255" height="30" uuid="ec4dde9e-7e64-4527-9ce5-775adeaca419"/>
+				<reportElement x="330" y="580" width="255" height="29" uuid="ec4dde9e-7e64-4527-9ce5-775adeaca419"/>
 				<textElement verticalAlignment="Middle">
-					<font size="10"/>
+					<font size="10" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
 			</textField>
@@ -217,15 +217,17 @@
 				<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="205" y="270" width="290" height="21" uuid="ac43f6cf-7945-4e81-b7fb-76c5d618b07e"/>
+				<reportElement x="200" y="270" width="295" height="21" uuid="ac43f6cf-7945-4e81-b7fb-76c5d618b07e"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="310" y="581" width="20" height="29" uuid="cc55b610-917a-4553-9f1a-ef276a0efb15"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="310" y="580" width="20" height="30" uuid="cc55b610-917a-4553-9f1a-ef276a0efb15"/>
+				<textElement verticalAlignment="Middle">
+					<font isItalic="true"/>
+				</textElement>
 				<text><![CDATA[On]]></text>
 			</staticText>
 			<line>
@@ -249,9 +251,9 @@
 				<text><![CDATA[ Address:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="250" y="590" width="60" height="20" uuid="d8d9bb34-50fb-4899-8679-46198e1d444a"/>
+				<reportElement x="250" y="590" width="60" height="21" uuid="d8d9bb34-50fb-4899-8679-46198e1d444a"/>
 				<textElement>
-					<font size="10"/>
+					<font size="10" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 			</textField>
@@ -271,7 +273,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Double"/>
 				</box>
 				<staticText>
-					<reportElement mode="Opaque" x="151" y="1" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="40236e94-95ad-4499-b645-2f7f12dd2165"/>
+					<reportElement mode="Opaque" x="151" y="1" width="364" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="40236e94-95ad-4499-b645-2f7f12dd2165"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
