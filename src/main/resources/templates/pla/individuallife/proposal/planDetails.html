@@ -222,14 +222,15 @@
                 </div>
             </div>
             <div ng-switch-when="DERIVED">
-                {{coverage.sumAssured.maxLimit}}
-                <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                       ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.maxLimit}}"
+                <input type="number" view-enabled="" class="form-control input-sm" min="{{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}"
+                       ng-disabled="mode=='new'||mode=='view'" max="{{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}"
                        name="sumAssuredPlanRider"
                        ng-model="searchRider.sumAssured"/>
 
                 <div class="error" ng-messages="step3.sumAssuredPlanRider.$error" ng-if="step3.sumAssuredPlanRider.$dirty">
-                    <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
+                    <small ng-message="max">Sum Assured should be {{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}.
+                    </small>
+                    <small ng-message="min">Sum Assured should be {{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}.
                     </small>
                 </div>
             </div>

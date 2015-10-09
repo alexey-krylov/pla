@@ -247,12 +247,6 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.tempCoverages = {}; //meant For Temp
             $scope.premiumResponse = {};
 
-
-            $scope.isPercentageSumAssuredValid=function(){
-
-                return $scope.proposalPlanDetail.sumAssured *($scope.coverage.coverageSumAssured.percentage/100);
-            }
-
             $scope.isBrowseDisable=function(document)
             {
                 if(document.fileName == null && document.submitted)
