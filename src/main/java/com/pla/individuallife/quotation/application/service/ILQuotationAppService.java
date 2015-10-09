@@ -79,7 +79,7 @@ public class ILQuotationAppService {
 
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
         List<PremiumInfluencingFactor> premiumInfluencingFactors = premium.getPremiumInfluencingFactors();
-
+        String premiumPaymentTerm = "0";
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
             if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, ((Integer) ((BigDecimal) quotation.get("SUMASSURED")).intValue()).toString());
@@ -89,8 +89,10 @@ public class ILQuotationAppService {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, String.valueOf(age));
             if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, quotation.get("POLICYTERM").toString());
-            if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
-                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, quotation.get("PREMIUMPAYMENT_TERM").toString());
+            if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM))) {
+                premiumPaymentTerm = quotation.get("PREMIUMPAYMENT_TERM").toString();
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, premiumPaymentTerm);
+            }
             if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
         }
@@ -125,7 +127,7 @@ public class ILQuotationAppService {
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, rider.get("COVERTERM").toString());
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
-                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, rider.get("RIDER_PREMIUM_WAIVER").toString());
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, premiumPaymentTerm);
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
                     }
@@ -259,7 +261,7 @@ public class ILQuotationAppService {
         agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
         agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
         agentDetailDto.setAgentName((String)agentDetail.get("firstName"));
-       // agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        // agentDetailDto.setAgentName(agentDetail.get("firstName") + " " +(agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         //agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;

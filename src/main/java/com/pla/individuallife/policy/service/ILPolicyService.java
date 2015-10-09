@@ -302,7 +302,7 @@ public class ILPolicyService {
             public Map<String, Object> apply(ILRiderDetail ilRiderDetail) {
                 Map<String,Object> coverageSumAssured = Maps.newLinkedHashMap();
                 coverageSumAssured.put("planCoverageName", ilRiderDetail.getCoverageName());
-                coverageSumAssured.put("planCoverageSumAssured", ilRiderDetail.getSumAssured().toString());
+                coverageSumAssured.put("planCoverageSumAssured", ilRiderDetail.getSumAssured()!=null?ilRiderDetail.getSumAssured().toString():"0");
                 return coverageSumAssured;
             }
         }).collect(Collectors.toList());

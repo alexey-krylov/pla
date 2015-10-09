@@ -275,7 +275,7 @@ public class ILProposalFinder {
 
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
         List<PremiumInfluencingFactor> premiumInfluencingFactors = premium.getPremiumInfluencingFactors();
-
+        String premiumPaymentTerm = "0";
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, planDetail.getSumAssured().toString());
@@ -285,8 +285,10 @@ public class ILProposalFinder {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.AGE, String.valueOf(age));
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, planDetail.getPolicyTerm().toString());
-            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
-                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, planDetail.getPremiumPaymentTerm().toString());
+            if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM))) {
+                premiumPaymentTerm = planDetail.getPremiumPaymentTerm().toString();
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, premiumPaymentTerm);
+            }
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, ((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
         }
@@ -320,7 +322,7 @@ public class ILProposalFinder {
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.POLICY_TERM)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.POLICY_TERM, rider.getCoverTerm().toString());
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
-                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, rider.getWaiverOfPremium().toString());
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, premiumPaymentTerm);
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, ((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
                     }
