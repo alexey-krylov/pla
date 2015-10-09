@@ -25,6 +25,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.docx4j.model.datastorage.migration.VariablePrepare;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +84,16 @@ public class NotificationTemplateService {
 
     public HashMap<String,String> getQuotationNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String quotationId) throws ProcessInfoException {
         int closureTimePeriod = iProcessInfoAdapter.getClosureTimePeriod(lineOfBusiness, ProcessType.QUOTATION);
+        int firstReminderPeriod = iProcessInfoAdapter.getDaysForFirstReminder(lineOfBusiness, ProcessType.QUOTATION);
+        int secondReminderPeriod = iProcessInfoAdapter.getDaysForSecondReminder(lineOfBusiness, ProcessType.QUOTATION);
         HashMap<String,String> notificationQuotationMap = null;
         if (LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(lineOfBusiness)){
             notificationQuotationMap = notificationFinder.findILQuotationProposerDetail(quotationId);
+            String dateTime = notificationQuotationMap.get("sharedOn");
+            DateTime firstReminder = DateTime.parse(dateTime).plusDays(firstReminderPeriod);
+            DateTime secondReminder = DateTime.parse(dateTime).plusDays(secondReminderPeriod);
+            notificationQuotationMap.put("firstReminderDate",String.valueOf(firstReminder));
+            notificationQuotationMap.put("secondReminderDate",String.valueOf(secondReminder));
             notificationQuotationMap.put("closureDays",String.valueOf(closureTimePeriod));
             return notificationQuotationMap;
         }

@@ -233,7 +233,7 @@ public class NotificationFinder {
             ilQuotationProposerMap.put("salutation", ilQuotationMap.get("salutation")!=null?ilQuotationMap.get("salutation").toString():"");
             ilQuotationProposerMap.put("proposerName", ilQuotationMap.get("proposerName")!=null?ilQuotationMap.get("proposerName").toString():"");
             ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
-//            ilQuotationProposerMap.put("sharedOn",  ilQuotationMap.get("sharedOn")!=null? ilQuotationMap.get("sharedOn").toString():"");
+            ilQuotationProposerMap.put("sharedOn",  ilQuotationMap.get("sharedOn")!=null? ilQuotationMap.get("sharedOn").toString():"");
             ilQuotationProposerMap.put("surName", ilQuotationMap.get("surName")!=null?ilQuotationMap.get("surName").toString():"");
             ilQuotationProposerMap.put("requestNumber", ilQuotationMap.get("requestNumber")!=null?ilQuotationMap.get("requestNumber").toString():"");
             return ilQuotationProposerMap;

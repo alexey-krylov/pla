@@ -1,11 +1,10 @@
 package com.pla.individuallife.quotation.saga;
 
 import com.google.common.collect.Lists;
-import com.pla.grouphealth.quotation.domain.event.GHQuotationReminderEvent;
 import com.pla.grouphealth.quotation.domain.model.GHQuotationStatus;
-import com.pla.individuallife.quotation.application.command.ILQuotationPurgeCommand;
 import com.pla.individuallife.quotation.application.command.ILQuotationClosureCommand;
 import com.pla.individuallife.quotation.application.command.ILQuotationConvertedCommand;
+import com.pla.individuallife.quotation.application.command.ILQuotationPurgeCommand;
 import com.pla.individuallife.quotation.domain.event.*;
 import com.pla.individuallife.quotation.domain.model.ILQuotation;
 import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
@@ -133,19 +132,29 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         }
         ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
         if (ILQuotationStatus.SHARED.equals(ilQuotation.getIlQuotationStatus())) {
-            this.noOfReminderSent = noOfReminderSent + 1;
+            System.out.println("************ Send Reminder ****************");
+            int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
+            int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
+            LocalDate quotationSharedDate = ilQuotation.getSharedOn();
+            LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
+            DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
+            ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(DateTime.now(), new ILQuotationSecondReminderEvent(event.getQuotationId()));
+            scheduledTokens.add(secondReminderScheduleToken);
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, ReminderTypeEnum.REMINDER_1));
+        }
+    }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    public void handle(ILQuotationSecondReminderEvent event) throws ProcessInfoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling IL Quotation Reminder Event .....", event);
+        }
+        ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
+        if (ILQuotationStatus.SHARED.equals(ilQuotation.getIlQuotationStatus())) {
             System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION,
-                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
-            if (this.noOfReminderSent == 1) {
-                int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
-                int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION);
-                LocalDate quotationSharedDate = ilQuotation.getGeneratedOn();
-                LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
-                DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
-                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
-                scheduledTokens.add(secondReminderScheduleToken);
-            }
+                    WaitingForEnum.QUOTATION_RESPONSE, ReminderTypeEnum.REMINDER_2));
         }
     }
 
@@ -177,8 +186,8 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-     @EndSaga
-     public void handle(ILQuotationPurgeEvent event) {
+    @EndSaga
+    public void handle(ILQuotationPurgeEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling IL Quotation Purge Event .....", event);
         }
