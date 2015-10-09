@@ -101,7 +101,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
-        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(DateTime.now(), new ILQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new ILQuotationReminderEvent(event.getQuotationId()));
         ScheduleToken purgeScheduleToken =  eventScheduler.schedule(purgeScheduleDateTime, new ILQuotationPurgeEvent(event.getQuotationId()));
         ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new ILQuotationClosureEvent(event.getQuotationId()));
         scheduledTokens.add(firstReminderScheduleToken);
@@ -138,7 +138,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
             LocalDate quotationSharedDate = ilQuotation.getSharedOn();
             LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
             DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
-            ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(DateTime.now(), new ILQuotationSecondReminderEvent(event.getQuotationId()));
+            ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new ILQuotationSecondReminderEvent(event.getQuotationId()));
             scheduledTokens.add(secondReminderScheduleToken);
             commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.INDIVIDUAL_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.INDIVIDUAL_LIFE, ProcessType.QUOTATION,
                     WaitingForEnum.QUOTATION_RESPONSE, ReminderTypeEnum.REMINDER_1));
