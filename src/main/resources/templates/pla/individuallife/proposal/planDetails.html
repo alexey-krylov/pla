@@ -43,6 +43,8 @@
                 <!-- <button type="button" class="btn btn-default bs-select"   required="true" name="ridersAppliedFor" id="ridersAppliedFor"  ng-disabled="mode=='new' || mode=='view'"  ng-model="createCoverage.benefitIds" max-length="0" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Riders" ng-options="searchRider.coverageName for searchRider in searchRiders | orderBy:'coverageName'"  >
                      Select Riders <span class="caret"></span>
                  </button>-->
+                    <!--<button type="button" class="btn btn-default bs-select" name="ridersAppliedFor" id="ridersAppliedFor"  ng-model="ridersAppliedFor" max-length="0"
+                    ng-disabled="mode== 'view'" data-all-none-buttons="true"  data-html="1" data-multiple="1" placeholder="Select Rider " ng-options="searchRiderDetail1.coverageId as searchRiderDetail.coverageName for searchRiderDetail1 in searchRiders" />-->
 
             </div>
                 <table class="table table-bordered">
@@ -220,10 +222,9 @@
                 </div>
             </div>
             <div ng-switch-when="DERIVED">
-                {{coverage.coverageSumAssured.incomeMultiplier}}
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.maxLimit}}"
-                       name="sumAssuredPlanRider"
+                       readonly="true" name="sumAssuredPlanRider"
                        ng-model="searchRider.sumAssured"/>
 
                 <div class="error" ng-messages="step3.sumAssuredPlanRider.$error" ng-if="step3.sumAssuredPlanRider.$dirty">
@@ -232,7 +233,6 @@
                 </div>
             </div>
             <div ng-switch-when="INCOME_MULTIPLIER">
-                {{coverage.sumAssured.incomeMultiplier}}
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.incomeMultiplier}}"
                        name="sumAssured"

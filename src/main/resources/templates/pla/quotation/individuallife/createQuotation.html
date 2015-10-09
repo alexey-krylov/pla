@@ -774,7 +774,7 @@
         <div ng-switch-when="DERIVED">
             <input type="number" view-enabled="" class="form-control input-sm" min="0"
                    max="{{coverage.sumAssured.maxLimit}}"
-                   name="sumAssured"
+                   readonly="true" name="sumAssured"
                    ng-model="rider.sumAssured"/>
 
             <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step1.$dirty">

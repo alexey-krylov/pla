@@ -193,6 +193,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     }
                 }
+
+               $scope.$watch('proposalPlanDetail.sumAssured', function (newval) {
+                    if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                        $scope.searchRider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                        console.log('Derived Type Came..');
+                    }
+
+                });
+
             }]
         }
     })
@@ -237,6 +246,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.searchRider = {};
             $scope.tempCoverages = {}; //meant For Temp
             $scope.premiumResponse = {};
+            $scope.ridersAppliedFor=[];
 
             $scope.isBrowseDisable=function(document)
             {
@@ -399,7 +409,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         var ageNextBirthday = moment().diff(new moment(new Date(age)), 'years') + 1;
                         //alert(ageNextBirthday);
 
-                        $http.get("getridersforplan/" + response.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
+
+                       /* $http.get("getridersforplan/" + response.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
                             $scope.searchRiders = response;
                             console.log('RiderDetails..' + JSON.stringify($scope.searchRiders));
                             $scope.proposalPlanDetail.riderDetails = response;
@@ -409,7 +420,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         }).error(function (response, status, headers, config) {
                             var check = status;
                             //console.log('Checking Status:'+JSON.stringify(check));
-                        });
+                        });*/
+
                     }
 
                     if (response.proposalPlanDetail != null) {
@@ -1684,7 +1696,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     "proposalPlanDetail": tempRequest,
                     //"proposalPlanDetail":$scope.proposalPlanDetail,
                     //"riderDetails": $scope.searchRiders,
-                    "riderDetails": $scope.proposalPlanDetail.riderDetails,
+                    //"riderDetails": $scope.proposalPlanDetail.riderDetails,
                     "beneficiaries": $scope.beneficiariesList,
                     "proposalId": $scope.proposal.proposalId
                 };
@@ -2174,6 +2186,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                     $http.get("getridersforplan/" + newValue.description.plan_id + "/" + $scope.proposedAssured.nextDob).success(function (response, status, headers, config) {
                         $scope.searchRiders = response;
+                        alert('planSelected..');
                         $scope.proposalPlanDetail.riderDetails = response;
                         //console.log('Riders Details From Db is:' +JSON.stringify(response));
                         //console.log($scope.searchRiders);

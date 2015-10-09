@@ -116,6 +116,15 @@
                             return $scope.coverage.coverageSumAssured.sumAssuredType;
                         }
                     }
+
+                    $scope.$watch('planDetailDto.sumAssured', function (newval) {
+                        if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                            $scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                            console.log('Derived Type Came..');
+                        }
+
+                    });
+
                 }]
             }
         })
