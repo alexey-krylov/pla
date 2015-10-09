@@ -182,7 +182,7 @@
         </div>
         <div class="col-sm-6">
             <!--{{commisionStatus}}-->
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="commisionStatus" ng-hide="mode=='new'||mode=='view'|| isRiderValid()" ng-click="savePlanDetail()">Save</button>
         </div>
     </div>
 
@@ -218,7 +218,6 @@
                 </div>
             </div>
             <div ng-switch-when="DERIVED">
-                {{coverage.sumAssured.incomeMultiplier}}
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.maxLimit}}"
                        name="sumAssured"

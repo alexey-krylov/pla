@@ -186,7 +186,7 @@
         </div>
         <div class="col-sm-6">
             <!--{{commisionStatus}}-->
-            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step3.$invalid || commisionStatus" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
+            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step3.$invalid || commisionStatus || isRiderValid()" ng-hide="mode=='new'||mode=='view'" ng-click="savePlanDetail()">Save</button>
         </div>
     </div>
 
@@ -222,9 +222,10 @@
                 </div>
             </div>
             <div ng-switch-when="DERIVED">
+                {{coverage.sumAssured.maxLimit}}
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.maxLimit}}"
-                       readonly="true" name="sumAssuredPlanRider"
+                       name="sumAssuredPlanRider"
                        ng-model="searchRider.sumAssured"/>
 
                 <div class="error" ng-messages="step3.sumAssuredPlanRider.$error" ng-if="step3.sumAssuredPlanRider.$dirty">

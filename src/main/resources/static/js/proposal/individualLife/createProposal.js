@@ -197,7 +197,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                $scope.$watch('proposalPlanDetail.sumAssured', function (newval) {
                     if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
                         $scope.searchRider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
-                        console.log('Derived Type Came..');
+                        console.log('Derived Type Came..'+$scope.coverage.coverageSumAssured.percentage);
                     }
 
                 });
@@ -246,7 +246,12 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.searchRider = {};
             $scope.tempCoverages = {}; //meant For Temp
             $scope.premiumResponse = {};
-            $scope.ridersAppliedFor=[];
+
+
+            $scope.isPercentageSumAssuredValid=function(){
+
+                return $scope.proposalPlanDetail.sumAssured *($scope.coverage.coverageSumAssured.percentage/100);
+            }
 
             $scope.isBrowseDisable=function(document)
             {
@@ -1677,6 +1682,32 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 "sumAssured": null
             };
 
+            $scope.isRiderValid=function()
+            {
+                var riderValid="true";
+                for(i in $scope.proposalPlanDetail.riderDetails){
+
+                    if($scope.proposalPlanDetail.riderDetails[i].sumAssured == null && $scope.proposalPlanDetail.riderDetails[i].coverTerm == null){
+                        riderValid="false";
+                        break;
+                    }
+                    else if($scope.proposalPlanDetail.riderDetails[i].sumAssured != null && $scope.proposalPlanDetail.riderDetails[i].coverTerm != null){
+                        riderValid="false";
+                        break;
+                    }
+                    else{
+                        riderValid="true";
+                    }
+                }
+                if(riderValid == "false"){
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
             $scope.savePlanDetail = function () {
                 //console.log('Save Plan');
                 //console.log("Minimum Age:" + $scope.plan.planDetail.minEntryAge);
