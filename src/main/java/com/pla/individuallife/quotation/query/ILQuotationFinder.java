@@ -35,9 +35,9 @@ public class ILQuotationFinder {
                     " ON r.`coverage_id` = c.`coverage_id` " +
                     " WHERE r.`quotation_id` =:quotationId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, " +
-            " gender AS ASSURED_GENDER, policy_term AS POLICYTERM, occupation AS ASSURED_OCCUPATION, " +
-            " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED " +
-            " FROM individual_life_quotation " +
+            " gender AS ASSURED_GENDER, policy_term AS POLICYTERM, IFNULL(oc.code,'') AS ASSURED_OCCUPATION,  " +
+            " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED  " +
+            " FROM individual_life_quotation il LEFT JOIN occupation_class oc ON il.occupation = oc.description " +
             " WHERE quotation_id =:quotationId";
 
     private static String findQuotation = "SELECT DISTINCT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ', " +
