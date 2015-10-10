@@ -73,6 +73,8 @@ public class ILProposalFinder {
 
     public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
 
+    public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
+
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
@@ -107,6 +109,15 @@ public class ILProposalFinder {
             return map.get("firstName").toString();
     }
 
+    public String getOccupationClass(String occupation) {
+        List<Map<String, Object>> occupationClassList = namedParameterJdbcTemplate.query(FIND_OCCUPATION_CLASS_QUERY, new MapSqlParameterSource().addValue("occupation", occupation), new ColumnMapRowMapper());
+        if (isNotEmpty(occupationClassList)) {
+            Map<String, Object> occupationClassMap = occupationClassList.get(0);
+            return (String) occupationClassMap.get("code");
+        }
+        return "";
+    }
+
     public List<RiderDetailDto> findAllOptionalCoverages(String planId,int age) {
         List<String> coverageIds = getCoverageIds(planId, age);
         // Query against the view
@@ -124,6 +135,7 @@ public class ILProposalFinder {
                 dto.setCoverageName(coverageMap.get("coverage_name").toString());
                 dto.setCoverageId(coverageMap.get("coverage_id").toString());
                 return dto;
+
             }
         }).collect(Collectors.toList());
     }
@@ -272,13 +284,13 @@ public class ILProposalFinder {
 
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
         Integer age = Years.yearsBetween(dob, DateTime.now()).getYears() + 1;
-
+        String occupationCode = getOccupationClass(((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
         List<PremiumInfluencingFactor> premiumInfluencingFactors = premium.getPremiumInfluencingFactors();
         String premiumPaymentTerm = "0";
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
-                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, planDetail.getSumAssured().toString());
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0) .toString():"");
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.GENDER)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, ((ProposedAssured) proposal.get("proposedAssured")).getGender().toString());
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.AGE)))
@@ -290,7 +302,7 @@ public class ILProposalFinder {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, premiumPaymentTerm);
             }
             if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
-                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, ((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
+                premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, occupationCode);
         }
 
         List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
@@ -314,7 +326,7 @@ public class ILProposalFinder {
 
                     for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
-                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, rider.getSumAssured().toString());
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, rider.getSumAssured()!=null?rider.getSumAssured().setScale(0).toString():"");
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.GENDER)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.GENDER, ((ProposedAssured) proposal.get("proposedAssured")).getGender().toString());
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.AGE)))
@@ -324,7 +336,7 @@ public class ILProposalFinder {
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, premiumPaymentTerm);
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
-                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, ((ProposedAssured) proposal.get("proposedAssured")).getEmploymentDetail().getOccupationClass());
+                            premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, occupationCode);
                     }
                     RiderPremiumDto rd = new RiderPremiumDto();
                     rd.setCoverageId(new CoverageId(rider.getCoverageId()));
