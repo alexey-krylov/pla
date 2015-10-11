@@ -29,7 +29,7 @@ public class GLEndorsementNumberGenerator {
         String currentDateInString = now.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         String month = currentDateInString.substring(3, 5).trim();
         String year = currentDateInString.substring(8, 10).trim();
-        String quotationNumber = 31 + glEndorsementSequence + month + year;
-        return quotationNumber;
+        String endorsementNumber = 31 + glEndorsementSequence + month + year;
+        return endorsementNumber;
     }
 }
