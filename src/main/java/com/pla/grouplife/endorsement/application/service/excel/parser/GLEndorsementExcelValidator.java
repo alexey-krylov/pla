@@ -77,16 +77,13 @@ public class GLEndorsementExcelValidator {
     public boolean isValidNumberOfAssured(Row row, String value, List<String> excelHeaders) {
         Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
         String relationShipValue = getCellValue(relationshipCell);
-        if (isNotEmpty(relationShipValue) && isNotEmpty(value)) {
-            return false;
-        }
         if (isEmpty(relationShipValue) && isEmpty(value)) {
             return false;
         }
         if (isNotEmpty(relationShipValue) && isEmpty(value)) {
             return true;
         }
-        return (isNotEmpty(value) && Double.valueOf(value) < 0);
+        return (isNotEmpty(value) && Double.valueOf(value).doubleValue() > 0d);
     }
 
     public boolean isValidMainAssuredClientId(Row row, String value, List<String> excelHeaders) {
@@ -107,7 +104,10 @@ public class GLEndorsementExcelValidator {
 
 
     public boolean isValidNRCNumber(Row row, String value, List<String> excelHeaders) {
-        return (!isValidNrcNumber(value) && isNotEmpty(value));
+        if (isEmpty(value)) {
+            return true;
+        }
+        return (isNotEmpty(value) && !isValidNrcNumber(value));
     }
 
 

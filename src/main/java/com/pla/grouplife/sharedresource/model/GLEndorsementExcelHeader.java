@@ -426,9 +426,6 @@ public enum GLEndorsementExcelHeader {
 
         @Override
         public InsuredDto populate(InsuredDto insuredDto, String value) {
-            if (isNotEmpty(value)) {
-                insuredDto.setAnnualIncome(BigDecimal.valueOf(Double.valueOf(value)));
-            }
             return insuredDto;
         }
 
