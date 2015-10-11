@@ -148,10 +148,10 @@ public class ILQuotationAppService {
         premiumDetailDto.setRiderPremium(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
-        premiumDetailDto.setAnnualPremium(totalPremium);
-        premiumDetailDto.setMonthlyPremium(monthlyPremium);
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium);
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium);
+        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 

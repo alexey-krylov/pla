@@ -92,8 +92,8 @@ public class NotificationTemplateService {
             String dateTime = notificationQuotationMap.get("sharedOn");
             DateTime firstReminder = DateTime.parse(dateTime).plusDays(firstReminderPeriod);
             DateTime secondReminder = DateTime.parse(dateTime).plusDays(secondReminderPeriod);
-            notificationQuotationMap.put("firstReminderDate",String.valueOf(firstReminder));
-            notificationQuotationMap.put("secondReminderDate",String.valueOf(secondReminder));
+            notificationQuotationMap.put("firstReminderDate",firstReminder.toString(AppConstants.DD_MM_YYY_FORMAT));
+            notificationQuotationMap.put("secondReminderDate",secondReminder.toString(AppConstants.DD_MM_YYY_FORMAT));
             notificationQuotationMap.put("closureDays",String.valueOf(closureTimePeriod));
             return notificationQuotationMap;
         }
