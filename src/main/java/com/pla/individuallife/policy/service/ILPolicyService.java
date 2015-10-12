@@ -326,7 +326,7 @@ public class ILPolicyService {
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
         String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/individuallife/policy/individuallifePolicyTemplate.vm", emailContentMap);
-        ILPolicyMailDto ilPolicyMailDto = new ILPolicyMailDto(subject, emailBody, new String[]{mailAddress},mailAddress);
+        ILPolicyMailDto ilPolicyMailDto = new ILPolicyMailDto(subject, emailBody,mailAddress);
         ilPolicyMailDto.setPolicyId(dto.getPolicyId());
         ilPolicyMailDto.setPolicyNumber(dto.getPolicyNumber().getPolicyNumber());
         return ilPolicyMailDto;

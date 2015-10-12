@@ -500,7 +500,7 @@ public class GLPolicyService {
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
         String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouplife/policy/grouplifePolicyTemplate.vm", emailContentMap);
-        GLPolicyMailDto dto = new GLPolicyMailDto(subject, emailBody, new String[]{mailAddress},mailAddress);
+        GLPolicyMailDto dto = new GLPolicyMailDto(subject, emailBody,mailAddress);
         dto.setPolicyId(policyId.getPolicyId());
         dto.setPolicyNumber(groupLifePolicy.getPolicyNumber().getPolicyNumber());
         return dto;

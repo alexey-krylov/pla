@@ -3,12 +3,14 @@ package com.pla.grouplife.policy.presentation.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Created by Admin on 9/11/2015.
  */
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class GLPolicyMailDto {
 
@@ -16,19 +18,16 @@ public class GLPolicyMailDto {
 
     private String mailContent;
 
-    private String[] recipientMailAddress;
-
-    private String emailAddress;
+    private String recipientMailAddress;
 
     private String policyId;
 
     private String policyNumber;
 
-    public GLPolicyMailDto(String subject, String mailContent, String[] recipientMailAddress,String emailAddress) {
+    public GLPolicyMailDto(String subject, String mailContent, String recipientMailAddress) {
         this.subject = subject;
         this.mailContent = mailContent;
         this.recipientMailAddress = recipientMailAddress;
-        this.emailAddress = emailAddress;
     }
 
 

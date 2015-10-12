@@ -201,7 +201,7 @@ public class ILPolicyController {
             fileOutputStream.flush();
             fileOutputStream.close();
             EmailAttachment emailAttachment = new EmailAttachment(fileName, "application/pdf", file);
-            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress());
+            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), Arrays.asList(emailAttachment), mailDto.getRecipientMailAddress().split(";"));
             file.delete();
             return Result.success("Email sent successfully");
 

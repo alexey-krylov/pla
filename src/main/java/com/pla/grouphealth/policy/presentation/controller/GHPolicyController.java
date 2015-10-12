@@ -181,7 +181,7 @@ public class GHPolicyController {
         }
         try {
             List<EmailAttachment> emailAttachment = ghPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()));
-            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachment, mailDto.getRecipientMailAddress());
+            mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachment, mailDto.getRecipientMailAddress().split(";"));
         /*
         * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
         * */

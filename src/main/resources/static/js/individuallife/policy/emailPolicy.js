@@ -44,21 +44,21 @@ function sendEmail() {
     var recipientMailAddress=toAddress.split(';');
     var i=0;
     for(;i<recipientMailAddress.length;i++){
-        /*if(!IsValidEmail(recipientMailAddress[i])){
-            alert('Please enter a valid email address.');
-            return;
-        }*/
-        if(!IsValidEmail(emailAddress)){
+        if(!IsValidEmail(recipientMailAddress[i])){
             alert('Please enter a valid email address.');
             return;
         }
+       /* if(!IsValidEmail(emailAddress)){
+            alert('Please enter a valid email address.');
+            return;
+        }*/
     }
 
     $.ajax({
         url: '/pla/individuallife/policy/emailpolicy',
         type: 'POST',
         data: JSON.stringify({
-            recipientMailAddress: toAddress.split(';'), subject: subject, mailContent:mailContent,
+            recipientMailAddress: toAddress, subject: subject, mailContent:mailContent,
             policyId:policyId,policyNumber:policyNumber
         }),
         contentType: 'application/json; charset=utf-8',

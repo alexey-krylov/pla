@@ -54,7 +54,7 @@ function sendEmail() {
         url: '/pla/grouphealth/policy/emailpolicy',
         type: 'POST',
         data: JSON.stringify({
-            recipientMailAddress: toAddress.split(';'), subject: subject, mailContent:mailContent,
+            recipientMailAddress: toAddress, subject: subject, mailContent:mailContent,
             policyId:policyId,policyNumber:policyNumber
         }),
         contentType: 'application/json; charset=utf-8',
