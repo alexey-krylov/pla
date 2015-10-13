@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.application.command;
 
+import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberDeletionEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
@@ -8,23 +9,27 @@ import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
-import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.grouplife.sharedresource.model.vo.InsuredBuilder;
-import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
-import com.pla.grouplife.sharedresource.model.vo.InsuredDependentBuilder;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -37,6 +42,10 @@ public class GLEndorsementCommandHandler {
     private Repository<GroupLifeEndorsement> glEndorsementMongoRepository;
 
     private GroupLifeEndorsementService groupLifeEndorsementService;
+
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @Autowired
     public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService) {
@@ -119,4 +128,29 @@ public class GLEndorsementCommandHandler {
         }).collect(Collectors.toSet());
         return insuredDependents;
     }
+
+
+    @CommandHandler
+    public void uploadMandatoryDocument(GLEndorsementDocumentCommand glEndorsementDocumentCommand) throws IOException {
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(glEndorsementDocumentCommand.getEndorsementId()));
+        String fileName = glEndorsementDocumentCommand.getFile() != null ? glEndorsementDocumentCommand.getFile().getOriginalFilename() : "";
+        Set<GLProposerDocument> documents = groupLifeEndorsement.getProposerDocuments();
+        if (isEmpty(documents)) {
+            documents = Sets.newHashSet();
+        }
+        String gridFsDocId = gridFsTemplate.store(glEndorsementDocumentCommand.getFile().getInputStream(), fileName, glEndorsementDocumentCommand.getFile().getContentType()).getId().toString();
+        GLProposerDocument currentDocument = new GLProposerDocument(glEndorsementDocumentCommand.getDocumentId(), fileName, gridFsDocId, glEndorsementDocumentCommand.getFile().getContentType(), glEndorsementDocumentCommand.isMandatory());
+        if (!documents.add(currentDocument)) {
+            GLProposerDocument existingDocument = documents.stream().filter(new Predicate<GLProposerDocument>() {
+                @Override
+                public boolean test(GLProposerDocument ghProposerDocument) {
+                    return currentDocument.equals(ghProposerDocument);
+                }
+            }).findAny().get();
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
+            existingDocument = existingDocument.updateWithNameAndContent(glEndorsementDocumentCommand.getFilename(), gridFsDocId, glEndorsementDocumentCommand.getFile().getContentType());
+        }
+        groupLifeEndorsement = groupLifeEndorsement.updateWithDocuments(documents);
+    }
+
 }

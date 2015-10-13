@@ -1,8 +1,10 @@
 package com.pla.grouplife.endorsement.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.endorsement.application.command.GLCreateEndorsementCommand;
 import com.pla.grouplife.endorsement.application.command.GLEndorsementCommand;
+import com.pla.grouplife.endorsement.application.command.GLEndorsementDocumentCommand;
 import com.pla.grouplife.endorsement.application.command.SubmitGLEndorsementCommand;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
@@ -10,7 +12,6 @@ import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
-import com.pla.grouplife.proposal.application.command.GLProposalDocumentCommand;
 import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
@@ -20,12 +21,16 @@ import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
+import lombok.Synchronized;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,6 +66,9 @@ public class GroupLifeEndorsementController {
 
     @Autowired
     private GLPolicyService glPolicyService;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {
@@ -267,19 +275,31 @@ public class GroupLifeEndorsementController {
     }
 
 
-    //TODO implement
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        org.apache.commons.io.IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
+
+    @Synchronized
     @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity uploadMandatoryDocument(GLProposalDocumentCommand glProposalDocumentCommand, HttpServletRequest request) {
-        glProposalDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+    public ResponseEntity uploadMandatoryDocument(GLEndorsementDocumentCommand glEndorsementDocumentCommand, HttpServletRequest request) {
+        glEndorsementDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
+            commandGateway.sendAndWait(glEndorsementDocumentCommand);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
-
     //TODO implement
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
