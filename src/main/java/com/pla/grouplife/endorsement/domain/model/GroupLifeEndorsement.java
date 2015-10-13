@@ -45,6 +45,8 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
 
     private Set<GLProposerDocument> proposerDocuments;
 
+    private DateTime submittedOn;
+
     public GroupLifeEndorsement(EndorsementId endorsementId, EndorsementNumber endorsementNumber, Policy policy, GLEndorsementType endorsementType) {
         checkArgument(endorsementId != null, "Endorsement ID cannot be empty");
         checkArgument(endorsementNumber != null, "Endorsement Number cannot be empty");
@@ -107,8 +109,16 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return this;
     }
 
+    public GroupLifeEndorsement submitForApproval(DateTime now, String username, String comment) {
+        this.submittedOn = now;
+        this.status = EndorsementStatus.APPROVER_PENDING_ACCEPTANCE;
+        return this;
+    }
+
     @Override
     public EndorsementId getIdentifier() {
         return endorsementId;
     }
+
+
 }

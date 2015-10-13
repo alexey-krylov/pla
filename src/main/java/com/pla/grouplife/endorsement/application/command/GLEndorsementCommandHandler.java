@@ -16,6 +16,7 @@ import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -153,4 +154,11 @@ public class GLEndorsementCommandHandler {
         groupLifeEndorsement = groupLifeEndorsement.updateWithDocuments(documents);
     }
 
+
+    @CommandHandler
+    public String submitProposal(SubmitGLEndorsementCommand submitGLEndorsementCommand) {
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(submitGLEndorsementCommand.getEndorsementId()));
+        groupLifeEndorsement = groupLifeEndorsement.submitForApproval(DateTime.now(), submitGLEndorsementCommand.getUserDetails().getUsername(), submitGLEndorsementCommand.getComment());
+        return groupLifeEndorsement.getIdentifier().getEndorsementId();
+    }
 }

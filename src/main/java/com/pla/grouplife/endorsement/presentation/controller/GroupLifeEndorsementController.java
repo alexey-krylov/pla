@@ -12,6 +12,7 @@ import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
+import com.pla.grouplife.proposal.application.command.SubmitGLProposalCommand;
 import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
@@ -368,5 +369,20 @@ public class GroupLifeEndorsementController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
+    public ResponseEntity submitProposal(@RequestBody SubmitGLProposalCommand submitGLProposalCommand, HttpServletRequest request) {
+        try {
+            submitGLProposalCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(submitGLProposalCommand);
+            return new ResponseEntity(Result.success("Proposal submitted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
