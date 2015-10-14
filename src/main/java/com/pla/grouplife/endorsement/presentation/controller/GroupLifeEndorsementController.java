@@ -12,7 +12,6 @@ import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
-import com.pla.grouplife.proposal.application.command.SubmitGLProposalCommand;
 import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
@@ -356,13 +355,13 @@ public class GroupLifeEndorsementController {
         return Lists.newArrayList();
     }
 
-    //TODO implement
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To submit endorsement for approval")
     public ResponseEntity submitProposal(@RequestBody SubmitGLEndorsementCommand submitGLEndorsementCommand, HttpServletRequest request) {
         try {
             submitGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(submitGLEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement submitted successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -370,7 +369,7 @@ public class GroupLifeEndorsementController {
         }
     }
 
-    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
     public ResponseEntity submitProposal(@RequestBody SubmitGLProposalCommand submitGLProposalCommand, HttpServletRequest request) {
@@ -382,7 +381,7 @@ public class GroupLifeEndorsementController {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
 
 }
