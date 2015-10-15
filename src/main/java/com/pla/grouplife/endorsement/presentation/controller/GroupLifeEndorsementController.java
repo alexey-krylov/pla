@@ -43,6 +43,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -253,7 +254,7 @@ public class GroupLifeEndorsementController {
     @RequestMapping(value = "/getpolicydetail/{endorsementId}")
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To get Policy detail from proposer")
-    public Map<String, Object> getPolicyDetail(@PathVariable("endorsementId") String endorsementId) {
+    public Map<String, Object> getPolicyDetail(@PathVariable("endorsementId") String endorsementId) throws ParseException {
         return glEndorsementService.getPolicyDetail(endorsementId);
     }
 
@@ -310,8 +311,8 @@ public class GroupLifeEndorsementController {
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
-        boolean isValidExcel = glEndorsementService.isValidExcel(uploadInsuredDetailDto.getEndorsementType(), insuredTemplateWorkbook, new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
         try {
+            boolean isValidExcel = glEndorsementService.isValidExcel(uploadInsuredDetailDto.getEndorsementType(), insuredTemplateWorkbook, new EndorsementId(uploadInsuredDetailDto.getEndorsementId()));
             if (!isValidExcel) {
                 File insuredTemplateWithError = new File(uploadInsuredDetailDto.getEndorsementId());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);

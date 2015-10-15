@@ -5,6 +5,8 @@ import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.sharedkernel.identifier.EndorsementId;
+import org.exolab.castor.types.DateTime;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,6 +19,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +81,10 @@ public class GLEndorsementFinder {
         return mongoTemplate.find(query, Map.class, "group_life_endorsement");
     }
 
-    public Map<String, Object> getPolicyDetail(String endorsementId){
+    public Map<String, Object> getPolicyDetail(String endorsementId) throws ParseException {
         Criteria endorsementCriteria = Criteria.where("_id").is(endorsementId);
         Query query = new Query(endorsementCriteria);
-        query.fields().include("policy.policyId").include("policy.policyHolderName");
+        query.fields().include("policy.policyId").include("policy.policyHolderName").include("endorsementType.").include("effectiveDate");
         List<Map> glEndorsement = mongoTemplate.find(query, Map.class, "group_life_endorsement");
         if (isEmpty(glEndorsement)){
             return Collections.EMPTY_MAP;
@@ -97,6 +100,8 @@ public class GLEndorsementFinder {
         policyDetailMap.put("policyHolderName",((Map) glEndorsement.get(0).get("policy")).get("policyHolderName"));
         policyDetailMap.put("inceptionDate",glPolicy.get(0).get("inceptionOn"));
         policyDetailMap.put("expiredDate",glPolicy.get(0).get("expiredOn"));
+        policyDetailMap.put("effectiveDate", glEndorsement.get(0).get("effectiveDate"));
+        policyDetailMap.put("endorsementType", GLEndorsementType.valueOf((String)glEndorsement.get(0).get("endorsementType")).getDescription());
         return policyDetailMap;
     }
 
