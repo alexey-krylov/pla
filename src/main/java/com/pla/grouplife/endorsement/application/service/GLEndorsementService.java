@@ -34,6 +34,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -170,7 +171,7 @@ public class GLEndorsementService {
         return policyId;
     }
 
-    public Map<String, Object> getPolicyDetail(String endorsementId) {
+    public Map<String, Object> getPolicyDetail(String endorsementId) throws ParseException {
         return glEndorsementFinder.getPolicyDetail(endorsementId);
     }
 
