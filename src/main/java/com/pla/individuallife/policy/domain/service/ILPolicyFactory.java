@@ -6,7 +6,6 @@ import com.pla.individuallife.policy.domain.model.IndividualLifePolicy;
 import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
 import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.sharedresource.model.vo.*;
-import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -14,8 +13,10 @@ import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -66,10 +67,14 @@ public class ILPolicyFactory {
         DateTime policyInceptionDate = DateTime.now();
         DateTime policyExpireDate = policyInceptionDate.plusYears(proposalPlanDetail.getPolicyTerm());
         Proposal proposal = new Proposal(proposalId, proposalNumber);
+        proposer.setClientId(generateClientId());
+        if (!proposer.getIsProposedAssured()){
+            proposedAssured.setClientId(generateClientId());
+        }
         IndividualLifePolicy  individualLifePolicy = IndividualLifePolicy.createPolicy(policyId,policyNumber,proposal,policyInceptionDate,policyExpireDate);
-        individualLifePolicy.withProposedAssured(proposedAssured)
+        individualLifePolicy.withProposer(proposer)
                 .withAgentCommissionShareModel(agentCommissionShareModel)
-                .withProposer(proposer)
+                .withProposedAssured(proposedAssured)
                 .withBeneficiaries(beneficiaries)
                 .withCompulsoryHealthStatement(questions)
                 .withGeneralDetails(generalDetails)
@@ -104,19 +109,12 @@ public class ILPolicyFactory {
         return null;
     }
 
-    private Set<GHInsured> populateFamilyId(Set<GHInsured> insureds) {
+    private String generateClientId() {
         Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(GHInsured.class);
-        final Integer[] sequenceNumber = {((Integer) entitySequenceMap.get("sequenceNumber")) + 1};
-        insureds.forEach(insured -> {
-            if (insured.getNoOfAssured() == null) {
-                String selfFamilySequence = sequenceNumber[0] + "01";
-                sequenceNumber[0] = sequenceNumber[0] + 1;
-                FamilyId familyId = new FamilyId(selfFamilySequence);
-                insured = insured.updateWithFamilyId(familyId);
-            }
-        });
-        sequenceGenerator.updateSequence(sequenceNumber[0], (Integer) entitySequenceMap.get("sequenceId"));
-        return insureds;
+        final Integer sequenceNumber = (Integer) entitySequenceMap.get("sequenceNumber") + 1;
+        String dateInString =  StringUtils.replaceEachRepeatedly(DateTime.now().toString(DateTimeFormat.forPattern("dd/MM/yy")), new String[]{"/"}, new String[]{""});
+        sequenceGenerator.updateSequence(sequenceNumber, (Integer) entitySequenceMap.get("sequenceId"));
+        return dateInString+sequenceNumber;
     }
 
 }

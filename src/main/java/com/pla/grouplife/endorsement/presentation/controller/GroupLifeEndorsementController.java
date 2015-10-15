@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -261,8 +262,7 @@ public class GroupLifeEndorsementController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("endorsementId") String endorsementId) {
-        PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
-        List<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glPolicyService.findMandatoryDocuments(policyId.getPolicyId());
+        List<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glEndorsementService.findMandatoryDocuments(endorsementId);
         return ghProposalMandatoryDocumentDtos;
     }
 
@@ -369,19 +369,26 @@ public class GroupLifeEndorsementController {
         }
     }
 
-    /*@RequestMapping(value = "/submit", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "POST", value = "To submit proposal for approval")
-    public ResponseEntity submitProposal(@RequestBody SubmitGLProposalCommand submitGLProposalCommand, HttpServletRequest request) {
-        try {
-            submitGLProposalCommand.setUserDetails(getLoggedInUserDetail(request));
-            commandGateway.sendAndWait(submitGLProposalCommand);
-            return new ResponseEntity(Result.success("Proposal submitted successfully"), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }*/
+    @RequestMapping(value = "/downloadinsuredtemplate/{endorsementId}", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To download insured template")
+    public void downloadInsuredTemplate(@PathVariable("endorsementId") String endorsementId, HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/msexcel");
+        response.setHeader("content-disposition", "attachment; filename=" + "Group_Life_InsuredTemplate.xls" + "");
+        OutputStream outputStream = response.getOutputStream();
+        HSSFWorkbook planDetailExcel =/* glEndorsementService.getInsuredTemplateExcel(policyId);*/ null;
+        planDetailExcel.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
 
+
+    @RequestMapping(value = "/getadditionaldocuments/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("endorsementId") String endorsementId) {
+        Set<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glEndorsementService.findAdditionalDocuments(endorsementId);
+        return ghProposalMandatoryDocumentDtos;
+    }
 
 }

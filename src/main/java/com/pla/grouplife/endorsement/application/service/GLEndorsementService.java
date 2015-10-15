@@ -1,29 +1,45 @@
 package com.pla.grouplife.endorsement.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.endorsement.application.service.excel.generator.GLEndorsementExcelGenerator;
 import com.pla.grouplife.endorsement.application.service.excel.parser.GLEndorsementExcelParser;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
+import com.pla.grouplife.policy.query.GLPolicyFinder;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
+import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
@@ -47,6 +63,9 @@ public class GLEndorsementService {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
+
+    @Autowired
+    private GLPolicyFinder glPolicyFinder;
 
     private final Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators;
 
@@ -154,5 +173,83 @@ public class GLEndorsementService {
     public Map<String, Object> getPolicyDetail(String endorsementId) {
         return glEndorsementFinder.getPolicyDetail(endorsementId);
     }
+
+    public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(String endorsementId) {
+        Map endorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
+        PolicyId policyId = getPolicyIdFromEndorsment(endorsementId);
+        Map policyMap = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        List<GLProposerDocument> uploadedDocuments = endorsementMap.get("proposerDocuments") != null ? (List<GLProposerDocument>) endorsementMap.get("proposerDocuments") : Lists.newArrayList();
+        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+        insureds.forEach(ghInsured -> {
+            PlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
+            SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planPremiumDetail.getPlanId());
+            documentDetailDtos.add(searchDocumentDetailDto);
+            if (isNotEmpty(ghInsured.getInsuredDependents())) {
+                ghInsured.getInsuredDependents().forEach(insuredDependent -> {
+                    PlanPremiumDetail dependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                    documentDetailDtos.add(new SearchDocumentDetailDto(dependentPlanPremiumDetail.getPlanId()));
+                });
+            }
+        });
+        Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.ENDORSEMENT);
+        List<GLProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
+        if (isNotEmpty(mandatoryDocuments)) {
+            mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GLProposalMandatoryDocumentDto>() {
+                @Override
+                public GLProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
+                    GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    Optional<GLProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<GLProposerDocument>() {
+                        @Override
+                        public boolean test(GLProposerDocument glProposerDocument) {
+                            return clientDocumentDto.getDocumentCode().equals(glProposerDocument.getDocumentId());
+                        }
+                    }).findAny();
+                    if (proposerDocumentOptional.isPresent()) {
+                        try {
+                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
+                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                                mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                                mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return mandatoryDocumentDtos;
+    }
+
+
+    public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(String endorsementId) {
+        Map endorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
+        List<GLProposerDocument> uploadedDocuments = endorsementMap.get("proposerDocuments") != null ? (List<GLProposerDocument>) endorsementMap.get("proposerDocuments") : Lists.newArrayList();
+        Set<GLProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
+                @Override
+                public GLProposalMandatoryDocumentDto apply(GLProposerDocument glProposerDocument) {
+                    GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), glProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
+    }
+
 
 }

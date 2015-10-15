@@ -10,9 +10,9 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class ILProposerAddedEvent {
 
-    private String proposerName;
+    private String clientId;
 
-    private String proposerCode;
+    private String proposerName;
 
     private String addressLine1;
 
@@ -26,9 +26,9 @@ public class ILProposerAddedEvent {
 
     private String emailAddress;
 
-    public ILProposerAddedEvent(String proposerName, String proposerCode, String addressLine1, String addressLine2, String postalCode, String province, String town, String emailAddress) {
+    public ILProposerAddedEvent(String clientId,String proposerName, String addressLine1, String addressLine2, String postalCode, String province, String town, String emailAddress) {
+        this.clientId = clientId;
         this.proposerName = proposerName;
-        this.proposerCode = proposerCode;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.postalCode = postalCode;

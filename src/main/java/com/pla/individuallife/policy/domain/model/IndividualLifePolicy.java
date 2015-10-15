@@ -3,7 +3,7 @@ package com.pla.individuallife.policy.domain.model;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
-import com.pla.sharedkernel.event.GHProposerAddedEvent;
+import com.pla.sharedkernel.event.ILProposerAddedEvent;
 import com.pla.sharedkernel.identifier.PolicyId;
 import lombok.Getter;
 import org.axonframework.domain.AbstractAggregateRoot;
@@ -59,12 +59,6 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
         this.expiredOn = expiredOn;
         this.proposal = proposal;
         this.policyStatus = PolicyStatus.IN_FORCE;
-//        ResidentialAddress proposerContactDetail = proposer.getResidentialAddress();
-       /* if (this.proposer != null && this.proposer.getResidentialAddress() != null) {
-            registerEvent(new GHProposerAddedEvent(proposer.getFirstName(), proposer.getTitle(),
-                    proposerContactDetail.getAddress().getAddress1(), proposerContactDetail.getAddress().getAddress2(), proposerContactDetail.getAddress().getPostalCode(),
-                    proposerContactDetail.getAddress().getProvince(), proposerContactDetail.getAddress().getTown(), proposerContactDetail.getEmailAddress()));
-        }*/
     }
 
     public static IndividualLifePolicy createPolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime policyInceptionDate, DateTime policyExpireDate) {
@@ -73,11 +67,23 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     public IndividualLifePolicy withProposedAssured(ProposedAssured proposedAssured){
         this.proposedAssured  = proposedAssured;
+        ResidentialAddress proposerContactDetail = proposedAssured.getResidentialAddress();
+        if (this.proposedAssured != null && this.proposedAssured.getResidentialAddress() != null && this.proposer.getIsProposedAssured()) {
+            registerEvent(new ILProposerAddedEvent(proposedAssured.getClientId(), proposedAssured.getFirstName(),
+                    proposerContactDetail.getAddress().getAddress1(), proposerContactDetail.getAddress().getAddress2(), proposerContactDetail.getAddress().getPostalCode(),
+                    proposerContactDetail.getAddress().getProvince(), proposerContactDetail.getAddress().getTown(), proposerContactDetail.getEmailAddress()));
+        }
         return this;
     }
 
     public IndividualLifePolicy withProposer(Proposer proposer){
         this.proposer  = proposer;
+        ResidentialAddress proposerContactDetail = proposer.getResidentialAddress();
+        if (this.proposer != null && this.proposer.getResidentialAddress() != null) {
+            registerEvent(new ILProposerAddedEvent(proposer.getClientId(), proposer.getFirstName(),
+                    proposerContactDetail.getAddress().getAddress1(), proposerContactDetail.getAddress().getAddress2(), proposerContactDetail.getAddress().getPostalCode(),
+                    proposerContactDetail.getAddress().getProvince(), proposerContactDetail.getAddress().getTown(), proposerContactDetail.getEmailAddress()));
+        }
         return this;
     }
 

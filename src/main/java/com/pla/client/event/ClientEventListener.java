@@ -33,8 +33,7 @@ public class ClientEventListener {
 
     @EventHandler
     public void handle(ILProposerAddedEvent ghProposerAddedEvent) {
-
-        ClientDetailDto clientDetailDto = new ClientDetailDto(ghProposerAddedEvent.getProposerCode(), ghProposerAddedEvent.getProposerName(), ghProposerAddedEvent.getAddressLine1(), ghProposerAddedEvent.getAddressLine2(), ghProposerAddedEvent.getPostalCode(), ghProposerAddedEvent.getProvince(), ghProposerAddedEvent.getTown(), ghProposerAddedEvent.getEmailAddress());
+        ClientDetailDto clientDetailDto = new ClientDetailDto(ghProposerAddedEvent.getClientId(), ghProposerAddedEvent.getProposerName(), ghProposerAddedEvent.getAddressLine1(), ghProposerAddedEvent.getAddressLine2(), ghProposerAddedEvent.getPostalCode(), ghProposerAddedEvent.getProvince(), ghProposerAddedEvent.getTown(), ghProposerAddedEvent.getEmailAddress());
         clientApplicationService.createClient(clientDetailDto);
     }
 }
