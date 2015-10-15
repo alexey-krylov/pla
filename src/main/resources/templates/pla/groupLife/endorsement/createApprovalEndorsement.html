@@ -180,18 +180,17 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group required">
+                                    <div class="form-group ">
                                         <label class="control-label">Scheme Name</label>
                                         <input type="text" class="form-control input-sm" name="schemeName"
-                                               ng-required="true"
-                                               ng-disabled="true"/>
+                                               ng-disabled="true" />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group required">
+                                    <div class="form-group">
                                         <label class="control-label">Endorsement Effective Date</label>
                                         <input type="text" class="form-control input-sm" name="effectiveDate"
-                                               ng-required="true"
+                                                ng-model="policyDetails.basicDetails.effectiveDate"
                                                ng-disabled="true"/>
                                     </div>
                                 </div>
@@ -199,7 +198,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Endorsement Type</label>
                                         <input type="text" class="form-control input-sm" name="endorsementType"
-                                               ng-required="true"
+                                               ng-required="true" ng-model="policyDetails.basicDetails.endorsementType"
                                                ng-disabled="true"/>
                                     </div>
                                 </div>
