@@ -1,8 +1,11 @@
 package com.pla.client.domain.model;
 
 import com.google.common.collect.Maps;
+import com.pla.sharedkernel.domain.model.FamilyId;
+import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.identifier.ClientId;
 import lombok.*;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,11 +25,13 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@EqualsAndHashCode(of = "clientCode")
+@EqualsAndHashCode
 public class Client {
 
     @Id
     private ClientId clientCode;
+
+    private FamilyId clientId;
 
     private String clientName;
 
@@ -34,9 +39,17 @@ public class Client {
 
     private String address2;
 
+    private DateTime dateOfBirth;
+
+    private Gender gender;
+
+    private String nrcNumber;
+
+    private String companyName;
+
     private String postalCode;
 
-    private String provience;
+    private String province;
 
     private String town;
 
@@ -50,9 +63,9 @@ public class Client {
         this.address1  = clientBuilder.getAddress1();
         this.address2 = clientBuilder.getAddress2();
         this.postalCode = clientBuilder.getPostalCode();
-        this.provience = clientBuilder.getProvience();
+        this.province = clientBuilder.getProvience();
         this.town = clientBuilder.getTown();
-        this.emailAddress = clientBuilder.getEmailAddress();
+            this.emailAddress = clientBuilder.getEmailAddress();
     }
 
     public static Client createClient(ClientBuilder clientBuilder,String clientCode){
@@ -83,4 +96,20 @@ public class Client {
         }
         return Collections.EMPTY_LIST;
     }
+
+    /*
+    * create builder and set that to client
+    * */
+public Client updateClient(ClientBuilder clientBuilder){
+   // this.clientName = clientBuilder.getClientName();
+    this.address1  = clientBuilder.getAddress1();
+    this.address2 = clientBuilder.getAddress2();
+    this.postalCode = clientBuilder.getPostalCode();
+    this.province = clientBuilder.getProvience();
+    this.town = clientBuilder.getTown();
+    this.emailAddress = clientBuilder.getEmailAddress();
+    this.withClientDocument(clientBuilder.getClientDocuments());
+
+    return this;
 }
+ }

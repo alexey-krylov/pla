@@ -68,7 +68,7 @@
         <constructor-arg index="3" value="pla"/>
         <constructor-arg index="4" value="pla"/>
     </bean>
-    <mongo:mongo id="mongo" host="127.0.0.1" port="33016"/>
+    <mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>
     <!--<mongo:mongo id="mongo" host="127.0.0.1" port="27017"/>-->
     <!--
         db.createUser({user:"pla", pwd:"pla" roles:[{role:"userAdmin",db:"pla"}]});
