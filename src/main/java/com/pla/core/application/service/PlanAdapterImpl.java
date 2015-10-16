@@ -229,6 +229,15 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return activePlanCount != 0;
     }
 
+    /*
+    * @TODO please review @Samir
+    * */
+     @Override
+    public Set<String> getConfiguredEndorsementType(Set<PlanId> planIds) {
+        Set<String> endorsementType =  planFinder.findConfiguredEndorsementType(planIds);
+        return endorsementType;
+    }
+
     @Override
     public boolean isValidAgeRange(String planCode, int age) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);

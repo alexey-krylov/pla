@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.endorsement.application.service.excel.generator.GLEndorsementExcelGenerator;
@@ -19,11 +20,13 @@ import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
+import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.EndorsementId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -35,10 +38,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -64,6 +64,8 @@ public class GLEndorsementService {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
+    @Autowired
+    private IPlanAdapter iPlanAdapter;
 
     @Autowired
     private GLPolicyFinder glPolicyFinder;
@@ -78,17 +80,62 @@ public class GLEndorsementService {
         this.excelParsers = excelParsers;
     }
 
+    /*
+    * @TODO please review @Samir
+    * */
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(), searchGLPolicyDto.getClientId(), new String[]{"IN_FORCE"}, searchGLPolicyDto.getProposalNumber());
         List<GLPolicyDetailDto> transformedPolicies = searchedPolices.stream().map(new Function<Map, GLPolicyDetailDto>() {
             @Override
             public GLPolicyDetailDto apply(Map map) {
                 GLPolicyDetailDto policyDetailDto = transformToDto(map);
-                policyDetailDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementTypeExceludingFCL());
+                Set<PlanId> planIds  = findSelectedPlanPolicy(map);
+                Set<String> endorsementTypes =  iPlanAdapter.getConfiguredEndorsementType(planIds);
+                policyDetailDto.setEndorsementTypes(getAllEndorsementTypeExcludingFCL(endorsementTypes));
                 return policyDetailDto;
             }
         }).collect(Collectors.toList());
         return transformedPolicies;
+    }
+
+    /*
+    * @TODO please review @Samir
+    * */
+    private List<Map<String,String>> getAllEndorsementTypeExcludingFCL(Set<String> endorsementTypes){
+        return Arrays.asList(GLEndorsementType.values()).parallelStream().filter(new Predicate<GLEndorsementType>() {
+            @Override
+            public boolean test(GLEndorsementType glEndorsementType) {
+                return (endorsementTypes.contains(glEndorsementType.getDescription()) && !GLEndorsementType.FREE_COVER_LIMIT.equals(glEndorsementType));
+            }
+        }).map(endorsement -> {
+            Map<String, String> endorsementMap = Maps.newLinkedHashMap();
+            endorsementMap.put("code", endorsement.name());
+            endorsementMap.put("description", endorsement.getDescription());
+            return endorsementMap;
+        }).collect(Collectors.toList());
+    }
+
+
+    /*
+    * @TODO please review @Samir
+    * */
+    private Set<PlanId> findSelectedPlanPolicy(Map searchedPolices){
+        if (isEmpty(searchedPolices)){
+            return Collections.EMPTY_SET;
+        }
+        List<Insured> insureds = (List<Insured>) searchedPolices.get("insureds");
+        Set<PlanId> planIds = Sets.newLinkedHashSet();
+        insureds.forEach(ghInsured -> {
+            PlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
+            planIds.add(planPremiumDetail.getPlanId());
+            if (isNotEmpty(ghInsured.getInsuredDependents())) {
+                ghInsured.getInsuredDependents().forEach(insuredDependent -> {
+                    PlanPremiumDetail dependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                    planIds.add(dependentPlanPremiumDetail.getPlanId());
+                });
+            }
+        });
+        return planIds;
     }
 
     private GLPolicyDetailDto transformToDto(Map policyMap) {

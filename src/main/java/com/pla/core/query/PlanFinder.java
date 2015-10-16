@@ -11,11 +11,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.dto.CoverageDto;
 import com.pla.sharedkernel.domain.model.CoverageType;
+import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -39,6 +41,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Nischitha
@@ -213,6 +216,26 @@ public class PlanFinder {
     public List<Map<String, Object>> getAllPlans() {
         final String FIND_ALL_PLAN_QUERY = "SELECT DISTINCT planId,planName,planCode FROM plan_coverage_benefit_assoc_view WHERE planStatus !='WITHDRAWN'";
         return namedParameterJdbcTemplate.query(FIND_ALL_PLAN_QUERY, new ColumnMapRowMapper());
+    }
+
+    public Set<String> findConfiguredEndorsementType(Set<PlanId> planIds) {
+        Criteria planCriteria = Criteria.where("planId").in(planIds);
+        Query query = new Query(planCriteria);
+        List<Plan> plans = mongoTemplate.find(query, Plan.class);
+        Set<String> endorsementTypes = Sets.newLinkedHashSet();
+        plans.parallelStream().map(new Function<Plan, String>() {
+            @Override
+            public String apply(Plan plan) {
+                Set<EndorsementType> endorsementType = plan.getPlanDetail().getEndorsementTypes();
+                if (isNotEmpty(endorsementType)) {
+                    endorsementType.forEach(endorsement -> {
+                        endorsementTypes.add(endorsement.getDescription());
+                    });
+                }
+                return "";
+            }
+        }).collect(Collectors.toSet());
+        return endorsementTypes;
     }
 
     private class TransformPlanCoverageWithCoverageName implements Function<Map, Map<String, Object>> {

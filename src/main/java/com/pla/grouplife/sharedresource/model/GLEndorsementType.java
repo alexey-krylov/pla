@@ -31,13 +31,13 @@ public enum GLEndorsementType {
             return Arrays.asList(GLEndorsementExcelHeader.CATEGORY, GLEndorsementExcelHeader.RELATIONSHIP
                     , GLEndorsementExcelHeader.NO_OF_ASSURED, GLEndorsementExcelHeader.CLIENT_ID);
         }
-    }, MEMBER_PROMOTION("Member Promotion") {
+    }, MEMBER_PROMOTION("Promotion") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.OLD_ANNUAL_INCOME, GLEndorsementExcelHeader.NEW_ANNUAL_INCOME);
         }
     },
-    NEW_CATEGORY_RELATION("New Category Relationship") {
+    NEW_CATEGORY_RELATION("Introduction of New category") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.PROPOSER_NAME, GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.CATEGORY,
@@ -45,7 +45,7 @@ public enum GLEndorsementType {
                     GLEndorsementExcelHeader.DATE_OF_BIRTH, GLEndorsementExcelHeader.GENDER, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.NO_OF_ASSURED,
                     GLEndorsementExcelHeader.ANNUAL_INCOME, GLEndorsementExcelHeader.INCOME_MULTIPLIER, GLEndorsementExcelHeader.PLAN, GLEndorsementExcelHeader.SUM_ASSURED, GLEndorsementExcelHeader.PLAN_PREMIUM);
         }
-    }, CHANGE_POLICY_HOLDER_NAME("Correction of Name - Policy Holder") {
+    }, CHANGE_POLICY_HOLDER_NAME("Correction of Name-Policyholder") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return null;
@@ -56,28 +56,28 @@ public enum GLEndorsementType {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME);
         }
     },
-    CHANGE_POLICY_HOLDER_CONTACT_DETAIL("Change of Contact Details") {
+    CHANGE_POLICY_HOLDER_CONTACT_DETAIL("Change of Address") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return null;
         }
-    }, CHANGE_DOB("Correction of Date of Birth - Assured") {
+    }, CHANGE_DOB("Change Life Assured Date of Birth") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.DATE_OF_BIRTH);
         }
-    }, CHANGE_NRC("Correction of NRC - Assured") {
+    }, CHANGE_NRC("Correction Life Assured - NRC") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.NRC_NUMBER);
         }
     },
-    CHANGE_MAN_NUMBER("Correction of MAN Number - Assured") {
+    CHANGE_MAN_NUMBER("Correction Life Assured-MAN Number") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.MAN_NUMBER);
         }
-    }, CHANGE_GENDER("Correction of Gender - Assured") {
+    }, CHANGE_GENDER("Correction Life Assured - Gender") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.GENDER);
@@ -94,7 +94,10 @@ public enum GLEndorsementType {
         return description;
     }
 
-    public static List<Map<String, String>> getAllEndorsementTypeExceludingFCL() {
+    /*
+    * @TODO please review @Samir
+    * */
+  /*  public static List<Map<String, String>> getAllEndorsementTypeExceludingFCL() {
         List<Map<String, String>> endorsementTypes = Lists.newArrayList();
         GLEndorsementType[] glEndorsementTypes = GLEndorsementType.values();
         for (int count = 0; count < glEndorsementTypes.length; count++) {
@@ -107,7 +110,7 @@ public enum GLEndorsementType {
             }
         }
         return endorsementTypes;
-    }
+    }*/
 
     public static List<Map<String, String>> getAllEndorsementType() {
         List<Map<String, String>> endorsementTypes = Lists.newArrayList();

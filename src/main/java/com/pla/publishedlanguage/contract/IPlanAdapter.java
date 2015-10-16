@@ -7,6 +7,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Samir on 4/22/2015.
@@ -46,6 +47,8 @@ public interface IPlanAdapter {
     PlanId getPlanId(String planCode);
 
     boolean isPlanActive(String planCode);
+
+    Set<String> getConfiguredEndorsementType(Set<PlanId> planIds);
 
 
 
