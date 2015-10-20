@@ -105,6 +105,8 @@
                                         <option value="correctinNRCLA">Correction of NRC- Life Assured</option>
                                         <option value="changecontactinLA">Change of Contact Details- Life Assured</option>
                                         <option value="changecontactinPH">Change of Contact Details- Policyholder</option>
+                                        <option value="changeBeneficiary">Add/Change/Delete Beneficiary</option>
+                                        <option value="changeAgent">Add/Change/Delete Agent</option>
                                     </select>
                                 </div>
                             </div>
@@ -606,7 +608,7 @@
                         </accordion>
 
                         <accordion ng-if="policy.endrosementType== 'changecontactinPH'">
-                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'changecontactinP'">
+                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'changecontactinPH'">
                                 <accordion-heading>
                                     Policyholder Contact Details <i class="pull-right glyphicon"
                                                                     ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -766,7 +768,268 @@
 
                             </accordion-group>
                         </accordion>
+                        <accordion ng-if="policy.endrosementType== 'changeBeneficiary'">
+                            <accordion-group is-open="policy.endrosementType== 'changeBeneficiary'">
+                                <accordion-heading>
+                                    Beneficiary Details <i class="pull-right glyphicon"
+                                                           ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.beneficiary, 'glyphicon-chevron-right': !accordionStatus.planDetails.beneficiary}"></i>
+                                </accordion-heading>
+                                <div class="row" style="margin: 0px">
+                                    <div class="col-md-12">
+                                        <p style="color:red" ng-show="commisionMessage">
+                                            Sum of share % is not 100..Please update share % to ensure it should be 100
+                                        </p>
+                                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                                data-toggle="modal" data-target="#beneficialModal"
+                                                ng-disabled="mode=='new'||mode=='view'" style="margin-bottom: 5px"><strong>Add Beneficiary</strong></button>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    Beneficiary Name
+                                                </th>
+                                                <th>
+                                                    Relationship To Proposed Assured
+                                                </th>
+                                                <th>
+                                                    Share %
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="beneficiary in beneficiariesList">
+                                                <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
+                                                <td>{{beneficiary.relationshipId}}</td>
+                                                <!--<td>{{beneficiary.share}}</td>-->
+                                                <td>
+                                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="shareSumTest()" min="0" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
 
+                        <accordion ng-if="policy.endrosementType== 'changeAgent'">
+                            <accordion-group is-open="policy.endrosementType== 'changeAgent'" ng-class="{'accordion-error':isAgentEmpty}">
+                                <accordion-heading>
+                                    Agent Details
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.agents, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.agents}"></i>
+                                </accordion-heading>
+                                <div class="col-md-12">
+                                    <p style="color:red" ng-show="agentMessage">
+                                        Sum of commission % is not 100..Please update commission % to ensure it should be 100
+                                    </p>
+                                    <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
+                                            data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Agent</strong>
+                                    </button>
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Agent Code</th>
+                                            <th>Agent Name</th>
+                                            <th>Commission %</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="row in agentDetails">
+                                            <td>{{row.agentId}}</td>
+                                            <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
+
+                                            <td>
+                                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="commisionSumTest()" ng-model="row.commission"  ng-blur="commisionSumTest()" value="{{row.commission}}" />
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+                        <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal" ng-form="agentForm">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">Agent Details</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Agent Code</label>
+                                                    <div class="input-group">
+                                                        <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
+                                                               ng-model="newAgent.agentId" ng-required="true"
+                                                               ng-blur="searchAgent()"
+                                                               ng-disabled="mode=='new'">
+                                                        </input>
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
+                                                                    ng-disabled="!newAgent.agentId || mode=='new'">
+                                                                <span class="glyphicon glyphicon-search"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group required" ng-show="check">
+                                                    <span style="color:red">Invalid Agent Code</span>
+                                                </div>
+
+                                                <div class="form-group required">
+                                                    <label class="control-label">Commission %</label>
+                                                    <input class="form-control input-sm" type="number" max="100" min="0" name="commission" ng-model="newAgent.commission"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">First Name</label>
+                                                    <input type="text" class="form-control input-sm" name="firstName" readonly="true" ng-model="newAgent.firstName" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Last Name</label>
+                                                    <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="newAgent.lastName" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" data-dismiss="modal" ng-disabled="agentForm.$invalid || checking" ng-click="addAgent(newAgent)">Add</button>
+                                        <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal" ng-form="beneficiaryForm">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">Beneficiary Details</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Title</label>
+                                                    <select class="form-control input-sm" name="beneficiaryTitle" ng-required="true" ng-model="newBeneficiary.title" ng-options="title for title in titleList">
+                                                    </select>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.beneficiaryTitle.$error" ng-if="beneficiaryForm.beneficiaryTitle.$dirty">
+                                                        <small ng-message="required">Please enter title.</small>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group required">
+                                                    <label class="control-label">First Name</label>
+                                                    <input type="text" class="form-control input-sm" ng-required="true" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" name="beneficiaryFirstName" ng-model="newBeneficiary.firstName"/>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.beneficiaryFirstName.$error" ng-if="beneficiaryForm.beneficiaryFirstName.$dirty">
+                                                        <small class="error" ng-message="required">Please enter First Name.</small>
+                                                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                                                    </div>
+
+                                                    <p style="color:red" ng-show="isBeneficiaryTrusteeNameSame">
+                                                        Beneficiary Name and Trustee Name Should Not be Same.
+                                                    </p>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">NRC</label>
+                                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" name="beneficiaryNrc" ng-model="newBeneficiary.nrc"/>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.beneficiaryNrc.$error" ng-if="beneficiaryForm.beneficiaryNrc.$dirty">
+                                                        <!--<small class="error" ng-message="required">Please enter NRC.</small>-->
+                                                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                                        <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                                                    </div>
+
+                                                    <p style="color:red" ng-show="isBeneficiaryTrusteeNRCSame">
+                                                        Beneficiary NRC and Trustee NRC Should Not be Same.
+                                                    </p>
+
+                                                </div>
+
+                                                <div class="form-group required">
+                                                    <label class="control-label required">Age</label>
+                                                    <input type="number" class="form-control input-sm" name="beneficiaryAge1"  ng-model="newBeneficiary.age"
+                                                           ng-required="true" ng-readonly="true"/>
+                                                </div>
+
+                                               <!-- <div class="form-group required">
+                                                    <label class="control-label">Relationship To Life Assured</label>
+                                                    <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="newBeneficiary.relationshipId" ng-options="applicableRelationship.relationCode as applicableRelationship.description for applicableRelationship in applicableRelationships">
+                                                    </select>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.relationship.$error" ng-if="beneficiaryForm.relationship.$dirty">
+                                                        <small class="error" ng-message="required">Please choose RelationshipId.</small>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Surname</label>
+                                                    <input type="text" class="form-control input-sm" name="beneficiarySurname" ng-pattern="/[a-zA-Z]/" ng-required="true" ng-maxlength="20" ng-model="newBeneficiary.surname"/>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.beneficiarySurname.$error" ng-if="beneficiaryForm.beneficiarySurname.$dirty">
+                                                        <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                                        <small ng-message="pattern">Only alphabets are allowed.</small>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group required">
+                                                    <label class="control-label">Date Of Birth</label>
+                                                    <div class='input-group date'>
+                                                        <input type="text" class="form-control input-sm"
+                                                               datepicker-popup="" view-enabled=""
+                                                               ng-required="true"
+                                                               is-open="launchdob4"
+                                                               max-date="todayDate"
+                                                               ng-model="newBeneficiary.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'"
+                                                               ng-change="showBeneficiaryDob(newBeneficiary.dateOfBirth)"/>
+                                                            <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default btn-sm"
+                                                                    ng-disabled="mode=='new'||mode=='view'" ng-click="launchBeneficiaryDob($event)">
+                                                                <i class="glyphicon glyphicon-calendar"></i></button>
+                                                          </span>
+                                                    </div>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.dob.$error" ng-if="beneficiaryForm.dob.$dirty">
+                                                        <small ng-message="required">Please enter Beneficiary Date Of Birth.</small>
+                                                        <small ng-message="date">Invalid Date.</small>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group required">
+                                                    <label class="control-label">Sex</label>
+                                                    <select type="text" class="form-control input-sm" name="sex" ng-model="newBeneficiary.gender" ng-required="true" ng-options="gender.code as gender.description for gender in genderList"></select>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.beneficiarySurname.$error" ng-if="beneficiaryForm.beneficiarySurname.$dirty">
+                                                        <small class="error" ng-message="required">Please enter Sex.</small>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group required">
+                                                    <label class="control-label">Share %</label>
+                                                    <input type="number" class="form-control input-sm" name="share" ng-required="true" ng-model="newBeneficiary.share"/>
+
+                                                    <div class="error" ng-messages="beneficiaryForm.share.$error" ng-if="beneficiaryForm.share.$dirty">
+                                                        <small ng-message="required">Please enter share%.</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" data-dismiss="modal" ng-disabled="beneficiaryForm.$invalid" ng-click="addBeneficiary(newBeneficiary)">Add</button>
+                                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
@@ -774,7 +1037,6 @@
                         </div>
                     </div>
                 </div>
-
 
 
                 <div class="step-pane" data-step="2">
