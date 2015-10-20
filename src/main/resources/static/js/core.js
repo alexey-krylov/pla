@@ -8,6 +8,12 @@ require(["bootstrap-datepicker"], function() {
         clearBtn: true,
         autoclose: true
     });
+    $('#datepicker5').datepicker({
+        format: "dd/mm/yyyy",
+        orientation: "top auto",
+        clearBtn: true,
+        autoclose: true
+    });
 });
 
 /* var openAssignTeam = function(teamId){

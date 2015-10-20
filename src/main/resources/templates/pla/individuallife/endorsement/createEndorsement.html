@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet">
+    <link href="../../../../static/css/common.css" rel="stylesheet">
+    <script data-main="../../../../static/js/requireConfig"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <!--*/-->
+</head>
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var isNumeric = function (evt) {
+
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode == 13) {
+            evt.preventDefault();
+        }
+
+
+        if (charCode > 31 && charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57 ))
+            return false;
+        return true;
+    }
+    /*]]>*/
+
+</script>
+<script>
+    var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
+    requirejs(['main','angular-file-upload'], function () {
+        require(['/pla/js/individuallife/endorsement/createEndorsement.js?t=11221'], function () {
+            angular.bootstrap(document, ['createEndorsement']);
+        });
+    });
+
+</script>
+<script type="text/ng-template" id="createEndorsementTpl.html">
+    <p class="container lead">
+    <ol class="container breadcrumb" style="margin-left: 12px;">
+        <li>Endorsement</li>
+        <li>Individual Life</li>
+    </ol>
+    </p>
+
+    <nth-alert></nth-alert>
+    <form name="endorsementForm" novalidate="true" class="css-form ng-cloak" method="post" enctype="multipart/form-data">
+        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
+            <ul class="steps" style="margin-left: 0">
+                <li data-step="1"><span class="badge badge-info">1</span>Endorsement Request<span class="chevron"></span>
+                </li>
+                <li data-step="2"><span class="badge">2</span>Document Details<span class="chevron"></span></li>
+            </ul>
+            <div class="actions">
+                <!-- <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
+                         style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
+                         ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>-->
+
+                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
+                        class="glyphicon glyphicon-arrow-left"></span>Prev
+                </button>
+                <button type="button" class="btn btn-default btn-next" >Next<span
+                        class="glyphicon glyphicon-arrow-right"></span></button>
+                <!-- -->
+            </div>
+            <div class="step-content ng-cloak">
+                <div class="step-pane active" data-step="1">
+                    <ng-form name="step1">
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Policy Number</label>
+                                    <div class='input-group'>
+                                        <input type="text" ng-blur="searchPolicyNumber()" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-model="policy.policyNumber"/>
+                                           <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-sm" ng-click="searchPolicyNumber()">
+                                                    <i class="glyphicon glyphicon-search"></i>
+                                                </button>
+                                           </span>
+                                    </div>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label">Endrosement Type</label>
+                                   <!-- <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-model="clientDetail.title" ng-options="title as title for title in titles">
+                                    </select>-->
+                                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="gender" ng-model="policy.endrosementType" ng-required="true">
+                                        <option value="">--- Select Endrosementtype -- </option>
+                                        <option value="correctinNameLA">Correction of Name- Life Assured</option>
+                                        <option value="correctinNamePH">Correction of Name- Policyholder</option>
+                                        <option value="correctinGenderPH">Correction of Gender- Policyholder</option>
+                                        <option value="correctinGenderLA">Correction of Gender- Life Assured</option>
+                                        <option value="correctinDOBLA">Correction of DoB- Life Assured</option>
+                                        <option value="correctinDOBPH">Correction of DoB- Policy Holder</option>
+                                        <option value="correctinNRCPH">Correction of NRC- Policy Holder</option>
+                                        <option value="correctinNRCLA">Correction of NRC- Life Assured</option>
+                                        <option value="changecontactinLA">Change of Contact Details- Life Assured</option>
+                                        <option value="changecontactinPH">Change of Contact Details- Policyholder</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Policy Holder Name</label>
+                                    <input type="text" class="form-control input-sm" readonly="true" name="firstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.policyHolderName"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Endrosement Effective Date</label>
+                                    <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
+                                    <div class='input-group date'>
+                                        <input type="text" class="form-control input-sm"
+                                               datepicker-popup="" view-enabled=""
+                                               is-open="efectiveDate"
+                                               readonly="true" max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
+                                               ng-model="policy.endrosmentDate" name="dob"/>
+                                    <span class="input-group-btn">
+                                    <button disabled="true" type="button" class="btn btn-default btn-sm"
+                                            ng-click="launchEndrosementDate($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <strong ng-if="policy.endrosementType =='correctinNameLA'">Life Assured Name Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNameLA'">
+                            <div class="col-md-6">
+                                <div class="form-group required">
+                                    <label class="control-label">Title</label>
+                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles" ng-change="getProposerGender(proposer.title)">
+                                    </select>
+
+                                    <div class="error" ng-messages="proposerForm.title.$error" ng-if="proposerForm.title.$dirty">
+                                        <small ng-message="required">Please enter Title</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Life Assured Surname</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group required">
+                                    <label class="control-label">Life Assured First Name</label>
+                                    <input type="text" class="form-control input-sm" ng-required="true" name="firstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.laFistName"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Other Name</label>
+                                    <input type="text" class="form-control input-sm" name="lastName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.otherName"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <strong ng-if="policy.endrosementType =='correctinNamePH'">Policy Holder Name Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNamePH'">
+                            <div class="col-md-6">
+                                <div class="form-group required">
+                                    <label class="control-label">Title</label>
+                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles" ng-change="getProposerGender(proposer.title)">
+                                    </select>
+
+                                    <div class="error" ng-messages="proposerForm.title.$error" ng-if="proposerForm.title.$dirty">
+                                        <small ng-message="required">Please enter Title</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Policy Holder Surname</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group required">
+                                    <label class="control-label">Policy Holder First Name</label>
+                                    <input type="text" class="form-control input-sm" ng-required="true" name="firstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.laFistName"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Other Name</label>
+                                    <input type="text" class="form-control input-sm" name="lastName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.otherName"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <strong ng-if="policy.endrosementType =='correctinGenderPH'">Policy Holder Gender Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinGenderPH'">
+                            <div class="col-md-6">
+                                <div class="form-group required">
+                                    <label class="control-label">Policy Holder Gender</label>
+
+                                    <select class="form-control input-sm" readonly="true" name="gender" ng-model="policy.genderOld" ng-required="true">
+                                        <option value="">Select Gender</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 required">
+                                <div class="form-group required">
+                                    <label class="control-label">Policy Holder Gender - New</label>
+                                    <select class="form-control input-sm" readonly="true" name="newGender" ng-model="policy.genderNew" ng-required="true">
+                                        <option value="">Select Gender</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <strong ng-if="policy.endrosementType =='correctinGenderLA'">Life Assured Gender Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinGenderLA'">
+                            <div class="col-md-6">
+                                <div class="form-group required">
+                                    <label class="control-label">Life Assured Gender</label>
+                                    <select class="form-control input-sm" readonly="true" name="gender" ng-model="policy.genderOld" ng-required="true">
+                                        <option value="">Select Gender</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label">Old Premium</label>
+                                    <input type="text" class="form-control input-sm" readonly="true" ng-required="true" name="oldPremium" ng-model="policy.oldPremium"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 required">
+                                <div class="form-group required">
+                                    <label class="control-label">Life Assured Gender - New</label>
+                                    <select class="form-control input-sm" readonly="true" name="gender" ng-model="policy.genderNew" ng-required="true">
+                                        <option value="">Select Gender</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label">New Premium</label>
+                                    <input type="text" class="form-control input-sm" readonly="true" ng-required="true" name="firstName" ng-model="policy.newPremium"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <accordion ng-if="policy.endrosementType== 'correctinDOBLA'">
+                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'correctinDOBLA'">
+                                <accordion-heading>
+                                    Life Assured DOB Details <i class="pull-right glyphicon"
+                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+                                </accordion-heading>
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Life Assured DoB</label>
+                                        <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   datepicker-popup="" view-enabled=""
+                                                   ng-required="true"
+                                                   is-open="launchdob"
+                                                  readonly="true" max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
+                                                   ng-change="clearPlanId()" ng-model="policy.dateOfBirth" name="dob"/>
+                                                    <span class="input-group-btn">
+                                                            <button ng-disabled="true" type="button" class="btn btn-default btn-sm"
+                                                                    ng-click="LADOB($event)">
+                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                            </button>
+                                                  </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Earlier Age</label>
+                                        <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="earlierAge" ng-model="policy.oldAge"/>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Old Premium</label>
+                                        <input type="text" class="form-control input-sm" readonly="true" ng-required="true" name="oldPremium" ng-model="policy.oldPremium"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Updated Life Assured DoB</label>
+                                        <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   datepicker-popup="" view-enabled=""
+                                                   ng-required="true"
+                                                   is-open="launchdob2"
+                                                   max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
+                                                   ng-change="clearPlanId()" ng-model="policy.updateDateOfBirth" name="dob"/>
+                                    <span class="input-group-btn">
+                                    <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
+                                            ng-click="updateLADOB($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                        </div>
+                                        <div class="error" ng-messages="proposerForm.dob.$error" ng-if="proposerForm.dob.$dirty">
+                                            <small ng-message="required">Please enter updated life assured DoB.</small>
+                                            <small ng-message="date">Invalid Date.</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Corrected Age</label>
+                                        <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="correctedAge" ng-model="policy.newAge"/>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">New Premium</label>
+                                        <input type="text" class="form-control input-sm" readonly="true" ng-required="true" name="firstName" ng-model="policy.newPremium"/>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+                        <accordion ng-if="policy.endrosementType== 'correctinDOBPH'">
+                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'correctinDOBPH'">
+                                <accordion-heading>
+                                    Policy Holder DOB Details <i class="pull-right glyphicon"
+                                                                ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+                                </accordion-heading>
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Policy Holder DoB</label>
+                                        <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   datepicker-popup="" view-enabled=""
+                                                   ng-required="true"
+                                                   is-open="launchdob"
+                                                   readonly="true" max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
+                                                   ng-change="clearPlanId()" ng-model="policy.dateOfBirth" name="dob"/>
+                                                    <span class="input-group-btn">
+                                                            <button ng-disabled="true" type="button" class="btn btn-default btn-sm"
+                                                                    ng-click="LADOB($event)">
+                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                            </button>
+                                                  </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Earlier Age</label>
+                                        <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="earlierAge" ng-model="policy.oldAge"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Updated Policy Holder DoB</label>
+                                        <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   datepicker-popup="" view-enabled=""
+                                                   ng-required="true"
+                                                   is-open="launchdob2"
+                                                   max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
+                                                   ng-change="clearPlanId()" ng-model="policy.updateDateOfBirth" name="dob"/>
+                                    <span class="input-group-btn">
+                                    <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
+                                            ng-click="updateLADOB($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                        </div>
+                                        <div class="error" ng-messages="proposerForm.dob.$error" ng-if="proposerForm.dob.$dirty">
+                                            <small ng-message="required">Please enter updated life assured DoB.</small>
+                                            <small ng-message="date">Invalid Date.</small>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Corrected Age</label>
+                                        <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-readonly="true" name="correctedAge" ng-model="policy.newAge"/>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+                        <strong ng-if="policy.endrosementType =='correctinNRCPH'">Policy Holder NRC Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNRCPH'">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Policyholder NRC</label>
+                                    <input type="text" class="form-control input-sm" name="nrc" readonly="true" ng-disabled="mode=='new'||mode=='view'" ng-model="policy.nrc" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+
+                                    <div class="error" ng-messages="proposerForm.nrc.$error" ng-if="proposerForm.nrc.$dirty">
+                                        <small class="error" ng-message="required">Please enter Policyholder NRC.</small>
+                                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                        <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 required">
+                                <div class="form-group required">
+                                    <label class="control-label">Policyholder NRC-New</label>
+                                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="policy.newNrc" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" ng-required="true"/>
+
+                                    <div class="error" ng-messages="proposerForm.nrc.$error" ng-if="proposerForm.nrc.$dirty">
+                                        <small class="error" ng-message="required">Please enter Policyholder NRC-New.</small>
+                                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                        <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <strong ng-if="policy.endrosementType =='correctinNRCLA'">Life Assured NRC Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNRCLA'">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Life Assured NRC</label>
+                                    <input type="text" class="form-control input-sm" name="nrc" readonly="true" ng-disabled="mode=='new'||mode=='view'" ng-model="policy.nrc" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+
+                                    <div class="error" ng-messages="proposerForm.nrc.$error" ng-if="proposerForm.nrc.$dirty">
+                                        <small class="error" ng-message="required">Please enter Life Assured NRC.</small>
+                                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                        <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 required">
+                                <div class="form-group required">
+                                    <label class="control-label">Life Assured NRC-New</label>
+                                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="policy.newNrc" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" ng-required="true"/>
+
+                                    <div class="error" ng-messages="proposerForm.nrc.$error" ng-if="proposerForm.nrc.$dirty">
+                                        <small class="error" ng-message="required">Please enter Life Assured NRC-New.</small>
+                                        <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                        <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <accordion ng-if="policy.endrosementType== 'changecontactinLA'">
+                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'changecontactinLA'">
+                                <accordion-heading>
+                                    Life Assured Contact Details <i class="pull-right glyphicon"
+                                                                 ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+                                </accordion-heading>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group required">
+                                            <label class="control-label">Mobile Number</label>
+                                            <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="policy.mobileNumber"/>
+
+                                            <div class="error" ng-messages="proposerForm.mobileNumber.$error" ng-if="proposerForm.mobileNumber.$dirty">
+                                                <small class="error" ng-message="required">Please enter Mobile Number</small>
+                                                <small ng-message="pattern">Please enter a valid mobile number.</small>
+                                                <small ng-message="maxlength">Only 10 number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Home Phone</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.homePhone"/>
+
+                                            <div class="error" ng-messages="proposerResidentForm.residentPhone.$error" ng-if="proposerResidentForm.residentPhone.$dirty">
+                                                <small ng-message="maxlength">Only 10 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 required">
+                                        <div class="form-group">
+                                            <label class="control-label">Work phone</label>
+                                            <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.workPhone"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.workPhone.$error" ng-if="proposerEmploymentForm.workPhone.$dirty">
+                                                <small ng-message="maxlength">Only 10 Number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 Numbers are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">EmailID</label>
+                                            <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="policy.emailAddress"/>
+                                            <div class="error" ng-messages="proposerSpouseForm.spouseEmailId.$error"  ng-if="proposerSpouseForm.spouseEmailId.$dirty">
+                                                <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <strong>Residential Address</strong>
+                                        <br /><br />
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 1</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="policy.residential.address1" ng-required="true"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 2</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="policy.residential.address2" ng-required="true"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Postal Code</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="policy.residential.postalCode"/>
+
+                                            <div class="error" ng-messages="proposerResidentForm.postalCode.$error" ng-if="proposerResidentForm.postalCode.$dirty">
+                                                <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Province</label>
+                                            <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                    ng-model="policy.residential.province" ng-required="true" ng-init="getTownList(policy.residential.province)" ng-change="getTownList(policy.residential.province)">
+                                            </select>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.province.$error" ng-if="proposerEmploymentForm.province.$dirty">
+                                                <small class="error" ng-message="required">Please enter Province</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Town</label>
+                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="policy.residential.town"
+                                                    ng-options="city.geoId as city.geoName for city in townList"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.town.$error" ng-if="proposerEmploymentForm.town.$dirty">
+                                                <small class="error" ng-message="required">Please enter Town</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Employment Address</strong>
+                                        <br /><br />
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 1</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="policy.employment.address1" ng-required="true"/>
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 2</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="policy.employment.address2" ng-required="true"/>
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Postal Code</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="policy.employment.postalCode"/>
+
+                                            <div class="error" ng-messages="proposerResidentForm.postalCode.$error" ng-if="proposerResidentForm.postalCode.$dirty">
+                                                <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Province</label>
+                                            <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                    ng-model="policy.employment.province" ng-required="true" ng-init="getEmpTownList(policy.employment.province)" ng-change="getEmpTownList(policy.employment.province)">
+                                            </select>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.province.$error" ng-if="proposerEmploymentForm.province.$dirty">
+                                                <small class="error" ng-message="required">Please enter Province</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Town</label>
+                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="policy.employment.town"
+                                                    ng-options="city.geoId as city.geoName for city in empTownList"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.town.$error" ng-if="proposerEmploymentForm.town.$dirty">
+                                                <small class="error" ng-message="required">Please enter Town</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+                        <accordion ng-if="policy.endrosementType== 'changecontactinPH'">
+                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'changecontactinP'">
+                                <accordion-heading>
+                                    Policyholder Contact Details <i class="pull-right glyphicon"
+                                                                    ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+                                </accordion-heading>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group required">
+                                            <label class="control-label">Mobile Number</label>
+                                            <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="policy.mobileNumber"/>
+
+                                            <div class="error" ng-messages="proposerForm.mobileNumber.$error" ng-if="proposerForm.mobileNumber.$dirty">
+                                                <small class="error" ng-message="required">Please enter Mobile Number</small>
+                                                <small ng-message="pattern">Please enter a valid mobile number.</small>
+                                                <small ng-message="maxlength">Only 10 number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Home Phone</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.homePhone"/>
+
+                                            <div class="error" ng-messages="proposerResidentForm.residentPhone.$error" ng-if="proposerResidentForm.residentPhone.$dirty">
+                                                <small ng-message="maxlength">Only 10 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 required">
+                                        <div class="form-group">
+                                            <label class="control-label">Work phone</label>
+                                            <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.workPhone"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.workPhone.$error" ng-if="proposerEmploymentForm.workPhone.$dirty">
+                                                <small ng-message="maxlength">Only 10 Number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 Numbers are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">EmailID</label>
+                                            <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="policy.emailAddress"/>
+                                            <div class="error" ng-messages="proposerSpouseForm.spouseEmailId.$error"  ng-if="proposerSpouseForm.spouseEmailId.$dirty">
+                                                <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <strong>Residential Address</strong>
+                                        <br /><br />
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 1</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="policy.residential.address1" ng-required="true"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 2</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="policy.residential.address2" ng-required="true"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Postal Code</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="policy.residential.postalCode"/>
+
+                                            <div class="error" ng-messages="proposerResidentForm.postalCode.$error" ng-if="proposerResidentForm.postalCode.$dirty">
+                                                <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Province</label>
+                                            <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                    ng-model="policy.residential.province" ng-required="true" ng-init="getTownList(policy.residential.province)" ng-change="getTownList(policy.residential.province)">
+                                            </select>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.province.$error" ng-if="proposerEmploymentForm.province.$dirty">
+                                                <small class="error" ng-message="required">Please enter Province</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Town</label>
+                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="policy.residential.town"
+                                                    ng-options="city.geoId as city.geoName for city in townList"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.town.$error" ng-if="proposerEmploymentForm.town.$dirty">
+                                                <small class="error" ng-message="required">Please enter Town</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Employment Address</strong>
+                                        <br /><br />
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 1</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="policy.employment.address1" ng-required="true"/>
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine1.$error" ng-if="proposerEmploymentForm.addressLine1.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 2</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="policy.employment.address2" ng-required="true"/>
+                                            <div class="error" ng-messages="proposerEmploymentForm.addressLine2.$error" ng-if="proposerEmploymentForm.addressLine2.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Postal Code</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="policy.employment.postalCode"/>
+
+                                            <div class="error" ng-messages="proposerResidentForm.postalCode.$error" ng-if="proposerResidentForm.postalCode.$dirty">
+                                                <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Province</label>
+                                            <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                    ng-model="policy.employment.province" ng-required="true" ng-init="getEmpTownList(policy.employment.province)" ng-change="getEmpTownList(policy.employment.province)">
+                                            </select>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.province.$error" ng-if="proposerEmploymentForm.province.$dirty">
+                                                <small class="error" ng-message="required">Please enter Province</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Town</label>
+                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="policy.employment.town"
+                                                    ng-options="city.geoId as city.geoName for city in empTownList"/>
+
+                                            <div class="error" ng-messages="proposerEmploymentForm.town.$error" ng-if="proposerEmploymentForm.town.$dirty">
+                                                <small class="error" ng-message="required">Please enter Town</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </accordion-group>
+                        </accordion>
+
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="cancel()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="step-pane" data-step="2">
+                    <ng-form name="step2">
+                        <strong>Documents</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                            <div class="row form-group">
+                                <div class="control-label col-md-7">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Document Name</th>
+                                            <th>Document</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="document in clientDetail.clientDocumentDetailDtoList">
+                                            <td>{{document.documentName}}</td>
+                                            <td><a  href="downloadmandatorydocument/{{document.gridFsDocId}}">{{document.documentType}}</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <strong>Policy Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                            <div class="row form-group">
+                                <div class="control-label col-md-7">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Policy Number</th>
+                                            <th>Client Type</th>
+                                            <th>Underwriter Decision</th>
+                                            <th>Underwriter Comments</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="document in clientDetail.clientPolicyDetailDtoList">
+                                            <td>{{document.number}}</td>
+                                            <td>{{document.clientType}}</td>
+                                            <td>{{document.underWriterDecision}}</td>
+                                            <td>{{document.underWriterComments}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <strong>Proposal Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                            <div class="row form-group">
+                                <div class="control-label col-md-7">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Proposal Number</th>
+                                            <th>Client Type</th>
+                                            <th>Underwriter Decision</th>
+                                            <th>Underwriter Comments</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="document in clientDetail.clientPolicyDetailDtoList">
+                                            <td>{{document.number}}</td>
+                                            <td>{{document.clientType}}</td>
+                                            <td>{{document.underWriterDecision}}</td>
+                                            <td>{{document.underWriterComments}}</td>
+                                        </tr>
+                                        <!--<tr>
+                                            <td>ProposalNmuber1</td>
+                                            <td>Client Type1</td>
+                                            <td>Underwriter Decision1</td>
+                                            <td>Underwriter Comments1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ProposalNmuber2</td>
+                                            <td>Client Type2</td>
+                                            <td>Underwriter Decision2</td>
+                                            <td>Underwriter Comments2</td>
+                                        </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="cancel()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form method="POST" action="createsearchendorsement" id="searchForm">
+        <input type="hidden" id="searchFormProposal" name="endorsementId"/>
+    </form>
+
+    <style>
+
+        .fuelux .checkbox-custom:before {
+            font-family: "Glyphicons Halflings" !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border: 1px solid #adadad;
+            border-radius: 4px;
+            color: #fff;
+            content: " ";
+            font-size: 12px;
+            height: 18px;
+            left: 0;
+            padding: 1px 0 0 1px;
+            position: absolute;
+            top: 3px;
+            width: 18px;
+        }
+        .btn {
+            font-size: 12px;
+        }
+    </style>
+</script>
+<div class="ng-view container-fluid">
+
+</div>
+
+
+</body>
+</html>
