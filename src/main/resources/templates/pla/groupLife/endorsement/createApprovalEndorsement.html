@@ -121,6 +121,10 @@
                                     <button type="button" class="btn btn-default btn-sm" style="float: right"
                                             ng-if="isViewMode" ng-click="approveEndorsement()">Approve
                                     </button>
+                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;"
+                                            ng-disabled="!comment" ng-if="isViewMode" ng-click="rejectEndorsement()">Reject
+                                    </button>
+
                                     <button type="button" class="btn btn-default btn-sm"
                                             style="float: right;margin-right: 10px;" ng-disabled="!comment"
                                             ng-if="isViewMode" ng-click="returnEndorsement()">Return

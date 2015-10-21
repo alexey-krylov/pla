@@ -6,6 +6,15 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
         function ($scope, $http, $timeout, $upload, provinces, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, policyDetails, endorsementNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
+             $scope.endorsementId = getQueryParameter('endorsementId') || null;
+           // $scope.endorsementId = window.location.search.split('=')[1];
+          //  alert($scope.endorsementId);
+
+            // $scope.versionNumber = getQueryParameter('version') || null;
+
+            /*actual quotation number to be used in the view*/
+            $scope.endorsementNumber = endorsementNumber;
+            // console.log(endorsementNumber);
 
             $scope.isEnablePolicyHolderMode = false;
             $scope.isEnableContactMode = false;
@@ -79,14 +88,6 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.stepsSaved = stepsSaved;
 
             /*Inter id used for programmatic purpose*/
-            $scope.endorsementId = getQueryParameter('endorsementId') || null;
-            //  alert($scope.endorsementId);
-
-            $scope.versionNumber = getQueryParameter('version') || null;
-
-            /*actual quotation number to be used in the view*/
-            $scope.endorsementNumber = endorsementNumber;
-            // console.log(endorsementNumber);
             $scope.provinces = provinces;
             $scope.showDownload = true;
 
@@ -222,7 +223,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 $upload.upload({
                     url: '/pla/grouplife/endorsement/uploadinsureddetail?endorsementType=' + $scope.endorsementType + "&endorsementId=" + $scope.endorsementId,
                     headers: {'Authorization': 'xxx'},
-                    fields: $scope.policyDetails.plan,
+                    //fields: $scope.policyDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
@@ -269,6 +270,20 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
                 });
             }
+            $scope.rejectEndorsement = function () {
+                var request = angular.extend({comment: $scope.comment}, {"endorsementId": $scope.endorsementId});
+
+                $http.post('/pla/grouplife/endorsement/reject', request).success(function (data) {
+                    if (data.status == 200) {
+
+
+                        $window.location.href = "/pla/grouplife/endorsement/openapprovalendorsement";
+
+                    }
+
+                });
+            }
+
             $scope.submitComments = function (comment) {
                 $http.post('/pla/grouplife/Endorsement/submit', angular.extend({},
                     {"endorsementId": $scope.endorsementId, comment: comment})).success(function (data) {
