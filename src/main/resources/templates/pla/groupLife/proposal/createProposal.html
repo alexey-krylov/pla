@@ -526,6 +526,10 @@
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
 
+                                    <p style="color:red" ng-hide="documentNameLengthTest()">
+                                        File Name shouldn't exceed more than 100 character.
+                                    </p>
+
                                     <div class="form-group " ng-repeat="document in documentList">
                                         <label class="col-sm-3 control-label">{{document.documentName}}</label>
 
@@ -538,14 +542,18 @@
                                                     ng-file-select=""
                                                     ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
                                             </button>
-                                            <label class="form-control input-sm"
-                                                   style="border:1px solid #ccc;width:380px;">{{document.documentAttached[0].name}} </label>
+                                           <!-- <label class="form-control input-sm"
+                                                   style="border:1px solid #ccc;width:380px;">{{document.documentAttached[0].name}} </label>-->
+
+                                            <input class="form-control input-sm" style="width:300px;"
+                                                   value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
 
                                         </div>
 
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                         ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All
+                                         ng-disabled="!documentNameLengthTest()" ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All
                                     </div>
                                 </div>
                             </accordion-group>

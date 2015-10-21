@@ -22,7 +22,7 @@
             datepickerPopupConfig.closeOnDateSelection = true;
         }]);
 
-    app.controller('individualClientSummaryController', ['$scope', '$http', '$location','getQueryParameter','globalConstants', function ($scope, $http, $location, getQueryParameter,globalConstants) {
+    app.controller('individualClientSummaryController', ['$scope', '$http', '$location','getQueryParameter','globalConstants','$upload', function ($scope, $http, $location, getQueryParameter,globalConstants) {
         $scope.provinces = [];
         $scope.proposerEmploymentCities=[];
         $scope.selectedItem = 1;

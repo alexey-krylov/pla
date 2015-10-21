@@ -172,6 +172,27 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     }
                 }
             }
+
+            $scope.documentNameLengthTest=function(){
+                var enableUploadButton= true;
+                for(var i=0;i < $scope.documentList.length;i++){
+                    if($scope.documentList[i].documentAttached != null && $scope.documentList[i].documentAttached[0] != null){
+                        if($scope.documentList[i].documentAttached[0].name.length >100)
+                        {
+                            enableUploadButton=false;
+                            break;
+                        }
+                    }
+                }
+                if(enableUploadButton){
+                    return true;
+                }
+                else
+                {
+                    return false
+                }
+            }
+
             /* $scope.$watch('documentList.documentAttached',function(newVal,oldVal){
              if(newVal && newVal.length){
              $scope.selectedFiles.push(newVal);
