@@ -107,6 +107,7 @@
                                         <option value="changecontactinPH">Change of Contact Details- Policyholder</option>
                                         <option value="changeBeneficiary">Add/Change/Delete Beneficiary</option>
                                         <option value="changeAgent">Add/Change/Delete Agent</option>
+                                        <option value="changePaymentMode">Change Payment Mode</option>
                                     </select>
                                 </div>
                             </div>
@@ -117,7 +118,6 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">Endrosement Effective Date</label>
-                                    <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
                                     <div class='input-group date'>
                                         <input type="text" class="form-control input-sm"
                                                datepicker-popup="" view-enabled=""
@@ -139,17 +139,17 @@
                             <div class="col-md-6">
                                 <div class="form-group required">
                                     <label class="control-label">Title</label>
-                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles" ng-change="getProposerGender(proposer.title)">
+                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titleList">
                                     </select>
 
-                                    <div class="error" ng-messages="proposerForm.title.$error" ng-if="proposerForm.title.$dirty">
+                                    <div class="error" ng-messages="step1.title.$error" ng-if="step1.title.$dirty">
                                         <small ng-message="required">Please enter Title</small>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label">Life Assured Surname</label>
-                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
                                 </div>
 
                             </div>
@@ -175,7 +175,7 @@
                                     <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="proposer.title" ng-options="title as title for title in titles" ng-change="getProposerGender(proposer.title)">
                                     </select>
 
-                                    <div class="error" ng-messages="proposerForm.title.$error" ng-if="proposerForm.title.$dirty">
+                                    <div class="error" ng-messages="step1.title.$error" ng-if="step1.title.$dirty">
                                         <small ng-message="required">Please enter Title</small>
                                     </div>
                                 </div>
@@ -257,7 +257,7 @@
                         </div>
 
                         <accordion ng-if="policy.endrosementType== 'correctinDOBLA'">
-                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'correctinDOBLA'">
+                            <accordion-group ng-form="contactForm" is-open="true">
                                 <accordion-heading>
                                     Life Assured DOB Details <i class="pull-right glyphicon"
                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -329,7 +329,7 @@
                         </accordion>
 
                         <accordion ng-if="policy.endrosementType== 'correctinDOBPH'">
-                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'correctinDOBPH'">
+                            <accordion-group ng-form="contactForm" is-open="true">
                                 <accordion-heading>
                                     Policy Holder DOB Details <i class="pull-right glyphicon"
                                                                 ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -447,7 +447,7 @@
                         </div>
 
                         <accordion ng-if="policy.endrosementType== 'changecontactinLA'">
-                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'changecontactinLA'">
+                            <accordion-group ng-form="contactForm" is-open="true">
                                 <accordion-heading>
                                     Life Assured Contact Details <i class="pull-right glyphicon"
                                                                  ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -608,7 +608,7 @@
                         </accordion>
 
                         <accordion ng-if="policy.endrosementType== 'changecontactinPH'">
-                            <accordion-group ng-form="contactForm" is-open="policy.endrosementType== 'changecontactinPH'">
+                            <accordion-group ng-form="contactForm" is-open="true">
                                 <accordion-heading>
                                     Policyholder Contact Details <i class="pull-right glyphicon"
                                                                     ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -769,7 +769,7 @@
                             </accordion-group>
                         </accordion>
                         <accordion ng-if="policy.endrosementType== 'changeBeneficiary'">
-                            <accordion-group is-open="policy.endrosementType== 'changeBeneficiary'">
+                            <accordion-group is-open="true">
                                 <accordion-heading>
                                     Beneficiary Details <i class="pull-right glyphicon"
                                                            ng-class="{'glyphicon-chevron-down': accordionStatus.planDetails.beneficiary, 'glyphicon-chevron-right': !accordionStatus.planDetails.beneficiary}"></i>
@@ -813,7 +813,7 @@
                         </accordion>
 
                         <accordion ng-if="policy.endrosementType== 'changeAgent'">
-                            <accordion-group is-open="policy.endrosementType== 'changeAgent'" ng-class="{'accordion-error':isAgentEmpty}">
+                            <accordion-group is-open="true" ng-class="{'accordion-error':isAgentEmpty}">
                                 <accordion-heading>
                                     Agent Details
                                     <i class="pull-right glyphicon"
@@ -833,6 +833,7 @@
                                             <th>Agent Code</th>
                                             <th>Agent Name</th>
                                             <th>Commission %</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -841,12 +842,145 @@
                                             <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
 
                                             <td>
-                                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="commisionSumTest()" ng-model="row.commission"  ng-blur="commisionSumTest()" value="{{row.commission}}" />
+                                                <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="commisionSumTest()" ng-model="row.commission"  ng-change="commisionSumTest()" ng-blur="commisionSumTest()" value="{{row.commission}}" />
                                             </td>
-
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm" ng-click="deleteAgent(row.agentId)">Delete</button>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+                        <accordion ng-if="policy.endrosementType== 'changePaymentMode'">
+                            <accordion-group is-open="true" ng-form="premiumEmpDetails " ng-if="policy.endrosementType== 'changePaymentMode'">
+                                <accordion-heading>
+                                    Premium Payment Mode<i class="pull-right glyphicon"
+                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposedAssured}"></i>
+                                </accordion-heading>
+                                <div class="col-md-6">
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Method Of Premium Payment</label>
+                                        <select class="form-control input-sm" name="methodOfPremium" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumPaymentDetails.premiumPaymentMethod">
+                                            <option value="" >--- Select Premium Payment ---</option>
+                                            <option value="CASH" >CASH</option>
+                                            <option value="STOP_ORDER">Stop Order</option>
+                                            <option value="DEBIT_ORDER">Bank Debit Order</option>
+                                            <!--<option value="CHEQUE"> Cheque</option>-->
+                                        </select>
+                                        <div class="error" ng-messages="step1.methodOfPremium.$error" ng-if="step1.methodOfPremium.$dirty">
+                                            <small class="error" ng-message="required">Please specify methodOfPremium</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Employee No</label>
+                                        <input type="text" class="form-control input-sm" ng-maxlength="15" name="employeeNumber" ng-model="premiumEmployerDetails.employeeId" ng-disabled="mode=='new'||mode=='view'"/>
+                                        <div class="error" ng-messages="premiumEmpDetails.employeeNumber.$error" ng-if="premiumEmpDetails.employeeNumber.$dirty">
+                                            <small ng-message="maxlength">Only 15 characters are allowed.</small>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Company Name and Postal Address</label>
+                                        <input type="text" class="form-control input-sm" ng-maxlength="100"  name="companyFullAddress1" ng-model="premiumEmployerDetails.companyNameAndPostalAddress" ng-disabled="mode=='new'||mode=='view'"/>
+
+                                        <div class="error" ng-messages="premiumEmpDetails.companyFullAddress1.$error" ng-if="premiumEmpDetails.companyFullAddress1.$dirty">
+                                            <!--<small class="error" ng-message="required">Please enter Spouse's First Name</small>-->
+                                            <!--<small ng-message="pattern">Only alphabets are allowed.</small>-->
+                                            <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Per</label>
+                                        <!-- <input type="text" class="form-control input-sm" name="nrc" ng-model="premiumEmployerDetails.salaryPer" ng-disabled="mode=='new'||mode=='view'"/>-->
+                                        <select class="form-control input-sm" name="salaryPer" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumEmployerDetails.salaryPer">
+                                            <option value=" "> -- Select Per -- </option>
+                                            <option value="ANNUALLY">Annum</option>
+                                            <option value="MONTHLY">Month</option>
+                                            <option value="WEEKLY">Week</option>
+                                        </select>
+
+                                        <div class="error" ng-messages="premiumEmpDetails.salaryPer.$error" ng-if="premiumEmpDetails.salaryPer.$dirty">
+                                            <small class="error" ng-message="required">Please specify whether salary is paid per week or Month or Year.</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Branch Sort Code</label>
+                                        <input type="text" class="form-control input-sm" readonly="true" ng-model="bankDetails.bankBranchSortCode" ng-disabled="mode=='new'||mode=='view'" name="spouseSurname"  ng-maxlength="20"
+                                               ng-required="true"/>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Branch Name</label>
+                                        <select class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.branchName as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" ng-required="true">
+                                        </select>
+
+                                        <div class="error" ng-messages="premiumBankDetail.branchname.$error" ng-if="premiumBankDetail.branchname.$dirty">
+                                            <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Account Number</label>
+                                        <input type="text" class="form-control input-sm" ng-model="bankDetails.bankAccountNumber" ng-maxlength="17" ng-disabled="mode=='new'||mode=='view'" name="bankAccountNumber"/>
+
+                                        <div class="error" ng-messages="premiumBankDetail.bankAccountNumber.$error" ng-if="premiumBankDetail.bankAccountNumber.$dirty">
+                                            <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                            <small class="error" ng-message="maxlength">Upto 17 Character Allow.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Man No</label>
+                                        <input type="text" class="form-control input-sm"  ng-model="premiumEmployerDetails.manNumber" ng-disabled="mode=='new' || mode=='view'" name="manNo"
+                                               ng-maxlength="15"/>
+
+                                        <div class="error" ng-messages="premiumEmpDetails.manNo.$error" ng-if="premiumEmpDetails.manNo.$dirty">
+                                            <small class="error" ng-message="maxlength">Upto 15 Character allowed.</small>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Basic Salary</label>
+                                        <input type="number" class="form-control input-sm" name="basicSalary" ng-required="true" ng-model="premiumEmployerDetails.basicSalary" min="0" max="9999999.99" ng-disabled="mode=='new'||mode=='view'"  />
+
+                                        <div class="error" ng-messages="premiumEmpDetails.basicSalary.$error" ng-if="premiumEmpDetails.basicSalary.$dirty">
+                                            <small class="error" ng-message="required">Please specify Basic Salary.</small>
+                                            <small class="error" ng-message="max">Upto 9999999.99 allowed.</small>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Name</label>
+                                        <select class="form-control input-sm" name="bankName" ng-disabled="mode=='new'||mode=='view'" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
+                                                ng-change="clearBankBranchName()" ng-model="bankDetails.bankName"  ng-required="true">
+                                        </select>
+
+                                        <div class="error" ng-messages="premiumBankDetail.bankName.$error" ng-if="premiumBankDetail.bankName.$dirty">
+                                            <small class="error" ng-message="required">Please specify Bank Name.</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Account Type</label>
+                                        <select class="form-control input-sm" name="accountType" ng-model="bankDetails.bankAccountType" ng-disabled="mode=='new'||mode=='view'">
+                                            <option  value="SAVING">Saving</option>
+                                            <option  value="CURRENT">Current</option>
+                                        </select>
+
+                                        <div class="error" ng-messages="premiumBankDetail.accountType.$error" ng-if="premiumBankDetail.accountType.$dirty">
+                                            <small class="error" ng-message="required">Please specify account type .</small>
+                                        </div>
+
+                                    </div>
+
                                 </div>
                             </accordion-group>
                         </accordion>
@@ -864,8 +998,7 @@
                                                     <label class="control-label">Agent Code</label>
                                                     <div class="input-group">
                                                         <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
-                                                               ng-model="newAgent.agentId" ng-required="true"
-                                                               ng-blur="searchAgent()"
+                                                               ng-blur="searchAgent()" ng-model="newAgent.agentId" ng-required="true"
                                                                ng-disabled="mode=='new'">
                                                         </input>
                                                         <div class="input-group-btn">
@@ -1041,91 +1174,92 @@
 
                 <div class="step-pane" data-step="2">
                     <ng-form name="step2">
-                        <strong>Documents</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
-                            <div class="row form-group">
-                                <div class="control-label col-md-7">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Document Name</th>
-                                            <th>Document</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="document in clientDetail.clientDocumentDetailDtoList">
-                                            <td>{{document.documentName}}</td>
-                                            <td><a  href="downloadmandatorydocument/{{document.gridFsDocId}}">{{document.documentType}}</a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        <accordion>
+                            <accordion-group>
+                                <accordion-heading>
+                                    Mandatory Documents <i class="pull-right glyphicon"
+                                                           ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
+                                                            'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;">
 
-                        <strong>Policy Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
-                            <div class="row form-group">
-                                <div class="control-label col-md-7">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Policy Number</th>
-                                            <th>Client Type</th>
-                                            <th>Underwriter Decision</th>
-                                            <th>Underwriter Comments</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="document in clientDetail.clientPolicyDetailDtoList">
-                                            <td>{{document.number}}</td>
-                                            <td>{{document.clientType}}</td>
-                                            <td>{{document.underWriterDecision}}</td>
-                                            <td>{{document.underWriterComments}}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                                    <p style="color:red" ng-hide="documentNameLengthTest()">
+                                        File Name shouldn't exceed more than 100 character.
+                                    </p>
 
-                        <strong>Proposal Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
-                            <div class="row form-group">
-                                <div class="control-label col-md-7">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Proposal Number</th>
-                                            <th>Client Type</th>
-                                            <th>Underwriter Decision</th>
-                                            <th>Underwriter Comments</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="document in clientDetail.clientPolicyDetailDtoList">
-                                            <td>{{document.number}}</td>
-                                            <td>{{document.clientType}}</td>
-                                            <td>{{document.underWriterDecision}}</td>
-                                            <td>{{document.underWriterComments}}</td>
-                                        </tr>
-                                        <!--<tr>
-                                            <td>ProposalNmuber1</td>
-                                            <td>Client Type1</td>
-                                            <td>Underwriter Decision1</td>
-                                            <td>Underwriter Comments1</td>
-                                        </tr>
-                                        <tr>
-                                            <td>ProposalNmuber2</td>
-                                            <td>Client Type2</td>
-                                            <td>Underwriter Decision2</td>
-                                            <td>Underwriter Comments2</td>
-                                        </tr>-->
-                                        </tbody>
-                                    </table>
+                                    <div class="form-group "  ng-repeat="document in documentList" >
+                                        <label class="col-sm-3 control-label">{{document.documentName}}</label>
+                                        <div class="col-md-1"></div>
+                                        <div class="input-group">
+                                            <a  href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;margin-top:10px;"  hg-show="!document.submitted">{{document.fileName}}</a>
+                                            <button class="btn btn-default"
+                                                    style="display:inline;float:right;margin-right:5px;" ng-file-select=""
+                                                    ng-disabled="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse
+                                            </button>
+                                            <!--<label class="form-control input-sm" style="border:1px solid #ccc;width:380px;">{{document.documentAttached[0].name}} </label>-->
+                                            <input class="form-control input-sm" style="width:300px;"
+                                                    value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"
+                                         ng-disabled="mode=='new'||mode=='view' || !documentNameLengthTest()" ng-click="uploadDocumentFiles()">Upload All
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </accordion-group>
+
+                            <accordion-group>
+                                <accordion-heading>
+                                    Additional Documents <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;">
+
+                                    <div class="row" >
+                                        <button class="btn btn-default"
+                                                style="display:inline;float:left;margin-right:5px;"
+                                                ng-disabled="mode=='new'||mode=='view'" ng-click="addAdditionalDocument()">Add Document
+                                        </button>
+                                    </div>
+                                    <br/><br/>
+
+                                    <div class="row" >
+                                        <div ng-repeat="additionalDocument in additionalDocumentList">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Document Title</label>
+                                                    <input type="text" class="form-control input-sm" style="width:400px;"
+                                                           ng-disabled="mode=='new'||mode=='view'" name="documentTitle" ng-model="additionalDocument.documentId" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label class="control-label">Browse File</label>
+                                                    <button class="btn btn-default"
+                                                            style="display:inline;float:right;margin-right:10px;margin-top:18px;" ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)"
+                                                            ng-disabled="mode=='new'||mode=='view'" ng-model="additionalDocument.documentAttached">Browse
+                                                    </button>
+                                                    <label class="form-control input-sm" style="border:1px solid #ccc;width:320px;">
+                                                        {{additionalDocument.documentAttached[0].name}}
+                                                    </label>
+                                                    <a  href="downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:0px;float:left;">{{additionalDocument.fileName}}</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-default" style="margin-top:20px;" ng-disabled="mode=='new'||mode=='view'" ng-click="removeAdditionalDocument($index)" >Remove</button>
+                                                <!--<a  href="downloadmandatorydocument/{{additionalDocument.gridFsDocId}}" style="display:inline;margin-top:25px;float:right;">{{additionalDocument.fileName}}</a>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-default"
+                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;" ng-hide="mode=='new'||mode=='view'"  ng-disabled="!checkDocumentAttached || mode=='new'||mode=='view'" ng-click="uploadAdditionalDocument()">Upload
+                                    </button>
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
