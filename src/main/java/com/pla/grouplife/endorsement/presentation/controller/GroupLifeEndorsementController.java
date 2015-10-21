@@ -221,7 +221,7 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/viewApprovalEndorsement");
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
-        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
+        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
         return modelAndView;
     }
 
@@ -233,7 +233,7 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/searchEndorsement");
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
-        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
+        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
         return modelAndView;
     }
 
