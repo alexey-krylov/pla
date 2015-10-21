@@ -1,23 +1,23 @@
 package com.pla.grouplife.endorsement.presentation.controller;
 
-import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
-import com.pla.grouplife.endorsement.application.command.GLCreateEndorsementCommand;
-import com.pla.grouplife.endorsement.application.command.GLEndorsementCommand;
-import com.pla.grouplife.endorsement.application.command.GLEndorsementDocumentCommand;
-import com.pla.grouplife.endorsement.application.command.SubmitGLEndorsementCommand;
+import com.pla.grouplife.endorsement.application.command.*;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
+import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
+import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementApproverCommentDto;
+import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
 import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
-import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.*;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.individuallife.proposal.application.command.WaiveMandatoryDocumentCommand;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
+import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -59,6 +59,9 @@ public class GroupLifeEndorsementController {
 
     @Autowired
     private GLEndorsementService glEndorsementService;
+
+    @Autowired
+    private GroupLifeEndorsementService groupLifeEndorsementService;
 
     @Autowired
     private CommandGateway commandGateway;
@@ -218,7 +221,7 @@ public class GroupLifeEndorsementController {
         modelAndView.setViewName("pla/groupLife/endorsement/viewApprovalEndorsement");
         modelAndView.addObject("searchCriteria", searchGLEndorsementDto);
         searchGLEndorsementDto.setEndorsementTypes(GLEndorsementType.getAllEndorsementType());
-        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE"}));
+        modelAndView.addObject("searchResult", glEndorsementService.searchEndorsement(searchGLEndorsementDto, new String[]{"APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
         return modelAndView;
     }
 
@@ -352,8 +355,8 @@ public class GroupLifeEndorsementController {
     @RequestMapping(value = "/getapprovercomments/{endorsementId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list approval comments")
-    public List<GLProposalApproverCommentDto> findApproverComments(@PathVariable("endorsementId") String endorsementId) {
-        return Lists.newArrayList();
+    public List<GLEndorsementApproverCommentDto> findApproverComments(@PathVariable("endorsementId") String endorsementId) {
+        return groupLifeEndorsementService.findApproverComments(endorsementId);
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
@@ -370,17 +373,48 @@ public class GroupLifeEndorsementController {
         }
     }
 
-    @RequestMapping(value = "/downloadinsuredtemplate/{endorsementId}", method = RequestMethod.GET)
-    @ApiOperation(httpMethod = "GET", value = "To download insured template")
-    public void downloadInsuredTemplate(@PathVariable("endorsementId") String endorsementId, HttpServletResponse response) throws IOException {
-        response.reset();
-        response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "Group_Life_InsuredTemplate.xls" + "");
-        OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook planDetailExcel =/* glEndorsementService.getInsuredTemplateExcel(policyId);*/ null;
-        planDetailExcel.write(outputStream);
-        outputStream.flush();
-        outputStream.close();
+    @RequestMapping(value = "/reject", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To reject endorsement for approval")
+    public ResponseEntity rejectEndorsement(@RequestBody ReturnGLEndorsementCommand rejectGLEndorsementCommand, HttpServletRequest request) {
+        try {
+            rejectGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            rejectGLEndorsementCommand.setStatus(EndorsementStatus.REJECTED);
+            commandGateway.sendAndWait(rejectGLEndorsementCommand);
+            return new ResponseEntity(Result.success("Endorsement rejected successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/return", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To return endorsement to processor")
+    public ResponseEntity returnEndorsement(@RequestBody ReturnGLEndorsementCommand returnGLEndorsementCommand, HttpServletRequest request) {
+        try {
+            returnGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            returnGLEndorsementCommand.setStatus(EndorsementStatus.RETURN);
+            commandGateway.sendAndWait(returnGLEndorsementCommand);
+            return new ResponseEntity(Result.success("Endorsement returned successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To approve endorsement by approval")
+    public ResponseEntity approveEndorsement(@RequestBody ApproveGLEndorsementCommand approveGLEndorsementCommand, HttpServletRequest request) {
+        try {
+            approveGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(approveGLEndorsementCommand);
+            return new ResponseEntity(Result.success("Endorsement approved successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -390,6 +424,37 @@ public class GroupLifeEndorsementController {
     public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("endorsementId") String endorsementId) {
         Set<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glEndorsementService.findAdditionalDocuments(endorsementId);
         return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getendorsementforschedule/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list Endorsements which are done for the policy")
+    public Set<GLEndorsementDto> endorsementScheduleGeneration(@PathVariable("policyId") String policyId) {
+
+       return null;
+    }
+
+
+    @RequestMapping(value = "/schedulegeneration/{policyId}/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list Endorsements which are done for the policy")
+    public Set<GLEndorsementDto> printEndorsement(@PathVariable("policyId") String policyId,@PathVariable("endorsementId") List<EndorsementId> endorsementId) {
+
+        return null;
+    }
+
+    @RequestMapping(value = "/waivedocument", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To waive mandatory document by Approver")
+    public ResponseEntity waiveDocument(@RequestBody WaiveMandatoryDocumentCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId =  commandGateway.sendAndWait(cmd);
+            return new ResponseEntity(Result.success("Mandatory Document waives successfully",proposalId), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

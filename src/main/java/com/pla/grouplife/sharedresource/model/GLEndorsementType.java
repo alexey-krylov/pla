@@ -50,7 +50,7 @@ public enum GLEndorsementType {
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return null;
         }
-    }, CHANGE_ASSURED_NAME("Correction of Name - Assured") {
+    }, CHANGE_ASSURED_NAME("Correction Of Name - Life Assured") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME);

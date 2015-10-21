@@ -161,4 +161,23 @@ public class GLEndorsementCommandHandler {
         groupLifeEndorsement = groupLifeEndorsement.submitForApproval(DateTime.now(), submitGLEndorsementCommand.getUserDetails().getUsername(), submitGLEndorsementCommand.getComment());
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
+
+    @CommandHandler
+    public String returnEndorsement(ReturnGLEndorsementCommand returnGLEndorsementCommand) {
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(returnGLEndorsementCommand.getEndorsementId()));
+        groupLifeEndorsement = groupLifeEndorsement.returnEndorsement(returnGLEndorsementCommand.getStatus(),returnGLEndorsementCommand.getUserDetails().getUsername(), returnGLEndorsementCommand.getComment());
+        return groupLifeEndorsement.getIdentifier().getEndorsementId();
+    }
+
+    /*
+    *
+    * @TODO need to generate the Endorsement number once the endorsement request got approved by the approver
+    * */
+    @CommandHandler
+    public String approve(ApproveGLEndorsementCommand approveGLEndorsementCommand) {
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(approveGLEndorsementCommand.getEndorsementId()));
+        groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment());
+        return groupLifeEndorsement.getIdentifier().getEndorsementId();
+    }
+
 }

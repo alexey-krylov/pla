@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.domain.model;
 
+import com.pla.grouplife.endorsement.domain.event.GLEndorsementStatusAuditEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 8/3/2015.
@@ -112,6 +114,26 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
     public GroupLifeEndorsement submitForApproval(DateTime now, String username, String comment) {
         this.submittedOn = now;
         this.status = EndorsementStatus.APPROVER_PENDING_ACCEPTANCE;
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLEndorsementStatusAuditEvent(this.getEndorsementId(), EndorsementStatus.APPROVER_PENDING_ACCEPTANCE, username, comment, submittedOn));
+        }
+        return this;
+    }
+
+    public GroupLifeEndorsement returnEndorsement(EndorsementStatus status, String username, String comment) {
+        this.status = status;
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLEndorsementStatusAuditEvent(this.getEndorsementId(), EndorsementStatus.RETURN, username, comment, submittedOn));
+        }
+        return this;
+    }
+
+    public GroupLifeEndorsement approve(DateTime now , String username, String comment) {
+        this.effectiveDate = now;
+        this.status = EndorsementStatus.APPROVED;
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLEndorsementStatusAuditEvent(this.getEndorsementId(), EndorsementStatus.APPROVED, username, comment, submittedOn));
+        }
         return this;
     }
 

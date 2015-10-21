@@ -21,4 +21,8 @@ public class EndorsementId implements Serializable {
     public EndorsementId(String endorsementId) {
         this.endorsementId = endorsementId;
     }
+
+    public String toString() {
+        return this.endorsementId;
+    }
 }

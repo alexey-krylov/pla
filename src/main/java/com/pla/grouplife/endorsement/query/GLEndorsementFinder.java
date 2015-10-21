@@ -3,10 +3,10 @@ package com.pla.grouplife.endorsement.query;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
+import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.sharedkernel.identifier.EndorsementId;
-import org.exolab.castor.types.DateTime;
-import org.nthdimenzion.common.AppConstants;
+import com.pla.sharedkernel.identifier.PolicyId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,7 +23,9 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -107,5 +109,29 @@ public class GLEndorsementFinder {
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
         return namedParameterJdbcTemplate.query(FIND_AGENT_PLANS_QUERY, new MapSqlParameterSource().addValue("agentId", agentId), new ColumnMapRowMapper());
+    }
+
+    public List<Map<String,Object>> getEndorsementByPolicyId(PolicyId policyId){
+        Criteria endorsementCriteria = Criteria.where("policy.policyId.policyId").is(policyId);
+        Query query = new Query(endorsementCriteria);
+        /*query.fields().include("endorsementId.endorsementId").include("endorsementNumber").include("endorsementType").include("effectiveDate")
+                .include("submittedOn");*/
+        List<GroupLifeEndorsement> groupLifeEndorsements = mongoTemplate.find(query, GroupLifeEndorsement.class);
+        if (isEmpty(groupLifeEndorsements)){
+            return Collections.EMPTY_LIST;
+        }
+        return groupLifeEndorsements.parallelStream().map(new Function<GroupLifeEndorsement, Map<String,Object>>() {
+            @Override
+            public Map<String, Object> apply(GroupLifeEndorsement groupLifeEndorsement) {
+                Map<String,Object> groupLifeEndorsementMap = Maps.newLinkedHashMap();
+                groupLifeEndorsementMap.put("endorsementId",groupLifeEndorsement.getEndorsementId().getEndorsementId());
+                groupLifeEndorsementMap.put("endorsementType",groupLifeEndorsement.getEndorsementType().getDescription());
+                groupLifeEndorsementMap.put("effectiveDate",groupLifeEndorsement.getEffectiveDate());
+                groupLifeEndorsementMap.put("policyId",groupLifeEndorsement.getPolicy().getPolicyId());
+                groupLifeEndorsementMap.put("policyNumber",groupLifeEndorsement.getEndorsementId().getEndorsementId());
+                groupLifeEndorsementMap.put("",groupLifeEndorsement.getEndorsementId().getEndorsementId());
+                return null;
+            }
+        }).collect(Collectors.toList());
     }
 }
