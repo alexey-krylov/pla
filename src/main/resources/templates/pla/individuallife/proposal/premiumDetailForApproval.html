@@ -81,7 +81,7 @@
                 <div class="form-group" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'STOP_ORDER'">
                     <label class="control-label">Man No</label>
                     <input type="text" class="form-control input-sm"  ng-model="premiumEmployerDetails.manNumber" ng-disabled="mode=='new' || mode=='view'" name="manNo"
-                           ng-maxlength="15" ng-required="true"/>
+                           ng-maxlength="15"/>
 
                     <div class="error" ng-messages="premiumEmpDetails.manNo.$error" ng-if="premiumEmpDetails.manNo.$dirty">
                         <small class="error" ng-message="maxlength">Upto 15 Character allowed.</small>

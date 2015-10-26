@@ -301,7 +301,7 @@
                     How much, and what do you smoke per day?
                 </div>
                 <div class="form-group required col-md-2">
-                    <input type="text" class="form-control input-sm" name="smokeDetail" ng-maxlength="15" ng-model="habits.smokePerDay"/>
+                    <input type="text" class="form-control input-sm" name="smokeDetail" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="15" ng-model="habits.smokePerDay"/>
 
                     <div class="error" ng-messages="step7.smokeDetail.$error" ng-if="step7.smokeDetail.$dirty">
                         <small ng-message="maxlength">Only 15 characters are allowed.</small>

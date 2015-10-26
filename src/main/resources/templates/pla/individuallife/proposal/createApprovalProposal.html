@@ -765,7 +765,7 @@
                                 <input type="text" class="form-control input-sm" name="beneficiarySurname" ng-pattern="/[a-zA-Z]/" ng-required="true" ng-maxlength="20" ng-model="beneficiary.surname"/>
 
                                 <div class="error" ng-messages="planBeneficiary.beneficiarySurname.$error" ng-if="planBeneficiary.beneficiarySurname.$dirty">
-                                    <!--<small class="error" ng-message="required">Please enter Surname.</small>-->
+                                    <small class="error" ng-message="required">Please enter Surname.</small>
                                     <small ng-message="maxlength">Only 20 characters are allowed.</small>
                                     <small ng-message="pattern">Only alphabets are allowed.</small>
                                 </div>
@@ -800,7 +800,7 @@
                                 <label class="control-label">Sex</label>
                                 <select type="text" class="form-control input-sm" name="sex" ng-model="beneficiary.gender" ng-required="true" ng-options="gender.code as gender.description for gender in genderList"></select>
 
-                                <div class="error" ng-messages="planBeneficiary.beneficiarySurname.$error" ng-if="planBeneficiary.beneficiarySurname.$dirty">
+                                <div class="error" ng-messages="planBeneficiary.sex.$error" ng-if="planBeneficiary.sex.$dirty">
                                     <small class="error" ng-message="required">Please enter Sex.</small>
                                 </div>
 
@@ -812,7 +812,7 @@
                                 </select>-->
                                 <input type="number" class="form-control input-sm" name="share" ng-required="true" ng-model="beneficiary.share"/>
 
-                                <div class="error" ng-messages="planBeneficiary.beneficiarySurname.$error" ng-if="planBeneficiary.beneficiarySurname.$dirty">
+                                <div class="error" ng-messages="planBeneficiary.share.$error" ng-if="planBeneficiary.share.$dirty">
                                     <!--<small class="error" ng-message="required">Please enter Surname.</small>-->
                                     <small ng-message="required">Please enter share%.</small>
                                 </div>
