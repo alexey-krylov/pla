@@ -32,7 +32,8 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.bankDetailsResponse=[];
             $scope.additionalDocumentList = [];
             $scope.documentList = [];
-            alert('createEndorsement');
+            $scope.todayDate = new Date();
+
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
             }).error(function (response, status, headers, config) {
