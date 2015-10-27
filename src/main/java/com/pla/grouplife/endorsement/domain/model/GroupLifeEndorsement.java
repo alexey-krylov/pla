@@ -3,6 +3,8 @@ package com.pla.grouplife.endorsement.domain.model;
 import com.pla.grouplife.endorsement.domain.event.GLEndorsementStatusAuditEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.domain.model.Policy;
@@ -16,6 +18,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -48,6 +51,8 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
     private Set<GLProposerDocument> proposerDocuments;
 
     private DateTime submittedOn;
+
+    private PremiumDetail premiumDetail;
 
     public GroupLifeEndorsement(EndorsementId endorsementId, EndorsementNumber endorsementNumber, Policy policy, GLEndorsementType endorsementType) {
         checkArgument(endorsementId != null, "Endorsement ID cannot be empty");
@@ -137,10 +142,47 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return this;
     }
 
+    public GroupLifeEndorsement updateWithInsureds(Set<Insured> insureds) {
+        this.endorsement.getMemberEndorsement().setInsureds(insureds);
+        return this;
+    }
+
     @Override
     public EndorsementId getIdentifier() {
         return endorsementId;
     }
+
+
+
+
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
+        BigDecimal totalBasicPremium = this.getTotalBasicPremiumForInsured();
+        BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
+        BigDecimal valuedClientDiscountAmount = premiumDetail.getValuedClientDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getValuedClientDiscount().divide(new BigDecimal(100))));
+        BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
+
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        BigDecimal industryLoadingFactor = BigDecimal.ZERO;
+        BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount).add(industryLoadingFactor)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
+        BigDecimal totalInsuredPremiumAmount = totalBasicPremium.add(totalLoadingAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
+    public BigDecimal getTotalBasicPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (Insured insured : this.endorsement.getMemberEndorsement().getInsureds()) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+    public GroupLifeEndorsement updateWithPremiumDetail(PremiumDetail premiumDetail) {
+        this.premiumDetail = premiumDetail;
+        return this;
+    }
+
 
 
 }

@@ -9,6 +9,7 @@ import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -18,8 +19,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -97,7 +100,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 if (insuredDto.getPlanPremiumDetail() == null) {
                     insuredDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                 }
-                insuredDto.getPlanPremiumDetail().setPlanId(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship)));
+                insuredDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDto.getNoOfAssured()));
                 Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
                     @Override
                     public InsuredDto.InsuredDependentDto apply(Row row) {
@@ -107,7 +110,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                         if (insuredDependentDto.getPlanPremiumDetail() == null) {
                             insuredDependentDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                         }
-                        insuredDependentDto.getPlanPremiumDetail().setPlanId(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship)));
+                        insuredDependentDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDependentDto.getNoOfAssured()));
                         return insuredDependentDto;
                     }
                 }).collect(Collectors.toSet());
@@ -144,7 +147,21 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
 
 
     //TODO populate plan and sum assured detail
-    private String findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship) {
+    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement) {
+        Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
+            @Override
+            public boolean test(Insured insured) {
+                return Relationship.SELF.equals(relationship);
+            }
+        }).findAny();
+        if (insuredOptional.isPresent()){
+            PlanPremiumDetail planPremiumDetail = insuredOptional.get().getPlanPremiumDetail();
+            BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0,BigDecimal.ROUND_FLOOR));
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured());
+             return planPremiumDetailDto;
+        }
         return null;
     }
 

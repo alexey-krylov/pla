@@ -11,6 +11,7 @@ import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
+import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.*;
@@ -134,7 +135,7 @@ public class GroupLifeEndorsementController {
 
     @RequestMapping(value = "/editEndorsement", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
-    private ModelAndView openCreateEndorsement() {
+    private ModelAndView openCreateEndorosement() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/endorsement/createEndorsement");
         return modelAndView;
@@ -276,6 +277,20 @@ public class GroupLifeEndorsementController {
     public PremiumDetailDto getPremiumDetail(@PathVariable("endorsementId") String endorsementId) {
         PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
         return glPolicyService.getPremiumDetail(policyId);
+    }
+
+
+    @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
+    @ResponseBody
+    public Result reCalculatePremium(@RequestBody GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
+        PremiumDetailDto premiumDetailDto = null;
+        try {
+            glRecalculatedInsuredPremiumCommand.setUserDetails(getLoggedInUserDetail(request));
+            premiumDetailDto = groupLifeEndorsementService.recalculatePremium(glRecalculatedInsuredPremiumCommand);
+            return Result.success("Premium recalculated successfully", premiumDetailDto);
+        } catch (Exception e) {
+            return Result.success(e.getMessage());
+        }
     }
 
 
@@ -431,7 +446,7 @@ public class GroupLifeEndorsementController {
     @ApiOperation(httpMethod = "GET", value = "To list Endorsements which are done for the policy")
     public Set<GLEndorsementDto> endorsementScheduleGeneration(@PathVariable("policyId") String policyId) {
 
-       return null;
+        return null;
     }
 
 

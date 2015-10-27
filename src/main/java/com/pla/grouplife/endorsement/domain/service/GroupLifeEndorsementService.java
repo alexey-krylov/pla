@@ -5,22 +5,43 @@ import com.pla.grouplife.endorsement.domain.model.GLEndorsementProcessor;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsementStatusAudit;
 import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementApproverCommentDto;
+import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.endorsement.repository.GLEndorsementStatusAuditRepository;
+import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
+import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.grouplife.sharedresource.model.vo.GLFrequencyPremium;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
+import com.pla.grouplife.sharedresource.util.GLInsuredFactory;
+import com.pla.publishedlanguage.contract.IPremiumCalculator;
+import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.apache.commons.beanutils.BeanUtils;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -36,10 +57,26 @@ public class GroupLifeEndorsementService {
 
     private GLEndorsementNumberGenerator glEndorsementNumberGenerator;
 
+    @Autowired
+    private GLEndorsementFinder glEndorsementFinder;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private IPremiumCalculator premiumCalculator;
+
     private GLFinder glFinder;
 
     @Autowired
     private GLEndorsementStatusAuditRepository glEndorsementStatusAuditRepository;
+
+    @Autowired
+    private GLInsuredFactory glInsuredFactory;
+
+    @Autowired
+    private CommandGateway commandGateway;
+
 
     @Autowired
     public GroupLifeEndorsementService(GroupLifeEndorsementRoleAdapter groupLifeEndorsementRoleAdapter, GLEndorsementNumberGenerator glEndorsementNumberGenerator, GLFinder glFinder) {
@@ -78,5 +115,88 @@ public class GroupLifeEndorsementService {
             }).collect(Collectors.toList());
         }
         return endorsementApproverCommentsDtos;
+    }
+
+    public PremiumDetailDto recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) throws ParseException {
+        GroupLifeEndorsement groupLifeEndorsement = commandGateway.sendAndWait(glRecalculatedInsuredPremiumCommand);
+        PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
+        return premiumDetailDto;
+    }
+
+    public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) throws ParseException {
+        Set<Insured> insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
+        Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeQuotation.getEndorsementId().getEndorsementId());
+        Date inceptionDate = (Date) policyDetail.get("inceptionDate");
+        DateTime inceptionOn = new DateTime(inceptionDate);
+        Date expiryDate = (Date) policyDetail.get("expiredDate");
+        DateTime expiredOn = new DateTime(expiryDate);
+        int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
+        int endorsementDuration = Days.daysBetween( DateTime.now(),expiredOn).getDays();
+        premiumDetailDto.setPolicyTermValue(endorsementDuration);
+        insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration);
+        groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);
+        groupLifeQuotation = updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails);
+        return groupLifeQuotation;
+    }
+
+    public GroupLifeEndorsement updateInsured(GroupLifeEndorsement groupLifeEndorsement, Set<Insured> insureds, UserDetails userDetails) {
+        GLEndorsementProcessor glEndorsementProcessor = groupLifeEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
+        return glEndorsementProcessor.updateWithInsured(groupLifeEndorsement, insureds);
+    }
+
+    public GroupLifeEndorsement updateWithPremiumDetail(GroupLifeEndorsement groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails) {
+        GLEndorsementProcessor glEndorsementProcessor = groupLifeEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
+        PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail));
+        if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
+            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_LIFE));
+            Set<GLFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GLFrequencyPremium>() {
+                @Override
+                public GLFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {
+                    return new GLFrequencyPremium(computedPremiumDto.getPremiumFrequency(), computedPremiumDto.getPremium().setScale(AppConstants.scale, AppConstants.roundingMode));
+                }
+            }).collect(Collectors.toSet());
+            premiumDetail = premiumDetail.addPolicies(policies);
+            premiumDetail = premiumDetail.nullifyPremiumInstallment();
+        } else if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() > 0 && premiumDetailDto.getPolicyTermValue() != 365) {
+            int noOfInstallment = premiumDetailDto.getPolicyTermValue() / 30;
+            if ((premiumDetailDto.getPolicyTermValue() % 30) == 0) {
+                noOfInstallment = noOfInstallment - 1;
+            }
+            for (int count = 1; count <= noOfInstallment; count++) {
+                BigDecimal installmentAmount = premiumDetail.getNetTotalPremium().divide(new BigDecimal(count), 2, BigDecimal.ROUND_CEILING);
+                premiumDetail = premiumDetail.addInstallments(count, installmentAmount);
+            }
+            if (premiumDetailDto.getPremiumInstallment() != null) {
+                premiumDetail = premiumDetail.addChoosenPremiumInstallment(premiumDetailDto.getPremiumInstallment().getInstallmentNo(), premiumDetailDto.getPremiumInstallment().getInstallmentAmount());
+            }
+            premiumDetail = premiumDetail.nullifyFrequencyPremium();
+        }
+        if (premiumDetailDto.getOptedPremiumFrequency() != null && isNotEmpty(premiumDetail.getFrequencyPremiums())) {
+            premiumDetail = premiumDetail.updateWithOptedFrequencyPremium(premiumDetailDto.getOptedPremiumFrequency());
+        }
+        groupLifeProposal = glEndorsementProcessor.updateWithPremiumDetail(groupLifeProposal, premiumDetail);
+        return groupLifeProposal;
+    }
+
+    private PremiumDetailDto getPremiumDetail(GroupLifeEndorsement groupLifeProposal) {
+        PremiumDetail premiumDetail = groupLifeProposal.getPremiumDetail();
+        if (premiumDetail == null) {
+            return new PremiumDetailDto();
+        }
+        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(), premiumDetail.getProfitAndSolvency(), premiumDetail.getHivDiscount(), premiumDetail.getValuedClientDiscount(), premiumDetail.getLongTermDiscount(), premiumDetail.getPolicyTermValue());
+        PremiumDetail.PremiumInstallment premiumInstallment = premiumDetail.getPremiumInstallment();
+        if (premiumInstallment != null) {
+            premiumDetailDto = premiumDetailDto.addOptedInstallmentDetail(premiumInstallment.getNoOfInstallment(), premiumInstallment.getInstallmentAmount());
+        }
+        if (isNotEmpty(premiumDetail.getInstallments())) {
+            for (PremiumDetail.PremiumInstallment installment : premiumDetail.getInstallments()) {
+                premiumDetailDto = premiumDetailDto.addInstallments(installment.getNoOfInstallment(), installment.getInstallmentAmount());
+            }
+        }
+        premiumDetailDto = premiumDetailDto.addFrequencyPremiumAmount(premiumDetail.getAnnualPremiumAmount(), premiumDetail.getSemiAnnualPremiumAmount(), premiumDetail.getQuarterlyPremiumAmount(), premiumDetail.getMonthlyPremiumAmount());
+        premiumDetailDto = premiumDetailDto.addNetTotalPremiumAmount(premiumDetail.getNetTotalPremium());
+        premiumDetailDto = premiumDetailDto.updateWithOptedFrequency(premiumDetail.getOptedFrequencyPremium() != null ? premiumDetail.getOptedFrequencyPremium().getPremiumFrequency() : null);
+        return premiumDetailDto;
     }
 }

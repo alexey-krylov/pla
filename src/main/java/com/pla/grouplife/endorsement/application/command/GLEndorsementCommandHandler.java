@@ -7,6 +7,8 @@ import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
+import com.pla.grouplife.endorsement.repository.GLEndorsementRepository;
+import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
@@ -24,6 +26,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -44,6 +47,9 @@ public class GLEndorsementCommandHandler {
 
     private GroupLifeEndorsementService groupLifeEndorsementService;
 
+
+    @Autowired
+    private GLEndorsementRepository glEndorsementRepository;
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
@@ -99,7 +105,7 @@ public class GLEndorsementCommandHandler {
         Set<Insured> insureds = insuredDtos.stream().map(new Function<InsuredDto, Insured>() {
             @Override
             public Insured apply(InsuredDto insuredDto) {
-                final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), null, null, null)};
+                final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured())};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).
                         withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName()).withFamilyId(insuredDto.getFamilyId())
@@ -180,4 +186,12 @@ public class GLEndorsementCommandHandler {
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
 
+
+    @CommandHandler
+    public GroupLifeEndorsement recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) throws ParseException {
+        GroupLifeEndorsement groupHealthProposal = glEndorsementRepository.findOne(new EndorsementId(glRecalculatedInsuredPremiumCommand.getProposalId()));
+        groupHealthProposal = groupLifeEndorsementService.populateAnnualBasicPremiumOfInsured(groupHealthProposal, glRecalculatedInsuredPremiumCommand.getUserDetails(), glRecalculatedInsuredPremiumCommand.getPremiumDetailDto());
+        glEndorsementMongoRepository.add(groupHealthProposal);
+        return groupHealthProposal;
+    }
 }
