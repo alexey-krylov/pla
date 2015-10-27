@@ -47,7 +47,7 @@
 </script>
 <script type="text/ng-template" id="createEndorsementTpl.html">
     <p class="container lead">
-    <ol class="container breadcrumb" style="margin-left: 12px;">
+    <ol class="container breadcrumb" style="margin-left: 12px;width:99%">
         <li>Endorsement</li>
         <li>Individual Life</li>
     </ol>
@@ -94,7 +94,7 @@
                                     <label class="control-label">Endrosement Type</label>
                                    <!-- <select class="form-control input-sm" name="title" ng-disabled="mode=='new'||mode=='view'" ng-model="clientDetail.title" ng-options="title as title for title in titles">
                                     </select>-->
-                                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="gender" ng-model="policy.endrosementType" ng-required="true">
+                                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="endrosementType" ng-model="policy.endrosementType" ng-required="true">
                                         <option value="">--- Select Endrosementtype -- </option>
                                         <option value="correctinNameLA">Correction of Name- Life Assured</option>
                                         <option value="correctinNamePH">Correction of Name- Policyholder</option>
@@ -106,10 +106,17 @@
                                         <option value="correctinNRCLA">Correction of NRC- Life Assured</option>
                                         <option value="changecontactinLA">Change of Contact Details- Life Assured</option>
                                         <option value="changecontactinPH">Change of Contact Details- Policyholder</option>
+                                        <option value="changeSumAssured">Change in Sum Assured</option>
                                         <option value="changeBeneficiary">Add/Change/Delete Beneficiary</option>
                                         <option value="changeAgent">Add/Change/Delete Agent</option>
                                         <option value="changePaymentMode">Change Payment Mode</option>
+                                        <option value="premiumAdjustment">Premium Adjustment</option>
                                     </select>
+
+                                    <div class="error" ng-messages="step1.endrosementType.$error" ng-if="step1.endrosementType.$dirty">
+                                        <small ng-message="required">Please select Endrosement Type</small>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -875,6 +882,129 @@
                                 </div>
                             </accordion-group>
                         </accordion>
+
+                        <accordion ng-if="policy.endrosementType== 'changeSumAssured'">
+                            <accordion-group ng-form="contactForm" is-open="true">
+                                <accordion-heading>
+                                    Change Sum Assured-Plan <i class="pull-right glyphicon"
+                                                                    ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
+                                </accordion-heading>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Plan</label>
+                                            <input type="text" class="form-control input-sm" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="policy.mobileNumber1"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Ealier Sum Assured</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.homePhone1"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">New Sum Assured</label>
+                                            <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="policy.emailAddress1"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <strong>Change Sum Assured- optional cover 1 </strong>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Earlier Sum Assured</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">New Sum Assured</label>
+                                            <input type="text" class="form-control input-sm" name="otherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.otherName"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <strong>Change Sum Assured- optional cover 2 </strong>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Earlier Sum Assured</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">New Sum Assured</label>
+                                            <input type="text" class="form-control input-sm" name="otherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.otherName"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Old Premium</label>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">New Premium</label>
+                                            <input type="text" class="form-control input-sm" name="otherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="policy.otherName"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <br />
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='premiumAdjustment'">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">New Plan Premium</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">New Optional Coverage 2 Premium</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">New Plan Sum Assured</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">New Optional Sum</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">New Optional Coverage 1 Premium</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">New Optional Coverage 3 Premium</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">New Optional Coverage 1 Sum Assured</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">New Optional Coverage 3 Sum Assured</label>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="policy.surName"/>
+                                </div>
+                            </div>
+                        </div>
+
                       <!--  <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal" ng-form="agentForm">
                             <div class="modal-dialog">
                                 <div class="modal-content">
