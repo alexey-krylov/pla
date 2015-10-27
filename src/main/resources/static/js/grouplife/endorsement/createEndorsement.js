@@ -9,6 +9,11 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
              $scope.endorsementId = getQueryParameter('endorsementId') || null;
            // $scope.endorsementId = window.location.search.split('=')[1];
           //  alert($scope.endorsementId);
+            /*This scope value is binded to fueluxWizard directive and hence it changes as and when next button is clicked*/
+            $scope.selectedItem = 1;
+
+            /*Holds the indicator for steps in which save button is clicked*/
+            $scope.stepsSaved = stepsSaved;
 
             // $scope.versionNumber = getQueryParameter('version') || null;
 
@@ -40,6 +45,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 $scope.submittedButton = false;
                 $scope.isEnablePlanMode = true;
                 $scope.isEnable = false;
+                $scope.stepsSaved["2"] = false
             }
             var mode = getQueryParameter("mode");
             if (mode == 'view') {
@@ -81,23 +87,19 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.fileSaved = null;
             $scope.disableUploadButton = false;
 
-            /*This scope value is binded to fueluxWizard directive and hence it changes as and when next button is clicked*/
-            $scope.selectedItem = 1;
-
-            /*Holds the indicator for steps in which save button is clicked*/
-            $scope.stepsSaved = stepsSaved;
 
             /*Inter id used for programmatic purpose*/
             $scope.provinces = provinces;
             $scope.showDownload = true;
 
             $scope.documentList = documentList;
-            $scope.stepsSaved["3"] = false
+            //$scope.stepsSaved["3"] = false
             /* if(status != 'return' && method != 'approval' && $scope.isEnable!= true && mode != 'view' && mode != 'edit' ){
              $scope.stepsSaved["3"] = false;
 
              }*/
             if (method == 'approval') {
+                $scope.stepsSaved["2"] = true;
                 $scope.stepsSaved["3"] = true;
 
             }
@@ -121,8 +123,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         }).progress(function (evt) {
                             console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                         }).success(function (data, status, headers, config) {
-                            console.log('file ' + config.file.name);
-                            console.log(data);
+                           // console.log('file ' + config.file.name);
+                            //console.log(data);
+
 
                         });
                     }
@@ -229,13 +232,18 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                     if (data.status == "200") {
                         $scope.submittedButton = true;
                         $scope.calculatePlan = true;
+                        $scope.stepsSaved["2"] = true;
                         $scope.stepsSaved["3"] = true;
                         $scope.stepsSaved["4"] = false;
                         // saveStep();
-                        /* $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + $scope.proposalId)
-                         .success(function () {
+                         $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + $scope.endorsementId)
+                         .success(function (data,status) {
+                                 if(status==200){
+                                     $scope.policyDetails.premium=data;
+                                 }
 
-                         })*/
+
+                             })
 
                         $scope.showDownload = true;
                     }else{

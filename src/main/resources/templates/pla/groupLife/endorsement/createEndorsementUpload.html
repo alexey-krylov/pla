@@ -71,9 +71,10 @@
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Basic Details<span class="chevron"></span></li>
                 <li data-step="2"><span class="badge">2</span>Endorsement Details<span class="chevron"></span></li>
-                <li data-step="3"><span class="badge">3</span>Documents<span class="chevron"></span></li>
-                <li data-step="4" class="ng-cloak" ng-show="calculatePlan"><span class="badge">4</span>Premium<span
-                        class="chevron"></span></li>
+                <li data-step="3"  ><span class="badge">3</span>Premium<span
+                        class="chevron"></span></li><!--ng-show="calculatePlan"-->
+                <li data-step="4"><span class="badge">4</span>Documents<span class="chevron"></span></li>
+
 
             </ul>
 
@@ -85,9 +86,8 @@
                         class="glyphicon glyphicon-arrow-left"></span>Prev
                 </button>
 
-                <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]">Next<span
-                        class="glyphicon glyphicon-arrow-right"></span></button>
-                <!-- -->
+                <button type="button" class="btn btn-default btn-next" ng-disabled="!stepsSaved[selectedItem]" >Next<span
+                        class="glyphicon glyphicon-arrow-right"></span></button><!---->
             </div>
 
             <div class="step-content ng-cloak">
@@ -200,7 +200,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="4" ng-show="calculatePlan">
+                <div class="step-pane" data-step="3" ><!-- ng-show="calculatePlan"-->
                     <div class="col-lg-9" disable-all-fields="isViewMode">
                         <div class="bs-callout  bs-callout-info">
                             <ng-form name="premiumForm" novalidate="true">
@@ -258,7 +258,7 @@
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
-                                        <div class="form-group">
+                                     <!--   <div class="form-group">
                                             <label>Policy Term Expired Till Date (Days)</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true"
@@ -267,7 +267,7 @@
                                             <small class="error" ng-show="inappropriatePolicyTerm">
                                                 Please enter a number between 30 and 9999.
                                             </small>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </ng-form>
@@ -275,11 +275,11 @@
                     </div>
                     <div class="col-lg-3" ng-hide="inappriatePooprlicyTerm"
                          disable-all-fields="isViewMode">
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label>Endorsement Charges</label>
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="policyDetails.premium.endorsementCharges" ng-disabled="true"/>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
@@ -288,16 +288,16 @@
                                 <input type="input" readonly="true" class="form-control input-sm"
                                        ng-model="policyDetails.premium.totalPremium" ng-disabled="true"/>
                             </div>
-                            <div class="form-group">
+                           <!-- <div class="form-group">
                                 <label>Total Refundable Amount</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
                                        ng-model="policyDetails.premium.totalRefundedPremium" ng-disabled="true"/>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
 
                 </div>
-                <div class="step-pane" data-step="3">
+                <div class="step-pane" data-step="4">
                     <ng-form name="step3">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">

@@ -66,8 +66,8 @@
                 </li>
                 <li data-step="2"><span class="badge">2</span>Basic Details<span class="chevron"></span></li>
                 <li data-step="3"><span class="badge">3</span>Endorsement Details<span class="chevron"></span></li>
-                <li data-step="4"><span class="badge">4</span>Documents<span class="chevron"></span></li>
-                <li data-step="5"><span class="badge">5</span>Premium<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Premium<span class="chevron"></span></li>
+                <li data-step="5"><span class="badge">5</span>Documents<span class="chevron"></span></li>
 
             </ul>
             <div class="actions">
@@ -249,7 +249,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="5">
+                <div class="step-pane" data-step="4">
                     <div class="col-lg-9" disable-all-fields="isViewMode">
                         <div class="bs-callout  bs-callout-info">
                             <ng-form name="premiumForm" novalidate="true">
@@ -303,7 +303,7 @@
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
-                                        <div class="form-group">
+                                      <!--  <div class="form-group">
                                             <label>Policy Term Expired Till Date (Days)</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true"
@@ -313,7 +313,7 @@
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
-
+-->
                                     </div>
                                 </div>
                             </ng-form>
@@ -321,11 +321,11 @@
                     </div>
                     <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm"
                          disable-all-fields="isViewMode">
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label>Endorsement Charges</label>
                             <input type="number" readonly="true" class="form-control input-sm"
                                    ng-model="policyDetails.premium.endorsementCharges" ng-disabled="true"/>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
@@ -334,11 +334,11 @@
                                 <input type="input" readonly="true" class="form-control input-sm"
                                        ng-model="policyDetails.premium.totalPremium" ng-disabled="true"/>
                             </div>
-                            <div class="form-group">
+                           <!-- <div class="form-group">
                                 <label>Total Refundable Amount</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
                                        ng-model="policyDetails.premium.totalRefundedPremium" ng-disabled="true"/>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <div class="row">
@@ -354,7 +354,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="step-pane" data-step="4">
+                <div class="step-pane" data-step="5">
                     <ng-form name="step4" disable-all-fields="isViewMode">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
