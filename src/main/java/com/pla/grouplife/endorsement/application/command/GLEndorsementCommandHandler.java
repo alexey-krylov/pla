@@ -7,8 +7,6 @@ import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
-import com.pla.grouplife.endorsement.repository.GLEndorsementRepository;
-import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
@@ -26,7 +24,6 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -46,10 +43,6 @@ public class GLEndorsementCommandHandler {
     private Repository<GroupLifeEndorsement> glEndorsementMongoRepository;
 
     private GroupLifeEndorsementService groupLifeEndorsementService;
-
-
-    @Autowired
-    private GLEndorsementRepository glEndorsementRepository;
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
@@ -186,12 +179,4 @@ public class GLEndorsementCommandHandler {
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
 
-
-    @CommandHandler
-    public GroupLifeEndorsement recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) throws ParseException {
-        GroupLifeEndorsement groupHealthProposal = glEndorsementRepository.findOne(new EndorsementId(glRecalculatedInsuredPremiumCommand.getProposalId()));
-        groupHealthProposal = groupLifeEndorsementService.populateAnnualBasicPremiumOfInsured(groupHealthProposal, glRecalculatedInsuredPremiumCommand.getUserDetails(), glRecalculatedInsuredPremiumCommand.getPremiumDetailDto());
-        glEndorsementMongoRepository.add(groupHealthProposal);
-        return groupHealthProposal;
-    }
 }

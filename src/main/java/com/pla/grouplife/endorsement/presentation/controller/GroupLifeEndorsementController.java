@@ -11,7 +11,6 @@ import com.pla.grouplife.endorsement.presentation.dto.SearchGLEndorsementDto;
 import com.pla.grouplife.endorsement.presentation.dto.UploadInsuredDetailDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
-import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithProposerCommand;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.*;
@@ -274,25 +273,11 @@ public class GroupLifeEndorsementController {
     @RequestMapping(value = "/getpremiumdetail/{endorsementId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To get premium detail")
-    public PremiumDetailDto getPremiumDetail(@PathVariable("endorsementId") String endorsementId) {
-        PolicyId policyId = glEndorsementService.getPolicyIdFromEndorsment(endorsementId);
-        return glPolicyService.getPremiumDetail(policyId);
+    public PremiumDetailDto getPremiumDetail(@PathVariable("endorsementId") String endorsementId,HttpServletRequest request) throws ParseException {
+        UserDetails userDetails  = getLoggedInUserDetail(request);
+        return groupLifeEndorsementService.recalculatePremium(endorsementId,userDetails);
+
     }
-
-
-    @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)
-    @ResponseBody
-    public Result reCalculatePremium(@RequestBody GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand, HttpServletRequest request) {
-        PremiumDetailDto premiumDetailDto = null;
-        try {
-            glRecalculatedInsuredPremiumCommand.setUserDetails(getLoggedInUserDetail(request));
-            premiumDetailDto = groupLifeEndorsementService.recalculatePremium(glRecalculatedInsuredPremiumCommand);
-            return Result.success("Premium recalculated successfully", premiumDetailDto);
-        } catch (Exception e) {
-            return Result.success(e.getMessage());
-        }
-    }
-
 
     @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
     public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {

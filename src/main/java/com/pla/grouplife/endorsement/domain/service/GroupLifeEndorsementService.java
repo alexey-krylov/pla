@@ -6,8 +6,8 @@ import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsementStatusAudit;
 import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementApproverCommentDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
+import com.pla.grouplife.endorsement.repository.GLEndorsementRepository;
 import com.pla.grouplife.endorsement.repository.GLEndorsementStatusAuditRepository;
-import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.GLFrequencyPremium;
@@ -24,14 +24,12 @@ import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.apache.commons.beanutils.BeanUtils;
-import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +59,7 @@ public class GroupLifeEndorsementService {
     private GLEndorsementFinder glEndorsementFinder;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private GLEndorsementRepository glEndorsementRepository;
 
     @Autowired
     private IPremiumCalculator premiumCalculator;
@@ -73,10 +71,6 @@ public class GroupLifeEndorsementService {
 
     @Autowired
     private GLInsuredFactory glInsuredFactory;
-
-    @Autowired
-    private CommandGateway commandGateway;
-
 
     @Autowired
     public GroupLifeEndorsementService(GroupLifeEndorsementRoleAdapter groupLifeEndorsementRoleAdapter, GLEndorsementNumberGenerator glEndorsementNumberGenerator, GLFinder glFinder) {
@@ -117,9 +111,20 @@ public class GroupLifeEndorsementService {
         return endorsementApproverCommentsDtos;
     }
 
-    public PremiumDetailDto recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) throws ParseException {
-        GroupLifeEndorsement groupLifeEndorsement = commandGateway.sendAndWait(glRecalculatedInsuredPremiumCommand);
-        PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
+    public PremiumDetailDto recalculatePremium(String endorsementId,UserDetails userDetails) throws ParseException {
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementRepository.findOne(new EndorsementId(endorsementId));
+        if (groupLifeEndorsement.getEndorsement()==null){
+            return new PremiumDetailDto();
+        }
+        if (groupLifeEndorsement.getEndorsement().getMemberEndorsement()==null){
+            return new PremiumDetailDto();
+        }
+        Map  policyMap = glFinder.findPolicyById(groupLifeEndorsement.getPolicy().getPolicyId().getPolicyId());
+        PremiumDetail premiumDetail = (PremiumDetail) policyMap.get("premiumDetail");
+        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
+                premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
+        groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto);
+        premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
         return premiumDetailDto;
     }
 
@@ -191,7 +196,9 @@ public class GroupLifeEndorsementService {
         }
         if (isNotEmpty(premiumDetail.getInstallments())) {
             for (PremiumDetail.PremiumInstallment installment : premiumDetail.getInstallments()) {
-                premiumDetailDto = premiumDetailDto.addInstallments(installment.getNoOfInstallment(), installment.getInstallmentAmount());
+                if (installment.getNoOfInstallment() == 1) {
+                    premiumDetailDto = premiumDetailDto.addInstallments(installment.getNoOfInstallment(), installment.getInstallmentAmount());
+                }
             }
         }
         premiumDetailDto = premiumDetailDto.addFrequencyPremiumAmount(premiumDetail.getAnnualPremiumAmount(), premiumDetail.getSemiAnnualPremiumAmount(), premiumDetail.getQuarterlyPremiumAmount(), premiumDetail.getMonthlyPremiumAmount());
@@ -199,4 +206,6 @@ public class GroupLifeEndorsementService {
         premiumDetailDto = premiumDetailDto.updateWithOptedFrequency(premiumDetail.getOptedFrequencyPremium() != null ? premiumDetail.getOptedFrequencyPremium().getPremiumFrequency() : null);
         return premiumDetailDto;
     }
+
+
 }
