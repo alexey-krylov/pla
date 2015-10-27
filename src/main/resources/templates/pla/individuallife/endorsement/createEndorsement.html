@@ -875,8 +875,62 @@
                                 </div>
                             </accordion-group>
                         </accordion>
+                      <!--  <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal" ng-form="agentForm">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">Agent Details</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Agent Code</label>
+                                                    <div class="input-group">
+                                                        <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
+                                                               ng-blur="searchAgent()" ng-model="newAgent.agentId" ng-required="true"
+                                                               ng-disabled="mode=='new'">
+                                                        </input>
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
+                                                                    ng-disabled="!newAgent.agentId || mode=='new'">
+                                                                <span class="glyphicon glyphicon-search"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group required" ng-show="check">
+                                                    <span style="color:red">Invalid Agent Code</span>
+                                                </div>
 
-                     <!-- <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal" ng-form="beneficiaryForm">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Commission %</label>
+                                                    <input class="form-control input-sm" type="number" max="100" min="0" name="commission" ng-model="newAgent.commission"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">First Name</label>
+                                                    <input type="text" class="form-control input-sm" name="firstName" readonly="true" ng-model="newAgent.firstName" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Last Name</label>
+                                                    <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="newAgent.lastName" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" data-dismiss="modal" ng-disabled="agentForm.$invalid || checking" ng-click="addAgent(newAgent)">Add</button>
+                                        <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </ng-form>
+
+                     <div class="modal fade" id="beneficialModal" tabindex="-1" role="dialog" aria-labelledby="beneficialModal" ng-form="beneficiaryForm">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -931,7 +985,7 @@
                                                            ng-required="true" ng-readonly="true"/>
                                                 </div>
 
-                                                &lt;!&ndash;<div class="form-group required">
+                                               <!--<div class="form-group required">
                                                      <label class="control-label">Relationship To Life Assured</label>
                                                      <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="newBeneficiary.relationshipId" ng-options="applicableRelationship.relationCode as applicableRelationship.description for applicableRelationship in applicableRelationships">
                                                      </select>
@@ -939,7 +993,7 @@
                                                      <div class="error" ng-messages="beneficiaryForm.relationship.$error" ng-if="beneficiaryForm.relationship.$dirty">
                                                          <small class="error" ng-message="required">Please choose RelationshipId.</small>
                                                      </div>
-                                                 </div>&ndash;&gt;
+                                                 </div>-->
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group required">
@@ -999,63 +1053,62 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
 
-                      <!--  <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal" ng-form="agentForm">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title">Agent Details</h3>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group required">
-                                                    <label class="control-label">Agent Code</label>
-                                                    <div class="input-group">
-                                                        <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
-                                                               ng-blur="searchAgent()" ng-model="newAgent.agentId" ng-required="true"
-                                                               ng-disabled="mode=='new'">
-                                                        </input>
-                                                        <div class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
-                                                                    ng-disabled="!newAgent.agentId || mode=='new'">
-                                                                <span class="glyphicon glyphicon-search"></span>
-                                                            </button>
-                                                        </div>
+                    <div class="modal fade" id="agentModal" tabindex="-1" role="dialog" aria-labelledby="agentModal" ng-form="agentForm">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Agent Details</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group required">
+                                                <label class="control-label">Agent Code</label>
+                                                <div class="input-group">
+                                                    <input type="text" onkeypress="return isEnterKey(event)" class="form-control input-sm" name="agentId"
+                                                           ng-blur="searchAgent()" ng-model="newAgent.agentId" ng-required="true"
+                                                           ng-disabled="mode=='new'">
+                                                    </input>
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-sm" ng-click="searchAgent()"
+                                                                ng-disabled="!newAgent.agentId || mode=='new'">
+                                                            <span class="glyphicon glyphicon-search"></span>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div class="form-group required" ng-show="check">
-                                                    <span style="color:red">Invalid Agent Code</span>
-                                                </div>
-
-                                                <div class="form-group required">
-                                                    <label class="control-label">Commission %</label>
-                                                    <input class="form-control input-sm" type="number" max="100" min="0" name="commission" ng-model="newAgent.commission"/>
-                                                </div>
+                                            </div>
+                                            <div class="form-group required" ng-show="check">
+                                                <span style="color:red">Invalid Agent Code</span>
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <div class="form-group required">
-                                                    <label class="control-label">First Name</label>
-                                                    <input type="text" class="form-control input-sm" name="firstName" readonly="true" ng-model="newAgent.firstName" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label">Last Name</label>
-                                                    <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="newAgent.lastName" />
-                                                </div>
+                                            <div class="form-group required">
+                                                <label class="control-label">Commission %</label>
+                                                <input class="form-control input-sm" type="number" max="100" min="0" name="commission" ng-model="newAgent.commission"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group required">
+                                                <label class="control-label">First Name</label>
+                                                <input type="text" class="form-control input-sm" name="firstName" readonly="true" ng-model="newAgent.firstName" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Last Name</label>
+                                                <input type="text" class="form-control input-sm" name="surname" readonly="true" ng-model="newAgent.lastName" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-default" data-dismiss="modal" ng-disabled="agentForm.$invalid || checking" ng-click="addAgent(newAgent)">Add</button>
-                                        <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
-                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-default" data-dismiss="modal" ng-disabled="agentForm.$invalid || checking" ng-click="addAgent(newAgent)">Add</button>
+                                    <button class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
+                    </div>
 
-                    </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="cancel()">Cancel</button>
