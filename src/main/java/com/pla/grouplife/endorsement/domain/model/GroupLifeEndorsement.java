@@ -7,6 +7,7 @@ import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
+import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.domain.model.Policy;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import lombok.AccessLevel;
@@ -36,7 +37,17 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
     @AggregateIdentifier
     private EndorsementId endorsementId;
 
+    /*
+    * Endorsement Request number
+    *
+    * */
     private EndorsementNumber endorsementNumber;
+
+    /*
+    * Endorsement number
+    *
+    * */
+    private EndorsementUniqueNumber endorsementUniqueNumber;
 
     private GLEndorsementType endorsementType;
 
@@ -133,8 +144,9 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return this;
     }
 
-    public GroupLifeEndorsement approve(DateTime now , String username, String comment) {
+    public GroupLifeEndorsement approve(DateTime now , String username, String comment, EndorsementUniqueNumber endorsementUniqueNumber) {
         this.effectiveDate = now;
+        this.endorsementUniqueNumber= endorsementUniqueNumber;
         this.status = EndorsementStatus.APPROVED;
         if (isNotEmpty(comment)) {
             registerEvent(new GLEndorsementStatusAuditEvent(this.getEndorsementId(), EndorsementStatus.APPROVED, username, comment, submittedOn));

@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.application.command;
 
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.policy.domain.service.GHPolicyEndorsementNumberGenerator;
 import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberDeletionEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
@@ -10,6 +11,7 @@ import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
+import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.EndorsementId;
@@ -44,13 +46,17 @@ public class GLEndorsementCommandHandler {
 
     private GroupLifeEndorsementService groupLifeEndorsementService;
 
+    private GHPolicyEndorsementNumberGenerator ghPolicyEndorsementNumberGenerator;
+
+
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
     @Autowired
-    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService) {
+    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GHPolicyEndorsementNumberGenerator ghPolicyEndorsementNumberGenerator) {
         this.glEndorsementMongoRepository = glEndorsementMongoRepository;
         this.groupLifeEndorsementService = groupLifeEndorsementService;
+        this.ghPolicyEndorsementNumberGenerator = ghPolicyEndorsementNumberGenerator;
     }
 
     @CommandHandler
@@ -98,7 +104,7 @@ public class GLEndorsementCommandHandler {
         Set<Insured> insureds = insuredDtos.stream().map(new Function<InsuredDto, Insured>() {
             @Override
             public Insured apply(InsuredDto insuredDto) {
-                final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured())};
+                final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), null, null, null)};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).
                         withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName()).withFamilyId(insuredDto.getFamilyId())
@@ -175,7 +181,9 @@ public class GLEndorsementCommandHandler {
     @CommandHandler
     public String approve(ApproveGLEndorsementCommand approveGLEndorsementCommand) {
         GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(approveGLEndorsementCommand.getEndorsementId()));
-        groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment());
+        String endorsementNo = ghPolicyEndorsementNumberGenerator.getPolicyNumber(GroupLifeEndorsement.class);
+        EndorsementUniqueNumber endorseNumber = new EndorsementUniqueNumber(endorsementNo);
+        groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment(), endorseNumber);
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
 
