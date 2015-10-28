@@ -1,16 +1,19 @@
 package com.pla.grouplife.endorsement.application.command;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.policy.domain.service.GHPolicyEndorsementNumberGenerator;
-import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
-import com.pla.grouplife.endorsement.domain.model.GLMemberDeletionEndorsement;
-import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
-import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
+import com.pla.grouphealth.policy.domain.service.GLEndorsementUniqueNumberGenerator;
+import com.pla.grouplife.endorsement.domain.model.*;
+import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementRoleAdapter;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
+import com.pla.individuallife.proposal.application.command.WaiveMandatoryDocumentCommand;
+import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
+import com.pla.individuallife.proposal.domain.model.ILProposalApprover;
+import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -46,17 +49,20 @@ public class GLEndorsementCommandHandler {
 
     private GroupLifeEndorsementService groupLifeEndorsementService;
 
-    private GHPolicyEndorsementNumberGenerator ghPolicyEndorsementNumberGenerator;
+    private GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator;
+
+    private GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter;
 
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
     @Autowired
-    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GHPolicyEndorsementNumberGenerator ghPolicyEndorsementNumberGenerator) {
+    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator, GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter) {
         this.glEndorsementMongoRepository = glEndorsementMongoRepository;
         this.groupLifeEndorsementService = groupLifeEndorsementService;
-        this.ghPolicyEndorsementNumberGenerator = ghPolicyEndorsementNumberGenerator;
+        this.glEndorsementUniqueNumberGenerator = glEndorsementUniqueNumberGenerator;
+        this.glEndorsementRoleAdapter = glEndorsementRoleAdapter;
     }
 
     @CommandHandler
@@ -174,6 +180,22 @@ public class GLEndorsementCommandHandler {
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
 
+    @CommandHandler
+    public String waiveDocumentCommandHandler(GLWaiveMandatoryDocumentCommand cmd) {
+        GLEndorsementApprover glEndorsementApprover =  glEndorsementRoleAdapter.userToEndorsmentApprover(cmd.getUserDetails());
+        GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(cmd.getEndorsementId()));
+        Set<GLProposerDocument> documents = groupLifeEndorsement.getProposerDocuments();
+        if (isEmpty(documents)) {
+            documents = Sets.newHashSet();
+        }
+        for (GLProposalMandatoryDocumentDto proposalDocument : cmd.getWaivedDocuments()){
+            GLProposerDocument glProposerDocument = new GLProposerDocument(proposalDocument.getDocumentId(),proposalDocument.getMandatory(),proposalDocument.getIsApproved());
+            documents.add(glProposerDocument);
+        }
+        groupLifeEndorsement = glEndorsementApprover.updateWithDocuments(groupLifeEndorsement,documents);
+        return groupLifeEndorsement.getIdentifier().getEndorsementId();
+    }
+
     /*
     *
     * @TODO need to generate the Endorsement number once the endorsement request got approved by the approver
@@ -181,7 +203,7 @@ public class GLEndorsementCommandHandler {
     @CommandHandler
     public String approve(ApproveGLEndorsementCommand approveGLEndorsementCommand) {
         GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(approveGLEndorsementCommand.getEndorsementId()));
-        String endorsementNo = ghPolicyEndorsementNumberGenerator.getPolicyNumber(GroupLifeEndorsement.class);
+        String endorsementNo = glEndorsementUniqueNumberGenerator.getEndorsementUniqueNumber(GroupLifeEndorsement.class);
         EndorsementUniqueNumber endorseNumber = new EndorsementUniqueNumber(endorsementNo);
         groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment(), endorseNumber);
         return groupLifeEndorsement.getIdentifier().getEndorsementId();

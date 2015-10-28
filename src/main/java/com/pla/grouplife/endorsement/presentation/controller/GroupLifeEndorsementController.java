@@ -409,8 +409,25 @@ public class GroupLifeEndorsementController {
     public ResponseEntity approveEndorsement(@RequestBody ApproveGLEndorsementCommand approveGLEndorsementCommand, HttpServletRequest request) {
         try {
             approveGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            /*
+            * service method which will check for the uploaded documets and waived documents..
+            * */
             commandGateway.sendAndWait(approveGLEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement approved successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/waivedocument", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "To waive mandatory document by Approver")
+    public ResponseEntity waiveDocument(@RequestBody GLWaiveMandatoryDocumentCommand cmd, HttpServletRequest request) {
+        try {
+            cmd.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId =  commandGateway.sendAndWait(cmd);
+            return new ResponseEntity(Result.success("Mandatory Document waives successfully",proposalId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -441,20 +458,6 @@ public class GroupLifeEndorsementController {
     public Set<GLEndorsementDto> printEndorsement(@PathVariable("policyId") String policyId,@PathVariable("endorsementId") List<EndorsementId> endorsementId) {
 
         return null;
-    }
-
-    @RequestMapping(value = "/waivedocument", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "POST", value = "To waive mandatory document by Approver")
-    public ResponseEntity waiveDocument(@RequestBody WaiveMandatoryDocumentCommand cmd, HttpServletRequest request) {
-        try {
-            cmd.setUserDetails(getLoggedInUserDetail(request));
-            String proposalId =  commandGateway.sendAndWait(cmd);
-            return new ResponseEntity(Result.success("Mandatory Document waives successfully",proposalId), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
 }

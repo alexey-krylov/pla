@@ -31,6 +31,10 @@ public class GLProposalMandatoryDocumentDto {
 
     private boolean isRequireForSubmission;
 
+    private Boolean isApproved  = Boolean.FALSE;
+
+    private Boolean mandatory;
+
     public GLProposalMandatoryDocumentDto(String documentId, String documentName) {
         this.documentId = documentId;
         this.documentName = documentName;
