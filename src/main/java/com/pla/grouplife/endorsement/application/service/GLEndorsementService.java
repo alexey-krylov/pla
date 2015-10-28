@@ -80,9 +80,6 @@ public class GLEndorsementService {
         this.excelParsers = excelParsers;
     }
 
-    /*
-    * @TODO please review @Samir
-    * */
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(), searchGLPolicyDto.getClientId(), new String[]{"IN_FORCE"}, searchGLPolicyDto.getProposalNumber());
         List<GLPolicyDetailDto> transformedPolicies = searchedPolices.stream().map(new Function<Map, GLPolicyDetailDto>() {
@@ -98,9 +95,7 @@ public class GLEndorsementService {
         return transformedPolicies;
     }
 
-    /*
-    * @TODO please review @Samir
-    * */
+
     private List<Map<String,String>> getAllEndorsementTypeExcludingFCL(Set<String> endorsementTypes){
         return Arrays.asList(GLEndorsementType.values()).parallelStream().filter(new Predicate<GLEndorsementType>() {
             @Override
@@ -116,9 +111,6 @@ public class GLEndorsementService {
     }
 
 
-    /*
-    * @TODO please review @Samir
-    * */
     private Set<PlanId> findSelectedPlanPolicy(Map searchedPolices){
         if (isEmpty(searchedPolices)){
             return Collections.EMPTY_SET;

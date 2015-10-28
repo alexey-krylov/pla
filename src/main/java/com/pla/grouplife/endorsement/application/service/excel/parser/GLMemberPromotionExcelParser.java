@@ -61,7 +61,7 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
         List<Row> dataRows = getDataRowsFromExcel(workbook);
         Row headerRow = getHeaderRow(workbook);
         List<String> headers = getHeaders(workbook);
-        List<String> allowedHeaders = transformToString(GLEndorsementType.ASSURED_MEMBER_DELETION.getAllowedExcelHeaders());
+        List<String> allowedHeaders = transformToString(GLEndorsementType.MEMBER_PROMOTION.getAllowedExcelHeaders());
         if (!isValidHeader(headers, allowedHeaders)) {
             raiseNotValidHeaderException();
         }
