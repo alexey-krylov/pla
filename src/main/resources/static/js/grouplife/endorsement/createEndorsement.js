@@ -14,6 +14,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             /*Holds the indicator for steps in which save button is clicked*/
             $scope.stepsSaved = stepsSaved;
+            console.log(stepsSaved);
 
             // $scope.versionNumber = getQueryParameter('version') || null;
 
@@ -62,6 +63,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 $scope.isReturnStatus = true;
                 $scope.stepsSaved["2"] = true;
                 $scope.stepsSaved["3"] = true;
+
 
                 $http.get("/pla/grouplife/endorsement/getapprovercomments/" + $scope.endorsementId).success(function (data, status) {
                     console.log(data);
@@ -562,7 +564,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         });
                         stepsSaved["1"] = true;
                         stepsSaved["3"] = true;
-                        // stepsSaved["4"] = true;
+                         stepsSaved["4"] = true;
                         return deferred.promise;
                     } else {
                         return {};
