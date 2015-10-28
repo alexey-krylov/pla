@@ -102,7 +102,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 if (insuredDto.getPlanPremiumDetail() == null) {
                     insuredDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                 }
-                insuredDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDto.getNoOfAssured(),category));
+                insuredDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship), insuredDto.getNoOfAssured(), category));
                 Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
                     @Override
                     public InsuredDto.InsuredDependentDto apply(Row row) {
@@ -114,7 +114,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                         if (insuredDependentDto.getPlanPremiumDetail() == null) {
                             insuredDependentDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                         }
-                        insuredDependentDto.setPlanPremiumDetail(findPlanIdByRelationshipOfDependentsFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDependentDto.getNoOfAssured(),category));
+                        insuredDependentDto.setPlanPremiumDetail(findPlanIdByRelationshipOfDependentsFromPolicy(policyId, Relationship.getRelationship(relationship), insuredDependentDto.getNoOfAssured(), category));
                         return insuredDependentDto;
                     }
                 }).collect(Collectors.toSet());
@@ -152,6 +152,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
 
     //TODO populate plan and sum assured detail
     private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
+        noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
