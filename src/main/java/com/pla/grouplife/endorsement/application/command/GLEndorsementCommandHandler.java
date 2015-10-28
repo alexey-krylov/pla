@@ -104,7 +104,7 @@ public class GLEndorsementCommandHandler {
         Set<Insured> insureds = insuredDtos.stream().map(new Function<InsuredDto, Insured>() {
             @Override
             public Insured apply(InsuredDto insuredDto) {
-                final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), null, null, null)};
+                final InsuredBuilder[] insuredBuilder = {Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured())};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).
                         withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName()).withFamilyId(insuredDto.getFamilyId())

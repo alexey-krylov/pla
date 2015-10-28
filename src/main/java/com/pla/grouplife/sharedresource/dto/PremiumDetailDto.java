@@ -50,6 +50,8 @@ public class PremiumDetailDto {
 
     private PremiumFrequency optedPremiumFrequency;
 
+    private Boolean isPremiumApplicable = Boolean.TRUE;
+
 
     public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;

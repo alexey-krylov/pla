@@ -96,21 +96,25 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 List<Row> dependentRows = rowListEntry.getValue();
                 InsuredDto insuredDto = createInsuredDto(insuredRow, excelHeaders);
                 Cell relationshipCell = getCellByName(insuredRow, excelHeaders, GLEndorsementExcelHeader.RELATIONSHIP.getDescription());
+                Cell categoryCell = getCellByName(insuredRow, excelHeaders, GLEndorsementExcelHeader.CATEGORY.getDescription());
                 String relationship = getCellValue(relationshipCell);
+                String category = getCellValue(categoryCell);
                 if (insuredDto.getPlanPremiumDetail() == null) {
                     insuredDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                 }
-                insuredDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDto.getNoOfAssured()));
+                insuredDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDto.getNoOfAssured(),category));
                 Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
                     @Override
                     public InsuredDto.InsuredDependentDto apply(Row row) {
                         InsuredDto.InsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders);
                         Cell relationshipCell = getCellByName(insuredRow, excelHeaders, GLEndorsementExcelHeader.RELATIONSHIP.getDescription());
                         String relationship = getCellValue(relationshipCell);
+                        Cell categoryCell = getCellByName(insuredRow, excelHeaders, GLEndorsementExcelHeader.CATEGORY.getDescription());
+                        String category = getCellValue(categoryCell);
                         if (insuredDependentDto.getPlanPremiumDetail() == null) {
                             insuredDependentDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                         }
-                        insuredDependentDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDependentDto.getNoOfAssured()));
+                        insuredDependentDto.setPlanPremiumDetail(findPlanIdByRelationshipOfDependentsFromPolicy(policyId, Relationship.getRelationship(relationship),insuredDependentDto.getNoOfAssured(),category));
                         return insuredDependentDto;
                     }
                 }).collect(Collectors.toSet());
@@ -147,13 +151,13 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
 
 
     //TODO populate plan and sum assured detail
-    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement) {
+    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
             @Override
             public boolean test(Insured insured) {
-                return Relationship.SELF.equals(relationship);
+                return (Relationship.SELF.equals(relationship) && insured.getCategory().equals(category));
             }
         }).findAny();
         if (insuredOptional.isPresent()){
@@ -161,6 +165,25 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0,BigDecimal.ROUND_FLOOR));
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured());
              return planPremiumDetailDto;
+        }
+        return null;
+    }
+
+    //TODO populate plan and sum assured detail
+    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipOfDependentsFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
+        Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
+            @Override
+            public boolean test(Insured insured) {
+                return (Relationship.SELF.equals(relationship) && insured.getCategory().equals(category));
+            }
+        }).findAny();
+        if (insuredOptional.isPresent()){
+            PlanPremiumDetail planPremiumDetail = insuredOptional.get().getPlanPremiumDetail();
+            BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0,BigDecimal.ROUND_FLOOR));
+            InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured());
+            return planPremiumDetailDto;
         }
         return null;
     }
