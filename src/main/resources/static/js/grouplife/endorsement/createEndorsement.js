@@ -246,9 +246,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
                              })
 
-                      //  $scope.showDownload = true;
+                        $scope.showDownload = true;
                     }else{
-                      //  $scope.showDownload = false;
+                        $scope.showDownload = false;
                     }
                 });
             };
