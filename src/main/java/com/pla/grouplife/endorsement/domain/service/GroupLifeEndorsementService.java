@@ -116,9 +116,9 @@ public class GroupLifeEndorsementService {
         if (groupLifeEndorsement.getEndorsement()==null){
             return new PremiumDetailDto();
         }
-        if (groupLifeEndorsement.getEndorsement().getMemberEndorsement()==null){
+     /*   if (groupLifeEndorsement.getEndorsement().getMemberEndorsement()==null){
             return new PremiumDetailDto();
-        }
+        }*/
         Map  policyMap = glFinder.findPolicyById(groupLifeEndorsement.getPolicy().getPolicyId().getPolicyId());
         PremiumDetail premiumDetail = (PremiumDetail) policyMap.get("premiumDetail");
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
@@ -136,7 +136,7 @@ public class GroupLifeEndorsementService {
         Date expiryDate = (Date) policyDetail.get("expiredDate");
         DateTime expiredOn = new DateTime(expiryDate);
         int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
-        int endorsementDuration = Days.daysBetween( DateTime.now(),expiredOn).getDays();
+        int endorsementDuration = Days.daysBetween(DateTime.now(),expiredOn).getDays();
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
         insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration);
         groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);

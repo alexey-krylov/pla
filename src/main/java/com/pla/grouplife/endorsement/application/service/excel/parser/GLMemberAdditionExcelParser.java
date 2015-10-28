@@ -134,6 +134,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             GLEndorsementExcelHeader glEndorsementExcelHeader = GLEndorsementExcelHeader.findGLEndorsementExcelHeaderTypeFromDescription(excelHeader);
             insuredDto[0] = glEndorsementExcelHeader.populate(insuredDto[0], cellValue);
         });
+
         return insuredDto[0];
     }
 
