@@ -28,8 +28,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.calculatePlan = false;
             $scope.submittedButton = false;
             $scope.disableProposerSaveButton = true;
-            $scope.endorsementType = getQueryParameter("endorsementType");
             var enableTab = getQueryParameter("endorsementType");
+            $scope.endorsementType = enableTab;
+
             console.log(enableTab);
             if (enableTab == 'CHANGE_POLICY_HOLDER_NAME' || enableTab == 'Correction of Name - Policy Holder') {
                 $scope.submittedButton = false;
@@ -45,21 +46,22 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 $scope.submittedButton = false;
                 $scope.isEnablePlanMode = true;
                 $scope.isEnable = false;
-                $scope.stepsSaved["2"] = false
+                $scope.stepsSaved["2"] = false;
             }
             var mode = getQueryParameter("mode");
             if (mode == 'view') {
+                $scope.stepsSaved["2"] = true;
                 $scope.isViewMode = true;
                 $scope.isEnableContactMode = false;
                 $scope.isEnablePlanMode = false;
                 $scope.isEnable = false;
                 $scope.isEnablePolicyHolderMode = false;
-
-
             }
             var status = getQueryParameter("status");
             if (status == 'return') {
                 $scope.isReturnStatus = true;
+                $scope.stepsSaved["2"] = true;
+                $scope.stepsSaved["3"] = true;
 
                 $http.get("/pla/grouplife/endorsement/getapprovercomments/" + $scope.endorsementId).success(function (data, status) {
                     console.log(data);
@@ -70,6 +72,8 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             var method = getQueryParameter("method");
             if (method == 'approval') {
                 $scope.isViewMode = true;
+                $scope.stepsSaved["2"] = true;
+                $scope.stepsSaved["3"] = true;
 
                 $http.get("/pla/grouplife/endorsement/getapprovercomments/" + $scope.endorsementId).success(function (data, status) {
                     // console.log(data);
@@ -98,11 +102,6 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
              $scope.stepsSaved["3"] = false;
 
              }*/
-            if (method == 'approval') {
-                $scope.stepsSaved["2"] = true;
-                $scope.stepsSaved["3"] = true;
-
-            }
 
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);
@@ -234,9 +233,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         $scope.calculatePlan = true;
                         $scope.stepsSaved["2"] = true;
                         $scope.stepsSaved["3"] = true;
-                        $scope.stepsSaved["4"] = false;
+                       // $scope.stepsSaved["4"] = false;
                         // saveStep();
-                         $http.get("/pla/grouphealth/proposal/getpremiumdetail/" + $scope.endorsementId)
+                         $http.get("/pla/grouplife/endorsement/getpremiumdetail/" + $scope.endorsementId)
                          .success(function (data,status) {
                                  if(status==200){
                                      $scope.policyDetails.premium=data;
@@ -245,9 +244,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
                              })
 
-                        $scope.showDownload = true;
+                      //  $scope.showDownload = true;
                     }else{
-                        $scope.showDownload = false;
+                      //  $scope.showDownload = false;
                     }
                 });
             };
