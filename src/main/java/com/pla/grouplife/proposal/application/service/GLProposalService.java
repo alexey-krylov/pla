@@ -471,4 +471,17 @@ public class GLProposalService {
         return mandatoryDocumentDtos;
     }
 
+    public boolean doesAllDocumentWaivesByApprover(String proposalId){
+        List<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = findMandatoryDocuments(proposalId);
+        long count =  glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
+            @Override
+            public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                return glProposalMandatoryDocumentDto.getIsApproved();
+            }
+        }).count();
+        if (count==glProposalMandatoryDocumentDtos.size())
+            return true;
+        return false;
+    }
+
 }

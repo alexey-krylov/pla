@@ -7,6 +7,7 @@ import com.pla.grouplife.endorsement.domain.model.*;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementRoleAdapter;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
+import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
@@ -32,6 +33,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.grouplife.endorsement.exception.GLEndorsementException.raiseMandatoryDocumentNotUploaded;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -50,16 +52,18 @@ public class GLEndorsementCommandHandler {
 
     private GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter;
 
+    private GLProposalService glProposalService;
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
     @Autowired
-    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator, GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter) {
+    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator, GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter, GLProposalService glProposalService) {
         this.glEndorsementMongoRepository = glEndorsementMongoRepository;
         this.groupLifeEndorsementService = groupLifeEndorsementService;
         this.glEndorsementUniqueNumberGenerator = glEndorsementUniqueNumberGenerator;
         this.glEndorsementRoleAdapter = glEndorsementRoleAdapter;
+        this.glProposalService = glProposalService;
     }
 
     @CommandHandler
@@ -207,6 +211,9 @@ public class GLEndorsementCommandHandler {
         GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(approveGLEndorsementCommand.getEndorsementId()));
         String endorsementNo = glEndorsementUniqueNumberGenerator.getEndorsementUniqueNumber(GroupLifeEndorsement.class);
         EndorsementUniqueNumber endorseNumber = new EndorsementUniqueNumber(endorsementNo);
+        if (GLProposalStatus.APPROVED.equals(approveGLEndorsementCommand.getStatus()) && !glProposalService.doesAllDocumentWaivesByApprover(approveGLEndorsementCommand.getEndorsementId())){
+            raiseMandatoryDocumentNotUploaded();
+        }
         groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment(), endorseNumber);
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
