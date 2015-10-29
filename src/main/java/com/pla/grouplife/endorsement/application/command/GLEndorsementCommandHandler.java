@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.application.command;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.policy.domain.service.GLEndorsementUniqueNumberGenerator;
 import com.pla.grouplife.endorsement.domain.model.*;
@@ -10,10 +11,6 @@ import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDt
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
-import com.pla.individuallife.proposal.application.command.WaiveMandatoryDocumentCommand;
-import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
-import com.pla.individuallife.proposal.domain.model.ILProposalApprover;
-import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -81,13 +78,21 @@ public class GLEndorsementCommandHandler {
         return groupLifeEndorsement.getEndorsementId().getEndorsementId();
     }
 
+
+    /*
+    * @TODO change according to type
+    * */
     private GLEndorsement populateGLEndorsement(GLEndorsement glEndorsement, GLEndorsementInsuredDto glEndorsementInsuredDto, GLEndorsementType glEndorsementType) {
         if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(glEndorsementType)) {
             GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addMemberEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
-            glEndorsement.addMemberDeletionEndorsement(createGLMemberDeletionEndorsement(glEndorsementInsuredDto));
+            glEndorsement.addMemberDeletionEndorsement(Lists.newArrayList());
+        }
+        if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(glEndorsementType)) {
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            glEndorsement.addNewCategoryRelationEndorsement(glMemberEndorsement);
         }
         return glEndorsement;
     }
@@ -196,10 +201,7 @@ public class GLEndorsementCommandHandler {
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
 
-    /*
-    *
-    * @TODO need to generate the Endorsement number once the endorsement request got approved by the approver
-    * */
+
     @CommandHandler
     public String approve(ApproveGLEndorsementCommand approveGLEndorsementCommand) {
         GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(approveGLEndorsementCommand.getEndorsementId()));

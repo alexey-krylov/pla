@@ -40,10 +40,11 @@ public enum GLEndorsementType {
     NEW_CATEGORY_RELATION("Introduction of New category") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
-            return Arrays.asList(GLEndorsementExcelHeader.PROPOSER_NAME, GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.CATEGORY,
-                    GLEndorsementExcelHeader.RELATIONSHIP, GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME,
-                    GLEndorsementExcelHeader.DATE_OF_BIRTH, GLEndorsementExcelHeader.GENDER, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.NO_OF_ASSURED,
-                    GLEndorsementExcelHeader.ANNUAL_INCOME, GLEndorsementExcelHeader.INCOME_MULTIPLIER, GLEndorsementExcelHeader.PLAN, GLEndorsementExcelHeader.SUM_ASSURED, GLEndorsementExcelHeader.PLAN_PREMIUM);
+            return Arrays.asList(GLEndorsementExcelHeader.PROPOSER_NAME, GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.ANNUAL_INCOME,
+                    GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME,GLEndorsementExcelHeader.DATE_OF_BIRTH,
+                    GLEndorsementExcelHeader.GENDER, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.CATEGORY,
+                    GLEndorsementExcelHeader.RELATIONSHIP,  GLEndorsementExcelHeader.NO_OF_ASSURED, GLEndorsementExcelHeader.PLAN,
+                    GLEndorsementExcelHeader.INCOME_MULTIPLIER, GLEndorsementExcelHeader.SUM_ASSURED, GLEndorsementExcelHeader.PLAN_PREMIUM);
         }
     }, CHANGE_POLICY_HOLDER_NAME("Correction of Name-Policyholder") {
         @Override

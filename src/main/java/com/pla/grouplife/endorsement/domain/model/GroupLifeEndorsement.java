@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.domain.model;
 
+import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.domain.event.GLEndorsementStatusAuditEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
@@ -153,9 +154,16 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         }
         return this;
     }
-
+    /*
+    * @TODO change according to the type
+    * */
     public GroupLifeEndorsement updateWithInsureds(Set<Insured> insureds) {
-        this.endorsement.getMemberEndorsement().setInsureds(insureds);
+        if (this.endorsementType.equals(GLEndorsementType.NEW_CATEGORY_RELATION))
+            this.endorsement.getNewCategoryRelationEndorsement().setInsureds(insureds);
+        else if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_ADDITION))
+            this.endorsement.getMemberEndorsement().setInsureds(insureds);
+        else if  (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_DELETION))
+            this.endorsement.setMemberDeletionEndorsements(Lists.newArrayList(insureds));
         return this;
     }
 
@@ -181,10 +189,25 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return totalInsuredPremiumAmount;
     }
 
+    /*
+    * @TODO change according to type
+    * */
     public BigDecimal getTotalBasicPremiumForInsured() {
         BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
-        for (Insured insured : this.endorsement.getMemberEndorsement().getInsureds()) {
-            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+        if (this.endorsementType.equals(GLEndorsementType.NEW_CATEGORY_RELATION)) {
+            for (Insured insured : this.endorsement.getNewCategoryRelationEndorsement().getInsureds()) {
+                totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+            }
+        }
+        else if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_ADDITION)) {
+            for (Insured insured : this.endorsement.getMemberEndorsement().getInsureds()) {
+                totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+            }
+        }
+        else if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_DELETION)) {
+            for (Insured insured : this.endorsement.getMemberDeletionEndorsements()) {
+                totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+            }
         }
         return totalBasicAnnualPremium;
     }

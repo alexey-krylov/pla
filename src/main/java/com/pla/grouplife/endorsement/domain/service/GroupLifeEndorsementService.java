@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.domain.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.domain.model.GLEndorsementProcessor;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsementStatusAudit;
@@ -128,8 +129,17 @@ public class GroupLifeEndorsementService {
         return premiumDetailDto;
     }
 
+    /*
+    * @TODO change according to type
+    * */
     public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) throws ParseException {
-        Set<Insured> insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
+        Set<Insured> insureds = Sets.newLinkedHashSet();
+        if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeQuotation.getEndorsementType()))
+            insureds = groupLifeQuotation.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
+        else if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(groupLifeQuotation.getEndorsementType()))
+            insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
+        else if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(groupLifeQuotation.getEndorsementType()))
+            insureds = Sets.newLinkedHashSet(groupLifeQuotation.getEndorsement().getMemberDeletionEndorsements());
         Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeQuotation.getEndorsementId().getEndorsementId());
         Date inceptionDate = (Date) policyDetail.get("inceptionDate");
         DateTime inceptionOn = new DateTime(inceptionDate);

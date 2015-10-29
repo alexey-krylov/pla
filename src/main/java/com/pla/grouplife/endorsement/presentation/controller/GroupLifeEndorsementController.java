@@ -15,7 +15,6 @@ import com.pla.grouplife.proposal.application.command.UpdateGLProposalWithPropos
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.*;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
-import com.pla.individuallife.proposal.application.command.WaiveMandatoryDocumentCommand;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.identifier.EndorsementId;
@@ -410,7 +409,7 @@ public class GroupLifeEndorsementController {
         try {
             approveGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
             /*
-            * service method which will check for the uploaded documets and waived documents..
+            * service method which will check for the uploaded documents and waived documents..
             * */
             commandGateway.sendAndWait(approveGLEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement approved successfully"), HttpStatus.OK);

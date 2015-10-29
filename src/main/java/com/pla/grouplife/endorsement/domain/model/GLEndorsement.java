@@ -1,6 +1,8 @@
 package com.pla.grouplife.endorsement.domain.model;
 
+import com.pla.grouplife.sharedresource.model.vo.Insured;
 import lombok.Getter;
+import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.List;
@@ -22,7 +24,8 @@ public class GLEndorsement {
 
     private GLPremiumEndorsement premiumEndorsement;
 
-    private List<GLMemberDeletionEndorsement> memberDeletionEndorsements;
+    @Setter
+    private List<Insured> memberDeletionEndorsements;
 
     private List<GLAssuredDOBEndorsement> dobEndorsements;
 
@@ -32,8 +35,15 @@ public class GLEndorsement {
 
     private List<GLAssuredMANNumberEndorsement> manNumberEndorsements;
 
+    private GLMemberEndorsement newCategoryRelationEndorsement;
+
     public GLEndorsement addMemberEndorsement(GLMemberEndorsement memberEndorsement) {
         this.memberEndorsement = memberEndorsement;
+        return this;
+    }
+
+    public GLEndorsement addNewCategoryRelationEndorsement(GLMemberEndorsement memberEndorsement) {
+        this.newCategoryRelationEndorsement = memberEndorsement;
         return this;
     }
 
@@ -42,7 +52,7 @@ public class GLEndorsement {
         return this;
     }
 
-    public GLEndorsement addMemberDeletionEndorsement(List<GLMemberDeletionEndorsement> glMemberDeletionEndorsements) {
+    public GLEndorsement addMemberDeletionEndorsement(List<Insured> glMemberDeletionEndorsements) {
         this.memberDeletionEndorsements = glMemberDeletionEndorsements;
         return this;
     }
