@@ -116,7 +116,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
         }
 
         public boolean isValidClientId(Row row, String value, List<String> excelHeaders) {
-            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.NO_OF_ASSURED.getDescription()));
+            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.CLIENT_ID.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
             if (isNotEmpty(noOfAssuredCellValue) && isEmpty(value)) {
                 return true;

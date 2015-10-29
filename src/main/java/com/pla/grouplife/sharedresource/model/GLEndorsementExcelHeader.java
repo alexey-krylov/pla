@@ -456,7 +456,8 @@ public enum GLEndorsementExcelHeader {
     CLIENT_ID("Client ID") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            boolean isValid = glEndorsementExcelValidator.isValidClientId(row, value, excelHeaders);
+            String clientId = String.valueOf(new BigDecimal(value).longValue());
+            boolean isValid = glEndorsementExcelValidator.isValidClientId(row, clientId, excelHeaders);
             return isValid ? "" : "Client ID cannot be blank/is not valid.";
         }
 

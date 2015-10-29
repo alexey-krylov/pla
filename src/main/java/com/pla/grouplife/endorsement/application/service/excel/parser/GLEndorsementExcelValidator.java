@@ -107,7 +107,7 @@ public class GLEndorsementExcelValidator {
         if (isEmpty(value)) {
             return true;
         }
-        return (isNotEmpty(value) && !isValidNrcNumber(value));
+        return (isNotEmpty(value) && isValidNrcNumber(value));
     }
 
 
