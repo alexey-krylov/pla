@@ -442,12 +442,12 @@ public class GroupLifeEndorsementController {
         return ghProposalMandatoryDocumentDtos;
     }
 
-    @RequestMapping(value = "/getendorsementforschedule/{policyId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getapprovedendorsement/{policyNumber}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list Endorsements which are done for the policy")
-    public Set<GLEndorsementDto> endorsementScheduleGeneration(@PathVariable("policyId") String policyId) {
-
-        return null;
+    public List<GLEndorsementDto> getApprovedEndorsementByPolicyNumber(@PathVariable("policyNumber") String policyNumber) {
+        List<GLEndorsementDto> glEndorsementSchedules = glEndorsementService.getApprovedEndorsementByPolicyNumber(policyNumber);
+        return glEndorsementSchedules;
     }
 
 

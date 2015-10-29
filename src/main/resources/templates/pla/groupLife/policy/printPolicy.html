@@ -22,43 +22,92 @@
                 <div class="panel-heading">
                     <span th:text="#{printPolicy}">View/Save Policy Documents</span>
                     <span style="float:right;font-weight: bold">Policy Number:{{policyNumber}}</span>
-
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-success btn-xs"
-                                     ng-disabled="!documentsIdList.length > 0" ng-click="printPolicy()">View/Save
-                            </button>
-                            <button type="button" class="btn btn-success btn-xs"
-                                    ng-disabled="documentsIdList.length > 0" ng-model="selectedAll" ng-click="printAllPolicy()">View/Save All
-                            </button>
-                        </div>
-
-                    </div>
-                    <div class="row" style="margin-top: 10px">
-                        <div class="col-md-12">
-                            <div class="form-group col-md-6 required">
-                                <label class="control-label">Documents</label>
-                                <input type="hidden" name="documents" class="form-control input-lg"
-                                       ng-model="printPol.documents"
-                                       value="{{printPol.documents}}"/>
-
-                                <div ng-repeat="allDoc in mulSelect">
-                                    <div class="action-checkbox">
-                                        <input id="{{allDoc.documentCode}}" type="checkbox"
-                                               value="{{allDoc.documentCode}}"
-                                               ng-model="allDoc.Selected" ng-checked="printPol.documents.indexOf(allDoc.documentCode) > -1"
-                                               ng-click="toggleSelection($event,allDoc.documentCode)"/>
-                                        <label for="{{allDoc.documentCode}}"></label>
-                                        {{allDoc.documentName}}
+                        <table style="width:100%">
+                            <tr>
+                                <th style="margin-right: 10px;">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    ng-disabled="!documentsIdList.length > 0" ng-click="printPolicy()">View/Save
+                                            </button>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    ng-disabled="documentsIdList.length > 0" ng-model="selectedAll" ng-click="printAllPolicy()">View/Save All
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                </th>
+                                <th></th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    ng-disabled="!approvedDocumentsIdList.length > 0" ng-click="printApprovedPolicy()">View/Save
+                                            </button>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    ng-disabled="approvedDocumentsIdList.length > 0" ng-model="selectedAll" ng-click="printAllApprovedPolicy()">View/Save All
+                                            </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Documents</label>
+                                                    <input type="hidden" name="documents" class="form-control input-lg"
+                                                           ng-model="printPol.documents"
+                                                           value="{{printPol.documents}}"/>
 
-                        </div>
+                                                    <div ng-repeat="allDoc in mulSelect">
+                                                        <div class="action-checkbox">
+                                                            <input id="{{allDoc.documentCode}}" type="checkbox"
+                                                                   value="{{allDoc.documentCode}}"
+                                                                   ng-model="allDoc.Selected" ng-checked="printPol.documents.indexOf(allDoc.documentCode) > -1"
+                                                                   ng-click="toggleSelection($event,allDoc.documentCode)"/>
+                                                            <label for="{{allDoc.documentCode}}"></label>
+                                                            {{allDoc.documentName}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group required">
+                                                    <label class="control-label">Endorsement</label>
+                                                    <input type="hidden" name="documents" class="form-control input-lg"
+                                                           ng-model="printPol.documents"
+                                                           value="{{printPol.documents}}"/>
+
+                                                    <div ng-repeat="allDoc in approvedEndorsement">
+                                                        <div class="action-checkbox">
+                                                            <input id="{{allDoc.endorsementCode}}" type="checkbox"
+                                                                   value="{{allDoc.endorsementNumber}}"
+                                                                   ng-model="allDoc.Selected" ng-checked="printPol.documents.indexOf(allDoc.endorsementCode) > -1"
+                                                                   title="Approved.." ng-click="toggleApprovedSelection($event,allDoc.endorsementId,allDoc.endorsementCode,allDoc.hasNoOfAssured)"/>
+                                                            <label for="{{allDoc.endorsementCode}}"></label>
+                                                            {{allDoc.endorsementType}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-
                 </div>
             </div>
         </div>

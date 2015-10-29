@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +37,15 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Service
 public class GLEndorsementFinder {
 
+    public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
     @Autowired
     private MongoTemplate mongoTemplate;
-
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
-
-    public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
     public Map findEndorsementById(String endorsementId) {
         BasicDBObject query = new BasicDBObject();
@@ -55,6 +54,12 @@ public class GLEndorsementFinder {
         return proposal;
     }
 
+    public List<Map> findEndorsementByPolicyId(String policyNumber) {
+        Criteria endorsementCriteria = Criteria.where("policy.policyNumber.policyNumber").is(policyNumber);
+        endorsementCriteria.and("status").is(EndorsementStatus.APPROVED);
+        Query query = new Query(endorsementCriteria);
+        return mongoTemplate.find(query, Map.class, "group_life_endorsement");
+    }
 
     public List<Map> searchEndorsement(GLEndorsementType endorsementType, String endorsementNumber, String endorsementId, String policyNumber, String policyHolderName, String[] statuses) {
         Criteria criteria = Criteria.where("status").in(statuses);

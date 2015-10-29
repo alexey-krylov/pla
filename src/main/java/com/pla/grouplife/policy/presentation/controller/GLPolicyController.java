@@ -3,6 +3,8 @@ package com.pla.grouplife.policy.presentation.controller;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
+import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementDto;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDto;
 import com.pla.grouplife.policy.presentation.model.GLPolicyDocument;
@@ -58,6 +60,10 @@ public class GLPolicyController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private GLEndorsementService glEndorsementService;
+
 
     @Autowired
     public GLPolicyController(GLPolicyService glPolicyService) {
@@ -200,9 +206,11 @@ public class GLPolicyController {
         List<Map<String,Object>> glPolicyDocument= GLPolicyDocument.getDeclaredPolicyDocument();
         Map policyMap = glPolicyFinder.findPolicyById(policyId);
         String policyNumber =  policyMap.get("policyNumber") != null ? ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber() : "";
+        List<GLEndorsementDto> glEndorsementDtos =  glEndorsementService.getApprovedEndorsementByPolicyNumber(policyNumber);
         Map<String,Object> policyNumberMap = Maps.newLinkedHashMap();
         policyNumberMap.put("policyNumber",policyNumber);
         policyNumberMap.put("glPolicyDocument", glPolicyDocument);
+        policyNumberMap.put("approvedEndorsement", glEndorsementDtos);
         return policyNumberMap;
     }
 

@@ -52,27 +52,20 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 public class GLEndorsementService {
 
+    private final Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators;
+    private final Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers;
     @Autowired
     private GLFinder glFinder;
-
     @Autowired
     private GLEndorsementFinder glEndorsementFinder;
-
     @Autowired
     private IUnderWriterAdapter underWriterAdapter;
-
     @Autowired
     private GridFsTemplate gridFsTemplate;
-
     @Autowired
     private IPlanAdapter iPlanAdapter;
-
     @Autowired
     private GLPolicyFinder glPolicyFinder;
-
-    private final Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators;
-
-    private final Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers;
 
 
     public GLEndorsementService(Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators, Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers) {
@@ -176,32 +169,19 @@ public class GLEndorsementService {
         if (isEmpty(endorsements)) {
             return Lists.newArrayList();
         }
-        List<GLEndorsementDto> endorsementDtos = endorsements.stream().map(new Function<Map, GLEndorsementDto>() {
-            @Override
-            public GLEndorsementDto apply(Map map) {
-                DateTime effectiveDate = map.get("effectiveDate") != null ? new DateTime(map.get("effectiveDate")) : null;
-                String endorsementId = map.get("_id").toString();
-                String endorsementNumber = map.get("endorsementNumber") != null ? ((EndorsementNumber) map.get("endorsementNumber")).getEndorsementNumber() : "";
-                Policy policy = map.get("policy") != null ? (Policy) map.get("policy") : null;
-                String policyNumber = policy != null ? policy.getPolicyNumber().getPolicyNumber() : "";
-                String policyHolderName = policy != null ? policy.getPolicyHolderName() : "";
-                String endorsementTypeInString = map.get("endorsementType") != null ? (String) map.get("endorsementType") : "";
-                String endorsementStatus = map.get("status") != null ? (String) map.get("status") : "";
-                String endorsementCode = "";
-                if (isNotEmpty(endorsementTypeInString)) {
-                    GLEndorsementType endorsementType = GLEndorsementType.valueOf(endorsementTypeInString);
-                    endorsementTypeInString = endorsementType.getDescription();
-                    endorsementCode = endorsementType.name();
-                }
-                if (isNotEmpty(endorsementStatus)) {
-                    endorsementStatus = EndorsementStatus.valueOf(endorsementStatus).getDescription();
-                }
-                GLEndorsementDto glEndorsementDto = new GLEndorsementDto(endorsementId, endorsementNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
-                return glEndorsementDto;
-            }
-        }).collect(Collectors.toList());
+        List<GLEndorsementDto> endorsementDtos = endorsements.stream().map(new GLEndorsementTransformation()).collect(Collectors.toList());
         return endorsementDtos;
     }
+
+    public List<GLEndorsementDto> getApprovedEndorsementByPolicyNumber(String policyNumber) {
+        List<Map> endorsements = glEndorsementFinder.findEndorsementByPolicyId(policyNumber);
+        if (isEmpty(endorsements)) {
+            return Lists.newArrayList();
+        }
+        List<GLEndorsementDto> endorsementDtos = endorsements.stream().map(new GLEndorsementTransformation()).collect(Collectors.toList());
+        return endorsementDtos;
+    }
+
 
     public PolicyId getPolicyIdFromEndorsment(String endorsementId) {
         Map endorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
@@ -291,5 +271,28 @@ public class GLEndorsementService {
         return mandatoryDocumentDtos;
     }
 
-
+    private class GLEndorsementTransformation implements Function<Map,GLEndorsementDto> {
+        @Override
+        public GLEndorsementDto apply(Map map) {
+            DateTime effectiveDate = map.get("effectiveDate") != null ? new DateTime(map.get("effectiveDate")) : null;
+            String endorsementId = map.get("_id").toString();
+            String endorsementNumber = map.get("endorsementNumber") != null ? ((EndorsementNumber) map.get("endorsementNumber")).getEndorsementNumber() : "";
+            Policy policy = map.get("policy") != null ? (Policy) map.get("policy") : null;
+            String policyNumber = policy != null ? policy.getPolicyNumber().getPolicyNumber() : "";
+            String policyHolderName = policy != null ? policy.getPolicyHolderName() : "";
+            String endorsementTypeInString = map.get("endorsementType") != null ? (String) map.get("endorsementType") : "";
+            String endorsementStatus = map.get("status") != null ? (String) map.get("status") : "";
+            String endorsementCode = "";
+            if (isNotEmpty(endorsementTypeInString)) {
+                GLEndorsementType endorsementType = GLEndorsementType.valueOf(endorsementTypeInString);
+                endorsementTypeInString = endorsementType.getDescription();
+                endorsementCode = endorsementType.name();
+            }
+            if (isNotEmpty(endorsementStatus)) {
+                endorsementStatus = EndorsementStatus.valueOf(endorsementStatus).getDescription();
+            }
+            GLEndorsementDto glEndorsementDto = new GLEndorsementDto(endorsementId, endorsementNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
+            return glEndorsementDto;
+        }
+    }
 }
