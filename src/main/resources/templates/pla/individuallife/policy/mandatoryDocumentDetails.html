@@ -8,11 +8,10 @@
             </accordion-heading>
             <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;">
                 <div class="form-group "  ng-repeat="document in documentList" >
-                   <!-- {{document.documentName}}-->
-                    <label class="col-sm-3 control-label">{{document.documentId}}</label>
+                    <label class="col-sm-3 control-label">{{document.documentName}}</label>
                     <div class="col-md-1"></div>
                     <div class="input-group">
-                        <a  href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;margin-top:10px;">{{document.fileName}}</a>
+                        <a  href="downloadmandatorydocument/{{document.gridFsDocId}}" style="display:inline;float:right;margin-top:10px;" hg-show="!document.submitted">{{document.fileName}}</a>
                         <button class="btn btn-default"
                                 style="display:inline;float:right;margin-right:5px;" ng-file-select=""
                                 ng-disabled="mode=='new'||mode=='view'" ng-model="document.documentAttached">Browse

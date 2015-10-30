@@ -58,6 +58,8 @@ public class ILProposalDto {
 
     private PremiumDetailDto premiumDetailDto;
 
+    private Boolean hasQuotationNumber = Boolean.FALSE;
+
 
 }
 

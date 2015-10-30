@@ -66,12 +66,11 @@
                     <label class="control-label">Per</label>
                     <!-- <input type="text" class="form-control input-sm" name="nrc" ng-model="premiumEmployerDetails.salaryPer" ng-disabled="mode=='new'||mode=='view'"/>-->
                     <select class="form-control input-sm" name="salaryPer" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="premiumEmployerDetails.salaryPer">
-                        <option value=" "> -- Select Per -- </option>
+                        <option value=" ">-- Select Per --</option>
                         <option value="ANNUALLY">Annum</option>
                         <option value="MONTHLY">Month</option>
                         <option value="WEEKLY">Week</option>
                     </select>
-
                     <div class="error" ng-messages="premiumEmpDetails.salaryPer.$error" ng-if="premiumEmpDetails.salaryPer.$dirty">
                         <small class="error" ng-message="required">Please specify whether salary is paid per week or Month or Year.</small>
                     </div>

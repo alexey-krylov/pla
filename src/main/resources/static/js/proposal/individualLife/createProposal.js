@@ -403,11 +403,18 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     var result = response;
                     console.log("ProposalReceive.." + JSON.stringify(response));
 
+                    if(response.hasQuotationNumber){
+                        $scope.isPlanTextField=true;
+                    }
+                    else
+                    {
+                        $scope.isPlanTextField=false;
+                    }
+
                     if (response.proposer.isProposedAssured) {
                         var age = response.proposedAssured.dateOfBirth;
                         var ageNextBirthday = moment().diff(new moment(new Date(age)), 'years') + 1;
                         //alert(ageNextBirthday);
-
 
                        /* $http.get("getridersforplan/" + response.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
                             $scope.searchRiders = response;

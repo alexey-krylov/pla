@@ -447,11 +447,18 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                             $scope.premiumResponse.riderPremiumDtos = $scope.rcvProposal.premiumDetailDto.riderPremiumDtos;
 
                         }*/
-                        if ($scope.rcvProposal.proposerDocuments != null) {
+
+                        /*if ($scope.rcvProposal.proposerDocuments != null) {
                             $scope.documentList = $scope.rcvProposal.proposerDocuments;
                             //alert('DocumentList:'+JSON.stringify($scope.documentList));
                             console.log('*******' + JSON.stringify($scope.documentList));
-                        }
+                        }*/
+
+                        $http.get("getmandatorydocuments/" + $scope.rcvProposal.policyId)
+                            .success(function (response) {
+                                $scope.documentList = response;
+                            });
+
 
                         /* $http.get("getmandatorydocuments/" + $scope.rcvProposal.proposal.proposalId)
                          .success(function (response) {
