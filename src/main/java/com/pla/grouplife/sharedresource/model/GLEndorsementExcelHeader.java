@@ -4,6 +4,7 @@ import com.pla.grouplife.endorsement.application.service.excel.parser.GLEndorsem
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -456,7 +458,12 @@ public enum GLEndorsementExcelHeader {
     CLIENT_ID("Client ID") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            String clientId = String.valueOf(new BigDecimal(value).longValue());
+            Cell cell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String cellValue = getCellValue(cell);
+            if (cellValue!=null){
+                return "";
+            }
+            String clientId = isNotEmpty(value)?String.valueOf(new BigDecimal(value).longValue()):"";
             boolean isValid = glEndorsementExcelValidator.isValidClientId(row, clientId, excelHeaders);
             return isValid ? "" : "Client ID cannot be blank/is not valid.";
         }
@@ -479,7 +486,13 @@ public enum GLEndorsementExcelHeader {
     }, MAIN_ASSURED_CLIENT_ID("Main Assured Client ID") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            boolean isValid = glEndorsementExcelValidator.isValidMainAssuredClientId(row, value, excelHeaders);
+            Cell cell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String cellValue = getCellValue(cell);
+            if (cellValue!=null){
+                return "";
+            }
+            String clientId = isNotEmpty(value)?String.valueOf(new BigDecimal(value).longValue()):"";
+            boolean isValid = glEndorsementExcelValidator.isValidMainAssuredClientId(row, clientId, excelHeaders);
             return isValid ? "" : "Main Assured Client ID cannot be blank/is not valid.";
         }
 

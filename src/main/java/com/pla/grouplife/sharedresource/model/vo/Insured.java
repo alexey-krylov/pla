@@ -94,7 +94,7 @@ public class Insured {
     }
 
     public BigDecimal getBasicAnnualPremium() {
-        BigDecimal basicAnnualPremium = planPremiumDetail.getPremiumAmount();
+        BigDecimal basicAnnualPremium = planPremiumDetail!=null?planPremiumDetail.getPlanId()!=null?planPremiumDetail.getPremiumAmount():BigDecimal.ONE: BigDecimal.ONE;
         if (isNotEmpty(coveragePremiumDetails)) {
             for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
                 basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
@@ -109,7 +109,7 @@ public class Insured {
         if (isNotEmpty(this.insuredDependents)) {
             for (InsuredDependent insuredDependent : this.insuredDependents) {
                 PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
-                basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
+                basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount(): BigDecimal.ZERO);
                 if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
                     for (CoveragePremiumDetail coveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
                         basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);

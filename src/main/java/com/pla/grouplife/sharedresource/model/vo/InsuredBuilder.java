@@ -4,6 +4,7 @@ import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
@@ -67,6 +68,10 @@ public class InsuredBuilder {
     public InsuredBuilder withInsuredNrcNumber(String nrcNumber) {
         this.nrcNumber = nrcNumber;
         return this;
+    }
+
+    public InsuredBuilder(){
+
     }
 
     public InsuredBuilder withCompanyName(String companyName) {
