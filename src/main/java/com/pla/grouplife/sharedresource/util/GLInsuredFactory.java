@@ -312,6 +312,9 @@ public class GLInsuredFactory {
                     int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependent.getDateOfBirth());
                     insuredDependentPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredDependentPlanProratePremium);
                 }
+                if (insuredDependent.getNoOfAssured() != null) {
+                    insuredDependentPlanProratePremium = insuredDependentPlanProratePremium.divide(new BigDecimal(policyTerm), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(endorsementDuration));
+                }
                 insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                 Set<CoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getCoveragePremiumDetails();
                 if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {

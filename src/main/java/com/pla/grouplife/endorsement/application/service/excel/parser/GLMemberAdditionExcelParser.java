@@ -208,7 +208,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             Cell mainAssuredClientIdCell = getCellByName(row, headers, GLEndorsementExcelHeader.MAIN_ASSURED_CLIENT_ID.getDescription());
             String relationship = getCellValue(relationshipCell);
             String mainAssuredClientId = getCellValue(mainAssuredClientIdCell);
-            if (Relationship.SELF.description.equals(relationship) || isEmpty(mainAssuredClientId)) {
+            if (Relationship.SELF.description.equals(relationship) && isEmpty(mainAssuredClientId)) {
                 selfRelationshipRow = row;
                 categoryRowMap.put(selfRelationshipRow, new ArrayList<>());
             } else {
