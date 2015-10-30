@@ -8,6 +8,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.policy.domain.model.GroupLifePolicy;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDetailDto;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDto;
+import com.pla.grouplife.policy.presentation.model.GLEndorsementDocument;
 import com.pla.grouplife.policy.presentation.model.GLPolicyDocument;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.policy.repository.GLPolicyRepository;
@@ -326,13 +327,29 @@ public class GLPolicyService {
     }
 
 
-    public List<EmailAttachment> getPolicyPDF(PolicyId policyId) throws IOException, JRException {
-        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId);
+    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, String endorsementId) throws IOException, JRException {
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, endorsementId);
         return GLPolicyDocument.getAllPolicyDocument(Arrays.asList(glPolicyDetailForPDF));
     }
 
-    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents) throws IOException, JRException {
-        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId);
+    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents, String endorsementId) throws IOException, JRException {
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, endorsementId);
+        if (isNotEmpty(endorsementId)){
+            return documents.parallelStream().map(new Function<String, EmailAttachment>() {
+                @Override
+                public EmailAttachment apply(String document) {
+                    EmailAttachment emailAttachment = null;
+                    try {
+                        emailAttachment =  GLEndorsementDocument.valueOf(document).getPolicyDocumentInPDF(Arrays.asList(glPolicyDetailForPDF));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JRException e) {
+                        e.printStackTrace();
+                    }
+                    return emailAttachment;
+                }
+            }).collect(Collectors.toList());
+        }
         return documents.parallelStream().map(new Function<String, EmailAttachment>() {
             @Override
             public EmailAttachment apply(String document) {
@@ -352,7 +369,11 @@ public class GLPolicyService {
 
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
-    private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId) {
+    private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId, String endorsementId) {
+        /*
+        * @TODO query endorsement number, type and effective date b endorsement id
+        *
+        * */
         GLPolicyMailDetailDto glQuotationDetailDto = new GLPolicyMailDetailDto();
         GroupLifePolicy groupLifePolicy = glPolicyRepository.findOne(policyId);
         AgentDetailDto agentDetailDto = getAgentDetail(policyId);
