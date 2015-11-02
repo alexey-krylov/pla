@@ -55,6 +55,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private String productType;
 
+    private Industry industry;
+
     @Override
     public ProposalId getIdentifier() {
         return proposalId;
@@ -83,6 +85,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         groupLifeProposal.proposalStatus = this.proposalStatus;
         groupLifeProposal.proposerDocuments = this.proposerDocuments;
         groupLifeProposal.productType = this.productType;
+        groupLifeProposal.industry = this.industry;
         return groupLifeProposal;
     }
 
@@ -101,6 +104,13 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.insureds = insureds;
         return this;
     }
+
+    public GroupLifeProposal updateWithIndustry(Industry industry) {
+        this.industry = industry;
+        return this;
+    }
+
+
 
     public GroupLifeProposal updateWithPremiumDetail(PremiumDetail premiumDetail) {
         this.premiumDetail = premiumDetail;
@@ -158,8 +168,12 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
         BigDecimal industryLoadingFactor = BigDecimal.ZERO;
+        if (this.industry != null) {
+            industryLoadingFactor = this.industry.getLoadingFactor();
+        }
         BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount).add(industryLoadingFactor)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
         BigDecimal totalInsuredPremiumAmount = totalBasicPremium.add(totalLoadingAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.multiply(industryLoadingFactor);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }

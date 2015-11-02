@@ -11,10 +11,7 @@ import com.pla.grouplife.endorsement.repository.GLEndorsementRepository;
 import com.pla.grouplife.endorsement.repository.GLEndorsementStatusAuditRepository;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
-import com.pla.grouplife.sharedresource.model.vo.GLFrequencyPremium;
-import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
-import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.util.GLInsuredFactory;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
@@ -36,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -139,7 +137,7 @@ public class GroupLifeEndorsementService {
         else if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
         else if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(groupLifeQuotation.getEndorsementType()))
-            insureds = Sets.newLinkedHashSet(groupLifeQuotation.getEndorsement().getMemberDeletionEndorsements());
+            insureds = groupLifeQuotation.getEndorsement().getMemberDeletionEndorsements().getInsureds();
         Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeQuotation.getEndorsementId().getEndorsementId());
         Date inceptionDate = (Date) policyDetail.get("inceptionDate");
         DateTime inceptionOn = new DateTime(inceptionDate);
@@ -162,7 +160,7 @@ public class GroupLifeEndorsementService {
     public GroupLifeEndorsement updateWithPremiumDetail(GroupLifeEndorsement groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails) {
         GLEndorsementProcessor glEndorsementProcessor = groupLifeEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
-        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail));
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail,new Industry("1","Mining",new BigDecimal("1.3000").setScale(0, RoundingMode.HALF_UP))));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_LIFE));
             Set<GLFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GLFrequencyPremium>() {

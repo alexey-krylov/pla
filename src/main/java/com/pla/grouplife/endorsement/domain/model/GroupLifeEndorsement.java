@@ -1,9 +1,9 @@
 package com.pla.grouplife.endorsement.domain.model;
 
-import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.domain.event.GLEndorsementStatusAuditEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
+import com.pla.grouplife.sharedresource.model.vo.Industry;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
@@ -163,7 +163,7 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         else if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_ADDITION))
             this.endorsement.getMemberEndorsement().setInsureds(insureds);
         else if  (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_DELETION))
-            this.endorsement.setMemberDeletionEndorsements(Lists.newArrayList(insureds));
+            this.endorsement.getMemberDeletionEndorsements().setInsureds(insureds);
         return this;
     }
 
@@ -175,16 +175,17 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
 
 
 
-    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail,Industry industry) {
         BigDecimal totalBasicPremium = this.getTotalBasicPremiumForInsured();
         BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
         BigDecimal valuedClientDiscountAmount = premiumDetail.getValuedClientDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getValuedClientDiscount().divide(new BigDecimal(100))));
         BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
         BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
-        BigDecimal industryLoadingFactor = BigDecimal.ZERO;
+        BigDecimal industryLoadingFactor = industry.getLoadingFactor();
         BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount).add(industryLoadingFactor)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
         BigDecimal totalInsuredPremiumAmount = totalBasicPremium.add(totalLoadingAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.multiply(industryLoadingFactor);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }
@@ -205,7 +206,7 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
             }
         }
         else if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_DELETION)) {
-            for (Insured insured : this.endorsement.getMemberDeletionEndorsements()) {
+            for (Insured insured : this.endorsement.getMemberDeletionEndorsements().getInsureds()) {
                 totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
             }
         }

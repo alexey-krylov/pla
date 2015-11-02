@@ -26,10 +26,7 @@ import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.ProcessType;
-import com.pla.sharedkernel.identifier.PlanId;
-import com.pla.sharedkernel.identifier.ProposalId;
-import com.pla.sharedkernel.identifier.ProposalNumber;
-import com.pla.sharedkernel.identifier.QuotationId;
+import com.pla.sharedkernel.identifier.*;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.beanutils.BeanUtils;
@@ -162,6 +159,14 @@ public class GLProposalService {
         Map proposal = glProposalFinder.findProposalById(proposalId);
         Proposer proposer = (Proposer) proposal.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
+        if (proposal.get("opportunityId") != null) {
+            OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
+            proposerDto.setOpportunityId(opportunityId.getOpportunityId());
+        }
+        if (proposal.get("industry") != null) {
+            Industry industry = (Industry) proposal.get("industry");
+            proposerDto.setIndustryId(industry.getIndustryId());
+        }
         return proposerDto;
     }
 

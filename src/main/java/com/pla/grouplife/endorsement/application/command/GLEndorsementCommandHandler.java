@@ -1,6 +1,5 @@
 package com.pla.grouplife.endorsement.application.command;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.policy.domain.service.GLEndorsementUniqueNumberGenerator;
 import com.pla.grouplife.endorsement.domain.model.*;
@@ -92,7 +91,8 @@ public class GLEndorsementCommandHandler {
             glEndorsement.addMemberEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
-            glEndorsement.addMemberDeletionEndorsement(Lists.newArrayList());
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            glEndorsement.addMemberDeletionEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(glEndorsementType)) {
             GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));

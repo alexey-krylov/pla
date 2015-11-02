@@ -11,6 +11,7 @@ import com.pla.grouplife.quotation.domain.service.AgentIsActive;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.dto.ProposerDto;
 import com.pla.grouplife.sharedresource.model.vo.*;
+import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -39,6 +41,9 @@ public class GroupLifeProposalService {
     private IPremiumCalculator premiumCalculator;
 
     private GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter;
+
+    @Autowired
+    private GLFinder glFinder;
 
     @Autowired
     public GroupLifeProposalService(AgentIsActive agentIsActive, GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter, IPremiumCalculator premiumCalculator) {
@@ -61,6 +66,11 @@ public class GroupLifeProposalService {
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
                 .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
         groupLifeProposal = glProposalProcessor.updateWithProposer(groupLifeProposal, proposerBuilder.build());
+        Map<String, Object> industryMap = glFinder.findIndustryById(proposerDto.getIndustryId());
+        if (industryMap != null) {
+            Industry industry = new Industry((String) industryMap.get("industryId"), (String) industryMap.get("industryName"), (BigDecimal) industryMap.get("industryFactor"));
+            groupLifeProposal = groupLifeProposal.updateWithIndustry(industry);
+        }
         return groupLifeProposal;
     }
 
@@ -70,6 +80,8 @@ public class GroupLifeProposalService {
             raiseAgentIsInactiveException();
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
+        Industry industry = groupLifeProposal.getIndustry();
+        groupLifeProposal = groupLifeProposal.updateWithIndustry(industry);
         return glProposalProcessor.updateWithInsured(groupLifeProposal, insureds);
     }
 

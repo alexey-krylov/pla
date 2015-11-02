@@ -168,8 +168,10 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             }
         }).findAny();
         if (insuredOptional.isPresent()){
-            PlanPremiumDetail planPremiumDetail = insuredOptional.get().getPlanPremiumDetail();
-            BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0,BigDecimal.ROUND_FLOOR));
+            Insured insured  = insuredOptional.get();
+            Integer noOfAssured = insured.getNoOfAssured()!=null?insured.getNoOfAssured():1;
+            PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
+            BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().divide(new BigDecimal(noOfAssured),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0, BigDecimal.ROUND_FLOOR));
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured());
             return planPremiumDetailDto;
         }
@@ -189,8 +191,10 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 }
             }).findAny();
             if (dependentOptional.isPresent()){
-                PlanPremiumDetail planPremiumDetail = dependentOptional.get().getPlanPremiumDetail();
-                BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0,BigDecimal.ROUND_FLOOR));
+                InsuredDependent insuredDependent = dependentOptional.get();
+                Integer noOfInsuredDependent =  insuredDependent.getNoOfAssured()!=null?insuredDependent.getNoOfAssured():1;
+                PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().divide(new BigDecimal(noOfInsuredDependent),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0, BigDecimal.ROUND_FLOOR));
                 InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured());
                 return planPremiumDetailDto;
             }

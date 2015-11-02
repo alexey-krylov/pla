@@ -226,6 +226,10 @@ public class GLEndorsementService {
                         }
                     }).findAny();
                     if (proposerDocumentOptional.isPresent()) {
+                        mandatoryDocumentDto.setRequireForSubmission(proposerDocumentOptional.get().isRequireForSubmission());
+                        mandatoryDocumentDto.setIsApproved(proposerDocumentOptional.get().isApproved());
+                        mandatoryDocumentDto.setMandatory(proposerDocumentOptional.get().isMandatory());
+                        mandatoryDocumentDto.setSubmitted(proposerDocumentOptional.get().isApproved());
                         try {
                             if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
                                 GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
