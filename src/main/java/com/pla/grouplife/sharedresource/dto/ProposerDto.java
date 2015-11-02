@@ -42,6 +42,8 @@ public class ProposerDto {
 
     private String industryId;
 
+    private Boolean hasUploaded = Boolean.FALSE;
+
     public ProposerDto(Proposer proposer) {
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         ProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;

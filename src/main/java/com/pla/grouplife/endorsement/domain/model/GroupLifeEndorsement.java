@@ -182,7 +182,10 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
         BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
         BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
-        BigDecimal industryLoadingFactor = industry.getLoadingFactor();
+        BigDecimal industryLoadingFactor = BigDecimal.ONE;
+        if (industry!=null) {
+            industryLoadingFactor = industry.getLoadingFactor();
+        }
         BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount).add(industryLoadingFactor)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
         BigDecimal totalInsuredPremiumAmount = totalBasicPremium.add(totalLoadingAmount);
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.multiply(industryLoadingFactor);

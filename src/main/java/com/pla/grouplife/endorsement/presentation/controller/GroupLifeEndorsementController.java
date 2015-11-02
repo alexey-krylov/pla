@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.presentation.controller;
 
+import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.endorsement.application.command.*;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
@@ -189,9 +190,12 @@ public class GroupLifeEndorsementController {
 
     @RequestMapping(value = "/getendorsementnumber/{endorsementId}", method = RequestMethod.GET)
     @ResponseBody
-    public Result getEndorsementNumber(@PathVariable("endorsementId") String endorsementId) {
+    public ResponseEntity getEndorsementNumber(@PathVariable("endorsementId") String endorsementId) {
         Map endorsmentMap = glEndorsementFinder.findEndorsementById(endorsementId);
-        return Result.success("Endorsement number ", endorsmentMap.get("endorsementNumber") != null ? ((EndorsementNumber) endorsmentMap.get("endorsementNumber")).getEndorsementNumber() : "");
+        Map<String,Object> endorsement = Maps.newLinkedHashMap();
+        endorsement.put("endorsementNumber", endorsmentMap.get("endorsementNumber") != null ? ((EndorsementNumber) endorsmentMap.get("endorsementNumber")).getEndorsementNumber() : "");
+        endorsement.put("hasUploaded", endorsmentMap.get("endorsement") != null ? Boolean.TRUE : Boolean.FALSE);
+        return new ResponseEntity(endorsement,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/opensearchendorsement", method = RequestMethod.GET)

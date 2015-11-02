@@ -19,9 +19,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             // $scope.versionNumber = getQueryParameter('version') || null;
 
             /*actual quotation number to be used in the view*/
-            $scope.endorsementNumber = endorsementNumber;
+            console.log('Response JSON*******'+JSON.stringify(endorsementNumber));
+            $scope.endorsementNumber = endorsementNumber.endorsementNumber;
             // console.log(endorsementNumber);
-
             $scope.isEnablePolicyHolderMode = false;
             $scope.isEnableContactMode = false;
             $scope.isEnablePlanMode = false;
@@ -31,7 +31,6 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             $scope.disableProposerSaveButton = true;
             var enableTab = getQueryParameter("endorsementType");
             $scope.endorsementType = enableTab;
-
             console.log(enableTab);
             if (enableTab == 'CHANGE_POLICY_HOLDER_NAME' || enableTab == 'Correction of Name - Policy Holder') {
                 $scope.submittedButton = false;
@@ -44,10 +43,10 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 $scope.isEnable = true;
                 $scope.disableProposerSaveButton = true;
             } else {
-                $scope.submittedButton = false;
+                $scope.submittedButton = true;
                 $scope.isEnablePlanMode = true;
                 $scope.isEnable = false;
-                $scope.stepsSaved["2"] = false;
+                $scope.stepsSaved["2"] = endorsementNumber.hasUploaded;
             }
             var mode = getQueryParameter("mode");
             if (mode == 'view') {
@@ -628,7 +627,7 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                         var deferred = $q.defer();
                         $http.get("/pla/grouplife/endorsement/getendorsementnumber/" + queryParam)
                             .success(function (response) {
-                                deferred.resolve(response.id)
+                                deferred.resolve(response)
                             })
                             .error(function () {
                                 deferred.reject();

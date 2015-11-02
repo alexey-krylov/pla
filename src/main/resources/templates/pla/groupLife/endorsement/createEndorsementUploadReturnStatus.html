@@ -368,7 +368,7 @@
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
                                                     ng-file-select=""
-                                                    ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
+                                                    ng-model="document.documentAttached" ng-disabled="isViewMode || isBrowseDisable(document)">Browse
                                             </button>
                                             <input class="form-control input-sm" style="width:200px;"
                                                    value="{{document.documentAttached[0].name}}"
