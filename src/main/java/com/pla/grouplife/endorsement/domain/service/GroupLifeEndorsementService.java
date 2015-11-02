@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -120,9 +119,10 @@ public class GroupLifeEndorsementService {
         }*/
         Map  policyMap = glFinder.findPolicyById(groupLifeEndorsement.getPolicy().getPolicyId().getPolicyId());
         PremiumDetail premiumDetail = (PremiumDetail) policyMap.get("premiumDetail");
+        Industry industry = (Industry) policyMap.get("industry");
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
                 premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
-        groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto);
+        groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto,industry);
         premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
         return premiumDetailDto;
     }
@@ -130,7 +130,7 @@ public class GroupLifeEndorsementService {
     /*
     * @TODO change according to type
     * */
-    public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) throws ParseException {
+    public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto,Industry industry) throws ParseException {
         Set<Insured> insureds = Sets.newLinkedHashSet();
         if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
@@ -148,7 +148,7 @@ public class GroupLifeEndorsementService {
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
         insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration);
         groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);
-        groupLifeQuotation = updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails);
+        groupLifeQuotation = updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails,industry);
         return groupLifeQuotation;
     }
 
@@ -157,10 +157,10 @@ public class GroupLifeEndorsementService {
         return glEndorsementProcessor.updateWithInsured(groupLifeEndorsement, insureds);
     }
 
-    public GroupLifeEndorsement updateWithPremiumDetail(GroupLifeEndorsement groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails) {
+    public GroupLifeEndorsement updateWithPremiumDetail(GroupLifeEndorsement groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails,Industry industry) {
         GLEndorsementProcessor glEndorsementProcessor = groupLifeEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
-        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail,new Industry("1","Mining",new BigDecimal("1.3000").setScale(0, RoundingMode.HALF_UP))));
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail,industry));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_LIFE));
             Set<GLFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GLFrequencyPremium>() {

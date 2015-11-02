@@ -3,10 +3,7 @@ package com.pla.grouplife.policy.domain.service;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.policy.domain.model.GroupLifePolicy;
-import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
-import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
-import com.pla.grouplife.sharedresource.model.vo.Proposer;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
@@ -49,6 +46,7 @@ public class GLPolicyFactory {
         AgentId agentId = (AgentId) proposalMap.get("agentId");
         Set<Insured> insureds = new HashSet((List) proposalMap.get("insureds"));
         PremiumDetail premiumDetail = (PremiumDetail) proposalMap.get("premiumDetail");
+        Industry industry = (Industry) proposalMap.get("industry");
         Proposer proposer = (Proposer) proposalMap.get("proposer");
         ProposalNumber proposalNumber = (ProposalNumber) proposalMap.get("proposalNumber");
         String policyNumberInString = glPolicyNumberGenerator.getPolicyNumber(GroupLifePolicy.class, agentId);
@@ -60,7 +58,7 @@ public class GLPolicyFactory {
         GroupLifePolicy groupLifePolicy = new GroupLifePolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail);
+                .addPremium(premiumDetail).addIndustry(industry);
         return groupLifePolicy;
     }
 
