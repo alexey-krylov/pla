@@ -365,7 +365,6 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
-
                                     <div class="form-group " ng-repeat="document in documentList">
                                         <label class="col-sm-3 control-label">{{document.documentName}}</label>
 
@@ -376,13 +375,17 @@
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
                                                     ng-file-select=""
-                                                    ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
+                                                    ng-model="document.documentAttached" ng-hide="isViewMode" ng-disabled="isViewMode || isBrowseDisable(document) ">Browse
                                             </button>
+                                            <input type="checkbox" data-toggle="tooltip" ng-hide="!isViewMode" ng-model="document.isApproved" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted || !document.fileName"/>
                                             <input class="form-control input-sm" style="width:380px;"
                                                    value="{{document.documentAttached[0].name}}"
                                                    readonly="true"/>
 
                                         </div>
+                                    </div>
+
+                                    <div class="btn btn-default" ng-hide="!isViewMode" style="display:inline;float:right;clear:both" ng-click="updateMandatoryDocumentForApproval()">Update
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
                                          ng-click="uploadDocumentFiles()" ng-hide="isViewMode">Upload All

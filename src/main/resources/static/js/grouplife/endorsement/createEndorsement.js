@@ -306,6 +306,58 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             }
 
+            $scope.waiverByApproved = [];
+            $scope.getMandatoryDocumentDetials = function ($event, document) {
+                var checkbox = $event.target;
+                if (checkbox.checked) {
+                    $scope.waiverByApproved.push({
+                        documentId: document.documentId,
+                        documentName: document.documentName,
+                        mandatory: true,
+                        isApproved: true
+                    });
+                }
+                else {
+                    //alert(index);
+                    for (i in $scope.waiverByApproved) {
+                        if ($scope.waiverByApproved[i].documentName == document.documentName) {
+                            $scope.waiverByApproved.splice(i, 1);
+                            //$scope.waiverByApproved[i].mandatory=false;
+                            //$scope.waiverByApproved[i].isApproved=false;
+                        }
+                    }
+                }
+            }
+
+            $scope.updateMandatoryDocumentForApproval = function () {
+                //alert($scope.proposal.proposalId);
+
+                var requestForApproval =
+                {
+                    "waivedDocuments": $scope.waiverByApproved,
+                    "endorsementId": $scope.endorsementId
+                }
+                console.log('requestForApprovalTest'+JSON.stringify(requestForApproval));
+
+                $http.post('waivedocument', requestForApproval).success(function (response, status, headers, config) {
+                    //$scope.proposal.proposalId=response.id;
+                }).error(function (response, status, headers, config) {
+                });
+
+            }
+
+            $scope.isBrowseDisable=function(document)
+            {
+                if(document.fileName == null && document.submitted)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
 
             $scope.$watch('policyDetails.proposer.proposerName', function (newVal, oldVal) {
                 //   console.log("****************************OLD VALUE------------>"+oldVal);
