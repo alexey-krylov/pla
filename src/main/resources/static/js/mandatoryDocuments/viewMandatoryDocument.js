@@ -37,6 +37,6 @@ var openPopover = function(){
            content=content.replace("Mandatory-Documents","");
           //console.log("Main content-------->"+content);
            that.attr('data-content', content);
-           that.popover({title :'Mandatory Documents',html : true,trigger: 'hover',placement:'top'}).css({'display':'block'});
+           that.popover({title :'Mandatory Documents',html : true,trigger: 'hover',placement:'left'}).css({'display':'block'});
        });
 }
