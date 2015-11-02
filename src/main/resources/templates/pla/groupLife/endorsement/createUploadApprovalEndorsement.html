@@ -59,7 +59,7 @@
     <nth-alert></nth-alert>
     <form name="quotationForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
-        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
+        <div class="wizard fueluxWizard" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
 
                 <li data-step="1"><span class="badge badge-info">1</span>Approval Comments<span class="chevron"></span>
@@ -363,14 +363,14 @@
                                                            ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
                                                             'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;padding-left:1px;"
                                      disable-all-fields="isViewMode">
                                     <div class="form-group " ng-repeat="document in documentList">
-                                        <label class="col-sm-3 control-label">{{document.documentName}}</label>
+                                        <label class="col-sm-5 control-label">{{document.documentName}}</label>
 
                                         <div class="input-group">
                                             <a href="/pla/grouplife/endorsement/downloadmandatorydocument/{{document.gridFsDocId}}"
-                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName}}</a>
+                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName | limitTo: 50}}</a>
 
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
@@ -378,7 +378,7 @@
                                                     ng-model="document.documentAttached" ng-hide="isViewMode" ng-disabled="isViewMode || isBrowseDisable(document) ">Browse
                                             </button>
                                             <input type="checkbox" data-toggle="tooltip" ng-hide="!isViewMode" ng-model="document.isApproved" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted || !document.fileName"/>
-                                            <input class="form-control input-sm" style="width:380px;"
+                                            <input class="form-control input-sm" style="width:200px;"
                                                    value="{{document.documentAttached[0].name}}"
                                                    readonly="true"/>
 

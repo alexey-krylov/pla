@@ -294,10 +294,10 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
             }
 
             $scope.submitComments = function (comment) {
-                $http.post('/pla/grouplife/Endorsement/submit', angular.extend({},
+                $http.post('/pla/grouplife/endorsement/submit', angular.extend({},
                     {"endorsementId": $scope.endorsementId, comment: comment})).success(function (data) {
                     if (data.status == "200") {
-                        saveStep();
+                       saveStep();
                         $('#searchFormEndorsement').val($scope.endorsementId);
                         $('#searchForm').submit();
                     }
@@ -564,7 +564,8 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
 
             $scope.back = function () {
-                $window.location.href = 'openpolicysearchpage';
+              //  $window.location.href = 'openpolicysearchpage';
+                $window.location.href = 'opensearchendorsement';
             }
 
         }])
