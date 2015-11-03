@@ -45,9 +45,15 @@ public class GLPolicyMailDetailDto {
     private String valuedClientDiscount;
     private String longTermDiscount;
 
+
     private String issueBranch;
     private String issuanceDate;
     private String policyTerm;
+
+    /*
+    * Endorsement details
+    * EUN,EFD etc....
+    * */
 
 
     @Getter

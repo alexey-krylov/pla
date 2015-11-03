@@ -5,16 +5,17 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.domain.model.GroupLifePolicy;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDetailDto;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDto;
-import com.pla.grouplife.policy.presentation.model.GLEndorsementDocument;
 import com.pla.grouplife.policy.presentation.model.GLPolicyDocument;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.policy.repository.GLPolicyRepository;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.sharedresource.dto.*;
+import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelGenerator;
@@ -59,6 +60,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Service
 public class GLPolicyService {
 
+    @Autowired
+    private GLEndorsementFinder glEndorsementFinder;
     @Autowired
     private GLPolicyFinder glPolicyFinder;
 
@@ -335,12 +338,13 @@ public class GLPolicyService {
     public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents, String endorsementId) throws IOException, JRException {
         GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, endorsementId);
         if (isNotEmpty(endorsementId)){
+            Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
             return documents.parallelStream().map(new Function<String, EmailAttachment>() {
                 @Override
                 public EmailAttachment apply(String document) {
                     EmailAttachment emailAttachment = null;
                     try {
-                        emailAttachment =  GLEndorsementDocument.valueOf(document).getPolicyDocumentInPDF(Arrays.asList(glPolicyDetailForPDF));
+                        emailAttachment =  GLEndorsementType.valueOf(document).getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JRException e) {
@@ -374,6 +378,11 @@ public class GLPolicyService {
         * @TODO query endorsement number, type and effective date b endorsement id
         *
         * */
+
+
+
+
+
         GLPolicyMailDetailDto glQuotationDetailDto = new GLPolicyMailDetailDto();
         GroupLifePolicy groupLifePolicy = glPolicyRepository.findOne(policyId);
         AgentDetailDto agentDetailDto = getAgentDetail(policyId);
