@@ -1,10 +1,10 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
@@ -135,5 +135,9 @@ public class InsuredBuilder {
 
     public Insured build() {
         return new Insured(this);
+    }
+
+    public InsuredDto buildInsuredDto(){
+        return new InsuredDto(this);
     }
 }

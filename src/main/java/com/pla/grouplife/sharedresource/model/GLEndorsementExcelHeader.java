@@ -460,7 +460,7 @@ public enum GLEndorsementExcelHeader {
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
             Cell cell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
             String cellValue = getCellValue(cell);
-            if (cellValue!=null){
+            if (isNotEmpty(cellValue)){
                 return "";
             }
             String clientId = isNotEmpty(value)?String.valueOf(new BigDecimal(value).longValue()):"";
@@ -488,7 +488,7 @@ public enum GLEndorsementExcelHeader {
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
             Cell cell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
             String cellValue = getCellValue(cell);
-            if (cellValue!=null){
+            if (isNotEmpty(cellValue)){
                 return "";
             }
             String clientId = isNotEmpty(value)?String.valueOf(new BigDecimal(value).longValue()):"";

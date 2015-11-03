@@ -1,5 +1,6 @@
 package com.pla.grouplife.sharedresource.dto;
 
+import com.pla.grouplife.sharedresource.model.vo.InsuredBuilder;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -12,6 +13,9 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/29/2015.
@@ -55,6 +59,28 @@ public class InsuredDto {
     private String familyId;
 
     private String relationship;
+
+    public InsuredDto(){
+
+    }
+    public InsuredDto(InsuredBuilder insuredBuilder) {
+        checkArgument(insuredBuilder != null);
+        this.companyName = insuredBuilder.getCompanyName();
+        this.manNumber = insuredBuilder.getManNumber();
+        this.salutation = insuredBuilder.getSalutation();
+        this.nrcNumber = insuredBuilder.getNrcNumber();
+        this.firstName = insuredBuilder.getFirstName();
+        this.lastName = insuredBuilder.getLastName();
+        this.dateOfBirth = insuredBuilder.getDateOfBirth();
+        this.gender = insuredBuilder.getGender();
+        this.category = insuredBuilder.getCategory();
+        this.annualIncome = insuredBuilder.getAnnualIncome();
+        this.occupationClass = insuredBuilder.getOccupation();
+        this.noOfAssured = insuredBuilder.getNoOfAssured();
+        if (isNotEmpty(insuredBuilder.getFamilyId())) {
+            this.familyId = insuredBuilder.getFamilyId();
+        }
+    }
 
     public InsuredDto addInsuredDependent(Set<InsuredDependentDto> insuredDependentDtos){
         this.insuredDependents=insuredDependentDtos;
