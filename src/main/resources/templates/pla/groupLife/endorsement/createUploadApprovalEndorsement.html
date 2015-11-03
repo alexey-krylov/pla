@@ -220,7 +220,7 @@
                         </div>
                         <div class="col-lg-3">
                             <button type="button" class="btn btn-default pull-right" data-animation="am-flip-x"
-                                    bs-dropdown="dropdown">Downloads
+                                    bs-dropdown="dropdown" style="margin-right:65px;">Downloads
                             </button>
                         </div>
                     </div>
@@ -237,12 +237,12 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="backToApproverPortlet()">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="backToApproverPortlet()" style="margin-top:100px;">
                                 Cancel
                             </button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                            <button type="button" class="btn btn-default btn-sm" style="float: right;margin-top:100px;margin-right:50px;"
                                     ng-disabled="!fileSaved" ng-if="!isViewMode" ng-click="savePlanDetails()">Upload
                                 &amp; Save
                             </button>
@@ -294,7 +294,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6" disable-all-fields="isViewMode">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-show="policyDetails.premium.isPremiumApplicable">
                                             <label>Balance Policy Term (Days)</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true" ng-model="policyDetails.premium.policyTermValue"
@@ -303,17 +303,17 @@
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
-                                      <!--  <div class="form-group">
+                                      <div class="form-group" ng-show="!policyDetails.premium.isPremiumApplicable">
                                             <label>Policy Term Expired Till Date (Days)</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true"
-                                                   ng-model="policyDetails.premium.policyTermExpiredDate"
+                                                   ng-model="policyDetails.premium.policyTermValue"
                                                    ng-blur="recalculatePremium(); " ng-disabled="true"/>
                                             <small class="error" ng-show="inappropriatePolicyTerm">
                                                 Please enter a number between 30 and 9999.
                                             </small>
                                         </div>
--->
+
                                     </div>
                                 </div>
                             </ng-form>
@@ -329,16 +329,16 @@
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
-                            <div class="form-group">
+                            <div class="form-group" ng-show="policyDetails.premium.isPremiumApplicable">
                                 <label>Total Endorsement Premium payable</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
                                        ng-model="policyDetails.premium.totalPremium" ng-disabled="true"/>
                             </div>
-                           <!-- <div class="form-group">
+                           <div class="form-group" ng-show="!policyDetails.premium.isPremiumApplicable">
                                 <label>Total Refundable Amount</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
-                                       ng-model="policyDetails.premium.totalRefundedPremium" ng-disabled="true"/>
-                            </div>-->
+                                       ng-model="policyDetails.premium.totalPremium" ng-disabled="true"/>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
