@@ -114,6 +114,7 @@ public class GroupLifeEndorsementService {
         if (groupLifeEndorsement.getEndorsement()==null){
             return new PremiumDetailDto();
         }
+
      /*   if (groupLifeEndorsement.getEndorsement().getMemberEndorsement()==null){
             return new PremiumDetailDto();
         }*/
@@ -124,6 +125,7 @@ public class GroupLifeEndorsementService {
                 premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
         groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto,industry);
         premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
+        premiumDetailDto.setIsPremiumApplicable(!groupLifeEndorsement.getEndorsementType().equals(GLEndorsementType.ASSURED_MEMBER_DELETION));
         return premiumDetailDto;
     }
 

@@ -52,7 +52,6 @@ public class PremiumDetailDto {
 
     private Boolean isPremiumApplicable = Boolean.TRUE;
 
-
     public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvencyLoading = profitAndSolvencyLoading;
@@ -68,7 +67,6 @@ public class PremiumDetailDto {
         this.valuedClientDiscount = valuedClientDiscount;
         this.longTermDiscount = longTermDiscount;
         this.policyTermValue = policyTermValue;
-
     }
 
     public PremiumDetailDto addOptedInstallmentDetail(int noOfInstallment, BigDecimal installmentAmount) {

@@ -191,6 +191,10 @@ public class GLPolicyService {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
         }
+        if (proposal.get("industry") != null) {
+            Industry industry = (Industry) proposal.get("industry");
+            proposerDto.setIndustryId(industry.getIndustryId());
+        }
         return proposerDto;
     }
 
