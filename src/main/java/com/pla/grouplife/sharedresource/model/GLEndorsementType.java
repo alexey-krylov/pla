@@ -49,11 +49,7 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte[] pdfData = null;
             if (insuredOptional.isPresent()) {
-                  /*
-            *  add With number of assured
-            * */
-
-                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");             }
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/AdditionMemeberAssured.jrxml");             }
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");
             }
@@ -83,12 +79,10 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
             if (insuredOptional.isPresent()) {
-                  /*
-            *  add With member deletion
-            * */
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssured.jrxml");
             }
             else {
-                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssured.jrxml");
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssuredMembersDetails.jrxml");
             }
             String fileName = "Deletion Member Assured_"+endorsementUniqueNumber+".pdf";
             File file = new File(fileName);
@@ -114,9 +108,7 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
             if (insuredOptional.isPresent()) {
-                  /*
-            *  add With member deletion
-            * */
+                pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/promotionOfMembersAssured.jrxml");
             }
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/promotionOfMembersAssured.jrxml");
@@ -150,9 +142,7 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
             if (insuredOptional.isPresent()) {
-                  /*
-            *  add With catagory reletionship
-            * */
+                pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationship.jrxml");
             }
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationshipMemberDetails.jrxml");

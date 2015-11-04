@@ -152,12 +152,12 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="issueDate" class="java.lang.String">
-		<fieldDescription><![CDATA[issueDate]]></fieldDescription>
-	</field>
 	<field name="issueBranch" class="java.lang.String">
 		<fieldDescription><![CDATA[issueBranch]]></fieldDescription>
 	</field>
+		<field name="proposerName" class="java.lang.String">
+    		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
+    	</field>
 	<field name="agentName" class="java.lang.String">
 		<fieldDescription><![CDATA[agentName]]></fieldDescription>
 	</field>
@@ -175,9 +175,6 @@
 	</field>
 	<field name="agentBranch" class="java.lang.String">
 		<fieldDescription><![CDATA[agentBranch]]></fieldDescription>
-	</field>
-	<field name="policyHolderName" class="java.lang.String">
-		<fieldDescription><![CDATA[policyHolderName]]></fieldDescription>
 	</field>
 	<field name="address" class="java.lang.String">
 		<fieldDescription><![CDATA[address]]></fieldDescription>
@@ -232,12 +229,6 @@
 	</field>
 	<field name="numberofLifeAssured" class="java.lang.String">
 		<fieldDescription><![CDATA[addOnBenefitsPercentage]]></fieldDescription>
-	</field>
-	<field name="policy" class="java.lang.String">
-		<fieldDescription><![CDATA[policy]]></fieldDescription>
-	</field>
-	<field name="originalExpiryDate" class="java.lang.String">
-		<fieldDescription><![CDATA[originalExpiryDate]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -346,7 +337,7 @@
 					<textField isStretchWithOverflow="true">
 						<reportElement x="132" y="35" width="113" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
 						<textElement verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="132" y="53" width="390" height="20" uuid="2f0cfc46-a16c-42f9-bd02-3752c890cc7c"/>
@@ -587,11 +578,11 @@
 				</staticText>
 				<textField>
 					<reportElement x="157" y="393" width="188" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="157" y="421" width="188" height="19" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<componentElement>
 					<reportElement key="table" style="table" positionType="Float" x="431" y="531" width="399" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
@@ -679,7 +670,7 @@
 				</staticText>
 				<textField>
 					<reportElement x="557" y="463" width="67" height="20" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="626" y="463" width="18" height="22" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
@@ -796,11 +787,11 @@
 					</staticText>
 					<textField>
 						<reportElement x="104" y="30" width="118" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
-						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="103" y="9" width="124" height="18" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
-						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -819,7 +810,7 @@
 					</staticText>
 					<textField>
 						<reportElement x="360" y="25" width="100" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
-						<textFieldExpression><![CDATA[$F{issueDate}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
