@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-03T17:51:22 -->
+<!-- 2015-11-04T17:58:35 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -124,6 +124,12 @@
 	</field>
 	<field name="numberofLifeAssured" class="java.lang.String">
 		<fieldDescription><![CDATA[addOnBenefitsPercentage]]></fieldDescription>
+	</field>
+	<field name="endorsementNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementNumber]]></fieldDescription>
+	</field>
+	<field name="endorsementEffectiveDate" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementEffectiveDate]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -497,11 +503,11 @@
 				</textField>
 				<textField>
 					<reportElement x="163" y="373" width="188" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="163" y="401" width="188" height="19" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<componentElement>
 					<reportElement key="table" style="table" positionType="Float" x="421" y="581" width="367" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
@@ -638,11 +644,11 @@ You may also email at help@insurance.com
 				</staticText>
 				<staticText>
 					<reportElement x="33" y="441" width="277" height="22" uuid="654ec1d3-cbcd-4bd0-a0b0-0d60cc865633"/>
-					<text><![CDATA[Static following assured are included under the Policy < …..>  from Text]]></text>
+					<text><![CDATA[Static following assured are included under the Policy ]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="311" y="443" width="100" height="20" uuid="ab59b1ce-42ae-4a9d-a674-ba91288fdec2"/>
-					<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="411" y="443" width="19" height="20" uuid="26e18d33-0d13-4618-9837-8bf27f6e72cb"/>
@@ -650,7 +656,7 @@ You may also email at help@insurance.com
 				</staticText>
 				<textField>
 					<reportElement x="430" y="444" width="60" height="19" uuid="b3373374-40ac-4966-9df0-24a7e47dd89e"/>
-					<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="488" y="444" width="459" height="19" uuid="a926716c-b96f-4f75-a1cf-508a51f20b4f"/>
