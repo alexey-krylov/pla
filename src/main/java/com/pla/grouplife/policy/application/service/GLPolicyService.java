@@ -334,21 +334,21 @@ public class GLPolicyService {
     }
 
 
-    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, String endorsementId) throws IOException, JRException {
-        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, endorsementId);
+    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, boolean isEndorsementDocument) throws IOException, JRException {
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId,isEndorsementDocument );
         return GLPolicyDocument.getAllPolicyDocument(Arrays.asList(glPolicyDetailForPDF));
     }
 
-    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents, String endorsementId) throws IOException, JRException {
-        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, endorsementId);
-        if (isNotEmpty(endorsementId)){
-            Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
+    public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents, boolean isEndorsementDocument) throws IOException, JRException {
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, isEndorsementDocument);
+        if (isEndorsementDocument){
             return documents.parallelStream().map(new Function<String, EmailAttachment>() {
                 @Override
-                public EmailAttachment apply(String document) {
+                public EmailAttachment apply(String endorsementType) {
                     EmailAttachment emailAttachment = null;
                     try {
-                        emailAttachment =  GLEndorsementType.valueOf(document).getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
+                        Map glEndorsementMap = glEndorsementFinder.findEndorsementByEndorsementType(endorsementType);
+                        emailAttachment =  GLEndorsementType.valueOf(endorsementType).getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JRException e) {
@@ -377,7 +377,7 @@ public class GLPolicyService {
 
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
-    private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId, String endorsementId) {
+    private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId, boolean isEndorsementDocument) {
         /*
         * @TODO query endorsement number, type and effective date b endorsement id
         *

@@ -181,7 +181,7 @@ public class GLPolicyController {
             return Result.failure("Email cannot be sent due to wrong data");
         }
         try {
-            List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()), "");
+            List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(mailDto.getPolicyId()),false);
             mailService.sendMailWithAttachment(mailDto.getSubject(), mailDto.getMailContent(), emailAttachments, mailDto.getRecipientMailAddress().split(";"));
            /*
            * Given the thread sleep time as 100ms to delete the files which got created while generating the Policy documents....
@@ -216,12 +216,12 @@ public class GLPolicyController {
 
     @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
     public void printQuotation(@PathVariable("policyId") String policyId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
-        print(policyId,documents,"",response);
+        print(policyId,documents, response,false );
     }
 
-    @RequestMapping(value = "/printendorsement/{policyId}/{endorsementId}/{documents}", method = RequestMethod.GET)
-    public void printQuotation(@PathVariable("policyId") String policyId,@PathVariable("endorsementId") String endorsementId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
-        print(policyId,documents,endorsementId,response);
+    @RequestMapping(value = "/printendorsement/{policyId}/{documents}", method = RequestMethod.GET)
+    public void printEndorsement(@PathVariable("policyId") String policyId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
+        print(policyId,documents,response, true);
     }
 
     @RequestMapping(value = "/openprintpolicy", method = RequestMethod.GET)
@@ -233,7 +233,7 @@ public class GLPolicyController {
     }
 
 
-    private void print(String policyId,List<String> documents,String endorsementId,HttpServletResponse response) throws IOException, JRException {
+    private void print(String policyId, List<String> documents, HttpServletResponse response, boolean isEndorsementDocument) throws IOException, JRException {
         if (isEmpty(documents)){
             return;
         }
@@ -241,7 +241,7 @@ public class GLPolicyController {
             response.reset();
             response.setContentType("application/pdf");
             OutputStream outputStream = response.getOutputStream();
-            List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(policyId), documents,endorsementId);
+            List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(policyId),documents,isEndorsementDocument);
             response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName());
             outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
             outputStream.flush();
@@ -252,7 +252,7 @@ public class GLPolicyController {
         response.reset();
         response.setContentType("application/zip");
         OutputStream outputStream = null;
-        List<EmailAttachment> emailAttachments =   glPolicyService.getPolicyPDF(new PolicyId(policyId),documents,endorsementId);
+        List<EmailAttachment> emailAttachments =   glPolicyService.getPolicyPDF(new PolicyId(policyId),documents,isEndorsementDocument);
         String zipFileName = "glPolicy.zip";
         ZipOutputStream zos = null;
         response.addHeader("Content-Disposition", "attachment; filename =" + zipFileName);

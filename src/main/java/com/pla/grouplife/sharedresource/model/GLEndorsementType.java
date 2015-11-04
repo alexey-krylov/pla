@@ -50,7 +50,8 @@ public enum GLEndorsementType {
                   /*
             *  add With number of assured
             * */
-            }
+
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");             }
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");
             }
@@ -242,24 +243,6 @@ public enum GLEndorsementType {
     public String getDescription() {
         return description;
     }
-
-    /*
-    * @TODO please review @Samir
-    * */
-  /*  public static List<Map<String, String>> getAllEndorsementTypeExceludingFCL() {
-        List<Map<String, String>> endorsementTypes = Lists.newArrayList();
-        GLEndorsementType[] glEndorsementTypes = GLEndorsementType.values();
-        for (int count = 0; count < glEndorsementTypes.length; count++) {
-            GLEndorsementType glEndorsementType = glEndorsementTypes[count];
-            if (!GLEndorsementType.FREE_COVER_LIMIT.equals(glEndorsementType)) {
-                Map<String, String> map = new HashMap<>();
-                map.put("code", glEndorsementType.name());
-                map.put("description", glEndorsementType.getDescription());
-                endorsementTypes.add(map);
-            }
-        }
-        return endorsementTypes;
-    }*/
 
     public static List<Map<String, String>> getAllEndorsementType() {
         List<Map<String, String>> endorsementTypes = Lists.newArrayList();

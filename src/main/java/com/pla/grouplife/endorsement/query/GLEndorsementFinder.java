@@ -54,6 +54,13 @@ public class GLEndorsementFinder {
         return proposal;
     }
 
+    public Map findEndorsementByEndorsementType(String endorsementType) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("endorsementType", endorsementType);
+        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_endorsement");
+        return proposal;
+    }
+
     public List<Map> findEndorsementByPolicyId(String policyNumber) {
         Criteria endorsementCriteria = Criteria.where("policy.policyNumber.policyNumber").is(policyNumber);
         endorsementCriteria.and("status").is(EndorsementStatus.APPROVED);
