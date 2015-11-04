@@ -91,11 +91,11 @@
                                                            value="{{printPol.documents}}"/>
 
                                                     <div ng-repeat="allDoc in approvedEndorsement">
-                                                        <div class="action-checkbox">
+                                                        <div class="action-checkbox" title="{{allDoc.endorsementType}} {{allDoc.effectiveDate | date : 'dd/MM/yyyy'}}" data-toggle="tooltip">
                                                             <input id="{{allDoc.endorsementCode}}" type="checkbox"
                                                                    value="{{allDoc.endorsementNumber}}"
                                                                    ng-model="allDoc.Selected" ng-checked="printPol.documents.indexOf(allDoc.endorsementCode) > -1"
-                                                                   title="{{allDoc.endorsementType}} {{allDoc.effectiveDate | date : 'dd/MM/yyyy' }}" ng-click="toggleApprovedSelection($event,allDoc.endorsementId)"/>
+                                                                   ng-click="toggleApprovedSelection($event,allDoc.endorsementId)"/>
                                                             <label for="{{allDoc.endorsementCode}}"></label>
                                                             {{allDoc.endorsementUniqueNumber}}
                                                         </div>
