@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-29T15:39:23 -->
+<!-- 2015-11-04T18:26:50 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -155,9 +155,9 @@
 	<field name="issueBranch" class="java.lang.String">
 		<fieldDescription><![CDATA[issueBranch]]></fieldDescription>
 	</field>
-		<field name="proposerName" class="java.lang.String">
-    		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
-    	</field>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
+	</field>
 	<field name="agentName" class="java.lang.String">
 		<fieldDescription><![CDATA[agentName]]></fieldDescription>
 	</field>
@@ -223,6 +223,12 @@
 	</field>
 	<field name="waiverOfExcessLoadingsPercentage" class="java.lang.String">
 		<fieldDescription><![CDATA[waiverOfExcessLoadingsPercentage]]></fieldDescription>
+	</field>
+	<field name="endorsementNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementNumber]]></fieldDescription>
+	</field>
+	<field name="endorsementEffectiveDate" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementEffectiveDate]]></fieldDescription>
 	</field>
 	<field name="addOnBenefitsPercentage" class="java.lang.String">
 		<fieldDescription><![CDATA[addOnBenefitsPercentage]]></fieldDescription>
@@ -550,7 +556,7 @@
 				</rectangle>
 				<staticText>
 					<reportElement x="25" y="392" width="136" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Number: ]]></text>
@@ -578,11 +584,12 @@
 				</staticText>
 				<textField>
 					<reportElement x="157" y="393" width="188" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
-					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="157" y="421" width="188" height="19" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
-					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<componentElement>
 					<reportElement key="table" style="table" positionType="Float" x="431" y="531" width="399" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
@@ -665,32 +672,20 @@
 					</jr:table>
 				</componentElement>
 				<staticText>
-					<reportElement x="23" y="461" width="534" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary, number of members under this policy is changed from]]></text>
+					<reportElement x="23" y="461" width="293" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<text><![CDATA[not withstanding anything contained in the policy to the contrary]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="557" y="463" width="67" height="20" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
-					<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="626" y="463" width="18" height="22" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
-					<text><![CDATA[to]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="869" y="467" width="72" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
-					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="647" y="462" width="63" height="21" uuid="c8a091f1-79bc-4803-ada5-fc1a6955cbe3"/>
-					<textFieldExpression><![CDATA[$F{agentBranch}]]></textFieldExpression>
+					<reportElement x="419" y="461" width="72" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="24" y="487" width="399" height="19" uuid="fc939519-f739-4050-b131-98fdd541efc5"/>
 					<text><![CDATA[ Assured Details(as an annexure to the Endorsement Schedule)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="710" y="465" width="158" height="21" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
-					<text><![CDATA[from < Endorsement Effective Date]]></text>
+					<reportElement x="380" y="461" width="32" height="21" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
+					<text><![CDATA[from ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement mode="Opaque" x="19" y="362" width="920" height="31" forecolor="#FFFFFF" backcolor="#002060" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
@@ -810,7 +805,7 @@
 					</staticText>
 					<textField>
 						<reportElement x="360" y="25" width="100" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
-						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -847,6 +842,10 @@ You may also email at help@insurance.com
 						<text><![CDATA[Note:]]></text>
 					</staticText>
 				</frame>
+				<textField>
+					<reportElement x="310" y="464" width="60" height="16" uuid="50ee38fa-6578-48b8-8bca-863ab48f1346"/>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</detail>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-19T10:58:59 -->
+<!-- 2015-11-04T18:54:36 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -46,6 +46,12 @@
 	</queryString>
 	<field name="issuanceDate" class="java.lang.String">
 		<fieldDescription><![CDATA[issuanceDate]]></fieldDescription>
+	</field>
+	<field name="endorsementNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementNumber]]></fieldDescription>
+	</field>
+	<field name="endorsementEffectiveDate" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementEffectiveDate]]></fieldDescription>
 	</field>
 	<field name="issueBranch" class="java.lang.String">
 		<fieldDescription><![CDATA[issueBranch]]></fieldDescription>
@@ -508,27 +514,23 @@
 				</textField>
 				<textField>
 					<reportElement x="159" y="389" width="188" height="19" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="25" y="429" width="653" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary, the Sum Assured for the following assured have been increased under the Policy ]]></text>
+					<reportElement x="25" y="429" width="245" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<text><![CDATA[not withstanding anything contained in the policy to the contrary]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="679" y="430" width="21" height="20" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
-					<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
+					<reportElement x="270" y="429" width="63" height="19" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="700" y="431" width="20" height="19" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
+					<reportElement x="333" y="433" width="20" height="19" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
 					<text><![CDATA[from]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="800" y="431" width="135" height="20" uuid="2b1c15a1-25e9-4104-9273-7d01d950a580"/>
-					<text><![CDATA[To]]></text>
-				</staticText>
 				<textField>
-					<reportElement x="731" y="431" width="69" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
-					<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
+					<reportElement x="364" y="433" width="69" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="27" y="452" width="83" height="21" uuid="c8a091f1-79bc-4803-ada5-fc1a6955cbe3"/>
@@ -637,7 +639,7 @@
 					</staticText>
 					<textField>
 						<reportElement x="310" y="21" width="160" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
-						<textFieldExpression><![CDATA[$F{issuanceDate}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="14" y="19" width="255" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-29T15:45:07 -->
+<!-- 2015-11-04T18:58:06 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -52,6 +52,12 @@
 	</field>
 	<field name="inceptionDate" class="java.lang.String">
 		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
+	</field>
+	<field name="endorsementNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementNumber]]></fieldDescription>
+	</field>
+	<field name="endorsementEffectiveDate" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementEffectiveDate]]></fieldDescription>
 	</field>
 	<field name="showLoading" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
@@ -415,7 +421,7 @@
 				</staticText>
 				<textField>
 					<reportElement x="372" y="592" width="100" height="21" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
-					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="472" y="630" width="322" height="30" uuid="d0d62e98-75de-48df-8522-aa35edbf1d8a"/>
@@ -435,11 +441,11 @@
 				</textField>
 				<textField>
 					<reportElement x="156" y="374" width="188" height="18" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
-					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="156" y="401" width="188" height="28" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
-					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement mode="Opaque" x="19" y="342" width="930" height="32" forecolor="#FFFFFF" backcolor="#002060" uuid="9f1bbd8f-fd99-4ce5-b3c6-d36323bb298f"/>
@@ -450,7 +456,7 @@
 				</staticText>
 				<textField>
 					<reportElement x="23" y="451" width="82" height="15" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
-					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="105" y="451" width="60" height="15" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
@@ -458,27 +464,7 @@
 				</staticText>
 				<textField>
 					<reportElement x="165" y="450" width="68" height="16" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
-					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="233" y="452" width="102" height="19" uuid="048f6e8f-17de-49d9-81a5-e82fe398c1cc"/>
-					<text><![CDATA[(original policy period -]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="395" y="453" width="20" height="20" uuid="95d6b370-7bd0-47a1-943a-a4f232ab063e"/>
-					<text><![CDATA[to]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="476" y="454" width="464" height="17" uuid="73acc717-b539-4017-a98b-b40bb245c14c"/>
-					<text><![CDATA[)Arising out of the aforesaid deletion, a sum of K XXX  is hereby refunded . Assured Details(as an annexure to the Endorsement Schedule)]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="415" y="452" width="61" height="19" uuid="0a13248e-6cad-4938-b6a3-499e3a0a1433"/>
-					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="335" y="453" width="60" height="18" uuid="e0d45270-057d-4a8b-9b16-eb9f90d9c3d4"/>
-					<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>
