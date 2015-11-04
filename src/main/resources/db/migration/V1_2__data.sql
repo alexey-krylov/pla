@@ -671,7 +671,8 @@ VALUES('ACTIVE_AT_WORK_DECLARATION_FORM','Active At Work Declaration Form','No')
 ('RANDOM_GLUCOSE_TEST_(RBS)','Random Glucose Test (RBS)','Yes'),
 ('SIGNED_AGREEMENT','Signed Agreement','No'),
 ('SIGNED_PROPOSAL_FORM','Signed Proposal Form','No'),
-('UREA_AND_CREATININE_TEST','Urea and Creatinine Test','Yes');
+('UREA_AND_CREATININE_TEST','Urea and Creatinine Test','Yes'),
+('ENDORSEMENT_REQUEST_FORM','Endorsement Request Form','No');
 
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of Life Assured Name','INDIVIDUAL');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of Policyholder Name','INDIVIDUAL');

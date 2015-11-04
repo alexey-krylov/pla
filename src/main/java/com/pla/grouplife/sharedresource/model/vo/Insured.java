@@ -84,8 +84,8 @@ public class Insured {
         }
     }
 
-    public static InsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
-        return new InsuredBuilder(planId, planCode, premiumAmount, sumAssured);
+    public static InsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
+        return new InsuredBuilder(planId, planCode, premiumAmount, sumAssured,incomeMultiplier );
     }
 
     public Insured updatePlanPremiumAmount(BigDecimal premiumAmount) {

@@ -191,7 +191,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
                     if (insuredDto.getPlanPremiumDetail() == null) {
                         insuredDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                     }
-                   insuredDto = findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship), insuredDto.getNoOfAssured(), category, clientId,insuredDto);
+                    insuredDto = findPlanIdByRelationshipFromPolicy(policyId, Relationship.getRelationship(relationship), insuredDto.getNoOfAssured(), category, clientId, insuredDto);
                 } else {
                     insuredDto = new InsuredDto();
                 }

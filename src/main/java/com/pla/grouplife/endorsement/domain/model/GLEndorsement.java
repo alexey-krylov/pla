@@ -1,7 +1,6 @@
 package com.pla.grouplife.endorsement.domain.model;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.List;
@@ -21,9 +20,8 @@ public class GLEndorsement {
 
     private GLAssuredNameEndorsement assuredNameEndorsement;
 
-    private GLPremiumEndorsement premiumEndorsement;
+    private GLMemberEndorsement premiumEndorsement;
 
-    @Setter
     private GLMemberEndorsement memberDeletionEndorsements;
 
     private List<GLAssuredDOBEndorsement> dobEndorsements;
@@ -66,7 +64,7 @@ public class GLEndorsement {
         return this;
     }
 
-    public GLEndorsement addPremiumEndorsement(GLPremiumEndorsement glPremiumEndorsement) {
+    public GLEndorsement addPremiumEndorsement(GLMemberEndorsement glPremiumEndorsement) {
         this.premiumEndorsement = glPremiumEndorsement;
         return this;
     }

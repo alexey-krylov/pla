@@ -52,9 +52,9 @@ public class InsuredBuilder {
 
     private String familyId;
 
-    InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
+    InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
         checkArgument(insuredPlan != null);
-        PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured);
+        PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured,incomeMultiplier );
         this.planPremiumDetail = planPremiumDetail;
     }
 

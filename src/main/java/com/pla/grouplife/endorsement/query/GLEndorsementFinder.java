@@ -91,7 +91,7 @@ public class GLEndorsementFinder {
     public Map<String, Object> getPolicyDetail(String endorsementId) throws ParseException {
         Criteria endorsementCriteria = Criteria.where("_id").is(endorsementId);
         Query query = new Query(endorsementCriteria);
-        query.fields().include("policy.policyId").include("policy.policyHolderName").include("endorsementType.").include("effectiveDate");
+        query.fields().include("policy.policyId").include("policy.policyHolderName").include("policy.policyNumber").include("endorsementType.").include("effectiveDate");
         List<Map> glEndorsement = mongoTemplate.find(query, Map.class, "group_life_endorsement");
         if (isEmpty(glEndorsement)){
             return Collections.EMPTY_MAP;
@@ -105,6 +105,7 @@ public class GLEndorsementFinder {
         }
         Map<String,Object> policyDetailMap = Maps.newLinkedHashMap();
         policyDetailMap.put("policyHolderName",((Map) glEndorsement.get(0).get("policy")).get("policyHolderName"));
+        policyDetailMap.put("policyNumber",((Map)((Map) glEndorsement.get(0).get("policy")).get("policyNumber")).get("policyNumber"));
         policyDetailMap.put("inceptionDate",glPolicy.get(0).get("inceptionOn"));
         policyDetailMap.put("expiredDate",glPolicy.get(0).get("expiredOn"));
         policyDetailMap.put("effectiveDate", glEndorsement.get(0).get("effectiveDate"));

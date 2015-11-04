@@ -52,7 +52,7 @@ public class InsuredDependentBuilder {
 
     InsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(planId != null);
-        PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(planId, planCode, premiumAmount, sumAssured);
+        PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(planId, planCode, premiumAmount, sumAssured,null);
         this.planPremiumDetail = planPremiumDetail;
     }
 

@@ -171,6 +171,11 @@ public class InsuredDto {
             this.premiumAmount = premiumAmount;
             this.sumAssured = sumAssured;
         }
+
+        public PlanPremiumDetailDto(String planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured,BigDecimal incomeMultiplier) {
+            this(planId,planCode,premiumAmount,sumAssured);
+            this.incomeMultiplier = incomeMultiplier;
+        }
     }
 
     @Getter

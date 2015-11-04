@@ -195,7 +195,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 Integer noOfInsuredDependent =  insuredDependent.getNoOfAssured()!=null?insuredDependent.getNoOfAssured():1;
                 PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
                 BigDecimal totalPremium = planPremiumDetail.getPremiumAmount().divide(new BigDecimal(noOfInsuredDependent),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredInEndorsement).setScale(0, BigDecimal.ROUND_FLOOR));
-                InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured());
+                InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured() );
                 return planPremiumDetailDto;
             }
         }

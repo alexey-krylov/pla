@@ -90,6 +90,10 @@ public class GLEndorsementCommandHandler {
             GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addMemberEndorsement(glMemberEndorsement);
         }
+        if (GLEndorsementType.MEMBER_PROMOTION.equals(glEndorsementType)) {
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            glEndorsement.addMemberEndorsement(glMemberEndorsement);
+        }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
             GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addMemberDeletionEndorsement(glMemberEndorsement);
@@ -119,7 +123,7 @@ public class GLEndorsementCommandHandler {
         Set<Insured> insureds = insuredDtos.stream().map(new Function<InsuredDto, Insured>() {
             @Override
             public Insured apply(InsuredDto insuredDto) {
-                final InsuredBuilder[] insuredBuilder = {insuredDto.getPlanPremiumDetail()!=null?Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured()):
+                final InsuredBuilder[] insuredBuilder = {insuredDto.getPlanPremiumDetail()!=null?Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured(), insuredDto.getPlanPremiumDetail().getIncomeMultiplier() ):
                         new InsuredBuilder()};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).
