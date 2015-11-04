@@ -214,9 +214,9 @@ public class GLPolicyController {
         return policyNumberMap;
     }
 
-    @RequestMapping(value = "/printpolicy/{policyId}/{documents}", method = RequestMethod.GET)
-    public void printQuotation(@PathVariable("policyId") String policyId,@PathVariable("documents") List<String> documents, HttpServletResponse response) throws IOException, JRException {
-        print(policyId,documents, response,false );
+    @RequestMapping(value = "/printpolicy/{policyId}/{endorsementIds}", method = RequestMethod.GET)
+    public void printQuotation(@PathVariable("policyId") String policyId,@PathVariable("endorsementIds") List<String> endorsementIds, HttpServletResponse response) throws IOException, JRException {
+        print(policyId,endorsementIds, response,false );
     }
 
     @RequestMapping(value = "/printendorsement/{policyId}/{documents}", method = RequestMethod.GET)

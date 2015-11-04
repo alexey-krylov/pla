@@ -344,11 +344,12 @@ public class GLPolicyService {
         if (isEndorsementDocument){
             return documents.parallelStream().map(new Function<String, EmailAttachment>() {
                 @Override
-                public EmailAttachment apply(String endorsementType) {
+                public EmailAttachment apply(String endorsementId) {
                     EmailAttachment emailAttachment = null;
                     try {
-                        Map glEndorsementMap = glEndorsementFinder.findEndorsementByEndorsementType(endorsementType);
-                        emailAttachment =  GLEndorsementType.valueOf(endorsementType).getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
+                        Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
+                        GLEndorsementType glEndorsementType = (GLEndorsementType)glEndorsementMap.get("endorsementType");
+                        emailAttachment = glEndorsementType.getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JRException e) {
