@@ -281,6 +281,7 @@ public class GLEndorsementService {
             DateTime effectiveDate = map.get("effectiveDate") != null ? new DateTime(map.get("effectiveDate")) : null;
             String endorsementId = map.get("_id").toString();
             String endorsementNumber = map.get("endorsementNumber") != null ? ((EndorsementNumber) map.get("endorsementNumber")).getEndorsementNumber() : "";
+            String endorsementUniqueNumber = map.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) map.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
             Policy policy = map.get("policy") != null ? (Policy) map.get("policy") : null;
             String policyNumber = policy != null ? policy.getPolicyNumber().getPolicyNumber() : "";
             String policyHolderName = policy != null ? policy.getPolicyHolderName() : "";
@@ -295,7 +296,7 @@ public class GLEndorsementService {
             if (isNotEmpty(endorsementStatus)) {
                 endorsementStatus = EndorsementStatus.valueOf(endorsementStatus).getDescription();
             }
-            GLEndorsementDto glEndorsementDto = new GLEndorsementDto(endorsementId, endorsementNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
+            GLEndorsementDto glEndorsementDto = new GLEndorsementDto(endorsementId, endorsementNumber,endorsementUniqueNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
             return glEndorsementDto;
         }
     }

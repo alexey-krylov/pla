@@ -19,6 +19,8 @@ public class GLEndorsementDto {
 
     private String endorsementNumber;
 
+    private String endorsementUniqueNumber;
+
     private String policyNumber;
 
     private String endorsementType;

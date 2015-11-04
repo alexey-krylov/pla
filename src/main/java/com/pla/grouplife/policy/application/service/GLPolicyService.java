@@ -348,7 +348,7 @@ public class GLPolicyService {
                     EmailAttachment emailAttachment = null;
                     try {
                         Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
-                        GLEndorsementType glEndorsementType = (GLEndorsementType)glEndorsementMap.get("endorsementType");
+                        GLEndorsementType glEndorsementType = GLEndorsementType.valueOf((String) glEndorsementMap.get("endorsementType"));
                         emailAttachment = glEndorsementType.getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -41,7 +41,7 @@
                                 </th>
                                 <th></th>
                                 <th>
-                                    <div class="row">
+                                    <div class="row" ng-if="approvedEndorsement.length >0 ">
                                         <div class="col-md-3">
                                             <button type="button" class="btn btn-success btn-xs"
                                                     ng-disabled="!approvedDocumentsIdList.length > 0" ng-click="printApprovedPolicy()">View/Save
@@ -82,7 +82,7 @@
                                 <td></td>
                                 <td>
                                     <div class="col-md-6">
-                                        <div class="row">
+                                        <div class="row" ng-if="approvedEndorsement.length >0 ">
                                             <div class="col-md-6">
                                                 <div class="form-group required">
                                                     <label class="control-label">Endorsement</label>
@@ -95,9 +95,9 @@
                                                             <input id="{{allDoc.endorsementCode}}" type="checkbox"
                                                                    value="{{allDoc.endorsementNumber}}"
                                                                    ng-model="allDoc.Selected" ng-checked="printPol.documents.indexOf(allDoc.endorsementCode) > -1"
-                                                                   title="Approved.." ng-click="toggleApprovedSelection($event,allDoc.endorsementId,allDoc.endorsementCode,allDoc.hasNoOfAssured)"/>
+                                                                   title="{{allDoc.endorsementType}} {{allDoc.effectiveDate | date : 'dd/MM/yyyy' }}" ng-click="toggleApprovedSelection($event,allDoc.endorsementId)"/>
                                                             <label for="{{allDoc.endorsementCode}}"></label>
-                                                            {{allDoc.endorsementType}}
+                                                            {{allDoc.endorsementUniqueNumber}}
                                                         </div>
                                                     </div>
                                                 </div>
