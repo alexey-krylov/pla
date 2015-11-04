@@ -56,6 +56,10 @@ public class GLPolicyMailDetailDto {
     * */
 
 
+    private String endorsementNumber;
+    private String endorsementEffectiveDate;
+
+
     @Getter
     @Setter
     @EqualsAndHashCode(of = {"category", "relationship", "planCoverageName"})

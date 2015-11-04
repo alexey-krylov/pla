@@ -9,11 +9,15 @@ import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
+import org.joda.time.DateTime;
+import org.nthdimenzion.common.AppConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 8/5/2015.
@@ -43,8 +47,14 @@ public enum GLEndorsementType {
         public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
             GLEndorsement glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
             String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
+            String endorsementEffectiveDate =  new DateTime((Date)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
             GLMemberEndorsement glMemberEndorsement  = glEndorsement.getMemberEndorsement();
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
+            if (isNotEmpty(glEndorsementDetailDto)){
+                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
+                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
+                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
+            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte[] pdfData = null;
@@ -73,8 +83,14 @@ public enum GLEndorsementType {
         public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
             GLEndorsement  glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
             String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
+            String endorsementEffectiveDate =  ((DateTime)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
             GLMemberEndorsement glMemberEndorsement  =glEndorsement.getMemberDeletionEndorsements();
             Set<Insured>insureds=glMemberEndorsement.getInsureds();
+            if (isNotEmpty(glEndorsementDetailDto)){
+                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
+                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
+                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
+            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
@@ -102,8 +118,14 @@ public enum GLEndorsementType {
         public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
             GLEndorsement  glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
             String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
+            String endorsementEffectiveDate =  ((DateTime)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
             GLMemberEndorsement glMemberEndorsement  = glEndorsement.getMemberEndorsement();
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
+            if (isNotEmpty(glEndorsementDetailDto)){
+                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
+                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
+                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
+            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
@@ -138,6 +160,12 @@ public enum GLEndorsementType {
             String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
             GLMemberEndorsement glMemberEndorsement= glEndorsement.getNewCategoryRelationEndorsement();
             Set<Insured> insureds=glMemberEndorsement.getInsureds();
+            String endorsementEffectiveDate =  ((DateTime)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
+            if (isNotEmpty(glEndorsementDetailDto)){
+                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
+                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
+                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
+            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;

@@ -379,15 +379,6 @@ public class GLPolicyService {
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
     private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId, boolean isEndorsementDocument) {
-        /*
-        * @TODO query endorsement number, type and effective date b endorsement id
-        *
-        * */
-
-
-
-
-
         GLPolicyMailDetailDto glQuotationDetailDto = new GLPolicyMailDetailDto();
         GroupLifePolicy groupLifePolicy = glPolicyRepository.findOne(policyId);
         AgentDetailDto agentDetailDto = getAgentDetail(policyId);
