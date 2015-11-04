@@ -379,14 +379,14 @@
 
                                         <div class="input-group">
                                             <a href="/pla/grouplife/endorsement/downloadmandatorydocument/{{document.gridFsDocId}}"
-                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName | limitTo: 50}}</a>
+                                               style="display:inline;float:right;margin-top:8px;margin-left:10px" hg-show="!document.submitted">{{document.fileName | limitTo: 50}}</a>
 
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
                                                     ng-file-select=""
                                                     ng-model="document.documentAttached" ng-hide="isViewMode" ng-disabled="isViewMode || isBrowseDisable(document) ">Browse
                                             </button>
-                                            <input type="checkbox" data-toggle="tooltip" ng-hide="!isViewMode" ng-model="document.isApproved" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted || !document.fileName"/>
+                                            <input style="margin-left:10px;margin-top:10px;" type="checkbox" data-toggle="tooltip" ng-hide="!isViewMode" ng-model="document.isApproved" title="Would you like to waive of the {{document.documentName}}" ng-click="getMandatoryDocumentDetials($event,document)" ng-if="!document.submitted || !document.fileName"/>
                                             <input class="form-control input-sm" style="width:200px;"
                                                    value="{{document.documentAttached[0].name}}"
                                                    readonly="true"/>
