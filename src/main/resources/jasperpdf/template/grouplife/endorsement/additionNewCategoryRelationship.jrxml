@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-04T18:26:50 -->
+<!-- 2015-11-05T10:29:35 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -246,6 +246,7 @@
 			</rectangle>
 			<image>
 				<reportElement x="430" y="0" width="312" height="70" uuid="c9df8c7e-ac40-43da-ba5c-80ebc4f43c92"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -351,26 +352,26 @@
 						<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="0" y="81" width="132" height="15" uuid="8be7f033-0783-4099-a616-37c35562a8fe"/>
+						<reportElement x="0" y="74" width="132" height="15" uuid="8be7f033-0783-4099-a616-37c35562a8fe"/>
 						<box>
 							<topPen lineColor="#F22522"/>
 							<leftPen lineColor="#F22522"/>
 							<bottomPen lineColor="#F22522"/>
 							<rightPen lineColor="#F22522"/>
 						</box>
-						<textElement markup="none">
+						<textElement verticalAlignment="Top" markup="none">
 							<font fontName="Arial" size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[ Telephone Number :]]></text>
+						<text><![CDATA[ Telephone Number(s):]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="132" y="82" width="89" height="14" uuid="36cd901e-43d2-44a7-ae37-2c26f2aeb94a"/>
-						<textElement verticalAlignment="Middle"/>
+						<reportElement x="132" y="75" width="89" height="14" uuid="36cd901e-43d2-44a7-ae37-2c26f2aeb94a"/>
+						<textElement verticalAlignment="Top"/>
 						<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement positionType="Float" x="21" y="210" width="929" height="110" uuid="30c76c21-9cdb-4914-be15-fa66a41532c0"/>
+					<reportElement positionType="Float" x="21" y="210" width="928" height="102" uuid="30c76c21-9cdb-4914-be15-fa66a41532c0"/>
 					<box>
 						<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
@@ -386,13 +387,13 @@
 					</textField>
 					<textField>
 						<reportElement x="139" y="83" width="67" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
-						<textElement verticalAlignment="Middle">
+						<textElement verticalAlignment="Top">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="205" y="83" width="15" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="205" y="83" width="15" height="17" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
 							<font isBold="true"/>
 						</textElement>
@@ -672,19 +673,22 @@
 					</jr:table>
 				</componentElement>
 				<staticText>
-					<reportElement x="23" y="461" width="293" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<reportElement x="23" y="460" width="293" height="20" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[not withstanding anything contained in the policy to the contrary]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="419" y="461" width="72" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<reportElement x="400" y="461" width="91" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="24" y="487" width="399" height="19" uuid="fc939519-f739-4050-b131-98fdd541efc5"/>
+					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[ Assured Details(as an annexure to the Endorsement Schedule)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="380" y="461" width="32" height="21" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
+					<reportElement x="370" y="461" width="42" height="21" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
 					<text><![CDATA[from ]]></text>
 				</staticText>
 				<staticText>
@@ -781,7 +785,8 @@
 						<text><![CDATA[Total Sum Assured:]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="104" y="30" width="118" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
+						<reportElement x="104" y="28" width="118" height="19" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
+						<textElement verticalAlignment="Top"/>
 						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 					</textField>
 					<textField>
@@ -843,7 +848,8 @@ You may also email at help@insurance.com
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="310" y="464" width="60" height="16" uuid="50ee38fa-6578-48b8-8bca-863ab48f1346"/>
+					<reportElement x="311" y="461" width="60" height="19" uuid="50ee38fa-6578-48b8-8bca-863ab48f1346"/>
+					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 			</frame>
