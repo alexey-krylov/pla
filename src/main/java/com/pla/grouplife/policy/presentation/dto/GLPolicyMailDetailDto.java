@@ -35,7 +35,7 @@ public class GLPolicyMailDetailDto {
 
     private String netPremium;
     private String profitAndSolvencyLoading;
-    private String serviceTax;
+    private String serviceTax = "";
     private String totalPremium;
     private String addOnBenefits;
     private String addOnBenefitsPercentage;
