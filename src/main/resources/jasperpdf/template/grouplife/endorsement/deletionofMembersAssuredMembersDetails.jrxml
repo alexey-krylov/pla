@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-05T11:49:42 -->
+<!-- 2015-11-05T18:05:01 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -318,7 +318,7 @@
 					<staticText>
 						<reportElement x="6" y="81" width="103" height="20" uuid="a45dea87-37f9-4284-a2f3-eb877f79bb55"/>
 						<textElement verticalAlignment="Middle">
-							<font fontName="Trebuchet MS" size="12" isBold="false"/>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Policy Period :]]></text>
 					</staticText>
@@ -432,7 +432,7 @@
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{numberofLifeAssured}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="144" y="535" width="210" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
@@ -477,6 +477,18 @@
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="511" y="450" width="399" height="24" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
+					<text><![CDATA[ is hereby refunded . Assured Details(as an annexure to the Endorsement Schedule)]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="443" y="451" width="61" height="24" uuid="f7188e5f-1ece-4cd1-af43-3dd1d5e735df"/>
+					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="237" y="452" width="205" height="24" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
+					<text><![CDATA[Arising out of the aforesaid deletion, a sum of]]></text>
+				</staticText>
 			</frame>
 			<staticText>
 				<reportElement x="-1" y="810" width="158" height="14" uuid="8048e2f0-5b00-4c75-8d12-eaf8c2ba1bfb"/>

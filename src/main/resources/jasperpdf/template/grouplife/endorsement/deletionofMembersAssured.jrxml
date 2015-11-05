@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-05T11:54:04 -->
+<!-- 2015-11-05T18:05:24 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1170" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -411,7 +411,7 @@
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{numberofLifeAssured}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="153" y="525" width="205" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
@@ -435,7 +435,7 @@
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table" style="table" positionType="Float" x="296" y="571" width="367" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
+					<reportElement key="table" style="table" positionType="Float" x="171" y="571" width="367" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
@@ -579,10 +579,22 @@ This Endorsement has been issued based on the information provided by you . In c
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="90" y="440" width="247" height="22" uuid="6365daff-d531-492f-aea0-74a38c3b9617"/>
+					<reportElement x="90" y="440" width="81" height="22" uuid="6365daff-d531-492f-aea0-74a38c3b9617"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
+				<textField>
+					<reportElement x="381" y="440" width="61" height="24" uuid="caf2bd61-37ef-4f2b-bf80-a346e818e233"/>
+					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="168" y="440" width="205" height="24" uuid="cb9bbe2d-986d-498d-8c40-4e56883f250f"/>
+					<text><![CDATA[Arising out of the aforesaid deletion, a sum of]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="443" y="441" width="219" height="24" uuid="0e60344c-5c8d-45e3-b527-6dec44347718"/>
+					<text><![CDATA[ is hereby refunded . Assured Detailsle)]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</detail>
