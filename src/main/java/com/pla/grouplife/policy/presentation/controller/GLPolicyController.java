@@ -41,6 +41,7 @@ import java.util.zip.ZipOutputStream;
 
 import static org.nthdimenzion.presentation.AppUtils.deleteTempFileIfExists;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 7/9/2015.
@@ -237,22 +238,23 @@ public class GLPolicyController {
         if (isEmpty(documents)){
             return;
         }
-        if (documents.size()==1){
-            response.reset();
-            response.setContentType("application/pdf");
-            OutputStream outputStream = response.getOutputStream();
-            List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(policyId),documents,isEndorsementDocument);
-            response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName());
-            outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
-            outputStream.flush();
-            outputStream.close();
-            deleteTempFileIfExists(emailAttachments);
-            return;
+        List<EmailAttachment> emailAttachments = glPolicyService.getPolicyPDF(new PolicyId(policyId),documents,isEndorsementDocument);
+        if (isNotEmpty(emailAttachments)){
+            if (documents.size()==1 && emailAttachments.get(0).getSubAttachments()==null){
+                response.reset();
+                response.setContentType("application/pdf");
+                OutputStream outputStream = response.getOutputStream();
+                response.setHeader("content-disposition", "attachment; filename=" + emailAttachments.get(0).getFileName());
+                outputStream.write(Files.toByteArray(emailAttachments.get(0).getFile()));
+                outputStream.flush();
+                outputStream.close();
+                deleteTempFileIfExists(emailAttachments);
+                return;
+            }
         }
         response.reset();
         response.setContentType("application/zip");
         OutputStream outputStream = null;
-        List<EmailAttachment> emailAttachments =   glPolicyService.getPolicyPDF(new PolicyId(policyId),documents,isEndorsementDocument);
         String zipFileName = "glPolicy.zip";
         ZipOutputStream zos = null;
         response.addHeader("Content-Disposition", "attachment; filename =" + zipFileName);
