@@ -51,6 +51,7 @@ public class GLPolicyMailDetailDto {
 
     private String endorsementNumber;
     private String endorsementEffectiveDate;
+    private String endorsementDetailHeaderName;
 
 
     @Getter

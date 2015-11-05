@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-08T17:26:38 -->
+<!-- 2015-11-05T16:02:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="695" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -50,6 +50,9 @@
 	</field>
 	<field name="inceptionDate" class="java.lang.String">
 		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
+	</field>
+	<field name="endorsementDetailHeaderName" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementDetailHeaderName]]></fieldDescription>
 	</field>
 	<field name="expiryDate" class="java.lang.String">
 		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
@@ -195,13 +198,6 @@
 				</textElement>
 				<text><![CDATA[ Policy Details:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="290" y="0" width="400" height="41" uuid="fb37d579-0233-4931-928d-eecd877b5711"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Trebuchet MS" size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Underwriting Schedule - Above Free Cover Limit]]></text>
-			</staticText>
 			<frame>
 				<reportElement x="60" y="360" width="798" height="40" uuid="2d14ec7f-8b11-4560-910e-70b0f55076bd"/>
 				<subreport runToBottom="false">
@@ -212,6 +208,13 @@
 					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/insureddetailsubreport.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
+			<textField>
+				<reportElement x="350" y="10" width="246" height="30" uuid="b1864fbd-2733-496f-bae7-bc97a8189823"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Trebuchet MS" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{endorsementDetailHeaderName}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>

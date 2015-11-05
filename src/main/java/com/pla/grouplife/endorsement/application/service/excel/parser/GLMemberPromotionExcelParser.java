@@ -180,8 +180,7 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
                     if (isNotEmpty(clientId)) {
                         clientId  = String.valueOf(new BigDecimal(clientId).longValue());
                     }
-                    insuredDto =  findPlanIdByRelationshipFromPolicy
-                    (policyId, clientId, insuredDto, insuredDto.getAnnualIncome());
+                    insuredDto =  findPlanIdByRelationshipFromPolicy(policyId, clientId, insuredDto, insuredDto.getAnnualIncome(),insuredDto.getFamilyId());
                 } else {
                     insuredDto = new InsuredDto();
                 }
@@ -192,7 +191,7 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
     }
 
     //TODO populate plan and sum assured detail
-    private InsuredDto findPlanIdByRelationshipFromPolicy(PolicyId policyId,String clientId,InsuredDto insuredDto,BigDecimal annualIncome) {
+    private InsuredDto findPlanIdByRelationshipFromPolicy(PolicyId policyId,String clientId,InsuredDto insuredDto,BigDecimal annualIncome,String familyId) {
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
@@ -206,7 +205,7 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
             PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
             BigDecimal totalPremium = planPremiumDetail.getPremiumAmount();
             InsuredBuilder insuredBuilder = new InsuredBuilder();
-            insuredDto = insuredBuilder.withInsuredName(insured.getSalutation(), insured.getFirstName(), insured.getLastName())
+            insuredDto = insuredBuilder.withInsuredName(insured.getSalutation(), insured.getFirstName(), insured.getLastName()).withFamilyId(familyId)
                     .withDateOfBirth(insured.getDateOfBirth()).withGender(insured.getGender()).withCategory(insured.getCategory()).withAnnualIncome(annualIncome).buildInsuredDto();
 
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured(),planPremiumDetail.getIncomeMultiplier());

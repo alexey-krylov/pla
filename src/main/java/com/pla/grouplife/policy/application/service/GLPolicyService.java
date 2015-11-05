@@ -351,8 +351,9 @@ public class GLPolicyService {
                         if (isNotEmpty(glEndorsementMap)) {
                             GroupLifeEndorsement groupLifeEndorsement = glEndorsementMap.get(0);
                             GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, isEndorsementDocument,groupLifeEndorsement);
-                            GLEndorsementType glEndorsementType =groupLifeEndorsement.getEndorsementType();
+                            GLEndorsementType glEndorsementType = groupLifeEndorsement.getEndorsementType();
                             emailAttachment = glEndorsementType.getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF),groupLifeEndorsement.getEndorsement());
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -395,6 +396,7 @@ public class GLPolicyService {
 
         Proposer proposer = groupLifePolicy.getProposer();
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
+        glQuotationDetailDto.setPolicyHolderName(proposer.getProposerName());
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         glQuotationDetailDto.setTelephoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
         Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());

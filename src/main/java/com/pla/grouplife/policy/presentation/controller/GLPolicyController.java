@@ -260,6 +260,12 @@ public class GLPolicyController {
             outputStream = response.getOutputStream();
             zos = new ZipOutputStream(outputStream);
             for (EmailAttachment inputStreamMap : emailAttachments){
+                if (inputStreamMap.getSubAttachments()!=null){
+                    ZipEntry zipEntry = new ZipEntry(inputStreamMap.getSubAttachments().getFileName());
+                    zos.putNextEntry(zipEntry);
+                    IOUtils.copy(FileUtils.openInputStream(inputStreamMap.getSubAttachments().getFile()), zos);
+                    zos.closeEntry();
+                }
                 ZipEntry zipEntry = new ZipEntry(inputStreamMap.getFileName());
                 zos.putNextEntry(zipEntry);
                 IOUtils.copy(FileUtils.openInputStream(inputStreamMap.getFile()), zos);

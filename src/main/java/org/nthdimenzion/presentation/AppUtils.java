@@ -113,6 +113,9 @@ public class AppUtils {
 
     public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments) throws IOException {
         for (EmailAttachment fileTobeDeleted : emailAttachments) {
+            if (fileTobeDeleted.getSubAttachments()!=null){
+                FileUtils.forceDelete(fileTobeDeleted.getSubAttachments().getFile());
+            }
             FileUtils.forceDelete(fileTobeDeleted.getFile());
         }
     }

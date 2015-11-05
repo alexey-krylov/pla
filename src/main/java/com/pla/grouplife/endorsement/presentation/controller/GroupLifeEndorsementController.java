@@ -454,13 +454,4 @@ public class GroupLifeEndorsementController {
         return glEndorsementSchedules;
     }
 
-
-    @RequestMapping(value = "/schedulegeneration/{policyId}/{endorsementId}", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(httpMethod = "GET", value = "To list Endorsements which are done for the policy")
-    public Set<GLEndorsementDto> printEndorsement(@PathVariable("policyId") String policyId,@PathVariable("endorsementId") List<EndorsementId> endorsementId) {
-
-        return null;
-    }
-
 }
