@@ -5,6 +5,7 @@ import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDetailDto;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -49,9 +50,13 @@ public enum GLEndorsementType {
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
+           Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            for (Insured insured : insureds){
+                dependentOptional =   insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
+            }
             byte[] pdfData = null;
             EmailAttachment emailAttachment = new EmailAttachment();
-            if (insuredOptional.isPresent()) {
+            if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/AdditionMemeberAssured.jrxml");             }
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");
@@ -91,7 +96,11 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
             EmailAttachment emailAttachment = new EmailAttachment();
-            if (insuredOptional.isPresent()) {
+            Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            for (Insured insured : insureds){
+                dependentOptional =   insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
+            }
+            if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssured.jrxml");
             }
             else {
@@ -131,7 +140,11 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
             EmailAttachment emailAttachment = new EmailAttachment();
-            if (insuredOptional.isPresent()) {
+            Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            for (Insured insured : insureds){
+                dependentOptional =  insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
+            }
+            if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/promotionOfMembersAssured.jrxml");
             }
             else {
@@ -176,7 +189,11 @@ public enum GLEndorsementType {
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
             EmailAttachment emailAttachment = new EmailAttachment();
-            if (insuredOptional.isPresent()) {
+            Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            for (Insured insured : insureds){
+                 dependentOptional =  insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
+            }
+            if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationship.jrxml");
             }
             else {
