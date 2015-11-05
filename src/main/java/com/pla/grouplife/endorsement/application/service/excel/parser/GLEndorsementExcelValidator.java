@@ -186,14 +186,18 @@ public class GLEndorsementExcelValidator {
     public boolean isValidNewAnnualIncome(Row row, String value, List<String> excelHeaders) {
         Cell oldAnnualIncomeCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.OLD_ANNUAL_INCOME.getDescription()));
         String oldIncome = getCellValue(oldAnnualIncomeCell);
+        String oldAnnualIncome = oldIncome;
+        if (isNotEmpty(value)) {
+            oldAnnualIncome = String.valueOf(new BigDecimal(oldIncome).setScale(0, BigDecimal.ROUND_FLOOR));
+        }
         if (isEmpty(value)) {
             return false;
         }
-        return !(value.equals(oldIncome));
+        return !(value.equals(oldAnnualIncome));
     }
 
     public boolean isValidOldAnnualIncome(Row row, String value, List<String> excelHeaders) {
-        Cell clientIdCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.MAIN_ASSURED_CLIENT_ID.getDescription()));
+        Cell clientIdCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.CLIENT_ID.getDescription()));
         String clientId = getCellValue(clientIdCell);
         if (!isValidClientId(policyAssureds, clientId)) {
             return false;

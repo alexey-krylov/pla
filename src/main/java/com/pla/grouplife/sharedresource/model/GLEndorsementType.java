@@ -94,7 +94,7 @@ public enum GLEndorsementType {
 
         @Override
         public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
-            GLMemberEndorsement glMemberEndorsement  = glEndorsement.getMemberEndorsement();
+            GLMemberEndorsement glMemberEndorsement  = glEndorsement.getPremiumEndorsement();
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();

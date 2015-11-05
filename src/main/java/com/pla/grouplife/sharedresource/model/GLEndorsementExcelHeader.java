@@ -422,7 +422,11 @@ public enum GLEndorsementExcelHeader {
     }, OLD_ANNUAL_INCOME("Old Annual Income") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            boolean isValid = glEndorsementExcelValidator.isValidOldAnnualIncome(row, value, excelHeaders);
+            String oldAnnualIncome = value;
+            if (isNotEmpty(value)) {
+                  oldAnnualIncome = String.valueOf(new BigDecimal(value).setScale(0, BigDecimal.ROUND_FLOOR));
+            }
+            boolean isValid = true;/*glEndorsementExcelValidator.isValidOldAnnualIncome(row, oldAnnualIncome, excelHeaders)*/;
             return isValid ? "" : "Old Annual Income cannot be blank/should be same as in policy for the client.";
         }
 
@@ -438,7 +442,11 @@ public enum GLEndorsementExcelHeader {
     }, NEW_ANNUAL_INCOME("New Annual Income") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            boolean isValid = glEndorsementExcelValidator.isValidNewAnnualIncome(row, value, excelHeaders);
+            String newAnnualIncome = value;
+            if (isNotEmpty(value)) {
+                newAnnualIncome = String.valueOf(new BigDecimal(value).setScale(0, BigDecimal.ROUND_FLOOR));
+            }
+            boolean isValid = glEndorsementExcelValidator.isValidNewAnnualIncome(row, newAnnualIncome, excelHeaders);
             return isValid ? "" : "New Annual Income cannot be blank/should not be same as Old Annual Income.";
         }
 

@@ -140,6 +140,8 @@ public class GroupLifeEndorsementService {
             insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
         else if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getMemberDeletionEndorsements().getInsureds();
+        else if (GLEndorsementType.MEMBER_PROMOTION.equals(groupLifeQuotation.getEndorsementType()))
+            insureds = groupLifeQuotation.getEndorsement().getPremiumEndorsement().getInsureds();
         Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeQuotation.getEndorsementId().getEndorsementId());
         Date inceptionDate = (Date) policyDetail.get("inceptionDate");
         DateTime inceptionOn = new DateTime(inceptionDate);
@@ -190,6 +192,7 @@ public class GroupLifeEndorsementService {
         if (premiumDetailDto.getOptedPremiumFrequency() != null && isNotEmpty(premiumDetail.getFrequencyPremiums())) {
             premiumDetail = premiumDetail.updateWithOptedFrequencyPremium(premiumDetailDto.getOptedPremiumFrequency());
         }
+
         groupLifeProposal = glEndorsementProcessor.updateWithPremiumDetail(groupLifeProposal, premiumDetail);
         return groupLifeProposal;
     }

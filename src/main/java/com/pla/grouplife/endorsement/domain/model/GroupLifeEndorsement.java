@@ -212,6 +212,11 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
                 totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
             }
         }
+        else if (this.endorsementType.equals(GLEndorsementType.MEMBER_PROMOTION)) {
+            for (Insured insured : this.endorsement.getPremiumEndorsement().getInsureds()) {
+                totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+            }
+        }
 
         return totalBasicAnnualPremium;
     }

@@ -1,6 +1,5 @@
 package com.pla.grouplife.endorsement.application.service.excel.parser;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
@@ -9,10 +8,10 @@ import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.InsuredBuilder;
 import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
-import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -30,6 +29,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 8/21/2015.
@@ -154,17 +154,11 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
         Row selfRelationshipRow = null;
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
-            Cell relationshipCell = getCellByName(row, headers, GLEndorsementExcelHeader.RELATIONSHIP.getDescription());
-            Cell mainAssuredClientIdCell = getCellByName(row, headers, GLEndorsementExcelHeader.MAIN_ASSURED_CLIENT_ID.getDescription());
-            String relationship = getCellValue(relationshipCell);
-            String mainAssuredClientId = getCellValue(mainAssuredClientIdCell);
-            if (Relationship.SELF.description.equals(relationship) && isEmpty(mainAssuredClientId)) {
+            Cell clientIdCell = getCellByName(row, headers, GLEndorsementExcelHeader.CLIENT_ID.getDescription());
+            String clientId = getCellValue(clientIdCell);
+            if (isNotEmpty(clientId)) {
                 selfRelationshipRow = row;
                 categoryRowMap.put(selfRelationshipRow, new ArrayList<>());
-            } else {
-                List<Row> rows = categoryRowMap.get(selfRelationshipRow)!=null?categoryRowMap.get(selfRelationshipRow):Lists.newArrayList();
-                rows.add(row);
-                categoryRowMap.put(selfRelationshipRow, rows);
             }
         }
         return categoryRowMap;
@@ -183,7 +177,11 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
                     if (insuredDto.getPlanPremiumDetail() == null) {
                         insuredDto.setPlanPremiumDetail(new InsuredDto.PlanPremiumDetailDto());
                     }
-                    insuredDto.setPlanPremiumDetail(findPlanIdByRelationshipFromPolicy(policyId,clientId ));
+                    if (isNotEmpty(clientId)) {
+                        clientId  = String.valueOf(new BigDecimal(clientId).longValue());
+                    }
+                    insuredDto =  findPlanIdByRelationshipFromPolicy
+                    (policyId, clientId, insuredDto, insuredDto.getAnnualIncome());
                 } else {
                     insuredDto = new InsuredDto();
                 }
@@ -194,7 +192,7 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
     }
 
     //TODO populate plan and sum assured detail
-    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipFromPolicy(PolicyId policyId,String clientId) {
+    private InsuredDto findPlanIdByRelationshipFromPolicy(PolicyId policyId,String clientId,InsuredDto insuredDto,BigDecimal annualIncome) {
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
@@ -207,10 +205,15 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
             Insured insured  = insuredOptional.get();
             PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
             BigDecimal totalPremium = planPremiumDetail.getPremiumAmount();
+            InsuredBuilder insuredBuilder = new InsuredBuilder();
+            insuredDto = insuredBuilder.withInsuredName(insured.getSalutation(), insured.getFirstName(), insured.getLastName())
+                    .withDateOfBirth(insured.getDateOfBirth()).withGender(insured.getGender()).withCategory(insured.getCategory()).withAnnualIncome(annualIncome).buildInsuredDto();
+
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,planPremiumDetail.getSumAssured(),planPremiumDetail.getIncomeMultiplier());
-            return planPremiumDetailDto;
+            insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
+            return insuredDto;
         }
-        return new InsuredDto.PlanPremiumDetailDto();
+        return insuredDto;
     }
 
 

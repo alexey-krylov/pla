@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,7 +100,7 @@ public class GLEndorsementCommandHandler {
         }
         if (GLEndorsementType.MEMBER_PROMOTION.equals(glEndorsementType)) {
             GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
-            glEndorsement.addMemberEndorsement(glMemberEndorsement);
+            glEndorsement.addPremiumEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
             GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
@@ -146,6 +147,9 @@ public class GLEndorsementCommandHandler {
 
 
     private Set<InsuredDependent> getInsuredDependent(Set<InsuredDto.InsuredDependentDto> insuredDependentDtos) {
+        if (isEmpty(insuredDependentDtos)){
+            return Collections.EMPTY_SET;
+        }
         Set<InsuredDependent> insuredDependents = insuredDependentDtos.stream().map(new Function<InsuredDto.InsuredDependentDto, InsuredDependent>() {
             @Override
             public InsuredDependent apply(InsuredDto.InsuredDependentDto insuredDependentDto) {

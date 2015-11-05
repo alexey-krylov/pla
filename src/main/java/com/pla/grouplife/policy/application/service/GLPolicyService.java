@@ -518,61 +518,74 @@ public class GLPolicyService {
         glQuotationDetailDto.setTotalSumAssured(totalSumAssured.toPlainString());
         List<GLPolicyMailDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
         List<GLPolicyMailDetailDto.Annexure> annexures = Lists.newArrayList();
-        if (isNotEmpty(groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds())) {
-            for (Insured insured : groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds()) {
-                PlanPremiumDetail insuredPremiumDetail = insured.getPlanPremiumDetail();
-                List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
-                BigDecimal insuredPlanSA = insuredPremiumDetail.getSumAssured();
-                insuredPlanSA = insuredPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                GLPolicyMailDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", isNotEmpty(planCoverageDetailDtoList)?planCoverageDetailDtoList.get(0).getPlanName():"", insuredPlanSA);
-                coverDetails.add(insuredPlanCoverDetail);
-                if (isNotEmpty(insured.getCoveragePremiumDetails())) {
-                    for (CoveragePremiumDetail coveragePremiumDetail : insured.getCoveragePremiumDetails()) {
-                        Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(coveragePremiumDetail.getCoverageId().getCoverageId());
-                        BigDecimal insuredCoverageSA = coveragePremiumDetail.getSumAssured();
-                        insuredCoverageSA = insuredCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLPolicyMailDetailDto.CoverDetail insuredCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self",
-                                (String) coverageMap.get("coverageName"), insuredCoverageSA);
-                        coverDetails.add(insuredCoverageCoverDetail);
-                    }
+        Set<Insured> insureds = Sets.newLinkedHashSet();
+        if (groupLifeEndorsement.getEndorsement()!=null){
+            if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(groupLifeEndorsement.getEndorsementType())){
+                insureds  = groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds();
+            }
+            else if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(groupLifeEndorsement.getEndorsementType())){
+                insureds  = groupLifeEndorsement.getEndorsement().getMemberDeletionEndorsements().getInsureds();
+            }
+            else if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeEndorsement.getEndorsementType())){
+                insureds  = groupLifeEndorsement.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
+            }
+            else if (GLEndorsementType.MEMBER_PROMOTION.equals(groupLifeEndorsement.getEndorsementType())){
+                insureds  = groupLifeEndorsement.getEndorsement().getPremiumEndorsement().getInsureds();
+            }
+        }
+        for (Insured insured :insureds) {
+            PlanPremiumDetail insuredPremiumDetail = insured.getPlanPremiumDetail();
+            List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
+            BigDecimal insuredPlanSA = insuredPremiumDetail.getSumAssured();
+            insuredPlanSA = insuredPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
+            GLPolicyMailDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", isNotEmpty(planCoverageDetailDtoList)?planCoverageDetailDtoList.get(0).getPlanName():"", insuredPlanSA);
+            coverDetails.add(insuredPlanCoverDetail);
+            if (isNotEmpty(insured.getCoveragePremiumDetails())) {
+                for (CoveragePremiumDetail coveragePremiumDetail : insured.getCoveragePremiumDetails()) {
+                    Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(coveragePremiumDetail.getCoverageId().getCoverageId());
+                    BigDecimal insuredCoverageSA = coveragePremiumDetail.getSumAssured();
+                    insuredCoverageSA = insuredCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
+                    GLPolicyMailDetailDto.CoverDetail insuredCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self",
+                            (String) coverageMap.get("coverageName"), insuredCoverageSA);
+                    coverDetails.add(insuredCoverageCoverDetail);
                 }
-                BigDecimal insuredAnnualIncome = insured.getAnnualIncome();
-                String insuredAnnualIncomeInString = "";
-                if (insuredAnnualIncome != null) {
-                    insuredAnnualIncome = insuredAnnualIncome.setScale(2, BigDecimal.ROUND_CEILING);
-                    insuredAnnualIncomeInString = insuredAnnualIncome.toPlainString();
-                }
-                BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
-                insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
-                GLPolicyMailDetailDto.Annexure insuredAnnexure = glQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
-                        , insured.getNrcNumber(), insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
-                        isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", insured.getDateOfBirth() == null ? "" : AppUtils.getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), insuredAnnualIncomeInString, insuredBasicPremium.toPlainString());
-                annexures.add(insuredAnnexure);
-                if (isNotEmpty(insured.getInsuredDependents())) {
-                    for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
-                        PlanPremiumDetail insuredDependentPremiumDetail = insuredDependent.getPlanPremiumDetail();
-                        List<PlanCoverageDetailDto> dependentPlanCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredDependentPremiumDetail.getPlanId()));
-                        BigDecimal insuredDependentPlanSA = insuredDependentPremiumDetail.getSumAssured();
-                        insuredDependentPlanSA = insuredDependentPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLPolicyMailDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA);
-                        coverDetails.add(insuredDependentPlanCoverDetail);
-                        if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
-                            for (CoveragePremiumDetail dependentCoveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
-                                BigDecimal insuredDependentCoverageSA = dependentCoveragePremiumDetail.getSumAssured();
-                                insuredDependentCoverageSA = insuredDependentCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
-                                Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(dependentCoveragePremiumDetail.getCoverageId().getCoverageId());
-                                GLPolicyMailDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA);
-                                coverDetails.add(insuredDependentCoverageCoverDetail);
-                            }
+            }
+            BigDecimal insuredAnnualIncome = insured.getAnnualIncome();
+            String insuredAnnualIncomeInString = "";
+            if (insuredAnnualIncome != null) {
+                insuredAnnualIncome = insuredAnnualIncome.setScale(2, BigDecimal.ROUND_CEILING);
+                insuredAnnualIncomeInString = insuredAnnualIncome.toPlainString();
+            }
+            BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
+            insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
+            GLPolicyMailDetailDto.Annexure insuredAnnexure = glQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
+                    , insured.getNrcNumber(), insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
+                    isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", insured.getDateOfBirth() == null ? "" : AppUtils.getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), insuredAnnualIncomeInString, insuredBasicPremium.toPlainString());
+            annexures.add(insuredAnnexure);
+            if (isNotEmpty(insured.getInsuredDependents())) {
+                for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
+                    PlanPremiumDetail insuredDependentPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                    List<PlanCoverageDetailDto> dependentPlanCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredDependentPremiumDetail.getPlanId()));
+                    BigDecimal insuredDependentPlanSA = insuredDependentPremiumDetail.getSumAssured();
+                    insuredDependentPlanSA = insuredDependentPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
+                    GLPolicyMailDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA);
+                    coverDetails.add(insuredDependentPlanCoverDetail);
+                    if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
+                        for (CoveragePremiumDetail dependentCoveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
+                            BigDecimal insuredDependentCoverageSA = dependentCoveragePremiumDetail.getSumAssured();
+                            insuredDependentCoverageSA = insuredDependentCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
+                            Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(dependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                            GLPolicyMailDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA);
+                            coverDetails.add(insuredDependentCoverageCoverDetail);
                         }
-                        BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
-                        insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
-                        GLPolicyMailDetailDto.Annexure annexure = glQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
-                                , insuredDependent.getNrcNumber(), insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "",
-                                insuredDependent.getDateOfBirth() == null ? "" : AppUtils.toString(insuredDependent.getDateOfBirth()),
-                                isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), "", insuredDependentBasicPremium.toPlainString());
-                        annexures.add(annexure);
                     }
+                    BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
+                    insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
+                    GLPolicyMailDetailDto.Annexure annexure = glQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
+                            , insuredDependent.getNrcNumber(), insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "",
+                            insuredDependent.getDateOfBirth() == null ? "" : AppUtils.toString(insuredDependent.getDateOfBirth()),
+                            isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), "", insuredDependentBasicPremium.toPlainString());
+                    annexures.add(annexure);
                 }
             }
         }
