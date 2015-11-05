@@ -279,7 +279,8 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         if (isNotEmpty(insureds)) {
             for (Insured insured : insureds) {
                 PlanPremiumDetail insuredPlanPremiumDetail = insured.getPlanPremiumDetail();
-                totalSumAssured = totalSumAssured.add(insuredPlanPremiumDetail.getSumAssured());
+                if (insuredPlanPremiumDetail!=null)
+                    totalSumAssured = totalSumAssured.add(insuredPlanPremiumDetail.getSumAssured());
                 if (isNotEmpty(insured.getInsuredDependents())) {
                     for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
                         totalSumAssured = totalSumAssured.add(insuredDependent.getPlanPremiumDetail().getSumAssured());
