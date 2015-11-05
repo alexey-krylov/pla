@@ -1,11 +1,9 @@
 package com.pla.grouplife.endorsement.domain.model;
 
+import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.domain.event.GLEndorsementStatusAuditEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
-import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
-import com.pla.grouplife.sharedresource.model.vo.Industry;
-import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
+import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
@@ -22,6 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -222,6 +221,69 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return this;
     }
 
+    public BigDecimal getNetAnnualPremiumPaymentAmountWithoutDiscount(PremiumDetail premiumDetail) {
+        BigDecimal totalInsuredPremiumAmount = this.getTotalBasicPremiumForInsured();
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add((addOnBenefitAmount.add(profitAndSolvencyAmount)));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
+    public Integer getTotalNoOfLifeCovered() {
+        Set<Insured> insureds  = Sets.newLinkedHashSet();
+        if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_ADDITION)){
+            insureds = this.getEndorsement().getMemberEndorsement().getInsureds();
+        }
+        if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_DELETION)){
+            insureds = this.getEndorsement().getMemberDeletionEndorsements().getInsureds();
+        }
+        if (this.endorsementType.equals(GLEndorsementType.NEW_CATEGORY_RELATION)){
+            insureds = this.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
+        }
+        if (this.endorsementType.equals(GLEndorsementType.MEMBER_PROMOTION)){
+            insureds = this.getEndorsement().getPremiumEndorsement().getInsureds();
+        }
+        Integer totalNoOfLifeCovered = insureds.size();
+        Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
+            @Override
+            public int applyAsInt(Insured value) {
+                return isNotEmpty(value.getInsuredDependents()) ? value.getInsuredDependents().size() : 0;
+            }
+        }).sum();
+        totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
+        return totalNoOfLifeCovered;
+    }
+
+
+    public BigDecimal getTotalSumAssured() {
+        Set<Insured> insureds  = Sets.newLinkedHashSet();
+        if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_ADDITION)){
+            insureds = this.getEndorsement().getMemberEndorsement().getInsureds();
+        }
+        if (this.endorsementType.equals(GLEndorsementType.ASSURED_MEMBER_DELETION)){
+            insureds = this.getEndorsement().getMemberDeletionEndorsements().getInsureds();
+        }
+        if (this.endorsementType.equals(GLEndorsementType.NEW_CATEGORY_RELATION)){
+            insureds = this.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
+        }
+        if (this.endorsementType.equals(GLEndorsementType.MEMBER_PROMOTION)){
+            insureds = this.getEndorsement().getPremiumEndorsement().getInsureds();
+        }
+        BigDecimal totalSumAssured = BigDecimal.ZERO;
+        if (isNotEmpty(insureds)) {
+            for (Insured insured : insureds) {
+                PlanPremiumDetail insuredPlanPremiumDetail = insured.getPlanPremiumDetail();
+                totalSumAssured = totalSumAssured.add(insuredPlanPremiumDetail.getSumAssured());
+                if (isNotEmpty(insured.getInsuredDependents())) {
+                    for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
+                        totalSumAssured = totalSumAssured.add(insuredDependent.getPlanPremiumDetail().getSumAssured());
+                    }
+                }
+            }
+        }
+        return totalSumAssured;
+    }
 
 
 }

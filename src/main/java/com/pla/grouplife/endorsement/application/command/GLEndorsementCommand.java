@@ -5,6 +5,7 @@ import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Created by Samir on 10/4/2015.
@@ -18,4 +19,6 @@ public class GLEndorsementCommand {
     private EndorsementId endorsementId;
 
     private GLEndorsementType glEndorsementType;
+
+    private UserDetails userDetails;
 }

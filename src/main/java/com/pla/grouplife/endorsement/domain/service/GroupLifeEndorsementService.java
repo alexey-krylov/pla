@@ -118,12 +118,12 @@ public class GroupLifeEndorsementService {
      /*   if (groupLifeEndorsement.getEndorsement().getMemberEndorsement()==null){
             return new PremiumDetailDto();
         }*/
-        Map  policyMap = glFinder.findPolicyById(groupLifeEndorsement.getPolicy().getPolicyId().getPolicyId());
-        PremiumDetail premiumDetail = (PremiumDetail) policyMap.get("premiumDetail");
-        Industry industry = (Industry) policyMap.get("industry");
-        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
-                premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
-        groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto,industry);
+    Map  policyMap = glFinder.findPolicyById(groupLifeEndorsement.getPolicy().getPolicyId().getPolicyId());
+    PremiumDetail premiumDetail = (PremiumDetail) policyMap.get("premiumDetail");
+    Industry industry = (Industry) policyMap.get("industry");
+    PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
+            premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
+    groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto,industry);
         premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
         premiumDetailDto.setIsPremiumApplicable(!groupLifeEndorsement.getEndorsementType().equals(GLEndorsementType.ASSURED_MEMBER_DELETION));
         return premiumDetailDto;

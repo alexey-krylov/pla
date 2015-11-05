@@ -50,12 +50,6 @@ public class GLPolicyMailDetailDto {
     private String issuanceDate;
     private String policyTerm;
 
-    /*
-    * Endorsement details
-    * EUN,EFD etc....
-    * */
-
-
     private String endorsementNumber;
     private String endorsementEffectiveDate;
 

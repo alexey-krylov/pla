@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.domain.model.GroupLifePolicy;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDetailDto;
@@ -335,21 +336,24 @@ public class GLPolicyService {
 
 
     public List<EmailAttachment> getPolicyPDF(PolicyId policyId, boolean isEndorsementDocument) throws IOException, JRException {
-        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId,isEndorsementDocument );
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId,isEndorsementDocument,null );
         return GLPolicyDocument.getAllPolicyDocument(Arrays.asList(glPolicyDetailForPDF));
     }
 
     public List<EmailAttachment> getPolicyPDF(PolicyId policyId, List<String> documents, boolean isEndorsementDocument) throws IOException, JRException {
-        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, isEndorsementDocument);
         if (isEndorsementDocument){
             return documents.parallelStream().map(new Function<String, EmailAttachment>() {
                 @Override
                 public EmailAttachment apply(String endorsementId) {
                     EmailAttachment emailAttachment = null;
                     try {
-                        Map glEndorsementMap = glEndorsementFinder.findEndorsementById(endorsementId);
-                        GLEndorsementType glEndorsementType = GLEndorsementType.valueOf((String) glEndorsementMap.get("endorsementType"));
-                        emailAttachment = glEndorsementType.getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF), glEndorsementMap);
+                        List<GroupLifeEndorsement> glEndorsementMap = glEndorsementFinder.findEndorsement(endorsementId);
+                        if (isNotEmpty(glEndorsementMap)) {
+                            GroupLifeEndorsement groupLifeEndorsement = glEndorsementMap.get(0);
+                            GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, isEndorsementDocument,groupLifeEndorsement);
+                            GLEndorsementType glEndorsementType =groupLifeEndorsement.getEndorsementType();
+                            emailAttachment = glEndorsementType.getEndorsementDocumentInPDF(Arrays.asList(glPolicyDetailForPDF),groupLifeEndorsement.getEndorsement());
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JRException e) {
@@ -359,6 +363,7 @@ public class GLPolicyService {
                 }
             }).collect(Collectors.toList());
         }
+        GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId, isEndorsementDocument,null);
         return documents.parallelStream().map(new Function<String, EmailAttachment>() {
             @Override
             public EmailAttachment apply(String document) {
@@ -378,7 +383,7 @@ public class GLPolicyService {
 
 
     //TODO Need to change the JASPER Field Key as per the object property and then use BeanUtils to copy object properties
-    private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId, boolean isEndorsementDocument) {
+    private GLPolicyMailDetailDto getGlPolicyDetailForPDF(PolicyId policyId, boolean isEndorsementDocument,GroupLifeEndorsement groupLifeEndorsement) {
         GLPolicyMailDetailDto glQuotationDetailDto = new GLPolicyMailDetailDto();
         GroupLifePolicy groupLifePolicy = glPolicyRepository.findOne(policyId);
         AgentDetailDto agentDetailDto = getAgentDetail(policyId);
@@ -399,6 +404,9 @@ public class GLPolicyService {
         glQuotationDetailDto.setInceptionDate(groupLifePolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         glQuotationDetailDto.setIssuanceDate(groupLifePolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         glQuotationDetailDto.setExpiryDate(groupLifePolicy.getExpiredOn().toString(AppConstants.DD_MM_YYY_FORMAT));
+        if (isEndorsementDocument){
+            return getEndorsementDetails(groupLifeEndorsement,glQuotationDetailDto,groupLifePolicy.getIndustry());
+        }
         PremiumDetail premiumDetail = groupLifePolicy.getPremiumDetail();
         glQuotationDetailDto.setPolicyTerm(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
         glQuotationDetailDto.setProfitAndSolvencyLoading((premiumDetail.getProfitAndSolvency() != null) ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
@@ -484,6 +492,96 @@ public class GLPolicyService {
         glQuotationDetailDto.setAnnexure(annexures);
         return glQuotationDetailDto;
     }
+
+    public GLPolicyMailDetailDto getEndorsementDetails(GroupLifeEndorsement groupLifeEndorsement,GLPolicyMailDetailDto glQuotationDetailDto,Industry industry){
+        glQuotationDetailDto.setEndorsementEffectiveDate(groupLifeEndorsement.getEffectiveDate().toString(AppConstants.DD_MM_YYY_FORMAT));
+        glQuotationDetailDto.setEndorsementNumber(groupLifeEndorsement.getEndorsementUniqueNumber().getEndorsementUniqueNumber());
+        PremiumDetail premiumDetail = groupLifeEndorsement.getPremiumDetail();
+        glQuotationDetailDto.setPolicyTerm(premiumDetail.getPolicyTermValue() != null ? premiumDetail.getPolicyTermValue().toString() + "  days" : "");
+        glQuotationDetailDto.setProfitAndSolvencyLoading((premiumDetail.getProfitAndSolvency() != null) ? premiumDetail.getProfitAndSolvency().toString() + " %" : "");
+        glQuotationDetailDto.setHivDiscount(premiumDetail.getHivDiscount() != null ? premiumDetail.getHivDiscount().toString() + " %" : "");
+        glQuotationDetailDto.setValuedClientDiscount(premiumDetail.getValuedClientDiscount() != null ? premiumDetail.getValuedClientDiscount().toString() + " %" : "");
+        glQuotationDetailDto.setLongTermDiscount(premiumDetail.getLongTermDiscount() != null ? premiumDetail.getLongTermDiscount().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null ) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null ) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
+        glQuotationDetailDto.setWaiverOfExcessLoadings("");
+        glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
+        BigDecimal totalPremiumAmount = groupLifeEndorsement.getNetAnnualPremiumPaymentAmount(premiumDetail,industry);
+        totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        BigDecimal netPremiumOfInsured = groupLifeEndorsement.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail);
+        netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);
+        glQuotationDetailDto.setNetPremium(netPremiumOfInsured.toPlainString());
+        glQuotationDetailDto.setTotalPremium(totalPremiumAmount.toPlainString());
+        glQuotationDetailDto.setTotalLivesCovered(groupLifeEndorsement.getTotalNoOfLifeCovered().toString());
+        BigDecimal totalSumAssured = groupLifeEndorsement.getTotalSumAssured();
+        totalSumAssured = totalSumAssured.setScale(2, BigDecimal.ROUND_CEILING);
+        glQuotationDetailDto.setTotalSumAssured(totalSumAssured.toPlainString());
+        List<GLPolicyMailDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
+        List<GLPolicyMailDetailDto.Annexure> annexures = Lists.newArrayList();
+        if (isNotEmpty(groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds())) {
+            for (Insured insured : groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds()) {
+                PlanPremiumDetail insuredPremiumDetail = insured.getPlanPremiumDetail();
+                List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredPremiumDetail.getPlanId()));
+                BigDecimal insuredPlanSA = insuredPremiumDetail.getSumAssured();
+                insuredPlanSA = insuredPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
+                GLPolicyMailDetailDto.CoverDetail insuredPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", isNotEmpty(planCoverageDetailDtoList)?planCoverageDetailDtoList.get(0).getPlanName():"", insuredPlanSA);
+                coverDetails.add(insuredPlanCoverDetail);
+                if (isNotEmpty(insured.getCoveragePremiumDetails())) {
+                    for (CoveragePremiumDetail coveragePremiumDetail : insured.getCoveragePremiumDetails()) {
+                        Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(coveragePremiumDetail.getCoverageId().getCoverageId());
+                        BigDecimal insuredCoverageSA = coveragePremiumDetail.getSumAssured();
+                        insuredCoverageSA = insuredCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
+                        GLPolicyMailDetailDto.CoverDetail insuredCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self",
+                                (String) coverageMap.get("coverageName"), insuredCoverageSA);
+                        coverDetails.add(insuredCoverageCoverDetail);
+                    }
+                }
+                BigDecimal insuredAnnualIncome = insured.getAnnualIncome();
+                String insuredAnnualIncomeInString = "";
+                if (insuredAnnualIncome != null) {
+                    insuredAnnualIncome = insuredAnnualIncome.setScale(2, BigDecimal.ROUND_CEILING);
+                    insuredAnnualIncomeInString = insuredAnnualIncome.toPlainString();
+                }
+                BigDecimal insuredBasicPremium = insuredPremiumDetail.getPremiumAmount();
+                insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
+                GLPolicyMailDetailDto.Annexure insuredAnnexure = glQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
+                        , insured.getNrcNumber(), insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
+                        isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", insured.getDateOfBirth() == null ? "" : AppUtils.getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), insuredAnnualIncomeInString, insuredBasicPremium.toPlainString());
+                annexures.add(insuredAnnexure);
+                if (isNotEmpty(insured.getInsuredDependents())) {
+                    for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
+                        PlanPremiumDetail insuredDependentPremiumDetail = insuredDependent.getPlanPremiumDetail();
+                        List<PlanCoverageDetailDto> dependentPlanCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(Arrays.asList(insuredDependentPremiumDetail.getPlanId()));
+                        BigDecimal insuredDependentPlanSA = insuredDependentPremiumDetail.getSumAssured();
+                        insuredDependentPlanSA = insuredDependentPlanSA.setScale(2, BigDecimal.ROUND_CEILING);
+                        GLPolicyMailDetailDto.CoverDetail insuredDependentPlanCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, dependentPlanCoverageDetailDtoList.get(0).getPlanName(), insuredDependentPlanSA);
+                        coverDetails.add(insuredDependentPlanCoverDetail);
+                        if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
+                            for (CoveragePremiumDetail dependentCoveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
+                                BigDecimal insuredDependentCoverageSA = dependentCoveragePremiumDetail.getSumAssured();
+                                insuredDependentCoverageSA = insuredDependentCoverageSA.setScale(2, BigDecimal.ROUND_CEILING);
+                                Map<String, Object> coverageMap = glQuotationFinder.getCoverageDetail(dependentCoveragePremiumDetail.getCoverageId().getCoverageId());
+                                GLPolicyMailDetailDto.CoverDetail insuredDependentCoverageCoverDetail = glQuotationDetailDto.new CoverDetail(isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().name(), (String) coverageMap.get("coverageName"), insuredDependentCoverageSA);
+                                coverDetails.add(insuredDependentCoverageCoverDetail);
+                            }
+                        }
+                        BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
+                        insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
+                        GLPolicyMailDetailDto.Annexure annexure = glQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
+                                , insuredDependent.getNrcNumber(), insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "",
+                                insuredDependent.getDateOfBirth() == null ? "" : AppUtils.toString(insuredDependent.getDateOfBirth()),
+                                isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), "", insuredDependentBasicPremium.toPlainString());
+                        annexures.add(annexure);
+                    }
+                }
+            }
+        }
+        List<GLPolicyMailDetailDto.CoverDetail> unifiedCoverDetails = unifyCoverDetails(coverDetails, glQuotationDetailDto);
+        glQuotationDetailDto.setCoverDetails(unifiedCoverDetails);
+        glQuotationDetailDto.setAnnexure(annexures);
+        return glQuotationDetailDto;
+    }
+
 
     private List<GLPolicyMailDetailDto.CoverDetail> unifyCoverDetails(List<GLPolicyMailDetailDto.CoverDetail> coverDetails, GLPolicyMailDetailDto glQuotationDetailDto) {
         Map<GLPolicyMailDetailDto.CoverDetail, List<GLPolicyMailDetailDto.CoverDetail>> coverDetailsMap = Maps.newLinkedHashMap();

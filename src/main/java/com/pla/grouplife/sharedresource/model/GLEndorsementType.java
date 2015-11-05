@@ -5,19 +5,14 @@ import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
 import com.pla.grouplife.endorsement.domain.model.GLMemberEndorsement;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDetailDto;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
-import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
-import org.joda.time.DateTime;
-import org.nthdimenzion.common.AppConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
-
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 8/5/2015.
@@ -31,7 +26,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     }, ASSURED_MEMBER_ADDITION("Member Addition") {
@@ -44,17 +39,9 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
-            GLEndorsement glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
-            String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
-            String endorsementEffectiveDate =  new DateTime((Date)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             GLMemberEndorsement glMemberEndorsement  = glEndorsement.getMemberEndorsement();
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
-            if (isNotEmpty(glEndorsementDetailDto)){
-                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
-                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
-                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
-            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte[] pdfData = null;
@@ -63,8 +50,7 @@ public enum GLEndorsementType {
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");
             }
-
-            String fileName = "Addition Member Endorsement_"+endorsementUniqueNumber+".pdf";
+            String fileName = "Addition Member Endorsement_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(pdfData);
@@ -80,17 +66,9 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
-            GLEndorsement  glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
-            String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
-            String endorsementEffectiveDate =  new DateTime((Date)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             GLMemberEndorsement glMemberEndorsement  =glEndorsement.getMemberDeletionEndorsements();
             Set<Insured>insureds=glMemberEndorsement.getInsureds();
-            if (isNotEmpty(glEndorsementDetailDto)){
-                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
-                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
-                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
-            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
@@ -100,7 +78,7 @@ public enum GLEndorsementType {
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssuredMembersDetails.jrxml");
             }
-            String fileName = "Deletion Member Assured_"+endorsementUniqueNumber+".pdf";
+            String fileName = "Deletion Member Assured_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(pdfData);
@@ -115,17 +93,9 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
-            GLEndorsement  glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
-            String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
-            String endorsementEffectiveDate =  new DateTime((Date)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             GLMemberEndorsement glMemberEndorsement  = glEndorsement.getMemberEndorsement();
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
-            if (isNotEmpty(glEndorsementDetailDto)){
-                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
-                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
-                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
-            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
@@ -135,7 +105,7 @@ public enum GLEndorsementType {
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/promotionOfMembersAssured.jrxml");
             }
-            String fileName = "Promotion of Members Assured_"+endorsementUniqueNumber+".pdf";
+            String fileName = "Promotion of Members Assured_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(pdfData);
@@ -155,17 +125,9 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
-            GLEndorsement  glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
-            String endorsementUniqueNumber = endorsementMap.get("endorsementUniqueNumber") != null ? ((EndorsementUniqueNumber) endorsementMap.get("endorsementUniqueNumber")).getEndorsementUniqueNumber() : "";
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             GLMemberEndorsement glMemberEndorsement= glEndorsement.getNewCategoryRelationEndorsement();
             Set<Insured> insureds=glMemberEndorsement.getInsureds();
-            String endorsementEffectiveDate =  new DateTime((Date)endorsementMap.get("effectiveDate")).toString(AppConstants.DD_MM_YYY_FORMAT);
-            if (isNotEmpty(glEndorsementDetailDto)){
-                GLPolicyMailDetailDto glPolicyMailDetailDto = glEndorsementDetailDto.get(0);
-                glPolicyMailDetailDto.setEndorsementNumber(endorsementUniqueNumber);
-                glPolicyMailDetailDto.setEndorsementEffectiveDate(endorsementEffectiveDate);
-            }
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             byte []pdfData=null;
@@ -175,7 +137,7 @@ public enum GLEndorsementType {
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationshipMemberDetails.jrxml");
             }
-            String fileName = "Addition New Category Reletionship_"+endorsementUniqueNumber+".pdf";
+            String fileName = "Addition New Category Reletionship_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(pdfData);
@@ -190,7 +152,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     }, CHANGE_ASSURED_NAME("Correction Of Name - Life Assured") {
@@ -200,7 +162,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     },
@@ -211,7 +173,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     }, CHANGE_DOB("Change Life Assured Date of Birth") {
@@ -221,7 +183,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     }, CHANGE_NRC("Correction Life Assured - NRC") {
@@ -231,7 +193,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     },
@@ -242,7 +204,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     }, CHANGE_GENDER("Correction Life Assured - Gender") {
@@ -252,7 +214,7 @@ public enum GLEndorsementType {
         }
 
         @Override
-        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException {
+        public EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException {
             return null;
         }
     };
@@ -281,5 +243,5 @@ public enum GLEndorsementType {
     }
 
     public abstract List<GLEndorsementExcelHeader> getAllowedExcelHeaders();
-    public abstract EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, Map endorsementMap) throws IOException, JRException;
+    public abstract EmailAttachment getEndorsementDocumentInPDF(List<GLPolicyMailDetailDto> glEndorsementDetailDto, GLEndorsement glEndorsement) throws IOException, JRException;
 }

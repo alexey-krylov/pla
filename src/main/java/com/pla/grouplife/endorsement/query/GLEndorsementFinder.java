@@ -54,6 +54,13 @@ public class GLEndorsementFinder {
         return proposal;
     }
 
+    public List<GroupLifeEndorsement> findEndorsement(String endorsementId) {
+        Criteria premiumCriteria = Criteria.where("_id").is(endorsementId);
+        Query query = new Query(premiumCriteria);
+        List<GroupLifeEndorsement> premiums = mongoTemplate.find(query, GroupLifeEndorsement.class);
+        return premiums;
+    }
+
     public List<Map> findEndorsementByPolicyId(String policyNumber) {
         Criteria endorsementCriteria = Criteria.where("policy.policyNumber.policyNumber").is(policyNumber);
         endorsementCriteria.and("status").is(EndorsementStatus.APPROVED);
