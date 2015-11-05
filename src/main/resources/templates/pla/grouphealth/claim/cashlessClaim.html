@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <style>
+        .ng-cloak{
+        display:none;
+
+        }
+    </style>
+
+</head>
+<body class="fuelux ng-cloak" style="overflow-x: hidden;">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var isNumeric = function (evt) {
+
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode == 13) {
+            evt.preventDefault();
+        }
+
+
+        if (charCode > 31 && charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57 ))
+            return false;
+        return true;
+    }
+    /*]]>*/
+
+
+
+
+</script>
+<script>
+    var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
+
+    requirejs(['main','angular-file-upload'],function(){
+        require(['/pla/js/grouphealth/claim/cashlessClaim.js?t=7'], function () {
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['cashlessClaim']);
+            });
+        });
+
+    });
+
+
+
+
+
+
+
+</script>
+<script type="text/ng-template" id="cashlessClaim.html">
+    <nth-alert></nth-alert>
+    <form name="quotationForm" novalidate="true" class="css-form ng-cloak" method="post" enctype="multipart/form-data">
+        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
+            <ul class="steps" style="margin-left: 0">
+                <li data-step="1"><span class="badge badge-info">1</span>Claimant Details<span class="chevron"></span>
+                </li>
+                <li data-step="2"><span class="badge">2</span>Assured Details<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>Treatement Details<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Illiness Details<span class="chevron"></span></li>
+                <li data-step="5"><span class="badge">5</span>Claim Details<span class="chevron"></span></li>
+                <li data-step="6"><span class="badge">6</span>Mandatory Details<span class="chevron"></span></li>
+            </ul>
+            <div class="actions">
+                <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
+                        style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
+                        ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
+                <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
+                        class="glyphicon glyphicon-arrow-left"></span>Prev
+                </button>
+                <button type="button" class="btn btn-default btn-next">Next<span
+                        class="glyphicon glyphicon-arrow-right"></span></button>
+                <!-- -->
+            </div>
+            <div class="step-content ng-cloak">
+                <div class="step-pane active" data-step="1">
+                    <ng-form name="step1">
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatusDocuments.documents">
+                                <accordion-heading>
+                                    Claim Details <i class="pull-right glyphicon"
+                                                     ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
+                                                            'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Batch Number</label>
+                                                <select class="form-control input-sm" ng-model="claimDetails.code"
+                                                        name="claimType"
+                                                        ng-options="claimTypeDetail.claimType as claimTypeDetail.claimType for claimTypeDetail in claimTypeDetailsResponse">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Pre Authorization Date</label>
+
+                                                <div class='input-group date'>
+                                                    <input type="text" class="form-control input-sm"
+                                                           datepicker-popup=""
+                                                           view-enabled=""
+                                                           is-open="claimIntimationDate"
+                                                           max-date="todayDate"
+                                                           ng-model="claimDetails.dateOfBirth" name="claimDate"/>
+                                             <span class="input-group-btn">
+                                           <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                                   ng-click="launchclaimDate($event)">
+                                               <i class="glyphicon glyphicon-calendar"></i></button>
+                                         </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Policy Number</label>
+                                                <input id="policy_number"
+                                                       name="policyNumber"
+                                                       ng-model="claimDetails.policyNumber"
+                                                       type="text"
+                                                       class="form-control input-md"
+                                                        />
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+
+                                        <div class="col-md-4">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Category</label>
+                                                <select class="form-control input-sm" ng-model="claimDetails.category"
+                                                        name="category"
+                                                        ng-options="category for category in claimDetailsResponse.category">
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group  ">
+
+                                                <label class="control-label">Relationship</label>
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.relationship" name="relationship"
+                                                        ng-options="relationships for relationships in claimDetailsResponse.relationship">
+
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group  ">
+
+                                                <label class="control-label">HCP Name</label>
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.relationship" name="relationship"
+                                                        ng-options="relationships for relationships in claimDetailsResponse.relationship">
+
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--<div class="col-md-4" style="margin-top:21px;">-->
+                                        <!--<button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="claimintimationModal" ng-click="showAsssuredSearchModal()">Assured Search</button>-->
+                                        <!--</div>-->
+
+
+                                    </div>
+
+                                    <!--<div id="claimintimationModal" class="modal fade" role="dialog">-->
+                                    <!--<div class="modal-dialog modal-lg">-->
+                                    <!--<div class="modal-content">-->
+                                    <!--<div class="modal-header">-->
+                                    <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                                    <!--<h4 class="modal-title">  Assured Search</h4>-->
+                                    <!--</div>-->
+                                    <!--<div class="modal-body">-->
+                                    <!--<div class="row">-->
+                                    <!--<table class="table table-striped table-bordered" id="assured-table" cellspacing="0" width="100%">-->
+                                    <!--<thead>-->
+                                    <!--<tr>-->
+                                    <!--<th style="width: 1%"></th>-->
+                                    <!--<th th:text="#{assuredFirstName}">Assured FirstName</th>-->
+                                    <!--<th th:text="#{assuredSurName}">Assured SurName</th>-->
+                                    <!--<th th:text="#{assuredDob}">Assured DOB</th>-->
+                                    <!--<th th:text="#{assuredClientId}">Assured ClientID</th>-->
+                                    <!--<th th:text="#{assuredNrc}">Assured NRC</th>-->
+                                    <!--<th th:text="#{assuredManNumber}">Assured MAN Number</th>-->
+
+
+                                    <!--</tr>-->
+                                    <!--</thead>-->
+                                    <!--<tbody>-->
+                                    <!--<form id="viewAssuredForm">-->
+                                    <!--<tr>-->
+
+
+                                    <!--</tr>-->
+                                    <!--</form>-->
+                                    <!--</tbody>-->
+                                    <!--</table>-->
+
+                                    <!--</div>-->
+
+                                    <!--</div> -->
+                                    <!-- -->
+                                    <!--<div class="modal-footer">-->
+                                    <!--<div class="row">-->
+                                    <!--<div class="col">-->
+                                    <!--</div>-->
+                                    <!--<div class="col">-->
+                                    <!--</div></div></div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatusDocuments.claimantDetails">
+                                <accordion-heading>
+                                    Claimant Details <i class="pull-right glyphicon"
+                                                        ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimantDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.claimantDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
+                                     disable-all-fields="isViewMode">
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Proposer Name</label>
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.proposerName" name="proposerName"
+                                                        ng-options="claimDetails.proposer.proposerName
+                                                         as ClaimantDetails.proposer.proposerName  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Address Line 1</label>
+
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.addressLine1" name="addressLine1"
+                                                        ng-options="claimDetails.proposer.contactDetail.addressLine1
+                                                         as ClaimantDetails.proposer.contactDetail.addressLine1  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Address Line 2</label>
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.addressLine2" name="addressLine2"
+                                                        ng-options="claimDetails.proposer.contactDetail.addressLine2
+                                                         as ClaimantDetails.proposer.contactDetail.addressLine2  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Province</label>
+                                                <select class="form-control input-sm" ng-model="claimDetails.province"
+                                                        name="province"
+                                                        ng-options="claimDetails.proposer.contactDetail.province
+                                                         as ClaimantDetails.proposer.contactDetail.province  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+                                                <!--<select class="form-control input-sm"  name="province"-->
+                                                <!--ng-model="ClaimantDetails.province"-->
+                                                <!--ng-options="province.provinceId  as province.provinceName for province in provinces" ng-change="getCurrentVal(proposalDetails.proposer.province)">-->
+                                                <!--</select>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Town</label>
+                                                <!--<select class="form-control input-sm"  name="town"-->
+                                                <!--ng-model="ClaimantDetails.town"-->
+                                                <!--ng-options="city.geoId as city.geoName for city in cities">-->
+                                                <!--</select>-->
+
+                                                <select class="form-control input-sm" ng-model="claimDetails.town"
+                                                        name="town"
+                                                        ng-options="claimDetails.proposer.contactDetail.town
+                                                         as ClaimantDetails.proposer.contactDetail.town  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Postal Code</label>
+                                                <select class="form-control input-sm" ng-model="claimDetails.postalCode"
+                                                        name="postalCode"
+                                                        ng-options="claimDetails.proposer.contactDetail.postalCode
+                                                         as ClaimantDetails.proposer.contactDetail.postalCode  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Email</label>
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.emailAddress" name="emailAddress"
+                                                        ng-options="claimDetails.proposer.contactDetail.emailAddress
+                                                         as ClaimantDetails.proposer.contactDetail.emailAddress  for ClaimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+
+                                                <!--<div ng-show="step2.email.$invalid &amp;&amp; step2.email.$dirty">-->
+                                                <!--<small class="error" ng-show="step2.email.$error.email">-->
+                                                <!--Please enter a valid emailId.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Work Phone</label>
+                                                <select class="form-control input-sm"
+                                                        ng-model="claimDetails.workPhoneNumber" name="workPhoneNumber"
+
+                                                        ng-options="claimDetails.proposer.contactDetail.contactPersonDetail.workPhoneNumber
+
+                                                        as claimantDetails.proposer.contactDetail.contactPersonDetail.workPhoneNumber
+
+                                                        for claimantDetails in claimIntimationDetailResponse">
+
+                                                </select>
+                                            </div>
+                                            <!--<div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">-->
+                                            <!--<small class="error"-->
+                                            <!--ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">-->
+                                            <!--Please enter a valid work phone.-->
+                                            <!--</small>-->
+                                            <!--<small class="error" ng-show="step2.workPhone.$error.pattern">-->
+                                            <!--Only numbers are allowed.-->
+                                            <!--</small>-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                            </accordion-group>
+                        </accordion>
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatusDocuments.policydetails">
+                                <accordion-heading>
+                                    Policy Details <i class="pull-right glyphicon"
+                                                      ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.policyDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.policyDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
+                                     disable-all-fields="isViewMode">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group" style="margin-left:8px">
+                                                <label class="control-label">Plan</label>
+                                                <!--<input-->
+                                                <!--type="text"-->
+                                                <!--name="plan"-->
+                                                <!--ng-model="planDetail.plan"-->
+                                                <!--class="form-control input-md" />-->
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step1.plan.$dirty &amp;&amp; step1.plan.$invalid">-->
+                                                <!--<small class="error" ng-show="step1.plan.$error.required">-->
+                                                <!--Please select the plan.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+
+
+                                                <input type="text" class="form-control input-sm" maxlength="13"
+                                                       minlength="13"
+                                                       name="plan" onkeypress="return isEnterKey(event)"
+                                                       ng-pattern="numberPattern"
+                                                       ng-model="planDetail.plan"/>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Sum Assured</label>
+                                                <input
+                                                        name="sumAssured"
+                                                        type="text"
+                                                        class="form-control input-md"
+                                                        ng-model="planDetail.sumAssured"
+                                                        >
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step1.sumAssured.$dirty &amp;&amp; step1.sumAssured.$invalid">-->
+                                                <!--<small class="error" ng-show="step1.sumAssured.$error.required">-->
+                                                <!--Please select the Sum Assured.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Optional cover active</th>
+                                            <th>Optional cover sum assured</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="pla in items">
+                                            <td>{{pla.assuredNumber}}</td>
+                                            <td>{{pla.assuredFirst}}</td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="saveClaimDetails()"
+                                    >Save
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="step-pane" data-step="2">
+                    <ng-form name="step2">
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.claimantDetails" ng-form="assuredDetailForm">
+                                <accordion-heading>
+                                    Claimant Details <i class="pull-right glyphicon"
+                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"
+                                     disable-all-fields="isViewMode">
+
+
+                                    <!--<accordion-group is-open="accordionStatus.proposerDetails.employment" ng-form="proposerEmploymentForm">-->
+                                    <!--<accordion-heading>-->
+                                    <!--Employment Details <i class="pull-right glyphicon"-->
+                                    <!--ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>-->
+                                    <!--</accordion-heading>-->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Title</label>
+                                                <select class="form-control input-sm" name="title"
+                                                        ng-model="assured.title"
+                                                        ng-options="title as title for title in titles"
+                                                        ng-change="getProposerGender(assured.title)">
+                                                </select>
+                                                <!--<div class="error" ng-messages="assuredDetailForm.title.$error" ng-if="assuredDetailForm.title.$dirty">-->
+                                                <!--<small ng-message="required">Please enter Title</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">First Name</label>
+                                                <input type="text" class="form-control input-sm" name="firstName"
+                                                       ng-pattern="/[a-zA-Z]/"
+                                                       ng-maxlength="20" ng-model="assured.firstName"/>
+
+                                                <!--<div class="error" ng-messages="assuredDetailForm.firstName.$error" ng-if="assuredDetailForm.firstName.$dirty">-->
+                                                <!--<small class="error" ng-message="required">-->
+                                                <!--Please enter FirstName-->
+                                                <!--</small>-->
+                                                <!--<small ng-message="maxlength">Only 20 characters are allowed.</small>-->
+                                                <!--<small ng-message="pattern">Only alphabets are allowed.</small>-->
+                                                <!--</div>-->
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Surname</label>
+                                                <input type="text" class="form-control input-sm"
+                                                       name="surname" ng-pattern="/[a-zA-Z]/"
+                                                       ng-maxlength="20" ng-model="assured.surname"/>
+
+                                                <!--<div class="error" ng-messages="assuredDetailForm.surname.$error" ng-if="assuredDetailForm.surname.$dirty">-->
+                                                <!--<small class="error" ng-message="required">Please enter Surname.</small>-->
+                                                <!--<small ng-message="maxlength">Only 20 characters are allowed.</small>-->
+                                                <!--<small ng-message="pattern">Only alphabets are allowed.</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Date OF Birth</label>
+
+                                                <div class='input-group date'>
+                                                    <input type="text" class="form-control input-sm"
+                                                           datepicker-popup=""
+                                                           view-enabled=""
+                                                           is-open="openDob"
+                                                           max-date="todayDate"
+                                                           ng-model="assured.Dob" name="Dob"/>
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                            ng-click="showDob($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                                </div>
+                                                <!--<div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">-->
+                                                <!--<small ng-message="required">Please enter theAssured DOB</small>-->
+                                                <!--<small ng-message="date">Invalid Date.</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Age Next Birthday</label>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-readonly="true" name="ageNextBirthday"
+                                                       ng-model="assured.nextDob"/>
+
+                                                <p style="color:red" ng-show="ageCalculateStatus">
+                                                    Age Next Birthday should be in between 18 years to 60 years.
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">NRC</label>
+                                                <input type="text" class="form-control input-sm" name="nrc"
+                                                       ng-model="assured.nrc" ng-maxlength="11"
+                                                       ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"
+                                                        />
+
+                                                <!--<div class="error" ng-messages="assuredDetailForm.nrc.$error" ng-if="assuredDetailForm.nrc.$dirty">-->
+                                                <!--<small class="error" ng-message="required">Please enter NRC.</small>-->
+                                                <!--<small ng-message="maxlength">Only 11 characters are allowed.</small>-->
+                                                <!--<small ng-message="pattern"> Follw Pattern 999999/99/1</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Sex</label>
+                                                <select class="form-control input-sm" name="gender"
+                                                        ng-model="assured.gender">
+                                                    <option value="">Select Gender</option>
+                                                    <option value="MALE">Male</option>
+                                                    <option value="FEMALE">Female</option>
+                                                </select>
+
+                                                <!--<div class="error" ng-messages="assuredDetailForm.gender.$error" ng-if="assuredDetailForm.gender.$dirty">-->
+                                                <!--<small class="error" ng-message="required">Please enter Sex</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Sum Assured</label>
+                                                <input id="sum_assured1"
+                                                       class="form-control input-md"
+                                                       name="sumAssured1"
+                                                       ng-disabled="true"
+                                                       type="text"
+                                                       ng-model="assured.sum_assured1">
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.sumAssured.$dirty &amp;&amp; step2.sumAssured.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.sumAssured.$error.required">-->
+                                                <!--Please select the Sum Assured.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Reserve Amount</label>
+                                                <input id="reserve_amounts"
+                                                       name="reserveAmount"
+                                                       ng-model="assured.reserveAmount"
+
+                                                       ng-disabled="true"
+                                                       type="text"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.sumAssured.$dirty &amp;&amp; step2.sumAssured.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.sumAssured.$error.required">-->
+                                                <!--Please select the Sum Assured.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Category</label>
+                                                <input id="category"
+
+                                                       ng-disabled="true"
+                                                       type="text"
+                                                       class="form-control input-md"
+                                                       ng-model="assured.category"
+                                                       name="category">
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.category.$dirty &amp;&amp; step2.category.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.category.$error.required">-->
+                                                <!--Please select the Category.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Man Number</label>
+                                                <input id="man_number"
+                                                       name="manNumber"
+                                                       ng-model="assured.manNumber"
+
+                                                       type="text"
+                                                       ng-disabled="true"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.manNumber.$dirty &amp;&amp; step2.manNumber.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.manNumber.$error.required">-->
+                                                <!--Please select the Man Number.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Last Salary</label>
+                                                <input id="last_salary"
+                                                       type="number"
+                                                       class="form-control input-md"
+                                                       ng-model="assured.lastSalary"
+
+                                                       pattern="[0-9]{5}"
+                                                       maxlength="5"
+                                                       name="lastSalary">
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.lastSalary.$dirty &amp;&amp; step2.lastSalary.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.lastSalary.$error.required">-->
+                                                <!--Please Enter the Last Salary.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Occupation</label>
+                                                <select class="form-control input-sm" name="occupation"
+                                                        ng-model="assured.occupation"
+                                                        ng-options="occupation.description as occupation.description for occupation in occupations"></select>
+
+                                                <!--<div class="error" ng-messages="assuredDetailForm.occupation.$error" ng-if="assuredDetailForm.occupation.$dirty">-->
+                                                <!--<small class="error" ng-message="required">Please enter Occupation</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.mainAssuredDetails"
+                                             ng-form="mainAssuredDetailForm">
+                                <accordion-heading>
+                                    Main Assured Detail <i class="pull-right glyphicon"
+                                                           ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Main Assured Full Name</label>
+
+                                                <input id="assuredFullName"
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Reletionship With Main Assured</label>
+                                                <input id="reletionship"
+                                                       class="form-control input-md"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.reletionship"
+                                                       name="reletionship">
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.reletionship.$dirty &amp;&amp; step2.reletionship.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.reletionship.$error.required">-->
+                                                <!--Please Select the Reletionship With Main Assured.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Main Assured NRC</label>
+
+                                                <input id="assuredNrc"
+                                                       name="assuredNrc"
+                                                       ng-model="assured.assuredNrc"
+
+                                                       ng-disabled="true"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredNrc.$dirty &amp;&amp; step2.assuredNrc.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredNrc.$error.required">-->
+                                                <!--Please Select the Main Assured NRC.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Main Assured MAN Number</label>
+
+                                                <input id="assuredMan"
+                                                       class="form-control input-md"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredMan"
+                                                       name="assuredMan">
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredMan.$dirty &amp;&amp; step2.assuredMan.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredMan.$error.required">-->
+                                                <!--Please Select the Main Assured MAN Number.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Last Salary</label>
+
+                                                <input id="salary"
+                                                       name="salary"
+                                                       ng-model="assured.salary"
+
+                                                       type="text"
+                                                       pattern="[0-9]{5}"
+                                                       maxlength="5"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.salary.$dirty &amp;&amp; step2.salary.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.salary.$error.required">-->
+                                                <!--Please Enter Last Salary(5 Digit).-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+
+                    </ng-form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step2)"
+                                    ng-if="!isViewMode">Save
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--=================starting of newtab(Trtmnt dtls)=============-->
+                <div class="step-pane" data-step="3">
+                    <ng-form name="step3">
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.claimantDetails" ng-form="assuredDetailForm">
+                                <accordion-heading> HCP Details
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label"> Hospitalization Event</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Hospital/Clinic Name</label>
+                                                <input
+                                                       class="form-control input-md"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.reletionship"
+                                                       name="reletionship">
+                                                </input>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.reletionship.$dirty &amp;&amp; step2.reletionship.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.reletionship.$error.required">-->
+                                                <!--Please Select the Reletionship With Main Assured.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Hospital/Clinic Address</label>
+
+                                                <input
+                                                       name="assuredNrc"
+                                                       ng-model="assured.assuredNrc"
+
+                                                       ng-disabled="true"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredNrc.$dirty &amp;&amp; step2.assuredNrc.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredNrc.$error.required">-->
+                                                <!--Please Select the Main Assured NRC.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label"> Name of the Treating Doctor</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label"> Doctor Contact Number</label>
+
+                                                <input     name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <!--=====================started a section(trtmntDtls)==================== -->
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.mainAssuredDetails"
+                                             ng-form="mainAssuredDetailForm">
+                                <accordion-heading>
+                                    Provisional Dignosis and Treatement <i class="pull-right glyphicon"
+                                                                           ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label"> Please indicate whether it is a</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label"> G</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label"> P</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label"> L</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">A</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Probable Date of Dalivery</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Mode of Delivery</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Name of Illness</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Relevant Clinincal Finding</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Duration of the Present Ailment in
+                                                    Days</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Date of First Consultance</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Past History Present ailment if any</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Provisional Diagonisis</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Name of Illness</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Proposed Line of Treatement</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Indicate Test</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Name of Surgery</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Probable Date of Admission</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Length of Stay</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Type of Accomodation</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!--=====================ending a section(trtmntDtls)==================== -->
+
+                                </div>
+
+                            </accordion-group>
+                        </accordion>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                        ng-click="saveClaimDetails()"
+                                        >Save
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                        <!--=====================endeing of new tab(trtmntDtls)==================== -->
+                    </ng-form>
+                </div>
+                <!--=====================endeing of new tab(trtmntDtls)==================== -->
+
+
+                <div class="step-pane" data-step="4">
+                    <ng-form name="step4">
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.illinessDetails" ng-form="illinessDetailsForm">
+                                <accordion-heading>
+                                    Have you past ever suffered from any of the following chronic illiness <i
+                                        class="pull-right glyphicon"
+                                        ng-class="{'glyphicon-chevron-down': accordionStatus.illinessDetails, 'glyphicon-chevron-right': !accordionStatus.illinessDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:1240px;"
+                                     disable-all-fields="isViewMode">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label">HTN</label>
+
+                                            <div class="radio" style="margin:0px">
+                                                <label style="margin-right:30px"><input type="radio"
+                                                                                        name="htn"
+                                                                                        value="true"
+                                                                                        ng-model="illinessDetails.htn"/>Yes</label>
+                                                <label><input type="radio" name="htn" value="false"
+                                                              ng-model="illinessDetails.htn"/>No</label>
+                                            </div>
+                                        </div>
+                                </div>
+
+
+                                    <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+                                        <div class="form-group col-md-4">
+                                            <textarea name="textarea"
+                                               style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label">IHD/CAD</label>
+
+                                            <div class="radio" style="margin:0px">
+                                                <label style="margin-right:30px"><input type="radio"
+                                                                                        name="ihd"
+                                                                                        value="true"
+                                                                                        ng-model="illinessDetails.ihd"/>Yes</label>
+                                                <label><input type="radio" name="ihd" value="false"
+                                                              ng-model="illinessDetails.ihd"/>No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label">  Dibetes</label>
+
+                                            <div class="radio" style="margin:0px">
+                                                <label style="margin-right:30px"><input type="radio"
+                                                                                        name="dibetes"
+                                                                                        value="true"
+                                                                                        ng-model="illinessDetails.dibetes"/>Yes</label>
+                                                <label><input type="radio" name="ihd" value="false"
+                                                              ng-model="illinessDetails.dibetes"/>No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <label class="control-label" style="left:30px">Please Provide full
+                                            Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="control-label">Asthma/COPO/TB</label>
+
+                                            <div class="radio" style="margin:0px">
+                                                <label style="margin-right:30px"><input type="radio"
+                                                                                        name="asthma"
+                                                                                        value="true"
+                                                                                        ng-model="illinessDetails.asthma"/>Yes</label>
+                                                <label><input type="radio" name="asthma" value="false"
+                                                              ng-model="illinessDetails.asthma"/>No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+
+
+
+
+                                                <div class="row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="control-label">STD/HIV/AIDS</label>
+
+                                                        <div class="radio" style="margin:0px">
+                                                            <label style="margin-right:30px"><input type="radio"
+                                                                                                    name="aids"
+                                                                                                    value="true"
+                                                                                                    ng-model="illinessDetails.aids"/>Yes</label>
+                                                            <label><input type="radio" name="aids" value="false"
+                                                                          ng-model="illinessDetails.aids"/>No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                    <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-4">
+                                                            <label class="control-label">Arthiritis</label>
+
+                                                            <div class="radio" style="margin:0px">
+                                                                <label style="margin-right:30px"><input type="radio"
+                                                                                                        name="arthiritis"
+                                                                                                        value="true"
+                                                                                                        ng-model="illinessDetails.arthiritis"/>Yes</label>
+                                                                <label><input type="radio" name="arthiritis" value="false"
+                                                                              ng-model="illinessDetails.arthiritis"/>No</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                    <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+
+                                                <div class="row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="control-label">Cancer/Tumor/Cyst</label>
+
+                                                        <div class="radio" style="margin:0px">
+                                                            <label style="margin-right:30px"><input type="radio"
+                                                                                                    name="cancer"
+                                                                                                    value="true"
+                                                                                                    ng-model="illinessDetails.cancer"/>Yes</label>
+                                                            <label><input type="radio" name="cancer" value="false"
+                                                                          ng-model="illinessDetails.cancer"/>No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                     <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+
+                                                <div class="row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="control-label">Alcohol/Drug Abuse</label>
+
+                                                        <div class="radio" style="margin:0px">
+                                                            <label style="margin-right:30px"><input type="radio"
+                                                                                                    name="drug"
+                                                                                                    value="true"
+                                                                                                    ng-model="illinessDetails.drug"/>Yes</label>
+                                                            <label><input type="radio" name="drug" value="false"
+                                                                          ng-model="illinessDetails.drug"/>No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+                                                <div class="row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="control-label">pshyciatric Condition</label>
+
+                                                        <div class="radio" style="margin:0px">
+                                                            <label style="margin-right:30px"><input type="radio"
+                                                                                                    name="pshyciatricCondition"
+                                                                                                    value="true"
+                                                                                                    ng-model="illinessDetails.pshyciatricCondition"/>Yes</label>
+                                                            <label><input type="radio" name="pshyciatricCondition" value="false"
+                                                                          ng-model="illinessDetails.pshyciatricCondition"/>No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                    <div class="row">
+                                        <label class="control-label">Please Provide full Details</label>
+
+                                        <div class="form-group col-md-4">
+                                            <textarea name="textarea"
+                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </accordion-group>
+                        </accordion>
+                    </ng-form>
+                </div>
+                <!--ending point of one panel-->
+
+                <div class="step-pane" data-step="5">
+                    <ng-form name="step5">
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.serviceavailed" ng-form="serviceavailedForm">
+                                <accordion-heading>Service/Drug to be availed
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.serviceavailed, 'glyphicon-chevron-right': !accordionStatus.serviceavailed}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"
+                                     disable-all-fields="isViewMode">
+
+
+                                    <table class="table table-striped table-bordered" id="assured-table" cellspacing="0"
+                                           width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 1%"></th>
+                                            <th th:text="#{assuredFirstName}">Type
+                                            </th>
+                                            <th th:text="#{assuredSurName}">Service/Drug Name</th>
+                                            <th th:text="#{assuredDob}">Drug Type/Accomodation Type</th>
+                                            <th th:text="#{assuredManNumber}">Duration/length of Stay</th>
+                                            <th th:text="#{assuredSurName}">Dosage/Day</th>
+                                            <th th:text="#{assuredSurName}">Strength</th>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>sharman</td>
+                                            <td>123</td>
+                                            <td>123as</td>
+                                            <td>32</td>
+                                            <td>123as</td>
+                                            <td>32</td>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody>
+                                        <form id="viewAssuredForm1">
+                                            <tr>
+                                            </tr>
+                                        </form>
+                                        </tbody>
+                                    </table>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label"> Type</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Service Name</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Accomodation Type</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label"> Length of Stay</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Drug Name</label>
+                                                <input             name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Drug Type</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label"> Dosage</label>
+
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Strength</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Duration</label>
+                                                <input
+                                                       name="assuredFullName"
+
+                                                       ng-disabled="true"
+                                                       ng-model="assured.assuredFullName"
+                                                       class="form-control input-md"/>
+                                                <!--<div class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
+                                                <!--<small class="error"-->
+                                                <!--ng-show="step2.assuredFullName.$error.required">-->
+                                                <!--Please Select the Main Assured Full Name.-->
+                                                <!--</small>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                                    ng-click="saveClaimDetails()"
+                                                    >Save
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.mainAssuredDetails"
+                                             ng-form="mainAssuredDetailForm">
+                                <accordion-heading>Claim Amount Details
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+                                    <table class="table table-striped table-bordered" id="assure-table" cellspacing="0"
+                                           width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 1%"></th>
+                                            <th th:text="#{assuredFirstName}">Covarage
+                                            </th>
+                                            <th th:text="#{assuredSurName}">Benifit</th>
+                                            <th th:text="#{assuredDob}">Balance Amount</th>
+
+                                            <th th:text="#{assuredManNumber}">Probabel Claim Amount</th>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>sharman</td>
+                                            <td>123</td>
+                                            <td>123as</td>
+                                            <td>32</td>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody>
+                                        <form id="viewAssuredForm">
+                                            <tr>
+                                            </tr>
+                                        </form>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                    </ng-form>
+                </div>
+                <!--ending point of one panel-->
+
+
+                <div class="step-pane" data-step="6">
+                    <ng-form name="step6">
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.claimantDetails" ng-form="assuredDetailForm">
+                                <accordion-heading>
+                                    Mandatory Document <i class="pull-right glyphicon"
+                                                          ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                    </ng-form>
+                </div>
+                <!--ending point of one panel-->
+            </div>
+        </div>
+    </form>
+    <form method="POST" action="searchproposal" id="searchForm">
+        <input type="hidden" id="searchFormProposal" name="proposalId"/>
+    </form>
+    <style>
+        p.ex1 {
+        margin-left: 2cm;
+        }
+    </style>
+    <style>
+
+        .fuelux .checkbox-custom:before {
+        font-family: "Glyphicons Halflings" !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        font-variant: normal !important;
+        text-transform: none !important;
+        line-height: 1;
+        speak: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        border: 1px solid #adadad;
+        border-radius: 4px;
+        color: #fff;
+        content: " ";
+        font-size: 12px;
+        height: 18px;
+        left: 0;
+        padding: 1px 0 0 1px;
+        position: absolute;
+        top: 3px;
+        width: 18px;
+        }
+        .btn {
+        font-size: 12px;
+        }
+    </style>
+</script>
+<div class="ng-view container-fluid">
+
+</div>
+
+
+</body>
+</html>
