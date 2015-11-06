@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-06T14:47:18 -->
+<!-- 2015-11-06T15:08:15 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -476,7 +476,7 @@
 				</rectangle>
 				<staticText>
 					<reportElement x="31" y="372" width="136" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Number: ]]></text>
@@ -489,11 +489,11 @@
 					<text><![CDATA[Endorsement Date :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="29" y="421" width="361" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
+					<reportElement x="29" y="421" width="371" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of ]]></text>
+					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of K]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="31" y="471" width="916" height="20" uuid="8d109acc-4992-41bf-9cf2-7bbaf42a9070"/>
@@ -510,28 +510,28 @@
 					<text><![CDATA[Event of happening upon which the sum assured in respect of a particular life becomes payable : Death]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="33" y="511" width="134" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
+					<reportElement x="33" y="511" width="191" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Lives Covered:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="33" y="531" width="120" height="18" uuid="2d718f48-d9a8-4d0b-a160-7cf6ae9ba6b8"/>
+					<reportElement x="33" y="531" width="191" height="18" uuid="2d718f48-d9a8-4d0b-a160-7cf6ae9ba6b8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Sum Assured:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="153" y="512" width="375" height="20" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
+					<reportElement x="226" y="511" width="304" height="20" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
 					<textElement textAlignment="Left" verticalAlignment="Top">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="153" y="530" width="208" height="19" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
+					<reportElement x="224" y="531" width="167" height="19" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -539,7 +539,7 @@
 				</textField>
 				<textField>
 					<reportElement x="163" y="373" width="188" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
@@ -644,23 +644,15 @@
 					</jr:table>
 				</componentElement>
 				<frame>
-					<reportElement positionType="Float" x="27" y="884" width="430" height="26" uuid="11200470-2a89-45fe-8f68-e97787792c5d"/>
+					<reportElement positionType="Float" x="27" y="884" width="625" height="26" uuid="11200470-2a89-45fe-8f68-e97787792c5d"/>
 					<staticText>
-						<reportElement x="6" y="6" width="255" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
+						<reportElement x="6" y="6" width="347" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="261" y="6" width="36" height="20" uuid="1cfc239f-6e36-4b3f-9d6a-b21222455e17"/>
+						<reportElement x="353" y="3" width="94" height="20" uuid="1cfc239f-6e36-4b3f-9d6a-b21222455e17"/>
 						<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 					</textField>
-					<textField>
-						<reportElement x="310" y="6" width="120" height="20" uuid="5e86aa19-65db-4735-96ef-683e7e695311"/>
-						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
-					</textField>
-					<staticText>
-						<reportElement x="297" y="6" width="28" height="20" uuid="50ad1c7b-b75a-4e0b-8773-50d8c292ea5c"/>
-						<text><![CDATA[to]]></text>
-					</staticText>
 				</frame>
 				<frame>
 					<reportElement positionType="Float" x="520" y="945" width="433" height="85" uuid="8a43c275-c851-4501-8e45-9cf033f77eb5"/>
@@ -692,7 +684,7 @@ This Endorsement has been issued based on the information provided by you . In c
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="390" y="421" width="67" height="19" uuid="0459fe9b-ab2c-48ad-afe3-cebef6ff9630"/>
+					<reportElement x="400" y="421" width="57" height="19" uuid="0459fe9b-ab2c-48ad-afe3-cebef6ff9630"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
@@ -709,6 +701,14 @@ This Endorsement has been issued based on the information provided by you . In c
 					</textElement>
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="444" y="891" width="86" height="20" uuid="50ad1c7b-b75a-4e0b-8773-50d8c292ea5c"/>
+					<text><![CDATA[to]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="475" y="885" width="178" height="20" uuid="5e86aa19-65db-4735-96ef-683e7e695311"/>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</detail>

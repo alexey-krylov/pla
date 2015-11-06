@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-05T18:01:29 -->
+<!-- 2015-11-06T16:00:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -241,7 +241,7 @@
 						<text><![CDATA[ Address :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="132" y="35" width="113" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
+						<reportElement x="132" y="35" width="374" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -291,21 +291,21 @@
 						<text><![CDATA[  Policy Details:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="261" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Top">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="139" y="83" width="67" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
+						<reportElement x="139" y="83" width="101" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="205" y="83" width="15" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="244" y="83" width="15" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
 							<font isBold="true"/>
 						</textElement>
@@ -319,11 +319,11 @@
 						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="6" y="81" width="103" height="20" uuid="a45dea87-37f9-4284-a2f3-eb877f79bb55"/>
+						<reportElement x="6" y="81" width="133" height="20" uuid="a45dea87-37f9-4284-a2f3-eb877f79bb55"/>
 						<textElement>
 							<font fontName="Trebuchet MS" size="12"/>
 						</textElement>
-						<text><![CDATA[Policy Period :]]></text>
+						<text><![CDATA[Policy Period :  From]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="5" y="62" width="133" height="20" uuid="cc188b88-d190-4432-b7e0-4cd4f9b656bd"/>
@@ -365,11 +365,11 @@
 					<frame>
 						<reportElement mode="Opaque" x="1" y="169" width="923" height="35" backcolor="#C4BD97" uuid="bba4e95b-2016-4cac-a25d-7d9176ec453a"/>
 						<staticText>
-							<reportElement x="2" y="8" width="96" height="20" uuid="b2daf5b4-4ba2-41df-b744-072bb9e1e741"/>
-							<textElement textAlignment="Right" verticalAlignment="Middle">
-								<font size="12" isBold="true"/>
+							<reportElement x="2" y="8" width="174" height="20" uuid="b2daf5b4-4ba2-41df-b744-072bb9e1e741"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<font size="12" isBold="true" isItalic="false"/>
 							</textElement>
-							<text><![CDATA[Total Premium :]]></text>
+							<text><![CDATA[ Total Premium :]]></text>
 						</staticText>
 						<textField>
 							<reportElement x="196" y="8" width="100" height="20" uuid="14061e33-0219-4b7a-9c53-5fa39020eefe"/>
@@ -449,6 +449,13 @@
 						</textElement>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
 					</textField>
+					<textField>
+						<reportElement x="198" y="134" width="427" height="23" uuid="def92c24-376f-4bb6-b8bc-ba94279e1f9d"/>
+						<textElement verticalAlignment="Middle">
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
+					</textField>
 				</frame>
 				<textField>
 					<reportElement x="731" y="61" width="161" height="30" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
@@ -458,7 +465,7 @@
 					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="181" y="11" width="370" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
+					<reportElement x="271" y="11" width="370" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Arial" size="14" isBold="true"/>
 					</textElement>
@@ -468,25 +475,25 @@
 					<reportElement x="21" y="329" width="923" height="239" uuid="9b03a00b-c021-4554-9d89-e2826de5fb84"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="27" y="360" width="136" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
-					<textElement>
+					<reportElement x="27" y="360" width="215" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Number: ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="388" width="131" height="20" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
+					<reportElement x="27" y="383" width="212" height="20" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Date :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="25" y="409" width="363" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
+					<reportElement x="25" y="409" width="375" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of ]]></text>
+					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of K]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="26" y="489" width="916" height="20" uuid="8d109acc-4992-41bf-9cf2-7bbaf42a9070"/>
@@ -503,61 +510,61 @@
 					<text><![CDATA[Event of happening upon which the sum assured in respect of a particular life becomes payable : Death]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="531" width="127" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
+					<reportElement x="26" y="531" width="165" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Lives Covered:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="551" width="118" height="18" uuid="2d718f48-d9a8-4d0b-a160-7cf6ae9ba6b8"/>
+					<reportElement x="26" y="551" width="165" height="18" uuid="2d718f48-d9a8-4d0b-a160-7cf6ae9ba6b8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Sum Assured:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="153" y="532" width="370" height="18" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
+					<reportElement x="191" y="532" width="370" height="18" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="153" y="553" width="203" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
+					<reportElement x="194" y="553" width="203" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="159" y="361" width="188" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
-					<textElement>
+					<reportElement x="243" y="363" width="188" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="159" y="389" width="188" height="19" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
+					<reportElement x="239" y="383" width="188" height="19" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="25" y="429" width="245" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary]]></text>
+					<reportElement x="25" y="441" width="675" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<text><![CDATA[not withstanding anything contained in the policy to the contrary the Sum Assured for the following assured have been increased under the Policy]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="270" y="429" width="55" height="19" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
+					<reportElement x="791" y="442" width="55" height="19" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="325" y="428" width="28" height="24" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
-					<text><![CDATA[from]]></text>
+					<reportElement x="751" y="442" width="28" height="24" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
+					<text><![CDATA[from ]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="356" y="428" width="77" height="24" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<reportElement x="866" y="441" width="77" height="24" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
@@ -572,21 +579,21 @@
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
 				<frame>
-					<reportElement positionType="Float" x="25" y="931" width="495" height="53" uuid="0cda6763-3659-4a53-8ff4-fcccaaf2fcbe"/>
+					<reportElement positionType="Float" x="25" y="931" width="518" height="53" uuid="0cda6763-3659-4a53-8ff4-fcccaaf2fcbe"/>
 					<textField>
-						<reportElement x="270" y="20" width="30" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
+						<reportElement x="318" y="16" width="30" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
 						<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="295" y="20" width="15" height="20" uuid="d4db3343-0d4b-42e9-a71f-edafefd126a2"/>
+						<reportElement x="343" y="16" width="15" height="20" uuid="d4db3343-0d4b-42e9-a71f-edafefd126a2"/>
 						<text><![CDATA[on]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="310" y="21" width="160" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
+						<reportElement x="358" y="17" width="160" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
 						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="14" y="19" width="256" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
+						<reportElement x="14" y="19" width="304" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 				</frame>
@@ -609,22 +616,27 @@
 					</staticText>
 					<staticText>
 						<reportElement x="0" y="30" width="930" height="80" uuid="391959a6-6b6f-4d30-811b-e6729b7aa2fa"/>
-						<text><![CDATA[ In the event of dishonor of cheque , this endorsement schedule document automatically stands cancelled from inception, irrespective of whether a separate communication is sent or not.					
-All endorsement premiums are  payable immediately.
-This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately.						
-You may also email at help@insurance.com 						
+						<text><![CDATA[ In the event of dishonor of cheque , this endorsement schedule document automatically stands cancelled from inception, irrespective of whether a separate communication is sent or not. All endorsement premiums are  payable immediately. This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately. You may also email at help@insurance.com 						
 							
 ]]></text>
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="388" y="408" width="72" height="20" uuid="74ae8926-dad5-4c8d-bd8c-0407405e3585"/>
+					<reportElement x="401" y="409" width="49" height="20" uuid="74ae8926-dad5-4c8d-bd8c-0407405e3585"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="460" y="411" width="481" height="18" uuid="30cee90a-9b23-48ab-9e9d-404f2fab6932"/>
 					<text><![CDATA[it is hereby understood and agreed that , not withstanding anything contained in the policy to the contrary,]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="688" y="443" width="55" height="19" uuid="4ba5dce5-56b4-4385-83ca-740b62a1e53f"/>
+					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="831" y="441" width="28" height="24" uuid="2b54bf08-a4b8-4d7e-a697-5a1b81b61450"/>
+					<text><![CDATA[To :]]></text>
 				</staticText>
 			</frame>
 		</band>

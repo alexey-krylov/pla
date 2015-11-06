@@ -35,10 +35,10 @@ public class GLPolicyMailDetailDto {
 
     private String netPremium;
     private String profitAndSolvencyLoading;
-    private String serviceTax = "";
+    private String serviceTax = "0.00";
     private String totalPremium;
     private String addOnBenefits;
-    private String addOnBenefitsPercentage;
+    private String addOnBenefitsPercentage="0";
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
     private String hivDiscount;
@@ -87,7 +87,7 @@ public class GLPolicyMailDetailDto {
     @Setter
     public class Annexure {
         private String insuredName;
-        private String nrc;
+        private String nrc="NA";
         private String sex;
         private String dob;
         private String category;

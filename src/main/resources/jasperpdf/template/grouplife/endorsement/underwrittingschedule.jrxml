@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-05T16:02:53 -->
+<!-- 2015-11-06T15:16:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="695" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -148,28 +148,28 @@
 				<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="80" y="310" width="119" height="25" uuid="90e8d14e-4118-47cb-8c3e-2a259840101c"/>
+				<reportElement x="80" y="310" width="170" height="25" uuid="90e8d14e-4118-47cb-8c3e-2a259840101c"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[ Policy Period: From:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="210" y="310" width="70" height="25" uuid="f804a0e1-156f-4ba4-b079-8b992751624b"/>
+				<reportElement x="260" y="310" width="70" height="25" uuid="f804a0e1-156f-4ba4-b079-8b992751624b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="280" y="310" width="30" height="24" uuid="b9ef9dd1-8b29-43c5-b785-48b156a55e94"/>
+				<reportElement x="330" y="310" width="30" height="24" uuid="b9ef9dd1-8b29-43c5-b785-48b156a55e94"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[To:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="310" y="309" width="300" height="26" uuid="96b872ba-7bf6-42ba-9fb1-65afd1eac9ba"/>
+				<reportElement x="360" y="309" width="300" height="26" uuid="96b872ba-7bf6-42ba-9fb1-65afd1eac9ba"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>

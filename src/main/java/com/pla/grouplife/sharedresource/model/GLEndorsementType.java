@@ -102,10 +102,10 @@ public enum GLEndorsementType {
                 dependentOptional =   insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
-                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssured.jrxml");
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemberDelWithNoOfAssured.jrxml");
             }
             else {
-                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/deletionofMembersAssuredMembersDetails.jrxml");
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemDelWithDetails.jrxml");
                 byte[] detailsData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/underwrittingschedule.jrxml");
                 String fileName = "Member_deletion_details_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
                 File file = new File(fileName);
