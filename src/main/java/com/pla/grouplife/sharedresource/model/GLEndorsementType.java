@@ -50,16 +50,17 @@ public enum GLEndorsementType {
             Set<Insured> insureds =  glMemberEndorsement.getInsureds();
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
-           Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            Optional<InsuredDependent>  dependentOptional  = Optional.empty();
             for (Insured insured : insureds){
                 dependentOptional =   insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
             byte[] pdfData = null;
             EmailAttachment emailAttachment = new EmailAttachment();
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
-                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/AdditionMemeberAssured.jrxml");             }
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemAdditionWithNoOfAssured.jrxml");
+            }
             else {
-                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionMemEndorsment.jrxml");
+                pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemAddWithDetail.jrxml");
                 byte[] detailsData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/underwrittingschedule.jrxml");
                 String fileName = "Member_addition_details_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
                 File file = new File(fileName);
@@ -121,7 +122,7 @@ public enum GLEndorsementType {
             fileOutputStream.write(pdfData);
             fileOutputStream.flush();
             fileOutputStream.close();
-           return emailAttachment.withAttachment(fileName,"application/pdf", file);
+            return emailAttachment.withAttachment(fileName,"application/pdf", file);
         }
     }, MEMBER_PROMOTION("Promotion") {
         @Override
@@ -165,7 +166,7 @@ public enum GLEndorsementType {
             fileOutputStream.write(pdfData);
             fileOutputStream.flush();
             fileOutputStream.close();
-          return emailAttachment.withAttachment(fileName, "application/pdf", file);
+            return emailAttachment.withAttachment(fileName, "application/pdf", file);
         }
     },
     NEW_CATEGORY_RELATION("Introduction of New category") {
@@ -191,7 +192,7 @@ public enum GLEndorsementType {
             EmailAttachment emailAttachment = new EmailAttachment();
             Optional<InsuredDependent>  dependentOptional  = Optional.empty();
             for (Insured insured : insureds){
-                 dependentOptional =  insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
+                dependentOptional =  insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationship.jrxml");
@@ -199,7 +200,7 @@ public enum GLEndorsementType {
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationshipMemberDetails.jrxml");
                 byte[] detailsData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/underwrittingschedule.jrxml");
-                String fileName = "Member_promotion_details_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                String fileName = "Member_new_category_details_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
                 File file = new File(fileName);
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 fileOutputStream.write(detailsData);
@@ -214,7 +215,7 @@ public enum GLEndorsementType {
             fileOutputStream.write(pdfData);
             fileOutputStream.flush();
             fileOutputStream.close();
-          return emailAttachment.withAttachment(fileName, "application/pdf", file);
+            return emailAttachment.withAttachment(fileName, "application/pdf", file);
         }
     }, CHANGE_POLICY_HOLDER_NAME("Correction of Name-Policyholder") {
         @Override
