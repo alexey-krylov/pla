@@ -1,6 +1,7 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by Samir on 6/24/2015.
@@ -20,6 +21,7 @@ public class GLProposerDocument {
 
     private boolean requireForSubmission;
 
+    @Setter
     private boolean isApproved;
 
     public GLProposerDocument(){

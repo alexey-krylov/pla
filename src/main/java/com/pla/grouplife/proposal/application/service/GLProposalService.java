@@ -433,24 +433,6 @@ public class GLProposalService {
         return mandatoryDocumentDtos;
     }
 
-    private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
-
-        public GlQuotationDto apply(Map map) {
-            String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
-            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
-            String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
-            String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
-            ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
-            Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
-            String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
-            String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
-            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
-            return glQuotationDto;
-        }
-    }
-
     public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(String proposalId) {
         Map proposal = glProposalFinder.findProposalById(new ProposalId(proposalId));
         List<GLProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GLProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
@@ -476,17 +458,22 @@ public class GLProposalService {
         return mandatoryDocumentDtos;
     }
 
-    public boolean doesAllDocumentWaivesByApprover(String proposalId){
-        List<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = findMandatoryDocuments(proposalId);
-        long count =  glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
-            @Override
-            public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
-                return glProposalMandatoryDocumentDto.getIsApproved();
-            }
-        }).count();
-        if (count==glProposalMandatoryDocumentDtos.size())
-            return true;
-        return false;
+    private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
+
+        public GlQuotationDto apply(Map map) {
+            String quotationId = map.get("_id").toString();
+            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
+            LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
+            String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";
+            String quotationNumber = map.get("quotationNumber") != null ? (String) map.get("quotationNumber") : "";
+            ObjectId parentQuotationIdMap = map.get("parentQuotationId") != null ? (ObjectId) map.get("parentQuotationId") : null;
+            Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
+            String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
+            String parentQuotationId = parentQuotationIdMap != null ? parentQuotationIdMap.toString() : "";
+            GlQuotationDto glQuotationDto = new GlQuotationDto(new QuotationId(quotationId), (Integer) map.get("versionNumber"), generatedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), new QuotationId(parentQuotationId), quotationStatus, quotationNumber, proposerName, getIntervalInDays(sharedOn), sharedOn);
+            return glQuotationDto;
+        }
     }
 
 }

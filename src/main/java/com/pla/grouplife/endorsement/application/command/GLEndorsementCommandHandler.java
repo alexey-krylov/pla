@@ -2,17 +2,18 @@ package com.pla.grouplife.endorsement.application.command;
 
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.policy.domain.service.GLEndorsementUniqueNumberGenerator;
+import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
 import com.pla.grouplife.endorsement.domain.model.*;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementRoleAdapter;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
-import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.grouplife.sharedresource.query.GLFinder;
+import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.domain.model.EndorsementUniqueNumber;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -56,7 +57,7 @@ public class GLEndorsementCommandHandler {
 
     private GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter;
 
-    private GLProposalService glProposalService;
+    private GLEndorsementService glEndorsementService;
 
     @Autowired
     private GLFinder glFinder;
@@ -65,12 +66,12 @@ public class GLEndorsementCommandHandler {
     private GridFsTemplate gridFsTemplate;
 
     @Autowired
-    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator, GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter, GLProposalService glProposalService) {
+    public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator, GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter, GLEndorsementService glEndorsementService) {
         this.glEndorsementMongoRepository = glEndorsementMongoRepository;
         this.groupLifeEndorsementService = groupLifeEndorsementService;
         this.glEndorsementUniqueNumberGenerator = glEndorsementUniqueNumberGenerator;
         this.glEndorsementRoleAdapter = glEndorsementRoleAdapter;
-        this.glProposalService = glProposalService;
+        this.glEndorsementService = glEndorsementService;
     }
 
     @CommandHandler
@@ -177,6 +178,7 @@ public class GLEndorsementCommandHandler {
         }
         String gridFsDocId = gridFsTemplate.store(glEndorsementDocumentCommand.getFile().getInputStream(), fileName, glEndorsementDocumentCommand.getFile().getContentType()).getId().toString();
         GLProposerDocument currentDocument = new GLProposerDocument(glEndorsementDocumentCommand.getDocumentId(), fileName, gridFsDocId, glEndorsementDocumentCommand.getFile().getContentType(), glEndorsementDocumentCommand.isMandatory());
+        currentDocument.setApproved(true);
         if (!documents.add(currentDocument)) {
             GLProposerDocument existingDocument = documents.stream().filter(new Predicate<GLProposerDocument>() {
                 @Override
@@ -225,11 +227,11 @@ public class GLEndorsementCommandHandler {
     @CommandHandler
     public String approve(ApproveGLEndorsementCommand approveGLEndorsementCommand) throws ParseException {
         GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(new EndorsementId(approveGLEndorsementCommand.getEndorsementId()));
-        String endorsementNo = glEndorsementUniqueNumberGenerator.getEndorsementUniqueNumber(GroupLifeEndorsement.class);
-        EndorsementUniqueNumber endorseNumber = new EndorsementUniqueNumber(endorsementNo);
-        if (GLProposalStatus.APPROVED.equals(approveGLEndorsementCommand.getStatus()) && !glProposalService.doesAllDocumentWaivesByApprover(approveGLEndorsementCommand.getEndorsementId())){
+        if (EndorsementStatus.APPROVED.equals(approveGLEndorsementCommand.getStatus()) && !glEndorsementService.doesAllDocumentWaivesByApprover(approveGLEndorsementCommand.getEndorsementId())){
             raiseMandatoryDocumentNotUploaded();
         }
+        String endorsementNo = glEndorsementUniqueNumberGenerator.getEndorsementUniqueNumber(GroupLifeEndorsement.class);
+        EndorsementUniqueNumber endorseNumber = new EndorsementUniqueNumber(endorsementNo);
         Map policyMap = glFinder.findPolicyById(groupLifeEndorsement.getPolicy().getPolicyId().getPolicyId());
         PremiumDetail premiumDetail = (PremiumDetail) policyMap.get("premiumDetail");
         Industry industry = (Industry) policyMap.get("industry");

@@ -415,11 +415,13 @@ public class GroupLifeEndorsementController {
             /*
             * service method which will check for the uploaded documents and waived documents..
             * */
-            commandGateway.sendAndWait(approveGLEndorsementCommand);
+            approveGLEndorsementCommand.setStatus(EndorsementStatus.APPROVED);
+             commandGateway.sendAndWait(approveGLEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement approved successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+//            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
     }
 

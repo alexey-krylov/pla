@@ -275,6 +275,19 @@ public class GLEndorsementService {
         return mandatoryDocumentDtos;
     }
 
+    public boolean doesAllDocumentWaivesByApprover(String endorsementId){
+        List<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = findMandatoryDocuments(endorsementId);
+        long count =  glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
+            @Override
+            public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                return glProposalMandatoryDocumentDto.getIsApproved();
+            }
+        }).count();
+        if (count==glProposalMandatoryDocumentDtos.size())
+            return true;
+        return false;
+    }
+
     private class GLEndorsementTransformation implements Function<Map,GLEndorsementDto> {
         @Override
         public GLEndorsementDto apply(Map map) {
@@ -300,4 +313,5 @@ public class GLEndorsementService {
             return glEndorsementDto;
         }
     }
+
 }
