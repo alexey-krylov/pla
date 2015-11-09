@@ -133,7 +133,8 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
             if (isNotEmpty(noOfAssuredCellValue) && isEmpty(value)) {
                 return true;
             }
-            return super.isValidClientId(row, value, excelHeaders);
+            String clientId = isNotEmpty(value)?String.valueOf(new BigDecimal(value).longValue()):"";
+            return super.isValidClientId(row, clientId, excelHeaders);
         }
     }
 

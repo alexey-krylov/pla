@@ -3,6 +3,7 @@ package com.pla.grouplife.endorsement.application.service.excel.parser;
 import com.google.common.collect.Lists;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -15,6 +16,7 @@ import org.apache.poi.ss.usermodel.Row;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
@@ -315,9 +317,22 @@ public class GLEndorsementExcelValidator {
         if (isValidClientId[0]) {
             return isValidClientId[0];
         }
-        insureds.forEach(insured -> {
-            isValidClientId[0] = insured.getInsuredDependents().stream().filter(insuredDependent -> (insuredDependent.getFamilyId() != null && clientId.equals(insuredDependent.getFamilyId().getFamilyId()))).findAny().isPresent();
-        });
-        return isValidClientId[0];
+
+        boolean isValidDependentClientId = false;
+        for (Insured insured : insureds){
+            if (isNotEmpty(insured.getInsuredDependents())){
+                Optional<InsuredDependent> dependentOptional =  insured.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
+                    @Override
+                    public boolean test(InsuredDependent insuredDependent) {
+                        return (insuredDependent.getFamilyId()!=null && clientId.equals(insuredDependent.getFamilyId().getFamilyId()));
+                    }
+                }).findAny();
+                if (dependentOptional.isPresent()) {
+                    isValidDependentClientId = true;
+                    break;
+                }
+            }
+        }
+        return isValidDependentClientId;
     }
 }

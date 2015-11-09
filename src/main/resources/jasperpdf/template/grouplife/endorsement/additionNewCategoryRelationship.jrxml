@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T16:12:47 -->
+<!-- 2015-11-09T18:16:21 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -695,12 +695,12 @@
 					</jr:table>
 				</componentElement>
 				<staticText>
-					<reportElement x="23" y="460" width="677" height="20" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<reportElement x="23" y="460" width="347" height="20" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
 					<textElement verticalAlignment="Top"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary, number of members under this policy is changed from 20 to 21,]]></text>
+					<text><![CDATA[number of members under this policy is changed from 20 to 21,]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="831" y="461" width="91" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<reportElement x="601" y="462" width="91" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
@@ -710,7 +710,7 @@
 					<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="801" y="461" width="42" height="21" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
+					<reportElement x="521" y="461" width="42" height="21" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<staticText>
@@ -879,7 +879,7 @@ You may also email at help@insurance.com
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="742" y="461" width="60" height="19" uuid="50ee38fa-6578-48b8-8bca-863ab48f1346"/>
+					<reportElement x="437" y="462" width="60" height="19" uuid="50ee38fa-6578-48b8-8bca-863ab48f1346"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
@@ -899,7 +899,7 @@ You may also email at help@insurance.com
 					<text><![CDATA[GROUP LIFE ASSURANCE POLICY ENDORSEMENT ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="701" y="461" width="42" height="21" uuid="cddf71f9-c841-497d-8d82-3bce8a7a52e6"/>
+					<reportElement x="380" y="461" width="42" height="21" uuid="cddf71f9-c841-497d-8d82-3bce8a7a52e6"/>
 					<text><![CDATA[from ]]></text>
 				</staticText>
 			</frame>

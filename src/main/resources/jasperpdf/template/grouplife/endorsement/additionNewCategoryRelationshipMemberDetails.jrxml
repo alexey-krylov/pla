@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T16:22:28 -->
+<!-- 2015-11-09T18:14:43 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -797,9 +797,9 @@ You may also email at help@insurance.com
 					<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="23" y="460" width="556" height="20" uuid="7dd38771-0c98-4c3b-8c8a-80e937d8a179"/>
+					<reportElement x="23" y="460" width="279" height="20" uuid="7dd38771-0c98-4c3b-8c8a-80e937d8a179"/>
 					<textElement verticalAlignment="Top"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary, following assured are included under this policy is changed]]></text>
+					<text><![CDATA[following assured are included under this policy is changed]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="24" y="487" width="898" height="19" uuid="1843d3ea-c6fe-4fa1-a422-af2e06b4371c"/>
@@ -807,25 +807,25 @@ You may also email at help@insurance.com
 					<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="581" y="462" width="42" height="21" uuid="775abc4f-7ee4-4508-bbfc-48a414909ccb"/>
+					<reportElement x="301" y="463" width="42" height="21" uuid="775abc4f-7ee4-4508-bbfc-48a414909ccb"/>
 					<text><![CDATA[from ]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="622" y="466" width="60" height="19" uuid="8484a620-21df-4988-9e9e-ad22e4c80a4a"/>
+					<reportElement x="341" y="465" width="60" height="19" uuid="8484a620-21df-4988-9e9e-ad22e4c80a4a"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="683" y="461" width="42" height="21" uuid="c1859e3f-d4c2-4d15-a84c-7016048870cd"/>
+					<reportElement x="412" y="465" width="42" height="21" uuid="c1859e3f-d4c2-4d15-a84c-7016048870cd"/>
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="704" y="464" width="91" height="19" uuid="d93546e2-f0b6-4e19-ac8f-59391ad27a57"/>
+					<reportElement x="458" y="465" width="91" height="19" uuid="d93546e2-f0b6-4e19-ac8f-59391ad27a57"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="793" y="462" width="164" height="45" uuid="3d50daf0-7597-449a-8417-64e3205ffb73"/>
+					<reportElement x="549" y="462" width="408" height="22" uuid="3d50daf0-7597-449a-8417-64e3205ffb73"/>
 					<text><![CDATA[Assured Details(as an annexure to the Endorsement Schedule)]]></text>
 				</staticText>
 			</frame>
