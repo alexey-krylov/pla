@@ -486,6 +486,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
                         return insuredDependentDto;
                     }
                 }).collect(Collectors.toSet());
+                insuredDto.setCategory(insuredDto.getOccupationCategory());
                 insuredDto.setInsuredDependents(insuredDependentDtoSet);
                 return insuredDto;
             }
