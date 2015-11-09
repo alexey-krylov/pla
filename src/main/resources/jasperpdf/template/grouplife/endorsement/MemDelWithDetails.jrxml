@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T12:34:11 -->
+<!-- 2015-11-09T15:03:45 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -503,7 +503,10 @@
 					<font fontName="Trebuchet MS" size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[All endorsement premiums are  payable immediately.
-This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately. For any assistance with claims or on the policy please contact us at the details mentioned above.You may also email at help@insurance.com 																					]]></text>
+This Endorsement has been issued based on the information provided by you .
+In case you find any discrepancy in the same, please contact us immediately.
+For any assistance with claims or on the policy please contact us at the details mentioned above.
+You may also email at help@insurance.com 																					]]></text>
 			</staticText>
 		</band>
 	</detail>

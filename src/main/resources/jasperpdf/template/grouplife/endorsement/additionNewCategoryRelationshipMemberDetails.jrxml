@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T12:42:23 -->
+<!-- 2015-11-09T15:02:12 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -554,6 +554,13 @@
 						</textElement>
 						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
 					</textField>
+					<textField>
+						<reportElement x="198" y="131" width="427" height="23" uuid="9b46c8df-9a3b-4a14-9702-bf993e4fb612"/>
+						<textElement verticalAlignment="Middle">
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
+					</textField>
 				</frame>
 				<textField>
 					<reportElement x="731" y="61" width="161" height="30" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
@@ -762,8 +769,10 @@
 						<textElement>
 							<font fontName="Trebuchet MS" size="12" isBold="false"/>
 						</textElement>
-						<text><![CDATA[
-In the event of dishonor of cheque , this policy document automatically stands cancelled from inception, irrespective of whether a separate communication is sent or not.All endorsement premiums are  payable immediately. This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately. You may also email at help@insurance.com
+						<text><![CDATA[In the event of dishonor of cheque , this policy document automatically stands cancelled from inception, irrespective of whether a separate communication is sent or not.
+All endorsement premiums are  payable immediately. 
+This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately. 
+You may also email at help@insurance.com
 
 ]]></text>
 					</staticText>

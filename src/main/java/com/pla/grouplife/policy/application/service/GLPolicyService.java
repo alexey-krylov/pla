@@ -507,7 +507,7 @@ public class GLPolicyService {
         glQuotationDetailDto.setAddOnBenefits((premiumDetail.getAddOnBenefit() != null ) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null ) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
-        glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
+        glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("0%");
         BigDecimal totalPremiumAmount = groupLifeEndorsement.getNetAnnualPremiumPaymentAmount(premiumDetail,industry);
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal netPremiumOfInsured = groupLifeEndorsement.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail);

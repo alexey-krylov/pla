@@ -38,9 +38,9 @@ public class GLPolicyMailDetailDto {
     private String serviceTax = "0.00";
     private String totalPremium;
     private String addOnBenefits;
-    private String addOnBenefitsPercentage="0";
+    private String addOnBenefitsPercentage="0%";
     private String waiverOfExcessLoadings;
-    private String waiverOfExcessLoadingsPercentage;
+    private String waiverOfExcessLoadingsPercentage ="0%";
     private String hivDiscount;
     private String valuedClientDiscount;
     private String longTermDiscount;
