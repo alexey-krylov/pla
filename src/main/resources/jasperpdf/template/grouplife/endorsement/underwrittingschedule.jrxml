@@ -205,7 +205,7 @@
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
-					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/insureddetailsubreport.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/endorsement/insureddetailsubreport.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<textField>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-06T14:47:58 -->
+<!-- 2015-11-09T11:10:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -28,17 +28,14 @@
 		</box>
 	</style>
 	<subDataset name="CoverDetailsDS" uuid="656ac15f-d3e1-439d-9d38-3c8d654e1e77">
-		<field name="planCoverageName" class="java.lang.String">
-			<fieldDescription><![CDATA[planCoverageName]]></fieldDescription>
-		</field>
-		<field name="planCoverageSumAssured" class="java.lang.String">
-			<fieldDescription><![CDATA[planCoverageSumAssured]]></fieldDescription>
-		</field>
 		<field name="category" class="java.lang.String">
 			<fieldDescription><![CDATA[category]]></fieldDescription>
 		</field>
 		<field name="relationship" class="java.lang.String">
 			<fieldDescription><![CDATA[relationship]]></fieldDescription>
+		</field>
+		<field name="noOfEmployeesCovered" class="java.lang.Integer">
+			<fieldDescription><![CDATA[noOfEmployeesCovered]]></fieldDescription>
 		</field>
 	</subDataset>
 	<queryString>
@@ -550,42 +547,6 @@
 						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
 						</datasetRun>
-						<jr:column width="130" uuid="319b4282-f0f9-4c25-bb4d-c30bacd599cb">
-							<jr:columnHeader style="table" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="54288609-a1e6-49a9-9dbe-857bc8a6ec04"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Plan/CoverageName]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="130" height="20" uuid="4681c041-f341-4714-9109-d47e7d128251"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="167" uuid="5052b2f4-b79f-452a-8031-74838d7b966b">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="dacc1d28-d8d6-4137-92ef-a1d9918bd0dc"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Sum Assured]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="167" height="20" uuid="fcde6f8a-0da2-4b3b-8bc3-b99b4332f43d"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{planCoverageSumAssured}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
 						<jr:column width="90" uuid="fdebfe64-4624-4d9b-9328-06b1370dd52b">
 							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 								<staticText>
@@ -619,6 +580,24 @@
 									<reportElement x="0" y="0" width="90" height="20" uuid="f68d44a3-e747-44ba-ad74-55155f6ca0c1"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="167" uuid="5052b2f4-b79f-452a-8031-74838d7b966b">
+							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="dacc1d28-d8d6-4137-92ef-a1d9918bd0dc"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="12" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Number Of Employees Covered]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="167" height="20" uuid="fcde6f8a-0da2-4b3b-8bc3-b99b4332f43d"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{noOfEmployeesCovered}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -696,7 +675,7 @@ This Endorsement has been issued based on the information provided by you . In c
 				<staticText>
 					<reportElement x="438" y="441" width="510" height="23" uuid="a926716c-b96f-4f75-a1cf-508a51f20b4f"/>
 					<textElement verticalAlignment="Top"/>
-					<text><![CDATA[. Assured Details(as an annexure to the Endorsement Schedule)]]></text>
+					<text><![CDATA[Assured Details(as an annexure to the Endorsement Schedule)]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="390" y="421" width="70" height="19" uuid="59477fae-a132-4b7d-b2ad-085badb03532"/>

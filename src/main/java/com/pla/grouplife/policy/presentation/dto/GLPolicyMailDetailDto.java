@@ -63,6 +63,7 @@ public class GLPolicyMailDetailDto {
         private String planCoverageName;
         private String planCoverageSumAssured;
         private BigDecimal sumAssured;
+        private Integer noOfEmployeesCovered;
 
         public CoverDetail(String category, String relationship, String planCoverageName, BigDecimal sumAssured) {
             this.category = category;
@@ -77,8 +78,18 @@ public class GLPolicyMailDetailDto {
             this.planCoverageName = planCoverageName;
         }
 
+        public CoverDetail(String category, String relationship, String planCoverageName, BigDecimal sumAssured,Integer noOfEmployeesCovered){
+            this(category,relationship,planCoverageName,sumAssured);
+            this.noOfEmployeesCovered = noOfEmployeesCovered;
+        }
+
         public CoverDetail addSumAssured(String sumAssured) {
             this.planCoverageSumAssured = sumAssured;
+            return this;
+        }
+
+        public CoverDetail addNoOfEmployeesCovered(Integer noOfEmployeesCovered) {
+            this.noOfEmployeesCovered = noOfEmployeesCovered;
             return this;
         }
     }
