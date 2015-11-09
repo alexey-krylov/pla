@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-06T16:00:53 -->
+<!-- 2015-11-09T13:17:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -291,7 +291,7 @@
 						<text><![CDATA[  Policy Details:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="261" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="301" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Top">
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -305,7 +305,7 @@
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="244" y="83" width="15" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="244" y="83" width="30" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
 							<font isBold="true"/>
 						</textElement>
@@ -472,7 +472,7 @@
 					<text><![CDATA[GROUP LIFE ASSURANCE POLICY ENDORSEMENT ]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="21" y="329" width="923" height="239" uuid="9b03a00b-c021-4554-9d89-e2826de5fb84"/>
+					<reportElement x="23" y="351" width="923" height="239" uuid="9b03a00b-c021-4554-9d89-e2826de5fb84"/>
 				</rectangle>
 				<staticText>
 					<reportElement x="27" y="360" width="215" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
@@ -500,7 +500,7 @@
 					<textElement>
 						<font fontName="Trebuchet MS" isItalic="false"/>
 					</textElement>
-					<text><![CDATA[sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
+					<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="26" y="510" width="917" height="20" uuid="485b02b8-58a7-4df1-8b41-43755d550268"/>
@@ -552,15 +552,15 @@
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="25" y="441" width="675" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary the Sum Assured for the following assured have been increased under the Policy]]></text>
+					<reportElement x="25" y="441" width="475" height="19" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<text><![CDATA[the Sum Assured for the following assured have been increased under the policy]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="791" y="442" width="55" height="19" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
+					<reportElement x="749" y="442" width="55" height="19" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="751" y="442" width="28" height="24" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
+					<reportElement x="721" y="442" width="28" height="24" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
 					<text><![CDATA[from ]]></text>
 				</staticText>
 				<textField>
@@ -579,32 +579,32 @@
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
 				<frame>
-					<reportElement positionType="Float" x="25" y="931" width="518" height="53" uuid="0cda6763-3659-4a53-8ff4-fcccaaf2fcbe"/>
+					<reportElement positionType="Float" x="23" y="918" width="616" height="53" uuid="0cda6763-3659-4a53-8ff4-fcccaaf2fcbe"/>
 					<textField>
-						<reportElement x="318" y="16" width="30" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
+						<reportElement x="318" y="16" width="57" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
 						<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="343" y="16" width="15" height="20" uuid="d4db3343-0d4b-42e9-a71f-edafefd126a2"/>
+						<reportElement x="393" y="16" width="15" height="20" uuid="d4db3343-0d4b-42e9-a71f-edafefd126a2"/>
 						<text><![CDATA[on]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="358" y="17" width="160" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
+						<reportElement x="435" y="16" width="160" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
 						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="14" y="19" width="304" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
+						<reportElement x="1" y="19" width="317" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 				</frame>
 				<frame>
-					<reportElement positionType="Float" x="527" y="950" width="414" height="90" uuid="1d97c3f5-a1d0-4fa7-8a3c-a43719e3400d"/>
+					<reportElement positionType="Float" x="511" y="981" width="414" height="69" uuid="1d97c3f5-a1d0-4fa7-8a3c-a43719e3400d"/>
 					<staticText>
 						<reportElement x="16" y="11" width="322" height="30" uuid="d0d62e98-75de-48df-8522-aa35edbf1d8a"/>
 						<text><![CDATA[For and on behalf of Insurance Company Limited]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="16" y="61" width="310" height="21" uuid="c8277392-f144-4b1f-9abf-cf2f8e8f43d7"/>
+						<reportElement x="18" y="48" width="310" height="21" uuid="c8277392-f144-4b1f-9abf-cf2f8e8f43d7"/>
 						<text><![CDATA[Authorised Signatory]]></text>
 					</staticText>
 				</frame>
@@ -616,7 +616,10 @@
 					</staticText>
 					<staticText>
 						<reportElement x="0" y="30" width="930" height="80" uuid="391959a6-6b6f-4d30-811b-e6729b7aa2fa"/>
-						<text><![CDATA[ In the event of dishonor of cheque , this endorsement schedule document automatically stands cancelled from inception, irrespective of whether a separate communication is sent or not. All endorsement premiums are  payable immediately. This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately. You may also email at help@insurance.com 						
+						<text><![CDATA[ In the event of dishonor of cheque , this endorsement schedule document automatically stands cancelled from inception, irrespective of whether a separate communication is sent or not. 
+All endorsement premiums are  payable immediately. 
+This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately. 
+You may also email at help@insurance.com 						
 							
 ]]></text>
 					</staticText>
@@ -631,11 +634,11 @@
 					<text><![CDATA[it is hereby understood and agreed that , not withstanding anything contained in the policy to the contrary,]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="688" y="443" width="55" height="19" uuid="4ba5dce5-56b4-4385-83ca-740b62a1e53f"/>
-					<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+					<reportElement x="541" y="442" width="169" height="19" uuid="4ba5dce5-56b4-4385-83ca-740b62a1e53f"/>
+					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="831" y="441" width="28" height="24" uuid="2b54bf08-a4b8-4d7e-a697-5a1b81b61450"/>
+					<reportElement x="811" y="441" width="28" height="24" uuid="2b54bf08-a4b8-4d7e-a697-5a1b81b61450"/>
 					<text><![CDATA[To :]]></text>
 				</staticText>
 			</frame>

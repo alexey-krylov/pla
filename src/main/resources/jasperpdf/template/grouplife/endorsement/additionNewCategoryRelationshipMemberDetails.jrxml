@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-06T17:52:37 -->
+<!-- 2015-11-09T12:42:23 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -346,7 +346,7 @@
 						<text><![CDATA[ Address :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="132" y="35" width="113" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
+						<reportElement x="132" y="35" width="448" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -389,21 +389,21 @@
 						<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="81" width="205" height="21" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="265" y="81" width="205" height="21" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Top">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="139" y="83" width="67" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
+						<reportElement x="139" y="83" width="97" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
 						<textElement verticalAlignment="Top">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="205" y="83" width="15" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="236" y="82" width="25" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Top">
 							<font isBold="true"/>
 						</textElement>
@@ -580,11 +580,11 @@
 					<text><![CDATA[Endorsement Date :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="26" y="444" width="364" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
+					<reportElement x="26" y="444" width="374" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of]]></text>
+					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of K]]></text>
 				</staticText>
 				<staticText>
 					<reportElement positionType="Float" x="25" y="507" width="911" height="20" uuid="485b02b8-58a7-4df1-8b41-43755d550268"/>
@@ -608,7 +608,7 @@
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table" style="table" positionType="Float" x="311" y="528" width="459" height="22" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
+					<reportElement key="table" style="table" positionType="Float" x="273" y="531" width="459" height="22" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
@@ -776,7 +776,7 @@ In the event of dishonor of cheque , this policy document automatically stands c
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="390" y="444" width="70" height="17" uuid="f6f38df5-313e-4214-8eeb-723a0b561ea6"/>
+					<reportElement x="400" y="444" width="60" height="17" uuid="f6f38df5-313e-4214-8eeb-723a0b561ea6"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>

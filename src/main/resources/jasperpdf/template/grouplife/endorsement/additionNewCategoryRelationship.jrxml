@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-06T16:40:02 -->
+<!-- 2015-11-09T13:19:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -587,11 +587,11 @@
 					<text><![CDATA[Endorsement Date :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="23" y="441" width="361" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
+					<reportElement x="23" y="441" width="367" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of ]]></text>
+					<text><![CDATA[Endorsement : In consideration of the payment of an additional premium of K]]></text>
 				</staticText>
 				<staticText>
 					<reportElement positionType="Float" x="25" y="507" width="911" height="20" uuid="485b02b8-58a7-4df1-8b41-43755d550268"/>
@@ -695,9 +695,9 @@
 					</jr:table>
 				</componentElement>
 				<staticText>
-					<reportElement x="23" y="460" width="587" height="20" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
+					<reportElement x="23" y="460" width="628" height="20" uuid="196c9d8e-45bd-4aff-a98e-73cc9e02ad27"/>
 					<textElement verticalAlignment="Top"/>
-					<text><![CDATA[not withstanding anything contained in the policy to the contrary, number of members under this policy is changed]]></text>
+					<text><![CDATA[not withstanding anything contained in the policy to the contrary, number of members under this policy is changed from 20 to 21,]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="831" y="461" width="91" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
@@ -830,11 +830,11 @@
 				<frame>
 					<reportElement positionType="Float" x="22" y="961" width="548" height="50" uuid="0ea9aa5e-5a08-4303-92c0-2a877830f4ed"/>
 					<staticText>
-						<reportElement x="4" y="23" width="336" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
+						<reportElement x="0" y="15" width="319" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="340" y="15" width="79" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
+						<reportElement x="323" y="15" width="97" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
 						<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 					</textField>
 					<staticText>
@@ -842,7 +842,7 @@
 						<text><![CDATA[on]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="440" y="16" width="100" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
+						<reportElement x="440" y="10" width="100" height="19" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
 						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -884,7 +884,7 @@ You may also email at help@insurance.com
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="388" y="442" width="72" height="18" uuid="d96d675a-f061-47ac-9d5e-88a7778353a5"/>
+					<reportElement x="390" y="442" width="70" height="18" uuid="d96d675a-f061-47ac-9d5e-88a7778353a5"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>

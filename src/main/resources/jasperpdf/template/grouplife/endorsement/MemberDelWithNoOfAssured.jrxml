@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T11:11:13 -->
+<!-- 2015-11-09T12:56:21 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1170" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -288,21 +288,21 @@
 						<text><![CDATA[  Policy Details:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="86" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="271" y="87" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="140" y="86" width="67" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
+						<reportElement x="140" y="86" width="92" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="205" y="86" width="15" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="240" y="88" width="28" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
 							<font isBold="true"/>
 						</textElement>
@@ -355,14 +355,14 @@
 					<reportElement x="22" y="331" width="923" height="220" uuid="9b03a00b-c021-4554-9d89-e2826de5fb84"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="26" y="364" width="141" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
+					<reportElement x="26" y="364" width="195" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Number: ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="27" y="390" width="131" height="29" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
+					<reportElement x="27" y="390" width="174" height="29" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -373,7 +373,7 @@
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement :It is hereby understood and agreed that not withstanding anything contained in the policy to the contrary, number of members under this policy is changed from in effect from]]></text>
+					<text><![CDATA[Endorsement :It is hereby understood and agreed that not withstanding anything contained in the policy to the contrary, number of members under this policy is changed from 21 to 20 in effect from]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="28" y="481" width="163" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
@@ -404,14 +404,14 @@
 					<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="160" y="364" width="188" height="18" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
+					<reportElement x="221" y="365" width="188" height="18" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="160" y="391" width="188" height="28" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
+					<reportElement x="222" y="391" width="188" height="28" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -487,26 +487,26 @@
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="28" y="440" width="52" height="16" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
+					<reportElement x="28" y="440" width="116" height="25" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<frame>
-					<reportElement positionType="Float" x="19" y="641" width="563" height="26" uuid="f451b6f5-f250-4e5c-807f-5d0f34a86641"/>
+					<reportElement positionType="Float" x="19" y="641" width="661" height="26" uuid="f451b6f5-f250-4e5c-807f-5d0f34a86641"/>
 					<staticText>
 						<reportElement x="3" y="4" width="347" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="362" y="4" width="41" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
+						<reportElement x="362" y="4" width="80" height="20" uuid="9fd9837e-3ffb-43ab-a58f-c607f0b5c64e"/>
 						<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="403" y="5" width="28" height="18" uuid="d4db3343-0d4b-42e9-a71f-edafefd126a2"/>
+						<reportElement x="442" y="5" width="36" height="18" uuid="d4db3343-0d4b-42e9-a71f-edafefd126a2"/>
 						<textElement verticalAlignment="Top"/>
 						<text><![CDATA[on]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="433" y="5" width="130" height="21" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
+						<reportElement x="490" y="0" width="130" height="21" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
 						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -542,24 +542,24 @@ You may also email at help@insurance.com 																					]]></text>
 					</staticText>
 				</frame>
 				<staticText>
-					<reportElement x="80" y="440" width="20" height="16" uuid="ee2a6631-abc8-4dd2-8043-e9feaddae6e0"/>
+					<reportElement x="154" y="441" width="37" height="24" uuid="ee2a6631-abc8-4dd2-8043-e9feaddae6e0"/>
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="90" y="440" width="81" height="22" uuid="6365daff-d531-492f-aea0-74a38c3b9617"/>
+					<reportElement x="201" y="443" width="81" height="22" uuid="6365daff-d531-492f-aea0-74a38c3b9617"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="381" y="440" width="61" height="24" uuid="caf2bd61-37ef-4f2b-bf80-a346e818e233"/>
+					<reportElement x="511" y="441" width="61" height="24" uuid="caf2bd61-37ef-4f2b-bf80-a346e818e233"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="168" y="440" width="213" height="24" uuid="cb9bbe2d-986d-498d-8c40-4e56883f250f"/>
+					<reportElement x="298" y="441" width="213" height="24" uuid="cb9bbe2d-986d-498d-8c40-4e56883f250f"/>
 					<text><![CDATA[Arising out of the aforesaid deletion, a sum of K]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="443" y="441" width="219" height="24" uuid="0e60344c-5c8d-45e3-b527-6dec44347718"/>
+					<reportElement x="573" y="442" width="219" height="24" uuid="0e60344c-5c8d-45e3-b527-6dec44347718"/>
 					<text><![CDATA[ is hereby refunded.]]></text>
 				</staticText>
 			</frame>

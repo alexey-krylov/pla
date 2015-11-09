@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T11:10:13 -->
+<!-- 2015-11-09T13:02:48 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -490,7 +490,7 @@
 					<textElement>
 						<font fontName="Trebuchet MS" isItalic="false"/>
 					</textElement>
-					<text><![CDATA[sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
+					<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="31" y="492" width="917" height="20" uuid="485b02b8-58a7-4df1-8b41-43755d550268"/>
@@ -604,21 +604,21 @@
 					</jr:table>
 				</componentElement>
 				<frame>
-					<reportElement positionType="Float" x="27" y="884" width="469" height="26" uuid="11200470-2a89-45fe-8f68-e97787792c5d"/>
+					<reportElement positionType="Float" x="27" y="884" width="603" height="26" uuid="11200470-2a89-45fe-8f68-e97787792c5d"/>
 					<staticText>
 						<reportElement x="6" y="6" width="291" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="300" y="3" width="49" height="20" uuid="1cfc239f-6e36-4b3f-9d6a-b21222455e17"/>
+						<reportElement x="300" y="3" width="121" height="20" uuid="1cfc239f-6e36-4b3f-9d6a-b21222455e17"/>
 						<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="363" y="3" width="106" height="20" uuid="5e86aa19-65db-4735-96ef-683e7e695311"/>
+						<reportElement x="477" y="3" width="106" height="20" uuid="5e86aa19-65db-4735-96ef-683e7e695311"/>
 						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="349" y="3" width="30" height="20" uuid="50ad1c7b-b75a-4e0b-8773-50d8c292ea5c"/>
+						<reportElement x="421" y="3" width="30" height="20" uuid="50ad1c7b-b75a-4e0b-8773-50d8c292ea5c"/>
 						<text><![CDATA[to]]></text>
 					</staticText>
 				</frame>

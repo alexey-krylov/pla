@@ -563,7 +563,7 @@ public class GLPolicyService {
                 BigDecimal insuredBasicPremium = insuredPremiumDetail != null ? insuredPremiumDetail.getPremiumAmount() : BigDecimal.ONE;
                 insuredBasicPremium = insuredBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                 GLPolicyMailDetailDto.Annexure insuredAnnexure = glQuotationDetailDto.new Annexure(insured.getFirstName() + " " + insured.getLastName()
-                        , insured.getNrcNumber(), insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
+                        , insured.getNrcNumber()!=null?insured.getNrcNumber():"NA", insured.getGender() != null ? insured.getGender().name() : "", AppUtils.toString(insured.getDateOfBirth()),
                         isEmpty(insured.getCategory()) ? "" : insured.getCategory(), "Self", insured.getDateOfBirth() == null ? "" : AppUtils.getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), insuredAnnualIncomeInString, insuredBasicPremium.toPlainString());
                 annexures.add(insuredAnnexure);
             }
@@ -587,7 +587,7 @@ public class GLPolicyService {
                     BigDecimal insuredDependentBasicPremium = insuredDependentPremiumDetail.getPremiumAmount();
                     insuredDependentBasicPremium = insuredDependentBasicPremium.setScale(2, BigDecimal.ROUND_CEILING);
                     GLPolicyMailDetailDto.Annexure annexure = glQuotationDetailDto.new Annexure(insuredDependent.getFirstName() + " " + insuredDependent.getLastName()
-                            , insuredDependent.getNrcNumber(), insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "",
+                            , insuredDependent.getNrcNumber()!=null? insuredDependent.getNrcNumber():"NA", insuredDependent.getGender() != null ? insuredDependent.getGender().name() : "",
                             insuredDependent.getDateOfBirth() == null ? "" : AppUtils.toString(insuredDependent.getDateOfBirth()),
                             isEmpty(insuredDependent.getCategory()) ? "" : insuredDependent.getCategory(), insuredDependent.getRelationship().description, AppUtils.getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), "", insuredDependentBasicPremium.toPlainString());
                     annexures.add(annexure);
