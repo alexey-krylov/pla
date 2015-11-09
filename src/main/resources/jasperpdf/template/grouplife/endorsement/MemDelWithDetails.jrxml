@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T15:03:45 -->
+<!-- 2015-11-09T16:48:40 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -285,21 +285,21 @@
 						<text><![CDATA[  Policy Details:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="222" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="289" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="139" y="83" width="67" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
+						<reportElement x="139" y="83" width="101" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="205" y="83" width="15" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="241" y="81" width="35" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
 							<font isBold="true"/>
 						</textElement>
@@ -352,14 +352,14 @@
 					<reportElement x="18" y="341" width="931" height="220" uuid="9b03a00b-c021-4554-9d89-e2826de5fb84"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="22" y="374" width="141" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
+					<reportElement x="22" y="374" width="189" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Number: ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="23" y="400" width="131" height="29" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
+					<reportElement x="23" y="400" width="188" height="29" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -409,14 +409,14 @@
 					<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="156" y="374" width="188" height="18" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
+					<reportElement x="221" y="377" width="188" height="18" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="156" y="401" width="188" height="28" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
+					<reportElement x="221" y="404" width="188" height="28" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -430,34 +430,34 @@
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="81" y="453" width="50" height="15" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
+					<reportElement x="110" y="453" width="50" height="15" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="23" y="452" width="67" height="15" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
+					<reportElement x="23" y="452" width="86" height="15" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
 					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[in effect from]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="143" y="451" width="93" height="21" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
+					<reportElement x="189" y="453" width="93" height="21" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="511" y="450" width="399" height="24" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
+					<reportElement x="548" y="453" width="399" height="24" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
 					<text><![CDATA[ is hereby refunded . Assured Details(as an annexure to the Endorsement Schedule)]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="443" y="451" width="61" height="24" uuid="f7188e5f-1ece-4cd1-af43-3dd1d5e735df"/>
+					<reportElement x="500" y="450" width="49" height="24" uuid="f7188e5f-1ece-4cd1-af43-3dd1d5e735df"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="237" y="452" width="205" height="24" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
-					<text><![CDATA[Arising out of the aforesaid deletion, a sum of]]></text>
+					<reportElement x="281" y="454" width="219" height="24" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
+					<text><![CDATA[Arising out of the aforesaid deletion, a sum of K]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="114" y="451" width="30" height="15" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
+					<reportElement x="160" y="453" width="30" height="15" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
 					<text><![CDATA[To]]></text>
 				</staticText>
 				<frame>
