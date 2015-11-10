@@ -1686,7 +1686,33 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.isRiderValid=function()
             {
                 var riderValid="true";
-                for(i in $scope.proposalPlanDetail.riderDetails){
+
+                /****
+                 * Checking for Rider Details if rider details is coming from Server..
+                 */
+                 if($scope.proposalPlanDetail.riderDetails.length >0 ){
+
+                     for(i in $scope.proposalPlanDetail.riderDetails){
+
+                         if($scope.proposalPlanDetail.riderDetails[i].sumAssured == null && $scope.proposalPlanDetail.riderDetails[i].coverTerm == null){
+                             riderValid="false";
+                             break;
+                         }
+                         else if($scope.proposalPlanDetail.riderDetails[i].sumAssured != null && $scope.proposalPlanDetail.riderDetails[i].coverTerm != null){
+                             riderValid="false";
+                             break;
+                         }
+                         else{
+                             riderValid="true";
+                         }
+                     }
+                 }
+                else{
+                     riderValid="false";
+                 }
+
+
+                /*for(i in $scope.proposalPlanDetail.riderDetails){
 
                     if($scope.proposalPlanDetail.riderDetails[i].sumAssured == null && $scope.proposalPlanDetail.riderDetails[i].coverTerm == null){
                         riderValid="false";
@@ -1699,7 +1725,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     else{
                         riderValid="true";
                     }
-                }
+                }*/
                 if(riderValid == "false"){
                     return false;
                 }

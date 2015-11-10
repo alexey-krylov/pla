@@ -334,6 +334,32 @@ public class GLPolicyService {
         return mandatoryDocumentDtos;
     }
 
+    public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(String policyId) {
+        Map policyMap = glPolicyFinder.findPolicyById(policyId);
+        List<GLProposerDocument> uploadedDocuments = policyMap.get("proposerDocuments") != null ? (List<GLProposerDocument>) policyMap.get("proposerDocuments") : Lists.newArrayList();
+        Set<GLProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
+                @Override
+                public GLProposalMandatoryDocumentDto apply(GLProposerDocument glProposerDocument) {
+                    GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), glProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
+    }
+
+
 
     public List<EmailAttachment> getPolicyPDF(PolicyId policyId, boolean isEndorsementDocument) throws IOException, JRException {
         GLPolicyMailDetailDto glPolicyDetailForPDF = getGlPolicyDetailForPDF(policyId,isEndorsementDocument,null );

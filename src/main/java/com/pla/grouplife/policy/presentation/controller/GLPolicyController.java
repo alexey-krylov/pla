@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -164,6 +165,14 @@ public class GLPolicyController {
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("policyId") String policyId) {
         List<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glPolicyService.findMandatoryDocuments(policyId);
+        return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getadditionaldocuments/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("policyId") String policyId) {
+        Set<GLProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = glPolicyService.findAdditionalDocuments(policyId);
         return ghProposalMandatoryDocumentDtos;
     }
 

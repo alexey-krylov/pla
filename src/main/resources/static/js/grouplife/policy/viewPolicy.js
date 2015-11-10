@@ -41,7 +41,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             $scope.industries = industries;
             $scope.additionalDocumentList = [{}];
-            $http.get("/pla/grouplife/proposal/getadditionaldocuments/" + $scope.policyId).success(function (data, status) {
+            $http.get("/pla/grouplife/policy/getadditionaldocuments/" + $scope.policyId).success(function (data, status) {
                 console.log(data);
                 $scope.additionalDocumentList = data;
                 //   $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
