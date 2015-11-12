@@ -299,13 +299,14 @@
 
                             <div class="controls">
                                 <input type="number" ng-model="newCoverage.coverageTerm.maxMaturityAge"
-                                       validate-term=""
-                                       class="form-control" name="maxMaturityAge" min="{{newCoverage.maxAge}}"
-                                       ng-required="true"/>
-
+                                       class="form-control input-sm" name="maxMaturityAge" min="{{newCoverage.maxAge}}"
+                                       max="{{plan.planDetail.maxEntryAge + 1}}" ng-required="true"/>
                                 <div ng-show="coverageForm.maxMaturityAge.$dirty &amp;&amp; coverageForm.maxMaturityAge.$invalid">
+                                    <small class="error" ng-show="coverageForm.maxMaturityAge.$error.min">
+                                        Coverage Maximum Maturity Age shouldn't be lesser than {{newCoverage.maxAge}}.
+                                    </small>
                                     <small class="error" ng-show="coverageForm.maxMaturityAge.$error.max">
-                                        Coverage Maximum Maturity Age should be greater than Max Entry Age of Coverage and less than or equal to the Maximum Maturity Age of Plan
+                                        Coverage Maximum Maturity Age shouldn't be greater than {{plan.planDetail.maxEntryAge + 1}}.
                                     </small>
                                 </div>
                             </div>
