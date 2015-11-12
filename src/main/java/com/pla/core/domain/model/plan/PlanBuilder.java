@@ -1,6 +1,7 @@
 package com.pla.core.domain.model.plan;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.PolicyTermType;
 import com.pla.sharedkernel.domain.model.PremiumTermType;
@@ -72,6 +73,9 @@ public class PlanBuilder {
                 this.premiumTerm = new Term(policyTerm);
                 break;
             case SINGLE:
+                Set<Integer> premiumTerm = Sets.newLinkedHashSet();
+                premiumTerm.add(1);
+                this.premiumTerm = new Term(premiumTerm);
                 //TODO find out what happens when it is single premium
         }
         return this;
