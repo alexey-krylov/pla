@@ -21,6 +21,7 @@ import com.pla.grouplife.sharedresource.service.*;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -80,7 +81,7 @@ public class GLQuotationService {
 
     public byte[] getPlanReadyReckoner(String quotationId) throws IOException, JRException {
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
-        List<PlanId> planIds = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
+        List<PlanId> planIds = getActivePlanByAgentId(agentDetailDto.getAgentId());
         List<PlanDetailDto> planDetailDtoList = PlanDetailDto.transformToPlanDetail(planAdapter.getPlanAndCoverageDetail(planIds));
         byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(planDetailDtoList, "jasperpdf/template/grouplife/planReadyReckoner.jrxml");
         return pdfData;
@@ -259,6 +260,18 @@ public class GLQuotationService {
 
     private List<PlanId> getAgentAuthorizedPlans(String agentId) {
         List<Map<String, Object>> authorizedPlans = glQuotationFinder.getAgentAuthorizedPlan(agentId);
+        List<PlanId> planIds = authorizedPlans.stream().map(new Function<Map<String, Object>, PlanId>() {
+            @Override
+            public PlanId apply(Map<String, Object> authorizePlanMap) {
+                String planId = (String) authorizePlanMap.get("planId");
+                return new PlanId(planId);
+            }
+        }).collect(Collectors.toList());
+        return planIds;
+    }
+
+    private List<PlanId> getActivePlanByAgentId(String agentId) {
+        List<Map<String, Object>> authorizedPlans = glQuotationFinder.getActivePlanTagToAgentById(agentId, LineOfBusinessEnum.GROUP_LIFE.getDescription());
         List<PlanId> planIds = authorizedPlans.stream().map(new Function<Map<String, Object>, PlanId>() {
             @Override
             public PlanId apply(Map<String, Object> authorizePlanMap) {

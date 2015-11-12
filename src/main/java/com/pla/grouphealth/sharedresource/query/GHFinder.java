@@ -54,6 +54,10 @@ public class GHFinder {
 
     public static final String FIND_GEO_BY_ID_QUERY = "SELECT geo_id AS geoId,parent_geo_id AS parentGeoId,geo_type AS geoType,geo_description AS geoName FROM geo WHERE geo_id=:geoId";
 
+    public static final String findActivePlansTagToAgentByIdQuery = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN " +
+            "plan_coverage_benefit_assoc p ON p.plan_id = a.plan_id WHERE agent_id=:agentId AND p.line_of_business=:lineOfBusiness AND p.plan_status = 'LAUNCHED'";
+
+
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -149,4 +153,9 @@ public class GHFinder {
         Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_health_proposal");
         return proposal;
     }
+
+    public List<Map<String, Object>> getActivePlanTagToAgentById(String agentId,String lineOfBusiness) {
+        return namedParameterJdbcTemplate.query(findActivePlansTagToAgentByIdQuery, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", lineOfBusiness), new ColumnMapRowMapper());
+    }
+
 }

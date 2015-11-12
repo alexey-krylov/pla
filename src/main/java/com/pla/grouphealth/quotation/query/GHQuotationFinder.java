@@ -54,6 +54,9 @@ public class GHQuotationFinder {
         return ghFinder.getAgentAuthorizedPlan(agentId);
     }
 
+    public List<Map<String, Object>> getActivePlanTagToAgentById(String agentId,String lineOfBusiness) {
+        return ghFinder.getActivePlanTagToAgentById(agentId,lineOfBusiness);
+    }
     public Map<String, Object> getCoverageDetail(String coverageId) {
         return ghFinder.getCoverageDetail(coverageId);
     }
