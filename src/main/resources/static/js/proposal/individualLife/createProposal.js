@@ -76,8 +76,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
                             var maxMaturityAge = coverage.coverageTerm.maxMaturityAge;
-                            //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
-                            //console.log('maxMaturityAgeTd***'+JSON.stringify(maxMaturityAge));
+                            //console.log('ageNextBirthdayCoverage *** SPECIFIED_VALUES***'+ageNextBirthday);
+                            //console.log('maxMaturityAgeTd***SPECIFIED_VALUES***'+JSON.stringify(maxMaturityAge));
                             $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                 //console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
                                 //console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
@@ -392,9 +392,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
              }
              });*/
             $scope.cancelAll = function () {
-                window.location.href = "/pla/individuallife/proposal/search"
-            }
+                //window.location.href = "/pla/individuallife/proposal/search"
 
+                if($scope.method == 'approval'){
+                 window.location.href = "/pla/individuallife/proposal/openapprovalproposal"
+                 }
+                 else
+                 {
+                 window.location.href = "/pla/individuallife/proposal/search"
+                 }
+
+            }
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     //alert(status);
