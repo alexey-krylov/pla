@@ -229,32 +229,39 @@ public class ProposedAssuredBuilder {
                 .withMaritalStatus(pa.getMaritalStatus())
                 .withNrc(pa.getNrc())
                 .withRelationShipId(pa.getRelationshipId())
-                .withClientId(pa.getClientId())
-                .withEmploymentDetail(new EmploymentDetailBuilder()
-                        .withEmploymentDate(pa.getEmploymentDetail().getEmploymentDate())
-                        .withEmploymentTypeId(pa.getEmploymentDetail().getEmploymentTypeId())
-                        .withEmployer(pa.getEmploymentDetail().getEmployer())
-                        .withWorkPhone(pa.getEmploymentDetail().getWorkPhone())
-                        .withAddress(new AddressBuilder()
-                                .withAddress1(pa.getEmploymentDetail().getAddress().getAddress1())
-                                .withAddress2(pa.getEmploymentDetail().getAddress().getAddress2())
-                                .withProvince(pa.getEmploymentDetail().getAddress().getProvince())
-                                .withPostalCode(pa.getEmploymentDetail().getAddress().getPostalCode())
-                                .withTown(pa.getEmploymentDetail().getAddress().getTown()).createAddress())
-                        .withOccupationClass(pa.getEmploymentDetail().getOccupationClass()).createEmploymentDetail())
-                .withResidentialAddress(new ResidentialAddress(new AddressBuilder()
-                        .withAddress1(pa.getResidentialAddress().getAddress().getAddress1())
-                        .withAddress2(pa.getResidentialAddress().getAddress().getAddress2())
-                        .withProvince(pa.getResidentialAddress().getAddress().getProvince())
-                        .withPostalCode(pa.getResidentialAddress().getAddress().getPostalCode())
-                        .withTown(pa.getResidentialAddress().getAddress().getTown()).createAddress(),
-                        pa.getResidentialAddress().getHomePhone(),
-                        pa.getResidentialAddress().getEmailAddress()));
-        if(pa.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
-            builder.withSpouseEmailAddress(pa.getSpouseEmailAddress())
-                    .withSpouseFirstName(pa.getSpouseFirstName())
-                    .withSpouseMobileNumber(pa.getSpouseMobileNumber())
-                    .withSpouseLastName(pa.getSpouseLastName());
+                .withClientId(pa.getClientId());
+        if (pa.getEmploymentDetail()!=null) {
+            builder.withEmploymentDetail(new EmploymentDetailBuilder()
+                    .withEmploymentDate(pa.getEmploymentDetail().getEmploymentDate())
+                    .withEmploymentTypeId(pa.getEmploymentDetail().getEmploymentTypeId())
+                    .withEmployer(pa.getEmploymentDetail().getEmployer())
+                    .withWorkPhone(pa.getEmploymentDetail().getWorkPhone())
+                    .withAddress(new AddressBuilder()
+                            .withAddress1(pa.getEmploymentDetail().getAddress().getAddress1())
+                            .withAddress2(pa.getEmploymentDetail().getAddress().getAddress2())
+                            .withProvince(pa.getEmploymentDetail().getAddress().getProvince())
+                            .withPostalCode(pa.getEmploymentDetail().getAddress().getPostalCode())
+                            .withTown(pa.getEmploymentDetail().getAddress().getTown()).createAddress())
+                    .withOccupationClass(pa.getEmploymentDetail().getOccupationClass()).createEmploymentDetail());
+        }
+        if (pa.getResidentialAddress()!=null) {
+            builder.withResidentialAddress(new ResidentialAddress(new AddressBuilder()
+                    .withAddress1(pa.getResidentialAddress().getAddress().getAddress1())
+                    .withAddress2(pa.getResidentialAddress().getAddress().getAddress2())
+                    .withProvince(pa.getResidentialAddress().getAddress().getProvince())
+                    .withPostalCode(pa.getResidentialAddress().getAddress().getPostalCode())
+                    .withTown(pa.getResidentialAddress().getAddress().getTown()).createAddress(),
+                    pa.getResidentialAddress().getHomePhone(),
+                    pa.getResidentialAddress().getEmailAddress()));
+        }
+
+        if (pa.getMaritalStatus()!=null) {
+            if (pa.getMaritalStatus().equals(MaritalStatus.MARRIED)) {
+                builder.withSpouseEmailAddress(pa.getSpouseEmailAddress())
+                        .withSpouseFirstName(pa.getSpouseFirstName())
+                        .withSpouseMobileNumber(pa.getSpouseMobileNumber())
+                        .withSpouseLastName(pa.getSpouseLastName());
+            }
         }
 
         return builder;

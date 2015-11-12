@@ -52,6 +52,9 @@ public class ILProposalFactory {
             quotationProposerDto.setSpouse(proposerDto.getSpouse());
             quotationProposerDto.setIsProposedAssured(cmd.getProposer().getIsProposedAssured());
             proposer = ProposerBuilder.getProposerBuilder(quotationProposerDto).createProposer();
+            ProposedAssuredDto proposedAssuredDto = dto.getProposedAssured();
+            proposedAssured = new ProposedAssured(proposedAssuredDto.getTitle(),proposedAssuredDto.getFirstName(),proposedAssuredDto.getSurname(),proposedAssuredDto.getNrc(),proposedAssuredDto.getDateOfBirth(),
+                    proposedAssuredDto.getGender(),proposedAssuredDto.getMobileNumber(),proposedAssuredDto.getEmailAddress(),proposedAssuredDto.getMaritalStatus(),null,null,null,null,null,null,proposedAssuredDto.getOtherName(),proposedAssuredDto.getRelationshipId(),proposedAssuredDto.getClientId());
             if (dto.isAssuredTheProposer()) {
                 proposedAssured =  withProposedAssure(quotationProposerDto);
             }
