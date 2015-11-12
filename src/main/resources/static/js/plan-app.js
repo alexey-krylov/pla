@@ -191,8 +191,9 @@ app.directive('validateTerm', function () {
                     valid = newval <= maxMaturityAge;
                     console.log(valid);
                 } else {
-                    maxMaturityAge = scope.$eval('plan.policyTerm.maxMaturityAge');
-                    valid = newval <= maxMaturityAge;
+                    //maxMaturityAge = scope.$eval('plan.policyTerm.maxMaturityAge');
+                    maxMaturityAge = scope.$eval('plan.planDetail.maxEntryAge');
+                    valid = newval <= maxMaturityAge +1 ;
                 }
                 ctrl.$setValidity('max', valid);
             });
