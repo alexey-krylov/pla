@@ -155,5 +155,10 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
         }
         return totalSumAssured;
     }
+    public GroupHealthPolicy updateWithDocuments(Set<GHProposerDocument> proposerDocuments) {
+        this.proposerDocuments = proposerDocuments;
+        // raise event to store document in client BC
+        return this;
+    }
 
 }

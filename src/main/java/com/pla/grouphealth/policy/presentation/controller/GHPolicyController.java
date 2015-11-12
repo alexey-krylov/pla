@@ -3,6 +3,7 @@ package com.pla.grouphealth.policy.presentation.controller;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.pla.grouphealth.policy.application.command.GHPolicyDocumentCommand;
 import com.pla.grouphealth.policy.application.service.GHPolicyService;
 import com.pla.grouphealth.policy.presentation.domain.GHPolicyDocument;
 import com.pla.grouphealth.policy.presentation.dto.GHPolicyMailDto;
@@ -18,21 +19,26 @@ import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
+import lombok.Synchronized;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,6 +48,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static org.nthdimenzion.presentation.AppUtils.deleteTempFileIfExists;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
@@ -61,6 +68,9 @@ public class GHPolicyController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private CommandGateway commandGateway;
 
     @Autowired
     public GHPolicyController(GHPolicyService ghPolicyService) {
@@ -272,5 +282,19 @@ public class GHPolicyController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/policy/printPolicy");
         return modelAndView;
+    }
+
+    @Synchronized
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadMandatoryDocument(GHPolicyDocumentCommand ghPolicyDocumentCommand, HttpServletRequest request) {
+        ghPolicyDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+        try {
+            commandGateway.send(ghPolicyDocumentCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
 }
