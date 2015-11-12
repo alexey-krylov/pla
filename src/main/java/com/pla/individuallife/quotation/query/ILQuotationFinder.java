@@ -1,12 +1,17 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
+import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.sharedresource.dto.*;
+import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,6 +22,9 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -26,6 +34,9 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Finder
 @Service
 public class ILQuotationFinder {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY =
@@ -76,7 +87,7 @@ public class ILQuotationFinder {
 
     public List<Map<String, Object>> getQuotationForPremiumWithRiderById(String quotationId) {
         return namedParameterJdbcTemplate.queryForList(FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY,
-                 new MapSqlParameterSource().addValue("quotationId", quotationId));
+                new MapSqlParameterSource().addValue("quotationId", quotationId));
     }
 
     public ILQuotationDto getQuotationById(String quotationId) {
@@ -175,4 +186,48 @@ public class ILQuotationFinder {
         SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("parentQuotationId",parentQuotationId);
         return namedParameterJdbcTemplate.query(findQuotationByQuotationNumberQuery, sqlParameterSource, new ColumnMapRowMapper());
     }
+
+
+    public List<RiderDetailDto> findCoveragesByPlanAndAssuredDOB(String planId, int proposedAssuredDOB) {
+        List<String> coverageIds = getCoverageIds(planId, proposedAssuredDOB);
+        // Query against the view
+        List<Map<String, Object>> resultSet = namedParameterJdbcTemplate.queryForList("select DISTINCT * from plan_coverage where plan_id in (:planId) " +
+                "AND (optional = 1)", new MapSqlParameterSource().addValue("planId", planId.toString()));
+        return resultSet.parallelStream().filter(new Predicate<Map<String, Object>>() {
+            @Override
+            public boolean test(Map<String, Object> coverageMap) {
+                return coverageIds.contains(coverageMap.get("coverage_id"));
+            }
+        }).map(new Function<Map<String, Object>, RiderDetailDto>() {
+            @Override
+            public RiderDetailDto apply(Map<String, Object> coverageMap) {
+                RiderDetailDto dto = new RiderDetailDto();
+                dto.setCoverageName(coverageMap.get("coverage_name").toString());
+                dto.setCoverageId(coverageMap.get("coverage_id").toString());
+                return dto;
+
+            }
+        }).collect(Collectors.toList());
+    }
+
+
+    private List<String> getCoverageIds(String planId,int age){
+        Criteria planCriteria = Criteria.where("_id").is(planId);
+        Query query = new Query(planCriteria);
+        query.fields().include("coverages");
+        Map planMap = mongoTemplate.findOne(query, Map.class, "PLAN");
+        List<PlanCoverage> planCoverages = (List<PlanCoverage>) planMap.get("coverages");
+        return planCoverages.parallelStream().filter(new Predicate<PlanCoverage>() {
+            @Override
+            public boolean test(PlanCoverage planCoverage) {
+                return (planCoverage.getCoverageType().equals(CoverageType.OPTIONAL) && age >= planCoverage.getMinAge() && age <=planCoverage.getMaxAge());
+            }
+        }).map(new Function<PlanCoverage, String>() {
+            @Override
+            public String apply(PlanCoverage planCoverage) {
+                return planCoverage.getCoverageId().getCoverageId();
+            }
+        }).collect(Collectors.toList());
+    }
+
 }

@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -154,19 +153,11 @@ public class ILQuotationController {
         return dto;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "getridersforplan/{planId}")
+    @RequestMapping(method = RequestMethod.GET, value = "getridersforplan/{planId}/{proposedAssuredDOB}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
     @ResponseBody
-    public List<RiderDetailDto> getRidersForPlan(@PathVariable("planId") String planId) {
-        List<Map<String, Object>> optionalCoverages = ilQuotationFinder.findAllOptionalCoverages(planId);
-        List<RiderDetailDto> riderDetails = new ArrayList<>();
-        for (Map<String, Object> m : optionalCoverages) {
-            RiderDetailDto dto = new RiderDetailDto();
-            dto.setCoverageName(m.get("coverage_name").toString());
-            dto.setCoverageId(m.get("coverage_id").toString());
-            riderDetails.add(dto);
-        }
-        return riderDetails;
+    public List<RiderDetailDto> getRidersForPlan(@PathVariable("planId") String planId,@PathVariable("proposedAssuredDOB") Integer proposedAssuredDOB) {
+       return  ilQuotationFinder.findCoveragesByPlanAndAssuredDOB(planId, proposedAssuredDOB);
     }
 
 
