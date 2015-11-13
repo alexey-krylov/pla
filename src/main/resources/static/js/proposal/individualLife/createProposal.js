@@ -76,11 +76,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
                             var maxMaturityAge = coverage.coverageTerm.maxMaturityAge;
-                            //console.log('ageNextBirthdayCoverage *** SPECIFIED_VALUES***'+ageNextBirthday);
-                            //console.log('maxMaturityAgeTd***SPECIFIED_VALUES***'+JSON.stringify(maxMaturityAge));
+                            console.log('ageNextBirthdayCoverage *** SPECIFIED_VALUES***'+ageNextBirthday);
+                            console.log('maxMaturityAgeTd***SPECIFIED_VALUES***'+JSON.stringify(maxMaturityAge));
                             $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
-                                //console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
-                                //console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
+                                console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
+                                console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
                                 return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text <= $scope.proposalPlanDetail.policyTerm);
                             });
 

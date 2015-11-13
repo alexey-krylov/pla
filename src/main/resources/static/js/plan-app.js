@@ -192,8 +192,15 @@ app.directive('validateTerm', function () {
                     console.log(valid);
                 } else {
                     //maxMaturityAge = scope.$eval('plan.policyTerm.maxMaturityAge');
-                    maxMaturityAge = scope.$eval('plan.planDetail.maxEntryAge');
-                    valid = newval <= maxMaturityAge +1 ;
+                    if(scope.$eval('plan.policyTerm.maxMaturityAge' != null)){
+                        maxMaturityAge = scope.$eval('plan.policyTerm.maxMaturityAge');
+                        valid = newval <= maxMaturityAge ;
+                    }
+                    else{
+
+                        maxMaturityAge = scope.$eval('plan.planDetail.maxEntryAge');
+                        valid = newval <= maxMaturityAge +1 ;
+                    }
                 }
                 ctrl.$setValidity('max', valid);
             });

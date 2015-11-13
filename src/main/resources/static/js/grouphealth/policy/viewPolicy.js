@@ -41,10 +41,10 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
 
             $scope.additionalDocumentList = [{}];
-            $http.get("/pla/grouphealth/proposal/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
+            $http.get("/pla/grouphealth/policy/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
                 console.log(data);
                 $scope.additionalDocumentList=data;
-              //  $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+                $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
 
             });
 
@@ -66,6 +66,59 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                     }
                 }
             }
+
+            $scope.callAdditionalDoc = function (file) {
+                if (file[0]) {
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+                }
+            }
+
+            $scope.isUploadEnabledForAdditionalDocument = function () {
+                var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    //alert(i+"--"+files)
+                    //alert(i+"--"+document.content);
+                    if (!(files || document.content)) {
+                        enableAdditionalUploadButton = false;
+                        break;
+                    }
+                }
+                return enableAdditionalUploadButton;
+            }
+
+            $scope.uploadAdditionalDocument = function () {
+                //alert('Upload');
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    //alert($scope.proposal.proposalId);
+
+                    $scope.additional = true;
+                    if (files) {
+                        console.dir(files);
+                        $upload.upload({
+                            url: '/pla/grouphealth/policy/uploadmandatorydocument',
+                            file: files,
+                            fields: {
+                                //documentId: document.documentName,
+                                documentId: document.documentId,
+                                policyId: $scope.policyId,
+                                mandatory: false
+                            },
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            ////console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+                }
+            };
+
+
             $http.get("/pla/grouphealth/policy/getpolicydetail/" + $scope.policyId).success(function (data, status) {
                //  console.log(data);
                  $scope.policyDetails.basicDetails = data;
@@ -197,6 +250,50 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             $scope.back = function () {
                 $window.location.href = 'openpolicysearchpage';
+            }
+
+
+            $scope.uploadDocumentFiles = function () {
+                // //console.log($scope.documentList.length);
+                for (var i = 0; i < $scope.documentList.length; i++) {
+                    var document = $scope.documentList[i];
+                    var files = document.documentAttached;
+                    //console.dir(files);
+                    // //alert(files.name);
+                    if (files) {
+                        //console.log('File Uploading....');
+                        $upload.upload({
+                            url: '/pla/grouphealth/policy/uploadmandatorydocument',
+                            file: files,
+                            fields: {
+                                documentId: document.documentId,
+                                policyId: $scope.policyId,
+                                mandatory: true,
+                                isApproved: true
+                            },
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            ////console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+
+                }
+
+            };
+
+            $scope.isBrowseDisable=function(document)
+            {
+                if(document.fileName == null && document.submitted)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
         }])
