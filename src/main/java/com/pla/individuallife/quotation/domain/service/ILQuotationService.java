@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.repository.Repository;
@@ -44,7 +45,7 @@ public class ILQuotationService {
      * @return
      */
     public void createQuotation(ILQuotationProcessor quotationProcessor, QuotationId quotationId,
-                                         AgentId agentId, ProposedAssured proposedAssured, PlanId planId) {
+                                         AgentId agentId, ProposedAssured proposedAssured, PlanId planId,OpportunityId opportunityId) {
         Preconditions.checkArgument(quotationId != null, "Quotation Id is empty.");
         Preconditions.checkArgument(agentId != null, "Agent Id is empty.");
         Preconditions.checkArgument(planId != null, "Plan Id is empty.");
@@ -54,6 +55,7 @@ public class ILQuotationService {
                 new ILQuotation(quotationProcessor, quotationARId,
                         quotationNumber, quotationId, agentId, proposedAssured, planId,
                         ILQuotationStatus.DRAFT, 0);
+        quotation = quotation.updateWithOpportunityId(opportunityId);
         ilQuotationRepository.add(quotation);
     }
 

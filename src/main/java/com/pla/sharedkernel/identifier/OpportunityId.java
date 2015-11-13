@@ -2,6 +2,7 @@ package com.pla.sharedkernel.identifier;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
@@ -12,6 +13,7 @@ import javax.persistence.Embeddable;
 @Getter
 @ValueObject
 @EqualsAndHashCode(of = "opportunityId")
+@NoArgsConstructor
 @Embeddable
 public class OpportunityId {
 

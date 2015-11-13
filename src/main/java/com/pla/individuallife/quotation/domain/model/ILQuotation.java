@@ -230,4 +230,9 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
     public QuotationId getIdentifier() {
         return this.getQuotationId();
     }
+
+    public ILQuotation updateWithOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId = opportunityId;
+        return this;
+    }
 }

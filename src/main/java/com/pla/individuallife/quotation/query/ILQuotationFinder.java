@@ -105,6 +105,7 @@ public class ILQuotationFinder {
         dto.setQuotationId(quotation.getQuotationId());
         dto.setQuotationStatus(quotation.getIlQuotationStatus().name());
         dto.setAssuredTheProposer(quotation.isAssuredTheProposer());
+        dto.setOpportunityId(quotation.getOpportunityId()!=null?quotation.getOpportunityId().getOpportunityId():"");
         //TODO change the type in dto
 //        dto.setQuotationStatus(quotation.getIlQuotationStatus());
         try {

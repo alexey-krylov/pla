@@ -38,6 +38,8 @@ public class ILCreateQuotationCommand {
     @NotNull(message = "{Plan ID cannot be null}")
     private String planId;
 
+    private String opportunityId;
+
     private UserDetails userDetails;
 
 }

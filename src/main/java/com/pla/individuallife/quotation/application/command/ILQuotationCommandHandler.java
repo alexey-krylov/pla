@@ -11,6 +11,7 @@ import com.pla.individuallife.sharedresource.dto.PlanDetailDto;
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.individuallife.sharedresource.dto.RiderDetailDto;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.axonframework.commandhandling.GenericCommandMessage;
@@ -54,7 +55,7 @@ public class ILQuotationCommandHandler {
                 .withNrcNumber(cmd.getNrc())
                 .withTitle(cmd.getTitle()).build();
         quotationService.createQuotation(quotationProcessor, quotationId, new AgentId(cmd.getAgentId()),
-                proposedAssured, new PlanId(cmd.getPlanId()));
+                proposedAssured, new PlanId(cmd.getPlanId()),new OpportunityId(cmd.getOpportunityId()));
         return quotationId;
     }
 

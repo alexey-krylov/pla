@@ -34,6 +34,8 @@ public class ILQuotationDto {
 
     private String quotationNumber;
 
+    private String opportunityId;
+
     private ProposerDto proposer;
     private ProposedAssuredDto proposedAssured;
     private Map<String, Object> agentDetail;
