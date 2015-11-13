@@ -135,6 +135,16 @@ public class GHPolicyController {
         return ghPolicyService.getProposerDetail(new PolicyId(policyId));
     }
 
+    @RequestMapping(value = "/getproposalid/{policyId}")
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get proposer detail from proposer")
+    public Map<String,Object> getProposalId(@PathVariable("policyId") String policyId) {
+        Map<String, Object> proposalMap = Maps.newLinkedHashMap();
+        proposalMap.put("proposalId", ghPolicyService.getProposalIdByPolicyId(policyId));
+        return proposalMap;
+    }
+
+
     @RequestMapping(value = "/downloadinsuredtemplate/{policyId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "To download insured template")
     public void downloadInsuredTemplate(@PathVariable("policyId") String policyId, HttpServletResponse response) throws IOException {

@@ -21,10 +21,9 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Service
 public class GHPolicyFinder {
 
+    private static final String GH_POLICY_COLLECTION_NAME = "group_health_policy";
     @Autowired
     private MongoTemplate mongoTemplate;
-
-    private static final String GH_POLICY_COLLECTION_NAME = "group_health_policy";
 
     public List<Map> findAllPolicy() {
         return mongoTemplate.findAll(Map.class, GH_POLICY_COLLECTION_NAME);
@@ -32,6 +31,12 @@ public class GHPolicyFinder {
 
     public Map findPolicyById(String policyId) {
         return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, GH_POLICY_COLLECTION_NAME);
+    }
+
+    public Map findProposalIdByPolicyId(String policyId) {
+        Query query = new Query(Criteria.where("_id").is(policyId));
+        query.fields().include("proposal");
+        return mongoTemplate.findOne(query, Map.class, GH_POLICY_COLLECTION_NAME);
     }
 
     public List<Map> searchPolicy(String policyNumber, String policyHolderName,String proposalNumber) {

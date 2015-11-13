@@ -29,6 +29,7 @@ import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -110,6 +111,11 @@ public class GHPolicyService {
         Map policyMap = ghPolicyFinder.findPolicyById(policyId);
         PolicyDetailDto policyDetailDto = transformToDto(policyMap);
         return policyDetailDto;
+    }
+
+    public String getProposalIdByPolicyId(String policyId){
+        Map policyMap = ghPolicyFinder.findProposalIdByPolicyId(policyId);
+        return policyMap.get("proposal") !=null ?((Proposal)policyMap.get("proposal")).getProposalId().getProposalId() : "";
     }
 
     public List<PolicyDetailDto> searchPolicy(SearchGHPolicyDto searchGHPolicyDto) {

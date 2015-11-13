@@ -128,6 +128,17 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             });
 
+            $http.get("/pla/grouphealth/policy/getproposalid/" + $scope.policyId).success(function (data, status) {
+                 //console.log(data);
+                $scope.proposalId=data.proposalId;
+                console.log('ProposalIDRCV'+ JSON.stringify($scope.proposalId));
+                $http.get("/pla/grouphealth/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
+                    //  console.log(data);
+                    $scope.approvalCommentList=data;
+                });
+            });
+
+
             $scope.policyDetails = {
                 /*initialize with default values*/
                 plan: {
