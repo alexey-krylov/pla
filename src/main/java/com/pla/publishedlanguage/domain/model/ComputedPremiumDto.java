@@ -16,9 +16,16 @@ public class ComputedPremiumDto {
 
     private BigDecimal premium;
 
+    private BigDecimal policyFee;
+
     public ComputedPremiumDto(PremiumFrequency premiumFrequency, BigDecimal premium) {
         this.premiumFrequency = premiumFrequency;
         this.premium = premium;
+    }
+
+    public ComputedPremiumDto(PremiumFrequency premiumFrequency, BigDecimal premium,BigDecimal policyFee) {
+        this(premiumFrequency,premium);
+        this.policyFee = policyFee;
     }
 
     public static BigDecimal getAnnualPremium(List<ComputedPremiumDto> computedPremiumDtoList) {
@@ -45,4 +52,23 @@ public class ComputedPremiumDto {
             }
         }).findAny().get();
     }
+
+    public static BigDecimal getAnnualPolicyFee(List<ComputedPremiumDto> computedPremiumDtoList) {
+        return getComputedPremiumByFrequency(computedPremiumDtoList, PremiumFrequency.ANNUALLY).policyFee;
+    }
+
+    public static BigDecimal getSemiAnnualPolicyFee(List<ComputedPremiumDto> computedPremiumDtoList) {
+        return getComputedPremiumByFrequency(computedPremiumDtoList, PremiumFrequency.SEMI_ANNUALLY).policyFee;
+    }
+
+    public static BigDecimal getQuarterlyFee(List<ComputedPremiumDto> computedPremiumDtoList) {
+        return getComputedPremiumByFrequency(computedPremiumDtoList, PremiumFrequency.QUARTERLY).policyFee;
+    }
+
+    public static BigDecimal getMonthlyFee(List<ComputedPremiumDto> computedPremiumDtoList) {
+        return getComputedPremiumByFrequency(computedPremiumDtoList, PremiumFrequency.MONTHLY).policyFee;
+    }
+
+
+
 }

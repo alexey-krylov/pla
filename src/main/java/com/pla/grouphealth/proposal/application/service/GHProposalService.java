@@ -480,6 +480,7 @@ public class GHProposalService {
     }
 
 
+
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
 
         @Override

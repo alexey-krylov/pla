@@ -151,10 +151,10 @@ public class PremiumCalculator implements IPremiumCalculator {
         int quarterly = policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("QUARTERLY")).collect(Collectors.toList()).get(0).getPolicyFee();
         int monthly = policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("MONTHLY")).collect(Collectors.toList()).get(0).getPolicyFee();
 
-        ComputedPremiumDto annualPremium = new ComputedPremiumDto(PremiumFrequency.ANNUALLY, premium.getAnnualPremium(premiumItem, organizationGeneralInformation.getDiscountFactorItems(), noOfDays).add(BigDecimal.valueOf(annual)));
-        ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, premium.getSemiAnnuallyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays).add(BigDecimal.valueOf(semiannual)));
-        ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, premium.getQuarterlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays).add(BigDecimal.valueOf(quarterly)));
-        ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, premium.getMonthlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), noOfDays).add(BigDecimal.valueOf(monthly)));
+        ComputedPremiumDto annualPremium = new ComputedPremiumDto(PremiumFrequency.ANNUALLY, premium.getAnnualPremium(premiumItem, organizationGeneralInformation.getDiscountFactorItems(), noOfDays),BigDecimal.valueOf(annual));
+        ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, premium.getSemiAnnuallyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays),BigDecimal.valueOf(semiannual));
+        ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, premium.getQuarterlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays),BigDecimal.valueOf(quarterly));
+        ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, premium.getMonthlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), noOfDays),BigDecimal.valueOf(monthly));
 
 
         List<ComputedPremiumDto> computedPremiumDtoList = Lists.newArrayList();

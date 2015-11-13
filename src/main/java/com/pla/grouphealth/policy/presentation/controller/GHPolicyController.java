@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -172,6 +173,14 @@ public class GHPolicyController {
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("policyId") String policyId) {
         List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghPolicyService.findMandatoryDocuments(policyId);
+        return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getadditionaldocuments/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("policyId") String policyId) {
+        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = ghPolicyService.findAdditionalDocuments(policyId);
         return ghProposalMandatoryDocumentDtos;
     }
 

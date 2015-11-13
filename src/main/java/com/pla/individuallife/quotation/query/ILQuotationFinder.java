@@ -187,7 +187,6 @@ public class ILQuotationFinder {
         return namedParameterJdbcTemplate.query(findQuotationByQuotationNumberQuery, sqlParameterSource, new ColumnMapRowMapper());
     }
 
-
     public List<RiderDetailDto> findCoveragesByPlanAndAssuredDOB(String planId, int proposedAssuredDOB) {
         List<String> coverageIds = getCoverageIds(planId, proposedAssuredDOB);
         // Query against the view

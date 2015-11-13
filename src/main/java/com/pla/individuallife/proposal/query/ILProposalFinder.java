@@ -257,6 +257,9 @@ public class ILProposalFinder {
         return ilProposalDtoList;
     }
 
+    /*
+    * @TODO premium with policy fee bug Fix
+    * */
     public PremiumDetailDto getPremiumDetail(String proposalId) {
 
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto();
@@ -351,12 +354,12 @@ public class ILProposalFinder {
             }
         }
         premiumDetailDto.setRiderPremiums(riderPremiumDtoSet);
-        premiumDetailDto.setTotalPremium(totalPremium);
+        premiumDetailDto.setTotalPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)));
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(planDetail.getPlanId())));
-        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(ComputedPremiumDto.getMonthlyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(ComputedPremiumDto.getQuarterlyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 

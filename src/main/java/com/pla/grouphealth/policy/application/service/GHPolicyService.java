@@ -372,6 +372,30 @@ public class GHPolicyService {
         return mandatoryDocumentDtos;
     }
 
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(String policyId) {
+        Map proposal = ghPolicyFinder.findPolicyById(policyId);
+        List<GHProposerDocument> uploadedDocuments = proposal.get("proposerDocuments") != null ? (List<GHProposerDocument>) proposal.get("proposerDocuments") : Lists.newArrayList();
+        Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
+                @Override
+                public GHProposalMandatoryDocumentDto apply(GHProposerDocument ghProposerDocument) {
+                    GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(ghProposerDocument.getDocumentId(), ghProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(ghProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
+    }
 
     public GHPolicyMailDto getPreScriptedEmail(PolicyId policyId) {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findOne(policyId);

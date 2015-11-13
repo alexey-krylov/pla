@@ -264,7 +264,7 @@ public class GLPolicyController {
         response.reset();
         response.setContentType("application/zip");
         OutputStream outputStream = null;
-        String zipFileName = "glPolicy.zip";
+        String zipFileName = "gl_Policy.zip";
         ZipOutputStream zos = null;
         response.addHeader("Content-Disposition", "attachment; filename =" + zipFileName);
         if (UtilValidator.isNotEmpty(emailAttachments)){
