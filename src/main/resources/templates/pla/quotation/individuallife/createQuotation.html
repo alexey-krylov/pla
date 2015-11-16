@@ -761,17 +761,16 @@
     <div ng-switch="getSumAssuredType(rider)">
         <div ng-switch-when="SPECIFIED_VALUES">
             <select view-enabled="" class="form-control input-sm" ng-model="rider.sumAssured" name="sumAssured"
-                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"></select>
+                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue | filter:lessThanEqualTo('text',planDetailDto.sumAssured)"></select>
         </div>
         <div ng-switch-when="RANGE">
             <input type="number" view-enabled="" class="form-control input-sm"
                    min="{{coverage.coverageSumAssured.minSumInsured}}"
                    name="sumAssuredPlanRider"
-                   max="{{coverage.coverageSumAssured.maxSumInsured}}" ng-model="rider.sumAssured"/>
-
+                   max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
             <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
                 <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
-                <small ng-message="max">Sum Assured cannot be more than {{coverage.coverageSumAssured.maxSumInsured}}.</small>
+                <small ng-message="max">Sum Assured cannot be more than {{maxOptionalCoverage}}.</small>
                 <small ng-message="invalidMultiple">Please enter multiples of {{coverage.coverageSumAssured.multiplesOf}}</small>
             </div>
         </div>
@@ -788,7 +787,7 @@
                 </small>
             </div>
         </div>
-        <div ng-switch-when="INCOME_MULTIPLIER">
+        <!--<div ng-switch-when="INCOME_MULTIPLIER">
             <input type="number" view-enabled="" class="form-control input-sm" min="0"
                    max="{{coverage.sumAssured.incomeMultiplier}}"
                    name="sumAssured"
@@ -798,7 +797,7 @@
                 <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
                 </small>
             </div>
-        </div>
+        </div>-->
     </div>
 </script>
 <script id="plan-policyterm.tpl" type="text/ng-template">

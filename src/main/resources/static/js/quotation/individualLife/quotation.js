@@ -85,7 +85,7 @@
                             } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                     //return term.text > ageNextBirthday;
-                                    return term.text <= (ageNextBirthday +$scope.planDetailDto.policyTerm);
+                                    return term.text <= (ageNextBirthday +$scope.planDetailDto.policyTerm) && (term.text> ageNextBirthday);
                                 });
                             }
                             return coverage.coverageTermType;
@@ -122,13 +122,21 @@
                             $scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
                             console.log('Derived Type Came..');
                         }
+                        if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
+                             if($scope.coverage.coverageSumAssured.maxSumInsured <=newval){
+                                 $scope.maxOptionalCoverage=$scope.coverage.coverageSumAssured.maxSumInsured;
+                             }
+                            else{
+                                 $scope.maxOptionalCoverage=newval;
+                             }
+                        }
 
                     });
 
                 }]
             }
         })
-        .directive('premiumterm', function () {
+    .directive('premiumterm', function () {
             return {
                 restrict: 'E',
                 templateUrl: 'plan-premiumterm.tpl',
@@ -141,11 +149,12 @@
                         if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
                             return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
-                                return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
+                                //return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
+                                return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
                             return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
-                                return parseInt(term.text) > ageNextBirthday;
+                                return (($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)) ;
                             });
                         }
                     };
