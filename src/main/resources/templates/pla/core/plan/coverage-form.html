@@ -301,7 +301,7 @@
                                 <input type="number" ng-model="newCoverage.coverageTerm.maxMaturityAge"
                                        validate-term=""
                                        class="form-control input-sm" name="maxMaturityAge" min="{{newCoverage.maxAge}}"
-                                       max="{{plan.planDetail.maxEntryAge + 1}}" ng-required="true"/>
+                                       ng-required="true"/>
 
                                 <div ng-show="coverageForm.maxMaturityAge.$dirty &amp;&amp; coverageForm.maxMaturityAge.$invalid">
                                     <small class="error" ng-show="coverageForm.maxMaturityAge.$error.min">

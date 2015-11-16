@@ -141,6 +141,10 @@
                                             <small ng-message="pattern">Only alphabets are allowed.</small>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Opportunity ID</label>
+                                        <input type="text" class="form-control input-sm" ng-disabled="uneditable" name="opportunityId " ng-model="opportunityId"/>
+                                    </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group required">
@@ -212,7 +216,7 @@
                                                ng-required="true"
                                                is-open="launchdob1"
                                                max-date="todayDate"
-                                               ng-model="proposedAssured.dateOfBirth" name="dob"/>
+                                               ng-change="riderDetailCalling()" ng-model="proposedAssured.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm" view-enabled=""
                                             ng-click="launchProposedAssuredDOB($event)">

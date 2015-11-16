@@ -328,6 +328,7 @@
                             $scope.proposedAssured = $scope.quotation.proposedAssured || {};
                             $scope.proposer = $scope.quotation.proposer || {};
                             $scope.originalProposer = $scope.quotation.proposer || {};
+                            $scope.opportunityId=$scope.quotation.opportunityId;
 
                             if ($scope.proposedAssured.dateOfBirth) {
                                 $scope.proposedAssuredAge = calculateAge($scope.proposedAssured.dateOfBirth);
@@ -417,14 +418,23 @@
                     }
                 });*/
 
-                $scope.$watch('plan.planId', function (newval) {
+                $scope.riderDetailCalling=function(){
+                    //alert('calling Rider Details...');
+                    $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.plan.planId +'/'+calculateAge($scope.proposedAssured.dateOfBirth))
+                        .success(function (response) {
+                            $scope.planDetailDto.riderDetails = response;
+                        });
+
+                }
+
+                /*$scope.$watch('plan.planId', function (newval) {
                     if (newval && !$scope.quotationId) {
-                        $http.get('/pla/individuallife/quotation/getridersforplan/' + newval)
+                        $http.get('/pla/individuallife/quotation/getridersforplan/' + newval +'/'+calculateAge($scope.proposedAssured.dateOfBirth))
                             .success(function (response) {
                                 $scope.planDetailDto.riderDetails = response;
                             });
                     }
-                });
+                });*/
 
                 $scope.$watchGroup(['proposedAssured.dateOfBirth', 'proposer.dateOfBirth'], function (newval, oldval) {
                     if (newval) {
@@ -449,7 +459,8 @@
                     $http.post('createquotation',
                         angular.extend($scope.proposedAssured, {
                             agentId: $scope.quotation.agentId,
-                            planId: $scope.plan.planId
+                            planId: $scope.plan.planId,
+                            opportunityId:$scope.opportunityId
                         }))
                        .success(function (data) {
                             if (data.id)
