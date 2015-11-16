@@ -121,7 +121,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            List<String> excelHeaders = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
+            List<String> excelHeaders = GLInsuredExcelHeader.getAllowedHeaderForParserEndorsement(planAdapter, agentPlans);
             String errorMessage = validateRow(currentRow, excelHeaders, agentPlans);
             List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);
@@ -223,7 +223,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
     }
 
     private boolean isValidHeaders(List<String> headers, List<PlanId> planIds) {
-        List<String> allowedHeaders = GLInsuredExcelHeader.getAllowedHeaders(planAdapter, planIds);
+        List<String> allowedHeaders = GLInsuredExcelHeader.getAllowedHeadersForEndorsement(planAdapter, planIds);
         return isTemplateContainsSameExcelHeader(allowedHeaders, headers);
     }
 
@@ -462,9 +462,9 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
-        final List<String> headers = GLInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
+        final List<String> headers = GLInsuredExcelHeader.getAllowedHeaderForParserEndorsement(planAdapter, agentPlans);
         final List<String> excelHeaders = getHeaders(headerRow);
-        Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(Lists.newArrayList(rowIterator), GLInsuredExcelHeader.getAllowedHeaders(planAdapter, agentPlans));
+        Map<Row, List<Row>> insuredTemplateDataRowMap = groupByRelationship(Lists.newArrayList(rowIterator), GLInsuredExcelHeader.getAllowedHeadersForEndorsement(planAdapter, agentPlans));
         List<InsuredDto> insuredDtoList = insuredTemplateDataRowMap.entrySet().stream().map(new Function<Map.Entry<Row, List<Row>>, InsuredDto>() {
             @Override
             public InsuredDto apply(Map.Entry<Row, List<Row>> rowListEntry) {

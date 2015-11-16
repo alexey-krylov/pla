@@ -28,6 +28,40 @@ import static org.nthdimenzion.utils.UtilValidator.*;
  */
 public enum GLInsuredExcelHeader {
 
+    CLIENT_ID("Client ID") {
+        @Override
+        public String getAllowedValue(InsuredDto insuredDto) {
+            return insuredDto.getFamilyId();
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setFamilyId(cellValue);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setFamilyId(cellValue);
+            return insuredDependentDto;
+        }
+
+        @Override
+        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+            return insuredDependentDto.getFamilyId();
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            return "";
+        }
+    },
     PROPOSER_NAME("Proposer Name") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
@@ -816,15 +850,20 @@ public enum GLInsuredExcelHeader {
     public static List<String> getAllHeader() {
         List<String> headers = Lists.newArrayList();
         for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
-            headers.add(glInsuredExcelHeader.getDescription());
+            if (!CLIENT_ID.equals(glInsuredExcelHeader)) {
+                headers.add(glInsuredExcelHeader.getDescription());
+            }
         }
         return headers;
     }
 
+
     public static List<String> getAllHeaderForParser() {
         List<String> headers = Lists.newArrayList();
         for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
-            headers.add(glInsuredExcelHeader.name());
+            if (!CLIENT_ID.equals(glInsuredExcelHeader)) {
+                headers.add(glInsuredExcelHeader.name());
+            }
         }
         return headers;
     }
@@ -851,6 +890,48 @@ public enum GLInsuredExcelHeader {
             headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
         }
         return ImmutableList.copyOf(headers);
+    }
+
+
+    public static List<String> getAllowedHeadersForEndorsement(IPlanAdapter planAdapter, List<PlanId> planIds) {
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
+        List<String> headers = GLInsuredExcelHeader.getAllHeaderForEndorsement();
+        for (int count = 1; count <= noOfOptionalCoverage; count++) {
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+        }
+        return ImmutableList.copyOf(headers);
+    }
+
+
+    public static List<String> getAllowedHeaderForParserEndorsement(IPlanAdapter planAdapter, List<PlanId> planIds) {
+        List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+        int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
+        List<String> headers = GLInsuredExcelHeader.getAllHeaderForParserEndorsement();
+        for (int count = 1; count <= noOfOptionalCoverage; count++) {
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
+            headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.PREMIUM_CELL_HEADER_NAME);
+        }
+        return ImmutableList.copyOf(headers);
+    }
+
+    public static List<String> getAllHeaderForParserEndorsement() {
+        List<String> headers = Lists.newArrayList();
+        for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
+            headers.add(glInsuredExcelHeader.name());
+        }
+        return headers;
+    }
+
+    public static List<String> getAllHeaderForEndorsement() {
+        List<String> headers = Lists.newArrayList();
+        for (GLInsuredExcelHeader glInsuredExcelHeader : GLInsuredExcelHeader.values()) {
+            headers.add(glInsuredExcelHeader.getDescription());
+        }
+        return headers;
     }
 
     public String getDescription() {

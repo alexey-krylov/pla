@@ -172,7 +172,7 @@ public enum GLEndorsementType {
     NEW_CATEGORY_RELATION("Introduction of New category") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
-            return Arrays.asList(GLEndorsementExcelHeader.PROPOSER_NAME, GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.ANNUAL_INCOME,
+            return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID,GLEndorsementExcelHeader.PROPOSER_NAME, GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.ANNUAL_INCOME,
                     GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME,GLEndorsementExcelHeader.DATE_OF_BIRTH,
                     GLEndorsementExcelHeader.GENDER, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.CATEGORY,
                     GLEndorsementExcelHeader.RELATIONSHIP,  GLEndorsementExcelHeader.NO_OF_ASSURED, GLEndorsementExcelHeader.PLAN,
