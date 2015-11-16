@@ -52,8 +52,8 @@ public class GLQuotationFinder {
 
     public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
 
-    public static final String findActivePlansTagToAgentByIdQuery = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN " +
-            "plan_coverage_benefit_assoc p ON p.plan_id = a.plan_id WHERE agent_id=:agentId AND p.line_of_business=:lineOfBusiness AND p.plan_status = 'LAUNCHED'";
+    public static final String findActivePlansTagToAgentById = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN " +
+            "plan_coverage_benefit_assoc p ON p.plan_id = a.plan_id WHERE agent_id=:agentId AND p.line_of_business=:lineOfBusiness AND p.plan_status = 'LAUNCHED' ";
 
     public static final String FIND_OCCUPATION_CLASS_QUERY = "SELECT code,description FROM occupation_class WHERE description=:occupation";
 
@@ -139,7 +139,7 @@ public class GLQuotationFinder {
     }
 
     public List<Map<String, Object>> getActivePlanTagToAgentById(String agentId,String lineOfBusiness) {
-        return namedParameterJdbcTemplate.query(findActivePlansTagToAgentByIdQuery, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", lineOfBusiness), new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(findActivePlansTagToAgentById, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", lineOfBusiness), new ColumnMapRowMapper());
     }
 
     public String getOccupationClass(String occupation) {
