@@ -42,14 +42,14 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/openclaimintimationpage", method = RequestMethod.GET)
     public ModelAndView claimIntimation() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/claim/claimintimation");
+        modelAndView.setViewName("pla/groupLife/claim/claimintimation");
         return modelAndView;
     }
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView searchPolicy() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/claim/searchPolicy");
+        modelAndView.setViewName("pla/groupLife/claim/searchPolicy");
         modelAndView.addObject("searchCriteria", new SearchGLPolicyDto());
         return modelAndView;
     }
@@ -57,7 +57,7 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ModelAndView searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/claim/searchPolicy");
+        modelAndView.setViewName("pla/groupLife/claim/searchPolicy");
         modelAndView.addObject("searchResult", glClaimService.searchPolicy(searchGLPolicyDto));
         modelAndView.addObject("searchCriteria", searchGLPolicyDto);
         return modelAndView;
