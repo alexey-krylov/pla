@@ -49,6 +49,7 @@ public class GLPolicyFactory {
         Industry industry = (Industry) proposalMap.get("industry");
         Proposer proposer = (Proposer) proposalMap.get("proposer");
         ProposalNumber proposalNumber = (ProposalNumber) proposalMap.get("proposalNumber");
+        Set<GLProposerDocument> proposerDocuments = proposalMap.get("proposerDocuments") != null ? new HashSet<>((List) proposalMap.get("proposerDocuments")) : null;
         String policyNumberInString = glPolicyNumberGenerator.getPolicyNumber(GroupLifePolicy.class, agentId);
         PolicyNumber policyNumber = new PolicyNumber(policyNumberInString);
         PolicyId policyId = new PolicyId(ObjectId.get().toString());
@@ -58,7 +59,7 @@ public class GLPolicyFactory {
         GroupLifePolicy groupLifePolicy = new GroupLifePolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail).addIndustry(industry);
+                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments);
         return groupLifePolicy;
     }
 

@@ -767,7 +767,7 @@
             <input type="number" view-enabled="" class="form-control input-sm"
                    min="{{coverage.coverageSumAssured.minSumInsured}}"
                    name="sumAssuredPlanRider"
-                   max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
+                   validate-optsumassured="" max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
             <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
                 <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
                 <small ng-message="max">Sum Assured cannot be more than {{maxOptionalCoverage}}.</small>

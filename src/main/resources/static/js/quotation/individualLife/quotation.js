@@ -104,6 +104,30 @@
                 }]
             };
         })
+        .directive('validateOptsumassured', function () {
+            return {
+                // restrict to an attribute type.
+                restrict: 'A',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    scope.$watch('rider.sumAssured', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        if (newval) {
+                            console.log('validating...***');
+                            if (scope.coverage && scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
+                                var multiplesOf = scope.coverage.coverageSumAssured.multiplesOf;
+                                var modulus = parseInt(newval) % parseInt(multiplesOf);
+                                var valid = modulus == 0;
+                                ctrl.$setValidity('invalidMultiple', valid);
+                            }
+                        }
+                        return valid ? newval : undefined;
+                    });
+                }
+            }
+        })
+
         .directive('coverageSumassured', function () {
             return {
                 restrict: 'E',

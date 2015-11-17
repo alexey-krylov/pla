@@ -53,6 +53,8 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     private Industry industry;
 
+    private Set<GLProposerDocument> proposerDocuments;
+
     public GroupLifePolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
         checkArgument(policyNumber != null, "Policy number cannot be empty");
@@ -66,6 +68,12 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
         this.proposal = proposal;
         this.status = PolicyStatus.IN_FORCE;
     }
+
+    public GroupLifePolicy addDocuments(Set<GLProposerDocument> proposerDocuments) {
+        this.proposerDocuments = proposerDocuments;
+        return this;
+    }
+
 
     public GroupLifePolicy addAgentId(AgentId agentId) {
         this.agentId = agentId;
