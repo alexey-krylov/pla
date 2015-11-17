@@ -95,7 +95,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 //console.log("term <=" +"(ageNextBirthday +$scope.proposalPlanDetail.policyTerm)");
                                 //console.log("term **"+ term.text +" <= "+ (ageNextBirthday )+" +"+($scope.proposalPlanDetail.policyTerm) +"--> "+ (term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm)));
                                 //console.log('condition'+ term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
-                                return (term.text <= (ageNextBirthday + $scope.proposalPlanDetail.policyTerm));
+                                return (term.text <= (ageNextBirthday + $scope.proposalPlanDetail.policyTerm)) && (term.text> ageNextBirthday);
                             });
                         }
                         return coverage.coverageTermType;

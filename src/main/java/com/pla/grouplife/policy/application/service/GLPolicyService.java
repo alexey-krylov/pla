@@ -27,6 +27,7 @@ import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -673,6 +674,11 @@ public class GLPolicyService {
         dto.setPolicyId(policyId.getPolicyId());
         dto.setPolicyNumber(groupLifePolicy.getPolicyNumber().getPolicyNumber());
         return dto;
+    }
+
+    public String getProposalIdByPolicyId(String policyId){
+        Map policyMap=glPolicyFinder.findProposalIdByPolicyId(policyId);
+        return policyMap.get("proposal") !=null ?((Proposal)policyMap.get("proposal")).getProposalId().getProposalId() : "";
     }
 
 }

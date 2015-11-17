@@ -16,13 +16,11 @@ import java.util.Map;
 @Service
 public class GLPolicyFinder {
 
+    private static final String GL_POLICY_COLLECTION_NAME = "group_life_policy";
     @Autowired
     private MongoTemplate mongoTemplate;
-
     @Autowired
     private GLFinder glFinder;
-
-    private static final String GL_POLICY_COLLECTION_NAME = "group_life_policy";
 
     public List<Map> findAllPolicy() {
         return mongoTemplate.findAll(Map.class, GL_POLICY_COLLECTION_NAME);
@@ -34,6 +32,12 @@ public class GLPolicyFinder {
 
     public List<Map> searchPolicy(String policyNumber, String policyHolderName, String clientId, String proposalNumber) {
         return glFinder.searchPolicy(policyNumber, policyHolderName, clientId, new String[]{"IN_FORCE"}, proposalNumber);
+    }
+
+    public Map findProposalIdByPolicyId(String policyId) {
+        Query query = new Query(Criteria.where("_id").is(policyId));
+        query.fields().include("proposal");
+        return mongoTemplate.findOne(query, Map.class, GL_POLICY_COLLECTION_NAME);
     }
 
 

@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
 import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementDto;
+import com.pla.grouplife.policy.application.command.GLPolicyDocumentCommand;
 import com.pla.grouplife.policy.application.service.GLPolicyService;
 import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDto;
 import com.pla.grouplife.policy.presentation.model.GLPolicyDocument;
@@ -16,21 +17,26 @@ import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.service.EmailAttachment;
 import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
+import lombok.Synchronized;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -41,6 +47,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static org.nthdimenzion.presentation.AppUtils.deleteTempFileIfExists;
+import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -65,6 +72,9 @@ public class GLPolicyController {
 
     @Autowired
     private GLEndorsementService glEndorsementService;
+
+    @Autowired
+    private CommandGateway commandGateway;
 
 
     @Autowired
@@ -303,4 +313,28 @@ public class GLPolicyController {
         deleteTempFileIfExists(emailAttachments);
 
     }
+
+    @Synchronized
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadMandatoryDocument(GLPolicyDocumentCommand glPolicyDocumentCommand, HttpServletRequest request) {
+        glPolicyDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
+        try {
+            commandGateway.sendAndWait(glPolicyDocumentCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getproposalid/{policyId}")
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To get proposer detail from proposer")
+    public Map<String,Object> getProposalId(@PathVariable("policyId") String policyId) {
+        Map<String, Object> proposalMap = Maps.newLinkedHashMap();
+        proposalMap.put("proposalId",glPolicyService.getProposalIdByPolicyId(policyId));
+        return proposalMap;
+    }
+
 }

@@ -166,6 +166,15 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
         return totalInsuredPremiumAmount;
     }
 
+    //TODO Document followup should be scheduled after submitting the proposal or even before also?
+    // TODO WIll additional documents also be followed up
+    public GroupLifePolicy updateWithDocuments(Set<GLProposerDocument> proposerDocuments) {
+        this.proposerDocuments = proposerDocuments;
+        // raise event to store document in client BC
+        return this;
+    }
+
+
 
     @Override
     public PolicyId getIdentifier() {
