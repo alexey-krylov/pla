@@ -305,24 +305,84 @@
                         </li>
 
 
-                        <li class="dropdown">
-                            <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Claim<i
+                 <li class="dropdown">
+                      <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Claim<i
                                     class="icon-angle-down"></i></a>
-                            <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                     <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                                 <li class="dropdown"><a href="#">Group Life<i style="margin-top:12px;"
                                                                               class="glyphicon glyphicon-chevron-right "></i></a>
                                     <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
 
+                                        <li> <a th:href="@{/grouplife/claim/openpolicysearchpage}">Search Policy</a>
+                                        </li>
                                         <li><a th:href="@{/grouplife/claim/openclaimintimationpage}">Claim
                                             Intimation</a></li>
-                                        <li><a th:href="@{/grouplife/claim/accesspolicysearchpage}">Search Policy</a>
-                                        </li>
                                     </ul>
                                 </li>
 
 
-                            </ul>
-                        </li>
+                                <li class="dropdown"><a href="#">Group Health<i style="margin-top:12px;"
+                                                                                   class="glyphicon glyphicon-chevron-right "></i></a>
+                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+
+                                        <li><a th:href="@{/grouphealth/claim/openreopenclaimpage}"> Claim Reopen  </a>
+                                        </li>
+                                        <li><a th:href="@{/grouphealth/claim/openamendmentclaimpage}"> Claim Amendment  </a>
+                                        </li>
+
+
+
+                                        <li class='dropdown'><a href="#">Reimbursement Claim</a>
+
+                                            <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                <li><a th:href="@{/grouphealth/claim/openreimbursementclaimpage}"> Claim Registration  </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class='dropdown'><a href="#">Cashless Claim</a>
+                                            <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                <li><a th:href="@{/grouphealth/claim/opencashlessclaimpage}"> Pre-authorization Requests  </a>
+                                                </li>
+                                             </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown"><a href="#">Indivisual Life<i style="margin-top:12px;"
+                                                                               class="glyphicon glyphicon-chevron-right"></i></a>
+                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                        <li class='dropdown'><a href="#">Claim Intimation</a>
+                                            <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+
+                                                <!--<li><a th:href="@{/indivisuallife/claim/openclaimsearchpage}">Claim Search-->
+                                                <!--</a></li>-->
+                                                <li><a th:href="@{/indivisuallife/claim/openclaimsettlementpage}">Claim
+                                                    Settlement</a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/opensurrenderclaimpage}">Surrender
+                                                    Claim</a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/openmaturityclaimpage}">Maturity
+                                                    Claim </a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/opendeathclaimpage}">Death
+                                                    Claim </a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/opendisabilityclaimpage}">Disability
+                                                    Claim </a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/openencashmentclaimpage}">Encashment
+                                                    Claim</a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/openfuneralproudctpage}"> Funeral Proudct
+                                                </a></li>
+                                                <li><a th:href="@{/indivisuallife/claim/opennonfuneralproudctpage}">Non Funeral Proudct
+                                                    </a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                     </ul>
+                    </li>
+
+
+
+
 
 
                         <li class="dropdown">
