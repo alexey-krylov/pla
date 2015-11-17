@@ -51,7 +51,7 @@
                                 <label class="control-label">Name</label>
                                 <input type="text" class="form-control input-sm" name="name" ng-required="true"
                                        ng-maxlength="20" view-enabled=""
-                                       placeholder="Enter Name" ng-model="agentDetails.agentProfile.firstName"/>
+                                       ng-change="tabOneEnableControl(step1.$valid)" placeholder="Enter Name" ng-model="agentDetails.agentProfile.firstName"/>
                             </div>
                         </div>
 
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="col-md-12" style="padding-left:0px">
-                            <div class="form-group required col-md-6">
+                            <div class="form-group  col-md-6">
                                 <label class="control-label">Training Completed On</label>
 
                                 <p class="input-group">
@@ -80,7 +80,7 @@
                                            datepicker-popup="dd/MM/yyyy" ng-model="trainingCompleteOn"
                                            init-date="today" is-open="datePickerSettings.isOpened" max-date="today"
                                            show-weeks="true"
-                                           datepicker-options="datePickerSettings.dateOptions" ng-required="true"
+                                           datepicker-options="datePickerSettings.dateOptions"
                                            close-text="Close" ng-disabled="isEditMode"/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"
@@ -96,7 +96,7 @@
                                         ng-model="agentDetails.authorizePlansToSell" data-multiple="1"
                                         ng-required="true"
                                         ng-options="authorisedToS.planId as authorisedToS.planName for authorisedToS in authorisedToSell"
-                                        placeholder="Select one or more plans">
+                                        ng-change="tabOneEnableControl()" placeholder="Select one or more plans">
                                     Action <span class="caret"></span>
                                 </button>
                             </div>
@@ -122,7 +122,7 @@
                                        ng-minlength="8" ng-required="true"
                                        ng-pattern="/^[A-z0-9]+$/" placeholder="Enter licence number"
                                        ng-disabled="isEditMode"
-                                       ng-model="agentDetails.licenseNumber.licenseNumber"/>
+                                       ng-change="tabOneEnableControl(step1.$valid)" ng-model="agentDetails.licenseNumber.licenseNumber"/>
 
                                 <div class="error" ng-messages="step1.licenseNumber.$error"
                                      ng-if="step1.licenseNumber.$dirty">
@@ -135,7 +135,7 @@
                                        name="registrationNumber" ng-maxlength="12" ng-minlength="12"
                                        ng-pattern="/^[A-z0-9]+$/" placeholder="Enter Registration number"
                                        ng-disabled="isEditMode" ng-required="true"
-                                       ng-model="agentDetails.registrationNumber"/>
+                                       ng-change="tabOneEnableControl(step1.$valid)" ng-model="agentDetails.registrationNumber"/>
 
                                 <div class="error" ng-messages="step1.registrationNumber.$error"
                                      ng-if="step1.registrationNumber.$dirty">
@@ -171,7 +171,7 @@
                                         <select class="form-control input-sm" view-enabled=""
                                                 ng-model="contact.lineOfBusinessId"
                                                 ng-options="lineOfBusiness.lineOfBusinessId as lineOfBusiness.value for lineOfBusiness in lineOfBusinessList"
-                                                ng-blur="addingRowTest(contact)">
+                                                ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact,step1.$valid)">
                                             <option value="">Select</option>
                                         </select>
                                         <span style="color:red;" ng-show="errorMsg">Select different option.</span>
@@ -179,14 +179,14 @@
                                     <td width="10%">
                                         <select class="form-control input-sm" name="title"
                                                 ng-model="contact.title" view-enabled="" ng-required="true"
-                                                ng-blur="addingRowTest(contact)"
+                                                ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact)"
                                                 ng-options="title as title for title in titleList">
                                         </select>
                                     </td>
                                     <td width="27%">
                                         <input type="text" class="form-control input-sm" name="fullName"
                                                ng-model="contact.fullName" ng-required="true"
-                                               ng-blur="addingRowTest(contact)" view-enabled=""/>
+                                               ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact)" view-enabled=""/>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control input-sm" ng-model="contact.emailId"
@@ -194,7 +194,7 @@
                                     </td>
                                     <td width="15%">
                                         <input type="text" ng-minlength="15" ng-maxlength="15" ng-required="true"
-                                               ng-blur="addingRowTest(contact)" class="form-control input-sm"
+                                               ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact)" class="form-control input-sm"
                                                ng-model="contact.workPhone"
                                                view-enabled=""/>
                                     </td>

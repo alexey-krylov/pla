@@ -48,6 +48,66 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             });
 
+            $scope.uploadDocumentFiles = function () {
+                // //console.log($scope.documentList.length);
+                for (var i = 0; i < $scope.documentList.length; i++) {
+                    var document = $scope.documentList[i];
+                    var files = document.documentAttached;
+                    //console.dir(files);
+                    // //alert(files.name);
+                    if (files) {
+                        //console.log('File Uploading....');
+                        $upload.upload({
+                            url: '/pla/grouplife/policy/uploadmandatorydocument',
+                            file: files,
+                            fields: {
+                                documentId: document.documentId,
+                                policyId: $scope.policyId,
+                                mandatory: true,
+                                isApproved: true
+                            },
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            ////console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+
+                }
+
+            };
+
+            $scope.uploadAdditionalDocument = function () {
+                //alert('Upload');
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    //alert($scope.proposal.proposalId);
+
+                    $scope.additional = true;
+                    if (files) {
+                        console.dir(files);
+                        $upload.upload({
+                            url: '/pla/grouplife/policy/uploadmandatorydocument',
+                            file: files,
+                            fields: {
+                                //documentId: document.documentName,
+                                documentId: document.documentId,
+                                policyId: $scope.policyId,
+                                mandatory: false
+                            },
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            ////console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+                }
+            };
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
@@ -56,6 +116,38 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             $scope.removeAdditionalDocument = function (index) {
                 $scope.additionalDocumentList.splice(index, 1);
             };
+
+            $scope.callAdditionalDoc = function (file) {
+                if (file[0]) {
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+                }
+            }
+
+            $scope.isBrowseDisable=function(document)
+            {
+                if(document.fileName == null && document.submitted)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            $scope.isUploadEnabledForAdditionalDocument = function () {
+                var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    //alert(i+"--"+files)
+                    //alert(i+"--"+document.content);
+                    if (!(files || document.content)) {
+                        enableAdditionalUploadButton = false;
+                        break;
+                    }
+                }
+                return enableAdditionalUploadButton;
+            }
 
             if ($scope.documentList) {
                 if ($scope.documentList.documentAttached) {
@@ -73,6 +165,16 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 $scope.policyDetails.basicDetails.expiryDate = moment(data.expiryDate).format("DD/MM/YYYY");
 
 
+            });
+
+            $http.get("/pla/grouplife/policy/getproposalid/" + $scope.policyId).success(function (data, status) {
+                //console.log(data);
+                $scope.proposalId=data.proposalId;
+                console.log('ProposalIDRCV'+ JSON.stringify($scope.proposalId));
+                $http.get("/pla/grouplife/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
+                    //  console.log(data);
+                    $scope.approvalCommentList=data;
+                });
             });
 
             $scope.policyDetails = {

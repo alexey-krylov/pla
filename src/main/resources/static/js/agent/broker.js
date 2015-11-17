@@ -119,22 +119,31 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.physicalCities = [];
             $scope.count = 0;
             $scope.errorMsg = false;
+            $scope.contactPersonStatus=false;
 
-            $scope.addingRowTest = function (contact) {
+            $scope.tabOneEnableControl=function(tabStatusCheck){
+                if(tabStatusCheck && $scope.contactPersonStatus){
+                    $scope.stepsSaved["1"] = true;
+                }
+                else{
+                    $scope.stepsSaved["1"] = false;
+                }
+            }
 
+            $scope.addingRowTest = function (contact,tabStatus) {
                 var addRowCheck = false;
                 // $scope.errorMsg = false;
                 $scope.contact = contact;
-
-
                 if ($scope.contact.lineOfBusinessId && $scope.contact.title && $scope.contact.fullName && $scope.contact.workPhone) {
                     addRowCheck = true;
-                    $scope.stepsSaved["1"] = true;
+                    //$scope.stepsSaved["1"] = true;
+                    $scope.contactPersonStatus=true;
 
                 }
                 else {
                     addRowCheck = false;
-                    $scope.stepsSaved["1"] = false;
+                    //$scope.stepsSaved["1"] = false;
+                    $scope.contactPersonStatus=false;
 
                 }
 
@@ -142,10 +151,12 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                     if ($scope.agentDetails.contactPersonDetails.length <= 2) {
                         $scope.agentDetails.contactPersonDetails.push({});
                         $scope.count++;
-                        $scope.stepsSaved["1"] = true;
+                        //$scope.stepsSaved["1"] = true;
+                        $scope.tabOneEnableControl(tabStatus);
                     }
 
                 }
+                $scope.tabOneEnableControl(tabStatus);
 
             }
             $scope.$watch('agentDetails.physicalAddress.physicalGeoDetail.provinceCode', function (newVal, oldVal) {
