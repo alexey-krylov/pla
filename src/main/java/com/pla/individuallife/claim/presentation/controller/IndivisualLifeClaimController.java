@@ -49,7 +49,7 @@ public class IndivisualLifeClaimController {
         @RequestMapping(value = "/openencashmentclaimpage", method = RequestMethod.GET)
         public ModelAndView encashmentClaim() {
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("pla/individuallife/claim/encashmentClaim");
+            modelAndView.setViewName("pla/individuallife/claim/encashmentclaim");
             return modelAndView;
         }
         @RequestMapping(value = "/opensurrenderclaimpage", method = RequestMethod.GET)
