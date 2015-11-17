@@ -150,7 +150,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http', '$timeout',   '$
 
  App.config(["$routeProvider", function ($routeProvider) {
                       $routeProvider.when('/', {
-                            templateUrl: 'claimIntimation.html',
+                            templateUrl: 'claimintimation.html',
                             controller: 'ClaimIntimationController',
                            resolve: {
 
