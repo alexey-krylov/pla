@@ -42,7 +42,7 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/openclaimintimationpage", method = RequestMethod.GET)
     public ModelAndView claimIntimation() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/claim/claimIntimation");
+        modelAndView.setViewName("pla/grouplife/claim/claimintimation");
         return modelAndView;
     }
 
