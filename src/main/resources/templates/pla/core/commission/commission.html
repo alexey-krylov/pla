@@ -60,7 +60,7 @@
                         </div>
 
 
-                        <div class="form-group col-md-7 required">
+                        <div class="form-group col-md-12 required">
                             <label class="control-label" style="display: block">{{override}} Commission Calculated</label>
                             <label class="radio-inline">
                                 <input type="radio" name="commissionCalculated"  ng-value="'POLICY_FEE'" ng-model="commissionDetails.premiumFee" ng-required="true" ng-disabled="viewType!='create'"/> Premium - Policy Fee
@@ -70,6 +70,16 @@
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" name="commissionCalculated"  ng-value="'RISK_PREMIUM'" ng-model="commissionDetails.premiumFee" ng-required="true" ng-disabled="viewType!='create'"/>Premium - Policy Fee - Risk Premium
+                            </label>
+
+                            <label class="radio-inline">
+                                <input type="radio" name="commissionCalculated"  ng-value="'AGENT_COMMISSION'" ng-model="commissionDetails.premiumFee" ng-required="true" ng-disabled="viewType!='create'"/>Agent's Commission
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="commissionCalculated"  ng-value="'BROKER_COMMISSION'" ng-model="commissionDetails.premiumFee" ng-required="true" ng-disabled="viewType!='create'"/>Broker Commission
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="commissionCalculated"  ng-value="'STAFF_COMMISSION'" ng-model="commissionDetails.premiumFee" ng-required="true" ng-disabled="viewType!='create'"/>Staff Commission
                             </label>
                             <div ng-show="productForm.commissionCalculated.$invalid &amp;&amp; productForm.commissionCalculated.$dirty">
                                 <small class="error" ng-show="productForm.endYear.$error.required">
