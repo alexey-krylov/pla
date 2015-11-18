@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-09T16:48:40 -->
+<!-- 2015-11-18T10:50:49 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -159,7 +159,7 @@
 						<rightPen lineColor="#F22522"/>
 					</box>
 					<textElement verticalAlignment="Middle" markup="none">
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Agent/Broker Name :]]></text>
 				</staticText>
@@ -168,28 +168,28 @@
 						<property name="local_mesure_unitx" value="pixel"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="621" y="61" width="110" height="18" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Contact  Number :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
 					<reportElement x="144" y="81" width="99" height="23" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="19" y="81" width="125" height="23" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Agent/Broker Code:]]></text>
 				</staticText>
@@ -210,14 +210,14 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Arial" size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<text><![CDATA[ Name :]]></text>
 					</staticText>
 					<staticText>
 						<reportElement mode="Opaque" x="0" y="0" width="928" height="31" forecolor="#FFFFFF" backcolor="#002060" uuid="e95c1610-70b6-4204-be32-c867179840b7"/>
 						<textElement verticalAlignment="Middle">
-							<font size="14" isBold="true"/>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[ Policy Holder :]]></text>
 					</staticText>
@@ -230,21 +230,21 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Arial" size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<text><![CDATA[ Address :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="132" y="35" width="113" height="19" uuid="4cc5632a-2840-4ba1-9867-b0b99a837b7a"/>
 						<textElement verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="132" y="53" width="390" height="20" uuid="2f0cfc46-a16c-42f9-bd02-3752c890cc7c"/>
 						<textElement verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 					</textField>
@@ -257,14 +257,14 @@
 							<rightPen lineColor="#F22522"/>
 						</box>
 						<textElement verticalAlignment="Middle" markup="none">
-							<font fontName="Arial" size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<text><![CDATA[ Telephone Number(s):]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="132" y="74" width="89" height="22" uuid="36cd901e-43d2-44a7-ae37-2c26f2aeb94a"/>
 						<textElement verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
 					</textField>
@@ -280,64 +280,64 @@
 					<staticText>
 						<reportElement mode="Opaque" x="1" y="0" width="928" height="32" forecolor="#FFFFFF" backcolor="#002060" uuid="c2652866-9fe2-490f-84c4-3caa84050503"/>
 						<textElement verticalAlignment="Middle">
-							<font size="14" isBold="true"/>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
 						</textElement>
 						<text><![CDATA[  Policy Details:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="289" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="139" y="83" width="101" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
 						<textElement verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="241" y="81" width="35" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
-							<font isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<text><![CDATA[TO]]></text>
 					</staticText>
 					<textField>
 						<reportElement x="139" y="63" width="198" height="20" uuid="e210b897-0555-43ef-8488-f8048f042862"/>
 						<textElement verticalAlignment="Middle">
-							<font size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="6" y="81" width="103" height="20" uuid="a45dea87-37f9-4284-a2f3-eb877f79bb55"/>
 						<textElement verticalAlignment="Middle">
-							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<text><![CDATA[Policy Period :]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="5" y="62" width="133" height="20" uuid="cc188b88-d190-4432-b7e0-4cd4f9b656bd"/>
 						<textElement verticalAlignment="Middle">
-							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<text><![CDATA[Master Policy Number :]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="5" y="41" width="116" height="18" uuid="3f15d2b5-44ee-448d-9d42-8d4cae1527cc"/>
 						<textElement>
-							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
 						<text><![CDATA[Scheme Name :]]></text>
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="731" y="61" width="161" height="30" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
-					<textElement>
-						<font size="12" isBold="false"/>
+					<reportElement x="731" y="61" width="161" height="18" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Trebuchet MS" size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 				</textField>
@@ -354,19 +354,19 @@
 				<staticText>
 					<reportElement x="22" y="374" width="189" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Number: ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="23" y="400" width="188" height="29" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Date :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="24" y="431" width="916" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
+					<reportElement x="24" y="431" width="922" height="19" uuid="618e67d9-95dd-47d4-82a6-cc8415dce90f"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
@@ -375,14 +375,14 @@
 				<staticText>
 					<reportElement x="24" y="496" width="187" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Lives Covered:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="24" y="516" width="187" height="18" uuid="2d718f48-d9a8-4d0b-a160-7cf6ae9ba6b8"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Sum Assured:]]></text>
 				</staticText>
@@ -392,78 +392,84 @@
 				</staticText>
 				<staticText>
 					<reportElement x="473" y="681" width="310" height="21" uuid="c8277392-f144-4b1f-9abf-cf2f8e8f43d7"/>
+					<textElement>
+						<font fontName="Times New Roman"/>
+					</textElement>
 					<text><![CDATA[Authorised Signatory]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="211" y="499" width="377" height="18" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="211" y="520" width="210" height="17" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="221" y="377" width="188" height="18" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="221" y="404" width="188" height="28" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
 					<textElement>
-						<font size="12" isBold="true"/>
+						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement mode="Opaque" x="19" y="342" width="930" height="32" forecolor="#FFFFFF" backcolor="#002060" uuid="9f1bbd8f-fd99-4ce5-b3c6-d36323bb298f"/>
 					<textElement verticalAlignment="Middle">
-						<font size="14" isBold="true"/>
+						<font fontName="Trebuchet MS" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="110" y="453" width="50" height="15" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
+					<reportElement x="194" y="450" width="50" height="20" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="23" y="452" width="86" height="15" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
+					<reportElement x="109" y="450" width="84" height="19" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
 					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[in effect from]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="189" y="453" width="93" height="21" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
+					<reportElement x="409" y="450" width="91" height="19" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="548" y="453" width="399" height="24" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
-					<text><![CDATA[ is hereby refunded . Assured Details(as an annexure to the Endorsement Schedule)]]></text>
+					<reportElement x="794" y="451" width="142" height="18" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
+					<text><![CDATA[ is hereby refunded .]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="500" y="450" width="49" height="24" uuid="f7188e5f-1ece-4cd1-af43-3dd1d5e735df"/>
+					<reportElement x="711" y="451" width="97" height="18" uuid="f7188e5f-1ece-4cd1-af43-3dd1d5e735df"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="281" y="454" width="219" height="24" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
+					<reportElement x="500" y="451" width="231" height="19" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
 					<text><![CDATA[Arising out of the aforesaid deletion, a sum of K]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="160" y="453" width="30" height="15" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
+					<reportElement x="392" y="450" width="17" height="20" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
 					<text><![CDATA[To]]></text>
 				</staticText>
 				<frame>
 					<reportElement x="15" y="590" width="467" height="22" uuid="8b918d8c-3b27-4797-9e14-74b3136d3fca"/>
 					<staticText>
 						<reportElement x="0" y="0" width="305" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
+						<textElement>
+							<font fontName="Trebuchet MS" isItalic="true"/>
+						</textElement>
 						<text><![CDATA[In witness, whereof this endorsement has been signed at]]></text>
 					</staticText>
 					<textField>
@@ -479,6 +485,25 @@
 						<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 					</textField>
 				</frame>
+				<staticText>
+					<reportElement x="243" y="450" width="77" height="19" uuid="91cb7146-b1b9-43ab-b83b-e4dc7d0ccecf"/>
+					<text><![CDATA[ (original policy period -]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="27" y="450" width="82" height="19" uuid="2a4fd6f7-4d0f-409c-a59e-98fdabc7eaee"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Trebuchet MS" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="320" y="450" width="71" height="19" uuid="b6dd06d4-0e2c-44c7-9d26-86b15240b720"/>
+					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="27" y="474" width="394" height="22" uuid="fd109b6f-b131-4a4e-9b77-fc4c054bbaec"/>
+					<text><![CDATA[ Assured Details(as an annexure to the Endorsement Schedule)]]></text>
+				</staticText>
 			</frame>
 			<staticText>
 				<reportElement x="-1" y="810" width="158" height="14" uuid="8048e2f0-5b00-4c75-8d12-eaf8c2ba1bfb"/>
