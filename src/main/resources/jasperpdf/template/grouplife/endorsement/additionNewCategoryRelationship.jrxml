@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T14:25:39 -->
+<!-- 2015-11-18T18:07:39 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -700,7 +700,7 @@
 					<text><![CDATA[number of members under this policy is changed from 20 to 21,]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="496" y="462" width="238" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<reportElement x="503" y="462" width="231" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
@@ -710,7 +710,7 @@
 					<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="470" y="462" width="26" height="20" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
+					<reportElement x="480" y="462" width="23" height="20" uuid="f7444223-a9a8-4c84-9283-d7aaf4ddeb73"/>
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<staticText>

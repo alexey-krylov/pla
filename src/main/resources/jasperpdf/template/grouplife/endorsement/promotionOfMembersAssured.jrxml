@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T15:43:25 -->
+<!-- 2015-11-18T16:02:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -141,6 +141,7 @@
 			</rectangle>
 			<image>
 				<reportElement x="430" y="0" width="312" height="70" uuid="c9df8c7e-ac40-43da-ba5c-80ebc4f43c92"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -148,7 +149,7 @@
 		<band height="1171" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<frame>
-				<reportElement x="0" y="0" width="960" height="1171" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
+				<reportElement x="1" y="0" width="959" height="1171" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
@@ -558,21 +559,21 @@
 					<text><![CDATA[the Sum Assured for the following assured have been increased under the policy]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="543" y="432" width="98" height="18" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
+					<reportElement x="529" y="432" width="112" height="18" uuid="5fd0ebe1-26e7-4dae-9f0a-9a9f1dca098e"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="500" y="432" width="43" height="18" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
+					<reportElement x="490" y="432" width="53" height="18" uuid="e4d94288-8b96-4fe0-ba31-a22d5df7d76e"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
 					<text><![CDATA[from ]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="661" y="431" width="109" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
+					<reportElement x="648" y="431" width="122" height="19" uuid="6e20edf6-d7a6-44f4-bf60-ac5a8b538c6c"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
@@ -668,14 +669,14 @@
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="401" y="409" width="49" height="20" uuid="74ae8926-dad5-4c8d-bd8c-0407405e3585"/>
+					<reportElement x="388" y="409" width="62" height="20" uuid="74ae8926-dad5-4c8d-bd8c-0407405e3585"/>
 					<textElement verticalAlignment="Top">
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="445" y="409" width="501" height="21" uuid="30cee90a-9b23-48ab-9e9d-404f2fab6932"/>
+					<reportElement x="431" y="409" width="515" height="21" uuid="30cee90a-9b23-48ab-9e9d-404f2fab6932"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
@@ -689,7 +690,7 @@
 					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="639" y="430" width="41" height="20" uuid="2b54bf08-a4b8-4d7e-a697-5a1b81b61450"/>
+					<reportElement x="610" y="430" width="70" height="20" uuid="2b54bf08-a4b8-4d7e-a697-5a1b81b61450"/>
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
@@ -731,7 +732,7 @@
   email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="400" y="40" width="127" height="60" forecolor="#0000CC" uuid="8b7c5b14-5bbc-47fa-b740-8ad44e3d9e7e"/>
+				<reportElement x="400" y="45" width="127" height="60" forecolor="#0000CC" uuid="8b7c5b14-5bbc-47fa-b740-8ad44e3d9e7e"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>

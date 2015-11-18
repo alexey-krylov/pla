@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-06T15:16:52 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="900" pageHeight="695" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
+<!-- 2015-11-18T18:43:04 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="underwrittingschedule" pageWidth="960" pageHeight="695" orientation="Landscape" columnWidth="920" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="13aafdf3-563b-48c5-a670-70761ea365e6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -63,7 +63,7 @@
 	<pageHeader>
 		<band height="89" splitType="Stretch">
 			<rectangle>
-				<reportElement x="60" y="0" width="799" height="88" uuid="bc444dc5-31bf-48c0-acd7-f66d36df06d4"/>
+				<reportElement x="60" y="0" width="860" height="88" uuid="bc444dc5-31bf-48c0-acd7-f66d36df06d4"/>
 			</rectangle>
 			<image>
 				<reportElement x="400" y="9" width="200" height="70" uuid="671eca74-e750-4c2b-a85f-38b663995d3d"/>
@@ -74,10 +74,10 @@
 	<detail>
 		<band height="400" splitType="Prevent">
 			<rectangle>
-				<reportElement x="60" y="0" width="798" height="360" uuid="8b526497-a828-47e2-955d-468b48480049"/>
+				<reportElement x="60" y="0" width="860" height="360" uuid="8b526497-a828-47e2-955d-468b48480049"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="75" y="50" width="777" height="139" uuid="0c84312b-5446-4faf-a1e6-bd32f5b2cd7d"/>
+				<reportElement x="75" y="50" width="825" height="139" uuid="0c84312b-5446-4faf-a1e6-bd32f5b2cd7d"/>
 			</rectangle>
 			<textField>
 				<reportElement x="210" y="100" width="325" height="20" uuid="7d50d6c6-9b6c-432e-affa-92a309f2346a"/>
@@ -122,7 +122,7 @@
 				<text><![CDATA[ Name:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="75" y="189" width="775" height="161" uuid="e6eef619-3a9b-45f8-b6f0-94dcd312f72c">
+				<reportElement x="75" y="189" width="825" height="161" uuid="e6eef619-3a9b-45f8-b6f0-94dcd312f72c">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</rectangle>
@@ -176,7 +176,7 @@
 				<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="75" y="50" width="775" height="36" backcolor="#19197D" uuid="4951941d-49cb-4573-b16e-25c76bb780d1"/>
+				<reportElement x="75" y="50" width="825" height="36" backcolor="#19197D" uuid="4951941d-49cb-4573-b16e-25c76bb780d1"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="80" y="56" width="649" height="30" forecolor="#FFFFFF" uuid="17a51e25-2b7f-4fe0-8e4b-a917949d56dc"/>
@@ -186,7 +186,7 @@
 				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="75" y="189" width="777" height="36" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431">
+				<reportElement x="75" y="189" width="825" height="36" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -199,9 +199,9 @@
 				<text><![CDATA[ Policy Details:]]></text>
 			</staticText>
 			<frame>
-				<reportElement x="60" y="360" width="798" height="40" uuid="2d14ec7f-8b11-4560-910e-70b0f55076bd"/>
+				<reportElement x="60" y="360" width="820" height="40" uuid="2d14ec7f-8b11-4560-910e-70b0f55076bd"/>
 				<subreport runToBottom="false">
-					<reportElement positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="798" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="77c4157c-864d-4d50-9e7c-b445f4f2d8de">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="810" height="40" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="77c4157c-864d-4d50-9e7c-b445f4f2d8de">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
@@ -220,10 +220,10 @@
 	<pageFooter>
 		<band height="96">
 			<rectangle>
-				<reportElement x="60" y="0" width="800" height="90" uuid="d0b5f077-2325-4977-8c10-f92b7a97754a"/>
+				<reportElement x="60" y="0" width="860" height="90" uuid="d0b5f077-2325-4977-8c10-f92b7a97754a"/>
 			</rectangle>
 			<frame>
-				<reportElement mode="Opaque" x="60" y="0" width="798" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="302e4e08-c71b-480d-ac3a-834b396d6775"/>
+				<reportElement mode="Opaque" x="60" y="0" width="860" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="302e4e08-c71b-480d-ac3a-834b396d6775"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Double"/>
 					<leftPen lineWidth="1.0" lineStyle="Double"/>
