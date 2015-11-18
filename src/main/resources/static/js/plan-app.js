@@ -304,6 +304,8 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
             $scope.onlyNumbers = /^[0-9]+$/;
 
             $scope.minDate = new Date();
+            $scope.minDate.setDate($scope.minDate.getDate() + 1);
+
             $scope.productName;
 
             $scope.planSetUpForm = {};
@@ -671,6 +673,7 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                         $location.path('/plan');
                         $scope.successMsg = data.message;
                         $templateCache.remove('plan/list');
+
                     }).
                     error(function (data, status, headers, config) {
                         $scope.validationFailed = true;
