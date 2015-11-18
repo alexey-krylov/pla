@@ -60,10 +60,11 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         GLEndorsementExcelValidator glEndorsementExcelValidator = new GLEndorsementExcelValidator(policyId, insureds, planAdapter);
         Cell errorMessageHeaderCell = null;
         for (Row currentRow : dataRows) {
+            String invalidCombinationMessage = buildErrorMessageIfInvalidCategoryRelationCombination(currentRow, insureds,headers);
             String errorMessage = validateRow(currentRow, headers, glEndorsementExcelValidator);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, headers);
             String duplicateRowErrorMessage = buildDuplicateRowMessage(duplicateRows);
-            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage)) {
+            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(invalidCombinationMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -71,7 +72,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 errorMessageHeaderCell = createErrorMessageHeaderCell(excelFile, headerRow, headers);
             }
             Cell errorMessageCell = currentRow.createCell(headers.size());
-            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage;
+            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage + "\n" +invalidCombinationMessage;
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
@@ -302,5 +303,29 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         public int hashCode() {
             return dateOfBirth != null ? dateOfBirth.hashCode() : 0;
         }
+    }
+
+    private String buildErrorMessageIfInvalidCategoryRelationCombination(Row currentRow, List<Insured> insureds,List<String> headers){
+        Cell categoryCell =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
+        String categoryCellValue = getCellValue(categoryCell);
+        Cell relationshipCell =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relationCellValue = getCellValue(relationshipCell);
+        boolean isExists  =false;
+        for (Insured insured :insureds){
+            isExists = insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue);
+            if (!isExists){
+                Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                for (InsuredDependent insuredDependent :insuredDependents){
+                    if (insuredDependent.getCategory().equals(categoryCellValue)&& insuredDependent.getRelationship().description.equals(relationCellValue)){
+                        isExists = true;
+                        break;
+                    }
+                }
+            }
+            if (isExists){
+                break;
+            }
+        }
+        return isExists?"":"Category - Relation is not an existing combination";
     }
 }
