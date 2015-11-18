@@ -266,7 +266,7 @@ public class GLInsuredFactory {
     }
 
 
-    public Set<Insured> calculateProratePremiumForInsureds(PremiumDetailDto premiumDetailDto, Set<Insured> insureds,int policyTerm,int endorsementDuration) {
+    public Set<Insured> calculateProratePremiumForInsureds(PremiumDetailDto premiumDetailDto, Set<Insured> insureds, int policyTerm, int endorsementDuration, boolean isMemberPromotion) {
         for (Insured insured : insureds) {//computePlanBasicAnnualPremium
             PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
             if (planPremiumDetail!=null && planPremiumDetail.getPlanId()!=null) {
@@ -282,6 +282,14 @@ public class GLInsuredFactory {
                 }
                 if (insured.getNoOfAssured() != null) {
                     insuredPlanProratePremium = insuredPlanProratePremium.divide(new BigDecimal(policyTerm), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(endorsementDuration));
+                }
+                if (isMemberPromotion){
+                    BigDecimal oldAnnualIncomePremiumAmount = insured.getPlanPremiumDetail().getPremiumAmount()!=null?insured.getPlanPremiumDetail().getPremiumAmount():BigDecimal.ONE;
+                    Integer noOfDaysOver = policyTerm - endorsementDuration;
+                    BigDecimal oldAnnualIncomeProratePremium = oldAnnualIncomePremiumAmount.multiply(new BigDecimal(noOfDaysOver).divide(new BigDecimal(policyTerm),2, RoundingMode.HALF_UP));
+                    BigDecimal newAnnualIncomePremiumPremiumAmount = oldAnnualIncomeProratePremium.add(insuredPlanProratePremium);
+                    BigDecimal proratePremium = newAnnualIncomePremiumPremiumAmount.subtract(insured.getPlanPremiumDetail().getPremiumAmount());
+                    insuredPlanProratePremium = proratePremium;
                 }
                 insured.updatePlanPremiumAmount(insuredPlanProratePremium);
                 if (isNotEmpty(insured.getCoveragePremiumDetails())) {

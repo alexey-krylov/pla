@@ -134,14 +134,17 @@ public class GroupLifeEndorsementService {
     * */
     public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto,Industry industry) throws ParseException {
         Set<Insured> insureds = Sets.newLinkedHashSet();
+        boolean isMemberPromotion = false;
         if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
         else if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
         else if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getMemberDeletionEndorsements().getInsureds();
-        else if (GLEndorsementType.MEMBER_PROMOTION.equals(groupLifeQuotation.getEndorsementType()))
+        else if (GLEndorsementType.MEMBER_PROMOTION.equals(groupLifeQuotation.getEndorsementType())) {
             insureds = groupLifeQuotation.getEndorsement().getPremiumEndorsement().getInsureds();
+            isMemberPromotion = true;
+        }
         Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeQuotation.getEndorsementId().getEndorsementId());
         Date inceptionDate = (Date) policyDetail.get("inceptionDate");
         DateTime inceptionOn = new DateTime(inceptionDate);
@@ -150,7 +153,7 @@ public class GroupLifeEndorsementService {
         int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
         int endorsementDuration = Days.daysBetween(DateTime.now(),expiredOn).getDays();
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
-        insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration);
+        insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration, isMemberPromotion);
         groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);
         groupLifeQuotation = updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails,industry);
         return groupLifeQuotation;
