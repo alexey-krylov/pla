@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T11:50:04 -->
+<!-- 2015-11-18T13:20:26 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -704,14 +704,14 @@
 						<text><![CDATA[This Endorsement has been issued based on the information provided by you . In case you find any discrepancy in the same, please contact us immediately.]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="90" width="943" height="22" uuid="6414f821-dd47-4518-b78f-bb7dafd66464"/>
+						<reportElement x="0" y="90" width="943" height="20" uuid="6414f821-dd47-4518-b78f-bb7dafd66464"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
 						<text><![CDATA[For any assistance with claims or on the policy please contact us at the details mentioned above.]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="115" width="910" height="30" uuid="323f0a99-ec23-469f-a2d7-a63a32a98a2e"/>
+						<reportElement x="0" y="110" width="910" height="30" uuid="323f0a99-ec23-469f-a2d7-a63a32a98a2e"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>

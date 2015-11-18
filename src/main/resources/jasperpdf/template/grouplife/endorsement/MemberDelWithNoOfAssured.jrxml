@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T11:56:17 -->
+<!-- 2015-11-18T13:08:09 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1170" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -146,7 +146,7 @@
 		<band height="942" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<frame>
-				<reportElement x="0" y="0" width="950" height="942" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
+				<reportElement x="10" y="0" width="950" height="942" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
@@ -491,7 +491,7 @@
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<frame>
-					<reportElement positionType="Float" x="19" y="641" width="661" height="26" uuid="f451b6f5-f250-4e5c-807f-5d0f34a86641"/>
+					<reportElement positionType="Float" x="19" y="641" width="661" height="24" uuid="f451b6f5-f250-4e5c-807f-5d0f34a86641"/>
 					<staticText>
 						<reportElement x="3" y="4" width="257" height="20" uuid="2cbf6453-637b-4190-bbce-c7959e7160c2"/>
 						<textElement>
@@ -514,7 +514,7 @@
 						<text><![CDATA[on]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="360" y="0" width="260" height="21" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
+						<reportElement x="360" y="0" width="301" height="21" uuid="7ca70f71-273e-4291-9413-81fb50fcf420"/>
 						<textElement verticalAlignment="Middle">
 							<font fontName="Trebuchet MS"/>
 						</textElement>
@@ -555,14 +555,14 @@
 						<text><![CDATA[All endorsement premiums are  payable immediately.]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="90" width="930" height="22" uuid="fb2db507-113a-4368-b04d-1ae2e424a811"/>
+						<reportElement x="0" y="90" width="930" height="20" uuid="fb2db507-113a-4368-b04d-1ae2e424a811"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
 						<text><![CDATA[For any assistance with claims or on the policy please contact us at the details mentioned above.]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="115" width="910" height="30" uuid="70f0c8f0-8494-45c4-92ee-f4179bc5cfe5"/>
+						<reportElement x="0" y="110" width="910" height="35" uuid="70f0c8f0-8494-45c4-92ee-f4179bc5cfe5"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
@@ -577,7 +577,7 @@
 					</staticText>
 				</frame>
 				<staticText>
-					<reportElement x="290" y="439" width="10" height="21" uuid="ee2a6631-abc8-4dd2-8043-e9feaddae6e0"/>
+					<reportElement x="290" y="439" width="30" height="21" uuid="ee2a6631-abc8-4dd2-8043-e9feaddae6e0"/>
 					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[to]]></text>
 				</staticText>
