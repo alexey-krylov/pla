@@ -35,10 +35,20 @@ public enum GLEndorsementType {
     }, ASSURED_MEMBER_ADDITION("Member Addition") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
-            return Arrays.asList(GLEndorsementExcelHeader.MAN_NUMBER, GLEndorsementExcelHeader.NRC_NUMBER, GLEndorsementExcelHeader.CATEGORY, GLEndorsementExcelHeader.RELATIONSHIP
-                    , GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME, GLEndorsementExcelHeader.GENDER,
-                    GLEndorsementExcelHeader.DATE_OF_BIRTH, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.NO_OF_ASSURED,
-                    GLEndorsementExcelHeader.ANNUAL_INCOME, GLEndorsementExcelHeader.MAIN_ASSURED_CLIENT_ID);
+            return Arrays.asList(
+                    GLEndorsementExcelHeader.CATEGORY,
+                    GLEndorsementExcelHeader.RELATIONSHIP,
+                    GLEndorsementExcelHeader.NO_OF_ASSURED,
+                    GLEndorsementExcelHeader.MAIN_ASSURED_CLIENT_ID,
+                    GLEndorsementExcelHeader.SALUTATION,
+                    GLEndorsementExcelHeader.FIRST_NAME,
+                    GLEndorsementExcelHeader.LAST_NAME,
+                    GLEndorsementExcelHeader.MAN_NUMBER,
+                    GLEndorsementExcelHeader.NRC_NUMBER,
+                    GLEndorsementExcelHeader.GENDER,
+                    GLEndorsementExcelHeader.DATE_OF_BIRTH,
+                    GLEndorsementExcelHeader.OCCUPATION,
+                    GLEndorsementExcelHeader.ANNUAL_INCOME);
         }
 
         @Override

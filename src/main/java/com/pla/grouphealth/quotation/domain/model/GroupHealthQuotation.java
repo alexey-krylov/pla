@@ -62,6 +62,10 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     private boolean moratoriumPeriodApplicable;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     private OpportunityId opportunityId;
 
 
@@ -106,6 +110,18 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
     public GroupHealthQuotation updateWithMoratoriumPeriod(boolean moratoriumPeriodApplicable) {
         checkInvariant();
         this.moratoriumPeriodApplicable = moratoriumPeriodApplicable;
+        return this;
+    }
+
+    public GroupHealthQuotation updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
+        checkInvariant();
+        this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
+
+    public GroupHealthQuotation updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
+        checkInvariant();
+        this.samePlanForAllCategory = samePlanForAllCategory;
         return this;
     }
 

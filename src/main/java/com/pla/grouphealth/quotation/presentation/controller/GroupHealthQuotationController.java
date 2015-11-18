@@ -352,7 +352,7 @@ public class GroupHealthQuotationController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
             List<GHInsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isConsiderMoratoriumPeriod()));
+            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isConsiderMoratoriumPeriod(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory()));
             return Result.success("Insured detail uploaded successfully", quotationId);
         } catch (Exception e) {
             e.printStackTrace();

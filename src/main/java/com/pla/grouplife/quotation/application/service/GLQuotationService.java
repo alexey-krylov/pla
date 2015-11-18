@@ -409,6 +409,21 @@ public class GLQuotationService {
         return agentDetailDto;
     }
 
+    public AgentDetailDto getActiveInactiveAgentDetail(QuotationId quotationId) {
+        Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = glQuotationFinder.getActiveInactiveAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
+
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         Proposer proposer = (Proposer) quotation.get("proposer");
@@ -438,7 +453,10 @@ public class GLQuotationService {
         @Override
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+          /*
+          * get only agent name
+          * */
+            AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new QuotationId(quotationId));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
             LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";

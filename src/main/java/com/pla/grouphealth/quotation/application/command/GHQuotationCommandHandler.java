@@ -104,6 +104,8 @@ public class GHQuotationCommandHandler {
         GHPremiumDetailDto premiumDetailDto = new GHPremiumDetailDto(BigDecimal.valueOf(20), 365, BigDecimal.valueOf(15), processInfoAdapter.getServiceTaxAmount());
         groupHealthQuotation = groupHealthQuotationService.updateWithPremiumDetail(groupHealthQuotation, premiumDetailDto, updateGLQuotationWithInsuredCommand.getUserDetails());
         groupHealthQuotation = groupHealthQuotation.updateWithMoratoriumPeriod(updateGLQuotationWithInsuredCommand.isConsiderMoratoriumPeriod());
+        groupHealthQuotation = groupHealthQuotation.updateFlagSamePlanForAllRelation(updateGLQuotationWithInsuredCommand.isSamePlanForAllRelation());
+        groupHealthQuotation = groupHealthQuotation.updateFlagSamePlanForAllCategory(updateGLQuotationWithInsuredCommand.isSamePlanForAllCategory());
         if (isVersioningRequire) {
             ghQuotationMongoRepository.add(groupHealthQuotation);
         }

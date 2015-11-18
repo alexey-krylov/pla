@@ -26,4 +26,8 @@ public class UpdateGLQuotationWithInsuredCommand {
 
     private boolean considerMoratoriumPeriod;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
 }

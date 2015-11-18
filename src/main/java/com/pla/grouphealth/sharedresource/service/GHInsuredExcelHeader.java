@@ -286,12 +286,29 @@ public enum GHInsuredExcelHeader {
             Cell maximumAgeCell = row.getCell(excelHeaders.indexOf(MAX_ENTRY_AGE.name()));
             String maximumAgeCellValue = getCellValue(maximumAgeCell);
             int age = AppUtils.getAgeOnNextBirthDate(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
+            int minimumAge;
+            int maximumAge;
             if (isNotEmpty(minimumAgeCellValue) && isNotEmpty(maximumAgeCellValue) && isEmpty(MIN_ENTRY_AGE.validateAndIfNotBuildErrorMessage(planAdapter, row, minimumAgeCellValue, excelHeaders)) && isEmpty(MAX_ENTRY_AGE.validateAndIfNotBuildErrorMessage(planAdapter, row, maximumAgeCellValue, excelHeaders))) {
-                int minimumAge = Double.valueOf(minimumAgeCellValue.trim()).intValue();
-                int maximumAge = Double.valueOf(maximumAgeCellValue.trim()).intValue();
+                minimumAge = Double.valueOf(minimumAgeCellValue.trim()).intValue();
+                maximumAge = Double.valueOf(maximumAgeCellValue.trim()).intValue();
                 if (!(age >= minimumAge && age <= maximumAge)) {
-                    errorMessage = errorMessage + " Age should between " + minimumAgeCellValue + " and " + maximumAgeCellValue + ".";
+                    errorMessage = errorMessage + " Age should between " + minimumAge + " and " + maximumAge + ".";
                     return errorMessage;
+                }
+            } else if(isNotEmpty(minimumAgeCellValue) || isNotEmpty(maximumAgeCellValue)){
+                if(isNotEmpty(minimumAgeCellValue)) {
+                    minimumAge = Double.valueOf(minimumAgeCellValue.trim()).intValue();
+                    if(age <= minimumAge){
+                        errorMessage = errorMessage + " Age should be greater than " + minimumAge + ".";
+                        return errorMessage;
+                    }
+                }
+                if(isNotEmpty(maximumAgeCellValue)) {
+                    maximumAge = Double.valueOf(maximumAgeCellValue.trim()).intValue();
+                    if(age >= maximumAge){
+                        errorMessage = errorMessage + " Age should be less than " + maximumAge + ".";
+                        return errorMessage;
+                    }
                 }
             } else {
                 Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
