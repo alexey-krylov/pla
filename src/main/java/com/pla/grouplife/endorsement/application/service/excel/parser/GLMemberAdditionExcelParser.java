@@ -310,7 +310,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         String categoryCellValue = getCellValue(categoryCell);
         Cell relationshipCell =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
         String relationCellValue = getCellValue(relationshipCell);
-        boolean isExists  =false;
+        boolean isExists  = false;
         for (Insured insured :insureds){
             isExists = insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue);
             if (!isExists){

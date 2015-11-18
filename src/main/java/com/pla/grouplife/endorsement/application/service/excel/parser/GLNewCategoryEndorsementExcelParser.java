@@ -7,8 +7,12 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
+import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
@@ -54,6 +58,8 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
     private IPlanAdapter planAdapter;
     @Autowired
     private GLQuotationFinder glQuotationFinder;
+    @Autowired
+    private GLPolicyFinder glPolicyFinder;
 
     @Override
     protected String validateRow(Row row, List<String> headers, GLEndorsementExcelValidator endorsementExcelValidator) {
@@ -65,7 +71,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         Map policyMap = glFinder.findPolicyById(policyId.getPolicyId());
         AgentId agentId = (AgentId) policyMap.get("agentId");
         List<PlanId> authorizedPlans = getAgentAuthorizedPlans(agentId.getAgentId());
-        return isValidInsuredExcel(workbook, false, false, authorizedPlans);
+        return isValidInsuredExcel(workbook, false, false, authorizedPlans,policyId);
     }
 
     @Override
@@ -92,7 +98,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         return planIds;
     }
 
-    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans) {
+    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans, PolicyId policyId) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
@@ -117,12 +123,15 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         } else if (samePlanForAllCategory && samePlanForAllRelation && (!isSamePlanForAllCategory && !isSamePlanForAllCategory)) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
+        Map policyMap = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
             List<String> excelHeaders = GLInsuredExcelHeader.getAllowedHeaderForParserEndorsement(planAdapter, agentPlans);
             String errorMessage = validateRow(currentRow, excelHeaders, agentPlans);
+            String invalidCombinationMessage =  buildErrorMessageIfInvalidCategoryRelationCombination(currentRow,insureds,headers);
             List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders);
@@ -135,7 +144,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
                 });
                 duplicateRowErrorMessage = duplicateRowErrorMessage + rowNumbers[0] + ".\n";
             }
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage)) {
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(invalidCombinationMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -148,7 +157,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
                 errorMessageHeaderCell.setCellValue(AppConstants.ERROR_CELL_HEADER_NAME);
                 errorMessageHeaderCell.setCellStyle(cellStyle);
             }
-            errorMessage = errorMessage + "\n" + coverageErrorMessage;
+            errorMessage = errorMessage + "\n" + coverageErrorMessage + "\n" +invalidCombinationMessage;
             errorMessage = errorMessage + duplicateRowErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
@@ -567,6 +576,30 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         }).collect(Collectors.toList());
         insuredDto = insuredDto.addCoveragePremiumDetails(coveragePremiumDetails);
         return insuredDto;
+    }
+
+    private String buildErrorMessageIfInvalidCategoryRelationCombination(Row currentRow, List<Insured> insureds,List<String> headers){
+        Cell categoryCell = currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
+        String categoryCellValue = getCellValue(categoryCell);
+        Cell relationshipCell = currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relationCellValue = getCellValue(relationshipCell);
+        boolean isExists  = false;
+        for (Insured insured :insureds){
+            isExists = insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue);
+            if (!isExists){
+                Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                for (InsuredDependent insuredDependent :insuredDependents){
+                    if (insuredDependent.getCategory().equals(categoryCellValue)&& insuredDependent.getRelationship().description.equals(relationCellValue)){
+                        isExists = true;
+                        break;
+                    }
+                }
+            }
+            if (isExists){
+                break;
+            }
+        }
+        return isExists?"Category - Relation is an existing combination":"";
     }
 
 }
