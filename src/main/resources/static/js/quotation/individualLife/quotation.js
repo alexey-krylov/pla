@@ -173,8 +173,8 @@
                         if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
                             return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
-                                //return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
-                                return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
+                                return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
+                                //return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
                             return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
