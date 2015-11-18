@@ -28,8 +28,15 @@ public class ProposedAssuredBuilder {
 
     private String occupation;
 
+    private String clientId;
+
     public ProposedAssuredBuilder withTitle(String title) {
         this.title = title;
+        return this;
+    }
+
+    public ProposedAssuredBuilder withClientId(String clientId) {
+        this.clientId = clientId;
         return this;
     }
 

@@ -47,6 +47,8 @@ public class ProposedAssured {
 
     private String occupation;
 
+    private String clientId;
+
     ProposedAssured(ProposedAssuredBuilder proposedAssuredBuilder) {
         checkArgument(proposedAssuredBuilder != null);
         this.title = proposedAssuredBuilder.getTitle();
@@ -58,6 +60,7 @@ public class ProposedAssured {
         this.mobileNumber = proposedAssuredBuilder.getMobileNumber();
         this.emailAddress = proposedAssuredBuilder.getEmailAddress();
         this.occupation = proposedAssuredBuilder.getOccupation();
+        this.clientId = proposedAssuredBuilder.getClientId();
     }
 
     public static ProposedAssuredBuilder proposedAssuredBuilder() {

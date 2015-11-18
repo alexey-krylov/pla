@@ -54,6 +54,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
             @AttributeOverride(name = "gender", column = @Column(name = "proposerGender")),
             @AttributeOverride(name = "title", column = @Column(name = "proposerTitle")),
             @AttributeOverride(name = "dateOfBirth", column = @Column(name = "proposerDateOfBirth")),
+            @AttributeOverride(name = "clientId", column = @Column(name = "proposerClientId")),
     })
     private Proposer proposer;
 

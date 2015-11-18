@@ -66,7 +66,7 @@ public class ILQuotationCommandHandler {
         ProposerDto dto = cmd.getProposerDto();
         Proposer proposer = new Proposer(dto.getTitle(), dto.getFirstName(), dto.getSurname(), dto.getNrc(),
                 dto.getDateOfBirth(), dto.getGender(), dto.getMobileNumber(), dto.getEmailAddress());
-
+        proposer.withClientId(dto.getClientId());
         if (quotation.requireVersioning()) {
             QuotationId newQuotationId = quotationService.updateProposerWithVersion(quotationProcessor, quotation, proposer);
             return newQuotationId;
@@ -91,7 +91,7 @@ public class ILQuotationCommandHandler {
                 .withMobileNumber(dto.getMobileNumber())
                 .withDateOfBirth(dto.getDateOfBirth())
                 .withOccupation(dto.getOccupation())
-                .withSurname(dto.getSurname()).build();
+                .withSurname(dto.getSurname()).withClientId(dto.getClientId()).build();
 
         if (quotation.requireVersioning()) {
             QuotationId newQuotationId = quotationService.updateAssuredDetailWithVersion(quotationProcessor,

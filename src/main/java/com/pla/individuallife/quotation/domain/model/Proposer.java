@@ -40,6 +40,8 @@ public class Proposer {
 
     private String emailAddress;
 
+    private String clientId;
+
     public Proposer() {
     }
 
@@ -54,4 +56,8 @@ public class Proposer {
         this.emailAddress = emailAddress;
     }
 
+    public Proposer withClientId(String clientId){
+        this.clientId = clientId;
+        return this;
+    }
 }
