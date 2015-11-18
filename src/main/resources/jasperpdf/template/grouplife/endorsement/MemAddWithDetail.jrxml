@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-17T19:33:55 -->
+<!-- 2015-11-18T16:45:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -134,7 +134,7 @@
 	<pageHeader>
 		<band height="83" splitType="Stretch">
 			<rectangle>
-				<reportElement x="-10" y="-10" width="959" height="89" uuid="a1941e7a-cfa1-424e-a902-f82d1f7e48ac"/>
+				<reportElement x="-10" y="-10" width="960" height="89" uuid="a1941e7a-cfa1-424e-a902-f82d1f7e48ac"/>
 			</rectangle>
 			<image>
 				<reportElement x="430" y="0" width="312" height="70" uuid="c9df8c7e-ac40-43da-ba5c-80ebc4f43c92"/>
@@ -146,7 +146,7 @@
 		<band height="1171" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<frame>
-				<reportElement x="-10" y="-4" width="953" height="1170" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
+				<reportElement x="-10" y="-4" width="960" height="1175" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
@@ -289,21 +289,21 @@
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="222" y="83" width="205" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
-						<textElement verticalAlignment="Middle">
+						<textElement verticalAlignment="Top">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="138" y="81" width="64" height="19" uuid="b24a5951-008e-44f6-8032-30854b956e6b"/>
-						<textElement verticalAlignment="Middle">
+						<textElement verticalAlignment="Top">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="202" y="83" width="48" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
-						<textElement verticalAlignment="Middle">
+						<textElement verticalAlignment="Top">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<text><![CDATA[TO]]></text>
@@ -794,7 +794,7 @@
   Tel : 021-2-224270,225611]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="748" y="40" width="212" height="60" forecolor="#3300CC" uuid="fe8814c2-f063-496e-8ed3-bc8fdbffede1"/>
+				<reportElement x="729" y="45" width="212" height="60" forecolor="#3300CC" uuid="fe8814c2-f063-496e-8ed3-bc8fdbffede1"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>

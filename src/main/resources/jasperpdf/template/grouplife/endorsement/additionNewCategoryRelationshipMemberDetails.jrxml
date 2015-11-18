@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T13:27:09 -->
+<!-- 2015-11-18T16:17:45 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -389,7 +389,7 @@
 						<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="240" y="81" width="230" height="21" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
+						<reportElement x="222" y="83" width="248" height="19" uuid="417b6a96-2e89-469a-a5bf-f638ca3d60d1"/>
 						<textElement verticalAlignment="Top">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
@@ -403,7 +403,7 @@
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="217" y="82" width="23" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="200" y="83" width="40" height="18" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Top">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
@@ -829,7 +829,7 @@
 					<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="28" y="460" width="292" height="20" uuid="7dd38771-0c98-4c3b-8c8a-80e937d8a179"/>
+					<reportElement x="28" y="463" width="330" height="17" uuid="7dd38771-0c98-4c3b-8c8a-80e937d8a179"/>
 					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[following assured are included under this policy is changed]]></text>
 				</staticText>
@@ -839,26 +839,33 @@
 					<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="320" y="463" width="38" height="21" uuid="775abc4f-7ee4-4508-bbfc-48a414909ccb"/>
+					<reportElement x="350" y="463" width="36" height="21" uuid="775abc4f-7ee4-4508-bbfc-48a414909ccb"/>
 					<text><![CDATA[from ]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="358" y="465" width="62" height="19" uuid="8484a620-21df-4988-9e9e-ad22e4c80a4a"/>
+					<reportElement x="390" y="465" width="80" height="19" uuid="8484a620-21df-4988-9e9e-ad22e4c80a4a"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="420" y="465" width="34" height="21" uuid="c1859e3f-d4c2-4d15-a84c-7016048870cd"/>
+					<reportElement x="470" y="465" width="30" height="21" uuid="c1859e3f-d4c2-4d15-a84c-7016048870cd"/>
 					<text><![CDATA[to]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="440" y="465" width="100" height="19" uuid="d93546e2-f0b6-4e19-ac8f-59391ad27a57"/>
+					<reportElement x="496" y="465" width="88" height="19" uuid="d93546e2-f0b6-4e19-ac8f-59391ad27a57"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="520" y="462" width="416" height="22" uuid="3d50daf0-7597-449a-8417-64e3205ffb73"/>
+					<reportElement x="584" y="463" width="360" height="22" uuid="3d50daf0-7597-449a-8417-64e3205ffb73"/>
 					<text><![CDATA[Assured Details(as an annexure to the Endorsement Schedule)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="181" y="11" width="459" height="30" uuid="70f02215-10fc-4415-aac9-698b8f3b80f5"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[GROUP LIFE ASSURANCE POLICY ENDORSEMENT ]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -866,7 +873,7 @@
 	<pageFooter>
 		<band height="105" splitType="Stretch">
 			<rectangle>
-				<reportElement x="1" y="0" width="959" height="105" uuid="96e1199b-71e3-426c-8e71-47728ea45a05"/>
+				<reportElement x="0" y="0" width="958" height="105" uuid="96e1199b-71e3-426c-8e71-47728ea45a05"/>
 			</rectangle>
 			<frame>
 				<reportElement mode="Opaque" x="2" y="0" width="956" height="40" forecolor="#FFFFFF" backcolor="#003399" uuid="637e6dff-f1d1-4607-8eaf-5ae8dc827bf8"/>
