@@ -4,8 +4,9 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-lg-3"><span>Create {{override}} Commission
-                        </span></div>
+                    <div class="col-lg-3"><span ng-if="viewType != 'view' ">Create {{override}} Commission
+                        </span>
+                        <span ng-if="viewType == 'view' ">View {{override}} Commission</span></div>
                 </div>
             </div>
             <div class="panel-body">
