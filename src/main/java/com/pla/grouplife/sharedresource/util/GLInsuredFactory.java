@@ -286,7 +286,7 @@ public class GLInsuredFactory {
                 if (isMemberPromotion){
                     BigDecimal oldAnnualIncomePremiumAmount = insured.getPlanPremiumDetail().getPremiumAmount()!=null?insured.getPlanPremiumDetail().getPremiumAmount():BigDecimal.ONE;
                     Integer noOfDaysOver = policyTerm - endorsementDuration;
-                    BigDecimal oldAnnualIncomeProratePremium = oldAnnualIncomePremiumAmount.multiply(new BigDecimal(noOfDaysOver).divide(new BigDecimal(policyTerm),2, RoundingMode.HALF_UP));
+                    BigDecimal oldAnnualIncomeProratePremium = oldAnnualIncomePremiumAmount.divide(new BigDecimal(policyTerm), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(noOfDaysOver));
                     BigDecimal newAnnualIncomePremiumPremiumAmount = oldAnnualIncomeProratePremium.add(insuredPlanProratePremium);
                     BigDecimal proratePremium = newAnnualIncomePremiumPremiumAmount.subtract(insured.getPlanPremiumDetail().getPremiumAmount());
                     insuredPlanProratePremium = proratePremium;
