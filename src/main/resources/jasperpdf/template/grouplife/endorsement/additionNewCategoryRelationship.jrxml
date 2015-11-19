@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T19:07:42 -->
+<!-- 2015-11-19T11:15:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -147,6 +147,9 @@
 		</field>
 		<field name="relationship" class="java.lang.String">
 			<fieldDescription><![CDATA[relationship]]></fieldDescription>
+		</field>
+		<field name="noOfEmployeesCovered" class="java.lang.Integer">
+			<fieldDescription><![CDATA[noOfEmployeesCovered]]></fieldDescription>
 		</field>
 	</subDataset>
 	<queryString>
@@ -615,7 +618,7 @@
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table" style="table" positionType="Float" x="232" y="527" width="399" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
+					<reportElement key="table" style="table" positionType="Float" x="232" y="527" width="478" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
@@ -861,47 +864,11 @@
 					<text><![CDATA[from ]]></text>
 				</staticText>
 				<componentElement>
-					<reportElement key="table" style="table" positionType="Float" x="231" y="611" width="399" height="23" isRemoveLineWhenBlank="true" uuid="771ac56a-225e-449b-8b77-85a20c880ee0"/>
+					<reportElement key="table" style="table" positionType="Float" x="231" y="611" width="312" height="23" isRemoveLineWhenBlank="true" uuid="771ac56a-225e-449b-8b77-85a20c880ee0"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="CoverDetailsDS" uuid="13d825f1-58e1-4671-9120-0f6a0a77bf9f">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
 						</datasetRun>
-						<jr:column width="130" uuid="56692d70-182c-4ad3-b474-7460571e7a01">
-							<jr:columnHeader style="table" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="0ba251a8-63a8-468e-a1be-5bef154378da"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Plan/CoverageName]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="130" height="20" uuid="18fb534c-1100-41e1-b497-c316e50faa0e"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="167" uuid="c7c700d7-d8f6-4601-840c-9cccc2d7148b">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="010e5c2c-c9d9-4dd2-b6fb-42d7097097df"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Sum Assured]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="167" height="20" uuid="3b47c842-c9cf-4ee9-9827-f40c1210ba46"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{planCoverageSumAssured}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
 						<jr:column width="90" uuid="1f36b9d1-70e7-473f-b971-a75a7f1024a0">
 							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 								<staticText>
@@ -935,6 +902,24 @@
 									<reportElement x="0" y="0" width="90" height="20" uuid="b9d82c10-5245-4406-b2dd-77a46a0892a8"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="130" uuid="56692d70-182c-4ad3-b474-7460571e7a01">
+							<jr:columnHeader style="table" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="0ba251a8-63a8-468e-a1be-5bef154378da"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="12" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Number Of Employees Covered]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="130" height="20" uuid="18fb534c-1100-41e1-b497-c316e50faa0e"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{noOfEmployeesCovered}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
