@@ -433,6 +433,8 @@ public class GHQuotationService {
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
         boolean moratoriumPeriodApplicable = quotation.get("moratoriumPeriodApplicable") != null ? (boolean) quotation.get("moratoriumPeriodApplicable") : false;
+        boolean samePlanForAllRelation = quotation.get("samePlanForAllRelation") != null ? (boolean) quotation.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = quotation.get("samePlanForAllCategory") != null ? (boolean) quotation.get("samePlanForAllCategory") : false;
         GHProposer proposer = (GHProposer) quotation.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (quotation.get("opportunityId") != null) {
@@ -440,6 +442,8 @@ public class GHQuotationService {
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
         }
         proposerDto.setConsiderMoratoriumPeriod(moratoriumPeriodApplicable);
+        proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
+        proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         return proposerDto;
     }
 

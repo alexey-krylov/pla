@@ -115,6 +115,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
+            super.registerEvent(new PlanCreatedEvent(planId, this.planDetail.getLaunchDate()));
             if (this.planDetail.withdrawalDate != null) {
                 super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
             }

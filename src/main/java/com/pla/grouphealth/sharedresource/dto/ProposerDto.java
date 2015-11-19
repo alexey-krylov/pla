@@ -42,6 +42,10 @@ public class ProposerDto {
 
     private boolean considerMoratoriumPeriod;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     public ProposerDto(GHProposer proposer) {
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         GHProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;

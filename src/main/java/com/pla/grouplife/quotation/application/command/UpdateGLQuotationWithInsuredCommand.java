@@ -26,4 +26,8 @@ public class UpdateGLQuotationWithInsuredCommand {
 
     private boolean industryLoadingFactorApplicable;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
 }

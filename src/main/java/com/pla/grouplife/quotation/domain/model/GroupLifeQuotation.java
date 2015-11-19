@@ -63,6 +63,10 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
 
     private Industry industry;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     private GroupLifeQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, Proposer proposer, QuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
         checkArgument(isNotEmpty(quotationNumber));
@@ -257,4 +261,16 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         }
         return totalBasicAnnualPremium;
     }
+    public GroupLifeQuotation updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
+        checkInvariant();
+        this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
+
+    public GroupLifeQuotation updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
+        checkInvariant();
+        this.samePlanForAllCategory = samePlanForAllCategory;
+        return this;
+    }
+
 }
