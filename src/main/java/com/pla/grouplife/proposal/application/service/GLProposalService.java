@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposalStatusAudit;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,6 +90,9 @@ public class GLProposalService {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
+
+    @Autowired
+    private GHProposalFinder ghProposalFinder;
 
     @Autowired
     public GLProposalService(GLFinder glFinder, GLProposalFinder glProposalFinder, IPlanAdapter planAdapter,
@@ -152,8 +157,51 @@ public class GLProposalService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         agentDetailDto.setActive("ACTIVE".equalsIgnoreCase((String) agentDetail.get("agentStatus")));
+        Boolean isCommissionOverridden =  proposal.get("isCommissionOverridden")!=null?(Boolean) proposal.get("isCommissionOverridden"):Boolean.FALSE;
+        if (isCommissionOverridden){
+            String agentCommissionPercentage  = (String) proposal.get("agentCommissionPercentage");
+            agentDetailDto.setAgentCommissionPercentage(agentCommissionPercentage);
+            agentDetailDto.setIsCommissionOverridden(isCommissionOverridden);
+            return agentDetailDto;
+        }
+        List<Insured> ghInsureds = (List<Insured>) proposal.get("insureds");
+        BigDecimal commission = getAgentCommission(ghInsureds);
+        agentDetailDto.setAgentCommissionPercentage(commission.compareTo(BigDecimal.ZERO)==0?"":commission.toPlainString());
+        agentDetailDto.setIsCommissionOverridden(Boolean.FALSE);
         return agentDetailDto;
     }
+
+    private BigDecimal getAgentCommission(List<Insured> ghInsureds){
+        Set<String> planIds = Sets.newLinkedHashSet();
+        ghInsureds.parallelStream().map(new Function<Insured, String>() {
+            @Override
+            public String apply(Insured ghInsured) {
+                planIds.add(ghInsured.getPlanPremiumDetail().getPlanId().getPlanId());
+                ghInsured.getInsuredDependents().parallelStream().map(new Function<InsuredDependent, String>() {
+                    @Override
+                    public String apply(InsuredDependent insuredDependent) {
+                        planIds.add(insuredDependent.getPlanPremiumDetail().getPlanId().getPlanId());
+                        return "";
+                    }
+                }).collect(Collectors.toSet());
+                return "";
+            }
+        }).collect(Collectors.toSet());
+        List<String> agentCommission = ghProposalFinder.getAgentCommissionPercentageByPlanId(planIds);
+        if (isNotEmpty(agentCommission)) {
+            Set<String> commissionSet = agentCommission.parallelStream().map(new Function<String, String>() {
+                @Override
+                public String apply(String commissionPercentage) {
+                    return commissionPercentage;
+                }
+            }).collect(Collectors.toSet());
+            if (commissionSet.size()==1 && commissionSet.size()!=agentCommission.size() && planIds.size()!=commissionSet.size()){
+                return new BigDecimal(agentCommission.get(0));
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
 
     public AgentDetailDto getActiveInactiveAgentDetail(ProposalId proposalId) {
         Map proposal = glProposalFinder.findProposalById(proposalId);
@@ -168,6 +216,17 @@ public class GLProposalService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         agentDetailDto.setActive("ACTIVE".equalsIgnoreCase((String) agentDetail.get("agentStatus")));
+        Boolean isCommissionOverridden =  proposal.get("isCommissionOverridden")!=null?(Boolean) proposal.get("isCommissionOverridden"):Boolean.FALSE;
+        if (isCommissionOverridden){
+            String agentCommissionPercentage  = (String) proposal.get("agentCommissionPercentage");
+            agentDetailDto.setAgentCommissionPercentage(agentCommissionPercentage);
+            agentDetailDto.setIsCommissionOverridden(isCommissionOverridden);
+            return agentDetailDto;
+        }
+        List<Insured> ghInsureds = (List<Insured>) proposal.get("insureds");
+        BigDecimal commission = getAgentCommission(ghInsureds);
+        agentDetailDto.setAgentCommissionPercentage(commission.compareTo(BigDecimal.ZERO)==0?"":commission.toPlainString());
+        agentDetailDto.setIsCommissionOverridden(Boolean.FALSE);
         return agentDetailDto;
     }
 
@@ -474,13 +533,15 @@ public class GLProposalService {
                 public GLProposalMandatoryDocumentDto apply(GLProposerDocument glProposerDocument) {
                     GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), glProposerDocument.getDocumentName());
                     GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
-                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
-                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
-                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
-                    try {
-                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (gridFSDBFile != null) {
+                        mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                        mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                        mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                        try {
+                            mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     return mandatoryDocumentDto;
                 }

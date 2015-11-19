@@ -1,23 +1,23 @@
 package com.pla.grouphealth.proposal.query;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mongodb.BasicDBObject;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +25,6 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -55,11 +54,32 @@ public class GHProposalFinder {
 
     public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
 
+
+    private static final  String findAgentCommissionPercentageByPlanIdQuery = "select cp.commission_percentage commissionPercentage from commission c inner join \n" +
+            "commission_commission_term cp on c.commission_id  = cp.commission_id where c.plan_id in (:planIds);";
+
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
         List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
         return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
     }
+
+
+    public List<String> getAgentCommissionPercentageByPlanId(Set<String> planIds) {
+        Preconditions.checkArgument(isNotEmpty(planIds));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.query(findAgentCommissionPercentageByPlanIdQuery, new MapSqlParameterSource().addValue("planIds", planIds),new ColumnMapRowMapper());
+       if (isNotEmpty(agentList)) {
+           return agentList.parallelStream().map(new Function<Map<String, Object>, String>() {
+               @Override
+               public String apply(Map<String, Object> agentCommissionMap) {
+                   return agentCommissionMap.get("commissionPercentage") != null ? ((BigDecimal) agentCommissionMap.get("commissionPercentage")).toPlainString() : "";
+               }
+           }).collect(Collectors.toList());
+       }
+        return Collections.EMPTY_LIST;
+
+    }
+
 
     public List<Map<String, Object>> getAgentAuthorizedPlan(String agentId) {
         return ghFinder.getAgentAuthorizedPlan(agentId);

@@ -8,6 +8,7 @@ import com.pla.grouplife.sharedresource.util.GroupLifeProposalFactory;
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -26,8 +27,8 @@ public class GLProposalProcessor {
         return groupLifeProposalFactory.createProposal(quotationId, proposalId);
     }
 
-    public GroupLifeProposal updateWithAgentId(GroupLifeProposal groupLifeProposal, AgentId agentId) {
-        return groupLifeProposal.updateWithAgentId(agentId);
+    public GroupLifeProposal updateWithAgentId(GroupLifeProposal groupLifeProposal, AgentId agentId,BigDecimal agentCommissionPercentage,Boolean isCommissionOverridden ) {
+        return groupLifeProposal.updateWithAgentId(agentId,agentCommissionPercentage,isCommissionOverridden);
     }
 
     public GroupLifeProposal updateWithProposer(GroupLifeProposal groupLifeProposal, Proposer proposer) {

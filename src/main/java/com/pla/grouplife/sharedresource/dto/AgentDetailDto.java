@@ -26,4 +26,9 @@ public class AgentDetailDto {
 
     private boolean active;
 
+    private String agentCommissionPercentage;
+
+    private Boolean isCommissionOverridden = Boolean.FALSE;
+
+
 }

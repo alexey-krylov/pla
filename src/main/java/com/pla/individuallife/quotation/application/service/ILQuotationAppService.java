@@ -96,8 +96,8 @@ public class ILQuotationAppService {
             if(premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.OCCUPATION_CLASS)))
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
         }
-
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
+        BigDecimal planSumAssured = quotation.get("SUMASSURED")!=null?(BigDecimal) quotation.get("SUMASSURED"):BigDecimal.ONE;
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto, planSumAssured);
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
         BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
@@ -135,7 +135,7 @@ public class ILQuotationAppService {
                     rd.setCoverageId(new CoverageId(rider.get("COVERAGEID").toString()));
                     if (rider.get("COVERAGENAME") != null)
                         rd.setCoverageName(new CoverageName(rider.get("COVERAGENAME").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, planSumAssured);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));

@@ -15,6 +15,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class GroupHealthProposalFactory {
         GHPremiumDetail premiumDetail = (GHPremiumDetail) quotationMap.get("premiumDetail");
         GHProposer proposer = (GHProposer) quotationMap.get("proposer");
         GroupHealthProposal groupHealthProposal = new GroupHealthProposal(proposalId, quotation, proposalNumber);
-        groupHealthProposal = groupHealthProposal.updateWithAgentId(agentId).updateWithProposer(proposer).updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail);
+        groupHealthProposal = groupHealthProposal.updateWithAgent(agentId, BigDecimal.ZERO,Boolean.FALSE).updateWithProposer(proposer).updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail);
         return groupHealthProposal;
     }
 }

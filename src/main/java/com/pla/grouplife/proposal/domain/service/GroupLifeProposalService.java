@@ -52,12 +52,12 @@ public class GroupLifeProposalService {
         this.premiumCalculator = premiumCalculator;
     }
 
-    public GroupLifeProposal updateWithAgent(GroupLifeProposal groupLifeProposal, String agentId, UserDetails userDetails) {
+    public GroupLifeProposal updateWithAgent(GroupLifeProposal groupLifeProposal, String agentId, UserDetails userDetails,BigDecimal agentCommissionPercentage,Boolean isCommissionOverridden) {
         if (!agentIsActive.isSatisfiedBy(new AgentId(agentId))){
             raiseAgentIsInactiveException();
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
-        return glProposalProcessor.updateWithAgentId(groupLifeProposal, new AgentId(agentId));
+        return glProposalProcessor.updateWithAgentId(groupLifeProposal, new AgentId(agentId),agentCommissionPercentage,isCommissionOverridden);
     }
 
     public GroupLifeProposal updateWithProposerDetail(GroupLifeProposal groupLifeProposal, ProposerDto proposerDto, UserDetails userDetails) {

@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -23,4 +24,8 @@ public class UpdateGLProposalWithAgentCommand {
     private String proposalId;
 
     private UserDetails userDetails;
+
+    private  BigDecimal agentCommissionPercentage;
+
+   private Boolean isCommissionOverridden;
 }
