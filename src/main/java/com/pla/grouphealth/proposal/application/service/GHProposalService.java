@@ -138,6 +138,22 @@ public class GHProposalService {
         return agentDetailDto;
     }
 
+    public AgentDetailDto getActiveInactiveAgentDetail(ProposalId proposalId) {
+        Map proposalMap = ghProposalFinder.findProposalById(proposalId.getProposalId());
+        AgentId agentMap = (AgentId) proposalMap.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = ghQuotationFinder.getActiveInactiveAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setActive("ACTIVE".equalsIgnoreCase((String) agentDetail.get("agentStatus")));
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
+
     public List<GHProposalDto> searchProposal(SearchGHProposalDto searchGHProposalDto, String[] statuses) {
         List<Map> allQuotations = ghProposalFinder.searchProposal(searchGHProposalDto.getProposalNumber(), searchGHProposalDto.getProposerName(), searchGHProposalDto.getAgentName(), searchGHProposalDto.getAgentCode(), searchGHProposalDto.getProposalId(), statuses);
         if (isEmpty(allQuotations)) {
@@ -147,7 +163,7 @@ public class GHProposalService {
             @Override
             public GHProposalDto apply(Map map) {
                 String proposalId = map.get("_id").toString();
-                AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
+                AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new ProposalId(proposalId));
                 DateTime submittedOn = map.get("submittedOn") != null ? new DateTime(map.get("submittedOn")) : null;
                 String proposalStatus = map.get("proposalStatus") != null ? ProposalStatus.valueOf((String) map.get("proposalStatus")).getDescription() : "";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
@@ -349,6 +365,21 @@ public class GHProposalService {
         return agentDetailDto;
     }
 
+    public AgentDetailDto getActiveInactiveAgentDetail(QuotationId quotationId) {
+        Map quotation = ghQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = ghQuotationFinder.getActiveInactiveAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
+
     public List<ProposalApproverCommentsDto> findApproverComments(String proposalId) {
         List<GroupHealthProposalStatusAudit> audits = ghProposalStatusAuditRepository.findByProposalId(new ProposalId(proposalId));
         List<ProposalApproverCommentsDto> proposalApproverCommentsDtos = Lists.newArrayList();
@@ -486,7 +517,7 @@ public class GHProposalService {
         @Override
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new QuotationId(quotationId));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
             LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";

@@ -158,7 +158,7 @@ public class GroupLifeProposalController {
     @RequestMapping(value = "/getagentdetailfromproposal/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     public AgentDetailDto getAgentDetailFromQuotation(@PathVariable("proposalId") String proposalId) {
-        return glProposalService.getAgentDetail(new ProposalId(proposalId));
+        return glProposalService.getActiveInactiveAgentDetail(new ProposalId(proposalId));
     }
 
     @RequestMapping(value = "/listgrouplifeproposal", method = RequestMethod.GET)

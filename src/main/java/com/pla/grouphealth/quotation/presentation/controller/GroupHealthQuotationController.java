@@ -133,7 +133,7 @@ public class GroupHealthQuotationController {
     @RequestMapping(value = "/getagentdetailfromquotation/{quotationId}", method = RequestMethod.GET)
     @ResponseBody
     public AgentDetailDto getAgentDetailFromQuotation(@PathVariable("quotationId") String quotationId) {
-        return ghQuotationService.getAgentDetail(new QuotationId(quotationId));
+        return ghQuotationService.getActiveInactiveAgentDetail(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/listgrouphealthquotation", method = RequestMethod.GET)

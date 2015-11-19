@@ -155,6 +155,22 @@ public class GLProposalService {
         return agentDetailDto;
     }
 
+    public AgentDetailDto getActiveInactiveAgentDetail(ProposalId proposalId) {
+        Map proposal = glProposalFinder.findProposalById(proposalId);
+        AgentId agentMap = (AgentId) proposal.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = glQuotationFinder.getActiveInactiveAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        agentDetailDto.setActive("ACTIVE".equalsIgnoreCase((String) agentDetail.get("agentStatus")));
+        return agentDetailDto;
+    }
+
     public ProposerDto getProposerDetail(ProposalId proposalId) {
         Map proposal = glProposalFinder.findProposalById(proposalId);
         Proposer proposer = (Proposer) proposal.get("proposer");
@@ -179,7 +195,7 @@ public class GLProposalService {
             @Override
             public GLProposalDto apply(Map map) {
                 String proposalId = map.get("_id").toString();
-                AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
+                AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new ProposalId(proposalId));
                 DateTime submittedOn = map.get("submittedOn") != null ? new DateTime(map.get("submittedOn")) : null;
                 String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
@@ -346,6 +362,21 @@ public class GLProposalService {
         agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
     }
+    public AgentDetailDto getActiveInactiveAgentDetail(QuotationId quotationId) {
+        Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        AgentId agentMap = (AgentId) quotation.get("agentId");
+        String agentId = agentMap.getAgentId();
+        Map<String, Object> agentDetail = glQuotationFinder.getActiveInactiveAgentById(agentId);
+        AgentDetailDto agentDetailDto = new AgentDetailDto();
+        agentDetailDto.setAgentId(agentId);
+        agentDetailDto.setBranchName((String) agentDetail.get("branchName"));
+        agentDetailDto.setTeamName((String) agentDetail.get("teamName"));
+        agentDetailDto.setAgentName(agentDetail.get("firstName") + " " + (agentDetail.get("lastName") == null ? "" : (String) agentDetail.get("lastName")));
+        agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
+        agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
+        return agentDetailDto;
+    }
+
 
     public List<GLProposalApproverCommentDto> findApproverComments(String proposalId) {
         List<GroupLifeProposalStatusAudit> audits = glProposalStatusAuditRepository.findByProposalId(new ProposalId(proposalId));
@@ -462,7 +493,7 @@ public class GLProposalService {
 
         public GlQuotationDto apply(Map map) {
             String quotationId = map.get("_id").toString();
-            AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+            AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new QuotationId(quotationId));
             LocalDate generatedOn = map.get("generatedOn") != null ? new LocalDate(map.get("generatedOn")) : null;
             LocalDate sharedOn = map.get("sharedOn") != null ? new LocalDate(map.get("sharedOn")) : null;
             String quotationStatus = map.get("quotationStatus") != null ? (String) map.get("quotationStatus") : "";

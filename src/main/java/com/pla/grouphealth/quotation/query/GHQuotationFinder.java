@@ -1,5 +1,7 @@
 package com.pla.grouphealth.quotation.query;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import org.bson.types.ObjectId;
@@ -9,10 +11,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/14/2015.
@@ -67,5 +72,9 @@ public class GHQuotationFinder {
 
     public Map<String, Object> findGeoDetail(String geoId) {
         return ghFinder.findGeoDetail(geoId);
+    }
+
+    public Map<String, Object> getActiveInactiveAgentById(String agentId) {
+        return ghFinder.getActiveInactiveAgentById(agentId);
     }
 }
