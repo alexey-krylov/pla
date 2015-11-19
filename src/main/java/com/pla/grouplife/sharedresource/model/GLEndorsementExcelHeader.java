@@ -13,6 +13,7 @@ import org.nthdimenzion.common.AppConstants;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
@@ -46,6 +47,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PROPOSER_NAME.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PROPOSER_NAME.getDescription()),"");
+            return insuredDetailMap;
+        }
     }, MAN_NUMBER("MAN Number") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -67,6 +80,18 @@ public enum GLEndorsementExcelHeader {
                 insuredDependentDto.setManNumber(value);
             }
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(MAN_NUMBER.getDescription()),insured.getManNumber());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(MAN_NUMBER.getDescription()),insuredDependentDto.getManNumber());
+            return insuredDetailMap;
         }
     }, NRC_NUMBER("NRC Number") {
         @Override
@@ -90,6 +115,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NRC_NUMBER.getDescription()),insured.getNrcNumber());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NRC_NUMBER.getDescription()),insuredDependentDto.getNrcNumber());
+            return insuredDetailMap;
+        }
     }, ANNUAL_INCOME("Annual Income") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -108,6 +145,17 @@ public enum GLEndorsementExcelHeader {
         @Override
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(ANNUAL_INCOME.getDescription()),insured.getAnnualIncome()!=null?insured.getAnnualIncome().toPlainString():"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            return insuredDetailMap;
         }
     },
     SALUTATION("Salutation") {
@@ -132,6 +180,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(SALUTATION.getDescription()),insured.getSalutation());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(SALUTATION.getDescription()),insuredDependentDto.getSalutation());
+            return insuredDetailMap;
+        }
     }, FIRST_NAME("First Name") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -153,6 +213,18 @@ public enum GLEndorsementExcelHeader {
                 insuredDependentDto.setFirstName(value);
             }
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(FIRST_NAME.getDescription()),insured.getFirstName());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(FIRST_NAME.getDescription()),insuredDependentDto.getFirstName());
+            return insuredDetailMap;
         }
     }, LAST_NAME("Last Name") {
         @Override
@@ -176,6 +248,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(LAST_NAME.getDescription()),insured.getLastName());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(LAST_NAME.getDescription()),insuredDependentDto.getLastName());
+            return insuredDetailMap;
+        }
     }, DATE_OF_BIRTH("Date of Birth") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -197,6 +281,18 @@ public enum GLEndorsementExcelHeader {
                 insuredDependentDto.setDateOfBirth(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
             }
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(DATE_OF_BIRTH.getDescription()),insured.getDateOfBirth()!=null?insured.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(DATE_OF_BIRTH.getDescription()),insuredDependentDto.getDateOfBirth()!=null?insuredDependentDto.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):"");
+            return insuredDetailMap;
         }
     },
     GENDER("Gender") {
@@ -221,6 +317,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(GENDER.getDescription()),insured.getGender()!=null?insured.getGender().name():"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(GENDER.getDescription()),insuredDependentDto.getGender()!=null?insuredDependentDto.getGender().name():"");
+            return insuredDetailMap;
+        }
     }, OCCUPATION("Occupation") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -242,6 +350,17 @@ public enum GLEndorsementExcelHeader {
                 insuredDependentDto.setOccupationClass(value);
             }
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(OCCUPATION.getDescription()),insured.getOccupationClass());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            return null;
         }
     }, CATEGORY("Category") {
         @Override
@@ -265,6 +384,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(CATEGORY.getDescription()),insured.getCategory());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(CATEGORY.getDescription()),insuredDependentDto.getCategory());
+            return insuredDetailMap;
+        }
     }, RELATIONSHIP("Relationship") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -286,6 +417,18 @@ public enum GLEndorsementExcelHeader {
                 insuredDependentDto.setRelationship(Relationship.getRelationship(value));
             }
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(RELATIONSHIP.getDescription()),Relationship.SELF.description);
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(RELATIONSHIP.getDescription()),insuredDependentDto.getRelationship()!=null?insuredDependentDto.getRelationship().description:"");
+            return insuredDetailMap;
         }
     },
     NO_OF_ASSURED("No Of Assured") {
@@ -310,6 +453,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NO_OF_ASSURED.getDescription()),String.valueOf(insured.getNoOfAssured()!=null?insured.getNoOfAssured():""));
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NO_OF_ASSURED.getDescription()),String.valueOf(insuredDependentDto.getNoOfAssured()!=null?insuredDependentDto.getNoOfAssured():""));
+            return insuredDetailMap;
+        }
     }, PLAN("Plan") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -325,6 +480,18 @@ public enum GLEndorsementExcelHeader {
         @Override
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PLAN.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PLAN.getDescription()),"");
+            return insuredDetailMap;
         }
     }, INCOME_MULTIPLIER("Income Multiplier") {
         @Override
@@ -342,6 +509,18 @@ public enum GLEndorsementExcelHeader {
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(INCOME_MULTIPLIER.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(INCOME_MULTIPLIER.getDescription()),"");
+            return insuredDetailMap;
+        }
     }, SUM_ASSURED("Sum Assured") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -357,6 +536,18 @@ public enum GLEndorsementExcelHeader {
         @Override
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(SUM_ASSURED.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(SUM_ASSURED.getDescription()),"");
+            return insuredDetailMap;
         }
     },
     PLAN_PREMIUM("Plan Premium") {
@@ -374,6 +565,18 @@ public enum GLEndorsementExcelHeader {
         @Override
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PLAN_PREMIUM.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PLAN_PREMIUM.getDescription()),"");
+            return insuredDetailMap;
         }
     }, OLD_CATEGORY("Old Category") {
         @Override
@@ -397,6 +600,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(OLD_CATEGORY.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(OLD_CATEGORY.getDescription()),"");
+            return insuredDetailMap;
+        }
     }, NEW_CATEGORY("New Category") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -419,6 +634,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NEW_CATEGORY.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NEW_CATEGORY.getDescription()),"");
+            return insuredDetailMap;
+        }
     }, OLD_ANNUAL_INCOME("Old Annual Income") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -438,6 +665,18 @@ public enum GLEndorsementExcelHeader {
         @Override
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(OLD_ANNUAL_INCOME.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(OLD_ANNUAL_INCOME.getDescription()),"");
+            return insuredDetailMap;
         }
     }, NEW_ANNUAL_INCOME("New Annual Income") {
         @Override
@@ -461,6 +700,18 @@ public enum GLEndorsementExcelHeader {
         @Override
         public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
             return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NEW_ANNUAL_INCOME.getDescription()),insured.getAnnualIncome().toPlainString());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(NEW_ANNUAL_INCOME.getDescription()),"");
+            return insuredDetailMap;
         }
     },
     CLIENT_ID("Client ID") {
@@ -491,6 +742,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(CLIENT_ID.getDescription()),insured.getFamilyId());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(CLIENT_ID.getDescription()),insuredDependentDto.getFamilyId());
+            return insuredDetailMap;
+        }
     }, MAIN_ASSURED_CLIENT_ID("Main Assured Client ID") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
@@ -519,6 +782,18 @@ public enum GLEndorsementExcelHeader {
             }
             return insuredDependentDto;
         }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(MAIN_ASSURED_CLIENT_ID.getDescription()),insured.getFamilyId());
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(MAIN_ASSURED_CLIENT_ID.getDescription()),insuredDependentDto.getFamilyId());
+            return insuredDetailMap;
+        }
     };
 
     private String description;
@@ -537,6 +812,10 @@ public enum GLEndorsementExcelHeader {
     public abstract InsuredDto populate(InsuredDto insuredDto, String value);
 
     public abstract InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value);
+
+    public abstract Map<Integer,String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString);
+
+    public abstract Map<Integer,String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString);
 
     public String getDescription() {
         return description;

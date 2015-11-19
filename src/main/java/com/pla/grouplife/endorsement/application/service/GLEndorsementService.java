@@ -67,7 +67,6 @@ public class GLEndorsementService {
     @Autowired
     private GLPolicyFinder glPolicyFinder;
 
-
     public GLEndorsementService(Map<GLEndorsementType, GLEndorsementExcelGenerator> excelGenerators, Map<GLEndorsementType, GLEndorsementExcelParser> excelParsers) {
         this.excelGenerators = excelGenerators;
         this.excelParsers = excelParsers;
@@ -138,7 +137,7 @@ public class GLEndorsementService {
         return policyDetailDto;
     }
 
-    public HSSFWorkbook generateEndorsementExcel(GLEndorsementType endorsementType, EndorsementId endorsementId) {
+    public HSSFWorkbook generateEndorsementExcel(GLEndorsementType endorsementType, EndorsementId endorsementId) throws IOException {
         GLEndorsementExcelGenerator glEndorsementExcelGenerator = excelGenerators.get(endorsementType);
         PolicyId policyId = findPolicyIdFromEndorsement(endorsementId);
         return glEndorsementExcelGenerator.generate(policyId, endorsementId);
@@ -313,5 +312,4 @@ public class GLEndorsementService {
             return glEndorsementDto;
         }
     }
-
 }

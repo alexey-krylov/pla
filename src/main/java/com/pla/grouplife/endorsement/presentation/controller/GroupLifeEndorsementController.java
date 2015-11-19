@@ -107,7 +107,6 @@ public class GroupLifeEndorsementController {
         outputStream.close();
     }
 
-
     @RequestMapping(value = "/downloaderrortemplate/{endorsementId}", method = RequestMethod.GET)
     public void downloadErrorInsuredTemplate(@PathVariable("endorsementId") String endorsementId, HttpServletResponse response) throws IOException {
         response.reset();
