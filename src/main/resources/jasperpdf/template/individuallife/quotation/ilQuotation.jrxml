@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-06T15:20:54 -->
+<!-- 2015-11-19T12:01:44 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -305,14 +305,14 @@
 						<textFieldExpression><![CDATA[$F{quotationNumber}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="8" y="54" width="154" height="16" uuid="2a8afc7d-5790-4f15-88e2-ac3b67686ebf"/>
+						<reportElement x="8" y="54" width="163" height="16" uuid="2a8afc7d-5790-4f15-88e2-ac3b67686ebf"/>
 						<textElement textAlignment="Left">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Proposed Cover Term :]]></text>
+						<text><![CDATA[Proposed Cover Period :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
-						<reportElement x="171" y="51" width="80" height="16" uuid="ab56d408-c6f6-42e9-8178-d73749575090"/>
+						<reportElement x="171" y="54" width="80" height="16" uuid="ab56d408-c6f6-42e9-8178-d73749575090"/>
 						<textElement verticalAlignment="Top"/>
 						<textFieldExpression><![CDATA[$F{proposedCoverPeriod}]]></textFieldExpression>
 					</textField>
