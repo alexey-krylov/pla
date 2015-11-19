@@ -91,13 +91,57 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 "lineOfBusinessId": "GROUP_LIFE",
                 "value": "Group Life"
             },]
+            $scope.contact={};
+            $scope.agentDetails.contactPersonDetails=[];
+            $scope.contactPersonDetailsCopy=[];
+            $scope.edit=false;
+            $scope.addContactPerson=function(contact,tab1Status){
+                if($scope.agentDetails.contactPersonDetails && $scope.agentDetails.contactPersonDetails.length == 0){
+                    $scope.agentDetails.contactPersonDetails.push(contact);
+                    //$scope.contact={};
+                }else{
+                    var checkLoopNameStatus = "true";
+                    for(i in $scope.agentDetails.contactPersonDetails){
+                        if($scope.agentDetails.contactPersonDetails[i].lineOfBusinessId == contact.lineOfBusinessId){
+                            $scope.agentDetails.contactPersonDetails[i]=contact;
+                            checkLoopNameStatus = "true";
+                            break;
+                        }
+                        else{
+                            checkLoopNameStatus = "false";
+                            //$scope.agentDetails.contactPersonDetails.push(contact);
+                        }
+                    }
+                    if(checkLoopNameStatus == 'false'){
+                        $scope.agentDetails.contactPersonDetails.push(contact);
+                    }
 
-            if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
-            //$scope.agentDetails.contactPersonDetails = [{}, {}, {}];
-                $scope.agentDetails.contactPersonDetails = [{}];
-            else {
-                var len = $scope.agentDetails.contactPersonDetails.length;
-                $scope.agentDetails.contactPersonDetails = [{}];
+                }
+                if($scope.edit){
+                    $scope.edit=false;
+                }
+                $scope.contact={};
+                $scope.lineOfBusinessList=_.reject($scope.lineOfBusinessList,{"lineOfBusinessId":contact.lineOfBusinessId});
+                $scope.tabOneEnableControl(tab1Status);
+            }
+            $scope.editContactPerson=function(contacts){
+                $scope.edit=true;
+                if(contacts){
+                    for(i in $scope.agentDetails.contactPersonDetails){
+                        if($scope.agentDetails.contactPersonDetails[i].lineOfBusinessId == contacts.lineOfBusinessId){
+                            //var contactToEdit=$scope.agentDetails.contactPersonDetails[i];
+                            //$scope.contact=$scope.agentDetails.contactPersonDetails[i];
+                            angular.copy($scope.agentDetails.contactPersonDetails[i],$scope.contact);
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+            $scope.cancelContactPerson=function(){
+                $scope.contact=null;
+                $scope.edit=false;
             }
             $scope.selectedItem = 1;
             $scope.stepsSaved = {};
@@ -108,10 +152,18 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $http.get('/pla/core/agent/agentdetail', {params: queryParam})
                     .success(function (response, status, headers, config) {
                         $scope.agentDetails = response;
+                        if($scope.agentDetails && $scope.agentDetails.contactPersonDetails.length >0){
+                            for(i in $scope.agentDetails.contactPersonDetails){
+                                if($scope.agentDetails.contactPersonDetails[i].lineOfBusinessId){
+                                    $scope.lineOfBusinessList=_.reject($scope.lineOfBusinessList,{"lineOfBusinessId":$scope.agentDetails.contactPersonDetails[i].lineOfBusinessId});
+                                }
+                            }
+                        }
                     });
 
 
                 console.log($scope.agentDetails);
+                console.log('**************'+JSON.stringify($scope.agentDetails));
             }
             $scope.contact = {};
             $scope.titleList = globalConstants.title;
@@ -122,42 +174,12 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.contactPersonStatus=false;
 
             $scope.tabOneEnableControl=function(tabStatusCheck){
-                if(tabStatusCheck && $scope.contactPersonStatus){
+                if(tabStatusCheck && $scope.agentDetails.contactPersonDetails.length >0){
                     $scope.stepsSaved["1"] = true;
                 }
                 else{
                     $scope.stepsSaved["1"] = false;
                 }
-            }
-
-            $scope.addingRowTest = function (contact,tabStatus) {
-                var addRowCheck = false;
-                // $scope.errorMsg = false;
-                $scope.contact = contact;
-                if ($scope.contact.lineOfBusinessId && $scope.contact.title && $scope.contact.fullName && $scope.contact.workPhone) {
-                    addRowCheck = true;
-                    //$scope.stepsSaved["1"] = true;
-                    $scope.contactPersonStatus=true;
-
-                }
-                else {
-                    addRowCheck = false;
-                    //$scope.stepsSaved["1"] = false;
-                    $scope.contactPersonStatus=false;
-
-                }
-
-                if (addRowCheck) {
-                    if ($scope.agentDetails.contactPersonDetails.length <= 2) {
-                        $scope.agentDetails.contactPersonDetails.push({});
-                        $scope.count++;
-                        //$scope.stepsSaved["1"] = true;
-                        $scope.tabOneEnableControl(tabStatus);
-                    }
-
-                }
-                $scope.tabOneEnableControl(tabStatus);
-
             }
             $scope.$watch('agentDetails.physicalAddress.physicalGeoDetail.provinceCode', function (newVal, oldVal) {
                 if (newVal) {
@@ -205,8 +227,8 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 $scope.datePickerSettings.isOpened = true;
             };
 
-            if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
-                $scope.agentDetails.contactPersonDetails = [{}, {}, {}];
+            /*if (!$scope.agentDetails.contactPersonDetails || $scope.agentDetails.contactPersonDetails.length == 0)
+                $scope.agentDetails.contactPersonDetails = [{}, {}, {}];*/
 
             $scope.submit = function () {
                 if ($scope.isEditMode) {

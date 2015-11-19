@@ -96,7 +96,7 @@
                                         ng-model="agentDetails.authorizePlansToSell" data-multiple="1"
                                         ng-required="true"
                                         ng-options="authorisedToS.planId as authorisedToS.planName for authorisedToS in authorisedToSell"
-                                        ng-change="tabOneEnableControl()" placeholder="Select one or more plans">
+                                        ng-change="tabOneEnableControl(step1.$valid)" placeholder="Select one or more plans">
                                     Action <span class="caret"></span>
                                 </button>
                             </div>
@@ -149,68 +149,106 @@
                     </div>
                     <!--Agent Details Left start-->
                 </ng-form>
+                <!--ContactPerson Details  start-->
+                <ng-form name="contactPersonForm">
+                    <strong>Contact Person Detail</strong>
+                    <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group required">
+                                    <label class="control-label">Line of Business</label>
+                                    <select class="form-control input-sm" view-enabled=""
+                                            ng-required="true" ng-model="contact.lineOfBusinessId"
+                                            ng-disabled="edit" name="lineOfBusiness1" ng-options="lineOfBusiness.lineOfBusinessId as lineOfBusiness.value for lineOfBusiness in lineOfBusinessList">
+                                        <option value=" ">--- Select Line of Business --- </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group required">
+                                    <label class="control-label">Salutation</label>
+                                    <select class="form-control input-sm" name="title"
+                                            ng-model="contact.title" view-enabled="" ng-required="true"
+                                            ng-options="title as title for title in titleList">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group required">
+                                    <label class="control-label">Full Name</label>
+                                    <input type="text" class="form-control input-sm" name="fullName"
+                                           ng-model="contact.fullName" ng-required="true"
+                                           view-enabled=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">email ID</label>
+                                    <input type="text" class="form-control input-sm" ng-model="contact.emailId"
+                                           view-enabled=""/>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group required">
+                                    <label class="control-label">Work Phone</label>
+                                    <input type="text" ng-minlength="15" ng-maxlength="15" maxlength="15" ng-required="true"
+                                            class="form-control input-sm"
+                                           ng-model="contact.workPhone"
+                                           view-enabled=""/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Fax</label>
+                                    <input type="text" ng-minlength="15" ng-maxlength="15"
+                                           class="form-control input-sm" ng-model="contact.fax" view-enabled=""/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-click="cancelContactPerson()">Cancel</button>
+                                <button ng-if="!edit" type="button" class="btn btn-primary btn-sm" ng-disabled="contactPersonForm.$invalid" ng-click="addContactPerson(contact,step1.$valid)">Add</button>
+                                <button ng-if="edit" type="button" class="btn btn-primary btn-sm" ng-disabled="contactPersonForm.$invalid" ng-click="addContactPerson(contact,step1.$valid)">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-form>
+                <!--ContactPerson Details  End-->
                 <ng-form name="">
                     <div class="row ng-cloak" style="padding:15px;margin-top:30px">
                         <h4 style="margin-left: 10px">Contact Person Details</h4>
-
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr class="form-group required">
-                                    <th class="control-label">Line of Business</th>
-                                    <th class="control-label">Salutation</th>
-                                    <th class="control-label">Full Name</th>
-                                    <th>email ID</th>
-                                    <th class="control-label">Work Phone</th>
-                                    <th>Fax</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="contact in agentDetails.contactPersonDetails">
-                                    <td width="13%">
-                                        <select class="form-control input-sm" view-enabled=""
-                                                ng-model="contact.lineOfBusinessId"
-                                                ng-options="lineOfBusiness.lineOfBusinessId as lineOfBusiness.value for lineOfBusiness in lineOfBusinessList"
-                                                ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact,step1.$valid)">
-                                            <option value="">Select</option>
-                                        </select>
-                                        <span style="color:red;" ng-show="errorMsg">Select different option.</span>
-                                    </td>
-                                    <td width="10%">
-                                        <select class="form-control input-sm" name="title"
-                                                ng-model="contact.title" view-enabled="" ng-required="true"
-                                                ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact)"
-                                                ng-options="title as title for title in titleList">
-                                        </select>
-                                    </td>
-                                    <td width="27%">
-                                        <input type="text" class="form-control input-sm" name="fullName"
-                                               ng-model="contact.fullName" ng-required="true"
-                                               ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact)" view-enabled=""/>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control input-sm" ng-model="contact.emailId"
-                                               view-enabled=""/>
-                                    </td>
-                                    <td width="15%">
-                                        <input type="text" ng-minlength="15" ng-maxlength="15" ng-required="true"
-                                               ng-change="addingRowTest(contact,step1.$valid)" ng-blur="addingRowTest(contact)" class="form-control input-sm"
-                                               ng-model="contact.workPhone"
-                                               view-enabled=""/>
-                                    </td>
-                                    <td width="15%">
-                                        <input type="text" ng-minlength="15" ng-maxlength="15"
-                                               class="form-control input-sm" ng-model="contact.fax" view-enabled=""/>
-                                    </td>
-                                </tr>
-                                </tbody>
-
-                            </table>
-
-
-                        </div>
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr class="form-group required">
+                                        <th>Line of Business</th>
+                                        <th>Salutation</th>
+                                        <th>Full Name</th>
+                                        <th>email ID</th>
+                                        <th>Work Phone</th>
+                                        <th>Fax</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="contacts in agentDetails.contactPersonDetails">
+                                            <td>{{contacts.lineOfBusinessId}}</td>
+                                            <td>{{contacts.title}}</td>
+                                            <td>{{contacts.fullName}}</td>
+                                            <td>{{contacts.emailId}}</td>
+                                            <td>{{contacts.workPhone}}</td>
+                                            <td>{{contacts.fax}}</td>
+                                            <td><button type="button" class="btn btn-primary btn-sm" ng-disabled="edit || isViewMode" ng-click="editContactPerson(contacts)">Edit</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                     </div>
-
                 </ng-form>
             </div>
 
