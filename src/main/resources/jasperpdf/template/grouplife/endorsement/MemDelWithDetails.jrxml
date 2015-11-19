@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T16:37:05 -->
+<!-- 2015-11-19T13:10:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -298,7 +298,7 @@
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="223" y="81" width="53" height="19" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
+						<reportElement x="210" y="83" width="40" height="17" uuid="25f0a9fe-5d0b-4178-87e3-8b53848a137d"/>
 						<textElement verticalAlignment="Middle">
 							<font fontName="Trebuchet MS" size="10" isBold="false"/>
 						</textElement>
@@ -432,17 +432,17 @@
 					<text><![CDATA[Endorsement Details:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="260" y="450" width="30" height="20" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
+					<reportElement x="211" y="450" width="79" height="20" uuid="42af9b28-b8b2-412e-9f18-2c4ebb38e36f"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="170" y="450" width="90" height="19" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
+					<reportElement x="144" y="450" width="116" height="19" uuid="fe1e99d8-f580-4ebf-81f9-56608ad9700c"/>
 					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[in effect from]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="515" y="450" width="115" height="19" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
+					<reportElement x="490" y="450" width="140" height="19" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
 					<textElement verticalAlignment="Top"/>
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
@@ -459,7 +459,7 @@
 					<text><![CDATA[)Arising out of the aforesaid deletion, a sum of K]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="490" y="450" width="25" height="20" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
+					<reportElement x="460" y="450" width="55" height="20" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
 					<text><![CDATA[To]]></text>
 				</staticText>
 				<frame>
@@ -490,13 +490,13 @@
 				</staticText>
 				<textField>
 					<reportElement x="23" y="450" width="147" height="19" uuid="2a4fd6f7-4d0f-409c-a59e-98fdabc7eaee"/>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Trebuchet MS" size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="400" y="450" width="90" height="19" uuid="b6dd06d4-0e2c-44c7-9d26-86b15240b720"/>
+					<reportElement x="380" y="450" width="110" height="19" uuid="b6dd06d4-0e2c-44c7-9d26-86b15240b720"/>
 					<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 				</textField>
 				<staticText>

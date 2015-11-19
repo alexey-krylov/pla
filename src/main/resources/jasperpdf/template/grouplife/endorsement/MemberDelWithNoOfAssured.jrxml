@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T14:26:26 -->
+<!-- 2015-11-19T13:17:32 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1170" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -584,7 +584,7 @@
 				<textField>
 					<reportElement x="230" y="439" width="60" height="26" uuid="6365daff-d531-492f-aea0-74a38c3b9617"/>
 					<textElement verticalAlignment="Top"/>
-					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="590" y="439" width="60" height="26" uuid="caf2bd61-37ef-4f2b-bf80-a346e818e233"/>
