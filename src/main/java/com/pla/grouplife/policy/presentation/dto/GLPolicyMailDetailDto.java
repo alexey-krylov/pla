@@ -106,6 +106,7 @@ public class GLPolicyMailDetailDto {
         private String age;
         private String annualIncome;
         private String basicPremium;
+        private String sumAssured;
 
         public Annexure(String insuredName, String nrc, String sex, String dob, String category, String status, String age, String annualIncome, String basicPremium) {
             this.insuredName = insuredName;
@@ -117,6 +118,11 @@ public class GLPolicyMailDetailDto {
             this.age = age;
             this.annualIncome = annualIncome;
             this.basicPremium = basicPremium;
+        }
+
+        public Annexure(String insuredName, String nrc, String sex, String dob, String category, String status, String age, String annualIncome, String basicPremium,String sumAssured) {
+           this(insuredName,nrc,sex,dob,category,status,age,annualIncome,basicPremium);
+            this.sumAssured = sumAssured;
         }
     }
 
