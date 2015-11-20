@@ -116,7 +116,7 @@ public class ILQuotationAppService {
                     premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
                     premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(rider.get("COVERAGEID").toString()));
                     premiumInfluencingFactors = premiumFinder.findPremium(premiumCalculationDto).getPremiumInfluencingFactors();
-
+                    BigDecimal coverageSumAssured = rider.get("RIDER_SA")!=null?(BigDecimal)  rider.get("RIDER_SA"):BigDecimal.ONE;
                     for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
                         if (premiumInfluencingFactor.name().equalsIgnoreCase(String.valueOf(PremiumInfluencingFactor.SUM_ASSURED)))
                             premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.SUM_ASSURED, ((Integer) ((BigDecimal)  rider.get("RIDER_SA")).intValue()).toString());
@@ -135,7 +135,7 @@ public class ILQuotationAppService {
                     rd.setCoverageId(new CoverageId(rider.get("COVERAGEID").toString()));
                     if (rider.get("COVERAGENAME") != null)
                         rd.setCoverageName(new CoverageName(rider.get("COVERAGENAME").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, planSumAssured);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, coverageSumAssured);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
@@ -146,12 +146,12 @@ public class ILQuotationAppService {
             }
         }
         premiumDetailDto.setRiderPremium(riderPremiumDtoSet);
-        premiumDetailDto.setTotalPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)));
+        premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
-        premiumDetailDto.setAnnualPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(ComputedPremiumDto.getMonthlyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(ComputedPremiumDto.getQuarterlyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 
