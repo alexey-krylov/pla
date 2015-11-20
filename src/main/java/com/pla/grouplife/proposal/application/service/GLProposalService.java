@@ -482,10 +482,28 @@ public class GLProposalService {
             PlanPremiumDetail planPremiumDetail = ghInsured.getPlanPremiumDetail();
             SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planPremiumDetail.getPlanId());
             documentDetailDtos.add(searchDocumentDetailDto);
+            if (isNotEmpty(ghInsured.getCoveragePremiumDetails())) {
+                List<CoverageId> coverageIds = ghInsured.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, CoverageId>() {
+                    @Override
+                    public CoverageId apply(CoveragePremiumDetail coveragePremiumDetail) {
+                        return coveragePremiumDetail.getCoverageId();
+                    }
+                }).collect(Collectors.toList());
+                documentDetailDtos.add(new SearchDocumentDetailDto(planPremiumDetail.getPlanId(), coverageIds));
+            }
             if (isNotEmpty(ghInsured.getInsuredDependents())) {
                 ghInsured.getInsuredDependents().forEach(insuredDependent -> {
                     PlanPremiumDetail dependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
                     documentDetailDtos.add(new SearchDocumentDetailDto(dependentPlanPremiumDetail.getPlanId()));
+                    if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
+                        List<CoverageId> coverageIds = insuredDependent.getCoveragePremiumDetails().stream().map(new Function<CoveragePremiumDetail, CoverageId>() {
+                            @Override
+                            public CoverageId apply(CoveragePremiumDetail ghCoveragePremiumDetail) {
+                                return ghCoveragePremiumDetail.getCoverageId();
+                            }
+                        }).collect(Collectors.toList());
+                        documentDetailDtos.add(new SearchDocumentDetailDto(planPremiumDetail.getPlanId(), coverageIds));
+                    }
                 });
             }
         });
