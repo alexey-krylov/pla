@@ -57,7 +57,7 @@ public class GroupLifeProposalService {
             raiseAgentIsInactiveException();
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
-        return glProposalProcessor.updateWithAgentId(groupLifeProposal, new AgentId(agentId),agentCommissionPercentage,isCommissionOverridden);
+        return glProposalProcessor.updateWithAgentId(groupLifeProposal, new AgentId(agentId),isCommissionOverridden?agentCommissionPercentage:null,isCommissionOverridden);
     }
 
     public GroupLifeProposal updateWithProposerDetail(GroupLifeProposal groupLifeProposal, ProposerDto proposerDto, UserDetails userDetails) {

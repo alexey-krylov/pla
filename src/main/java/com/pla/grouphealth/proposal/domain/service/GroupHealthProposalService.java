@@ -53,7 +53,7 @@ public class GroupHealthProposalService {
             raiseAgentIsInactiveException();
         }
         GHProposalProcessor ghProposalProcessor = ghProposalRoleAdapter.userToProposalProcessor(userDetails);
-        return ghProposalProcessor.updateWithAgentId(groupHealthProposal, new AgentId(agentId),agentCommissionPercentage,isCommissionOverridden);
+        return ghProposalProcessor.updateWithAgentId(groupHealthProposal, new AgentId(agentId),isCommissionOverridden?agentCommissionPercentage:null,isCommissionOverridden);
     }
 
     public GroupHealthProposal updateWithProposer(GroupHealthProposal groupHealthProposal, ProposerDto proposerDto, UserDetails userDetails) {
