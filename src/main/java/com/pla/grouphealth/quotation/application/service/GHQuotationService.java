@@ -130,7 +130,7 @@ public class GHQuotationService {
         GHQuotationDetailDto ghQuotationDetailDto = new GHQuotationDetailDto();
         ghQuotationDetailDto.setShowLoading(!withOutSplit);
         GroupHealthQuotation quotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
-        AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+        AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new QuotationId(quotationId));
         ghQuotationDetailDto.setAgentBranch(isEmpty(agentDetailDto.getBranchName()) ? "" : agentDetailDto.getBranchName());
         ghQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         ghQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());

@@ -116,7 +116,7 @@ public class GLQuotationService {
         GLQuotationDetailDto glQuotationDetailDto = new GLQuotationDetailDto();
         glQuotationDetailDto.setShowLoading(!withOutSplit);
         GroupLifeQuotation quotation = glQuotationRepository.findOne(new QuotationId(quotationId));
-        AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
+        AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new QuotationId(quotationId));
         glQuotationDetailDto.setAgentBranch(isNotEmpty(agentDetailDto.getBranchName()) ? agentDetailDto.getBranchName() : "");
         glQuotationDetailDto.setAgentCode(agentDetailDto.getAgentId());
         glQuotationDetailDto.setAgentName(agentDetailDto.getAgentSalutation() + "  " + agentDetailDto.getAgentName());
