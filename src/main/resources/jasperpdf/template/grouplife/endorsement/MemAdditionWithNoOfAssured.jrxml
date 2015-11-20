@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T13:20:26 -->
+<!-- 2015-11-20T17:35:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -176,7 +176,7 @@
 					<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="621" y="61" width="110" height="18" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
+					<reportElement x="621" y="51" width="110" height="19" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
@@ -331,7 +331,7 @@
 					</staticText>
 					<staticText>
 						<reportElement x="5" y="41" width="116" height="18" uuid="3f15d2b5-44ee-448d-9d42-8d4cae1527cc"/>
-						<textElement>
+						<textElement verticalAlignment="Middle">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
 						<text><![CDATA[Scheme Name :]]></text>
@@ -455,7 +455,7 @@
 					</textField>
 				</frame>
 				<textField>
-					<reportElement x="710" y="61" width="182" height="18" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
+					<reportElement x="710" y="51" width="182" height="19" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="false"/>
 					</textElement>
@@ -472,7 +472,7 @@
 					<reportElement x="25" y="341" width="923" height="220" uuid="9b03a00b-c021-4554-9d89-e2826de5fb84"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="31" y="372" width="130" height="19" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
+					<reportElement x="31" y="372" width="130" height="28" uuid="d0533f73-4a6a-4931-b956-0a20ea7c1f9e"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
@@ -480,7 +480,7 @@
 				</staticText>
 				<staticText>
 					<reportElement x="30" y="391" width="123" height="29" uuid="52d7a3a6-fa9f-4fa3-af70-9e4347f7bf5a"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Endorsement Date :]]></text>
@@ -509,33 +509,33 @@
 				<staticText>
 					<reportElement x="33" y="511" width="126" height="19" uuid="91f71e1e-f6ac-40ca-a260-fc97c03dfeb9"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Lives Covered:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="33" y="531" width="126" height="18" uuid="2d718f48-d9a8-4d0b-a160-7cf6ae9ba6b8"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Sum Assured:]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="161" y="511" width="369" height="20" uuid="3f28e04c-109a-4073-94a7-45f05b928ebd"/>
 					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalLivesCovered}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="161" y="531" width="230" height="19" uuid="45fc1b5c-d6eb-49d3-8404-4cc5fbd7dcc8"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="142" y="371" width="287" height="19" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
+					<reportElement x="142" y="371" width="287" height="29" uuid="71ce5744-f59d-4576-b67c-57870cdacbd8"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
@@ -543,7 +543,7 @@
 				</textField>
 				<textField>
 					<reportElement x="142" y="391" width="290" height="29" uuid="d74113df-1ac8-4254-b287-816ea26f1380"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
@@ -570,7 +570,7 @@
 					<text><![CDATA[contrary, number of members under this policy is changed from 20 to 21, from]]></text>
 				</staticText>
 				<componentElement>
-					<reportElement key="table" style="table" positionType="Float" x="421" y="581" width="399" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
+					<reportElement key="table" style="table" positionType="Float" x="326" y="571" width="399" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
@@ -737,7 +737,7 @@
 					<textElement>
 						<font fontName="Trebuchet MS" isBold="true"/>
 					</textElement>
-					<text><![CDATA[it is hereby understood and agreed that, not withstanding anything contained in the policy to the ]]></text>
+					<text><![CDATA[,it is hereby understood and agreed that, not withstanding anything contained in the policy to the ]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement x="26" y="341" width="921" height="31" backcolor="#000066" uuid="f9f53185-bce9-493c-81ee-c864f3ef5205"/>
