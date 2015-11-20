@@ -55,7 +55,7 @@ public class GHProposalFinder {
     public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
 
 
-    private static final  String findAgentCommissionPercentageByPlanIdQuery = "select cp.commission_percentage commissionPercentage from commission c inner join \n" +
+    private static final  String findAgentCommissionPercentageByPlanId = "select cp.commission_percentage commissionPercentage from commission c inner join \n" +
             "commission_commission_term cp on c.commission_id  = cp.commission_id where c.plan_id in (:planIds);";
 
     public Map<String, Object> getAgentById(String agentId) {
@@ -67,7 +67,7 @@ public class GHProposalFinder {
 
     public List<String> getAgentCommissionPercentageByPlanId(Set<String> planIds) {
         Preconditions.checkArgument(isNotEmpty(planIds));
-        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.query(findAgentCommissionPercentageByPlanIdQuery, new MapSqlParameterSource().addValue("planIds", planIds),new ColumnMapRowMapper());
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.query(findAgentCommissionPercentageByPlanId, new MapSqlParameterSource().addValue("planIds", planIds),new ColumnMapRowMapper());
        if (isNotEmpty(agentList)) {
            return agentList.parallelStream().map(new Function<Map<String, Object>, String>() {
                @Override
