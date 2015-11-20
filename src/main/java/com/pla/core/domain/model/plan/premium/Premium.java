@@ -153,8 +153,8 @@ public class Premium {
     private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem, int noOfDays, BigDecimal sumAssured) {
         BigDecimal premiumAmount = premiumItem.getPremium();
         if (PremiumFactor.PER_THOUSAND.equals(premiumFactor)) {
-            premiumAmount = sumAssured.divide(new BigDecimal(1000)).multiply(premiumItem.getPremium());
-//            premiumAmount = premiumAmount.divide(new BigDecimal(1000));
+            premiumAmount = sumAssured.multiply(premiumItem.getPremium());
+            premiumAmount = premiumAmount.divide(new BigDecimal(1000));
         }
         if (noOfDays != 365) {
             if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {

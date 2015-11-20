@@ -198,7 +198,7 @@ public class GLProposalService {
             if (commissionSet.size()==1 && commissionSet.size()!=agentCommission.size() && planIds.size()!=commissionSet.size()){
                 return new BigDecimal(agentCommission.get(0));
             }
-            if (commissionSet.size()==1 && commissionSet.size()!=agentCommission.size() && planIds.size()!=commissionSet.size()){
+           else if (commissionSet.size()==1 && planIds.size()==1){
                 return new BigDecimal(agentCommission.get(0));
             }
         }

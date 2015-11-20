@@ -19,6 +19,7 @@ import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
@@ -135,7 +136,7 @@ public class ILQuotationAppService {
                     rd.setCoverageId(new CoverageId(rider.get("COVERAGEID").toString()));
                     if (rider.get("COVERAGENAME") != null)
                         rd.setCoverageName(new CoverageName(rider.get("COVERAGENAME").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, coverageSumAssured);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, coverageSumAssured, LineOfBusinessEnum.INDIVIDUAL_LIFE);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));

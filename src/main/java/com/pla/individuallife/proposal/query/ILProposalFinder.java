@@ -25,6 +25,7 @@ import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.domain.model.PlanStatus;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import org.joda.time.DateTime;
@@ -340,7 +341,7 @@ public class ILProposalFinder {
                     RiderPremiumDto rd = new RiderPremiumDto();
                     rd.setCoverageId(new CoverageId(rider.getCoverageId()));
                     rd.setCoverageName(new CoverageName(coverageFinder.getCoverageDetail(rider.getCoverageId()).get("coverageName").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0):BigDecimal.ONE);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0):BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     rd.setSemiAnnualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
                     rd.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));
@@ -356,10 +357,10 @@ public class ILProposalFinder {
         premiumDetailDto.setRiderPremiums(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(planDetail.getPlanId())));
-        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0, BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 

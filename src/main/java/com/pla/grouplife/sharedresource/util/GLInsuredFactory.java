@@ -111,7 +111,7 @@ public class GLInsuredFactory {
         if (isNotEmpty(coverageId)) {
             premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(coverageId));
         }
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal(sumAssured).setScale(0,BigDecimal.ROUND_FLOOR));
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal(sumAssured).setScale(0,BigDecimal.ROUND_FLOOR), LineOfBusinessEnum.GROUP_LIFE);
         BigDecimal annualBasicPremium = ComputedPremiumDto.getAnnualPremium(computedPremiums);
         return annualBasicPremium;
     }

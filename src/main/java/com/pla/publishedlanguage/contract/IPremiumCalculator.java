@@ -5,6 +5,7 @@ import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.LocalDate;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public interface IPremiumCalculator {
 
-    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured);
+    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, LineOfBusinessEnum lineOfBusinessEnum);
 
     List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured);
 
