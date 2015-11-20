@@ -170,21 +170,32 @@
                 controller: ['$scope', function ($scope) {
                     $scope.premiumTerms = function () {
                         var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
-                        $scope.ageNOB=calculateAge($scope.proposedAssured.dateOfBirth);
+                        //console.log('plan*** '+JSON.stringify($scope.plan));
                         if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
                             //console.log('To Verify..'+JSON.stringify($scope.plan.premiumTerm.maxMaturityAge));
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
                             //console.log('MAXAGE**** '+maxMaturityAge);
                             return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
-                                //console.log('ageNextBirthday '+ageNextBirthday +'premiumTermType '+parseInt(term.text) + '<=' +'maxMaturityAge '+maxMaturityAge);
-                                //console.log('Condition..'+ageNextBirthday + parseInt(term.text) <= maxMaturityAge);
                                 //return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
                                 return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
-                            return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                             if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                                 return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                                     return $scope.planDetailDto.policyTerm >= parseInt(term.text) && ageNextBirthday <=parseInt(term.text);
+                                 });
+                             }
+                            else if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                                 //console.log('Plan SPecified Values.. ***'+JSON.stringify($scope.plan));
+                                return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                                    return $scope.planDetailDto.policyTerm + ageNextBirthday <= parseInt(term.text) && ageNextBirthday >= parseInt(term.text);
+                                });
+                            }
+                            /*return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                                console.log('ageNextBirthday'+ageNextBirthday+'policyTerm'+$scope.planDetailDto.policyTerm + '<='+ parseInt(term.text)+'&&'+'ageNextBirthday'+ageNextBirthday+'>='+'premiumTerm'+parseInt(term.text));
+                                console.log((($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)))
                                 return (($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)) ;
-                            });
+                            });*/
                         }
                     };
 

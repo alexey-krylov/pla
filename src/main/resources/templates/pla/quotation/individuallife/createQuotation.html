@@ -841,7 +841,7 @@
         <div ng-switch-when="SPECIFIED_AGES">
             <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
                     name="premiumTerm"
-                    ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',planDetailDto.policyTerm)"
+                    ng-options="value.text as value.text for value in premiumTerms()"
                     ng-required="true"></select>
         </div>
         <div ng-switch-when="REGULAR">
