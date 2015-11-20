@@ -18,15 +18,15 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
     }
 
     public static void raiseNotSamePlanForAllCategoryException() {
-        throw new  GLInsuredTemplateExcelParseException("For all Self relationship plan code should be same");
+        throw new  GLInsuredTemplateExcelParseException("For all similar relationship plan code should be same");
     }
 
     public static void raiseNotSamePlanForAllRelationshipException() {
-        throw new  GLInsuredTemplateExcelParseException("For all relationship other then Self; plan code should be same");
+        throw new  GLInsuredTemplateExcelParseException("For all similar category plan code should be same");
     }
 
     public static void raiseNotSamePlanForAllCategoryAndRelationshipException() {
-        throw new  GLInsuredTemplateExcelParseException("For all relationship plan code should be same");
+        throw new  GLInsuredTemplateExcelParseException("All plan code should be same");
     }
 
     public static void raiseAssuredDataNotSharedException() {

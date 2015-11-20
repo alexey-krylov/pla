@@ -42,6 +42,10 @@ public class ProposerDto {
 
     private String industryId;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     private Boolean hasUploaded = Boolean.FALSE;
 
     public ProposerDto(Proposer proposer) {

@@ -426,6 +426,8 @@ public class GLQuotationService {
 
     public ProposerDto getProposerDetail(QuotationId quotationId) {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
+        boolean samePlanForAllRelation = quotation.get("samePlanForAllRelation") != null ? (boolean) quotation.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = quotation.get("samePlanForAllCategory") != null ? (boolean) quotation.get("samePlanForAllCategory") : false;
         Proposer proposer = (Proposer) quotation.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (quotation.get("opportunityId") != null) {
@@ -436,6 +438,8 @@ public class GLQuotationService {
             Industry industry = (Industry) quotation.get("industry");
             proposerDto.setIndustryId(industry.getIndustryId());
         }
+        proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
+        proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
         return proposerDto;
     }
 

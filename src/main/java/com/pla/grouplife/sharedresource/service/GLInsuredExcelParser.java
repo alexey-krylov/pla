@@ -27,7 +27,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.*;
+import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
+import static com.pla.grouphealth.sharedresource.service.RelationshipCategoryFlagChecker.*;
+import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidFirstHeaderException;
+import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -170,13 +173,20 @@ public class GLInsuredExcelParser {
             raiseNotValidFirstHeaderException();
         }
         Map<Row, List<Row>> insuredDependentMap = groupByRelationship(dataRows, headers);
-        boolean isSamePlanForAllCategory = isSamePlanForAllCategory(insuredDependentMap, headers);
-        boolean isSamePlanForAllRelationship = isSamePlanForAllRelation(insuredDependentMap, headers);
-        if (samePlanForAllCategory && !isSamePlanForAllCategory) {
+        boolean isSamePlanForAllCategory = Boolean.TRUE;
+        boolean isSamePlanForAllRelationship = Boolean.TRUE;
+        boolean isSamePlanForAllRelationshipCategory = Boolean.TRUE;
+        if(samePlanForAllCategory && !samePlanForAllRelation)
+            isSamePlanForAllCategory = isSamePlanForAllCategory(insuredDependentMap, headers);
+        if(samePlanForAllRelation && !samePlanForAllCategory)
+            isSamePlanForAllRelationship = isSamePlanForAllRelation(insuredDependentMap, headers);
+        if(samePlanForAllCategory && samePlanForAllRelation)
+            isSamePlanForAllRelationshipCategory = isSamePlanForAllRelationshipCategory(insuredDependentMap, headers);
+        if (!isSamePlanForAllCategory) {
             raiseNotSamePlanForAllCategoryException();
-        } else if (samePlanForAllRelation && !isSamePlanForAllRelationship) {
+        } else if (!isSamePlanForAllRelationship) {
             raiseNotSamePlanForAllRelationshipException();
-        } else if (samePlanForAllCategory && samePlanForAllRelation && (!isSamePlanForAllCategory && !isSamePlanForAllCategory)) {
+        } else if (!isSamePlanForAllRelationshipCategory) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
         Cell errorMessageHeaderCell = null;
@@ -434,37 +444,6 @@ public class GLInsuredExcelParser {
             }
         }
         return categoryRowMap;
-    }
-
-
-    private boolean isSamePlanForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
-        boolean isSamePlanForAllCategory = false;
-        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            Cell planCell = getCellByName(row, headers, GLInsuredExcelHeader.PLAN.getDescription());
-            String planCode = getCellValue(planCell);
-            if (isSamePlanForAllCategory) {
-                break;
-            }
-            for (Map.Entry<Row, List<Row>> otherRowEntry : relationshipGroupRowMap.entrySet()) {
-                Row otherRow = otherRowEntry.getKey();
-                Cell otherPlanCell = getCellByName(otherRow, headers, GLInsuredExcelHeader.PLAN.getDescription());
-                String otherPlanCode = getCellValue(otherPlanCell);
-                if (isNotEmpty(planCode) && isNotEmpty(otherPlanCode) && planCode.equals(otherPlanCode)) {
-                    isSamePlanForAllCategory = true;
-                    break;
-                }
-            }
-        }
-        return isSamePlanForAllCategory;
-    }
-
-    private boolean isSamePlanForAllRelation(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
-        List<Row> allRows = Lists.newArrayList();
-        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
-            allRows.addAll(rowEntry.getValue());
-        }
-        return isRowsContainSamePlan(allRows, headers);
     }
 
     private boolean isRowsContainSamePlan(List<Row> rows, List<String> headers) {
