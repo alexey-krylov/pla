@@ -5,6 +5,7 @@ import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -19,8 +20,8 @@ public class GHProposalProcessor {
     }
 
 
-    public GroupHealthProposal updateWithAgentId(GroupHealthProposal groupHealthProposal, AgentId agentId) {
-        return groupHealthProposal.updateWithAgentId(agentId);
+    public GroupHealthProposal updateWithAgentId(GroupHealthProposal groupHealthProposal, AgentId agentId, BigDecimal agentCommissionPercentage,Boolean isCommissionOverridden) {
+        return groupHealthProposal.updateWithAgent(agentId, agentCommissionPercentage, isCommissionOverridden);
     }
 
     public GroupHealthProposal updateWithProposer(GroupHealthProposal groupHealthProposal, GHProposer proposer) {

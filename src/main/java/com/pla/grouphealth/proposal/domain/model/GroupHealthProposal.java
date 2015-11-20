@@ -46,6 +46,10 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private AgentId agentId;
 
+    private BigDecimal agentCommissionPercentage = BigDecimal.ZERO;
+
+    private Boolean isCommissionOverridden = Boolean.FALSE;
+
     private GHProposer proposer;
 
     private Set<GHInsured> insureds;
@@ -92,8 +96,10 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         return groupHealthProposal;
     }
 
-    public GroupHealthProposal updateWithAgentId(AgentId agentId) {
+    public GroupHealthProposal updateWithAgent(AgentId agentId, BigDecimal agentCommissionPercentage, Boolean isCommissionOverridden) {
         this.agentId = agentId;
+        this.agentCommissionPercentage = agentCommissionPercentage;
+        this.isCommissionOverridden = isCommissionOverridden;
         return this;
     }
 

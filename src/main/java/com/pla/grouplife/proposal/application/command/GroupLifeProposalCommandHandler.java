@@ -98,7 +98,7 @@ public class GroupLifeProposalCommandHandler {
     @CommandHandler
     public String updateWithAgentId(UpdateGLProposalWithAgentCommand updateGLProposalWithAgentCommand) {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(updateGLProposalWithAgentCommand.getProposalId()));
-        groupLifeProposal = groupLifeProposalService.updateWithAgent(groupLifeProposal, updateGLProposalWithAgentCommand.getAgentId(), updateGLProposalWithAgentCommand.getUserDetails());
+        groupLifeProposal = groupLifeProposalService.updateWithAgent(groupLifeProposal, updateGLProposalWithAgentCommand.getAgentId(), updateGLProposalWithAgentCommand.getUserDetails(),updateGLProposalWithAgentCommand.getAgentCommissionPercentage(),updateGLProposalWithAgentCommand.getIsCommissionOverridden());
         groupLifeProposalRepository.add(groupLifeProposal);
         return groupLifeProposal.getIdentifier().getProposalId();
     }

@@ -101,7 +101,7 @@ public class GHProposalCommandHandler {
     @CommandHandler
     public String updateWithAgentDetail(UpdateGHProposalWithAgentCommand updateGHProposalWithAgentCommand) {
         GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(updateGHProposalWithAgentCommand.getProposalId()));
-        groupHealthProposal = groupHealthProposalService.updateWithAgent(groupHealthProposal, updateGHProposalWithAgentCommand.getAgentId(), updateGHProposalWithAgentCommand.getUserDetails());
+        groupHealthProposal = groupHealthProposalService.updateWithAgent(groupHealthProposal, updateGHProposalWithAgentCommand.getAgentId(), updateGHProposalWithAgentCommand.getAgentCommissionPercentage(),updateGHProposalWithAgentCommand.getIsCommissionOverridden(),updateGHProposalWithAgentCommand.getUserDetails());
         return groupHealthProposal.getIdentifier().getProposalId();
     }
 

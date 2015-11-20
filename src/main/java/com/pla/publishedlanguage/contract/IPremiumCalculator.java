@@ -17,13 +17,13 @@ import java.util.List;
 
 public interface IPremiumCalculator {
 
-    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto);
+    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured);
 
-    List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto);
+    List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured);
 
     List<ComputedPremiumDto> calculateModalPremium(BasicPremiumDto basicPremiumDto);
 
-    BigDecimal computeProratePremium(PremiumCalculationDto premiumCalculationDto);
+    BigDecimal computeProratePremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured);
 
     List<PremiumInfluencingFactor> getPremiumInfluencingFactors(PlanId planId, LocalDate calculateDate);
 

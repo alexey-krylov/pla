@@ -112,7 +112,7 @@ public class PremiumUnitTest {
     @Test
     public void givenPremiumItemAndDiscountFactor_thenItShouldReturnTheAnnualDiscountFactor() {
         BigDecimal expectedAnnualDiscountFactor = new BigDecimal(123486.7744).setScale(4, BigDecimal.ROUND_CEILING);
-        BigDecimal annualDiscountFactor = premium.getAnnualPremium(premiumItem, discountFactorItems, 365);
+        BigDecimal annualDiscountFactor = premium.getAnnualPremium(premiumItem, discountFactorItems, 365, BigDecimal.ONE);
         annualDiscountFactor = annualDiscountFactor.setScale(4, BigDecimal.ROUND_CEILING);
         assertThat(expectedAnnualDiscountFactor, is(annualDiscountFactor));
 
@@ -121,7 +121,7 @@ public class PremiumUnitTest {
     @Test
     public void givenPremiumItemAndDiscountFactor_thenItShouldReturnTheSemiAnnualDiscountFactor() {
         BigDecimal expectedSemiAnnualDiscountFactor = new BigDecimal(5555586.4990).setScale(4, BigDecimal.ROUND_CEILING);
-        BigDecimal semiAnnualDiscountFactor = premium.getSemiAnnuallyPremium(premiumItem, modelFactorItems, discountFactorItems, 365);
+        BigDecimal semiAnnualDiscountFactor = premium.getSemiAnnuallyPremium(premiumItem, modelFactorItems, discountFactorItems, 365, BigDecimal.ONE);
         semiAnnualDiscountFactor = semiAnnualDiscountFactor.setScale(4, BigDecimal.ROUND_CEILING);
         assertThat(expectedSemiAnnualDiscountFactor, is(semiAnnualDiscountFactor));
 
@@ -133,7 +133,7 @@ public class PremiumUnitTest {
     @Test
     public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsMonthly_thenItShouldReturnThePremiumAmount() {
         BigDecimal expectedMonthlyPremiumFactor = new BigDecimal(100.00).setScale(1, BigDecimal.ROUND_HALF_UP);
-        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems, 365);
+        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems, 365, BigDecimal.ONE);
         assertThat(expectedMonthlyPremiumFactor, is(monthlyPremium));
     }
 
@@ -141,7 +141,7 @@ public class PremiumUnitTest {
     public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsNotMonthly_thenItShouldReturnTheMonthlyPremiumAmount() {
         BigDecimal expectedMonthlyPremiumFactor = new BigDecimal(100299.8991).setScale(4, BigDecimal.ROUND_CEILING);
         premium.setPremiumRateFrequency(PremiumRateFrequency.YEARLY);
-        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems, 365);
+        BigDecimal monthlyPremium = premium.getMonthlyPremium(premiumItem, modelFactorItems, 365, BigDecimal.ONE);
         monthlyPremium = monthlyPremium.setScale(4, BigDecimal.ROUND_CEILING);
         assertThat(expectedMonthlyPremiumFactor, is(monthlyPremium));
     }
@@ -150,7 +150,7 @@ public class PremiumUnitTest {
     public void givenPremiumItemAndModalFactorItem_whenModalFactorItemIsNotMonthly_thenItShouldReturnTheQuarterlyPremiumAmount() {
         BigDecimal expectedQuarterlyPremiumFactor = new BigDecimal(100199.9941).setScale(4, BigDecimal.ROUND_CEILING);
         premium.setPremiumRateFrequency(PremiumRateFrequency.YEARLY);
-        BigDecimal quarterlyPremium = premium.getQuarterlyPremium(premiumItem, modelFactorItems, discountFactorItems, 365);
+        BigDecimal quarterlyPremium = premium.getQuarterlyPremium(premiumItem, modelFactorItems, discountFactorItems, 365, BigDecimal.ONE);
         quarterlyPremium = quarterlyPremium.setScale(4,BigDecimal.ROUND_CEILING);
         assertThat(expectedQuarterlyPremiumFactor, is(quarterlyPremium));
     }

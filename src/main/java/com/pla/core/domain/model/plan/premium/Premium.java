@@ -107,12 +107,12 @@ public class Premium {
         }
     }
 
-    public BigDecimal getProratePremium(PremiumItem premiumItem, int noOfDays) {
-        return getAllowedPremiumAmount(premiumItem, noOfDays);
+    public BigDecimal getProratePremium(PremiumItem premiumItem, int noOfDays, BigDecimal sumAssured) {
+        return getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured );
     }
 
-    public BigDecimal getAnnualPremium(PremiumItem premiumItem, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays);
+    public BigDecimal getAnnualPremium(PremiumItem premiumItem, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays, BigDecimal sumAssured) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured );
         if (PremiumRateFrequency.YEARLY.equals(this.premiumRateFrequency)) {
             return premiumAmount;
         }
@@ -120,8 +120,8 @@ public class Premium {
         return premiumAmount;
     }
 
-    public BigDecimal getMonthlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, int noOfDays) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays);
+    public BigDecimal getMonthlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, int noOfDays, BigDecimal sumAssured) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured );
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             return premiumAmount;
         }
@@ -129,8 +129,8 @@ public class Premium {
         return premiumAmount;
     }
 
-    public BigDecimal getQuarterlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays);
+    public BigDecimal getQuarterlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays, BigDecimal sumAssured) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured );
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getQuarterlyDiscountFactor(discountFactorItems));
             return premiumAmount;
@@ -139,8 +139,8 @@ public class Premium {
         return premiumAmount;
     }
 
-    public BigDecimal getSemiAnnuallyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays);
+    public BigDecimal getSemiAnnuallyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays, BigDecimal sumAssured) {
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured );
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getSemiAnnualDiscountFactor(discountFactorItems));
             return premiumAmount;
@@ -150,10 +150,10 @@ public class Premium {
     }
 
 
-    private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem, int noOfDays) {
+    private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem, int noOfDays, BigDecimal sumAssured) {
         BigDecimal premiumAmount = premiumItem.getPremium();
         if (PremiumFactor.PER_THOUSAND.equals(premiumFactor)) {
-            premiumAmount = premiumItem.getSumAssuredValue().multiply(premiumItem.getPremium());
+            premiumAmount = sumAssured.multiply(premiumItem.getPremium());
             premiumAmount = premiumAmount.divide(new BigDecimal(1000));
         }
         if (noOfDays != 365) {

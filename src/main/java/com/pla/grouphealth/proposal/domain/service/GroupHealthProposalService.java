@@ -48,12 +48,12 @@ public class GroupHealthProposalService {
         this.premiumCalculator = premiumCalculator;
     }
 
-    public GroupHealthProposal updateWithAgent(GroupHealthProposal groupHealthProposal, String agentId, UserDetails userDetails) {
+    public GroupHealthProposal updateWithAgent(GroupHealthProposal groupHealthProposal, String agentId, BigDecimal agentCommissionPercentage,Boolean isCommissionOverridden,UserDetails userDetails) {
         if (!agentIsActive.isSatisfiedBy(new AgentId(agentId))) {
             raiseAgentIsInactiveException();
         }
         GHProposalProcessor ghProposalProcessor = ghProposalRoleAdapter.userToProposalProcessor(userDetails);
-        return ghProposalProcessor.updateWithAgentId(groupHealthProposal, new AgentId(agentId));
+        return ghProposalProcessor.updateWithAgentId(groupHealthProposal, new AgentId(agentId),agentCommissionPercentage,isCommissionOverridden);
     }
 
     public GroupHealthProposal updateWithProposer(GroupHealthProposal groupHealthProposal, ProposerDto proposerDto, UserDetails userDetails) {

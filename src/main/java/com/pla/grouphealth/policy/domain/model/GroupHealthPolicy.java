@@ -43,6 +43,10 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     private AgentId agentId;
 
+    private BigDecimal agentCommissionPercentage;
+
+    private Boolean isCommissionOverridden;
+
     private GHProposer proposer;
 
     private Set<GHInsured> insureds;

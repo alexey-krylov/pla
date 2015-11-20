@@ -304,7 +304,7 @@ public class ILProposalFinder {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, occupationCode);
         }
 
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto);
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto, planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0,BigDecimal.ROUND_FLOOR):BigDecimal.ONE);
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
         BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
@@ -340,7 +340,7 @@ public class ILProposalFinder {
                     RiderPremiumDto rd = new RiderPremiumDto();
                     rd.setCoverageId(new CoverageId(rider.getCoverageId()));
                     rd.setCoverageName(new CoverageName(coverageFinder.getCoverageDetail(rider.getCoverageId()).get("coverageName").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0):BigDecimal.ONE);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     rd.setSemiAnnualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
                     rd.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));
@@ -354,12 +354,12 @@ public class ILProposalFinder {
             }
         }
         premiumDetailDto.setRiderPremiums(riderPremiumDtoSet);
-        premiumDetailDto.setTotalPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)));
+        premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(planDetail.getPlanId())));
-        premiumDetailDto.setAnnualPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(ComputedPremiumDto.getMonthlyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(ComputedPremiumDto.getQuarterlyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums)).setScale(0, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 

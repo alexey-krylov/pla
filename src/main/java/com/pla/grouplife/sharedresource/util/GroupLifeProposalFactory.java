@@ -53,7 +53,7 @@ public class GroupLifeProposalFactory {
         PremiumDetail premiumDetail = (PremiumDetail) quotationMap.get("premiumDetail");
         Proposer proposer = (Proposer) quotationMap.get("proposer");
         GroupLifeProposal groupLifeProposal = new GroupLifeProposal(proposalId, quotation, proposalNumber);
-        groupLifeProposal = groupLifeProposal.updateWithAgentId(agentId).updateWithProposer(proposer)
+        groupLifeProposal = groupLifeProposal.updateWithAgentId(agentId,null,null).updateWithProposer(proposer)
                 .updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail).updateWithIndustry(industry);
         return groupLifeProposal;
     }
