@@ -174,6 +174,9 @@ public class GHProposalService {
             if (commissionSet.size()==1 && commissionSet.size()!=agentCommission.size() && planIds.size()!=commissionSet.size()){
                 return new BigDecimal(agentCommission.get(0));
             }
+            else if (planIds.size()==1 && commissionSet.size()==1){
+                return new BigDecimal(agentCommission.get(0));
+            }
         }
         return BigDecimal.ZERO;
     }
