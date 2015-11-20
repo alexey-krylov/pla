@@ -68,12 +68,12 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $scope.stepsSaved["1"] =true;
             }
 
-            $scope.$watch('proposalDetails.basic.isCommissionOverridden',function(newVal){
-                if(!newVal){
+            $scope.toggleSelection=function($event){
+                var checkbox = $event.target;
+                if(!checkbox.checked){
                     $scope.proposalDetails.basic.agentCommissionPercentage='';
                 }
-
-            });
+            }
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);
                 for (var i = 0; i < $scope.documentList.length; i++) {

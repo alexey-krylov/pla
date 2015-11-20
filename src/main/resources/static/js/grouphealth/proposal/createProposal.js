@@ -71,17 +71,16 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 $scope.proposalDetails.proposer.town='';
 
             }
-
+            $scope.toggleSelection=function($event){
+                var checkbox = $event.target;
+                if(!checkbox.checked){
+                    $scope.proposalDetails.basic.agentCommissionPercentage='';
+                }
+            }
 
             if (status == 'return') {
                 $scope.stepsSaved["1"] =true;
             }
-
-            $scope.$watch('proposalDetails.basic.isCommissionOverridden',function(newVal){
-                if(!newVal){
-                    $scope.proposalDetails.basic.agentCommissionPercentage='';
-                }
-            });
 
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);

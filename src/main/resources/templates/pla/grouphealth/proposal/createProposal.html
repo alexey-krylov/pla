@@ -144,7 +144,7 @@
                                     <div class="form-group" style="margin-top: 20px">
                                         <label class="control-label">Change Broker Commission Rates %</label>
                                         <label class="radio-inline">
-                                        <input type="checkbox" name="brokerCommissionRate" ng-model="proposalDetails.basic.isCommissionOverridden"/>
+                                        <input type="checkbox" name="brokerCommissionRate" ng-click="toggleSelection($event)" ng-model="proposalDetails.basic.isCommissionOverridden"/>
                                         </label>
                                     </div>
                                 </div>
