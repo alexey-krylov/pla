@@ -170,11 +170,16 @@
                 controller: ['$scope', function ($scope) {
                     $scope.premiumTerms = function () {
                         var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
+                        $scope.ageNOB=calculateAge($scope.proposedAssured.dateOfBirth);
                         if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
+                            //console.log('To Verify..'+JSON.stringify($scope.plan.premiumTerm.maxMaturityAge));
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
+                            //console.log('MAXAGE**** '+maxMaturityAge);
                             return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
-                                return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
-                                //return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
+                                //console.log('ageNextBirthday '+ageNextBirthday +'premiumTermType '+parseInt(term.text) + '<=' +'maxMaturityAge '+maxMaturityAge);
+                                //console.log('Condition..'+ageNextBirthday + parseInt(term.text) <= maxMaturityAge);
+                                //return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
+                                return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
                             });
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
                             return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
@@ -193,6 +198,13 @@
 
                         if ($scope.plan && $scope.plan.premiumTermType === 'REGULAR') {
                             $scope.planDetailDto.premiumPaymentTerm = newval;
+                        }
+
+                    })
+                    $scope.$watch('planDetailDto.policyTerm', function (newval) {
+
+                        if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE') {
+                            $scope.planDetailDto.premiumPaymentTerm = 1;
                         }
 
                     });
