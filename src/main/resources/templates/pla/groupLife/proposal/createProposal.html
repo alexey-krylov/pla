@@ -141,7 +141,7 @@
                                     <div class="form-group" style="margin-top: 20px">
                                         <label class="control-label">Change Broker Commission Rates %</label>
                                         <label class="radio-inline">
-                                        <input type="checkbox" name="brokerCommissionRate" ng-model="proposalDetails.basic.isCommissionOverridden"/>
+                                        <input type="checkbox" name="brokerCommissionRate" ng-disabled="isViewMode" ng-model="proposalDetails.basic.isCommissionOverridden"/>
                                         </label>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                                     <div class="form-group required">
                                         <label class="control-label">Agent Commission % (of Final Premium)</label>
                                         <input type="text" class="form-control input-sm" min="0.1" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/" ng-required="true"
-                                               name="agentCommissionPercentage" ng-model="proposalDetails.basic.agentCommissionPercentage"/>
+                                                name="agentCommissionPercentage" ng-model="proposalDetails.basic.agentCommissionPercentage"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-3" ng-if="!proposalDetails.basic.isCommissionOverridden">
