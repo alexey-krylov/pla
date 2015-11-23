@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
-import static com.pla.grouphealth.sharedresource.service.RelationshipCategoryFlagChecker.*;
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.*;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidFirstHeaderException;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
@@ -157,7 +157,7 @@ public class GLInsuredExcelParser {
     }
 
 
-    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans) {
+    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans, int minimumNumberOfPersonPerPolicy, int minimumPremium) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
@@ -189,6 +189,12 @@ public class GLInsuredExcelParser {
         } else if (!isSamePlanForAllRelationshipCategory) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
+        boolean isPremiumLessThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremium(insuredDependentMap, headers, minimumPremium);
+        boolean isNoOfPersonsLessThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersons(insuredDependentMap, headers, minimumNumberOfPersonPerPolicy);
+        if(isPremiumLessThenMinimumConfiguredPremium)
+            premiumLessThenMinimumConfiguredPremiumException();
+        if(isNoOfPersonsLessThenMinimumConfiguredPersons)
+            noOfPersonsLessThenMinimumConfiguredPersonsException();
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {

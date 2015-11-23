@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.query.MasterFinder;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
@@ -27,6 +28,7 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
+import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.*;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
@@ -55,6 +57,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -386,7 +389,10 @@ public class GLProposalService {
     public boolean isValidInsuredTemplate(String proposalId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
         AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
         List<PlanId> agentPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelation, agentPlans);
+        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
+        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelation, agentPlans, minimumNumberOfPersonPerPolicy, minimumPremium);
     }
 
     public List<InsuredDto> transformToInsuredDto(HSSFWorkbook insuredTemplateWorkbook, String proposalId, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {

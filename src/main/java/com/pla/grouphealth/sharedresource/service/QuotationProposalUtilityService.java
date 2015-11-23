@@ -1,11 +1,18 @@
 package com.pla.grouphealth.sharedresource.service;
 
 import com.google.common.collect.Sets;
+import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimit;
+import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimitItem;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.grouphealth.sharedresource.dto.CategoryPlanDataHolder;
 import com.pla.grouphealth.sharedresource.dto.RelationshipPlanDataHolder;
+import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.nthdimenzion.utils.UtilValidator;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +22,7 @@ import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 /**
  * Created by Mohan Sharma on 11/20/2015.
  */
-public class RelationshipCategoryFlagChecker {
+public class QuotationProposalUtilityService {
 
     public static boolean isSamePlanForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
         RelationshipPlanDataHolder relationshipPlanDataHolder = null;
@@ -83,5 +90,72 @@ public class RelationshipCategoryFlagChecker {
     private static Cell getCellByName(Row row, List<String> headers, String cellName) {
         int cellNumber = headers.indexOf(cellName);
         return row.getCell(cellNumber);
+    }
+
+    public static int getMinimumValueForGivenCriteria(ProductLineGeneralInformation productLineInformation, PolicyProcessMinimumLimitType policyProcessMinimumLimitType) {
+        Set<PolicyProcessMinimumLimitItem> policyProcessMinimumLimitItems = getPolicyProcessMinimumLimitItems(productLineInformation);
+        if(UtilValidator.isNotEmpty(policyProcessMinimumLimitItems)){
+            for(PolicyProcessMinimumLimitItem policyProcessMinimumLimitItem : policyProcessMinimumLimitItems){
+                if(policyProcessMinimumLimitItem.getPolicyProcessMinimumLimitType().equals(policyProcessMinimumLimitType)){
+                    return policyProcessMinimumLimitItem.getValue();
+                }
+
+            }
+        }
+        return 0;
+    }
+
+    private static Set<PolicyProcessMinimumLimitItem> getPolicyProcessMinimumLimitItems(ProductLineGeneralInformation productLineInformation) {
+        if(productLineInformation != null){
+            PolicyProcessMinimumLimit policyProcessMinimumLimit = productLineInformation.getPolicyProcessMinimumLimit();
+            if(policyProcessMinimumLimit != null){
+                return policyProcessMinimumLimit.getPolicyProcessMinimumLimitItemsByForce();
+            }
+        }
+        return Collections.EMPTY_SET;
+    }
+
+
+    public static boolean isPremiumGreaterThenMinimumConfiguredPremium(Map<Row, List<Row>> insuredDependentMap, List<String> headers, int minimumPremium) {
+        BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
+        for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {
+            Row row = rowEntry.getKey();
+            Cell planPremiumCell = getCellByName(row, headers, GHInsuredExcelHeader.PLAN_PREMIUM.getDescription());
+            String planPremium = getCellValue(planPremiumCell);
+            Cell noOfAssuredCell = getCellByName(row, headers, GHInsuredExcelHeader.NO_OF_ASSURED.getDescription());
+            String noOfAssured = getCellValue(noOfAssuredCell);
+            totalPremiumInExcel = totalPremiumInExcel.add(getPremiumDetail(planPremium, noOfAssured));
+        }
+        if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
+            return Boolean.FALSE;
+        return Boolean.TRUE;
+    }
+
+    private static BigDecimal getPremiumDetail(String planPremium, String noOfAssured) {
+        BigDecimal sumOfplanPremiumAndNoOfAssured = BigDecimal.ZERO;
+        if(UtilValidator.isNotEmpty(planPremium)){
+            sumOfplanPremiumAndNoOfAssured = new BigDecimal(planPremium);
+            if(UtilValidator.isNotEmpty(noOfAssured)){
+                return new BigDecimal(noOfAssured).multiply(sumOfplanPremiumAndNoOfAssured);
+            }
+        }
+        return sumOfplanPremiumAndNoOfAssured;
+    }
+
+    public static boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons(Map<Row, List<Row>> insuredDependentMap, List<String> headers, int minimumPremium) {
+        int totalNumberOfPersonInExcel = 0;
+        for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {
+            Row row = rowEntry.getKey();
+            Cell noOfAssuredCell = getCellByName(row, headers, GHInsuredExcelHeader.NO_OF_ASSURED.getDescription());
+            String noOfAssured = getCellValue(noOfAssuredCell);
+            if(UtilValidator.isNotEmpty(noOfAssured)){
+                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += new BigDecimal(noOfAssured).intValue();
+            } else {
+                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += 1;
+            }
+        }
+        if(totalNumberOfPersonInExcel >= minimumPremium)
+            return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 }

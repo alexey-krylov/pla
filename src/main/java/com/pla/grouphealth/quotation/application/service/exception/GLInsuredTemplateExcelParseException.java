@@ -33,6 +33,13 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
         throw new  GLInsuredTemplateExcelParseException("Assured data not shared.");
     }
 
+    public static void premiumLessThenMinimumConfiguredPremiumException() {
+        throw new  GLInsuredTemplateExcelParseException("Total Premium is less than the specified Minimum for Plans.");
+    }
+    public static void noOfPersonsLessThenMinimumConfiguredPersonsException() {
+        throw new  GLInsuredTemplateExcelParseException("Total Number of Members is less than the specified Minimum for Plans.");
+    }
+
     public static void raiseNotValidValueException(String message) {
         throw new  GLInsuredTemplateExcelParseException(message);
     }

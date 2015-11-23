@@ -9,8 +9,8 @@ import lombok.Setter;
 /**
  * Created by Admin on 4/1/2015.
  */
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
+@Getter
+@Setter
 @EqualsAndHashCode
 public class PolicyProcessMinimumLimitItem {
 

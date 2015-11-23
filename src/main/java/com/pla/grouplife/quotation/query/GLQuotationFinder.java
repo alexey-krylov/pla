@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -171,4 +172,9 @@ public class GLQuotationFinder {
         return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode));
     }
 
+    public ProductLineGeneralInformation getGHProductLineInformation() {
+        Criteria criteria = Criteria.where("productLine").is("GROUP_HEALTH");
+        Query query = new Query(criteria);
+        return mongoTemplate.findOne(query, ProductLineGeneralInformation.class, "product_line_information");
+    }
 }

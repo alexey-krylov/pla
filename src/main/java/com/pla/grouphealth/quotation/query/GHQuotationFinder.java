@@ -3,6 +3,7 @@ package com.pla.grouphealth.quotation.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -76,5 +77,11 @@ public class GHQuotationFinder {
 
     public Map<String, Object> getActiveInactiveAgentById(String agentId) {
         return ghFinder.getActiveInactiveAgentById(agentId);
+    }
+
+    public ProductLineGeneralInformation getGHProductLineInformation() {
+        Criteria criteria = Criteria.where("productLine").is("GROUP_HEALTH");
+        Query query = new Query(criteria);
+        return mongoTemplate.findOne(query, ProductLineGeneralInformation.class, "product_line_information");
     }
 }

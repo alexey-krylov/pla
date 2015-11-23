@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimit;
+import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimitItem;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.grouphealth.quotation.application.command.GHRecalculatedInsuredPremiumCommand;
 import com.pla.grouphealth.quotation.application.command.SearchGlQuotationDto;
 import com.pla.grouphealth.quotation.domain.model.*;
@@ -19,9 +22,11 @@ import com.pla.grouphealth.sharedresource.dto.ProposerDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelGenerator;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelParser;
+import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
 import com.pla.grouplife.sharedresource.dto.*;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
+import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -35,6 +40,7 @@ import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -45,6 +51,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.*;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -262,7 +269,10 @@ public class GHQuotationService {
     public boolean isValidInsuredTemplate(String quotationId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
         List<PlanId> agentPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        return ghInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans);
+        ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
+        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        return ghInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans, minimumNumberOfPersonPerPolicy, minimumPremium);
     }
 
     public List<GHInsuredDto> transformToInsuredDto(HSSFWorkbook workbook, String quotationId, boolean samePlanForAllCategory, boolean samePlanForAllRelations) {

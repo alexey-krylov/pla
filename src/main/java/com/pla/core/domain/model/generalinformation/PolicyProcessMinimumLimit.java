@@ -39,4 +39,8 @@ public class PolicyProcessMinimumLimit {
          return policyProcessMinimumLimitItem;
       }
    }
+
+   public Set<PolicyProcessMinimumLimitItem> getPolicyProcessMinimumLimitItemsByForce(){
+      return this.policyProcessMinimumLimitItems;
+   }
 }
