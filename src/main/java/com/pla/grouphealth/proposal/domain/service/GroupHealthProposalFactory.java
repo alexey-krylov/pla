@@ -42,6 +42,7 @@ public class GroupHealthProposalFactory {
 
     public GroupHealthProposal createProposal(QuotationId quotationId,ProposalId proposalId) {
         Map quotationMap = ghFinder.searchQuotationById(quotationId);
+        boolean moratoriumPeriodApplicable = quotationMap.get("moratoriumPeriodApplicable") != null ? (boolean) quotationMap.get("moratoriumPeriodApplicable") : false;
         boolean samePlanForAllRelation = quotationMap.get("samePlanForAllRelation") != null ? (boolean) quotationMap.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = quotationMap.get("samePlanForAllCategory") != null ? (boolean) quotationMap.get("samePlanForAllCategory") : false;
         String quotationNumber = (String) quotationMap.get("quotationNumber");
@@ -56,6 +57,7 @@ public class GroupHealthProposalFactory {
         GroupHealthProposal groupHealthProposal = new GroupHealthProposal(proposalId, quotation, proposalNumber);
         groupHealthProposal.updateFlagSamePlanForAllRelation(samePlanForAllRelation);
         groupHealthProposal.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
+        groupHealthProposal.updateFlagMoratoriumPeriodApplicable(moratoriumPeriodApplicable);
         groupHealthProposal = groupHealthProposal.updateWithAgent(agentId, BigDecimal.ZERO,Boolean.FALSE).updateWithProposer(proposer).updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail);
         return groupHealthProposal;
     }

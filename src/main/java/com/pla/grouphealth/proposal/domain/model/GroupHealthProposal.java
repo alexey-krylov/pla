@@ -64,6 +64,8 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private String productType;
 
+    private boolean moratoriumPeriodApplicable;
+
     private boolean samePlanForAllRelation;
 
     private boolean samePlanForAllCategory;
@@ -97,6 +99,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         groupHealthProposal.proposerDocuments = this.proposerDocuments;
         groupHealthProposal.opportunityId = this.opportunityId;
         groupHealthProposal.productType = this.productType;
+        groupHealthProposal.moratoriumPeriodApplicable = this.moratoriumPeriodApplicable;
         groupHealthProposal.samePlanForAllCategory = this.samePlanForAllCategory;
         groupHealthProposal.samePlanForAllRelation = this.samePlanForAllRelation;
         return groupHealthProposal;
@@ -199,6 +202,11 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupHealthProposal updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
         this.samePlanForAllCategory = samePlanForAllCategory;
+        return this;
+    }
+
+    public GroupHealthProposal updateFlagMoratoriumPeriodApplicable(boolean moratoriumPeriodApplicable) {
+        this.moratoriumPeriodApplicable = moratoriumPeriodApplicable;
         return this;
     }
 }
