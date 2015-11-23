@@ -61,6 +61,10 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private Industry industry;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     @Override
     public ProposalId getIdentifier() {
         return proposalId;
@@ -90,6 +94,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         groupLifeProposal.proposerDocuments = this.proposerDocuments;
         groupLifeProposal.productType = this.productType;
         groupLifeProposal.industry = this.industry;
+        groupLifeProposal.samePlanForAllCategory = this.samePlanForAllCategory;
+        groupLifeProposal.samePlanForAllRelation = this.samePlanForAllRelation;
         return groupLifeProposal;
     }
 
@@ -190,5 +196,15 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
             totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
         }
         return totalBasicAnnualPremium;
+    }
+
+    public GroupLifeProposal updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
+        this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
+
+    public GroupLifeProposal updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
+        this.samePlanForAllCategory = samePlanForAllCategory;
+        return this;
     }
 }

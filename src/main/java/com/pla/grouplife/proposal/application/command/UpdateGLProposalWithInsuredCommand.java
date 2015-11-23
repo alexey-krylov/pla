@@ -24,4 +24,7 @@ public class UpdateGLProposalWithInsuredCommand {
 
     private UserDetails userDetails;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
 }

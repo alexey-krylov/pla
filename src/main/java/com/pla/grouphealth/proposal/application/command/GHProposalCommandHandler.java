@@ -119,6 +119,8 @@ public class GHProposalCommandHandler {
         GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(updateGHProposalWithInsuredCommand.getProposalId()));
         groupHealthProposal = groupHealthProposalService.updateInsured(groupHealthProposal, insureds, updateGHProposalWithInsuredCommand.getUserDetails());
         GHPremiumDetailDto premiumDetailDto = new GHPremiumDetailDto(BigDecimal.valueOf(20), 365, BigDecimal.valueOf(15), processInfoAdapter.getServiceTaxAmount());
+        groupHealthProposal = groupHealthProposal.updateFlagSamePlanForAllRelation(updateGHProposalWithInsuredCommand.isSamePlanForAllRelation());
+        groupHealthProposal = groupHealthProposal.updateFlagSamePlanForAllCategory(updateGHProposalWithInsuredCommand.isSamePlanForAllCategory());
         groupHealthProposal = groupHealthProposalService.updateWithPremiumDetail(groupHealthProposal, premiumDetailDto, updateGHProposalWithInsuredCommand.getUserDetails());
         return groupHealthProposal.getIdentifier().getProposalId();
     }

@@ -64,6 +64,10 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private String productType;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     @Override
     public ProposalId getIdentifier() {
         return proposalId;
@@ -93,6 +97,8 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         groupHealthProposal.proposerDocuments = this.proposerDocuments;
         groupHealthProposal.opportunityId = this.opportunityId;
         groupHealthProposal.productType = this.productType;
+        groupHealthProposal.samePlanForAllCategory = this.samePlanForAllCategory;
+        groupHealthProposal.samePlanForAllRelation = this.samePlanForAllRelation;
         return groupHealthProposal;
     }
 
@@ -184,6 +190,15 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
     public GroupHealthProposal updateWithOpportunityId(OpportunityId opportunityId) {
         this.opportunityId = opportunityId;
         return this;
+    }
 
+    public GroupHealthProposal updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
+        this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
+
+    public GroupHealthProposal updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
+        this.samePlanForAllCategory = samePlanForAllCategory;
+        return this;
     }
 }

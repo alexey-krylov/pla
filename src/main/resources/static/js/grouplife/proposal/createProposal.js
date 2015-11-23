@@ -258,6 +258,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
 
             $scope.proposalDetails.proposer = proposerDetails;
+            $scope.proposalDetails.plan.samePlanForAllRelation=proposerDetails.samePlanForAllRelation;
+            $scope.proposalDetails.plan.samePlanForAllCategory=proposerDetails.samePlanForAllCategory;
             if (mode == 'view') {
                 $scope.dropdown = [
                     {

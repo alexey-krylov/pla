@@ -242,11 +242,15 @@ public class GHProposalService {
     public ProposerDto getProposerDetail(ProposalId proposalId) {
         Map proposal = ghProposalFinder.findProposalById(proposalId.getProposalId());
         GHProposer proposer = (GHProposer) proposal.get("proposer");
+        boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
         }
+        proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
+        proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         return proposerDto;
     }
 

@@ -236,6 +236,8 @@ public class GLProposalService {
     public ProposerDto getProposerDetail(ProposalId proposalId) {
         Map proposal = glProposalFinder.findProposalById(proposalId);
         Proposer proposer = (Proposer) proposal.get("proposer");
+        boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
@@ -245,6 +247,8 @@ public class GLProposalService {
             Industry industry = (Industry) proposal.get("industry");
             proposerDto.setIndustryId(industry.getIndustryId());
         }
+        proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
+        proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         return proposerDto;
     }
 

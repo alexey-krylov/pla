@@ -335,7 +335,7 @@ public class GroupHealthProposalController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
             }
             List<GHInsuredDto> insuredDtos = ghProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getProposalId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String proposalId = commandGateway.sendAndWait(new UpdateGHProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request)));
+            String proposalId = commandGateway.sendAndWait(new UpdateGHProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllRelation()));
             return Result.success("Insured detail uploaded successfully", proposalId);
         } catch (Exception e) {
             e.printStackTrace();

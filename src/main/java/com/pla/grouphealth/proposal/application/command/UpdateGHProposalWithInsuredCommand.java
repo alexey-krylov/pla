@@ -24,4 +24,8 @@ public class UpdateGHProposalWithInsuredCommand {
 
     private UserDetails userDetails;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
 }
