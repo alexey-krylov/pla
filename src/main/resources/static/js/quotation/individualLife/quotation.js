@@ -188,7 +188,7 @@
                             else if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
                                  //console.log('Plan SPecified Values.. ***'+JSON.stringify($scope.plan));
                                 return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
-                                    return $scope.planDetailDto.policyTerm + ageNextBirthday <= parseInt(term.text) && ageNextBirthday >= parseInt(term.text);
+                                    return $scope.planDetailDto.policyTerm + ageNextBirthday >= parseInt(term.text) && ageNextBirthday <= parseInt(term.text);
                                 });
                             }
                             /*return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
