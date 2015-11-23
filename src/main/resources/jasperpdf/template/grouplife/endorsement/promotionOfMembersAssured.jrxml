@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-18T16:02:31 -->
+<!-- 2015-11-23T15:03:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -179,7 +179,7 @@
 					<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="621" y="61" width="110" height="18" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
+					<reportElement x="621" y="52" width="110" height="18" uuid="3d80a0b0-f997-454c-b31d-0dc020c6ed22"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="true"/>
 					</textElement>
@@ -458,7 +458,7 @@
 					</textField>
 				</frame>
 				<textField>
-					<reportElement x="731" y="61" width="161" height="18" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
+					<reportElement x="731" y="52" width="161" height="18" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="10" isBold="false"/>
 					</textElement>
