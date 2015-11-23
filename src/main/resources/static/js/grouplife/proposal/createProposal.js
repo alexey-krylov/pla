@@ -642,7 +642,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             }
 
             $scope.backToApproverPortlet = function () {
-                $window.location.href = 'viewApprovalProposal';
+                //$window.location.href = 'viewApprovalProposal';
+                $window.location.href = 'openapprovalproposal';
             }
 
 
