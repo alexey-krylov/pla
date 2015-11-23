@@ -247,12 +247,33 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return sumAssuredValues.contains(sumAssured);
     }
 
+    public boolean isValidUnderWriterSumAssured(BigDecimal sumAssured) {
+        if (SumAssuredType.INCOME_MULTIPLIER.equals(this.sumAssured.getSumAssuredType())) {
+            return true;
+        }
+        List<BigDecimal> sumAssuredValues = getAllowedSumAssuredValues();
+        if (SumAssuredType.SPECIFIED_VALUES.equals(this.sumAssured.getSumAssuredType())){
+            BigDecimal max =  Collections.max(sumAssuredValues);
+            BigDecimal min = Collections.min(sumAssuredValues);
+            if (max.compareTo(sumAssured)>=0 && min.compareTo(sumAssured)<=0){
+                return true;
+            }
+        }
+        return sumAssuredValues.contains(sumAssured);
+    }
 
     public boolean isValidCoverageSumAssured(BigDecimal sumAssured, CoverageId coverageId) {
         List<BigDecimal> coverageSumAssuredValues = getAllowedCoverageSumAssuredValues(coverageId);
+        PlanCoverage planCoverage = findPlanCoverage(coverageId);
+        if (SumAssuredType.SPECIFIED_VALUES.equals(planCoverage.getCoverageSumAssured().getSumAssuredType())){
+            BigDecimal max =  Collections.max(coverageSumAssuredValues);
+            BigDecimal min = Collections.min(coverageSumAssuredValues);
+            if (max.compareTo(sumAssured)>=0 && min.compareTo(sumAssured)<=0){
+                return true;
+            }
+        }
         return coverageSumAssuredValues.contains(sumAssured);
     }
-
 
     public boolean isValidPlanCoverageBenefit(CoverageId coverageId, BenefitId benefitId) {
         PlanCoverage planCoverage = findPlanCoverage(coverageId);
