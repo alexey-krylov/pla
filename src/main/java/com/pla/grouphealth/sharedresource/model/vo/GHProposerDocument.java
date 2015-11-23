@@ -41,4 +41,9 @@ public class GHProposerDocument {
         this.contentType = contentType;
         return this;
     }
+
+    public GHProposerDocument(String documentId, boolean mandatory,boolean requireForSubmission) {
+        this.documentId = documentId;
+        this.mandatory = mandatory;
+    }
 }

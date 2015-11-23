@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.query.MasterFinder;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
@@ -90,9 +91,11 @@ public class GLProposalService {
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
-
     @Autowired
     private GHProposalFinder ghProposalFinder;
+
+    @Autowired
+    private MasterFinder masterFinder;
 
     @Autowired
     public GLProposalService(GLFinder glFinder, GLProposalFinder glProposalFinder, IPlanAdapter planAdapter,
@@ -198,7 +201,7 @@ public class GLProposalService {
             if (commissionSet.size()==1 && commissionSet.size()!=agentCommission.size() && planIds.size()!=commissionSet.size()){
                 return new BigDecimal(agentCommission.get(0));
             }
-           else if (commissionSet.size()==1 && planIds.size()==1){
+            else if (commissionSet.size()==1 && planIds.size()==1){
                 return new BigDecimal(agentCommission.get(0));
             }
         }
@@ -467,9 +470,18 @@ public class GLProposalService {
     }
 
     public List<GLProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+        Map proposalMap = glProposalFinder.findProposalById(new ProposalId(proposalId));
+        String glProposalStatus = null;
+        if (isNotEmpty(proposalMap)) {
+            glProposalStatus = proposalMap.get("proposalStatus") != null ? (String) proposalMap.get("proposalStatus") : null;
+        }
         List<GLProposerDocument> uploadedDocuments = getUploadedMandatoryDocument(proposalId);
         Set<ClientDocumentDto> mandatoryDocuments = getMandatoryDocumentRequiredForSubmission(proposalId);
-        return getAllMandatoryDocuments(uploadedDocuments,mandatoryDocuments);
+        if (glProposalStatus != null ? glProposalStatus.equals(GLProposalStatus.DRAFT.name()) : "".equals(GLProposalStatus.DRAFT)) {
+            return getAllMandatoryDocuments(uploadedDocuments, mandatoryDocuments);
+        } else {
+            return getGLProposalDocument(uploadedDocuments);
+        }
     }
 
     public List<GLProposerDocument> getUploadedMandatoryDocument(String proposalId){
@@ -546,6 +558,51 @@ public class GLProposalService {
             }).collect(Collectors.toList());
         }
         return mandatoryDocumentDtos;
+    }
+
+    public List<GLProposalMandatoryDocumentDto> getGLProposalDocument(List<GLProposerDocument> uploadedDocuments){
+        List<Map<String, Object>> masterDocument = masterFinder.getAllDocument();
+        Set<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos =  masterDocument.parallelStream().map(new Function<Map<String,Object>, GLProposalMandatoryDocumentDto>() {
+            @Override
+            public GLProposalMandatoryDocumentDto apply(Map<String, Object> documentMap) {
+                return new GLProposalMandatoryDocumentDto((String)documentMap.get("documentCode"),(String)documentMap.get("documentName"));
+            }
+        }).collect(Collectors.toSet());
+        return uploadedDocuments.stream().filter(new Predicate<GLProposerDocument>() {
+            @Override
+            public boolean test(GLProposerDocument glProposerDocument) {
+                return glProposerDocument.getDocumentId()!=null;
+            }
+        }).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
+            @Override
+            public GLProposalMandatoryDocumentDto apply(GLProposerDocument glProposerDocument) {
+                Optional<GLProposalMandatoryDocumentDto> proposalMandatoryDocumentDto = glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
+                    @Override
+                    public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                        return glProposalMandatoryDocumentDto.getDocumentId().equals(glProposerDocument.getDocumentId());
+                    }
+                }).findAny();
+                String documentName = "";
+                if (proposalMandatoryDocumentDto.isPresent()) {
+                    documentName = proposalMandatoryDocumentDto.get().getDocumentName();
+                }
+                GLProposalMandatoryDocumentDto mandatoryDocumentDto = new GLProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), documentName != "" ? documentName : glProposerDocument.getDocumentId());
+                try {
+                    if (glProposerDocument.getDocumentId() != null) {
+                        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
+                        if (gridFSDBFile != null) {
+                            mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                            mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                            mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                            mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return mandatoryDocumentDto;
+            }
+        }).collect(Collectors.toList());
     }
 
     public Set<GLProposalMandatoryDocumentDto> findAdditionalDocuments(String proposalId) {

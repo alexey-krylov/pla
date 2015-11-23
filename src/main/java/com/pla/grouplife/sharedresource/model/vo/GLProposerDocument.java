@@ -1,5 +1,6 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import lombok.Setter;
  * Created by Samir on 6/24/2015.
  */
 @Getter
+@EqualsAndHashCode(of = {"documentId","gridFsDocId"})
 public class GLProposerDocument {
 
     private String documentId;

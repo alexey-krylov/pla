@@ -1,17 +1,19 @@
 package com.pla.grouphealth.proposal.application.command;
 
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.proposal.application.service.GHProposalService;
 import com.pla.grouphealth.proposal.domain.model.GHProposalApprover;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.service.GHProposalRoleAdapter;
 import com.pla.grouphealth.proposal.domain.service.GroupHealthProposalFactory;
 import com.pla.grouphealth.proposal.domain.service.GroupHealthProposalService;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.proposal.repository.GHProposalRepository;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.sharedresource.dto.GHPremiumDetailDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.grouphealth.sharedresource.service.GHInsuredFactory;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
@@ -33,7 +35,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
@@ -63,6 +67,9 @@ public class GHProposalCommandHandler {
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    private GHProposalService ghProposalService;
 
     @Autowired
     public GHProposalCommandHandler(GroupHealthProposalFactory groupHealthProposalFactory, Repository<GroupHealthProposal> ghProposalMongoRepository, GHProposalFinder ghProposalFinder,
@@ -144,6 +151,28 @@ public class GHProposalCommandHandler {
     public String submitProposal(SubmitGHProposalCommand submitGHProposalCommand) {
         GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(submitGHProposalCommand.getProposalId()));
         groupHealthProposal = groupHealthProposal.submitForApproval(DateTime.now(), submitGHProposalCommand.getUserDetails().getUsername(), submitGHProposalCommand.getComment());
+        Set<GHProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = ghProposalService.findMandatoryDocuments(submitGHProposalCommand.getProposalId());
+        Set<GHProposerDocument> proposerDocuments  = groupHealthProposal.getProposerDocuments();
+        Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<GHProposerDocument, String>() {
+            @Override
+            public String apply(GHProposerDocument glProposerDocument) {
+                return glProposerDocument.getDocumentId();
+            }
+        }).collect(Collectors.toSet());
+
+        glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GHProposalMandatoryDocumentDto>() {
+            @Override
+            public boolean test(GHProposalMandatoryDocumentDto ghProposalMandatoryDocumentDto) {
+                return !(documentIds.contains(ghProposalMandatoryDocumentDto.getDocumentId()));
+            }
+        }).map(new Function<GHProposalMandatoryDocumentDto, GHProposerDocument>() {
+            @Override
+            public GHProposerDocument apply(GHProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                proposerDocuments.add(new GHProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(),true,true));
+                return null;
+            }
+        }).collect(Collectors.toSet());
+        groupHealthProposal = groupHealthProposal.updateWithDocuments(proposerDocuments);
         return groupHealthProposal.getIdentifier().getProposalId();
     }
 

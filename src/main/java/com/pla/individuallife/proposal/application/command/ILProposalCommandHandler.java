@@ -217,6 +217,27 @@ public class ILProposalCommandHandler {
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(aggregate.getProposalPlanDetail().getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
         RoutingLevel routinglevel = ilProposalService.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
         aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getUserDetails().getUsername(),cmd.getComment(), routinglevel);
+        List<ILProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = ilProposalService.findAllMandatoryDocument(cmd.getProposalId());
+        Set<ILProposerDocument> proposerDocuments  = aggregate.getProposalDocuments();
+        Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<ILProposerDocument, String>() {
+            @Override
+            public String apply(ILProposerDocument glProposerDocument) {
+                return glProposerDocument.getDocumentId();
+            }
+        }).collect(Collectors.toSet());
+        glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<ILProposalMandatoryDocumentDto>() {
+            @Override
+            public boolean test(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                return !documentIds.contains(glProposalMandatoryDocumentDto.getDocumentId());
+            }
+        }).map(new Function<ILProposalMandatoryDocumentDto, ILProposerDocument>() {
+            @Override
+            public ILProposerDocument apply(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                proposerDocuments.add(new ILProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(),true,false));
+                return null;
+            }
+        }).collect(Collectors.toSet());
+        aggregate = aggregate.updateWithDocuments(proposerDocuments);
         return aggregate.getIdentifier().getProposalId();
     }
 

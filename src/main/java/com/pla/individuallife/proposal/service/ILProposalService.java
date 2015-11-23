@@ -2,6 +2,8 @@ package com.pla.individuallife.proposal.service;
 
 import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.pla.core.query.MasterFinder;
+import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatusAudit;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
 import com.pla.individuallife.proposal.presentation.dto.ProposalApproverCommentsDto;
@@ -73,6 +75,9 @@ public class ILProposalService {
     @Autowired
     private ILProposalStatusAuditRepository ilProposalStatusAuditRepository;
 
+    @Autowired
+    private MasterFinder masterFinder;
+
     public boolean hasProposalForQuotation(String quotationId){
         if (isEmpty(quotationId))
             return false;
@@ -109,10 +114,67 @@ public class ILProposalService {
 
 
     public List<ILProposalMandatoryDocumentDto> findAllMandatoryDocument(String proposalId) {
+        Map proposalMap = proposalFinder.getProposalByProposalId(proposalId);
+        String glProposalStatus = null;
+        if (isNotEmpty(proposalMap)) {
+            glProposalStatus = proposalMap.get("proposalStatus") != null ? (String) proposalMap.get("proposalStatus") : null;
+        }
         List<ILProposerDocument> uploadedDocuments = getAllUploadedDocument(proposalId);
         List<ClientDocumentDto> mandatoryDocuments = getDocumentRequiredForSubmission(proposalId);
-        return getAllMandatoryDocumentByPlan(uploadedDocuments, mandatoryDocuments);
+        if (glProposalStatus != null ? glProposalStatus.equals(ILProposalStatus.DRAFT.name()) : "".equals(ILProposalStatus.DRAFT)) {
+            return getAllMandatoryDocumentByPlan(uploadedDocuments, mandatoryDocuments);
+
+        } else {
+            return getGLProposalDocument(uploadedDocuments);
+        }
     }
+
+
+    public List<ILProposalMandatoryDocumentDto> getGLProposalDocument(List<ILProposerDocument> uploadedDocuments){
+        List<Map<String, Object>> masterDocument = masterFinder.getAllDocument();
+        Set<ILProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos =  masterDocument.parallelStream().map(new Function<Map<String,Object>, ILProposalMandatoryDocumentDto>() {
+            @Override
+            public ILProposalMandatoryDocumentDto apply(Map<String, Object> documentMap) {
+                return new ILProposalMandatoryDocumentDto((String)documentMap.get("documentCode"),(String)documentMap.get("documentName"));
+            }
+        }).collect(Collectors.toSet());
+        return uploadedDocuments.stream().filter(new Predicate<ILProposerDocument>() {
+            @Override
+            public boolean test(ILProposerDocument glProposerDocument) {
+                return glProposerDocument.getDocumentId()!=null;
+            }
+        }).map(new Function<ILProposerDocument, ILProposalMandatoryDocumentDto>() {
+            @Override
+            public ILProposalMandatoryDocumentDto apply(ILProposerDocument glProposerDocument) {
+                Optional<ILProposalMandatoryDocumentDto> proposalMandatoryDocumentDto = glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<ILProposalMandatoryDocumentDto>() {
+                    @Override
+                    public boolean test(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                        return glProposalMandatoryDocumentDto.getDocumentId().equals(glProposerDocument.getDocumentId());
+                    }
+                }).findAny();
+                String documentName = "";
+                if (proposalMandatoryDocumentDto.isPresent()) {
+                    documentName = proposalMandatoryDocumentDto.get().getDocumentName();
+                }
+                ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), documentName != "" ? documentName : glProposerDocument.getDocumentId());
+                try {
+                    if (glProposerDocument.getDocumentId() != null) {
+                        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
+                        if (gridFSDBFile != null) {
+                            mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                            mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                            mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                            mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return mandatoryDocumentDto;
+            }
+        }).collect(Collectors.toList());
+    }
+
 
     public List<ILProposerDocument> getAllUploadedDocument(String proposalId){
         Map proposal = proposalFinder.getProposalByProposalId(proposalId);

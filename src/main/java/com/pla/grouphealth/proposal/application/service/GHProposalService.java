@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.query.MasterFinder;
 import com.pla.grouphealth.proposal.application.command.GHProposalRecalculatedInsuredPremiumCommand;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposalStatusAudit;
@@ -45,7 +46,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -85,6 +89,9 @@ public class GHProposalService {
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    private MasterFinder masterFinder;
 
     @Autowired
     public GHProposalService(GHProposalFinder ghProposalFinder, IPlanAdapter planAdapter, GHFinder ghFinder, GHInsuredExcelGenerator ghInsuredExcelGenerator, GHInsuredExcelParser ghInsuredExcelParser, GHProposalRepository ghProposalRepository, CommandGateway commandGateway) {
@@ -451,9 +458,63 @@ public class GHProposalService {
     }
 
     public Set<GHProposalMandatoryDocumentDto> findMandatoryDocuments(String proposalId) {
+        Map proposalMap = ghProposalFinder.findProposalById(proposalId);
+        String glProposalStatus = null;
+        if (isNotEmpty(proposalMap)) {
+            glProposalStatus = proposalMap.get("proposalStatus") != null ? (String) proposalMap.get("proposalStatus") : null;
+        }
         List<GHProposerDocument> uploadedDocuments = getUploadedMandatoryDocument(proposalId);
         Set<ClientDocumentDto> mandatoryDocuments = getMandatoryDocumentRequiredForSubmission(proposalId);
-        return getAllMandatoryDocument(uploadedDocuments,mandatoryDocuments);
+        if (glProposalStatus != null ? glProposalStatus.equals(ProposalStatus.DRAFT.name()) : "".equals(ProposalStatus.DRAFT)) {
+            return getAllMandatoryDocument(uploadedDocuments, mandatoryDocuments);
+        } else {
+            return getGLProposalDocument(uploadedDocuments);
+        }
+    }
+
+    public Set<GHProposalMandatoryDocumentDto> getGLProposalDocument(List<GHProposerDocument> uploadedDocuments){
+        List<Map<String, Object>> masterDocument = masterFinder.getAllDocument();
+        Set<GHProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos =  masterDocument.parallelStream().map(new Function<Map<String,Object>, GHProposalMandatoryDocumentDto>() {
+            @Override
+            public GHProposalMandatoryDocumentDto apply(Map<String, Object> documentMap) {
+                return new GHProposalMandatoryDocumentDto((String)documentMap.get("documentCode"),(String)documentMap.get("documentName"));
+            }
+        }).collect(Collectors.toSet());
+        return uploadedDocuments.stream().filter(new Predicate<GHProposerDocument>() {
+            @Override
+            public boolean test(GHProposerDocument glProposerDocument) {
+                return glProposerDocument.getDocumentId()!=null;
+            }
+        }).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
+            @Override
+            public GHProposalMandatoryDocumentDto apply(GHProposerDocument glProposerDocument) {
+                Optional<GHProposalMandatoryDocumentDto> proposalMandatoryDocumentDto = glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GHProposalMandatoryDocumentDto>() {
+                    @Override
+                    public boolean test(GHProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                        return glProposalMandatoryDocumentDto.getDocumentId().equals(glProposerDocument.getDocumentId());
+                    }
+                }).findAny();
+                String documentName = "";
+                if (proposalMandatoryDocumentDto.isPresent()) {
+                    documentName = proposalMandatoryDocumentDto.get().getDocumentName();
+                }
+                GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), documentName != "" ? documentName : glProposerDocument.getDocumentId());
+                try {
+                    if (glProposerDocument.getDocumentId() != null) {
+                        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
+                        if (gridFSDBFile != null) {
+                            mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                            mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                            mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                            mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return mandatoryDocumentDto;
+            }
+        }).collect(Collectors.toSet());
     }
 
     public List<GHProposerDocument> getUploadedMandatoryDocument(String proposalId){
