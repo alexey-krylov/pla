@@ -85,7 +85,7 @@
                             } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                     //return term.text > ageNextBirthday;
-                                    return term.text <= (ageNextBirthday +$scope.planDetailDto.policyTerm) && (term.text> ageNextBirthday);
+                                    return term.text <= (ageNextBirthday + $scope.planDetailDto.policyTerm) && (term.text > ageNextBirthday);
                                 });
                             }
                             return coverage.coverageTermType;
@@ -136,7 +136,7 @@
                     $scope.getSumAssuredType = function (riderDetail) {
                         if ($scope.plan) {
                             $scope.coverage = _.findWhere($scope.plan.coverages, {coverageId: riderDetail.coverageId});
-                           // console.log('Coverage..'+JSON.stringify($scope.coverage));
+                            // console.log('Coverage..'+JSON.stringify($scope.coverage));
                             return $scope.coverage.coverageSumAssured.sumAssuredType;
                         }
                     }
@@ -160,7 +160,7 @@
                 }]
             }
         })
-    .directive('premiumterm', function () {
+        .directive('premiumterm', function () {
             return {
                 restrict: 'E',
                 templateUrl: 'plan-premiumterm.tpl',
@@ -186,16 +186,16 @@
                                  });
                              }
                             else if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
-                                 //console.log('Plan SPecified Values.. ***'+JSON.stringify($scope.plan));
+                                //console.log('Plan SPecified Values.. ***'+JSON.stringify($scope.plan));
                                 return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
                                     return $scope.planDetailDto.policyTerm + ageNextBirthday >= parseInt(term.text) && ageNextBirthday <= parseInt(term.text);
                                 });
                             }
                             /*return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
-                                console.log('ageNextBirthday'+ageNextBirthday+'policyTerm'+$scope.planDetailDto.policyTerm + '<='+ parseInt(term.text)+'&&'+'ageNextBirthday'+ageNextBirthday+'>='+'premiumTerm'+parseInt(term.text));
-                                console.log((($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)))
-                                return (($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)) ;
-                            });*/
+                             console.log('ageNextBirthday'+ageNextBirthday+'policyTerm'+$scope.planDetailDto.policyTerm + '<='+ parseInt(term.text)+'&&'+'ageNextBirthday'+ageNextBirthday+'>='+'premiumTerm'+parseInt(term.text));
+                             console.log((($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)))
+                             return (($scope.planDetailDto.policyTerm + ageNextBirthday) <= parseInt(term.text)) && (ageNextBirthday>=parseInt(term.text)) ;
+                             });*/
                         }
                     };
 
@@ -309,7 +309,7 @@
             'globalConstants', 'getQueryParameter', '$timeout', '$filter',
             function ($scope, $http, $route, $location, $bsmodal, $window, globalConstants, getQueryParameter, $timeout, $filter) {
 
-                $scope.tempCoverages={};
+                $scope.tempCoverages = {};
                 var absUrl = $location.absUrl();
                 $scope.titleList = globalConstants.title;
                 $scope.mode = absUrl.indexOf('view') != -1 ? 'view' : null;
@@ -463,20 +463,20 @@
                 }
 
                 /*$scope.$watch('selectedPlan', function (newval, oldval) {
-                    console.log('SelectedPlan'+JSON.stringify(newval));
-                    if (newval && newval.description && newval.description.plan_id) {
-                        var plan = newval.description;
-                        $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
-                            .success(function (response) {
-                                $scope.plan = response;
-                            });
+                 console.log('SelectedPlan'+JSON.stringify(newval));
+                 if (newval && newval.description && newval.description.plan_id) {
+                 var plan = newval.description;
+                 $http.get('/pla/core/plan/getPlanById/' + newval.description.plan_id)
+                 .success(function (response) {
+                 $scope.plan = response;
+                 });
 
-                    }
-                });*/
+                 }
+                 });*/
 
-                $scope.riderDetailCalling=function(){
+                $scope.riderDetailCalling = function () {
                     //alert('calling Rider Details...');
-                    $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.plan.planId +'/'+calculateAge($scope.proposedAssured.dateOfBirth))
+                    $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.plan.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
                         .success(function (response) {
                             $scope.planDetailDto.riderDetails = response;
                         });
@@ -484,13 +484,13 @@
                 }
 
                 /*$scope.$watch('plan.planId', function (newval) {
-                    if (newval && !$scope.quotationId) {
-                        $http.get('/pla/individuallife/quotation/getridersforplan/' + newval +'/'+calculateAge($scope.proposedAssured.dateOfBirth))
-                            .success(function (response) {
-                                $scope.planDetailDto.riderDetails = response;
-                            });
-                    }
-                });*/
+                 if (newval && !$scope.quotationId) {
+                 $http.get('/pla/individuallife/quotation/getridersforplan/' + newval +'/'+calculateAge($scope.proposedAssured.dateOfBirth))
+                 .success(function (response) {
+                 $scope.planDetailDto.riderDetails = response;
+                 });
+                 }
+                 });*/
 
                 $scope.$watchGroup(['proposedAssured.dateOfBirth', 'proposer.dateOfBirth'], function (newval, oldval) {
                     if (newval) {
@@ -516,9 +516,9 @@
                         angular.extend($scope.proposedAssured, {
                             agentId: $scope.quotation.agentId,
                             planId: $scope.plan.planId,
-                            opportunityId:$scope.opportunityId
+                            opportunityId: $scope.opportunityId
                         }))
-                       .success(function (data) {
+                        .success(function (data) {
                             if (data.id)
                                 $window.location = '/pla/individuallife/quotation/edit?quotationId=' + data.id;
                         });
@@ -545,15 +545,48 @@
                 $scope.$watch('proposerSameAsProposedAssured', function (newval, oldval) {
                     if (newval == oldval)
                         return;
-
                     if (!newval) {
                         //$scope.proposer = angular.copy($scope.originalProposer);
-                        $scope.proposer=null;
-                        $scope.proposerAge=null;
+                        $scope.proposer = null;
+                        $scope.proposerAge = null;
                     } else {
                         $scope.proposer = $scope.proposedAssured;
                     }
                 });
+
+                $scope.isRiderValid = function () {
+                    var riderValid = "true";
+                    if ($scope.planDetailDto) {
+                        if ($scope.planDetailDto.riderDetails) {
+                            if ($scope.planDetailDto.riderDetails.length > 0) {
+                                for (var i = 0; i < $scope.planDetailDto.riderDetails.length; i++) {
+                                    if ($scope.planDetailDto.riderDetails[i].sumAssured == null && $scope.planDetailDto.riderDetails[i].coverTerm == null) {
+                                        riderValid = "false";
+                                        break;
+                                    }
+                                    else if ($scope.planDetailDto.riderDetails[i].sumAssured != null && $scope.planDetailDto.riderDetails[i].coverTerm != null) {
+                                        riderValid = "false";
+                                        break;
+                                    }
+                                    else {
+                                        riderValid = "true";
+                                    }
+                                }
+                            }
+                            else {
+                                riderValid = "false";
+                            }
+
+                        }
+                    }
+
+                    if (riderValid == "false") {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
 
                 $scope.saveStep2 = function (stepForm) {
                     stepForm.$setPristine();
@@ -669,9 +702,9 @@ var viewILQuotationModule = (function () {
     }
 
     services.emailQuotation = function () {
-       /* window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;*/
+        /* window.location.href = '/pla/individuallife/quotation/emailQuotation/' + this.selectedItem;*/
 
-        window.open('/pla/individuallife/quotation/emailQuotation/'+this.selectedItem,"_blank","toolbar=no,resizable=no," +
+        window.open('/pla/individuallife/quotation/emailQuotation/' + this.selectedItem, "_blank", "toolbar=no,resizable=no," +
         "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
 
     }
