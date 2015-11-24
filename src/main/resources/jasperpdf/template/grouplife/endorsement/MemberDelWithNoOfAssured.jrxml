@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-23T15:04:10 -->
+<!-- 2015-11-24T10:30:20 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1170" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -484,7 +484,7 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement Details:]]></text>
+					<text><![CDATA[  Endorsement Details:]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="62" y="440" width="61" height="25" uuid="885190fb-94cd-4ed7-9901-1efa5f1601e6"/>
@@ -591,8 +591,8 @@
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="370" y="439" width="220" height="26" uuid="cb9bbe2d-986d-498d-8c40-4e56883f250f"/>
-					<text><![CDATA[)Arising out of the aforesaid deletion, a sum of K]]></text>
+					<reportElement x="360" y="439" width="230" height="26" uuid="cb9bbe2d-986d-498d-8c40-4e56883f250f"/>
+					<text><![CDATA[.)Arising out of the aforesaid deletion, a sum of K]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="639" y="439" width="301" height="27" uuid="0e60344c-5c8d-45e3-b527-6dec44347718"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-23T15:02:08 -->
+<!-- 2015-11-24T10:28:10 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -699,7 +699,7 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement Details:]]></text>
+					<text><![CDATA[  Endorsement Details:]]></text>
 				</staticText>
 				<frame>
 					<reportElement positionType="Float" x="28" y="611" width="630" height="50" uuid="328a096b-064f-44fa-8b0f-327a34d43acf"/>
@@ -817,11 +817,11 @@
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="400" y="444" width="60" height="17" uuid="f6f38df5-313e-4214-8eeb-723a0b561ea6"/>
+					<reportElement x="390" y="444" width="70" height="17" uuid="f6f38df5-313e-4214-8eeb-723a0b561ea6"/>
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="460" y="444" width="476" height="18" uuid="c48f4f99-eefe-4584-ad14-017084229bda"/>
+					<reportElement x="440" y="444" width="503" height="18" uuid="c48f4f99-eefe-4584-ad14-017084229bda"/>
 					<text><![CDATA[it is hereby understood and agreed that , not withstanding anything contained in the policy to the contrary,]]></text>
 				</staticText>
 				<textField>

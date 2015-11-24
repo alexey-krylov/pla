@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-23T14:59:46 -->
+<!-- 2015-11-24T10:28:32 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -721,7 +721,7 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Endorsement Details:]]></text>
+					<text><![CDATA[  Endorsement Details:]]></text>
 				</staticText>
 				<frame>
 					<reportElement positionType="Float" x="25" y="550" width="328" height="54" uuid="328a096b-064f-44fa-8b0f-327a34d43acf"/>
@@ -848,7 +848,7 @@
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="431" y="442" width="499" height="18" uuid="3c97e86d-6d4d-4195-977a-ea2177dfda40"/>
+					<reportElement x="420" y="442" width="522" height="18" uuid="3c97e86d-6d4d-4195-977a-ea2177dfda40"/>
 					<text><![CDATA[ it is hereby understood and agreed that , not withstanding anything contained in the policy to the contrary,]]></text>
 				</staticText>
 				<staticText>
