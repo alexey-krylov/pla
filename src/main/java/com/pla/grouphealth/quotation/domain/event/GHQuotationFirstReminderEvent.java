@@ -14,7 +14,7 @@ import org.nthdimenzion.axonframework.event.ISagaEvent;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class GHQuotationReminderEvent implements ISagaEvent {
+public class GHQuotationFirstReminderEvent implements ISagaEvent {
 
     private QuotationId quotationId;
 }

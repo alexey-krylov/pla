@@ -115,6 +115,7 @@ public class GLMemberPromotionEndorsementExcelGenerator extends AbstractGLEndors
                 insuredDto.setGender(insured.getGender());
                 insuredDto.setCategory(insured.getCategory());
                 insuredDto.setAnnualIncome(insured.getAnnualIncome());
+                insuredDto.setOldAnnualIncome(insured.getOldAnnualIncome());
                 insuredDto.setOccupationClass(insured.getOccupationClass());
                 insuredDto.setOccupationCategory(insured.getCategory());
                 insuredDto.setNoOfAssured(insured.getNoOfAssured());

@@ -150,10 +150,10 @@ public class NotificationTemplateService {
                     notificationQuotationMap.put("proposerName", proposerMap.get("proposerName").toString());
                     Map<String, Object> contactDetailMap = (Map) proposerMap.get("contactDetail");
                     notificationQuotationMap.put("addressLine1", contactDetailMap.get("addressLine1").toString());
-                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2").toString());
+                    notificationQuotationMap.put("addressLine2", contactDetailMap.get("addressLine2")!=null?contactDetailMap.get("addressLine2").toString():"");
                     notificationQuotationMap.put("province", contactDetailMap.get("province").toString());
                     notificationQuotationMap.put("town", contactDetailMap.get("town").toString());
-                    notificationQuotationMap.put("emailAddress", contactDetailMap.get("emailAddress").toString());
+                    notificationQuotationMap.put("emailAddress",contactDetailMap.get("emailAddress")!=null?contactDetailMap.get("emailAddress").toString():"");
                     notificationQuotationMap.put("requestNumber", map.get("quotationNumber").toString());
                 }
                 return notificationQuotationMap;

@@ -659,6 +659,9 @@ public enum GLEndorsementExcelHeader {
 
         @Override
         public InsuredDto populate(InsuredDto insuredDto, String value) {
+            if (isNotEmpty(value)) {
+                insuredDto.setOldAnnualIncome(BigDecimal.valueOf(Double.valueOf(value)));
+            }
             return insuredDto;
         }
 
@@ -669,7 +672,7 @@ public enum GLEndorsementExcelHeader {
 
         @Override
         public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
-            insuredDetailMap.put(excelHeaderInString.indexOf(OLD_ANNUAL_INCOME.getDescription()),"");
+            insuredDetailMap.put(excelHeaderInString.indexOf(OLD_ANNUAL_INCOME.getDescription()),insured.getOldAnnualIncome().toPlainString());
             return insuredDetailMap;
         }
 

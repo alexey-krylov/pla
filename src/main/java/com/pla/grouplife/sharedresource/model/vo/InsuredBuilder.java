@@ -40,6 +40,8 @@ public class InsuredBuilder {
 
     private BigDecimal annualIncome;
 
+    private BigDecimal oldAnnualIncome;
+
     private Set<InsuredDependent> insuredDependents;
 
     private PlanPremiumDetail planPremiumDetail;
@@ -106,6 +108,11 @@ public class InsuredBuilder {
 
     public InsuredBuilder withAnnualIncome(BigDecimal annualIncome) {
         this.annualIncome = annualIncome;
+        return this;
+    }
+
+    public InsuredBuilder withOlAnnualIncome(BigDecimal oldAnnualIncome) {
+        this.oldAnnualIncome = oldAnnualIncome;
         return this;
     }
 

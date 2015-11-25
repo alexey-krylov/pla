@@ -114,6 +114,9 @@ public class ILProposalCommandHandler {
             logger.debug(" Proposer :: " + proposer);
         }
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
+        if (!aggregate.getProposalPlanDetail().getPlanId().equals(cmd.getPlanDetail().getPlanId())){
+            cmd.getPlanDetail().setRiderDetails(null);
+        }
         aggregate = ilProposalProcessor.updateWithProposer(aggregate,proposer,agentCommissionShareModel,cmd.getPlanDetail());
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();

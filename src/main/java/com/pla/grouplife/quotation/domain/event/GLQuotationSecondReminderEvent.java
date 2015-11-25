@@ -8,13 +8,13 @@ import lombok.ToString;
 import org.nthdimenzion.axonframework.event.ISagaEvent;
 
 /**
- * Created by Samir on 5/31/2015.
+ * Created by Admin on 25-Nov-15.
  */
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class GLQuotationReminderEvent implements ISagaEvent {
+public class GLQuotationSecondReminderEvent implements ISagaEvent {
 
     private QuotationId quotationId;
 }

@@ -212,8 +212,8 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-    @EndSaga
-    public void handle(ILQuotationEndSagaEvent event) {
+      @EndSaga
+      public void handle(ILQuotationEndSagaEvent event) {
         scheduledTokens.forEach(scheduledToken -> {
             eventScheduler.cancelSchedule(scheduledToken);
         });

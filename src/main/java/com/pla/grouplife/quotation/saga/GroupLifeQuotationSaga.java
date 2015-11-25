@@ -56,8 +56,6 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
     @Autowired
     private transient IProcessInfoAdapter processInfoAdapter;
 
-    private int noOfReminderSent;
-
     @Autowired
     private transient CommandGateway commandGateway;
 
@@ -84,7 +82,7 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
-        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GLQuotationFirstReminderEvent(event.getQuotationId()));
         ScheduleToken purgeScheduleToken = eventScheduler.schedule(purgeScheduleDateTime, new GLQuotationPurgeEvent(event.getQuotationId()));
         ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new GLQuotationClosureEvent(event.getQuotationId()));
         scheduledTokens.add(firstReminderScheduleToken);
@@ -111,27 +109,36 @@ public class GroupLifeQuotationSaga extends AbstractAnnotatedSaga {
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GLQuotationReminderEvent event) throws ProcessInfoException {
+    public void handle(GLQuotationFirstReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Quotation Reminder Event .....", event);
         }
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
         if (QuotationStatus.SHARED.equals(groupLifeQuotation.getQuotationStatus())) {
-            this.noOfReminderSent = noOfReminderSent + 1;
-            System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.GROUP_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION,
-                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
-            if (this.noOfReminderSent == 1) {
-                int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
-                int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
-                LocalDate quotationSharedDate = groupLifeQuotation.getSharedOn();
-                LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
-                DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
-                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GLQuotationReminderEvent(event.getQuotationId()));
-                scheduledTokens.add(secondReminderScheduleToken);
-            }
+                    WaitingForEnum.QUOTATION_RESPONSE, ReminderTypeEnum.REMINDER_1));
+            int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
+            int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION);
+            LocalDate quotationSharedDate = groupLifeQuotation.getSharedOn();
+            LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
+            DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
+            ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GLQuotationSecondReminderEvent(event.getQuotationId()));
+            scheduledTokens.add(secondReminderScheduleToken);
         }
     }
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    public void handle(GLQuotationSecondReminderEvent event) throws ProcessInfoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling GL Quotation Reminder Event .....", event);
+        }
+        GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(event.getQuotationId());
+        if (QuotationStatus.SHARED.equals(groupLifeQuotation.getQuotationStatus())) {
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.GROUP_LIFE_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE, ReminderTypeEnum.REMINDER_2));
+        }
+    }
+
 
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(GLQuotationClosureEvent event) {

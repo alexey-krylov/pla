@@ -44,6 +44,8 @@ public class InsuredDto {
 
     private BigDecimal annualIncome;
 
+    private BigDecimal oldAnnualIncome;
+
     private String occupationClass;
 
     private String occupationCategory;
@@ -75,6 +77,7 @@ public class InsuredDto {
         this.gender = insuredBuilder.getGender();
         this.category = insuredBuilder.getCategory();
         this.annualIncome = insuredBuilder.getAnnualIncome();
+        this.oldAnnualIncome  = insuredBuilder.getOldAnnualIncome();
         this.occupationClass = insuredBuilder.getOccupation();
         this.noOfAssured = insuredBuilder.getNoOfAssured();
         if (isNotEmpty(insuredBuilder.getFamilyId())) {
@@ -95,6 +98,11 @@ public class InsuredDto {
 
     public InsuredDto addCoveragePremiumDetails(List<CoveragePremiumDetailDto> coveragePremiumDetailDtos) {
         this.coveragePremiumDetails = coveragePremiumDetailDtos;
+        return this;
+    }
+
+    public InsuredDto withOldAnnualIncome(BigDecimal oldAnnualIncome) {
+        this.oldAnnualIncome = oldAnnualIncome;
         return this;
     }
 

@@ -56,8 +56,6 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     @Autowired
     private transient IProcessInfoAdapter processInfoAdapter;
 
-    private int noOfReminderSent;
-
     @Autowired
     private transient CommandGateway commandGateway;
 
@@ -83,7 +81,7 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
         DateTime purgeScheduleDateTime = purgeDate.toDateTimeAtStartOfDay();
         DateTime closureScheduleDateTime = closureDate.toDateTimeAtStartOfDay();
         DateTime firstReminderDateTime = firstReminderDate.toDateTimeAtStartOfDay();
-        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
+        ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GHQuotationFirstReminderEvent(event.getQuotationId()));
         ScheduleToken purgeScheduleToken = eventScheduler.schedule(purgeScheduleDateTime, new GHQuotationPurgeEvent(event.getQuotationId()));
         ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new GHQuotationClosureEvent(event.getQuotationId()));
         scheduledTokens.add(firstReminderScheduleToken);
@@ -110,27 +108,38 @@ public class GroupHealthQuotationSaga extends AbstractAnnotatedSaga {
     }
 
     @SagaEventHandler(associationProperty = "quotationId")
-    public void handle(GHQuotationReminderEvent event) throws ProcessInfoException {
+    public void handle(GHQuotationFirstReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GH Quotation Reminder Event .....", event);
         }
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
         if (GHQuotationStatus.SHARED.equals(groupHealthQuotation.getQuotationStatus())) {
-            this.noOfReminderSent = noOfReminderSent + 1;
-            System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION,
-                    WaitingForEnum.QUOTATION_RESPONSE, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
-            if (this.noOfReminderSent == 1) {
+                    WaitingForEnum.QUOTATION_RESPONSE,ReminderTypeEnum.REMINDER_1));
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
                 LocalDate quotationSharedDate = groupHealthQuotation.getSharedOn();
                 LocalDate secondReminderDate = quotationSharedDate.plusDays(firstReminderDay + secondReminderDay);
                 DateTime secondReminderDateTime = secondReminderDate.toDateTimeAtStartOfDay();
-                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GHQuotationReminderEvent(event.getQuotationId()));
+                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GHQuotationSecondReminderEvent(event.getQuotationId()));
                 scheduledTokens.add(secondReminderScheduleToken);
-            }
         }
     }
+
+
+    @SagaEventHandler(associationProperty = "quotationId")
+    public void handle(GHQuotationSecondReminderEvent event) throws ProcessInfoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling GH Quotation Reminder Event .....", event);
+        }
+        GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(event.getQuotationId());
+        if (GHQuotationStatus.SHARED.equals(groupHealthQuotation.getQuotationStatus())) {
+            commandGateway.send(new CreateQuotationNotificationCommand(event.getQuotationId(), RolesUtil.GROUP_HEALTH_QUOTATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION,
+                    WaitingForEnum.QUOTATION_RESPONSE,ReminderTypeEnum.REMINDER_2));
+        }
+    }
+
+
 
     @SagaEventHandler(associationProperty = "quotationId")
     public void handle(GHQuotationClosureEvent event) {

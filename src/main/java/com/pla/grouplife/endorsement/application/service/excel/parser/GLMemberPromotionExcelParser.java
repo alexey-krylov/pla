@@ -206,7 +206,7 @@ public class GLMemberPromotionExcelParser extends AbstractGLEndorsementExcelPars
             BigDecimal totalPremium = planPremiumDetail.getPremiumAmount();
             InsuredBuilder insuredBuilder = new InsuredBuilder();
             insuredDto = insuredBuilder.withInsuredName(insured.getSalutation(), insured.getFirstName(), insured.getLastName()).withFamilyId(familyId)
-                    .withDateOfBirth(insured.getDateOfBirth()).withGender(insured.getGender()).withCategory(insured.getCategory()).withAnnualIncome(annualIncome).buildInsuredDto();
+                    .withDateOfBirth(insured.getDateOfBirth()).withGender(insured.getGender()).withCategory(insured.getCategory()).withAnnualIncome(annualIncome).withOlAnnualIncome(insuredDto.getOldAnnualIncome()).buildInsuredDto();
             BigDecimal sumAssured = planPremiumDetail.getIncomeMultiplier().multiply(annualIncome);
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(),planPremiumDetail.getPlanCode(),totalPremium,sumAssured.setScale(0,BigDecimal.ROUND_FLOOR),planPremiumDetail.getIncomeMultiplier());
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);

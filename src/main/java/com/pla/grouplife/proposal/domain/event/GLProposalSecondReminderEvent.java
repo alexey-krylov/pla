@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Created by Admin on 8/23/2015.
+ * Created by Admin on 25-Nov-15.
  */
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class GLProposalReminderEvent implements Serializable {
+public class GLProposalSecondReminderEvent implements Serializable {
     private ProposalId proposalId;
 }

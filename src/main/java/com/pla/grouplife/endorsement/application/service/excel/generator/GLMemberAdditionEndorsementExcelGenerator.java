@@ -6,8 +6,6 @@ import com.google.common.collect.Sets;
 import com.pla.core.query.MasterFinder;
 import com.pla.grouplife.endorsement.domain.model.GLEndorsement;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
-import com.pla.grouplife.policy.query.GLPolicyFinder;
-import com.pla.grouplife.proposal.query.GLProposalFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
@@ -15,7 +13,6 @@ import com.pla.grouplife.sharedresource.model.vo.CoveragePremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
-import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -46,15 +43,6 @@ public class GLMemberAdditionEndorsementExcelGenerator extends AbstractGLEndorse
 
     @Autowired
     private GLEndorsementFinder glEndorsementFinder;
-
-    @Autowired
-    private GLPolicyFinder glPolicyFinder;
-
-    @Autowired
-    private GLProposalFinder glProposalFinder;
-
-    @Autowired
-    private GLFinder glFinder;
 
     @Override
     public HSSFWorkbook generate(PolicyId policyId, EndorsementId endorsementId) throws IOException {

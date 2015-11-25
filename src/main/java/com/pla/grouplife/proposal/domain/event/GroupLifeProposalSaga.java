@@ -42,8 +42,6 @@ public class GroupLifeProposalSaga extends AbstractAnnotatedSaga implements Seri
     @Autowired
     private transient IProcessInfoAdapter processInfoAdapter;
 
-    private int noOfReminderSent;
-
     @Autowired
     private transient CommandGateway commandGateway;
 
@@ -70,7 +68,7 @@ public class GroupLifeProposalSaga extends AbstractAnnotatedSaga implements Seri
             DateTime firstReminderDateTime = proposalSubmitDate.plusDays(firstReminderDay);
             DateTime purgeScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToPurge);
             DateTime closureScheduleDateTime = proposalSubmitDate.plusDays(noOfDaysToClosure);
-            ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GLProposalReminderEvent(event.getProposalId()));
+            ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GLProposalFirstReminderEvent(event.getProposalId()));
             ScheduleToken purgeScheduleToken = eventScheduler.schedule(purgeScheduleDateTime, new GLProposalPurgeEvent(event.getProposalId()));
             ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new GLProposalClosureEvent(event.getProposalId()));
             scheduledTokens.add(firstReminderScheduleToken);
@@ -80,24 +78,32 @@ public class GroupLifeProposalSaga extends AbstractAnnotatedSaga implements Seri
     }
 
     @SagaEventHandler(associationProperty = "proposalId")
-    public void handle(GLProposalReminderEvent event) throws ProcessInfoException {
+    public void handle(GLProposalFirstReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Proposal Reminder Event .....", event);
         }
         GroupLifeProposal proposalAggregate = groupLifeProposalRepository.load(event.getProposalId());
         if (GLProposalStatus.PENDING_ACCEPTANCE.equals(proposalAggregate.getProposalStatus()) && glMandatoryDocumentChecker.isRequiredForSubmission(event.getProposalId().getProposalId())) {
-            this.noOfReminderSent = noOfReminderSent + 1;
-            System.out.println("************ Send Reminder ****************");
             commandGateway.send(new CreateProposalNotificationCommand(event.getProposalId(), RolesUtil.GROUP_LIFE_PROPOSAL_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.PROPOSAL,
-                    WaitingForEnum.MANDATORY_DOCUMENTS, noOfReminderSent == 1 ? ReminderTypeEnum.REMINDER_1 : ReminderTypeEnum.REMINDER_2));
-            if (this.noOfReminderSent == 1) {
+                    WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1));
                 int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.PROPOSAL);
                 int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.PROPOSAL);
                 DateTime proposalSharedDate = proposalAggregate.getSubmittedOn();
                 DateTime secondReminderDateTime = proposalSharedDate.plusDays(firstReminderDay + secondReminderDay);
-                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GLProposalReminderEvent(event.getProposalId()));
+                ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GLProposalSecondReminderEvent(event.getProposalId()));
                 scheduledTokens.add(secondReminderScheduleToken);
-            }
+        }
+    }
+
+    @SagaEventHandler(associationProperty = "proposalId")
+    public void handle(GLProposalSecondReminderEvent event) throws ProcessInfoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling GL Proposal Reminder Event .....", event);
+        }
+        GroupLifeProposal proposalAggregate = groupLifeProposalRepository.load(event.getProposalId());
+        if (GLProposalStatus.PENDING_ACCEPTANCE.equals(proposalAggregate.getProposalStatus()) && glMandatoryDocumentChecker.isRequiredForSubmission(event.getProposalId().getProposalId())) {
+            commandGateway.send(new CreateProposalNotificationCommand(event.getProposalId(), RolesUtil.GROUP_LIFE_PROPOSAL_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.PROPOSAL,
+                    WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2));
         }
     }
 

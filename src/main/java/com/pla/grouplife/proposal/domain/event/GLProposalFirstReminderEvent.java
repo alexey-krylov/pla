@@ -1,4 +1,4 @@
-package com.pla.grouphealth.proposal.domain.event;
+package com.pla.grouplife.proposal.domain.event;
 
 import com.pla.sharedkernel.identifier.ProposalId;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,9 @@ import java.io.Serializable;
  * Created by Admin on 8/23/2015.
  */
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class GHProposalReminderEvent implements Serializable {
+public class GLProposalFirstReminderEvent implements Serializable {
     private ProposalId proposalId;
 }

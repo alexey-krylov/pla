@@ -46,6 +46,8 @@ public class Insured {
 
     private BigDecimal annualIncome;
 
+    private BigDecimal oldAnnualIncome;
+
     private String occupationClass;
 
     private String occupationCategory;
@@ -76,6 +78,7 @@ public class Insured {
         this.category = insuredBuilder.getCategory();
         this.insuredDependents = insuredBuilder.getInsuredDependents();
         this.annualIncome = insuredBuilder.getAnnualIncome();
+        this.oldAnnualIncome = insuredBuilder.getOldAnnualIncome();
         this.occupationClass = insuredBuilder.getOccupation();
         this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
         this.noOfAssured = insuredBuilder.getNoOfAssured();
@@ -118,6 +121,11 @@ public class Insured {
             }
         }
         return basicAnnualPremiumOfDependent;
+    }
+
+    public Insured updateWithOldAnnualIncome(BigDecimal oldAnnualIncome){
+        this.oldAnnualIncome = oldAnnualIncome;
+        return this;
     }
 
     public Insured updateWithFamilyId(FamilyId familyId) {
