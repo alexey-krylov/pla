@@ -172,13 +172,22 @@
                         var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                         //console.log('plan*** '+JSON.stringify($scope.plan));
                         if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
-                            //console.log('To Verify..'+JSON.stringify($scope.plan.premiumTerm.maxMaturityAge));
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
-                            //console.log('MAXAGE**** '+maxMaturityAge);
-                            return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
-                                //return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
+                            if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                                return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
+                                    return parseInt(term.text) <= $scope.planDetailDto.policyTerm;
+
+                                });
+                            }
+                            else if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                                return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
+                                    return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
+                                });
+                            }
+                           /* return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
                                 return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
-                            });
+
+                            });*/
                         } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
                              if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
                                  return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
