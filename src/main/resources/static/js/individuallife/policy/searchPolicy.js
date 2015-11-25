@@ -530,21 +530,26 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                 }
             });
             $scope.bankCodeDetails = [];
-
             $scope.$watch('bankDetails.bankBranchName', function (newvalue, oldvalue) {
                 if (newvalue) {
-                    //alert("//alert in bankCode"+newvalue);
-                    var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
-                    //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
-                    //$scope.bankBranchDetails=bankBranchNames;
-                    ////alert("bankBranchName"+JSON.stringify($scope.bankBranchNames));
-                    //console.log("Branch Details.."+JSON.stringify($scope.bankBranchNames))
-                    if (bankBranchNames) {
-                        $scope.bankDetails.bankBranchSortCode = bankBranchNames.sortCode;
-                    }
+                    $scope.bankDetails.bankBranchSortCode = newvalue;
                 }
             });
 
+            /* $scope.$watch('bankDetails.bankBranchName', function (newvalue, oldvalue) {
+                 if (newvalue) {
+                     //alert("//alert in bankCode"+newvalue);
+                     var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
+                     //$scope.bankDetails.bankBranchSortCode=bankBranchNames.sortCode;
+                     //$scope.bankBranchDetails=bankBranchNames;
+                     ////alert("bankBranchName"+JSON.stringify($scope.bankBranchNames));
+                     //console.log("Branch Details.."+JSON.stringify($scope.bankBranchNames))
+                     if (bankBranchNames) {
+                         $scope.bankDetails.bankBranchSortCode = bankBranchNames.sortCode;
+                     }
+                 }
+             });
+ */
 
             $scope.titles = globalConstants.title;
             $scope.part = {

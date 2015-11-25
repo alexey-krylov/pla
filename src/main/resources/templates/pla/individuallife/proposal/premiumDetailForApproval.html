@@ -121,8 +121,12 @@
                 <div class="form-group required" ng-if="premiumPaymentDetails.premiumPaymentMethod == 'DEBIT_ORDER'">
                     <label class="control-label">Bank Branch Name</label>
                     <!-- <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
-                    <select ng-if="mode=='edit'" class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.branchName as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                    <!--<select ng-if="mode=='edit'" class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.branchName as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
                             ng-model="bankDetails.bankBranchName" ng-required="true">
+                    </select>
+-->
+                    <select ng-if="mode=='edit'" class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                            ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" ng-required="true">
                     </select>
 
                     <input ng-if="mode!='edit'" type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>

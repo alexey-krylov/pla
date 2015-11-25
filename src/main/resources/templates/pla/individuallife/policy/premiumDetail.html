@@ -125,7 +125,11 @@
                             ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" ng-required="true">
                     </select>-->
 
-                    <input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>
+                    <!--<input type="text" class="form-control input-sm" ng-model="bankDetails.bankBranchName" ng-disabled="mode=='new'||mode=='view'" name="branchname"/>-->
+
+                    <select class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                            ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" ng-required="true">
+                    </select>
 
                     <div class="error" ng-messages="premiumBankDetail.branchname.$error" ng-if="premiumBankDetail.branchname.$dirty">
                         <small class="error" ng-message="required">Please specify Bank Branch Name.</small>

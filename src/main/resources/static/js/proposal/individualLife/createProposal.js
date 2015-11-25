@@ -826,6 +826,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.bankCodeDetails = [];
             $scope.clearBankBranchName = function () {
                 $scope.bankDetails.bankBranchName = null;
+                $scope.bankDetails.bankBranchSortCode=null;
             }
             $scope.$watch('bankDetails.bankName', function (newvalue, oldvalue) {
                 if (newvalue) {
@@ -842,16 +843,21 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             });
 
             $scope.bankCodeDetails = [];
-
             $scope.$watch('bankDetails.bankBranchName', function (newvalue, oldvalue) {
                 if (newvalue) {
-                    var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
-                    if (bankBranchNames) {
-                        $scope.bankDetails.bankBranchSortCode = bankBranchNames.sortCode;
-                    }
+                    $scope.bankDetails.bankBranchSortCode = newvalue;
                 }
             });
 
+            /* $scope.$watch('bankDetails.bankBranchName', function (newvalue, oldvalue) {
+                 if (newvalue) {
+                     var bankBranchNames = _.findWhere($scope.bankBranchDetails, {branchName: newvalue});
+                     if (bankBranchNames) {
+                         $scope.bankDetails.bankBranchSortCode = bankBranchNames.sortCode;
+                     }
+                 }
+             });
+ */
             $scope.titles = globalConstants.title;
             $scope.part = {
                 isPart: true
