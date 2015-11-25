@@ -139,29 +139,21 @@
                                     <li><a th:href="@{/core/benefit/listbenefit}">Benefits</a></li>
                                     <li><a th:href="@{/core/coverages/view}">Coverages</a></li>
                                     <li><a th:href="@{/core/team/view}">Team</a></li>
-                                    <li><a th:href="@{/core/plan}" onclick="window.location='/pla/core/plan'">Plan</a>
-                                    </li>
+                                    <li><a th:href="@{/core/plan}">Plan</a></li>
                                     <li><a th:href="@{/core/branch/view}">Branch Manager</a></li>
                                     <li><a th:href="@{/core/region/view}">Regional Manager</a></li>
                                     <li><a th:href="@{/core/premium/listpremium}">Premium</a></li>
-
-                                    <li class="dropdown"><a href="#">Underwriting<i style="margin-top:12px;"
-                                                                                    class="glyphicon glyphicon-chevron-right "></i></a>
+                                    <li class="dropdown"><a href="#">Underwriting<i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                                             <li><a th:href="@{/underwriter/viewdocumentsetup}">Document Setup</a></li>
-                                            <li><a th:href="@{/underwriter/viewroutinglevel}">Routing Level Setup</a>
-                                            </li>
+                                            <li><a th:href="@{/underwriter/viewroutinglevel}">Routing Level Setup</a></li>
                                         </ul>
                                     </li>
-
                                     <li><a th:href="@{/core/productclaimmap/openviewproductclaim}">Product-Claim Type Mapping</a></li>
-                                    <!--<li><a th:href="@{/core/productclaimmap/opencreateproductclaim}">Product-Claim Type Mapping</a></li>-->
-
                                     <li class="dropdown"><a href="#">Client Summary <i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                                             <li><a th:href="@{/core/clientsummary/individualclientsummary}">Individual</a></li>
-                                            <li><a th:href="@{/core/clientsummary/groupclientsummary}">Group</a>
-                                            </li>
+                                            <li><a th:href="@{/core/clientsummary/groupclientsummary}">Group</a></li>
                                         </ul>
                                     </li>
 
@@ -170,14 +162,14 @@
                             <li class="dropdown">
                                 <a href="javascript:void(0)">
                                     <span class="glyphicon glyphicon-cog"></span>&nbsp;Global Configuration<i
-                                        class="icon-angle-down"></i></a>
+                                        class="icon-angle-down"></i>
+                                </a>
                                 <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
                                     <li><a th:href="@{/core/commission/list/NORMAL}">Commission</a></li>
                                     <li><a th:href="@{/core/commission/list/OVERRIDE}">Over-ride Commission</a></li>
                                     <li><a th:href="@{/core/mandatorydocument/view}">Mandatory Documents </a></li>
                                     <li class="dropdown"><a href="#">General Information
-                                        <small style="margin-top:5px"><i style="margin-top:12px;"
-                                                                         class="glyphicon glyphicon-chevron-right"></i>
+                                        <small style="margin-top:5px"><i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right"></i>
                                         </small>
                                     </a>
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
@@ -199,248 +191,229 @@
                                                 </ul>
                                             </li>
                                         </ul>
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0)">
-                                            <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Notification
-                                            <small style="margin-top:5px">
-                                                <i style="margin-top:12px;"
-                                                   class="glyphicon glyphicon-chevron-right"></i>
-                                            </small>
-                                        </a>
+                                    </li>
+                                    <li class="dropdown"><a href="javascript:void(0)">
+                                        <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Notification
+                                        <small style="margin-top:5px">
+                                            <i style="margin-top:12px;"
+                                               class="glyphicon glyphicon-chevron-right"></i>
+                                        </small>
+                                    </a>
+
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                            <li><a th:href="@{/core/notification/rolelist}">Role Mapping</a>
+                                            <li><a th:href="@{/core/notification/rolelist}">Role Mapping</a></li>
+                                            <li><a th:href="@{/core/notification/templatelist}">Upload Template</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">GroupLife </a></li>
+                                    <li><a th:href="@{/quotation/grouphealth/listgrouphealthquotation}">Group Health</a>
+                                    </li>
+                                    <li><a th:href="@{/individuallife/quotation}">Individual Life </a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Proposal<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;"
+                                                                                   class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouphealth/proposal/opensearchquotation}">Create
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouphealth/proposal/opensearchproposal}">Search
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouphealth/proposal/openapprovalproposal}">Approval
+                                                Proposal</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;"
+                                                                                 class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouplife/proposal/opensearchquotation}">Create
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouplife/proposal/opensearchproposal}">Search
+                                                Proposal</a></li>
+                                            <li><a th:href="@{/grouplife/proposal/openapprovalproposal}">Approval
+                                                Proposal</a></li>
+                                        </ul>
+                                    </li>
+                                    <!--<li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>-->
+
+                                    <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
+                                                                                       class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/individuallife/proposal/search}">Create Proposal</a></li>
+                                            <li><a th:href="@{/individuallife/proposal}">Search Proposal</a></li>
+                                            <li><a th:href="@{/individuallife/proposal/openapprovalproposal}">Approval
+                                                Proposal</a></li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="javascript:void(0)"><span
+                                        class="glyphicon glyphicon-list-alt"></span>&nbsp;Policy<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;"
+                                                                                   class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouphealth/policy/openpolicysearchpage}">Search Policy</a>
                                             </li>
-                                            <li><a th:href="@{/core/notification/templatelist}">Upload Template</a>
+
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;"
+                                                                                 class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouplife/policy/openpolicysearchpage}">Search Policy</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
+                                                                                       class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/individuallife/policy/openpolicysearchpage}">Search
+                                                Policy</a></li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Claim<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li class="dropdown"><a href="#">Group Life<i style="margin-top:12px;"
+                                                                                  class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+
+                                            <li> <a th:href="@{/grouplife/claim/openpolicysearchpage}">Search Policy</a>
+                                            </li>
+                                            <li><a th:href="@{/grouplife/claim/openclaimintimationpage}">Claim
+                                                Intimation</a></li>
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="dropdown"><a href="#">Group Health<i style="margin-top:12px;"
+                                                                                    class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+
+                                            <li><a th:href="@{/grouphealth/claim/openreopenclaimpage}"> Claim Reopen  </a>
+                                            </li>
+                                            <li><a th:href="@{/grouphealth/claim/openamendmentclaimpage}"> Claim Amendment  </a>
+                                            </li>
+
+
+
+                                            <li class='dropdown'><a href="#">Reimbursement Claim</a>
+
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/grouphealth/claim/openreimbursementclaimpage}"> Claim Registration  </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class='dropdown'><a href="#">Cashless Claim</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/grouphealth/claim/opencashlessclaimpage}"> Pre-authorization Requests  </a>
+                                                    </li>
+                                                </ul>
                                             </li>
                                         </ul>
                                     </li>
-                            </li>
-                        </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)">
-                                <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Quotation<i
-                                    class="icon-angle-down"></i></a>
-                            <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                <li><a th:href="@{/quotation/grouphealth/listgrouphealthquotation}">Group Health</a>
-                                </li>
-                                <li><a th:href="@{/quotation/grouplife/listgrouplifequotation}">Group Life </a></li>
-                                <li><a th:href="@{/individuallife/quotation}"
-                                       onclick="window.location='/pla/individuallife/quotation'">Individual
-                                    Life </a></li>
-                            </ul>
-                        </li>
 
-                        <li class="dropdown">
-                            <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Proposal<i
-                                    class="icon-angle-down"></i></a>
-                            <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;"
-                                                                               class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/grouphealth/proposal/opensearchquotation}">Create
-                                            Proposal</a></li>
-                                        <li><a th:href="@{/grouphealth/proposal/opensearchproposal}">Search
-                                            Proposal</a></li>
-                                        <li><a th:href="@{/grouphealth/proposal/openapprovalproposal}">Approval
-                                            Proposal</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;"
-                                                                             class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/grouplife/proposal/opensearchquotation}">Create
-                                            Proposal</a></li>
-                                        <li><a th:href="@{/grouplife/proposal/opensearchproposal}">Search
-                                            Proposal</a></li>
-                                        <li><a th:href="@{/grouplife/proposal/openapprovalproposal}">Approval
-                                            Proposal</a></li>
-                                    </ul>
-                                </li>
-                                <!--<li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>-->
+                                    <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
+                                                                                       class="glyphicon glyphicon-chevron-right"></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li class='dropdown'><a href="#">Claim Intimation</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
 
-                                <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
-                                                                                   class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/individuallife/proposal/search}">Create Proposal</a></li>
-                                        <li><a th:href="@{/individuallife/proposal}">Search Proposal</a></li>
-                                        <li><a th:href="@{/individuallife/proposal/openapprovalproposal}">Approval
-                                            Proposal</a></li>
-                                    </ul>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <li class="dropdown">
-                            <a href="javascript:void(0)"><span
-                                    class="glyphicon glyphicon-list-alt"></span>&nbsp;Policy<i
-                                    class="icon-angle-down"></i></a>
-                            <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;"
-                                                                               class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/grouphealth/policy/openpolicysearchpage}">Search Policy</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;"
-                                                                             class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/grouplife/policy/openpolicysearchpage}">Search Policy</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
-                                                                                   class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/individuallife/policy/openpolicysearchpage}">Search
-                                            Policy</a></li>
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-
-                 <li class="dropdown">
-                      <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Claim<i
-                                    class="icon-angle-down"></i></a>
-                     <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                <li class="dropdown"><a href="#">Group Life<i style="margin-top:12px;"
-                                                                              class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-
-                                        <li> <a th:href="@{/grouplife/claim/openpolicysearchpage}">Search Policy</a>
-                                        </li>
-                                        <li><a th:href="@{/grouplife/claim/openclaimintimationpage}">Claim
-                                            Intimation</a></li>
-                                    </ul>
-                                </li>
-
-
-                                <li class="dropdown"><a href="#">Group Health<i style="margin-top:12px;"
-                                                                                   class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-
-                                        <li><a th:href="@{/grouphealth/claim/openreopenclaimpage}"> Claim Reopen  </a>
-                                        </li>
-                                        <li><a th:href="@{/grouphealth/claim/openamendmentclaimpage}"> Claim Amendment  </a>
-                                        </li>
-
-
-
-                                        <li class='dropdown'><a href="#">Reimbursement Claim</a>
-
-                                            <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
-                                                <li><a th:href="@{/grouphealth/claim/openreimbursementclaimpage}"> Claim Registration  </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class='dropdown'><a href="#">Cashless Claim</a>
-                                            <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
-                                                <li><a th:href="@{/grouphealth/claim/opencashlessclaimpage}"> Pre-authorization Requests  </a>
-                                                </li>
-                                             </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                                <li class="dropdown"><a href="#">Indivisual Life<i style="margin-top:12px;"
-                                                                               class="glyphicon glyphicon-chevron-right"></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li class='dropdown'><a href="#">Claim Intimation</a>
-                                            <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
-
-                                                <!--<li><a th:href="@{/indivisuallife/claim/openclaimsearchpage}">Claim Search-->
-                                                <!--</a></li>-->
-                                                <li><a th:href="@{/indivisuallife/claim/openclaimsettlementpage}">Claim
-                                                    Settlement</a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/opensurrenderclaimpage}">Surrender
-                                                    Claim</a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/openmaturityclaimpage}">Maturity
-                                                    Claim </a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/opendeathclaimpage}">Death
-                                                    Claim </a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/opendisabilityclaimpage}">Disability
-                                                    Claim </a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/openencashmentclaimpage}">Encashment
-                                                    Claim</a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/openfuneralproudctpage}"> Funeral Product
-                                                </a></li>
-                                                <li><a th:href="@{/indivisuallife/claim/opennonfuneralproudctpage}">Non Funeral Product
+                                                    <!--<li><a th:href="@{/indivisuallife/claim/openclaimsearchpage}">Claim Search-->
+                                                    <!--</a></li>-->
+                                                    <li><a th:href="@{/indivisuallife/claim/openclaimsettlementpage}">Claim
+                                                        Settlement</a></li>
+                                                    <li><a th:href="@{/indivisuallife/claim/opensurrenderclaimpage}">Surrender
+                                                        Claim</a></li>
+                                                    <li><a th:href="@{/indivisuallife/claim/openmaturityclaimpage}">Maturity
+                                                        Claim </a></li>
+                                                    <li><a th:href="@{/indivisuallife/claim/opendeathclaimpage}">Death
+                                                        Claim </a></li>
+                                                    <li><a th:href="@{/indivisuallife/claim/opendisabilityclaimpage}">Disability
+                                                        Claim </a></li>
+                                                    <li><a th:href="@{/indivisuallife/claim/openencashmentclaimpage}">Encashment
+                                                        Claim</a></li>
+                                                    <li><a th:href="@{/indivisuallife/claim/openfuneralproudctpage}"> Funeral Product
                                                     </a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
+                                                    <li><a th:href="@{/indivisuallife/claim/opennonfuneralproudctpage}">Non Funeral Product
+                                                    </a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
 
-                     </ul>
-                    </li>
+                                </ul>
+                            </li>
 
+                            <li class="dropdown">
+                                <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Endorsement<i
+                                        class="icon-angle-down"></i></a>
+                                <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                    <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;"
+                                                                                 class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/grouplife/endorsement/openpolicysearchpage}">Create
+                                                Endorsement</a></li>
+                                            <li><a th:href="@{/grouplife/endorsement/opensearchendorsement}">Search
+                                                Endorsement</a></li>
+                                            <li><a th:href="@{/grouplife/endorsement/openapprovalendorsement}">Approval
+                                                Endorsement</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">IndividualLife<i style="margin-top:12px;"
+                                                                                      class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/individuallife/endorsement/createendorsement}">Create
+                                                Endorsement</a></li>
+                                            <li><a th:href="@{/individuallife/endorsement/opensearchendorsement}">Search
+                                                Endorsement</a></li>
+                                        </ul>
+                                    </li>
 
+                                    <!--<li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>-->
 
+                                    <!-- <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
+                                                                                        class="glyphicon glyphicon-chevron-right "></i></a>
+                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                             <li><a th:href="@{/individuallife/proposal/search}">Create Proposal</a></li>
+                                             <li><a th:href="@{/individuallife/proposal}">Search Proposal</a></li>
+                                             <li><a th:href="@{/individuallife/proposal/openapprovalproposal}">Approval
+                                                 Proposal</a></li>
+                                         </ul>
+                                     </li>-->
 
-
-
-                        <li class="dropdown">
-                            <a href="javascript:void(0)"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Endorsement<i
-                                    class="icon-angle-down"></i></a>
-                            <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                <!-- <li class="dropdown"><a href="#">GroupHealth<i style="margin-top:12px;"
-                                                                                class="glyphicon glyphicon-chevron-right "></i></a>
-                                     <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                         <li><a th:href="@{/grouphealth/proposal/opensearchquotation}">Create
-                                             Proposal</a></li>
-                                         <li><a th:href="@{/grouphealth/proposal/opensearchproposal}">Search
-                                             Proposal</a></li>
-                                         <li><a th:href="@{/grouphealth/proposal/openapprovalproposal}">Approval
-                                             Proposal</a></li>
-                                     </ul>
-                                 </li>-->
-                                <li class="dropdown"><a href="#">GroupLife<i style="margin-top:12px;"
-                                                                             class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/grouplife/endorsement/openpolicysearchpage}">Create
-                                            Endorsement</a></li>
-                                        <li><a th:href="@{/grouplife/endorsement/opensearchendorsement}">Search
-                                            Endorsement</a></li>
-                                        <li><a th:href="@{/grouplife/endorsement/openapprovalendorsement}">Approval
-                                            Endorsement</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown"><a href="#">IndividualLife<i style="margin-top:12px;"
-                                                                             class="glyphicon glyphicon-chevron-right "></i></a>
-                                    <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                        <li><a th:href="@{/individuallife/endorsement/createendorsement}">Create
-                                            Endorsement</a></li>
-                                        <li><a th:href="@{/individuallife/endorsement/opensearchendorsement}">Search
-                                            Endorsement</a></li>
-                                    </ul>
-                                </li>
-
-                                <!--<li><a th:href="@{/individuallife/proposal}">Individual Life </a></li>-->
-
-                                <!-- <li class="dropdown"><a href="#">Individual Life<i style="margin-top:12px;"
-                                                                                    class="glyphicon glyphicon-chevron-right "></i></a>
-                                     <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
-                                         <li><a th:href="@{/individuallife/proposal/search}">Create Proposal</a></li>
-                                         <li><a th:href="@{/individuallife/proposal}">Search Proposal</a></li>
-                                         <li><a th:href="@{/individuallife/proposal/openapprovalproposal}">Approval
-                                             Proposal</a></li>
-                                     </ul>
-                                 </li>-->
-
-                            </ul>
-                        </li>
+                                </ul>
+                            </li>
 
 
-                        <li class='last' style="float:right">
-                            <a href="#" class="menu-button" th:href="@{/logout}"><span
-                                    class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log off</a>
-                        </li>
+
+
+
+                            <li class='last' style="float:right">
+                                <a href="#" class="menu-button" th:href="@{/logout}"><span
+                                        class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log off</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
