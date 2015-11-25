@@ -252,11 +252,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         }
         List<BigDecimal> sumAssuredValues = getAllowedSumAssuredValues();
         if (SumAssuredType.SPECIFIED_VALUES.equals(this.sumAssured.getSumAssuredType())){
-            BigDecimal max =  Collections.max(sumAssuredValues);
-            BigDecimal min = Collections.min(sumAssuredValues);
-            if (max.compareTo(sumAssured)>=0 && min.compareTo(sumAssured)<=0){
-                return true;
-            }
+            return isValidSumAssured(sumAssuredValues,sumAssured);
         }
         return sumAssuredValues.contains(sumAssured);
     }
@@ -264,14 +260,19 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     public boolean isValidCoverageSumAssured(BigDecimal sumAssured, CoverageId coverageId) {
         List<BigDecimal> coverageSumAssuredValues = getAllowedCoverageSumAssuredValues(coverageId);
         PlanCoverage planCoverage = findPlanCoverage(coverageId);
-        if (SumAssuredType.SPECIFIED_VALUES.equals(planCoverage.getCoverageSumAssured().getSumAssuredType())){
-            BigDecimal max =  Collections.max(coverageSumAssuredValues);
-            BigDecimal min = Collections.min(coverageSumAssuredValues);
-            if (max.compareTo(sumAssured)>=0 && min.compareTo(sumAssured)<=0){
-                return true;
-            }
+        if (Arrays.asList(SumAssuredType.SPECIFIED_VALUES,SumAssuredType.DERIVED).contains(planCoverage.getCoverageSumAssured().getSumAssuredType())){
+            return isValidSumAssured(coverageSumAssuredValues,sumAssured);
         }
         return coverageSumAssuredValues.contains(sumAssured);
+    }
+
+    private boolean isValidSumAssured(List<BigDecimal> sumAssuredValues,BigDecimal sumAssured){
+        BigDecimal max =  Collections.max(sumAssuredValues);
+        BigDecimal min = Collections.min(sumAssuredValues);
+        if (max.compareTo(sumAssured)>=0 && min.compareTo(sumAssured)<=0){
+            return true;
+        }
+        return false;
     }
 
     public boolean isValidPlanCoverageBenefit(CoverageId coverageId, BenefitId benefitId) {
