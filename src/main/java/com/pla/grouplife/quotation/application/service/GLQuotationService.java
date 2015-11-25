@@ -371,12 +371,14 @@ public class GLQuotationService {
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(quotationId);
         PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeQuotation);
+        premiumDetailDto.updateWithStatus(groupLifeQuotation.getQuotationStatus());
         return premiumDetailDto;
     }
 
     public PremiumDetailDto recalculatePremium(GLRecalculatedInsuredPremiumCommand glRecalculatedInsuredPremiumCommand) {
         GroupLifeQuotation groupLifeQuotation = commandGateway.sendAndWait(glRecalculatedInsuredPremiumCommand);
         PremiumDetailDto premiumDetailDto = getPremiumDetail(groupLifeQuotation);
+        premiumDetailDto.updateWithStatus(groupLifeQuotation.getQuotationStatus());
         return premiumDetailDto;
     }
 

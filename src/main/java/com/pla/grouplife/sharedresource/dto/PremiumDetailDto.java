@@ -1,6 +1,7 @@
 package com.pla.grouplife.sharedresource.dto;
 
 import com.google.common.collect.Sets;
+import com.pla.grouplife.quotation.domain.model.QuotationStatus;
 import com.pla.grouplife.quotation.query.PremiumInstallmentDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import lombok.Getter;
@@ -52,6 +53,8 @@ public class PremiumDetailDto {
 
     private Boolean isPremiumApplicable = Boolean.TRUE;
 
+    private QuotationStatus quotationStatus;
+
     public PremiumDetailDto(BigDecimal addOnBenefit, BigDecimal profitAndSolvencyLoading, BigDecimal hivDiscount, BigDecimal valuedClientDiscount, BigDecimal longTermDiscount, Integer policyTermValue) {
         this.addOnBenefit = addOnBenefit;
         this.profitAndSolvencyLoading = profitAndSolvencyLoading;
@@ -100,4 +103,10 @@ public class PremiumDetailDto {
         this.optedPremiumFrequency=optedPremiumFrequency;
         return this;
     }
+
+    public PremiumDetailDto updateWithStatus(QuotationStatus quotationStatus){
+        this.quotationStatus=quotationStatus;
+        return this;
+    }
+
 }

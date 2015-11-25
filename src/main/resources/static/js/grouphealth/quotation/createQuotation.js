@@ -325,7 +325,18 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
                 console.log(JSON.stringify(request));
                 $http.post('/pla/quotation/grouphealth/savepremiumdetail', request).success(function (data) {
-                    $http.post("/pla/quotation/grouphealth/generate", angular.extend({},
+                    if($scope.premiumData.quotationStatus != 'SHARED'){
+                        $http.post("/pla/quotation/grouplife/generate", angular.extend({},
+                            {"quotationId": $scope.quotationId}))
+                            .success(function (data) {
+                                /* if (data.status == "200") {
+                                 saveStep();
+                                 $('#searchFormQuotation').val($scope.quotationId);
+                                 $('#searchForm').submit();
+                                 }*/
+                            });
+                    }
+                   /* $http.post("/pla/quotation/grouphealth/generate", angular.extend({},
                         {"quotationId": $scope.quotationId}))
                         .success(function (data) {
                             if (data.status == "200") {
@@ -333,7 +344,12 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                                 $('#searchFormQuotation').val($scope.quotationId);
                                 $('#searchForm').submit();
                             }
-                        });
+                        });*/
+                    if (data.status == "200") {
+                        saveStep();
+                        $('#searchFormQuotation').val($scope.quotationId);
+                        $('#searchForm').submit();
+                    }
                 });
 
             }
