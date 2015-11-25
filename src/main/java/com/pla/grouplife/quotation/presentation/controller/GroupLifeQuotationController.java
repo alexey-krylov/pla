@@ -99,9 +99,9 @@ public class GroupLifeQuotationController {
     @RequestMapping(value = "/getagentdetail/{agentId}", method = RequestMethod.GET)
     @ResponseBody
     public Result getAgentDetail(@PathVariable("agentId") String agentId) {
-        Map<String, Object> agentDetail = glQuotationFinder.getAgentById(agentId);
+        Map<String, Object> agentDetail = glQuotationFinder.getBrokerById(agentId);
         if (isEmpty(agentDetail)) {
-            return Result.failure("Agent detail not found");
+            return Result.failure("Please enter a relevant broker ID.");
         }
         checkArgument(agentDetail != null);
         CreateGLQuotationCommand createGLQuotationCommand = new CreateGLQuotationCommand();

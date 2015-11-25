@@ -46,6 +46,8 @@ public class GHFinder {
 
     public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
 
+    public static final String FIND_ACTIVE_BROKER_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE' AND channelCode IN ('DIRECT','BROKER');";
+
     public static final String FIND_ACTIVE_INACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
 
     public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
@@ -146,6 +148,12 @@ public class GHFinder {
     public Map<String, Object> getAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));
         List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
+    }
+
+    public Map<String, Object> getBrokerById(String agentId) {
+        Preconditions.checkArgument(isNotEmpty(agentId));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_BROKER_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
         return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
     }
 

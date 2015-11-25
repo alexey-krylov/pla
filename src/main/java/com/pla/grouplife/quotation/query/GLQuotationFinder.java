@@ -47,7 +47,9 @@ public class GLQuotationFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'";
+    public static final String FIND_ACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE' ";
+
+    public static final String FIND_ACTIVE_BROKER_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId AND agentStatus='ACTIVE'  AND channelCode IN ('DIRECT','BROKER');";
 
     public static final String FIND_ACTIVE_INACTIVE_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
 
@@ -71,6 +73,14 @@ public class GLQuotationFinder {
         List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_AGENT_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
         return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
     }
+
+
+    public Map<String, Object> getBrokerById(String agentId) {
+        Preconditions.checkArgument(isNotEmpty(agentId));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.queryForList(FIND_ACTIVE_BROKER_BY_ID_QUERY, new MapSqlParameterSource().addValue("agentId", agentId));
+        return isNotEmpty(agentList) ? agentList.get(0) : Maps.newHashMap();
+    }
+
 
     public Map<String, Object> getActiveInactiveAgentById(String agentId) {
         Preconditions.checkArgument(isNotEmpty(agentId));

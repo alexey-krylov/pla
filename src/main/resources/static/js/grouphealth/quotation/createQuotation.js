@@ -157,10 +157,10 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                             $scope.quotationDetails.basic.agentName = agentName;
                         } else {
                             $scope.agentNotFound = true;
+                            $scope.errorMessage=data.message;
                         }
                     })
                     .error(function (data, status) {
-
                     });
             };
 
