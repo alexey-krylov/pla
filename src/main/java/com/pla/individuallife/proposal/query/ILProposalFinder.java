@@ -313,6 +313,11 @@ public class ILProposalFinder {
         BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
         BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
 
+        premiumDetailDto.setAnnualFee(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums));
+        premiumDetailDto.setQuarterlyFee(ComputedPremiumDto.getQuarterlyFee(computedPremiums));
+        premiumDetailDto.setSemiAnnualFee(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums));
+        premiumDetailDto.setMonthlyFee(ComputedPremiumDto.getMonthlyFee(computedPremiums));
+
         Set<ILRiderDetail> riderList = planDetail.getRiderDetails();
 
         if (riderList != null) {
