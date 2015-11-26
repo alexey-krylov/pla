@@ -245,6 +245,14 @@
                                                     </dl>
                                                 </div>
                                             </div>
+
+                                            <div ng-if="planCoverage.coverageSumAssured.sumAssuredType=='DERIVED'">
+                                                <div class="col-md-12">
+                                                    <span>
+                                                        % of plan Sum assured {{planCoverage.coverageSumAssured.percentage}} Max Limit {{planCoverage.coverageSumAssured.maxLimit}}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <h6 class="text-muted">Benefits</h6>
 
