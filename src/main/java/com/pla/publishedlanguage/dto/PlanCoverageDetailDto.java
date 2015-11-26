@@ -1,5 +1,6 @@
 package com.pla.publishedlanguage.dto;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -7,6 +8,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -161,10 +163,11 @@ public class PlanCoverageDetailDto {
     }
 
     public static int getNoOfOptionalCoverage(List<PlanCoverageDetailDto> planCoverageDetailDtoList) {
-        int noOfCoverage = 0;
+        List<Integer> maxNumberOfCoverage = Lists.newArrayList();
         for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
-            noOfCoverage = noOfCoverage + planCoverageDetailDto.getCoverageDtoList().size();
+            maxNumberOfCoverage.add(planCoverageDetailDto.getCoverageDtoList().size());
         }
+        Integer noOfCoverage = Collections.max(maxNumberOfCoverage);
         return noOfCoverage;
     }
 

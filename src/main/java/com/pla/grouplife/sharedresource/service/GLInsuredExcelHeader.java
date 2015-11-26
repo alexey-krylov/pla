@@ -870,6 +870,7 @@ public enum GLInsuredExcelHeader {
 
     public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+
         int noOfOptionalCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
         List<String> headers = GLInsuredExcelHeader.getAllHeader();
         for (int count = 1; count <= noOfOptionalCoverage; count++) {

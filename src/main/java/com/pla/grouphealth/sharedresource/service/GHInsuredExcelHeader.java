@@ -18,8 +18,11 @@ import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
@@ -874,9 +877,21 @@ public enum GHInsuredExcelHeader {
 
     public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
+        Integer noOfCoverage = PlanCoverageDetailDto.getNoOfOptionalCoverage(planCoverageDetailDtoList);
         List<String> headers = GHInsuredExcelHeader.getAllHeader();
+        List<PlanCoverageDetailDto> coverageList =   planCoverageDetailDtoList.parallelStream().filter(new Predicate<PlanCoverageDetailDto>() {
+            @Override
+            public boolean test(PlanCoverageDetailDto planCoverageDetailDto) {
+                return planCoverageDetailDto.getCoverageDtoList().size()==noOfCoverage;
+            }
+        }).map(new Function<PlanCoverageDetailDto, PlanCoverageDetailDto>() {
+            @Override
+            public PlanCoverageDetailDto apply(PlanCoverageDetailDto planCoverageDetailDto) {
+                return planCoverageDetailDto;
+            }
+        }).collect(Collectors.toList());
         int count = 1;
-        for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
+        for (PlanCoverageDetailDto planCoverageDetailDto : coverageList) {
             for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
                 headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count));
                 headers.add((AppConstants.OPTIONAL_COVERAGE_HEADER + count) + " " + AppConstants.OPTIONAL_COVERAGE_SA_HEADER);
