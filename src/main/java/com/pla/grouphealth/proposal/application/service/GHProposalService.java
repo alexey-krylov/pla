@@ -16,6 +16,7 @@ import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.proposal.repository.GHProposalRepository;
 import com.pla.grouphealth.proposal.repository.GHProposalStatusAuditRepository;
+import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.*;
@@ -23,6 +24,7 @@ import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.grouphealth.sharedresource.query.GHFinder;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelGenerator;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelParser;
+import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
@@ -39,6 +41,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -48,14 +51,12 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
 import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -399,10 +400,7 @@ public class GHProposalService {
     public boolean isValidInsuredTemplate(String proposalId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
         AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
         List<PlanId> agentPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
-        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return ghInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelation, agentPlans, minimumNumberOfPersonPerPolicy, minimumPremium);
+        return ghInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelation, agentPlans);
     }
 
     public List<GHInsuredDto> transformToInsuredDto(HSSFWorkbook insuredTemplateWorkbook, String proposalId, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
@@ -628,7 +626,18 @@ public class GHProposalService {
         return mandatoryDocumentDtos;
     }
 
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(ProposalId proposalId) {
+        GroupHealthProposal groupHealthProposal = ghProposalRepository.findOne(proposalId);
+        if(groupHealthProposal == null && UtilValidator.isEmpty(groupHealthProposal.getInsureds())){
+            return getFalseFlagMap();
+        }
+        if(groupHealthProposal != null && UtilValidator.isEmpty(groupHealthProposal.getInsureds())){
+            return getFalseFlagMap();
+        }
+        ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
+        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(groupHealthProposal, productLineInformation);
 
+    }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
 

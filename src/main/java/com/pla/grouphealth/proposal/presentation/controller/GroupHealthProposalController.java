@@ -21,9 +21,9 @@ import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
-import org.apache.xpath.operations.Bool;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -343,6 +343,12 @@ public class GroupHealthProposalController {
         }
     }
 
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(@PathVariable("proposalId") String proposalId) {
+        return ghProposalService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(new ProposalId(proposalId));
+    }
+
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To get premium detail")
@@ -472,6 +478,23 @@ public class GroupHealthProposalController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
+
+    @Synchronized
+    @RequestMapping(value = "/removeGHProposalAdditionalDocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity removeGHProposalAdditionalDocument(@RequestParam String proposalId, @RequestParam String gridFsDocId, HttpServletRequest request) {
+        if(UtilValidator.isEmpty(gridFsDocId) || UtilValidator.isEmpty(proposalId)){
+            return new ResponseEntity(Result.failure("request parameter cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+        try {
+            if(commandGateway.sendAndWait(new GHProposalDocumentRemoveCommand(proposalId, gridFsDocId)))
+                return new ResponseEntity(Result.success("Document deleted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.success("Document cannot be deleted"), HttpStatus.OK);
     }
 
 }

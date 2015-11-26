@@ -40,6 +40,10 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
         throw new  GLInsuredTemplateExcelParseException("Total Number of Members is less than the specified Minimum for Plans.");
     }
 
+    public static void raiseSameOptionalCoverageException() {
+        throw new  GLInsuredTemplateExcelParseException("Same optional cover added twice ...Please check");
+    }
+
     public static void raiseNotValidValueException(String message) {
         throw new  GLInsuredTemplateExcelParseException(message);
     }

@@ -23,6 +23,7 @@ import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -205,6 +207,30 @@ public class GHProposalCommandHandler {
             existingDocument = existingDocument.updateWithNameAndContent(fileName, gridFsDocId, ghProposalDocumentCommand.getFile().getContentType());
         }
         groupHealthProposal = groupHealthProposal.updateWithDocuments(documents);
+    }
+
+    @CommandHandler
+    public boolean removeAdditionalDocument(GHProposalDocumentRemoveCommand ghProposalDocumentRemoveCommand) {
+        boolean result = Boolean.FALSE;
+        GroupHealthProposal groupHealthProposal = ghProposalMongoRepository.load(new ProposalId(ghProposalDocumentRemoveCommand.getProposalId()));
+        if(groupHealthProposal != null){
+            Set<GHProposerDocument> ghProposerDocuments = groupHealthProposal.getProposerDocuments();
+            result =  removeDocumentByGridFsDocId(ghProposerDocuments, ghProposalDocumentRemoveCommand.getGridFsDocId());
+        }
+        return result;
+    }
+
+    private boolean removeDocumentByGridFsDocId(Set<GHProposerDocument> ghProposerDocuments, String gridFsDocId) {
+        if(UtilValidator.isNotEmpty(ghProposerDocuments)) {
+            for (Iterator iterator = ghProposerDocuments.iterator(); iterator.hasNext(); ) {
+                GHProposerDocument ghProposerDocument = (GHProposerDocument) iterator.next();
+                if (ghProposerDocument.getGridFsDocId().equals(gridFsDocId)) {
+                    iterator.remove();
+                    return Boolean.TRUE;
+                }
+            }
+        }
+        return Boolean.FALSE;
     }
 
     private GroupHealthProposal populateAnnualBasicPremiumOfInsured(GroupHealthProposal groupHealthProposal, UserDetails userDetails, GHPremiumDetailDto premiumDetailDto) {

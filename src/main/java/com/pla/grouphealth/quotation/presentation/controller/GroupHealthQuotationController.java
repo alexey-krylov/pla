@@ -3,6 +3,7 @@ package com.pla.grouphealth.quotation.presentation.controller;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.application.command.*;
 import com.pla.grouphealth.quotation.application.service.GHQuotationService;
+import com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException;
 import com.pla.grouphealth.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.*;
@@ -363,6 +364,12 @@ public class GroupHealthQuotationController {
     @ResponseBody
     public GHPremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {
         return ghQuotationService.getPremiumDetail(new QuotationId(quotationId));
+    }
+
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation/{quotationid}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(@PathVariable("quotationid") String quotationId) {
+        return ghQuotationService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(new QuotationId(quotationId));
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)

@@ -790,8 +790,15 @@ public enum GLInsuredExcelHeader {
             BigDecimal planPremium = null;
             Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
+            Cell firstNameCell = row.getCell(headers.indexOf(FIRST_NAME.getDescription()));
+            String firstName = getCellValue(firstNameCell);
+            Cell dateOfBirthCell = row.getCell(headers.indexOf(DATE_OF_BIRTH.getDescription()));
+            String dateOfBirth = getCellValue(dateOfBirthCell);
             if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
+            }
+            else if (isNotEmpty(firstName) && isNotEmpty(dateOfBirth) && isNotEmpty(cellValue)) {
+                planPremium = BigDecimal.valueOf(Double.valueOf(cellValue)).multiply(new BigDecimal(1));
             }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
             planPremiumDetailDto.setPremiumAmount(planPremium);
@@ -806,9 +813,16 @@ public enum GLInsuredExcelHeader {
             String cellValue = getCellValue(cell);
             Cell noOfAssuredCell = row.getCell(headers.indexOf(NO_OF_ASSURED.getDescription()));
             String noOfAssuredCellValue = getCellValue(noOfAssuredCell);
+            Cell firstNameCell = row.getCell(headers.indexOf(FIRST_NAME.getDescription()));
+            String firstName = getCellValue(firstNameCell);
+            Cell dateOfBirthCell = row.getCell(headers.indexOf(DATE_OF_BIRTH.getDescription()));
+            String dateOfBirth = getCellValue(dateOfBirthCell);
             BigDecimal planPremium = null;
             if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
+            }
+            else if (isNotEmpty(firstName) && isNotEmpty(dateOfBirth) && isNotEmpty(cellValue)) {
+                planPremium = BigDecimal.valueOf(Double.valueOf(cellValue)).multiply(new BigDecimal(1));
             }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
             planPremiumDetailDto.setPremiumAmount(planPremium);

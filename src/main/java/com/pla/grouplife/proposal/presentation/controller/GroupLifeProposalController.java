@@ -2,6 +2,7 @@ package com.pla.grouplife.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
 import com.pla.grouplife.proposal.application.command.*;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
@@ -26,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -344,6 +346,12 @@ public class GroupLifeProposalController {
         }
     }
 
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(@PathVariable("proposalId") String proposalId) {
+        return glProposalService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(new ProposalId(proposalId));
+    }
+
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
     public PremiumDetailDto getPremiumDetail(@PathVariable("proposalId") String proposalId) {
@@ -469,5 +477,22 @@ public class GroupLifeProposalController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
+
+    @Synchronized
+    @RequestMapping(value = "/removeGLProposalAdditionalDocument", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity removeGLProposalAdditionalDocument(@RequestParam String proposalId, @RequestParam String gridFsDocId, HttpServletRequest request) {
+        if(UtilValidator.isEmpty(gridFsDocId) || UtilValidator.isEmpty(proposalId)){
+            return new ResponseEntity(Result.failure("request parameter cannot be empty"), HttpStatus.BAD_REQUEST);
+        }
+        try {
+            if(commandGateway.sendAndWait(new GLProposalDocumentRemoveCommand(proposalId, gridFsDocId)))
+                return new ResponseEntity(Result.success("Document deleted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.success("Document cannot be deleted"), HttpStatus.OK);
     }
 }

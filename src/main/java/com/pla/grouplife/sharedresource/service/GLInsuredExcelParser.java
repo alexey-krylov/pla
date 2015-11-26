@@ -109,6 +109,9 @@ public class GLInsuredExcelParser {
                 if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDependentDto.getNoOfAssured() != null) {
                     coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(finalInsuredDependentDto.getNoOfAssured())));
                 }
+                if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDependentDto.getFirstName() != null && finalInsuredDependentDto.getDateOfBirth() != null) {
+                    coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(new BigDecimal(1));
+                }
                 coveragePremiumDetailDto.setPremium(coveragePremium);
                 int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
                 coveragePremiumDetailDto.setSumAssured(BigDecimal.valueOf(coverageSA));
@@ -157,7 +160,7 @@ public class GLInsuredExcelParser {
     }
 
 
-    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans, int minimumNumberOfPersonPerPolicy, int minimumPremium) {
+    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
@@ -189,12 +192,9 @@ public class GLInsuredExcelParser {
         } else if (!isSamePlanForAllRelationshipCategory) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
-        boolean isPremiumLessThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremium(insuredDependentMap, headers, minimumPremium);
-        boolean isNoOfPersonsLessThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersons(insuredDependentMap, headers, minimumNumberOfPersonPerPolicy);
-        if(isPremiumLessThenMinimumConfiguredPremium)
-            premiumLessThenMinimumConfiguredPremiumException();
-        if(isNoOfPersonsLessThenMinimumConfiguredPersons)
-            noOfPersonsLessThenMinimumConfiguredPersonsException();
+        if(checkIfSameOptionalCoverage(insuredDependentMap, headers)){
+            raiseSameOptionalCoverageException();
+        }
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {

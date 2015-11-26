@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
+import com.pla.grouphealth.sharedresource.dto.RelationshipPlanDataHolder;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -109,6 +110,9 @@ public class GHInsuredExcelParser {
                 if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDependentDto.getNoOfAssured() != null) {
                     coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(finalInsuredDependentDto.getNoOfAssured())));
                 }
+                if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDependentDto.getFirstName() != null && finalInsuredDependentDto.getDateOfBirth() != null) {
+                    coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(new BigDecimal(1));
+                }
                 coveragePremiumDetailDto.setPremium(coveragePremium);
                 int coverageSA = Double.valueOf(ExcelGeneratorUtil.getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell())).intValue();
                 coveragePremiumDetailDto.setSumAssured(BigDecimal.valueOf(coverageSA));
@@ -158,6 +162,9 @@ public class GHInsuredExcelParser {
                 if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDto.getNoOfAssured() != null) {
                     coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(finalInsuredDto.getNoOfAssured())));
                 }
+                if (isNotEmpty(optionalCoveragePremiumCellValue) && finalInsuredDto.getFirstName() != null && finalInsuredDto.getDateOfBirth() != null) {
+                    coveragePremium = BigDecimal.valueOf(Double.valueOf(optionalCoveragePremiumCellValue)).multiply(new BigDecimal(1));
+                }
                 coveragePremiumDetailDto.setPremium(coveragePremium);
                 if (optionalCoverageCellHolder.getBenefitCellHolders() != null) {
                     for (OptionalCoverageBenefitCellHolder optionalCoverageBenefitCellHolder : optionalCoverageCellHolder.getBenefitCellHolders()) {
@@ -176,7 +183,7 @@ public class GHInsuredExcelParser {
     }
 
 
-    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans, int minimumNumberOfPersonPerPolicy, int minimumPremium) {
+    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation, List<PlanId> agentPlans) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
@@ -211,12 +218,9 @@ public class GHInsuredExcelParser {
         } else if (!isSamePlanForAllRelationshipCategory) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
-        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremium(insuredDependentMap, headers, minimumPremium);
-        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersons(insuredDependentMap, headers, minimumNumberOfPersonPerPolicy);
-        if(isPremiumGreaterThenMinimumConfiguredPremium)
-            premiumLessThenMinimumConfiguredPremiumException();
-        if(isNoOfPersonsGreaterThenMinimumConfiguredPersons)
-            noOfPersonsLessThenMinimumConfiguredPersonsException();
+        if(checkIfSameOptionalCoverage(insuredDependentMap, headers)){
+            raiseSameOptionalCoverageException();
+        }
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {

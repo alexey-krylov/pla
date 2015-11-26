@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
 import com.pla.grouplife.quotation.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.quotation.application.command.SearchGlQuotationDto;
 import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
@@ -36,6 +37,7 @@ import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -46,6 +48,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
 import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -254,7 +257,7 @@ public class GLQuotationService {
         ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
         int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans, minimumNumberOfPersonPerPolicy, minimumPremium);
+        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans);
     }
 
     public List<InsuredDto> transformToInsuredDto(HSSFWorkbook workbook, String quotationId, boolean samePlanForAllCategory, boolean samePlanForAllRelations) {
@@ -458,6 +461,19 @@ public class GLQuotationService {
         }
         List<GlQuotationDto> glQuotationDtoList = allQuotations.stream().map(new TransformToGLQuotationDto()).collect(Collectors.toList());
         return glQuotationDtoList;
+    }
+
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(QuotationId quotationId) {
+        GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(quotationId);
+        if(groupLifeQuotation == null && UtilValidator.isEmpty(groupLifeQuotation.getInsureds())){
+            return getFalseFlagMap();
+        }
+        if(groupLifeQuotation != null && UtilValidator.isEmpty(groupLifeQuotation.getInsureds())){
+            return getFalseFlagMap();
+        }
+        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
+        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(groupLifeQuotation, productLineInformation);
+
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {

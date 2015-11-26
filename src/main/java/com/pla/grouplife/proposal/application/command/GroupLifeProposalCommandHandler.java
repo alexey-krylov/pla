@@ -1,6 +1,9 @@
 package com.pla.grouplife.proposal.application.command;
 
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
+import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.domain.model.GLProposalApprover;
 import com.pla.grouplife.proposal.domain.model.GLProposalProcessor;
@@ -22,6 +25,7 @@ import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,6 +35,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -207,6 +212,29 @@ public class GroupLifeProposalCommandHandler {
         groupLifeProposal = groupLifeProposal.updateWithDocuments(documents);
     }
 
+    @CommandHandler
+    public boolean removeGLProposalAdditionalDocument(GLProposalDocumentRemoveCommand glProposalDocumentRemoveCommand) {
+        boolean result = Boolean.FALSE;
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(glProposalDocumentRemoveCommand.getProposalId()));
+        if(groupLifeProposal != null){
+            Set<GLProposerDocument> glProposerDocuments = groupLifeProposal.getProposerDocuments();
+            result =  removeDocumentByGridFsDocId(glProposerDocuments, glProposalDocumentRemoveCommand.getGridFsDocId());
+        }
+        return result;
+    }
+
+    private boolean removeDocumentByGridFsDocId(Set<GLProposerDocument> ghProposerDocuments, String gridFsDocId) {
+        if(UtilValidator.isNotEmpty(ghProposerDocuments)) {
+            for (Iterator iterator = ghProposerDocuments.iterator(); iterator.hasNext(); ) {
+                GLProposerDocument glProposerDocument = (GLProposerDocument) iterator.next();
+                if (glProposerDocument.getGridFsDocId().equals(gridFsDocId)) {
+                    iterator.remove();
+                    return Boolean.TRUE;
+                }
+            }
+        }
+        return Boolean.FALSE;
+    }
     private GroupLifeProposal populateAnnualBasicPremiumOfInsured(GroupLifeProposal groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto) {
         Set<Insured> insureds = groupLifeQuotation.getInsureds();
         insureds = glInsuredFactory.recalculateProratePremiumForInsureds(premiumDetailDto, insureds);

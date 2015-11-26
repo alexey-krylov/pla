@@ -183,7 +183,7 @@ public class GLQuotationFinder {
     }
 
     public ProductLineGeneralInformation getGHProductLineInformation() {
-        Criteria criteria = Criteria.where("productLine").is("GROUP_HEALTH");
+        Criteria criteria = Criteria.where("productLine").is("GROUP_LIFE");
         Query query = new Query(criteria);
         return mongoTemplate.findOne(query, ProductLineGeneralInformation.class, "product_line_information");
     }

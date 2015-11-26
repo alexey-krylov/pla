@@ -4,18 +4,22 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimit;
 import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimitItem;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
+import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.sharedresource.dto.CategoryPlanDataHolder;
+import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.sharedresource.dto.RelationshipPlanDataHolder;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
+import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 
@@ -116,46 +120,135 @@ public class QuotationProposalUtilityService {
     }
 
 
-    public static boolean isPremiumGreaterThenMinimumConfiguredPremium(Map<Row, List<Row>> insuredDependentMap, List<String> headers, int minimumPremium) {
+    public static boolean isPremiumGreaterThenMinimumConfiguredPremiumGH(Set<GHInsured> insuredDtos, int minimumPremium) {
         BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
-        for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            Cell planPremiumCell = getCellByName(row, headers, GHInsuredExcelHeader.PLAN_PREMIUM.getDescription());
-            String planPremium = getCellValue(planPremiumCell);
-            Cell noOfAssuredCell = getCellByName(row, headers, GHInsuredExcelHeader.NO_OF_ASSURED.getDescription());
-            String noOfAssured = getCellValue(noOfAssuredCell);
-            totalPremiumInExcel = totalPremiumInExcel.add(getPremiumDetail(planPremium, noOfAssured));
+        for (GHInsured ghInsured : insuredDtos) {
+            totalPremiumInExcel = totalPremiumInExcel.add(getPremiumDetail(ghInsured.getPlanPremiumDetail().getPremiumAmount(), ghInsured.getNoOfAssured()));
         }
         if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
-            return Boolean.FALSE;
-        return Boolean.TRUE;
+            return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
-    private static BigDecimal getPremiumDetail(String planPremium, String noOfAssured) {
-        BigDecimal sumOfplanPremiumAndNoOfAssured = BigDecimal.ZERO;
-        if(UtilValidator.isNotEmpty(planPremium)){
-            sumOfplanPremiumAndNoOfAssured = new BigDecimal(planPremium);
-            if(UtilValidator.isNotEmpty(noOfAssured)){
-                return new BigDecimal(noOfAssured).multiply(sumOfplanPremiumAndNoOfAssured);
-            }
+    public static boolean isPremiumGreaterThenMinimumConfiguredPremiumGL(Set<Insured> insuredDtos, int minimumPremium) {
+        BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
+        for (Insured ghInsured : insuredDtos) {
+            totalPremiumInExcel = totalPremiumInExcel.add(getPremiumDetail(ghInsured.getPlanPremiumDetail().getPremiumAmount(), ghInsured.getNoOfAssured()));
         }
-        return sumOfplanPremiumAndNoOfAssured;
+        if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
+            return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
-    public static boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons(Map<Row, List<Row>> insuredDependentMap, List<String> headers, int minimumPremium) {
+    private static BigDecimal getPremiumDetail(BigDecimal planPremium, Integer noOfAssured) {
+        BigDecimal sumOfPlanPremiumAndNoOfAssured = BigDecimal.ZERO;
+        sumOfPlanPremiumAndNoOfAssured = planPremium.add(sumOfPlanPremiumAndNoOfAssured);
+            if(noOfAssured != null){
+                return new BigDecimal(noOfAssured).multiply(sumOfPlanPremiumAndNoOfAssured);
+            }
+        return sumOfPlanPremiumAndNoOfAssured;
+    }
+
+    public static boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(Set<GHInsured> insuredDtos, int minimumConfiguredPersons) {
         int totalNumberOfPersonInExcel = 0;
-        for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            Cell noOfAssuredCell = getCellByName(row, headers, GHInsuredExcelHeader.NO_OF_ASSURED.getDescription());
-            String noOfAssured = getCellValue(noOfAssuredCell);
-            if(UtilValidator.isNotEmpty(noOfAssured)){
-                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += new BigDecimal(noOfAssured).intValue();
+        for (GHInsured ghInsured : insuredDtos) {
+            if(ghInsured.getNoOfAssured() != null){
+                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
             } else {
                 totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += 1;
             }
         }
-        if(totalNumberOfPersonInExcel >= minimumPremium)
-            return Boolean.FALSE;
-        return Boolean.TRUE;
+        if(totalNumberOfPersonInExcel >= minimumConfiguredPersons)
+            return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+
+    public static boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(Set<Insured> insuredDtos, int minimumConfiguredPersons) {
+        int totalNumberOfPersonInExcel = 0;
+        for (Insured ghInsured : insuredDtos) {
+            if(ghInsured.getNoOfAssured() != null){
+                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
+            } else {
+                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += 1;
+            }
+        }
+        if(totalNumberOfPersonInExcel >= minimumConfiguredPersons)
+            return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+
+    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(GroupHealthQuotation groupHealthQuotation, ProductLineGeneralInformation productLineInformation) {
+        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthQuotation.getInsureds(), minimumPremium);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+    }
+
+    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(GroupLifeQuotation groupLifeQuotation, ProductLineGeneralInformation productLineInformation) {
+        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeQuotation.getInsureds(), minimumPremium);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+    }
+
+    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(GroupHealthProposal groupHealthProposal, ProductLineGeneralInformation productLineInformation) {
+        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthProposal.getInsureds(), minimumPremium);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+    }
+
+    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(GroupLifeProposal groupLifeProposal, ProductLineGeneralInformation productLineInformation) {
+        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeProposal.getInsureds(), minimumPremium);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+    }
+
+    private static Map<String, Boolean> getResultMapIfLessThanMinimumPremiumOrNoOfPersons(boolean isPremiumGreaterThenMinimumConfiguredPremium, boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons) {
+        Map<String, Boolean> result = getFalseFlagMap();
+        if(isPremiumGreaterThenMinimumConfiguredPremium)
+            result.put("isPremiumGreaterThenMinimumConfiguredPremium", Boolean.TRUE);
+        if(isNoOfPersonsGreaterThenMinimumConfiguredPersons)
+            result.put("isNoOfPersonsGreaterThenMinimumConfiguredPersons", Boolean.TRUE);
+        return result;
+    }
+
+
+    public static Map<String, Boolean> getFalseFlagMap(){
+        return new HashMap<String, Boolean>(){{
+            put("isPremiumGreaterThenMinimumConfiguredPremium",Boolean.FALSE);
+            put("isNoOfPersonsGreaterThenMinimumConfiguredPersons",Boolean.FALSE);
+        }};
+    }
+
+    public static boolean checkIfSameOptionalCoverage(Map<Row, List<Row>> insuredDependentMap, List<String> headers) {
+        Set<String> optionalCoverageHeaders = getAllOptionalCoverageHeaders(headers);
+        Set<String> optionalCoverageSet = Sets.newHashSet();
+        for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {
+            Row row = rowEntry.getKey();
+            for(String optionalCoverageHeader : optionalCoverageHeaders) {
+                Cell optionalCoverageHeaderCell = getCellByName(row, headers, optionalCoverageHeader);
+                String optionalCoverage = getCellValue(optionalCoverageHeaderCell);
+                if(UtilValidator.isNotEmpty(optionalCoverage) && !optionalCoverageSet.add(optionalCoverage))
+                    return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
+
+    private static Set<String> getAllOptionalCoverageHeaders(List<String> headers) {
+        Set<String> optionalCoverageHeaders = Sets.newLinkedHashSet();
+        for(String header : headers){
+            String headerWithoutWhitespace = header.trim().replaceAll("//s+","");
+            if(headerWithoutWhitespace.startsWith("OptionalCoverage") && headerWithoutWhitespace.matches("^OptionalCoverage\\d$")){
+                optionalCoverageHeaders.add(header);
+            }
+        }
+        return optionalCoverageHeaders;
     }
 }

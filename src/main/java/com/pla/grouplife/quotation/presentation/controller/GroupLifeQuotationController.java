@@ -361,6 +361,12 @@ public class GroupLifeQuotationController {
         }
     }
 
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation/{quotationid}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(@PathVariable("quotationid") String quotationId) {
+        return glQuotationService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(new QuotationId(quotationId));
+    }
+
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public PremiumDetailDto getPremiumDetail(@PathVariable("quotationid") String quotationId) {

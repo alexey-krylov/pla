@@ -6,7 +6,9 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.query.MasterFinder;
+import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
+import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposalStatusAudit;
@@ -40,6 +42,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -57,6 +60,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
 import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -389,10 +393,7 @@ public class GLProposalService {
     public boolean isValidInsuredTemplate(String proposalId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
         AgentDetailDto agentDetailDto = getAgentDetail(new ProposalId(proposalId));
         List<PlanId> agentPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
-        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelation, agentPlans, minimumNumberOfPersonPerPolicy, minimumPremium);
+        return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelation, agentPlans);
     }
 
     public List<InsuredDto> transformToInsuredDto(HSSFWorkbook insuredTemplateWorkbook, String proposalId, boolean samePlanForAllCategory, boolean samePlanForAllRelation) {
@@ -636,6 +637,19 @@ public class GLProposalService {
             }).collect(Collectors.toSet());
         }
         return mandatoryDocumentDtos;
+    }
+
+    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(ProposalId proposalId) {
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.findOne(proposalId);
+        if(groupLifeProposal == null && UtilValidator.isEmpty(groupLifeProposal.getInsureds())){
+            return getFalseFlagMap();
+        }
+        if(groupLifeProposal != null && UtilValidator.isEmpty(groupLifeProposal.getInsureds())){
+            return getFalseFlagMap();
+        }
+        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
+        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(groupLifeProposal, productLineInformation);
+
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
