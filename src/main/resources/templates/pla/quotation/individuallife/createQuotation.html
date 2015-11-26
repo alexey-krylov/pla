@@ -374,8 +374,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <input type="submit" class="btn btn-default btn-sm" style="float: right;clear:both"
-                                       ng-click="saveStep2(step2)"
-                                       ng-disabled="isSaveDisabled(step2)" value="Save"/>
+                                       ng-disabled="isSaveDisabled(step2)" ng-click="saveStep2(step2)"
+                                       value="Save"/>
                             </div>
                         </div>
                     </ng-form>
@@ -564,6 +564,7 @@
                                                 proposedAssured="proposedAssured"></policyterm>
                                 </div>
                                 <table class="table table-bordered">
+                                    {{isRiderValid()}} {{planDetailDto.riderDetails.length}}
                                     <p style="color:red;margin-left: 10px;" ng-show="isRiderValid()">
                                         Please Fill the PartialFilled Row.
                                     </p>
@@ -790,14 +791,14 @@
     <div ng-switch="getSumAssuredType(rider)">
         <div ng-switch-when="SPECIFIED_VALUES">
             <select view-enabled="" class="form-control input-sm" ng-model="rider.sumAssured" name="sumAssured"
-                    ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue | filter:lessThanEqualTo('text',planDetailDto.sumAssured)">
+                     ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue | filter:lessThanEqualTo('text',planDetailDto.sumAssured)">
                     <option value="">--Select One--</option>
                     </select>
         </div>
         <div ng-switch-when="RANGE">
             <input type="number" view-enabled="" class="form-control input-sm"
                    min="{{coverage.coverageSumAssured.minSumInsured}}"
-                   name="sumAssuredPlanRider"
+                    name="sumAssuredPlanRider"
                    validate-optsumassured="" max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
             <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
                 <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
@@ -853,14 +854,14 @@
         </div>
         <div ng-switch-when="AGE_DEPENDENT">
             <select class="form-control input-sm" view-enabled="" ng-model="rider.coverTerm" name="policyTerm"
-                    ng-options="value.text as value.text for value in policyTerms">
+                     ng-options="value.text as value.text for value in policyTerms">
                 <option value="">--Select One--</option>
                     </select>
         </div>
 
         <div ng-switch-when="POLICY_TERM" >
             <input type="number" view-enabled="" class="form-control input-sm"
-                   max="{{planDetailDto.policyTerm}}" min="{{planDetailDto.policyTerm}}" ng-disabled="mode=='new'||mode=='view'" name="coverTerm" ng-model="rider.coverTerm"/>
+                    max="{{planDetailDto.policyTerm}}" min="{{planDetailDto.policyTerm}}" ng-disabled="mode=='new'||mode=='view'" name="coverTerm" ng-model="rider.coverTerm"/>
 
             <div class="error" ng-messages="step4.coverTerm.$error" ng-if="step4.coverTerm.$dirty">
                 <small ng-message="max">Optional Cover Sum Assured Should be {{planDetailDto.policyTerm}}.

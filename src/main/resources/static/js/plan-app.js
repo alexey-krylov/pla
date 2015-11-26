@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('planSetup', ['common', 'ngTagsInput', 'checklist-model', 'ngRoute','mgcrea.ngStrap.select','ngSanitize','mgcrea.ngStrap']);
+var app = angular.module('planSetup', ['common', 'commonServices','ngTagsInput', 'checklist-model', 'ngRoute','mgcrea.ngStrap.select','ngSanitize','mgcrea.ngStrap','ui.bootstrap']);
 
 app.config(function (tagsInputConfigProvider) {
     tagsInputConfigProvider.setDefaults('tagsInput', {
@@ -250,8 +250,38 @@ app.directive('coverageCheck', function () {
 app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
     function ($scope, plan, activeCoverages) {
         $scope.plan = plan;
-
         $scope.coverages = activeCoverages;
+
+        $scope.selectedDate =moment().add(1,'days').format("YYYY-MM-DD");
+        $scope.newDateField={};
+        $scope.datePickerSettings = {
+            isOpened:false,
+            dateOptions:{
+                formatYear:'yyyy' ,
+                startingDay:1
+
+            }
+        }
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePickerSettings.isOpened = true;
+        };
+        $scope.datePickerSettingsBDE = {
+            isOpened:false,
+            dateOptions:{
+                formatYear:'yyyy' ,
+                startingDay:1
+            }
+        }
+        $scope.openBDE = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePickerSettingsBDE.isOpened = true;
+        };
+
+
+
         $scope.getCoverageName = function (coverageId) {
             var coverage = _.findWhere($scope.coverages, {coverageId: coverageId});
             if (coverage) {
@@ -259,7 +289,27 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
             }
             return '';
         };
-
+        $scope.$watch('plan.planDetail.launchDate',function(newVal,oldVal){
+            if(newVal){
+                var launchdate=moment(newVal).format("YYYY-MM-DD");
+                var todayDate=moment().format("YYYY-MM-DD");
+                if(moment(todayDate).diff(launchdate) >= 0){
+                    alert('today is greater or same..');
+                    $scope.dateWithDraw =moment().add(1,'days').format("YYYY-MM-DD");
+                }
+                else{
+                    alert('today is smaller..');
+                    $scope.dateWithDraw =moment(launchdate).add(1,'days').format("YYYY-MM-DD");
+                }
+            }
+        });
+        $scope.updateWithdrawalDate=function(){
+            if (moment($scope.plan.planDetail.withdrawalDate, 'dd/mm/yyyy').isValid()) {
+                var withdrawalDate = moment($scope.plan.planDetail.withdrawalDate).format('YYYY-MM-DDTHH:mm:ss+0530');
+            }
+            else {
+            }
+        }
 
         $scope.getBenefitName = function (coverageId, benefitId) {
             var coverage = _.findWhere($scope.coverages, {coverageId: coverageId});
