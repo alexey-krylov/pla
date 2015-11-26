@@ -838,7 +838,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
 
 ALTER TABLE `individual_life_quotation`
 ADD COLUMN `annual_premium` decimal(19,2) DEFAULT NULL,
-ADD COLUMN ` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `monthly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `quarterly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `semiannual_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `total_premium` decimal(19,2) DEFAULT NULL;
