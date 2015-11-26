@@ -149,10 +149,10 @@ public class ILQuotationAppService {
         premiumDetailDto.setRiderPremium(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium);
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
-        premiumDetailDto.setAnnualPremium(totalPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(0,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.setScale(2,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.setScale(2,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.setScale(2,BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.setScale(2,BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 
@@ -217,10 +217,10 @@ public class ILQuotationAppService {
         ilQuotationDetailDto.setCoverDetails(coverDetails);
 
         PremiumDetailDto premiumDetailDto = getPremiumDetail(new QuotationId(quotationId));
-        ilQuotationDetailDto.setNetAnnualPremium(premiumDetailDto.getTotalPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
-        ilQuotationDetailDto.setNetSemiAnnualPremium(premiumDetailDto.getSemiannualPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
-        ilQuotationDetailDto.setNetQuarterlyPremium(premiumDetailDto.getQuarterlyPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
-        ilQuotationDetailDto.setNetMonthlyPremium(premiumDetailDto.getMonthlyPremium().setScale(2, BigDecimal.ROUND_CEILING).toPlainString());
+        ilQuotationDetailDto.setNetAnnualPremium(premiumDetailDto.getTotalPremium().setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
+        ilQuotationDetailDto.setNetSemiAnnualPremium(premiumDetailDto.getSemiannualPremium().setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
+        ilQuotationDetailDto.setNetQuarterlyPremium(premiumDetailDto.getQuarterlyPremium().setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
+        ilQuotationDetailDto.setNetMonthlyPremium(premiumDetailDto.getMonthlyPremium().setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
 
         return ilQuotationDetailDto;
     }

@@ -35,16 +35,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.pla.individuallife.proposal.exception.ILProposalException.raiseMandatoryDocumentNotUploaded;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Prasant on 26-May-15.
@@ -221,31 +219,42 @@ public class ILProposalCommandHandler {
         RoutingLevel routinglevel = ilProposalService.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
         aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getUserDetails().getUsername(),cmd.getComment(), routinglevel);
         List<ILProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = ilProposalService.findAllMandatoryDocument(cmd.getProposalId());
-        Set<ILProposerDocument> proposerDocuments  = aggregate.getProposalDocuments();
-        Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<ILProposerDocument, String>() {
-            @Override
-            public String apply(ILProposerDocument glProposerDocument) {
-                return glProposerDocument.getDocumentId();
-            }
-        }).collect(Collectors.toSet());
-        glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<ILProposalMandatoryDocumentDto>() {
-            @Override
-            public boolean test(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
-                return !documentIds.contains(glProposalMandatoryDocumentDto.getDocumentId());
-            }
-        }).map(new Function<ILProposalMandatoryDocumentDto, ILProposerDocument>() {
-            @Override
-            public ILProposerDocument apply(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
-                proposerDocuments.add(new ILProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(),true,false));
-                return null;
-            }
-        }).collect(Collectors.toSet());
-        aggregate = aggregate.updateWithDocuments(proposerDocuments);
+        Set<ILProposerDocument> proposerDocuments  = aggregate.getProposalDocuments()!=null?aggregate.getProposalDocuments():Sets.newLinkedHashSet();
+        if (isNotEmpty(proposerDocuments)) {
+            Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<ILProposerDocument, String>() {
+                @Override
+                public String apply(ILProposerDocument glProposerDocument) {
+                    return glProposerDocument.getDocumentId();
+                }
+            }).collect(Collectors.toSet());
+            glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<ILProposalMandatoryDocumentDto>() {
+                @Override
+                public boolean test(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                    return !documentIds.contains(glProposalMandatoryDocumentDto.getDocumentId());
+                }
+            }).map(new Function<ILProposalMandatoryDocumentDto, ILProposerDocument>() {
+                @Override
+                public ILProposerDocument apply(ILProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                    proposerDocuments.add(new ILProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(), true, false));
+                    return null;
+                }
+            }).collect(Collectors.toSet());
+            aggregate = aggregate.updateWithDocuments(proposerDocuments);
+        }
+        else {
+            Set<ILProposerDocument> ilProposerDocuments = glProposalMandatoryDocumentDtos.parallelStream().map(new Function<ILProposalMandatoryDocumentDto, ILProposerDocument>() {
+                @Override
+                public ILProposerDocument apply(ILProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
+                   return  new ILProposerDocument(ilProposalMandatoryDocumentDto.getDocumentId(), true, false);
+                }
+            }).collect(Collectors.toSet());
+            aggregate = aggregate.updateWithDocuments(ilProposerDocuments);
+        }
         return aggregate.getIdentifier().getProposalId();
     }
 
     @CommandHandler
-     public String proposalApproval(ILProposalApprovalCommand cmd) {
+    public String proposalApproval(ILProposalApprovalCommand cmd) {
         ILProposalApprover ilProposalApprover = ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         if (ILProposalStatus.APPROVED.equals(cmd.getStatus()) && !ilProposalService.doesAllDocumentWaivesByApprover(cmd.getProposalId())){
@@ -264,15 +273,22 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-    public String waiveDocumentCommandHandler(WaiveMandatoryDocumentCommand cmd) {
+     public String waiveDocumentCommandHandler(WaiveMandatoryDocumentCommand cmd) {
         ILProposalApprover ilProposalApprover =  ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         Set<ILProposerDocument> documents = aggregate.getProposalDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();
         }
-        for (ILProposalMandatoryDocumentDto proposalDocument : cmd.getWaivedDocuments()){
-            ILProposerDocument ilProposerDocument = new ILProposerDocument(proposalDocument.getDocumentId(),proposalDocument.getMandatory(),proposalDocument.getIsApproved());
+        Optional<ILProposerDocument> ilProposerDocumentOptional  = documents.parallelStream().filter(new Predicate<ILProposerDocument>() {
+            @Override
+            public boolean test(ILProposerDocument ilProposerDocument) {
+                return cmd.getWaivedDocuments().contains(ilProposerDocument.getDocumentId());
+            }
+        }).findAny();
+        if (ilProposerDocumentOptional.isPresent()){
+            ILProposerDocument ilProposerDocument = ilProposerDocumentOptional.get();
+            ilProposerDocument.setApproved(true);
             documents.add(ilProposerDocument);
         }
         aggregate = ilProposalApprover.updateWithDocuments(aggregate,documents);

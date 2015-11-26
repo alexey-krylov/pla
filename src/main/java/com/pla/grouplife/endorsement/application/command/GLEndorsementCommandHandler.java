@@ -136,7 +136,7 @@ public class GLEndorsementCommandHandler {
                         new InsuredBuilder()};
                 insuredBuilder[0].withCategory(insuredDto.getCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).withOlAnnualIncome(insuredDto.getOldAnnualIncome()).
-                        withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName()).withFamilyId(insuredDto.getFamilyId())
+                        withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName()).withFamilyId(insuredDto.getFamilyId()).withManNumber(insuredDto.getManNumber())
                         .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).withGender(insuredDto.getGender()).withNoOfAssured(insuredDto.getNoOfAssured());
                 Set<InsuredDependent> insuredDependents = getInsuredDependent(insuredDto.getInsuredDependents());
                 insuredBuilder[0] = insuredBuilder[0].withDependents(insuredDependents);
@@ -159,7 +159,7 @@ public class GLEndorsementCommandHandler {
                 final InsuredDependentBuilder[] insuredDependentBuilder = {InsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), premiumDetail.getPremiumAmount(), premiumDetail.getSumAssured())};
                 insuredDependentBuilder[0].withCategory(insuredDependentDto.getCategory()).withInsuredName(insuredDependentDto.getSalutation(), insuredDependentDto.getFirstName(), insuredDependentDto.getLastName())
                         .withInsuredNrcNumber(insuredDependentDto.getNrcNumber()).withCompanyName(insuredDependentDto.getCompanyName()).withOccupationClass(insuredDependentDto.getOccupationClass())
-                        .withDateOfBirth(insuredDependentDto.getDateOfBirth()).withGender(insuredDependentDto.getGender())
+                        .withDateOfBirth(insuredDependentDto.getDateOfBirth()).withGender(insuredDependentDto.getGender()).withManNumber(insuredDependentDto.getManNumber()).withFamilyId(insuredDependentDto.getFamilyId())
                         .withRelationship(insuredDependentDto.getRelationship()).withNoOfAssured(insuredDependentDto.getNoOfAssured()).withFamilyId(insuredDependentDto.getFamilyId());
                 return insuredDependentBuilder[0].build();
             }

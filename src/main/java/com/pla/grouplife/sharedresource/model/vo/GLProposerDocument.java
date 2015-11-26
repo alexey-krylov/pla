@@ -19,6 +19,7 @@ public class GLProposerDocument {
 
     private String gridFsDocId;
 
+    @Setter
     private boolean mandatory;
 
     private boolean requireForSubmission;

@@ -138,6 +138,7 @@ public class GLMemberAdditionEndorsementExcelGenerator extends AbstractGLEndorse
                         insuredDependentDto.setOccupationClass(insuredDependent.getOccupationClass());
                         insuredDependentDto.setOccupationCategory(insuredDependent.getCategory());
                         insuredDependentDto.setNoOfAssured(insuredDependent.getNoOfAssured());
+                        insuredDependentDto.setFamilyId(insuredDependent.getFamilyId() != null ? insuredDependent.getFamilyId().getFamilyId():"");
                         PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
                         InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                         insuredDependentDto = insuredDependentDto.addPlanPremiumDetail(planPremiumDetailDto);

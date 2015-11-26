@@ -577,7 +577,7 @@ public class GLProposalService {
         return uploadedDocuments.stream().filter(new Predicate<GLProposerDocument>() {
             @Override
             public boolean test(GLProposerDocument glProposerDocument) {
-                return glProposerDocument.getDocumentId()!=null;
+                return (glProposerDocument.getDocumentId()!=null && glProposerDocument.isMandatory());
             }
         }).map(new Function<GLProposerDocument, GLProposalMandatoryDocumentDto>() {
             @Override

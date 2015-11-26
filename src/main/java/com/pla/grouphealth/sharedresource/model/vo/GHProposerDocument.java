@@ -1,9 +1,6 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Created by Samir on 6/24/2015.
@@ -21,6 +18,7 @@ public class GHProposerDocument {
 
     private String gridFsDocId;
 
+    @Setter
     private boolean mandatory;
 
     private boolean requireForSubmission;

@@ -491,7 +491,7 @@ public class GHProposalService {
         return uploadedDocuments.stream().filter(new Predicate<GHProposerDocument>() {
             @Override
             public boolean test(GHProposerDocument glProposerDocument) {
-                return glProposerDocument.getDocumentId()!=null;
+                return (glProposerDocument.getDocumentId()!=null && glProposerDocument.isMandatory());
             }
         }).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
             @Override

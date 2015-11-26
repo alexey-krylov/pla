@@ -123,11 +123,6 @@ public class Insured {
         return basicAnnualPremiumOfDependent;
     }
 
-    public Insured updateWithOldAnnualIncome(BigDecimal oldAnnualIncome){
-        this.oldAnnualIncome = oldAnnualIncome;
-        return this;
-    }
-
     public Insured updateWithFamilyId(FamilyId familyId) {
         this.familyId = familyId;
         return this;

@@ -1,9 +1,6 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Created by Karunakar on 7/13/2015.
@@ -23,6 +20,7 @@ public class ILProposerDocument {
 
     private boolean mandatory;
 
+    @Setter
     private boolean isApproved;
 
     private boolean requireForSubmission;
