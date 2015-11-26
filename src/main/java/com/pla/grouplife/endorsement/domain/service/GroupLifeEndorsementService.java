@@ -147,11 +147,11 @@ public class GroupLifeEndorsementService {
         }
         Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeQuotation.getEndorsementId().getEndorsementId());
         Date inceptionDate = (Date) policyDetail.get("inceptionDate");
-        DateTime inceptionOn = new DateTime(inceptionDate);
+        LocalDate inceptionOn = new LocalDate(inceptionDate);
         Date expiryDate = (Date) policyDetail.get("expiredDate");
-        DateTime expiredOn = new DateTime(expiryDate);
+        LocalDate expiredOn = new LocalDate(expiryDate);
         int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
-        int endorsementDuration = Days.daysBetween(DateTime.now(),expiredOn).getDays();
+        int endorsementDuration = Days.daysBetween(new LocalDate(),expiredOn).getDays()+1;
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
         insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration, isMemberPromotion);
         groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);
