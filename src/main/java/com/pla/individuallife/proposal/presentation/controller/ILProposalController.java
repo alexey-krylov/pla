@@ -13,6 +13,8 @@ import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.proposal.service.ILProposalService;
 import com.pla.individuallife.quotation.application.service.ILQuotationAppService;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
+import com.pla.individuallife.sharedresource.dto.ILClientDetailDto;
+import com.pla.individuallife.sharedresource.service.ILClientService;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
@@ -67,6 +69,9 @@ public class ILProposalController {
 
     @Autowired
     private CommandGateway commandGateway;
+
+    @Autowired
+    private ILClientService ilClientService;
 
 
 
@@ -373,6 +378,13 @@ public class ILProposalController {
         ILProposalDto dto = proposalFinder.getProposalById(proposalId);
         checkArgument(dto != null, "Proposal not found");
         return dto;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getclientid/{clientId}")
+    @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
+    @ResponseBody
+    public ILClientDetailDto getClientId(@PathVariable("clientId") String clientId) {
+       return ilClientService.findClientDetailByClientId(clientId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getproposalnumber/{proposalId}")
