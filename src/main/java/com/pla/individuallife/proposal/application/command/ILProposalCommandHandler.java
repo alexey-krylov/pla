@@ -245,7 +245,7 @@ public class ILProposalCommandHandler {
             Set<ILProposerDocument> ilProposerDocuments = glProposalMandatoryDocumentDtos.parallelStream().map(new Function<ILProposalMandatoryDocumentDto, ILProposerDocument>() {
                 @Override
                 public ILProposerDocument apply(ILProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
-                   return  new ILProposerDocument(ilProposalMandatoryDocumentDto.getDocumentId(), true, false);
+                    return  new ILProposerDocument(ilProposalMandatoryDocumentDto.getDocumentId(), true, false);
                 }
             }).collect(Collectors.toSet());
             aggregate = aggregate.updateWithDocuments(ilProposerDocuments);
@@ -273,25 +273,28 @@ public class ILProposalCommandHandler {
     }
 
     @CommandHandler
-     public String waiveDocumentCommandHandler(WaiveMandatoryDocumentCommand cmd) {
+    public String waiveDocumentCommandHandler(WaiveMandatoryDocumentCommand cmd) {
         ILProposalApprover ilProposalApprover =  ilProposalRoleAdapter.userToProposalApproverRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
         Set<ILProposerDocument> documents = aggregate.getProposalDocuments();
-        if (isEmpty(documents)) {
-            documents = Sets.newHashSet();
+        Set<ILProposerDocument> ilProposerDocumentSet = Sets.newLinkedHashSet();
+        if (isNotEmpty(cmd.getWaivedDocuments())) {
+            List<String> waiveDocumentList = cmd.getWaivedDocuments().parallelStream().map(new Function<ILProposalMandatoryDocumentDto, String>() {
+                @Override
+                public String apply(ILProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
+                    return ilProposalMandatoryDocumentDto.getDocumentId();
+                }
+            }).collect(Collectors.toList());
+            documents.forEach(ilProposerDocument -> {
+                if (waiveDocumentList.contains(ilProposerDocument.getDocumentId())) {
+                    ilProposerDocument.setApproved(true);
+                    ilProposerDocumentSet.add(ilProposerDocument);
+                } else {
+                    ilProposerDocumentSet.add(ilProposerDocument);
+                }
+            });
         }
-        Optional<ILProposerDocument> ilProposerDocumentOptional  = documents.parallelStream().filter(new Predicate<ILProposerDocument>() {
-            @Override
-            public boolean test(ILProposerDocument ilProposerDocument) {
-                return cmd.getWaivedDocuments().contains(ilProposerDocument.getDocumentId());
-            }
-        }).findAny();
-        if (ilProposerDocumentOptional.isPresent()){
-            ILProposerDocument ilProposerDocument = ilProposerDocumentOptional.get();
-            ilProposerDocument.setApproved(true);
-            documents.add(ilProposerDocument);
-        }
-        aggregate = ilProposalApprover.updateWithDocuments(aggregate,documents);
+        aggregate = ilProposalApprover.updateWithDocuments(aggregate,ilProposerDocumentSet);
         return aggregate.getIdentifier().getProposalId();
     }
 

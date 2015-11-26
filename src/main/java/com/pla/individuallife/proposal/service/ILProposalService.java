@@ -157,6 +157,7 @@ public class ILProposalService {
                     documentName = proposalMandatoryDocumentDto.get().getDocumentName();
                 }
                 ILProposalMandatoryDocumentDto mandatoryDocumentDto = new ILProposalMandatoryDocumentDto(glProposerDocument.getDocumentId(), documentName != "" ? documentName : glProposerDocument.getDocumentId());
+                mandatoryDocumentDto.setIsApproved(glProposerDocument.isApproved());
                 try {
                     if (glProposerDocument.getDocumentId() != null) {
                         GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(glProposerDocument.getGridFsDocId())));
