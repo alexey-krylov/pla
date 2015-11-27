@@ -27,6 +27,14 @@ public class PremiumDetailDto {
 
     private BigDecimal monthlyPremium;
 
+    private BigDecimal annualFee;
+
+    private BigDecimal semiAnnualFee;
+
+    private BigDecimal monthlyFee;
+
+    private BigDecimal quarterlyFee;
+
     private BigDecimal totalPremium;
 
     private Set<RiderPremiumDto> riderPremium;

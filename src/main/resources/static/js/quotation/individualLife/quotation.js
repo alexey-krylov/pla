@@ -355,7 +355,15 @@
                 $scope.isSaveDisabled = function (stepForm) {
                     var returnval = true;
                     if (stepForm.$dirty && stepForm.$valid) {
-                        $scope.stepsSaved[stepForm.$name == 'step2' ? "2" : stepForm.$name == 'step3' ? "3" : stepForm.$name == 'step4' ? "4" : "5"] = false;
+                        if($scope.proposerSameAsProposedAssured){
+                            $scope.stepsSaved["2"] = true;
+                            $scope.stepsSaved["3"] = true;
+                            //$scope.stepsSaved[stepForm.$name == 'step2' ? "2" : stepForm.$name == 'step3' ? "3" : stepForm.$name == 'step4' ? "4" : "5"] = false;
+                        }
+                        else{
+                            $scope.stepsSaved[stepForm.$name == 'step2' ? "2" : stepForm.$name == 'step3' ? "3" : stepForm.$name == 'step4' ? "4" : "5"] = false;
+                        }
+                        //$scope.stepsSaved[stepForm.$name == 'step2' ? "2" : stepForm.$name == 'step3' ? "3" : stepForm.$name == 'step4' ? "4" : "5"] = false;
                         returnval = false;
                     } else {
                         returnval = true;
@@ -564,7 +572,7 @@
                 });
 
                 $scope.isRiderValid = function () {
-                    var riderValid = "true";
+                    var riderValid;
                     if ($scope.planDetailDto) {
                         if ($scope.planDetailDto.riderDetails) {
                             if ($scope.planDetailDto.riderDetails.length > 0) {
