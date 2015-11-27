@@ -383,8 +383,12 @@ public class ILProposalController {
     @RequestMapping(method = RequestMethod.GET, value = "/getclientid/{clientId}")
     @ApiOperation(httpMethod = "GET", value = "This call for edit proposal screen.")
     @ResponseBody
-    public ILClientDetailDto getClientId(@PathVariable("clientId") String clientId) {
-       return ilClientService.findClientDetailByClientId(clientId);
+    public ResponseEntity<Result> getClientId(@PathVariable("clientId") String clientId) {
+        ILClientDetailDto ilClientDetailDto  = ilClientService.findClientDetailByClientId(clientId);
+        if (ilClientDetailDto!=null){
+            return new ResponseEntity(Result.success("Client details Found",ilClientDetailDto),HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.failure("Client details Not Found"),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getproposalnumber/{proposalId}")

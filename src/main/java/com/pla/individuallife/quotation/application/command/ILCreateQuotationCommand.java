@@ -40,6 +40,8 @@ public class ILCreateQuotationCommand {
 
     private String opportunityId;
 
+    private String clientId;
+
     private UserDetails userDetails;
 
 }

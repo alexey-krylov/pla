@@ -132,7 +132,7 @@
                                         <label class="control-label">Client ID</label>
                                         <div class="input-group">
                                                 <input type="text" class="form-control input-sm" ng-minlength="12" maxlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/"
-                                                        name="clientId" ng-disabled="uneditable" ng-model="proposedAssured.clientId"/>
+                                                        name="clientId" ng-blur="searchProposedAssuredByClientId()" ng-disabled="uneditable" ng-model="proposedAssured.clientId"/>
                                                 <div class="input-group-btn">
                                                     <button type="button" class="btn btn-default btn-sm" ng-click="searchProposedAssuredByClientId()"
                                                             ng-disabled="uneditable">
@@ -564,7 +564,6 @@
                                                 proposedAssured="proposedAssured"></policyterm>
                                 </div>
                                 <table class="table table-bordered">
-                                    {{isRiderValid()}} {{planDetailDto.riderDetails.length}}
                                     <p style="color:red;margin-left: 10px;" ng-show="isRiderValid()">
                                         Please Fill the PartialFilled Row.
                                     </p>
@@ -635,6 +634,28 @@
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
+                                    <label>Total Annual Fee</label>
+                                    <input type="text" class="form-control input-sm" readonly="true"
+                                           ng-model="premiumData.annualFee"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Semi-Annual Fee</label>
+                                    <input type="text" class="form-control input-sm" readonly="true"
+                                           ng-model="premiumData.semiAnnualFee"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Quarterly Fee</label>
+                                    <input type="text" class="form-control input-sm" readonly="true"
+                                           ng-model="premiumData.quarterlyFee"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Monthly Fee</label>
+                                    <input type="text" class="form-control input-sm" readonly="true"
+                                           ng-model="premiumData.monthlyFee"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
                                     <label>Total Annual Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
                                            ng-model="premiumData.annualPremium"/>
@@ -658,28 +679,6 @@
                                     <label>Total Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
                                            ng-model="premiumData.totalPremium"/>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label>Total Annual Fee</label>
-                                    <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.annualFee"/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Semi-Annual Fee</label>
-                                    <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.semiAnnualFee"/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Quarterly Fee</label>
-                                    <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.quarterlyFee"/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Monthly Fee</label>
-                                    <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.monthlyFee"/>
                                 </div>
                             </div>
                         </div>

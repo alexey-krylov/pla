@@ -592,6 +592,68 @@
                                 </div>
                             </div>
 
+                            <div class="panel panel-default animate-switch" ng-switch-when="SINGLE_SPECIFIED_AGES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Premium Payment Term Values</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <!--<div class="control-group col-md-3">
+                                        <label class="control-label" for="groupTerm">Premium Payment Cutoff Age</label>
+                                        <div class="controls">
+                                            <input type="number" ng-pattern="onlyNumbers" class="form-control col-sm-3"
+                                                   ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"/>
+                                        </div>
+                                    </div>-->
+                                    <div class="control-group required col-md-9">
+                                        <label class="control-label">Payment Terms</label>
+
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg" name="validTerms"
+                                                        ng-model="plan.premiumTerm.validTerms"
+                                                        min-tags="1" placeholder="Add a number"
+                                                        allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step4.validTerms.$dirty &amp;&amp; step4.validTerms.$invalid">
+                                                <small class="error" ng-show="step4.validTerms.$error.minTags">
+                                                    Premium Terms are required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default animate-switch" ng-switch-when="SINGLE_SPECIFIED_VALUES">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Premium Payment Term Values</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <!--<div class="control-group col-md-3">
+                                        <label class="control-label" for="groupTerm">Premium Payment Cutoff Age</label>
+                                        <div class="controls">
+                                            <input type="number" ng-pattern="onlyNumbers" class="form-control col-sm-3"
+                                                   ng-model="plan.premiumTerm.maxMaturityAge" name="cutoffage"/>
+                                        </div>
+                                    </div>-->
+                                    <div class="control-group required col-md-9">
+                                        <label class="control-label">Payment Terms</label>
+
+                                        <div class="controls">
+                                            <tags-input class="ti-input-lg" name="validTerms"
+                                                        ng-model="plan.premiumTerm.validTerms"
+                                                        min-tags="1" placeholder="Add a number"
+                                                        allow-leftover-text="false"
+                                                        allowed-tags-pattern="^[0-9]+$"></tags-input>
+                                            <div class="error" ng-show="step4.validTerms.$dirty &amp;&amp; step4.validTerms.$invalid">
+                                                <small class="error" ng-show="step4.validTerms.$error.minTags">
+                                                    Premium Terms are required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="panel panel-default animate-switch" ng-switch-when="SPECIFIED_AGES">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Premium Payment Term Age</h3>

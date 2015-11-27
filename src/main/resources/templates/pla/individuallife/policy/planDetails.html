@@ -188,6 +188,7 @@
                 <div class="error" ng-messages="step3.sumAssured.$error">
                     <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
+                   <!-- <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.</small>-->
                 </div>
             </div>
             <div ng-switch-when="DERIVED">

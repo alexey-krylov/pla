@@ -247,8 +247,8 @@ app.directive('coverageCheck', function () {
     }
 });
 
-app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
-    function ($scope, plan, activeCoverages) {
+app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages','$http',
+    function ($scope, plan, activeCoverages,$http) {
         $scope.plan = plan;
         $scope.coverages = activeCoverages;
 
@@ -294,11 +294,11 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
                 var launchdate=moment(newVal).format("YYYY-MM-DD");
                 var todayDate=moment().format("YYYY-MM-DD");
                 if(moment(todayDate).diff(launchdate) >= 0){
-                    alert('today is greater or same..');
+                    //alert('today is greater or same..');
                     $scope.dateWithDraw =moment().add(1,'days').format("YYYY-MM-DD");
                 }
                 else{
-                    alert('today is smaller..');
+                    //alert('today is smaller..');
                     $scope.dateWithDraw =moment(launchdate).add(1,'days').format("YYYY-MM-DD");
                 }
             }
@@ -306,9 +306,20 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages',
         $scope.updateWithdrawalDate=function(){
             if (moment($scope.plan.planDetail.withdrawalDate, 'dd/mm/yyyy').isValid()) {
                 var withdrawalDate = moment($scope.plan.planDetail.withdrawalDate).format('YYYY-MM-DDTHH:mm:ss+0530');
+                $scope.plan.planDetail.withdrawalDate=withdrawalDate;
             }
             else {
             }
+            var request={
+                "planId":$scope.plan.planId,
+                "withdrawalDate":$scope.plan.planDetail.withdrawalDate
+            }
+            console.log('WithDrawDate Request..'+JSON.stringify(request));
+            $http.post('updatewithdrawaldate' + request)
+                .success(function (response) {
+                }).error(function (response) {
+                });
+
         }
 
         $scope.getBenefitName = function (coverageId, benefitId) {

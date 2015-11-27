@@ -949,16 +949,20 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 if (newVal == 'QUARTERLY') {
 
                     $scope.premiumPaymentDetails.premiumFrequencyPayable = $scope.premiumResponse.quarterlyPremium;
+                    $scope.premiumPaymentDetails.policyFee = $scope.premiumResponse.quarterlyFee;
                 }
                 else if (newVal == 'ANNUALLY') {
                     $scope.premiumPaymentDetails.premiumFrequencyPayable = $scope.premiumResponse.annualPremium;
+                    $scope.premiumPaymentDetails.policyFee = $scope.premiumResponse.annualFee;
                 }
                 else if (newVal == 'SEMI_ANNUALLY') {
                     $scope.premiumPaymentDetails.premiumFrequencyPayable = $scope.premiumResponse.semiannualPremium;
+                    $scope.premiumPaymentDetails.policyFee = $scope.premiumResponse.semiAnnualFee;
                 }
 
                 else if (newVal == 'MONTHLY') {
                     $scope.premiumPaymentDetails.premiumFrequencyPayable = $scope.premiumResponse.monthlyPremium;
+                    $scope.premiumPaymentDetails.policyFee = $scope.premiumResponse.monthlyFee;
                 }
 
             }
