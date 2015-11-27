@@ -387,6 +387,12 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return optionalCoverages;
     }
 
+    public Plan updateWithdrawalDate(DateTime withdrawalDate){
+        this.planDetail.withdrawalDate = withdrawalDate;
+        super.registerEvent(new PlanWithdrawnEvent(planId, withdrawalDate));
+        return this;
+    }
+
     public void withdrawPlan() {
         this.status = PlanStatus.WITHDRAWN;
         this.planDetail.setWithdrawalDate(DateTime.now());

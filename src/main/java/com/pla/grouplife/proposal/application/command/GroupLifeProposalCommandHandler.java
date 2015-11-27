@@ -1,21 +1,18 @@
 package com.pla.grouplife.proposal.application.command;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
-import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.domain.model.GLProposalApprover;
 import com.pla.grouplife.proposal.domain.model.GLProposalProcessor;
-import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
-import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalRoleAdapter;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalService;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.proposal.query.GLProposalFinder;
 import com.pla.grouplife.proposal.repository.GlProposalRepository;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
+import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.util.GLInsuredFactory;
@@ -44,6 +41,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by User on 6/25/2015.
@@ -158,25 +156,36 @@ public class GroupLifeProposalCommandHandler {
         groupLifeProposal = groupLifeProposal.submitForApproval(DateTime.now(), submitGLProposalCommand.getUserDetails().getUsername(), submitGLProposalCommand.getComment());
         List<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = glProposalService.findMandatoryDocuments(submitGLProposalCommand.getProposalId());
         Set<GLProposerDocument> proposerDocuments  = groupLifeProposal.getProposerDocuments();
-        Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<GLProposerDocument, String>() {
-            @Override
-            public String apply(GLProposerDocument glProposerDocument) {
-                return glProposerDocument.getDocumentId();
-            }
-        }).collect(Collectors.toSet());
-        glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
-            @Override
-            public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
-                return !documentIds.contains(glProposalMandatoryDocumentDto.getDocumentId());
-            }
-        }).map(new Function<GLProposalMandatoryDocumentDto, GLProposerDocument>() {
-            @Override
-            public GLProposerDocument apply(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
-                proposerDocuments.add(new GLProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(),true,false));
-                return null;
-            }
-        }).collect(Collectors.toSet());
-        groupLifeProposal = groupLifeProposal.updateWithDocuments(proposerDocuments);
+        if (isNotEmpty(proposerDocuments)) {
+            Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<GLProposerDocument, String>() {
+                @Override
+                public String apply(GLProposerDocument glProposerDocument) {
+                    return glProposerDocument.getDocumentId();
+                }
+            }).collect(Collectors.toSet());
+            glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
+                @Override
+                public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                    return !documentIds.contains(glProposalMandatoryDocumentDto.getDocumentId());
+                }
+            }).map(new Function<GLProposalMandatoryDocumentDto, GLProposerDocument>() {
+                @Override
+                public GLProposerDocument apply(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                    proposerDocuments.add(new GLProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(), true, false));
+                    return null;
+                }
+            }).collect(Collectors.toSet());
+            groupLifeProposal = groupLifeProposal.updateWithDocuments(proposerDocuments);
+        }
+        else {
+            Set<GLProposerDocument> ilProposerDocuments = glProposalMandatoryDocumentDtos.parallelStream().map(new Function<GLProposalMandatoryDocumentDto, GLProposerDocument>() {
+                @Override
+                public GLProposerDocument apply(GLProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
+                    return  new GLProposerDocument(ilProposalMandatoryDocumentDto.getDocumentId(), true, false);
+                }
+            }).collect(Collectors.toSet());
+            groupLifeProposal = groupLifeProposal.updateWithDocuments(ilProposerDocuments);
+        }
         return groupLifeProposal.getIdentifier().getProposalId();
     }
 

@@ -4,6 +4,7 @@ import com.pla.core.domain.exception.PlanException;
 import com.pla.core.presentation.command.CreatePlanCommand;
 import com.pla.core.presentation.command.PlanCommandGateway;
 import com.pla.core.presentation.command.UpdatePlanCommand;
+import com.pla.core.presentation.command.UpdatePlanWithdrawalDateCommand;
 import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.axonframework.commandhandling.CommandBus;
@@ -11,7 +12,9 @@ import org.axonframework.commandhandling.gateway.GatewayProxyFactory;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -178,6 +181,12 @@ public class PlanSetupController {
         return plan;
     }
 
+    @RequestMapping(value = "/updatewithdrawaldate",method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> updateWithdrawalDate(@RequestBody UpdatePlanWithdrawalDateCommand updatePlanWithdrawalDateCommand) throws PlanException {
+        planCommandGateway.updatePlanWithdrawalDate(updatePlanWithdrawalDateCommand);
+        return new ResponseEntity(Result.success("Updated successfully"), HttpStatus.OK);
+    }
 
     @ExceptionHandler
     @ResponseBody
