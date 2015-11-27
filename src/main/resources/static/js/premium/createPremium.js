@@ -75,5 +75,14 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         }
     });
 
+    $scope.isDownloadTemplateEnabled=function(){
+
+        if($scope.createPremium.planId && $scope.createPremium.definedFor && $scope.createPremium.premiumFactor){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 }]);
