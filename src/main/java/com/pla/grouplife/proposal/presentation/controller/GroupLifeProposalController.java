@@ -323,7 +323,7 @@ public class GroupLifeProposalController {
     public Result uploadInsuredDetail(UploadInsuredDetailDto uploadInsuredDetailDto, HttpServletRequest request) throws IOException {
         MultipartFile file = uploadInsuredDetailDto.getFile();
         if (!("application/x-ms-excel".equals(file.getContentType())|| "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
-            return Result.failure("Uploaded file is not valid excel");
+            return Result.failure("Uploaded file is not valid excel",Boolean.FALSE);
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
@@ -335,14 +335,14 @@ public class GroupLifeProposalController {
                 insuredTemplateWorkbook.write(fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
-                return Result.failure("Uploaded Insured template is not valid.Please download to check the errors");
+                return Result.failure("Uploaded Insured template is not valid.Please download to check the errors", Boolean.TRUE);
             }
             List<InsuredDto> insuredDtos = glProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getProposalId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
             String quotationId = commandGateway.sendAndWait(new UpdateGLProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory()));
             return Result.success("Insured detail uploaded successfully", quotationId);
         } catch (Exception e) {
             e.printStackTrace();
-            return Result.failure(e.getMessage());
+            return Result.failure(e.getMessage(),Boolean.FALSE);
         }
     }
 
