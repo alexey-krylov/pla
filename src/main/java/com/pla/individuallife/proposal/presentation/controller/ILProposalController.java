@@ -460,6 +460,8 @@ public class ILProposalController {
             dto = proposalFinder.getPremiumDetail(proposalId);
         } catch (IllegalArgumentException iag) {
             return new ResponseEntity(Result.failure(iag.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e){
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(dto, HttpStatus.OK);
     }

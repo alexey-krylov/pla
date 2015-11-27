@@ -64,7 +64,6 @@ public class GroupLifeQuotationController {
         this.glQuotationFinder = glQuotationFinder;
         this.mailService = mailService;
         this.clientProvider = clientProvider;
-
     }
 
     @RequestMapping(value = "/creategrouplifequotation", method = RequestMethod.GET)

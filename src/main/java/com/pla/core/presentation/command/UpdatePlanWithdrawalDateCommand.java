@@ -1,7 +1,9 @@
 package com.pla.core.presentation.command;
 
 import com.pla.sharedkernel.identifier.PlanId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
@@ -10,6 +12,8 @@ import org.joda.time.DateTime;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdatePlanWithdrawalDateCommand {
 
     private PlanId planId;

@@ -183,7 +183,7 @@ public class PlanSetupController {
 
     @RequestMapping(value = "/updatewithdrawaldate",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Result> updateWithdrawalDate(@RequestBody UpdatePlanWithdrawalDateCommand updatePlanWithdrawalDateCommand) throws PlanException {
+    public ResponseEntity<Result> updateWithdrawalDate(@RequestBody @Valid UpdatePlanWithdrawalDateCommand updatePlanWithdrawalDateCommand) throws PlanException {
         planCommandGateway.updatePlanWithdrawalDate(updatePlanWithdrawalDateCommand);
         return new ResponseEntity(Result.success("Updated successfully"), HttpStatus.OK);
     }

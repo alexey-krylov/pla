@@ -16,10 +16,7 @@ import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -139,7 +136,7 @@ public class PlanCommandHandler {
         System.out.println(command.getPremiumTerm());
 
         planBuilder.withPremiumTerm(command.getPremiumTermType(),
-                command.getPremiumTermType().equals(PremiumTermType.SPECIFIED_AGES)?command.getPremiumTerm().getMaturityAges():command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
+                Arrays.asList(PremiumTermType.SPECIFIED_AGES,PremiumTermType.SINGLE_SPECIFIED_AGES).contains(command.getPremiumTermType())?command.getPremiumTerm().getMaturityAges():command.getPremiumTerm().getValidTerms(), command.getPremiumTerm().getMaxMaturityAge());
         planBuilder.withPlanCoverages(coverageSet);
         return planBuilder;
     }
