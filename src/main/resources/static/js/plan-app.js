@@ -315,7 +315,7 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages','$http
                 "withdrawalDate":$scope.plan.planDetail.withdrawalDate
             }
             console.log('WithDrawDate Request..'+JSON.stringify(request));
-            $http.post('updatewithdrawaldate' + request)
+            $http.post('plan/updatewithdrawaldate',request)
                 .success(function (response) {
                 }).error(function (response) {
                 });
