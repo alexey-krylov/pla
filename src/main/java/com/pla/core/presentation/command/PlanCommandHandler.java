@@ -175,4 +175,10 @@ public class PlanCommandHandler {
         Plan plan = planMongoRepository.load(command.getPlanId());
         plan.withdrawPlan();
     }
+
+    @CommandHandler
+    public void updatePlanWithdrawalDate(UpdatePlanWithdrawalDateCommand updatePlanWithdrawalDateCommand){
+        Plan plan = planMongoRepository.load(updatePlanWithdrawalDateCommand.getPlanId());
+        plan.updateWithdrawalDate(updatePlanWithdrawalDateCommand.getWithdrawalDate());
+    }
 }

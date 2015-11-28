@@ -390,7 +390,23 @@
                     }
 
                 });
-
+                $scope.searchProposedAssuredByClientId=function(){
+                    //proposedAssured.clientId
+                    $http.get('/pla/individuallife/proposal/getclientid/' + $scope.proposedAssured.clientId)
+                        .success(function (response) {
+                            $scope.serverError = false;
+                            $scope.proposedAssured.title=response.data.title;
+                            $scope.proposedAssured.surname=response.data.surname;
+                            $scope.proposedAssured.firstName=response.data.firstName;
+                            $scope.proposedAssured.nrc=response.data.nrc;
+                            $scope.proposedAssured.opportunityId=response.opportunityId;
+                        }).error(function (response, status, headers, config) {
+                            $scope.serverError = true;
+                            $scope.serverErrMsg = response.message;
+                            $scope.proposedAssured={};
+                            $scope.proposedAssured.clientId='';
+                        });
+                }
                 $scope.originalProposer = {};
                 if ($scope.quotationId) {
                     $scope.uneditable = true;

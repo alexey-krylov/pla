@@ -53,7 +53,8 @@ public class ILQuotationCommandHandler {
                 .withFirstName(cmd.getFirstName())
                 .withSurname(cmd.getSurname())
                 .withNrcNumber(cmd.getNrc())
-                .withTitle(cmd.getTitle()).build();
+                .withTitle(cmd.getTitle()).
+                        withClientId(cmd.getClientId()).build();
         quotationService.createQuotation(quotationProcessor, quotationId, new AgentId(cmd.getAgentId()),
                 proposedAssured, new PlanId(cmd.getPlanId()),new OpportunityId(cmd.getOpportunityId()));
         return quotationId;
@@ -79,7 +80,7 @@ public class ILQuotationCommandHandler {
     @CommandHandler
     public QuotationId updateProposedAssuredDetail(ILUpdateQuotationWithAssuredCommand cmd) {
 
-            ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
+        ILQuotation quotation = ilQuotationRepository.load(new QuotationId(cmd.getQuotationId()));
         ILQuotationProcessor quotationProcessor = ILQuotationRoleAdapter.userToQuotationProcessor(cmd.getUserDetails());
         ProposedAssuredDto dto = cmd.getProposedAssured();
         ProposedAssured proposedAssured = ProposedAssured.proposedAssuredBuilder()

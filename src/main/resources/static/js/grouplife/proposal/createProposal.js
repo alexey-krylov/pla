@@ -155,7 +155,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $upload.upload({
                             url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentName, proposalId: $scope.proposalId,mandatory:false},
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:false},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -608,18 +608,19 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }).success(function (data, status, headers, config) {
                   //  console.log(data.status);
                     if (data.status == "200") {
-                       // alert("200 successfull");
-                       /* $http.get("/pla/grouplife/proposal/getpremiumdetail/" + $scope.proposalId)
-                            .success(function () {
+                        if (data.id) {
+                            $scope.proposalId = data.id;
+                            $timeout($scope.updatePremiumDetail($scope.proposalId), 500);
+                            saveStep();
 
-                            })*/
-                        $scope.proposalId = data.id;
-                        $timeout($scope.updatePremiumDetail($scope.proposalId), 500);
+                        }
+                        if (data.data) {
+                            $scope.showDownload = false;
 
-                        saveStep();
-                        $scope.showDownload = true;
-                    }else{
-                        $scope.showDownload = false;
+                        } else {
+                            $scope.showDownload = true;
+
+                        }
                     }
                 });
             };

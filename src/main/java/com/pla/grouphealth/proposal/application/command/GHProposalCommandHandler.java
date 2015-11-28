@@ -42,6 +42,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 6/26/2015.
@@ -155,26 +156,37 @@ public class GHProposalCommandHandler {
         groupHealthProposal = groupHealthProposal.submitForApproval(DateTime.now(), submitGHProposalCommand.getUserDetails().getUsername(), submitGHProposalCommand.getComment());
         Set<GHProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = ghProposalService.findMandatoryDocuments(submitGHProposalCommand.getProposalId());
         Set<GHProposerDocument> proposerDocuments  = groupHealthProposal.getProposerDocuments();
-        Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<GHProposerDocument, String>() {
-            @Override
-            public String apply(GHProposerDocument glProposerDocument) {
-                return glProposerDocument.getDocumentId();
-            }
-        }).collect(Collectors.toSet());
+       if (isNotEmpty(proposerDocuments)) {
+           Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<GHProposerDocument, String>() {
+               @Override
+               public String apply(GHProposerDocument glProposerDocument) {
+                   return glProposerDocument.getDocumentId();
+               }
+           }).collect(Collectors.toSet());
 
-        glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GHProposalMandatoryDocumentDto>() {
-            @Override
-            public boolean test(GHProposalMandatoryDocumentDto ghProposalMandatoryDocumentDto) {
-                return !(documentIds.contains(ghProposalMandatoryDocumentDto.getDocumentId()));
-            }
-        }).map(new Function<GHProposalMandatoryDocumentDto, GHProposerDocument>() {
-            @Override
-            public GHProposerDocument apply(GHProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
-                proposerDocuments.add(new GHProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(),true,true));
-                return null;
-            }
-        }).collect(Collectors.toSet());
-        groupHealthProposal = groupHealthProposal.updateWithDocuments(proposerDocuments);
+           glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GHProposalMandatoryDocumentDto>() {
+               @Override
+               public boolean test(GHProposalMandatoryDocumentDto ghProposalMandatoryDocumentDto) {
+                   return !(documentIds.contains(ghProposalMandatoryDocumentDto.getDocumentId()));
+               }
+           }).map(new Function<GHProposalMandatoryDocumentDto, GHProposerDocument>() {
+               @Override
+               public GHProposerDocument apply(GHProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                   proposerDocuments.add(new GHProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(), true, true));
+                   return null;
+               }
+           }).collect(Collectors.toSet());
+           groupHealthProposal = groupHealthProposal.updateWithDocuments(proposerDocuments);
+       }
+        else {
+           Set<GHProposerDocument> ilProposerDocuments = glProposalMandatoryDocumentDtos.parallelStream().map(new Function<GHProposalMandatoryDocumentDto, GHProposerDocument>() {
+               @Override
+               public GHProposerDocument apply(GHProposalMandatoryDocumentDto ilProposalMandatoryDocumentDto) {
+                   return  new GHProposerDocument(ilProposalMandatoryDocumentDto.getDocumentId(), true, false);
+               }
+           }).collect(Collectors.toSet());
+           groupHealthProposal = groupHealthProposal.updateWithDocuments(ilProposerDocuments);
+       }
         return groupHealthProposal.getIdentifier().getProposalId();
     }
 

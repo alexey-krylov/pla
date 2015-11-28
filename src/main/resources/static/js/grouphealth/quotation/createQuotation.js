@@ -273,14 +273,22 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
-                        $scope.quotationId = data.id;
-                        $timeout($scope.updatePremiumDetail($scope.quotationId), 500);
-                        saveStep();
-                        $scope.showDownload = true;
-                    } else {
-                        $scope.showDownload = false;
-                        // console.log($scope.showDownload);
+                        if(data.id) {
+                            $scope.quotationId = data.id;
+                            $timeout($scope.updatePremiumDetail($scope.quotationId), 500);
+                            saveStep();
+
+                        }
+                        if(data.data){
+                            $scope.showDownload = false;
+
+                        }else{
+                            $scope.showDownload = true;
+
+                        }
+
                     }
+
 
                 });
             };

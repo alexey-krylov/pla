@@ -97,7 +97,7 @@ public class Insured {
     }
 
     public BigDecimal getBasicAnnualPremium() {
-        BigDecimal basicAnnualPremium = planPremiumDetail!=null?planPremiumDetail.getPlanId()!=null?planPremiumDetail.getPremiumAmount():BigDecimal.ONE: BigDecimal.ONE;
+        BigDecimal basicAnnualPremium = planPremiumDetail!=null?planPremiumDetail.getPlanId()!=null?planPremiumDetail.getPremiumAmount():BigDecimal.ZERO: BigDecimal.ZERO;
         if (isNotEmpty(coveragePremiumDetails)) {
             for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
                 basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
