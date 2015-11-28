@@ -19,6 +19,7 @@ import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -65,7 +66,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             this.status = PlanStatus.DRAFT;
             copyPropertiesFromPlanBuilder(planBuilder);
             if (planBuilder.getPlanDetail() != null) {
-                super.registerEvent(new PlanCreatedEvent(planId, planDetail.getLaunchDate()));
+                super.registerEvent(new PlanCreatedEvent(planId, new DateTime(planDetail.getLaunchDate(), DateTimeZone.getDefault())));
                 if (this.planDetail.withdrawalDate != null) {
                     super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
                 }
@@ -114,7 +115,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
-            super.registerEvent(new PlanUpdatedEvent(planId, this.planDetail.getLaunchDate()));
+            super.registerEvent(new PlanUpdatedEvent(planId, new DateTime(planDetail.getLaunchDate(), DateTimeZone.getDefault())));
             if (this.planDetail.withdrawalDate != null) {
                 super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
             }

@@ -123,7 +123,7 @@ public class QuotationProposalUtilityService {
     public static boolean isPremiumGreaterThenMinimumConfiguredPremiumGH(Set<GHInsured> insuredDtos, int minimumPremium) {
         BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
         for (GHInsured ghInsured : insuredDtos) {
-            totalPremiumInExcel = totalPremiumInExcel.add(getPremiumDetail(ghInsured.getPlanPremiumDetail().getPremiumAmount(), ghInsured.getNoOfAssured()));
+            totalPremiumInExcel = totalPremiumInExcel.add(ghInsured.getPlanPremiumDetail().getPremiumAmount());
         }
         if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
             return Boolean.TRUE;
@@ -133,7 +133,7 @@ public class QuotationProposalUtilityService {
     public static boolean isPremiumGreaterThenMinimumConfiguredPremiumGL(Set<Insured> insuredDtos, int minimumPremium) {
         BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
         for (Insured ghInsured : insuredDtos) {
-            totalPremiumInExcel = totalPremiumInExcel.add(getPremiumDetail(ghInsured.getPlanPremiumDetail().getPremiumAmount(), ghInsured.getNoOfAssured()));
+            totalPremiumInExcel = totalPremiumInExcel.add(ghInsured.getPlanPremiumDetail().getPremiumAmount());
         }
         if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
             return Boolean.TRUE;
@@ -153,9 +153,9 @@ public class QuotationProposalUtilityService {
         int totalNumberOfPersonInExcel = 0;
         for (GHInsured ghInsured : insuredDtos) {
             if(ghInsured.getNoOfAssured() != null){
-                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
+                totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
             } else {
-                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += 1;
+                totalNumberOfPersonInExcel += 1;
             }
         }
         if(totalNumberOfPersonInExcel >= minimumConfiguredPersons)
@@ -167,9 +167,9 @@ public class QuotationProposalUtilityService {
         int totalNumberOfPersonInExcel = 0;
         for (Insured ghInsured : insuredDtos) {
             if(ghInsured.getNoOfAssured() != null){
-                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
+                totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
             } else {
-                totalNumberOfPersonInExcel = totalNumberOfPersonInExcel += 1;
+                totalNumberOfPersonInExcel += 1;
             }
         }
         if(totalNumberOfPersonInExcel >= minimumConfiguredPersons)
