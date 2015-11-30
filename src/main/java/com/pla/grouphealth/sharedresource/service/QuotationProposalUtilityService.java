@@ -177,53 +177,44 @@ public class QuotationProposalUtilityService {
         return Boolean.FALSE;
     }
 
-    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(GroupHealthQuotation groupHealthQuotation, ProductLineGeneralInformation productLineInformation) {
+    public static boolean validateIfLessThanMinimumNoOfPersonsForGHQuotation(GroupHealthQuotation groupHealthQuotation, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthQuotation.getInsureds(), minimumPremium);
-        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
-        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
-    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(GroupLifeQuotation groupLifeQuotation, ProductLineGeneralInformation productLineInformation) {
+    public static boolean validateIfLessThanMinimumPremiumForGHQuotation(GroupHealthQuotation groupHealthQuotation, ProductLineGeneralInformation productLineInformation) {
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        return isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthQuotation.getInsureds(), minimumPremium);
+    }
+
+    public static boolean validateIfLessThanMinimumNoOfPersonsForGLQuotation(GroupLifeQuotation groupLifeQuotation, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeQuotation.getInsureds(), minimumPremium);
-        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
-        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
-    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(GroupHealthProposal groupHealthProposal, ProductLineGeneralInformation productLineInformation) {
+    public static boolean validateIfLessThanMinimumPremiumForGLQuotation(GroupLifeQuotation groupLifeQuotation, ProductLineGeneralInformation productLineInformation) {
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        return isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeQuotation.getInsureds(), minimumPremium);
+    }
+
+    public static boolean validateIfLessThanMinimumNoOfPersonsForGHProposal(GroupHealthProposal groupHealthProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthProposal.getInsureds(), minimumPremium);
-        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
-        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
+        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
-    public static Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(GroupLifeProposal groupLifeProposal, ProductLineGeneralInformation productLineInformation) {
+    public static boolean validateIfLessThanMinimumPremiumForGHProposal(GroupHealthProposal groupHealthProposal, ProductLineGeneralInformation productLineInformation) {
+        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
+        return isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthProposal.getInsureds(), minimumPremium);
+    }
+
+    public static boolean validateIfLessThanMinimumNoOfPersonsForGLProposal(GroupLifeProposal groupLifeProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
+        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
+    }
+
+    public static boolean validateIfLessThanMinimumPremiumForGLProposal(GroupLifeProposal groupLifeProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        boolean isPremiumGreaterThenMinimumConfiguredPremium = isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeProposal.getInsureds(), minimumPremium);
-        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons = isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
-        return getResultMapIfLessThanMinimumPremiumOrNoOfPersons(isPremiumGreaterThenMinimumConfiguredPremium, isNoOfPersonsGreaterThenMinimumConfiguredPersons);
-    }
-
-    private static Map<String, Boolean> getResultMapIfLessThanMinimumPremiumOrNoOfPersons(boolean isPremiumGreaterThenMinimumConfiguredPremium, boolean isNoOfPersonsGreaterThenMinimumConfiguredPersons) {
-        Map<String, Boolean> result = getFalseFlagMap();
-        if(isPremiumGreaterThenMinimumConfiguredPremium)
-            result.put("isPremiumGreaterThenMinimumConfiguredPremium", Boolean.TRUE);
-        if(isNoOfPersonsGreaterThenMinimumConfiguredPersons)
-            result.put("isNoOfPersonsGreaterThenMinimumConfiguredPersons", Boolean.TRUE);
-        return result;
-    }
-
-
-    public static Map<String, Boolean> getFalseFlagMap(){
-        return new HashMap<String, Boolean>(){{
-            put("isPremiumGreaterThenMinimumConfiguredPremium",Boolean.FALSE);
-            put("isNoOfPersonsGreaterThenMinimumConfiguredPersons",Boolean.FALSE);
-        }};
+        return isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeProposal.getInsureds(), minimumPremium);
     }
 
     public static boolean checkIfSameOptionalCoverage(Map<Row, List<Row>> insuredDependentMap, List<String> headers) {

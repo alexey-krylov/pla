@@ -15,6 +15,7 @@ import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
+import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import net.sf.jasperreports.engine.JRException;
@@ -343,11 +344,28 @@ public class GroupHealthProposalController {
         }
     }
 
-    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal/{proposalId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGHProposal/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(@PathVariable("proposalId") String proposalId) {
-        return ghProposalService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(new ProposalId(proposalId));
+    public Result validateIfLessThanMinimumNoOfPersonsForGHProposal(@PathVariable("proposalId") String proposalId) {
+        try {
+            return ghProposalService.validateIfLessThanMinimumNoOfPersonsForGHProposal(new ProposalId(proposalId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
     }
+
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumForGHProposal/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result validateIfLessThanMinimumPremiumForGHProposal(@PathVariable("proposalId") String proposalId) {
+        try {
+            return ghProposalService.validateIfLessThanMinimumPremiumForGHProposal(new ProposalId(proposalId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
+    }
+
 
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody

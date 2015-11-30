@@ -366,10 +366,26 @@ public class GroupHealthQuotationController {
         return ghQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
-    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation/{quotationid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGHQuotation/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(@PathVariable("quotationid") String quotationId) {
-        return ghQuotationService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(new QuotationId(quotationId));
+    public Result validateIfLessThanMinimumNoOfPersonsForGHQuotation(@PathVariable("quotationid") String quotationId) {
+        try {
+            return ghQuotationService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(new QuotationId(quotationId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
+    }
+
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumForGHQuotation/{quotationid}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result validateIfLessThanMinimumPremiumForGHQuotation(@PathVariable("quotationid") String quotationId) {
+        try {
+            return ghQuotationService.validateIfLessThanMinimumPremiumForGHQuotation(new QuotationId(quotationId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
     }
 
     @RequestMapping(value = "/recalculatePremium", method = RequestMethod.POST)

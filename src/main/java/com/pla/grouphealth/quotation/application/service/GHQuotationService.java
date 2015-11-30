@@ -33,6 +33,7 @@ import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -43,7 +44,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -476,17 +476,47 @@ public class GHQuotationService {
         return glQuotationDtoList;
     }
 
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(QuotationId quotationId) {
+    public Result validateIfLessThanMinimumNoOfPersonsForGHQuotation(QuotationId quotationId) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(quotationId);
-        if(groupHealthQuotation == null && isEmpty(groupHealthQuotation.getInsureds())){
-            return getFalseFlagMap();
+        if(groupHealthQuotation == null){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
         }
         if(groupHealthQuotation != null && isEmpty(groupHealthQuotation.getInsureds())){
-            return getFalseFlagMap();
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
         }
+        Result result;
         ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
-        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHQuotation(groupHealthQuotation, productLineInformation);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH = QuotationProposalUtilityService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(groupHealthQuotation, productLineInformation);
+        if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Number of Members is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
+    }
 
+
+    public Result validateIfLessThanMinimumPremiumForGHQuotation(QuotationId quotationId) {
+        GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(quotationId);
+        if(groupHealthQuotation == null){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
+        }
+        if(groupHealthQuotation != null && isEmpty(groupHealthQuotation.getInsureds())){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
+        }
+        Result result;
+        ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
+        boolean isPremiumGreaterThenMinimumConfiguredPremiumGH = QuotationProposalUtilityService.validateIfLessThanMinimumPremiumForGHQuotation(groupHealthQuotation, productLineInformation);
+        if(isPremiumGreaterThenMinimumConfiguredPremiumGH){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Premium is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {

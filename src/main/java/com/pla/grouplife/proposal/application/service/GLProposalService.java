@@ -6,7 +6,6 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.query.MasterFinder;
-import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
 import com.pla.grouplife.proposal.application.command.GLRecalculatedInsuredPremiumCommand;
@@ -30,7 +29,6 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
-import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.*;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
@@ -42,7 +40,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -60,8 +58,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -639,17 +635,47 @@ public class GLProposalService {
         return mandatoryDocumentDtos;
     }
 
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(ProposalId proposalId) {
+    public Result validateIfLessThanMinimumNoOfPersonsForGLProposal(ProposalId proposalId) {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.findOne(proposalId);
-        if(groupLifeProposal == null && UtilValidator.isEmpty(groupLifeProposal.getInsureds())){
-            return getFalseFlagMap();
+        if(groupLifeProposal == null){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
-        if(groupLifeProposal != null && UtilValidator.isEmpty(groupLifeProposal.getInsureds())){
-            return getFalseFlagMap();
+        if(groupLifeProposal != null && isEmpty(groupLifeProposal.getInsureds())){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
+        Result result;
         ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
-        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(groupLifeProposal, productLineInformation);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL = QuotationProposalUtilityService.validateIfLessThanMinimumNoOfPersonsForGLProposal(groupLifeProposal, productLineInformation);
+        if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Number of Members is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
+    }
 
+
+    public Result validateIfLessThanMinimumPremiumForGLProposal(ProposalId proposalId) {
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.findOne(proposalId);
+        if(groupLifeProposal == null){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
+        }
+        if(groupLifeProposal != null && isEmpty(groupLifeProposal.getInsureds())){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
+        }
+        Result result;
+        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
+        boolean isPremiumGreaterThenMinimumConfiguredPremiumGL = QuotationProposalUtilityService.validateIfLessThanMinimumPremiumForGLProposal(groupLifeProposal, productLineInformation);
+        if(isPremiumGreaterThenMinimumConfiguredPremiumGL){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Premium is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {

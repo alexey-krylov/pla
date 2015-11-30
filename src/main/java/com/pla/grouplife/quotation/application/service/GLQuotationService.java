@@ -15,11 +15,8 @@ import com.pla.grouplife.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.quotation.repository.GlQuotationRepository;
 import com.pla.grouplife.sharedresource.dto.*;
-import com.pla.grouplife.sharedresource.dto.InsuredDto;
-import com.pla.grouplife.sharedresource.dto.PremiumDetailDto;
-import com.pla.grouplife.sharedresource.dto.ProposerDto;
 import com.pla.grouplife.sharedresource.model.vo.*;
-import com.pla.grouplife.sharedresource.service.*;
+import com.pla.grouplife.sharedresource.service.GLInsuredExcelGenerator;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
@@ -37,7 +34,7 @@ import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
-import org.nthdimenzion.utils.UtilValidator;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -48,7 +45,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
 import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -463,17 +459,47 @@ public class GLQuotationService {
         return glQuotationDtoList;
     }
 
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(QuotationId quotationId) {
-        GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(quotationId);
-        if(groupLifeQuotation == null && UtilValidator.isEmpty(groupLifeQuotation.getInsureds())){
-            return getFalseFlagMap();
+    public Result validateIfLessThanMinimumNoOfPersonsForGLQuotation(QuotationId quotationId) {
+        GroupLifeQuotation groupLifeQuotation =  glQuotationRepository.findOne(quotationId);
+        if(groupLifeQuotation == null){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
         }
-        if(groupLifeQuotation != null && UtilValidator.isEmpty(groupLifeQuotation.getInsureds())){
-            return getFalseFlagMap();
+        if(groupLifeQuotation != null && isEmpty(groupLifeQuotation.getInsureds())){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
         }
+        Result result;
         ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
-        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(groupLifeQuotation, productLineInformation);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH = QuotationProposalUtilityService.validateIfLessThanMinimumNoOfPersonsForGLQuotation(groupLifeQuotation, productLineInformation);
+        if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Number of Members is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
+    }
 
+
+    public Result validateIfLessThanMinimumPremiumForGLQuotation(QuotationId quotationId) {
+        GroupLifeQuotation groupLifeQuotation =  glQuotationRepository.findOne(quotationId);
+        if(groupLifeQuotation == null){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
+        }
+        if(groupLifeQuotation != null && isEmpty(groupLifeQuotation.getInsureds())){
+            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
+        }
+        Result result;
+        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
+        boolean isPremiumGreaterThenMinimumConfiguredPremiumGH = QuotationProposalUtilityService.validateIfLessThanMinimumPremiumForGLQuotation(groupLifeQuotation, productLineInformation);
+        if(isPremiumGreaterThenMinimumConfiguredPremiumGH){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Premium is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {

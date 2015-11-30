@@ -346,11 +346,28 @@ public class GroupLifeProposalController {
         }
     }
 
-    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal/{proposalId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGLProposal/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(@PathVariable("proposalId") String proposalId) {
-        return glProposalService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLProposal(new ProposalId(proposalId));
+    public Result validateIfLessThanMinimumNoOfPersonsForGLProposal(@PathVariable("proposalId") String proposalId) {
+        try {
+            return glProposalService.validateIfLessThanMinimumNoOfPersonsForGLProposal(new ProposalId(proposalId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
     }
+
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumForGLProposal/{proposalId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result validateIfLessThanMinimumPremiumForGLProposal(@PathVariable("proposalId") String proposalId) {
+        try {
+            return glProposalService.validateIfLessThanMinimumPremiumForGLProposal(new ProposalId(proposalId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
+    }
+
 
     @RequestMapping(value = "/getpremiumdetail/{proposalId}", method = RequestMethod.GET)
     @ResponseBody

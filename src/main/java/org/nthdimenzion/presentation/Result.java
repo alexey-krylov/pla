@@ -107,6 +107,9 @@ public final class Result {
         return new Result(failureMsg, RESULT_TYPE.ERROR);
     }
 
+    public void setData(Object data) {
+        this.data = data;
+    }
 
     @Override
     public String toString() {

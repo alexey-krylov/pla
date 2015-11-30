@@ -360,10 +360,26 @@ public class GroupLifeQuotationController {
         }
     }
 
-    @RequestMapping(value = "/validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation/{quotationid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGLQuotation/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(@PathVariable("quotationid") String quotationId) {
-        return glQuotationService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGLQuotation(new QuotationId(quotationId));
+    public Result validateIfLessThanMinimumNoOfPersonsForGLQuotation(@PathVariable("quotationid") String quotationId) {
+        try {
+            return glQuotationService.validateIfLessThanMinimumNoOfPersonsForGLQuotation(new QuotationId(quotationId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
+    }
+
+    @RequestMapping(value = "/validateIfLessThanMinimumPremiumForGLQuotation/{quotationid}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result validateIfLessThanMinimumPremiumForGLQuotation(@PathVariable("quotationid") String quotationId) {
+        try {
+            return glQuotationService.validateIfLessThanMinimumPremiumForGLQuotation(new QuotationId(quotationId));
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
     }
 
     @RequestMapping(value = "/getpremiumdetail/{quotationid}", method = RequestMethod.GET)

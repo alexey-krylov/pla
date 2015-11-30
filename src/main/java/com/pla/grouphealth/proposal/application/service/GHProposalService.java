@@ -16,7 +16,6 @@ import com.pla.grouphealth.proposal.presentation.dto.SearchGHProposalDto;
 import com.pla.grouphealth.proposal.query.GHProposalFinder;
 import com.pla.grouphealth.proposal.repository.GHProposalRepository;
 import com.pla.grouphealth.proposal.repository.GHProposalStatusAuditRepository;
-import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.quotation.presentation.dto.PlanDetailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.*;
@@ -29,7 +28,6 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
-import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.identifier.*;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
@@ -41,7 +39,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -51,13 +49,14 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getFalseFlagMap;
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -626,17 +625,47 @@ public class GHProposalService {
         return mandatoryDocumentDtos;
     }
 
-    public Map<String, Boolean> validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(ProposalId proposalId) {
+    public Result validateIfLessThanMinimumNoOfPersonsForGHProposal(ProposalId proposalId) {
         GroupHealthProposal groupHealthProposal = ghProposalRepository.findOne(proposalId);
-        if(groupHealthProposal == null && UtilValidator.isEmpty(groupHealthProposal.getInsureds())){
-            return getFalseFlagMap();
+        if(groupHealthProposal == null){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
-        if(groupHealthProposal != null && UtilValidator.isEmpty(groupHealthProposal.getInsureds())){
-            return getFalseFlagMap();
+        if(groupHealthProposal != null && isEmpty(groupHealthProposal.getInsureds())){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
+        Result result;
         ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
-        return QuotationProposalUtilityService.validateIfLessThanMinimumPremiumOrNoOfPersonsForGHProposal(groupHealthProposal, productLineInformation);
+        boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH = QuotationProposalUtilityService.validateIfLessThanMinimumNoOfPersonsForGHProposal(groupHealthProposal, productLineInformation);
+        if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Number of Members is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
+    }
 
+
+    public Result validateIfLessThanMinimumPremiumForGHProposal(ProposalId proposalId) {
+        GroupHealthProposal groupHealthProposal = ghProposalRepository.findOne(proposalId);
+        if(groupHealthProposal == null){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
+        }
+        if(groupHealthProposal != null && isEmpty(groupHealthProposal.getInsureds())){
+            return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
+        }
+        Result result;
+        ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
+        boolean isPremiumGreaterThenMinimumConfiguredPremiumGH = QuotationProposalUtilityService.validateIfLessThanMinimumPremiumForGHProposal(groupHealthProposal, productLineInformation);
+        if(isPremiumGreaterThenMinimumConfiguredPremiumGH){
+            result = new Result("", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.TRUE);
+        } else {
+            result = new Result("Total Premium is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
+            result.setData(Boolean.FALSE);
+        }
+        return result;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
