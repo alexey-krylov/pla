@@ -334,7 +334,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 console.log(JSON.stringify(request));
                 $http.post('/pla/quotation/grouphealth/savepremiumdetail', request).success(function (data) {
                     if($scope.premiumData.quotationStatus != 'SHARED'){
-                        $http.post("/pla/quotation/grouplife/generate", angular.extend({},
+                        $http.post("/pla/quotation/grouphealth/generate", angular.extend({},
                             {"quotationId": $scope.quotationId}))
                             .success(function (data) {
                                 /* if (data.status == "200") {
