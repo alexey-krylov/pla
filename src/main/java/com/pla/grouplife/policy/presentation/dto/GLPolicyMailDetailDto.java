@@ -32,6 +32,8 @@ public class GLPolicyMailDetailDto {
     private List<CoverDetail> coverDetails;
     private List<Annexure> annexure;
     private String specialConditions;
+    private String premiumPaymentEndDate;
+    private String commissionAmount;
 
     private String netPremium;
     private String profitAndSolvencyLoading;

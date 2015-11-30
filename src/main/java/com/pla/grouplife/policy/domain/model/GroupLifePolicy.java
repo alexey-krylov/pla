@@ -53,6 +53,10 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     private Industry industry;
 
+    private BigDecimal agentCommissionPercentage = BigDecimal.ZERO;
+
+    private Boolean isCommissionOverridden = Boolean.FALSE;
+
     private Set<GLProposerDocument> proposerDocuments;
 
     public GroupLifePolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
@@ -174,6 +178,11 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
         return this;
     }
 
+    public GroupLifePolicy updateWithCommissionPercentage(Boolean isCommissionOverridden,BigDecimal agentCommissionPercentage){
+        this.isCommissionOverridden = isCommissionOverridden;
+        this.agentCommissionPercentage = agentCommissionPercentage;
+        return this;
+    }
 
 
     @Override

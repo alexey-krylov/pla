@@ -68,6 +68,13 @@ public class GLEndorsementFinder {
         return mongoTemplate.find(query, Map.class, "group_life_endorsement");
     }
 
+    public List<GroupLifeEndorsement> findEndorsementByPolicyNumber(String policyNumber) {
+        Criteria endorsementCriteria = Criteria.where("policy.policyNumber.policyNumber").is(policyNumber);
+        endorsementCriteria.and("status").is(EndorsementStatus.APPROVED);
+        Query query = new Query(endorsementCriteria);
+        return   mongoTemplate.find(query, GroupLifeEndorsement.class);
+    }
+
     public List<Map> searchEndorsement(GLEndorsementType endorsementType, String endorsementNumber, String endorsementId, String policyNumber, String policyHolderName, String[] statuses) {
         Criteria criteria = Criteria.where("status").in(statuses);
         if (endorsementType == null && isEmpty(endorsementNumber) && isEmpty(endorsementId) && isEmpty(policyNumber) && isEmpty(policyHolderName)) {

@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,9 @@ public class GLFinder {
     public static final String FIND_COVERAGE_BY_CODE_QUERY = "SELECT coverage_id AS coverageId, coverage_code AS coverageCode,coverage_name AS coverageName FROM coverage WHERE coverage_code=:coverageCode";
     public static final String FIND_ACTIVE_AGENT_BY_FIRST_NAME_QUERY = "SELECT * FROM agent_team_branch_view WHERE firstName =:firstName";
     public static final String FIND_AGENT_PLANS_QUERY = "SELECT agent_id as agentId,plan_id as planId FROM `agent_authorized_plan` WHERE agent_id=:agentId";
+
+    private static final  String findAgentCommissionPercentageByPlanId = "select cp.commission_percentage commissionPercentage from commission c inner join \n" +
+            "commission_commission_term cp on c.commission_id  = cp.commission_id where c.plan_id in (:planIds);";
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
@@ -191,5 +195,18 @@ public class GLFinder {
         return mongoTemplate.find(query, Map.class, GL_POLICY_COLLECTION_NAME);
     }
 
+    public List<String> getAgentCommissionPercentageByPlanId(Set<String> planIds) {
+        Preconditions.checkArgument(isNotEmpty(planIds));
+        List<Map<String, Object>> agentList = namedParameterJdbcTemplate.query(findAgentCommissionPercentageByPlanId, new MapSqlParameterSource().addValue("planIds", planIds),new ColumnMapRowMapper());
+        if (isNotEmpty(agentList)) {
+            return agentList.parallelStream().map(new Function<Map<String, Object>, String>() {
+                @Override
+                public String apply(Map<String, Object> agentCommissionMap) {
+                    return agentCommissionMap.get("commissionPercentage") != null ? ((BigDecimal) agentCommissionMap.get("commissionPercentage")).toPlainString() : "";
+                }
+            }).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
+    }
 
 }

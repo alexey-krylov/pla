@@ -458,6 +458,15 @@ public class GLPolicyService {
         glQuotationDetailDto.setTotalSumAssured(totalSumAssured.toPlainString());
         List<GLPolicyMailDetailDto.CoverDetail> coverDetails = Lists.newArrayList();
         List<GLPolicyMailDetailDto.Annexure> annexures = Lists.newArrayList();
+        BigDecimal commission= BigDecimal.ZERO;
+        if (groupLifePolicy.getIsCommissionOverridden()){
+            commission =  groupLifePolicy.getAgentCommissionPercentage();
+        }else {
+            BigDecimal agentCommission = getAgentCommission(groupLifePolicy.getInsureds());
+            commission = agentCommission!=null?agentCommission:BigDecimal.ZERO;
+        }
+        String commissionAmount = new BigDecimal(glQuotationDetailDto.getTotalPremium()!=null?glQuotationDetailDto.getTotalPremium(): "1").divide(new BigDecimal(100)).multiply(commission).toPlainString();
+        glQuotationDetailDto.setCommissionAmount(commissionAmount);
         if (isNotEmpty(groupLifePolicy.getInsureds())) {
             for (Insured insured : groupLifePolicy.getInsureds()) {
                 PlanPremiumDetail insuredPremiumDetail = insured.getPlanPremiumDetail();
@@ -520,6 +529,40 @@ public class GLPolicyService {
         glQuotationDetailDto.setCoverDetails(unifiedCoverDetails);
         glQuotationDetailDto.setAnnexure(annexures);
         return glQuotationDetailDto;
+    }
+
+    private BigDecimal getAgentCommission(Set<Insured> ghInsureds){
+        Set<String> planIds = Sets.newLinkedHashSet();
+        ghInsureds.parallelStream().map(new Function<Insured, String>() {
+            @Override
+            public String apply(Insured ghInsured) {
+                planIds.add(ghInsured.getPlanPremiumDetail().getPlanId().getPlanId());
+                ghInsured.getInsuredDependents().parallelStream().map(new Function<InsuredDependent, String>() {
+                    @Override
+                    public String apply(InsuredDependent insuredDependent) {
+                        planIds.add(insuredDependent.getPlanPremiumDetail().getPlanId().getPlanId());
+                        return "";
+                    }
+                }).collect(Collectors.toSet());
+                return "";
+            }
+        }).collect(Collectors.toSet());
+        List<String> agentCommission = glFinder.getAgentCommissionPercentageByPlanId(planIds);
+        if (isNotEmpty(agentCommission)) {
+            Set<String> commissionSet = agentCommission.parallelStream().map(new Function<String, String>() {
+                @Override
+                public String apply(String commissionPercentage) {
+                    return commissionPercentage;
+                }
+            }).collect(Collectors.toSet());
+            if (commissionSet.size()==1 && commissionSet.size()!=agentCommission.size() && planIds.size()!=commissionSet.size()){
+                return new BigDecimal(agentCommission.get(0));
+            }
+            else if (commissionSet.size()==1 && planIds.size()==1){
+                return new BigDecimal(agentCommission.get(0));
+            }
+        }
+        return BigDecimal.ZERO;
     }
 
     public GLPolicyMailDetailDto getEndorsementDetails(GroupLifeEndorsement groupLifeEndorsement,GLPolicyMailDetailDto glQuotationDetailDto,Industry industry){

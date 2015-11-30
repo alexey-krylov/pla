@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouplife.endorsement.application.command.*;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
+import com.pla.grouplife.endorsement.application.service.GroupLifeEndorsementChecker;
 import com.pla.grouplife.endorsement.domain.service.GroupLifeEndorsementService;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.endorsement.presentation.dto.GLEndorsementApproverCommentDto;
@@ -74,6 +75,10 @@ public class GroupLifeEndorsementController {
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
+
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView openPolicySearchPage() {

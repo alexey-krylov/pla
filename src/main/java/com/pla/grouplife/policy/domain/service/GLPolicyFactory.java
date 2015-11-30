@@ -18,6 +18,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -50,6 +51,8 @@ public class GLPolicyFactory {
         Proposer proposer = (Proposer) proposalMap.get("proposer");
         ProposalNumber proposalNumber = (ProposalNumber) proposalMap.get("proposalNumber");
         Set<GLProposerDocument> proposerDocuments = proposalMap.get("proposerDocuments") != null ? new HashSet<>((List) proposalMap.get("proposerDocuments")) : null;
+        Boolean isCommissionOverridden =  proposalMap.get("isCommissionOverridden")!=null?(Boolean) proposalMap.get("isCommissionOverridden"):false;
+        BigDecimal agentCommissionPercentage =  proposalMap.get("agentCommissionPercentage")!=null?new BigDecimal((String) proposalMap.get("agentCommissionPercentage")):BigDecimal.ZERO;
         String policyNumberInString = glPolicyNumberGenerator.getPolicyNumber(GroupLifePolicy.class, agentId);
         PolicyNumber policyNumber = new PolicyNumber(policyNumberInString);
         PolicyId policyId = new PolicyId(ObjectId.get().toString());
@@ -59,7 +62,7 @@ public class GLPolicyFactory {
         GroupLifePolicy groupLifePolicy = new GroupLifePolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments);
+                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage);
         return groupLifePolicy;
     }
 
