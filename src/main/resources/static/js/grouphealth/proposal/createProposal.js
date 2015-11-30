@@ -116,14 +116,28 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             });
 
             $scope.addAdditionalDocument = function () {
+
                 $scope.additionalDocumentList.unshift({});
                 $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
             };
 
-            $scope.removeAdditionalDocument = function (index) {
-                $scope.additionalDocumentList.splice(index, 1);
-                $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+            $scope.removeAdditionalDocument = function (index,gridFsDocId) {
+                if(gridFsDocId) {
+                    $http.post("/pla/grouphealth/proposal/removeGHProposalAdditionalDocument?proposalId=" + $scope.proposalId + "&gridFsDocId=" + gridFsDocId).success(function (data, status) {
+                        console.log(data);
+                        if (data.status == '200') {
+                            $scope.additionalDocumentList.splice(index, 1);
+                            $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+                        }
+                    });
+                }else{
+                    $scope.additionalDocumentList.splice(index, 1);
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+
+                }
+
+
             };
             $scope.callAdditionalDoc = function (file) {
                 if (file[0]) {

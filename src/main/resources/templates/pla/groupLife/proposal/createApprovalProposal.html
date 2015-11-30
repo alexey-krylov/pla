@@ -669,7 +669,7 @@
                                                 </div>
                                                 <div class="col-lg-8">
                                                     <a href="/pla/grouplife/proposal/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}"
-                                                       style="display:inline;" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName}}</a>
+                                                       style="display:inline;" hg-show="!additionalDocument.submitted">{{additionalDocument.fileName | limitTo: 30}}</a>
                                                 </div>
                                             </div>
                                         </div>
