@@ -178,10 +178,12 @@
 
 
                                 <div class="col-lg-3">
-                                    <div class="form-group ">
+                                    <div class="form-group " style="margin-top: 20px">
                                         <label class="control-label">Change Broker Commission Rates %</label>
-                                        <input type="checkbox" class="form-control"
-                                               name="brokerCommissionRate" ng-model="proposalDetails.basic.brokerCommissionRate"/>
+                                        <label class="radio-inline">
+                                        <input type="checkbox"
+                                               ng-disabled="isViewMode" ng-click="toggleSelection($event)" name="brokerCommissionRate" ng-model="proposalDetails.basic.brokerCommissionRate"/>
+                                            </label>
                                     </div>
                                 </div>
                                 <div class="col-lg-3" ng-if="proposalDetails.basic.brokerCommissionRate">
