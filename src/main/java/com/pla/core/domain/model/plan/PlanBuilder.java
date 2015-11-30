@@ -66,10 +66,19 @@ public class PlanBuilder {
             case SPECIFIED_VALUES:
                 this.premiumTerm = new Term(validValues, cutOffAge);
                 break;
+            case SINGLE_SPECIFIED_VALUES:
+                this.premiumTerm = new Term(validValues, cutOffAge);
+                break;
             case SPECIFIED_AGES:
                 this.premiumTerm = new Term(validValues);
                 break;
+            case SINGLE_SPECIFIED_AGES:
+                this.premiumTerm = new Term(validValues);
+                break;
             case REGULAR:
+                this.premiumTerm = new Term(policyTerm);
+                break;
+            case SINGLE_REGULAR:
                 this.premiumTerm = new Term(policyTerm);
                 break;
             case SINGLE:

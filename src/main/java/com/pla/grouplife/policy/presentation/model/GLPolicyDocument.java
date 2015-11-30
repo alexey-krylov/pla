@@ -68,7 +68,21 @@ public enum GLPolicyDocument {
             fileOutputStream.close();
             return new EmailAttachment(fileName, "application/pdf", file);
         }
-    },LONG_TERM_AGREEMENT("Long Term Agreement") {
+    },
+    DEBIT_CREDIT("Debit/Credit Note") {
+        @Override
+        public EmailAttachment getPolicyDocumentInPDF(List<GLPolicyMailDetailDto> glQuotationDetailDto) throws IOException, JRException {
+            byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(glQuotationDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+            String fileName = "Debit_credit.pdf";
+            File file = new File(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(pdfData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            return new EmailAttachment(fileName, "application/pdf", file);
+        }
+    }
+    ,LONG_TERM_AGREEMENT("Long Term Agreement") {
         @Override
         public EmailAttachment getPolicyDocumentInPDF(List<GLPolicyMailDetailDto> glQuotationDetailDto) throws IOException, JRException {
             byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(glQuotationDetailDto, "jasperpdf/template/grouplife/policy/LongTermAgr.jrxml");

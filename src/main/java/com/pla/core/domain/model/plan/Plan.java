@@ -97,7 +97,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         this.coverages = planBuilder.getCoverages();
         Preconditions.checkState(specification.isSatisfiedBy(this), "Conflicting terms values found.Please check Policy and Premium Terms ");
         Collection<Term> allTerms = new LinkedList<>();
-        if (this.premiumTermType == PremiumTermType.SPECIFIED_VALUES)
+        if (Arrays.asList(PremiumTermType.SPECIFIED_VALUES,PremiumTermType.SINGLE_SPECIFIED_VALUES).contains(this.premiumTermType))
             allTerms.add(this.premiumTerm);
         this.coverages.forEach(planCoverage -> {
             Term term = planCoverage.getCoverageTerm();
@@ -199,11 +199,11 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     }
 
     public Set<Integer> getAllowedPremiumTerms() {
-        if (PremiumTermType.SPECIFIED_VALUES.equals(this.premiumTermType)) {
+        if (Arrays.asList(PremiumTermType.SPECIFIED_VALUES,PremiumTermType.SINGLE_SPECIFIED_VALUES).contains(this.premiumTermType)) {
             return this.premiumTerm.getValidTerms();
-        } else if (PremiumTermType.SPECIFIED_AGES.equals(this.premiumTermType)) {
+        } else if (Arrays.asList(PremiumTermType.SPECIFIED_AGES,PremiumTermType.SINGLE_SPECIFIED_AGES).contains(this.premiumTermType)) {
             return this.premiumTerm.getMaturityAges();
-        } else if (PremiumTermType.REGULAR.equals(this.premiumTermType)) {
+        } else if (Arrays.asList(PremiumTermType.REGULAR,PremiumTermType.SINGLE_REGULAR).contains(this.premiumTermType)) {
             return getAllowedPolicyTerm();
         }
         return Sets.newHashSet(1);
