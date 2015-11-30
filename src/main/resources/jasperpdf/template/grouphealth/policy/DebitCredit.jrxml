@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-11-29T17:39:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="66"/>
+	<property name="ireport.y" value="460"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="issuanceDate" class="java.lang.String">
+		<fieldDescription><![CDATA[issuanceDate]]></fieldDescription>
+	</field>
+	<field name="issueBranch" class="java.lang.String">
+		<fieldDescription><![CDATA[issueBranch]]></fieldDescription>
+	</field>
+	<field name="endorsementEffectiveDate" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementEffectiveDate]]></fieldDescription>
+	</field>
+	<field name="agentName" class="java.lang.String">
+		<fieldDescription><![CDATA[agentName]]></fieldDescription>
+	</field>
+	<field name="inceptionDate" class="java.lang.String">
+		<fieldDescription><![CDATA[inceptionDate]]></fieldDescription>
+	</field>
+	<field name="showLoading" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[showLoading]]></fieldDescription>
+	</field>
+	<field name="agentMobileNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[agentMobileNumber]]></fieldDescription>
+	</field>
+	<field name="agentCode" class="java.lang.String">
+		<fieldDescription><![CDATA[agentCode]]></fieldDescription>
+	</field>
+	<field name="agentBranch" class="java.lang.String">
+		<fieldDescription><![CDATA[agentBranch]]></fieldDescription>
+	</field>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="masterPolicyNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[masterPolicyNumber]]></fieldDescription>
+	</field>
+	<field name="expiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
+	</field>
+	<field name="totalSumAssured" class="java.lang.String">
+		<fieldDescription><![CDATA[totalSumAssured]]></fieldDescription>
+	</field>
+	<field name="coverDetails" class="java.util.List">
+		<fieldDescription><![CDATA[coverDetails]]></fieldDescription>
+	</field>
+	<field name="annexure" class="java.util.List">
+		<fieldDescription><![CDATA[annexure]]></fieldDescription>
+	</field>
+	<field name="netPremium" class="java.lang.String">
+		<fieldDescription><![CDATA[netPremium]]></fieldDescription>
+	</field>
+	<field name="profitAndSolvencyLoading" class="java.lang.String">
+		<fieldDescription><![CDATA[profitAndSolvencyLoading]]></fieldDescription>
+	</field>
+	<field name="serviceTax" class="java.lang.String">
+		<fieldDescription><![CDATA[serviceTax]]></fieldDescription>
+	</field>
+	<field name="totalPremium" class="java.lang.String">
+		<fieldDescription><![CDATA[totalPremium]]></fieldDescription>
+	</field>
+	<field name="specialConditions" class="java.lang.String">
+		<fieldDescription><![CDATA[specialConditions]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="84" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="-10" width="961" height="93" uuid="a1941e7a-cfa1-424e-a902-f82d1f7e48ac"/>
+			</rectangle>
+			<image>
+				<reportElement x="50" y="-10" width="312" height="70" uuid="c9df8c7e-ac40-43da-ba5c-80ebc4f43c92"/>
+				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="330" y="0" width="230" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TAX  INVOICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="40" width="579" height="20" uuid="9114e32d-947d-4fbe-bd4f-45f8545cea66"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Professional Life  Assurance Limited  Finsbury Park, cairo Road ,Northend P.O BOX 31357 Lusaka--Zambia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="60" width="585" height="20" uuid="bad2313e-a3ae-4b98-895a-9291ff95315c"/>
+				<textElement>
+					<font fontName="Trebuchet MS" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tel:021-1-222233,333334  Fax:021-1-220128  Email:HO@profilife.co.zm]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="1271" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<frame>
+				<reportElement x="0" y="0" width="961" height="1267" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4"/>
+				<box>
+					<topPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<frame>
+					<reportElement x="10" y="10" width="939" height="1250" uuid="eace2152-6452-48f8-b362-d958a83a9b16"/>
+					<staticText>
+						<reportElement x="395" y="10" width="150" height="30" uuid="d0e05afd-2e9b-4460-86db-ffcd7cc2928d"/>
+						<text><![CDATA[DEBIT/CREDIT  NOTE]]></text>
+					</staticText>
+					<rectangle>
+						<reportElement x="390" y="50" width="530" height="40" uuid="6cbd5a9e-457f-4ec9-b3e9-587c50fbbd6b"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="390" y="90" width="530" height="40" uuid="2f3ef4e2-dafa-4585-a988-69c0d4953cd9"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="290" width="920" height="50" uuid="60f9e3ef-44d0-44d2-87a2-f7791897a6d9"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="390" y="250" width="530" height="40" uuid="3c7682ec-0649-4fcd-a824-ae8e0fa97712"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="390" y="210" width="530" height="40" uuid="2830a52d-117f-40da-bd94-8b12106fec20"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="390" y="170" width="530" height="40" uuid="67a13347-3df4-47d2-9b6a-8ffca1a26947"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="390" y="130" width="530" height="40" uuid="271f6cde-94a5-4f36-a538-888fc7525d0b"/>
+					</rectangle>
+					<line>
+						<reportElement x="660" y="50" width="1" height="80" uuid="6e15fd6e-e949-4ba4-b537-48307264e8e0"/>
+					</line>
+					<rectangle>
+						<reportElement x="0" y="340" width="920" height="50" uuid="552a9e9e-2e33-4826-8963-9c14f9eb48ef"/>
+					</rectangle>
+					<line>
+						<reportElement x="240" y="290" width="1" height="100" uuid="60f4fb32-a26a-466c-8e54-7eaeae0a01b0"/>
+					</line>
+					<line>
+						<reportElement x="120" y="290" width="1" height="100" uuid="7ba5169c-433d-4518-80cf-f89488eb9bfe"/>
+					</line>
+					<rectangle>
+						<reportElement x="0" y="390" width="920" height="50" uuid="38246c83-c197-4d62-a12b-6208dd339866"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="440" width="920" height="60" uuid="9d3af3cc-f9dd-40da-b4de-f4ac1a450dd8"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="500" width="920" height="60" uuid="a73ccf5b-1039-4a61-86e6-a6159ff096b5"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="560" width="440" height="50" uuid="fd3c8f82-fa21-4deb-822e-d066800f5755"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="560" width="420" height="50" uuid="4a54b653-9511-4e01-a2fc-b9c861702e8f"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="810" width="420" height="50" uuid="2a862367-0e3d-45c2-968b-8d23d2a9059c"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="860" width="420" height="50" uuid="5919b74e-ce69-469c-9ba4-ec489ce9c2ab"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="760" width="420" height="50" uuid="6afc5aed-1eac-4719-9025-dbe31cd8eb99"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="710" width="420" height="50" uuid="94d57cfb-d795-4ff6-a292-57b71b2dff00"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="660" width="420" height="50" uuid="0e70c955-97db-48c3-9790-a3d9f12e5ab3"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="610" width="420" height="50" uuid="46a75961-f585-4a04-a1ee-adaf16ea2fc7"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="910" width="420" height="50" uuid="d110c9b8-64e4-410a-bbb8-d59307a9aeb8"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="500" y="960" width="420" height="50" uuid="eee3a170-b5e6-4778-82d3-4e4d181fb413"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="760" width="440" height="50" uuid="8c44d419-6f4c-43a1-8269-547e928c1933"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="860" width="440" height="50" uuid="20557054-16ab-489c-a2e6-49ceba74caad"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="810" width="440" height="50" uuid="2431d36c-dd14-42b9-8981-94be47a8aac0"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="910" width="440" height="50" uuid="cc5948c2-7fb3-43dd-870b-08a9311fa5e6"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="710" width="440" height="50" uuid="7f95cc10-1114-47cc-8d2e-3deaacd610fd"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="660" width="440" height="50" uuid="320b1b72-692a-4dea-bdcb-f182d2eecba3"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="610" width="440" height="50" uuid="739ad3c6-2b57-4784-bbae-818539e1dec0"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="960" width="440" height="50" uuid="7c0e4619-0039-459c-9681-402584d4f81b"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="1010" width="920" height="60" uuid="81bc60a5-c609-43aa-87fd-811786bb1a13"/>
+					</rectangle>
+					<rectangle>
+						<reportElement x="0" y="1070" width="920" height="60" uuid="99fdc8d0-3227-43dd-8f6b-f38c87a40e2d"/>
+					</rectangle>
+					<staticText>
+						<reportElement x="10" y="1160" width="400" height="41" uuid="3727fbce-571c-4f47-a204-58999f0fed62"/>
+						<text><![CDATA[Prepared by:]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="590" y="1160" width="330" height="41" uuid="cd29c59f-57bd-4684-9286-fb6bac0b52db"/>
+						<text><![CDATA[Checked by:]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="1084" width="160" height="30" uuid="52bfca3e-dd9e-435a-b60b-78e36f30c682"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Company Date]]></text>
+					</staticText>
+					<line>
+						<reportElement x="170" y="390" width="1" height="740" uuid="e089e752-e7c9-42d9-b89b-012b6c2c24d9"/>
+					</line>
+					<staticText>
+						<reportElement x="10" y="1020" width="160" height="30" uuid="95c05033-5817-41d0-b22b-5d33e772be5a"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Date Due]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="970" width="160" height="30" uuid="af0eb620-1b4f-4b48-9d8a-15fab760146b"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Net Amount Due]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="210" y="970" width="100" height="30" uuid="8e7f41ee-8493-4b6d-9eec-a9c02c3423cb"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[TO YOU]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="400" width="160" height="30" uuid="2a95e01e-6352-4c3b-81bc-99e9dad1fd44"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="870" width="160" height="30" uuid="e8c5f0cb-15c8-43c3-a689-22c37dbae8ab"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Commission]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="920" width="160" height="30" uuid="2e858f05-8929-4133-8e52-03a0889a84da"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[16% VAT]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="820" width="160" height="30" uuid="2f7b0964-9c06-4323-be52-559a6373e730"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[LTA discount]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="770" width="160" height="30" uuid="19b4934a-efb8-4599-8884-a9f515ddaaff"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Valued client discount]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="460" width="160" height="30" uuid="26d75f00-af4b-48eb-933a-d7207cb2f284"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Insured]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="670" width="160" height="30" uuid="7af0a708-a600-4585-ae7d-e255d9cb46f0"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Introductory discount]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="300" width="110" height="30" uuid="aab1c29f-5409-4346-975a-55c9070b0866"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Certificate No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="720" width="160" height="30" uuid="1609bb8f-88aa-412d-a35b-b8514c6a7bbd"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[HIV Policy discount]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="515" width="160" height="30" uuid="4bb7e694-5858-4841-9883-a17097710b54"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Period]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="191" y="570" width="129" height="30" uuid="81d78c07-4522-4a44-89a5-9e8ade5a5e09"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[CREDIT]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="10" y="620" width="160" height="30" uuid="7597ac0f-78a5-48f3-8eed-a43e0a206c22"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Premium]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="600" y="570" width="100" height="30" uuid="553e1763-acfb-4bc1-97b6-6b20fbc001df"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[DEBIT]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="130" y="300" width="110" height="30" uuid="2fc805b8-8bf8-4838-a49b-6d9ad909f532"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Cover Note No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="250" y="300" width="130" height="30" uuid="af073014-defa-4059-b2cb-e0c63295d572"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Receipt No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="399" y="300" width="142" height="30" uuid="b5911101-c4e5-4c1c-a651-99a000f803f3"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Type Of Endorsement]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="399" y="350" width="143" height="30" uuid="bb8915be-81b7-455d-b262-343ccc5ca3a6"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Class/Code]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="398" y="400" width="144" height="30" uuid="6f6ce1d5-2615-422a-ab23-7e15a2614597"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[Agency/Broker/Direct]]></text>
+					</staticText>
+					<line>
+						<reportElement x="390" y="290" width="1" height="150" uuid="b60555d2-8f5b-4144-9eba-c39a6720d231"/>
+					</line>
+					<staticText>
+						<reportElement x="399" y="260" width="146" height="30" uuid="2d683787-c632-4b9b-8f1b-850f46eb3d6b"/>
+						<text><![CDATA[Renewal]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="399" y="220" width="143" height="30" uuid="6dd6c69b-29d4-44e1-ab56-28e50ecf17c6"/>
+						<text><![CDATA[New Policy]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="399" y="140" width="143" height="30" uuid="2913eac8-8b58-46e7-85d4-be3e5c653a61"/>
+						<text><![CDATA[Policy No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="398" y="175" width="143" height="30" uuid="5e5bd2c6-a4e0-4a82-b238-61c451a03164"/>
+						<text><![CDATA[Endorement No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="399" y="55" width="143" height="30" uuid="8f0045e0-b73c-44e0-b540-c66c7309b7fd"/>
+						<text><![CDATA[No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="399" y="100" width="142" height="30" uuid="3f20c6bc-7d25-4883-8e5d-a1b0c020361d"/>
+						<text><![CDATA[Date]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="510" y="970" width="90" height="30" uuid="356e21e3-bec8-4d99-a8e6-5c68e7920c82"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[ FROM YOU]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="670" y="55" width="190" height="30" uuid="0fd4d03b-5c2f-49ca-a122-36d4980d678f"/>
+						<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="670" y="95" width="200" height="30" uuid="424862dd-9524-41f0-b8f2-f8ad8590aa12"/>
+						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="670" y="175" width="200" height="30" uuid="67ab05c8-fa57-45bf-94bc-bb8a765e2fbe"/>
+						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="670" y="135" width="200" height="30" uuid="53c19f26-acd8-44d9-aacb-f40cfed0b2e5"/>
+						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="670" y="300" width="200" height="30" uuid="c82aba69-8aab-43a2-9358-8681bbe00055"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="670" y="400" width="200" height="30" uuid="26f3c592-240d-479b-9bb9-d41c3b76a636"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="191" y="460" width="209" height="30" uuid="6016c042-337f-484a-85c0-eef78e39486a"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="191" y="515" width="119" height="30" uuid="6bf31b5e-52f5-45bb-95cd-7dd4d8d0207b"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="511" y="620" width="404" height="30" uuid="91a720d4-0a14-48fa-a718-c1cf0f75dbb9"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="511" y="720" width="409" height="30" uuid="84fa270d-08a1-4a8c-a1d8-2bed2567191c"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="511" y="770" width="409" height="30" uuid="78d32966-0bfd-4525-86d3-0223e685c20d"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="510" y="870" width="409" height="30" uuid="487c2186-4fd5-45d1-b30c-52ecd22f1702"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="511" y="820" width="404" height="30" uuid="8d4860a4-272b-4901-be19-1d5d85923aca"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="610" y="970" width="300" height="30" uuid="5b076c50-1db6-467a-b478-b54b431fd3f9"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="215" y="1025" width="380" height="30" uuid="f56522aa-a2ca-49cc-ba4a-fc281679e10d"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="600" y="10" width="120" height="30" uuid="ee3e671a-1536-4218-b3a0-14add2abe5a7"/>
+						<text><![CDATA[VAT/REG]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="670" y="11" width="170" height="30" uuid="fb2753cd-6535-483a-937e-9564fad58d99"/>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="310" y="514" width="80" height="30" uuid="542524d6-dd2b-4582-9ecb-e25c999c4022"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<text><![CDATA[to]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="340" y="514" width="190" height="30" uuid="8f892858-b348-4866-924c-531872a22bf2"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="105" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="0" width="959" height="100" uuid="96e1199b-71e3-426c-8e71-47728ea45a05"/>
+			</rectangle>
+			<frame>
+				<reportElement mode="Opaque" x="-1" y="-4" width="962" height="34" forecolor="#FFFFFF" backcolor="#003399" uuid="637e6dff-f1d1-4607-8eaf-5ae8dc827bf8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement mode="Opaque" x="295" y="6" width="366" height="24" forecolor="#FFFFFF" backcolor="#003399" uuid="a52e332d-c040-415d-a379-d4470c569c7d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Professional Life Assurance Limited]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="4" y="40" width="234" height="60" forecolor="#0000CC" uuid="4580ed8b-04a2-4262-be5a-2cc774cfe345"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Head Office
+  Finsbury Park, Cairo Road,
+  North End ,P.O.Box 31357,Lusaka-Zambia
+  Tel : 021-1-222233,366704,Fax: 021-1-220128
+  email : ho@proflife.co.zm.Website : www.proflife.co.zm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="40" width="127" height="60" forecolor="#0000CC" uuid="8b7c5b14-5bbc-47fa-b740-8ad44e3d9e7e"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  KITWE Branch
+  17,Kanyanta Road
+  P.O.Box 20564
+  Kitwe - Zambia
+  Tel : 021-2-224270,225611]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="748" y="40" width="212" height="60" forecolor="#3300CC" uuid="fe8814c2-f063-496e-8ed3-bc8fdbffede1"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Ndola Branch
+  1stFloor, Finance House,President Avenue,
+  P.O.Box:71177,Ndola,Zambia
+  Tel - 021-2-612466
+  Fax-021-2-612466]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

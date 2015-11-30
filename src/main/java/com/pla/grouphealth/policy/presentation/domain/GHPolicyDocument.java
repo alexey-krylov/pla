@@ -32,7 +32,21 @@ public enum GHPolicyDocument {
             fileOutputStream.close();
             return new EmailAttachment(fileName, "application/pdf", file);
         }
-    },GH_POLICY_DOC("Group Health Policy") {
+    },
+    DEBIT_CREDIT("Debit/Credit Note") {
+        @Override
+        public EmailAttachment getPolicyDocumentInPDF(List< GHPolicyDetailDto > ghPolicyDetailDtoList) throws IOException, JRException {
+            byte[] pdfData =  PDFGeneratorUtils.createPDFReportByList(ghPolicyDetailDtoList, "jasperpdf/template/grouphealth/policy/DebitCredit.jrxml");
+            String fileName = "Debit_credit.pdf";
+            File file = new File(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(pdfData);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            return new EmailAttachment(fileName, "application/pdf", file);
+        }
+    }
+    ,GH_POLICY_DOC("Group Health Policy") {
         @Override
         public EmailAttachment getPolicyDocumentInPDF(List<GHPolicyDetailDto> ghPolicyDetailDtoList) throws IOException, JRException {
             byte[] pdfData = PDFGeneratorUtils.createPDFReportByList(ghPolicyDetailDtoList, "jasperpdf/template/grouphealth/policy/GHPolicyDoc.jrxml");

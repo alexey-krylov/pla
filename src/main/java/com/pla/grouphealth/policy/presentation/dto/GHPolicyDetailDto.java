@@ -46,7 +46,7 @@ public class GHPolicyDetailDto {
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
 
-
+    private String endorsementEffectiveDate;
 
     @Getter
     @Setter
