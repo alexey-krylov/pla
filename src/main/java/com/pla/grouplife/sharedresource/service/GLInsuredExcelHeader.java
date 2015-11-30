@@ -797,7 +797,7 @@ public enum GLInsuredExcelHeader {
             if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
             }
-            else if (isNotEmpty(firstName) && isNotEmpty(dateOfBirth) && isNotEmpty(cellValue)) {
+            if (isNotEmpty(firstName) && isNotEmpty(dateOfBirth) && isNotEmpty(cellValue)) {
                 planPremium = BigDecimal.valueOf(Double.valueOf(cellValue)).multiply(new BigDecimal(1));
             }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();

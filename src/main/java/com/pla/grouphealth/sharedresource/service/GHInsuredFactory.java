@@ -58,7 +58,7 @@ public class GHInsuredFactory {
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() :
                         computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
                                 String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, null);
-                if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null) {
+                if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null && premiumDetail.getPremiumAmount()== null) {
                     int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
                     basicAnnualPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, basicAnnualPremium);
                 }
@@ -70,7 +70,7 @@ public class GHInsuredFactory {
                         .withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
-                    if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null) {
+                    if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null  && premiumDetail.getPremiumAmount()== null) {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
                         coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
                     }
@@ -100,7 +100,7 @@ public class GHInsuredFactory {
                     computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
                             getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null) : computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
                     getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
-            if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
+            if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null && insured.getPlanPremiumDetail().getPremiumAmount() == null) {
                 insuredPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredPlanProratePremium);
             }
             insured.updatePlanPremiumAmount(insuredPlanProratePremium);
@@ -111,7 +111,7 @@ public class GHInsuredFactory {
                             coveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(),
                             occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId()) : computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
                             getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
-                    if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null) {
+                    if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null && insured.getPlanPremiumDetail().getPremiumAmount() == null) {
                         insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredCoveragePremiumDetail);
                     }
                     coveragePremiumDetail.updateWithPremium(insuredCoveragePremiumDetail);
