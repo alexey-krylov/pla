@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-29T17:39:09 -->
+<!-- 2015-11-30T12:10:23 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -66,11 +66,20 @@
 	<field name="address" class="java.lang.String">
 		<fieldDescription><![CDATA[address]]></fieldDescription>
 	</field>
+	<field name="waiverOfExcessLoadings" class="java.lang.String">
+		<fieldDescription><![CDATA[waiverOfExcessLoadings]]></fieldDescription>
+	</field>
+	<field name="waiverOfExcessLoadingsPercentage" class="java.lang.String">
+		<fieldDescription><![CDATA[waiverOfExcessLoadingsPercentage]]></fieldDescription>
+	</field>
 	<field name="masterPolicyNumber" class="java.lang.String">
 		<fieldDescription><![CDATA[masterPolicyNumber]]></fieldDescription>
 	</field>
 	<field name="expiryDate" class="java.lang.String">
 		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
+	</field>
+	<field name="addOnBenefits" class="java.lang.String">
+		<fieldDescription><![CDATA[addOnBenefits]]></fieldDescription>
 	</field>
 	<field name="totalSumAssured" class="java.lang.String">
 		<fieldDescription><![CDATA[totalSumAssured]]></fieldDescription>
@@ -80,6 +89,9 @@
 	</field>
 	<field name="annexure" class="java.util.List">
 		<fieldDescription><![CDATA[annexure]]></fieldDescription>
+	</field>
+	<field name="endorsementNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[endorsementNumber]]></fieldDescription>
 	</field>
 	<field name="netPremium" class="java.lang.String">
 		<fieldDescription><![CDATA[netPremium]]></fieldDescription>
@@ -105,7 +117,7 @@
 				<reportElement x="0" y="-10" width="961" height="93" uuid="a1941e7a-cfa1-424e-a902-f82d1f7e48ac"/>
 			</rectangle>
 			<image>
-				<reportElement x="50" y="-10" width="312" height="70" uuid="c9df8c7e-ac40-43da-ba5c-80ebc4f43c92"/>
+				<reportElement x="50" y="0" width="312" height="70" uuid="c9df8c7e-ac40-43da-ba5c-80ebc4f43c92"/>
 				<imageExpression><![CDATA["static/images/Plal_Logo.jpg"]]></imageExpression>
 			</image>
 			<staticText>
@@ -170,7 +182,7 @@
 						<reportElement x="390" y="130" width="530" height="40" uuid="271f6cde-94a5-4f36-a538-888fc7525d0b"/>
 					</rectangle>
 					<line>
-						<reportElement x="660" y="50" width="1" height="80" uuid="6e15fd6e-e949-4ba4-b537-48307264e8e0"/>
+						<reportElement x="590" y="50" width="1" height="80" uuid="6e15fd6e-e949-4ba4-b537-48307264e8e0"/>
 					</line>
 					<rectangle>
 						<reportElement x="0" y="340" width="920" height="50" uuid="552a9e9e-2e33-4826-8963-9c14f9eb48ef"/>
@@ -450,30 +462,22 @@
 						<text><![CDATA[ FROM YOU]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="670" y="55" width="190" height="30" uuid="0fd4d03b-5c2f-49ca-a122-36d4980d678f"/>
+						<reportElement x="600" y="55" width="170" height="30" uuid="0fd4d03b-5c2f-49ca-a122-36d4980d678f"/>
 						<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="670" y="95" width="200" height="30" uuid="424862dd-9524-41f0-b8f2-f8ad8590aa12"/>
-						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="670" y="175" width="200" height="30" uuid="67ab05c8-fa57-45bf-94bc-bb8a765e2fbe"/>
+						<reportElement x="600" y="135" width="270" height="30" uuid="53c19f26-acd8-44d9-aacb-f40cfed0b2e5"/>
 						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="670" y="135" width="200" height="30" uuid="53c19f26-acd8-44d9-aacb-f40cfed0b2e5"/>
-						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="670" y="300" width="200" height="30" uuid="c82aba69-8aab-43a2-9358-8681bbe00055"/>
+						<reportElement x="600" y="300" width="270" height="30" uuid="c82aba69-8aab-43a2-9358-8681bbe00055"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="670" y="400" width="200" height="30" uuid="26f3c592-240d-479b-9bb9-d41c3b76a636"/>
+						<reportElement x="600" y="400" width="100" height="30" uuid="26f3c592-240d-479b-9bb9-d41c3b76a636"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
@@ -484,7 +488,7 @@
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="191" y="515" width="119" height="30" uuid="6bf31b5e-52f5-45bb-95cd-7dd4d8d0207b"/>
@@ -494,35 +498,14 @@
 						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="511" y="620" width="404" height="30" uuid="91a720d4-0a14-48fa-a718-c1cf0f75dbb9"/>
+						<reportElement x="506" y="770" width="414" height="30" uuid="78d32966-0bfd-4525-86d3-0223e685c20d"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadings}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="511" y="720" width="409" height="30" uuid="84fa270d-08a1-4a8c-a1d8-2bed2567191c"/>
-						<textElement>
-							<font fontName="Trebuchet MS"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="511" y="770" width="409" height="30" uuid="78d32966-0bfd-4525-86d3-0223e685c20d"/>
-						<textElement>
-							<font fontName="Trebuchet MS"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{totalSumAssured}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="510" y="870" width="409" height="30" uuid="487c2186-4fd5-45d1-b30c-52ecd22f1702"/>
-						<textElement>
-							<font fontName="Trebuchet MS"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="511" y="820" width="404" height="30" uuid="8d4860a4-272b-4901-be19-1d5d85923aca"/>
+						<reportElement x="506" y="870" width="413" height="30" uuid="487c2186-4fd5-45d1-b30c-52ecd22f1702"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
@@ -533,14 +516,14 @@
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="215" y="1025" width="380" height="30" uuid="f56522aa-a2ca-49cc-ba4a-fc281679e10d"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{inceptionDate}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="600" y="10" width="120" height="30" uuid="ee3e671a-1536-4218-b3a0-14add2abe5a7"/>
@@ -551,19 +534,72 @@
 						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="310" y="514" width="80" height="30" uuid="542524d6-dd2b-4582-9ecb-e25c999c4022"/>
+						<reportElement x="250" y="514" width="140" height="30" uuid="542524d6-dd2b-4582-9ecb-e25c999c4022"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
 						<text><![CDATA[to]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="340" y="514" width="190" height="30" uuid="8f892858-b348-4866-924c-531872a22bf2"/>
+						<reportElement x="270" y="514" width="260" height="30" uuid="8f892858-b348-4866-924c-531872a22bf2"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 					</textField>
+					<textField pattern="MMMMM dd, yyyy">
+						<reportElement x="600" y="100" width="180" height="25" uuid="b5b206e5-05fd-44d0-8a61-4fabea772f7b"/>
+						<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement x="680" y="400" width="235" height="30" uuid="9c518136-61fa-484d-a918-a502bc73a9b5">
+							<property name="local_mesure_unitx" value="pixel"/>
+						</reportElement>
+						<textElement verticalAlignment="Top">
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="600" y="175" width="269" height="30" uuid="3ca93492-8c2f-45e7-a376-ca9a6a894a79"/>
+						<textElement verticalAlignment="Top">
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement x="506" y="620" width="394" height="30" uuid="12bfab63-34e5-4d64-a9d4-5742d6549c3c"/>
+						<textElement textAlignment="Left" verticalAlignment="Top">
+							<font fontName="Trebuchet MS" size="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="506" y="720" width="404" height="30" uuid="55e06ea5-89d6-4e86-87cc-3a97af5d2270"/>
+						<textElement>
+							<font fontName="Trebuchet MS" size="10" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{addOnBenefits}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="506" y="820" width="334" height="30" uuid="17a7b96e-2802-496b-ac56-319db2dc0cc1"/>
+						<textElement verticalAlignment="Top">
+							<font fontName="Trebuchet MS" size="10" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="506" y="920" width="409" height="30" uuid="528523af-a7b2-42e9-94a4-8d27a85cd8e9"/>
+						<textElement>
+							<font fontName="Trebuchet MS"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{serviceTax}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="660" y="399" width="78" height="30" uuid="fbe0be84-d66b-427e-afb5-78152b0cd8b4"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[/]]></text>
+					</staticText>
 				</frame>
 			</frame>
 		</band>
