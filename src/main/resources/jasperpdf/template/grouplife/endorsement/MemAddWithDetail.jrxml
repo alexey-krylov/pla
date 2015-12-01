@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-23T14:03:01 -->
+<!-- 2015-11-23T17:32:19 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1400" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -28,6 +28,12 @@
 		</box>
 	</style>
 	<subDataset name="CoverDetailsDS" uuid="656ac15f-d3e1-439d-9d38-3c8d654e1e77">
+		<field name="planCoverageName" class="java.lang.String">
+			<fieldDescription><![CDATA[planCoverageName]]></fieldDescription>
+		</field>
+		<field name="planCoverageSumAssured" class="java.lang.String">
+			<fieldDescription><![CDATA[planCoverageSumAssured]]></fieldDescription>
+		</field>
 		<field name="category" class="java.lang.String">
 			<fieldDescription><![CDATA[category]]></fieldDescription>
 		</field>
@@ -541,68 +547,6 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{endorsementEffectiveDate}]]></textFieldExpression>
 				</textField>
-				<componentElement>
-					<reportElement key="table" style="table" positionType="Float" x="421" y="581" width="367" height="23" isRemoveLineWhenBlank="true" uuid="5efcc67b-70bb-431a-8855-43495a9a987d"/>
-					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="CoverDetailsDS" uuid="d1d76d75-2d88-45c9-a1a7-87fd1d12acff">
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
-						</datasetRun>
-						<jr:column width="90" uuid="fdebfe64-4624-4d9b-9328-06b1370dd52b">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="bd535f4c-9ac7-4d77-82a8-cd2f129c7936"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Category]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="90" height="20" uuid="94c5bc59-79b3-4a43-80bb-ecb5d8762422"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="90" uuid="b3afab25-c398-426a-b4a1-fbe6aefda4cb">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="999a7856-ec04-4433-8281-b0b22f6eb0c0"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Relationship]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="90" height="20" uuid="f68d44a3-e747-44ba-ad74-55155f6ca0c1"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="167" uuid="5052b2f4-b79f-452a-8031-74838d7b966b">
-							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="dacc1d28-d8d6-4137-92ef-a1d9918bd0dc"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Number Of Employees Covered]]></text>
-								</staticText>
-							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="167" height="20" uuid="fcde6f8a-0da2-4b3b-8bc3-b99b4332f43d"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{noOfEmployeesCovered}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-					</jr:table>
-				</componentElement>
 				<frame>
 					<reportElement positionType="Float" x="27" y="884" width="603" height="26" uuid="11200470-2a89-45fe-8f68-e97787792c5d"/>
 					<staticText>
@@ -756,6 +700,86 @@
 					<textElement verticalAlignment="Top"/>
 					<text><![CDATA[from]]></text>
 				</staticText>
+				<componentElement>
+					<reportElement key="table" style="table" positionType="Float" x="235" y="591" width="478" height="23" isRemoveLineWhenBlank="true" uuid="ee6ab550-50a7-4783-af6a-e473ddd4cbcd"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="CoverDetailsDS" uuid="6fa41976-e077-4f52-b1de-32abfae4bc63">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverDetails})]]></dataSourceExpression>
+						</datasetRun>
+						<jr:column width="130" uuid="3477dd96-9f71-4764-a4dc-30594c4c954a">
+							<jr:columnHeader style="table" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="badb2189-f7c5-46eb-a2b5-93c5c5f18c69"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="12" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Plan/CoverageName]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="130" height="20" uuid="c2fb0973-d7b0-41c3-baa3-e17f2e5a5f66"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{planCoverageName}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="167" uuid="59444048-256f-4416-b396-f77514b125ed">
+							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="167" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="f2c31fd9-48a9-46ef-be44-588ecdfad2d3"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="12" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Sum Assured]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="167" height="20" uuid="969a2a93-560e-420a-8f02-1dbc538d080c"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{planCoverageSumAssured}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="cbc13a77-2f9a-4ab7-8e46-f57bc39083ac">
+							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="a4cdc57b-b29a-4181-ac34-1401b6538cc4"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="12" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Category]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="20" uuid="853e41ef-50ba-4272-80a3-1e4ebdf248bf"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="0b223362-8392-41aa-a307-cf49fa34a5aa">
+							<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#808080" uuid="f00b3ae1-aa1e-4dae-b1b8-6f234eb0ab82"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="12" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Relationship]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="20" uuid="80d101ce-8493-46bf-bbb3-ab13d54f19aa"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{relationship}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
 			</frame>
 		</band>
 	</detail>

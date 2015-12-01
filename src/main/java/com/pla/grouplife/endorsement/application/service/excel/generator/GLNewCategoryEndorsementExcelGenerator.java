@@ -143,9 +143,12 @@ public class GLNewCategoryEndorsementExcelGenerator extends AbstractGLEndorsemen
         return occupationClasses;
     }
 
-    public  List<InsuredDto>  getInsuredTemplateExcel(String endorsementId) throws IOException {
+    public  List<InsuredDto> getInsuredTemplateExcel(String endorsementId) throws IOException {
         Map endorsementMap =  glEndorsementFinder.findEndorsementById(endorsementId);
-        GLEndorsement glEndorsement = (GLEndorsement) endorsementMap.get("endorsement");
+        GLEndorsement glEndorsement = endorsementMap.get("endorsement")!=null?(GLEndorsement) endorsementMap.get("endorsement"):null;
+        if (glEndorsement==null){
+            return Lists.newArrayList();
+        }
         List<Insured> insureds = Lists.newArrayList(glEndorsement.getNewCategoryRelationEndorsement().getInsureds());
         List<InsuredDto> insuredDtoList = isNotEmpty(insureds) ? insureds.stream().map(new Function<Insured, InsuredDto>() {
             @Override

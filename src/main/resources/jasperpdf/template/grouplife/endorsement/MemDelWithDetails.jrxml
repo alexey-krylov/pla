@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-23T15:04:46 -->
+<!-- 2015-11-23T18:12:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1075" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -447,7 +447,7 @@
 					<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="21" y="474" width="99" height="22" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
+					<reportElement x="21" y="474" width="121" height="22" uuid="2552380f-594e-4cfa-9e09-80909ed18d26"/>
 					<text><![CDATA[ is hereby refunded .]]></text>
 				</staticText>
 				<textField>
@@ -455,8 +455,8 @@
 					<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="600" y="451" width="260" height="19" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
-					<text><![CDATA[)Arising out of the aforesaid deletion, a sum of K]]></text>
+					<reportElement x="588" y="451" width="272" height="19" uuid="97e17934-bd88-43de-b189-6e6cda62b99a"/>
+					<text><![CDATA[.)Arising out of the aforesaid deletion, a sum of K]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="460" y="450" width="55" height="20" uuid="7e98bc77-fa35-47d8-b291-56c8c0f4d1c1"/>
@@ -485,7 +485,7 @@
 					</textField>
 				</frame>
 				<staticText>
-					<reportElement x="297" y="450" width="103" height="19" uuid="91cb7146-b1b9-43ab-b83b-e4dc7d0ccecf"/>
+					<reportElement x="271" y="450" width="129" height="19" uuid="91cb7146-b1b9-43ab-b83b-e4dc7d0ccecf"/>
 					<text><![CDATA[ (original policy period -]]></text>
 				</staticText>
 				<textField>
@@ -524,7 +524,7 @@
 			<staticText>
 				<reportElement x="4" y="730" width="942" height="110" uuid="59013d2e-daf2-48dd-bab2-cc3e3106647d"/>
 				<textElement>
-					<font fontName="Trebuchet MS" size="12" isBold="false"/>
+					<font fontName="Trebuchet MS" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[All endorsement premiums are  payable immediately.
 This Endorsement has been issued based on the information provided by you .

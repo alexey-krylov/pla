@@ -54,6 +54,14 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
             $http.get('/pla/core/plan/getcoveragebyplanid/' + planId).success(function (data) {
                 $scope.optionalCoverageList = data;
                 console.log($scope.optionalCoverageList);
+                if($scope.optionalCoverageList.length == 1){
+                    if($scope.optionalCoverageList[0].coverageTermType == 'SINGLE'){
+                        $scope.createPremium.premiumPaymentTermType='SINGLEPREMIUM';
+                    }
+                    else{
+                        $scope.createPremium.premiumPaymentTermType='OTHERPREMIUM';
+                    }
+                }
             });
         }
     });

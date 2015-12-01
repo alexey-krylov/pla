@@ -128,6 +128,15 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="form-group col-md-4 required">
+                        <label class="control-label">Premium Payment Term Type</label>
+                        <select class="form-control input-sm" ng-model="createPremium.premiumPaymentTermType" name="premiumPaymentType" ng-required="true">
+                            <option value="SINGLEPREMIUM">Single Premium </option>
+                            <option value="OTHERPREMIUM">Other Premiums</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="form-group col-md-6 required">
                         <label class="control-label">Rate Expressed As</label>
 

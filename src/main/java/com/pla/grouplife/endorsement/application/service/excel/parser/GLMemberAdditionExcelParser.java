@@ -30,6 +30,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 
 /**
@@ -61,10 +62,11 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         Cell errorMessageHeaderCell = null;
         for (Row currentRow : dataRows) {
             String invalidCombinationMessage = buildErrorMessageIfInvalidCategoryRelationCombination(currentRow, insureds,headers);
+            String invalidDetailAssuredMessage = buildErrorMessageIfInvalidDetailsAssure(currentRow, insureds, headers);
             String errorMessage = validateRow(currentRow, headers, glEndorsementExcelValidator);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, headers);
             String duplicateRowErrorMessage = buildDuplicateRowMessage(duplicateRows);
-            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(invalidCombinationMessage)) {
+            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(invalidCombinationMessage) && isEmpty(invalidDetailAssuredMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -72,7 +74,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 errorMessageHeaderCell = createErrorMessageHeaderCell(excelFile, headerRow, headers);
             }
             Cell errorMessageCell = currentRow.createCell(headers.size());
-            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage + "\n" +invalidCombinationMessage;
+            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage + "\n" +invalidCombinationMessage + "\n" +invalidDetailAssuredMessage;
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
@@ -327,5 +329,52 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             }
         }
         return isExists?"":"Category - Relation is not an existing combination";
+    }
+
+    private String buildErrorMessageIfInvalidDetailsAssure(Row currentRow, List<Insured> insureds,List<String> headers){
+        Cell categoryCell =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
+        String categoryCellValue = getCellValue(categoryCell);
+        Cell relationshipCell =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relationCellValue = getCellValue(relationshipCell);
+        Cell noOfAssured =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.NO_OF_ASSURED.getDescription()));
+        String noOfAssuredCellValue = getCellValue(noOfAssured);
+        boolean isInvalid  = false;
+        boolean isDetailsAssured  =false;
+        for (Insured insured :insureds){
+            isDetailsAssured = false;
+            if (insured.getNoOfAssured()==null){
+                isDetailsAssured  =true;
+            }
+            if (insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue)){
+                if (isNotEmpty(noOfAssuredCellValue) && insured.getNoOfAssured()==null){
+                        isInvalid =true;
+                    break;
+                }
+                else if (insured.getNoOfAssured()!=null && isEmpty(noOfAssuredCellValue)){
+                    isInvalid =true;
+                    break;
+                }
+
+            }
+            if (!isInvalid){
+                Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                for (InsuredDependent insuredDependent :insuredDependents) {
+                    if (insuredDependent.getNoOfAssured()==null){
+                        isDetailsAssured = true;
+                    }
+                    if (insuredDependent.getCategory().equals(categoryCellValue) && insuredDependent.getRelationship().description.equals(relationCellValue)) {
+                        if (isNotEmpty(noOfAssuredCellValue)&& insuredDependent.getNoOfAssured()==null) {
+                            isInvalid = true;
+                            break;
+                        }
+                        else if (insuredDependent.getNoOfAssured()!=null && isEmpty(noOfAssuredCellValue)){
+                            isInvalid =true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return isInvalid?isDetailsAssured?"Please share the member details.":"Please share the number of member.":"";
     }
 }

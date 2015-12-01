@@ -1,8 +1,10 @@
 package com.pla.grouplife.proposal.application.command;
 
 import com.google.common.collect.Sets;
+import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.domain.model.GLProposalApprover;
 import com.pla.grouplife.proposal.domain.model.GLProposalProcessor;
+import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.grouplife.sharedresource.model.vo.GLProposerDocument;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.proposal.domain.service.GroupLifeProposalRoleAdapter;
@@ -32,7 +34,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
@@ -49,6 +53,9 @@ public class GroupLifeProposalCommandHandler {
     private GroupLifeProposalRoleAdapter groupLifeProposalRoleAdapter;
 
     private GroupLifeProposalService groupLifeProposalService;
+
+    @Autowired
+    private GLProposalService glProposalService;
 
     private Repository<GroupLifeProposal> groupLifeProposalRepository;
 
@@ -144,6 +151,27 @@ public class GroupLifeProposalCommandHandler {
     public String submitProposal(SubmitGLProposalCommand submitGLProposalCommand) {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(submitGLProposalCommand.getProposalId()));
         groupLifeProposal = groupLifeProposal.submitForApproval(DateTime.now(), submitGLProposalCommand.getUserDetails().getUsername(), submitGLProposalCommand.getComment());
+        List<GLProposalMandatoryDocumentDto> glProposalMandatoryDocumentDtos = glProposalService.findMandatoryDocuments(submitGLProposalCommand.getProposalId());
+        Set<GLProposerDocument> proposerDocuments  = groupLifeProposal.getProposerDocuments();
+        Set<String> documentIds = proposerDocuments.parallelStream().map(new Function<GLProposerDocument, String>() {
+            @Override
+            public String apply(GLProposerDocument glProposerDocument) {
+                return glProposerDocument.getDocumentId();
+            }
+        }).collect(Collectors.toSet());
+        glProposalMandatoryDocumentDtos.parallelStream().filter(new Predicate<GLProposalMandatoryDocumentDto>() {
+            @Override
+            public boolean test(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                return !documentIds.contains(glProposalMandatoryDocumentDto.getDocumentId());
+            }
+        }).map(new Function<GLProposalMandatoryDocumentDto, GLProposerDocument>() {
+            @Override
+            public GLProposerDocument apply(GLProposalMandatoryDocumentDto glProposalMandatoryDocumentDto) {
+                proposerDocuments.add(new GLProposerDocument(glProposalMandatoryDocumentDto.getDocumentId(),true,false));
+                return null;
+            }
+        }).collect(Collectors.toSet());
+        groupLifeProposal = groupLifeProposal.updateWithDocuments(proposerDocuments);
         return groupLifeProposal.getIdentifier().getProposalId();
     }
 

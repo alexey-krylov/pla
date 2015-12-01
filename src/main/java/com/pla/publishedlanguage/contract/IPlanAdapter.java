@@ -30,6 +30,8 @@ public interface IPlanAdapter {
 
     boolean isValidPlanSumAssured(String planCode, BigDecimal sumAssured);
 
+    boolean isValidUnderWriterPlanSumAssured(String planCode, BigDecimal sumAssured);
+
     boolean isValidCoverageSumAssured(String planCode, String coverageId, BigDecimal sumAssured);
 
     boolean isValidPlanAge(String planCode, int age);

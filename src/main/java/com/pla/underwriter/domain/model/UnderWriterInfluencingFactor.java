@@ -77,14 +77,14 @@ public enum UnderWriterInfluencingFactor {
                     errorMessageBuilder.append(" Sum Assured To should be greater than Sum Assured From \n");
                     return false;
                 }
-                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId)) ? (iPlanAdapter.isValidPlanSumAssured(planCode, sumAssuredFromCell) && iPlanAdapter.isValidPlanSumAssured(planCode, sumAssuredToCell)) :
+                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId)) ? (iPlanAdapter.isValidUnderWriterPlanSumAssured(planCode, sumAssuredFromCell) && iPlanAdapter.isValidUnderWriterPlanSumAssured(planCode, sumAssuredToCell)) :
                         (iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, sumAssuredFromCell) && iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, sumAssuredToCell));
                 if (!isValid)
                     errorMessageBuilder.append(errorMessage);
                 return isValid;
             }
             else {
-                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId)) ? (iPlanAdapter.isValidPlanSumAssured(planCode, new BigDecimal(fromValue)) && iPlanAdapter.isValidPlanSumAssured(planCode,new BigDecimal(toValue))):
+                boolean isValid = !(isNotEmpty(planCode) && isNotEmpty(coverageId)) ? (iPlanAdapter.isValidUnderWriterPlanSumAssured(planCode, new BigDecimal(fromValue)) && iPlanAdapter.isValidUnderWriterPlanSumAssured(planCode,new BigDecimal(toValue))):
                         (iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId, new BigDecimal(fromValue)) && iPlanAdapter.isValidCoverageSumAssured(planCode, coverageId,  new BigDecimal(toValue)));
                 if (!isValid)
                     errorMessageBuilder.append(errorMessage);

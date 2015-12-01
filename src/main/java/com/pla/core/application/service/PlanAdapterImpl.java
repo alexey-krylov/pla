@@ -153,6 +153,16 @@ public class PlanAdapterImpl implements IPlanAdapter {
     }
 
     @Override
+    public boolean isValidUnderWriterPlanSumAssured(String planCode, BigDecimal sumAssured) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.isValidUnderWriterSumAssured(sumAssured);
+    }
+
+    @Override
     public boolean isValidCoverageSumAssured(String planCode, String coverageId, BigDecimal sumAssured) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         if (isEmpty(plans)) {
