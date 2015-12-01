@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.nthdimenzion.common.AppConstants.DEFAULT_CURRENCY;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author: Nthdimenzion
@@ -113,8 +114,14 @@ public class AppUtils {
 
     public static void deleteTempFileIfExists(List<EmailAttachment> emailAttachments) throws IOException {
         for (EmailAttachment fileTobeDeleted : emailAttachments) {
-            if (fileTobeDeleted.getSubAttachments()!=null){
-                FileUtils.forceDelete(fileTobeDeleted.getSubAttachments().getFile());
+            if (isNotEmpty(fileTobeDeleted.getSubAttachments())){
+                fileTobeDeleted.getSubAttachments().forEach(subAttachment->{
+                    try {
+                        FileUtils.forceDelete(subAttachment.getFile());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
             FileUtils.forceDelete(fileTobeDeleted.getFile());
         }
