@@ -1,5 +1,47 @@
 angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
+    .directive('modal', function () {
+        return {
+            template: '<div class="modal fade">' +
+            '<div class="modal-dialog modal-sm">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<h4 class="modal-title">{{ title }}</h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-transclude></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            link: function postLink(scope, element, attrs) {
+                scope.title = attrs.title;
+
+                scope.$watch(attrs.visible, function (value) {
+                    if (value == true)
+                        $(element).modal('show');
+                    else
+                        $(element).modal('hide');
+                });
+
+                $(element).on('shown.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+            }
+        };
+    })
+
 
     .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces','industries', 'getProvinceAndCityDetail', 'globalConstants',
         'agentDetails', 'stepsSaved', 'proposerDetails', 'proposalNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
@@ -7,6 +49,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                   getQueryParameter, $window, premiumData, documentList) {
 
             var mode = getQueryParameter("mode");
+            $scope.showModal = false;
+
             if (mode == 'view') {
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
@@ -612,6 +656,13 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }
                     });
             };
+            $scope.proceedToNext = function () {
+                saveStep();
+                $scope.showModal = false;
+
+
+            }
+            $scope.errorMessage='';
 
             $scope.savePlanDetails = function () {
                 $upload.upload({
@@ -625,7 +676,20 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         if (data.id) {
                             $scope.proposalId = data.id;
                             $timeout($scope.updatePremiumDetail($scope.proposalId), 500);
-                            saveStep();
+                            $http.get("/pla/grouplife/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                                .success(function (response) {
+                                    console.log(response);
+                                    // $scope.validateGLQuotation = data;
+                                    if (response.data) {
+                                        $scope.showModal = true;
+                                        $scope.errorMessage=response.message;
+
+                                    } else {
+                                        saveStep();
+
+                                    }
+
+                                });
 
                         }
                     } else{

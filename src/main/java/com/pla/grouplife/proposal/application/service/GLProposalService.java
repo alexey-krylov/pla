@@ -635,47 +635,47 @@ public class GLProposalService {
         return mandatoryDocumentDtos;
     }
 
-    public Result validateIfLessThanMinimumNoOfPersonsForGLProposal(ProposalId proposalId) {
+    public boolean validateIfLessThanMinimumNoOfPersonsForGLProposal(ProposalId proposalId) {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.findOne(proposalId);
-        if(groupLifeProposal == null){
+        /*if(groupLifeProposal == null){
             return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
         if(groupLifeProposal != null && isEmpty(groupLifeProposal.getInsureds())){
             return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
-        Result result;
+        Result result*/;
         ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
         boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL = QuotationProposalUtilityService.validateIfLessThanMinimumNoOfPersonsForGLProposal(groupLifeProposal, productLineInformation);
-        if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL){
+      /*  if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL){
             result = new Result("", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.TRUE);
         } else {
             result = new Result("Total Number of Members is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.FALSE);
-        }
-        return result;
+        }*/
+        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL;
     }
 
 
-    public Result validateIfLessThanMinimumPremiumForGLProposal(ProposalId proposalId) {
+    public boolean validateIfLessThanMinimumPremiumForGLProposal(ProposalId proposalId) {
         GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.findOne(proposalId);
-        if(groupLifeProposal == null){
+       /* if(groupLifeProposal == null){
             return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
         }
         if(groupLifeProposal != null && isEmpty(groupLifeProposal.getInsureds())){
             return new Result("No data found with given proposal Id", Result.RESULT_TYPE.ERROR);
-        }
-        Result result;
+        }*//*
+        Result result;*/
         ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
         boolean isPremiumGreaterThenMinimumConfiguredPremiumGL = QuotationProposalUtilityService.validateIfLessThanMinimumPremiumForGLProposal(groupLifeProposal, productLineInformation);
-        if(isPremiumGreaterThenMinimumConfiguredPremiumGL){
+       /* if(isPremiumGreaterThenMinimumConfiguredPremiumGL){
             result = new Result("", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.TRUE);
         } else {
             result = new Result("Total Premium is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.FALSE);
-        }
-        return result;
+        }*/
+        return isPremiumGreaterThenMinimumConfiguredPremiumGL;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
