@@ -86,7 +86,7 @@ public final class Result {
     }
 
     public static Result failure(String message, Object data) {
-        Result result = new Result(message, RESULT_TYPE.SUCCESS);
+        Result result = new Result(message, RESULT_TYPE.ERROR);
         result.data = data;
         return result;
     }
