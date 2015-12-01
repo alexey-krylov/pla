@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-10-08T16:03:41 -->
+<!-- 2015-12-01T13:02:29 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cover" pageWidth="1000" pageHeight="930" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc47796d-11f2-4054-910b-4c89fed0a700">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -26,6 +26,9 @@
 	</field>
 	<field name="totalPremium" class="java.lang.String">
 		<fieldDescription><![CDATA[totalPremium]]></fieldDescription>
+	</field>
+	<field name="expiryDate" class="java.lang.String">
+		<fieldDescription><![CDATA[expiryDate]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -256,6 +259,14 @@
 					<font size="10" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{issueBranch}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="510" y="270" width="160" height="21" uuid="9eddd465-53ec-4efb-83c0-d5936b439f84"/>
+				<text><![CDATA[ Premium End Date : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="690" y="270" width="166" height="21" uuid="9cfae314-bd87-4daa-99ec-cae226774b16"/>
+				<textFieldExpression><![CDATA[$F{expiryDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
