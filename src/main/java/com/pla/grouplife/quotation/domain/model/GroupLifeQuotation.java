@@ -193,6 +193,8 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         newQuotation.insureds = this.insureds;
         newQuotation.premiumDetail = this.premiumDetail;
         newQuotation.industry = this.industry;
+        newQuotation.samePlanForAllCategory = this.samePlanForAllCategory;
+        newQuotation.samePlanForAllRelation = this.samePlanForAllRelation;
         return newQuotation;
     }
 

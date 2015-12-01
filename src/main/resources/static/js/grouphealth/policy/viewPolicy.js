@@ -167,6 +167,8 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             }
 
             $scope.policyDetails.proposer = policyDetails;
+            $scope.policyDetails.plan.samePlanForAllRelation = policyDetails.samePlanForAllRelation;
+            $scope.policyDetails.plan.samePlanForAllCategory = policyDetails.samePlanForAllCategory;
             /*used for bs-dropdown*/
             $scope.dropdown = [
                 {

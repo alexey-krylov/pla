@@ -188,7 +188,11 @@ public class GLPolicyService {
     public ProposerDto getProposerDetail(PolicyId policyId) {
         Map proposal = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         Proposer proposer = (Proposer) proposal.get("proposer");
+        boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
         ProposerDto proposerDto = new ProposerDto(proposer);
+        proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
+        proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());

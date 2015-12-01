@@ -44,6 +44,8 @@ public class GLPolicyFactory {
 
     public GroupLifePolicy createPolicy(ProposalId proposalId) {
         Map proposalMap = glFinder.findProposalById(proposalId.getProposalId());
+        boolean samePlanForAllRelation = proposalMap.get("samePlanForAllRelation") != null ? (boolean) proposalMap.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = proposalMap.get("samePlanForAllCategory") != null ? (boolean) proposalMap.get("samePlanForAllCategory") : false;
         AgentId agentId = (AgentId) proposalMap.get("agentId");
         Set<Insured> insureds = new HashSet((List) proposalMap.get("insureds"));
         PremiumDetail premiumDetail = (PremiumDetail) proposalMap.get("premiumDetail");
@@ -60,6 +62,8 @@ public class GLPolicyFactory {
         DateTime policyExpireDate = policyInceptionDate.plusDays(premiumDetail.getPolicyTermValue());
         Proposal proposal = new Proposal(proposalId, proposalNumber);
         GroupLifePolicy groupLifePolicy = new GroupLifePolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
+        groupLifePolicy.updateFlagSamePlanForAllRelation(samePlanForAllRelation);
+        groupLifePolicy.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
                 .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage);

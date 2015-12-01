@@ -207,6 +207,9 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         newQuotation.agentId = this.agentId;
         newQuotation.insureds = this.insureds;
         newQuotation.premiumDetail = this.premiumDetail;
+        newQuotation.samePlanForAllCategory = this.samePlanForAllCategory;
+        newQuotation.samePlanForAllRelation = this.samePlanForAllRelation;
+        newQuotation.moratoriumPeriodApplicable = this.moratoriumPeriodApplicable;
         return newQuotation;
     }
 

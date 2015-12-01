@@ -57,6 +57,11 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
 
     private Set<GHProposerDocument> proposerDocuments;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
+
     public GroupHealthPolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
         checkArgument(policyNumber != null, "Policy number cannot be empty");
@@ -162,6 +167,16 @@ public class GroupHealthPolicy extends AbstractAggregateRoot<PolicyId> {
     public GroupHealthPolicy updateWithDocuments(Set<GHProposerDocument> proposerDocuments) {
         this.proposerDocuments = proposerDocuments;
         // raise event to store document in client BC
+        return this;
+    }
+
+    public GroupHealthPolicy updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
+        this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
+
+    public GroupHealthPolicy updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
+        this.samePlanForAllCategory = samePlanForAllCategory;
         return this;
     }
 

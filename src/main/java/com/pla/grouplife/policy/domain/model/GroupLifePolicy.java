@@ -59,6 +59,10 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     private Set<GLProposerDocument> proposerDocuments;
 
+    private boolean samePlanForAllRelation;
+
+    private boolean samePlanForAllCategory;
+
     public GroupLifePolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
         checkArgument(policyNumber != null, "Policy number cannot be empty");
@@ -184,7 +188,15 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
         return this;
     }
 
+    public GroupLifePolicy updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
+        this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
 
+    public GroupLifePolicy updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
+        this.samePlanForAllCategory = samePlanForAllCategory;
+        return this;
+    }
     @Override
     public PolicyId getIdentifier() {
         return policyId;
