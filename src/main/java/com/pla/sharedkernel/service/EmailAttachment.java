@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by Samir on 5/27/2015.
@@ -20,7 +21,7 @@ public class EmailAttachment {
     private String contentType;
 
     @Setter
-    private EmailAttachment subAttachments;
+    private List<EmailAttachment> subAttachments;
 
     public EmailAttachment(String fileName, String contentType, File file) {
         this.fileName = fileName;
