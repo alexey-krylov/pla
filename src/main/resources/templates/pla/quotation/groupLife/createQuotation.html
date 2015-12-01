@@ -49,6 +49,16 @@
     </ol>
     </p>
     <nth-alert></nth-alert>
+
+    <modal title="Alert" visible="showModal">
+    <div class="form-group">{{errorMessage}}</div>
+
+        <div class="modal-footer" style="padding-left:0px;padding-right: 0px;">
+            <button type="button" ng-click="proceedToNext()" class="btn btn-primary">Proceed</button>
+            <button type="button" class="btn btn-danger" ng-click="back()" >Cancel</button> <!--data-dismiss="modal"-->
+
+        </div>
+    </modal>
     <form name="quotationForm" novalidate="true" class="container">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
@@ -390,14 +400,16 @@
                                         <div class="form-group required">
                                             <label class="control-label">Add-On Benefits</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" name="addOnBenefits" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   ng-required="true" name="addOnBenefits"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="quotationDetails.premium.addOnBenefit"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Profit and Solvency Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="profitAndSolvencyLoading" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   name="profitAndSolvencyLoading"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="quotationDetails.premium.profitAndSolvencyLoading"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
@@ -411,14 +423,16 @@
                                         <div class="form-group">
                                             <label class="control-label">Valued Client Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="valuedClientDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   name="valuedClientDiscount"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="quotationDetails.premium.valuedClientDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Long Term Discounts</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   name="longTermDiscount" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                   name="longTermDiscount"
+                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
                                                    ng-model="quotationDetails.premium.longTermDiscount"
                                                    ng-blur="recalculatePremium();" value="0"/>
                                         </div>

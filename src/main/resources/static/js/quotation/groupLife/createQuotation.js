@@ -1,5 +1,49 @@
 angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives', 'angularFileUpload',
-    'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
+    'mgcrea.ngStrap.dropdown', 'mgcrea.ngStrap.modal', 'ngSanitize', 'commonServices'])
+
+
+    .directive('modal', function () {
+        return {
+            template: '<div class="modal fade">' +
+            '<div class="modal-dialog modal-sm">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<h4 class="modal-title">{{ title }}</h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-transclude></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            link: function postLink(scope, element, attrs) {
+                scope.title = attrs.title;
+
+                scope.$watch(attrs.visible, function (value) {
+                    if (value == true)
+                        $(element).modal('show');
+                    else
+                        $(element).modal('hide');
+                });
+
+                $(element).on('shown.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+            }
+        };
+    })
+
     .controller('quotationCtrl', ['$scope', '$http', '$timeout', '$location', '$route', '$upload', 'provinces', 'industries', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
         'quotationNumber', 'getQueryParameter', '$window', 'checkIfInsuredUploaded', 'premiumData',
         function ($scope, $http, $timeout, $location, $route, $upload, provinces, industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
@@ -7,6 +51,8 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             var mode = getQueryParameter("mode");
             $scope.mode = mode;
             $scope.qId = null;
+            $scope.showModal = false;
+
             if (mode == 'view') {
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
@@ -63,10 +109,6 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             if (proposerDetails && proposerDetails.proposerCode) {
                 $scope.proposerCodeDisabled = true;
             }
-            // console.log(getQueryParameter('quotationId'));
-            // console.log($scope.quotationId);
-
-
             $scope.$watchCollection('[quotationId,showDownload]', function (n) {
                 if (n[0]) {
                     $scope.qId = n[0];
@@ -159,7 +201,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                             $scope.quotationDetails.basic.agentName = agentName;
                         } else {
                             $scope.agentNotFound = true;
-                            $scope.errorMessage=data.message;
+                            $scope.errorMessage = data.message;
                         }
                     })
                     .error(function (data, status) {
@@ -267,7 +309,15 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     });
             }
 
+            $scope.proceedToNext = function () {
+                saveStep();
+                $scope.showModal = false;
+
+
+            }
+            $scope.errorMessage='';
             $scope.savePlanDetails = function () {
+
                 $upload.upload({
                     url: '/pla/quotation/grouplife/uploadinsureddetail?quotationId=' + $scope.quotationId,
                     headers: {'Authorization': 'xxx'},
@@ -275,16 +325,30 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
-                        if(data.id) {
+                        if (data.id) {
+                           // alert("called");
                             $scope.quotationId = data.id;
                             $timeout($scope.updatePremiumDetail($scope.quotationId), 500);
-                            saveStep();
+                            $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/" + $scope.quotationId)
+                                .success(function (response) {
+                                    console.log(response);
+                                    // $scope.validateGLQuotation = data;
+                                    if (response.data) {
+                                        $scope.showModal = true;
+                                        $scope.errorMessage=response.message;
+
+                                    } else {
+                                        saveStep();
+
+                                    }
+
+                                });
 
                         }
-                        if(data.data){
+                        if (data.data) {
                             $scope.showDownload = false;
 
-                        }else{
+                        } else {
                             $scope.showDownload = true;
 
                         }
@@ -339,26 +403,26 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 request.premiumDetailDto["premiumInstallment"] = $scope.selectedInstallment;
                 console.log(JSON.stringify(request));
                 $http.post('/pla/quotation/grouplife/savepremiumdetail', request).success(function (data) {
-                    if($scope.premiumData.quotationStatus != 'SHARED'){
+                    if ($scope.premiumData.quotationStatus != 'SHARED') {
                         $http.post("/pla/quotation/grouplife/generate", angular.extend({},
                             {"quotationId": $scope.quotationId}))
                             .success(function (data) {
-                               /* if (data.status == "200") {
-                                    saveStep();
-                                    $('#searchFormQuotation').val($scope.quotationId);
-                                    $('#searchForm').submit();
-                                }*/
+                                /* if (data.status == "200") {
+                                 saveStep();
+                                 $('#searchFormQuotation').val($scope.quotationId);
+                                 $('#searchForm').submit();
+                                 }*/
                             });
                     }
                     /*$http.post("/pla/quotation/grouplife/generate", angular.extend({},
-                        {"quotationId": $scope.quotationId}))
-                        .success(function (data) {
-                            if (data.status == "200") {
-                                saveStep();
-                                $('#searchFormQuotation').val($scope.quotationId);
-                                $('#searchForm').submit();
-                            }
-                        });*/
+                     {"quotationId": $scope.quotationId}))
+                     .success(function (data) {
+                     if (data.status == "200") {
+                     saveStep();
+                     $('#searchFormQuotation').val($scope.quotationId);
+                     $('#searchForm').submit();
+                     }
+                     });*/
                     if (data.status == "200") {
                         saveStep();
                         $('#searchFormQuotation').val($scope.quotationId);

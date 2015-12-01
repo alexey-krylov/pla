@@ -366,7 +366,7 @@ public class GroupHealthQuotationController {
         return ghQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
-    @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGHQuotation/{quotationid}", method = RequestMethod.GET)
+   /* @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGHQuotation/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public Result validateIfLessThanMinimumNoOfPersonsForGHQuotation(@PathVariable("quotationid") String quotationId) {
         try {
@@ -376,12 +376,25 @@ public class GroupHealthQuotationController {
             return Result.failure(e.getMessage(), Boolean.FALSE);
         }
     }
-
-    @RequestMapping(value = "/validateIfLessThanMinimumPremiumForGHQuotation/{quotationid}", method = RequestMethod.GET)
+*/
+    @RequestMapping(value = "/isValidPremiumAndPerson/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public Result validateIfLessThanMinimumPremiumForGHQuotation(@PathVariable("quotationid") String quotationId) {
         try {
-            return ghQuotationService.validateIfLessThanMinimumPremiumForGHQuotation(new QuotationId(quotationId));
+            Boolean isValidPremium =  ghQuotationService.validateIfLessThanMinimumPremiumForGHQuotation(new QuotationId(quotationId));
+            Boolean isValidMinimumPerson = ghQuotationService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(new QuotationId(quotationId));
+            if (!isValidPremium && !isValidMinimumPerson){
+                return  Result.failure("Total Premium and Total Number of Members is less than the specified Minimum", Boolean.TRUE);
+            }
+            else  if (!isValidPremium){
+                return  Result.failure("Total Premium is less than the specified Minimum",Boolean.TRUE);
+            }
+            else  if (!isValidMinimumPerson){
+                return  Result.failure("Total Number of Members is less than the specified Minimum",Boolean.TRUE);
+            }
+            else {
+                return Result.success();
+            }
         } catch (Exception e){
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);

@@ -49,6 +49,16 @@
     </ol>
     </p>
     <nth-alert></nth-alert>
+    <modal title="Alert" visible="showModal">
+        <div class="form-group">{{errorMessage}}</div>
+
+        <div class="modal-footer" style="padding-left:0px;padding-right: 0px;">
+            <button type="button" ng-click="proceedToNext()" class="btn btn-primary">Proceed</button>
+            <button type="button" class="btn btn-danger" ng-click="back()" >Cancel</button> <!--data-dismiss="modal"-->
+
+        </div>
+    </modal>
+
     <form name="quotationForm" novalidate="true" class="container">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">

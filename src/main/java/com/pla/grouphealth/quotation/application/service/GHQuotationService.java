@@ -476,47 +476,47 @@ public class GHQuotationService {
         return glQuotationDtoList;
     }
 
-    public Result validateIfLessThanMinimumNoOfPersonsForGHQuotation(QuotationId quotationId) {
+    public boolean validateIfLessThanMinimumNoOfPersonsForGHQuotation(QuotationId quotationId) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(quotationId);
-        if(groupHealthQuotation == null){
+      /*  if(groupHealthQuotation == null){
             return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
         }
         if(groupHealthQuotation != null && isEmpty(groupHealthQuotation.getInsureds())){
             return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
         }
-        Result result;
+        Result result;*/
         ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
         boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH = QuotationProposalUtilityService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(groupHealthQuotation, productLineInformation);
-        if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH){
+     /*   if(isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH){
             result = new Result("", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.TRUE);
         } else {
             result = new Result("Total Number of Members is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.FALSE);
-        }
-        return result;
+        }*/
+        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH;
     }
 
 
-    public Result validateIfLessThanMinimumPremiumForGHQuotation(QuotationId quotationId) {
+    public boolean validateIfLessThanMinimumPremiumForGHQuotation(QuotationId quotationId) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(quotationId);
-        if(groupHealthQuotation == null){
-            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
-        }
-        if(groupHealthQuotation != null && isEmpty(groupHealthQuotation.getInsureds())){
-            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
-        }
-        Result result;
+//        if(groupHealthQuotation == null){
+//            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
+//        }
+//        if(groupHealthQuotation != null && isEmpty(groupHealthQuotation.getInsureds())){
+//            return new Result("No data found with given quotation Id", Result.RESULT_TYPE.ERROR);
+//        }
+//        Result result;
         ProductLineGeneralInformation productLineInformation = ghQuotationFinder.getGHProductLineInformation();
         boolean isPremiumGreaterThenMinimumConfiguredPremiumGH = QuotationProposalUtilityService.validateIfLessThanMinimumPremiumForGHQuotation(groupHealthQuotation, productLineInformation);
-        if(isPremiumGreaterThenMinimumConfiguredPremiumGH){
+        /*if(isPremiumGreaterThenMinimumConfiguredPremiumGH){
             result = new Result("", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.TRUE);
         } else {
             result = new Result("Total Premium is less than the specified Minimum", Result.RESULT_TYPE.SUCCESS);
             result.setData(Boolean.FALSE);
-        }
-        return result;
+        }*/
+        return isPremiumGreaterThenMinimumConfiguredPremiumGH;
     }
 
     private class TransformToGLQuotationDto implements Function<Map, GlQuotationDto> {
