@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-30T12:10:23 -->
+<!-- 2015-11-30T23:49:14 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -80,6 +80,9 @@
 	</field>
 	<field name="addOnBenefits" class="java.lang.String">
 		<fieldDescription><![CDATA[addOnBenefits]]></fieldDescription>
+	</field>
+	<field name="commissionAmount" class="java.lang.String">
+		<fieldDescription><![CDATA[commissionAmount]]></fieldDescription>
 	</field>
 	<field name="totalSumAssured" class="java.lang.String">
 		<fieldDescription><![CDATA[totalSumAssured]]></fieldDescription>
@@ -444,6 +447,7 @@
 					</staticText>
 					<staticText>
 						<reportElement x="398" y="175" width="143" height="30" uuid="5e5bd2c6-a4e0-4a82-b238-61c451a03164"/>
+						<textElement verticalAlignment="Middle"/>
 						<text><![CDATA[Endorement No.]]></text>
 					</staticText>
 					<staticText>
@@ -462,18 +466,7 @@
 						<text><![CDATA[ FROM YOU]]></text>
 					</staticText>
 					<textField>
-						<reportElement x="600" y="55" width="170" height="30" uuid="0fd4d03b-5c2f-49ca-a122-36d4980d678f"/>
-						<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
-					</textField>
-					<textField>
 						<reportElement x="600" y="135" width="270" height="30" uuid="53c19f26-acd8-44d9-aacb-f40cfed0b2e5"/>
-						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="600" y="300" width="270" height="30" uuid="c82aba69-8aab-43a2-9358-8681bbe00055"/>
-						<textElement>
-							<font fontName="Trebuchet MS"/>
-						</textElement>
 						<textFieldExpression><![CDATA[$F{masterPolicyNumber}]]></textFieldExpression>
 					</textField>
 					<textField>
@@ -509,14 +502,14 @@
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{commissionAmount}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="610" y="970" width="300" height="30" uuid="5b076c50-1db6-467a-b478-b54b431fd3f9"/>
 						<textElement>
 							<font fontName="Trebuchet MS"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{waiverOfExcessLoadingsPercentage}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="215" y="1025" width="380" height="30" uuid="f56522aa-a2ca-49cc-ba4a-fc281679e10d"/>
@@ -562,17 +555,17 @@
 					</textField>
 					<textField>
 						<reportElement x="600" y="175" width="269" height="30" uuid="3ca93492-8c2f-45e7-a376-ca9a6a894a79"/>
-						<textElement verticalAlignment="Top">
+						<textElement verticalAlignment="Middle">
 							<font fontName="Trebuchet MS" size="10" isBold="true"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{endorsementNumber}]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="506" y="620" width="394" height="30" uuid="12bfab63-34e5-4d64-a9d4-5742d6549c3c"/>
 						<textElement textAlignment="Left" verticalAlignment="Top">
 							<font fontName="Trebuchet MS" size="10"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{netPremium}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{totalPremium}]]></textFieldExpression>
 					</textField>
 					<textField>
 						<reportElement x="506" y="720" width="404" height="30" uuid="55e06ea5-89d6-4e86-87cc-3a97af5d2270"/>

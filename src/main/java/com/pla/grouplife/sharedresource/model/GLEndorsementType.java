@@ -61,6 +61,7 @@ public enum GLEndorsementType {
             Optional<Insured> insuredOptional =  insureds.parallelStream().filter(insured ->
                     insured.getNoOfAssured()!=null).findAny();
             Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            List<EmailAttachment> emailAttachments = Lists.newArrayList();
             for (Insured insured : insureds){
                 dependentOptional =   insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
@@ -68,6 +69,16 @@ public enum GLEndorsementType {
             EmailAttachment emailAttachment = new EmailAttachment();
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemAdditionWithNoOfAssured.jrxml");
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "member_addition_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                EmailAttachment  subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemAddWithDetail.jrxml");
@@ -79,7 +90,20 @@ public enum GLEndorsementType {
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 EmailAttachment subAttachment = new EmailAttachment(fileName,"application/pdf", file);
-                emailAttachment.setSubAttachments(subAttachment);
+                emailAttachments.add(subAttachment);
+
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "member_addition_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+
+                emailAttachment.setSubAttachments(emailAttachments);
+
             }
             String fileName = "Addition Member Endorsement_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
@@ -108,11 +132,23 @@ public enum GLEndorsementType {
             byte []pdfData=null;
             EmailAttachment emailAttachment = new EmailAttachment();
             Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            List<EmailAttachment> emailAttachments = Lists.newArrayList();
             for (Insured insured : insureds){
                 dependentOptional =   insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemberDelWithNoOfAssured.jrxml");
+
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "member_deletion_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                EmailAttachment  subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             else {
                 pdfData = PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/MemDelWithDetails.jrxml");
@@ -124,7 +160,19 @@ public enum GLEndorsementType {
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 EmailAttachment subAttachment = new EmailAttachment(fileName,"application/pdf", file);
-                emailAttachment.setSubAttachments(subAttachment);
+                emailAttachments.add(subAttachment);
+
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "member_deletion_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             String fileName = "Deletion Member Assured_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
@@ -152,11 +200,22 @@ public enum GLEndorsementType {
             byte []pdfData=null;
             EmailAttachment emailAttachment = new EmailAttachment();
             Optional<InsuredDependent>  dependentOptional  = Optional.empty();
+            List<EmailAttachment> emailAttachments = Lists.newArrayList();
             for (Insured insured : insureds){
                 dependentOptional =  insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/promotionOfMembersAssured.jrxml");
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "member_promotion_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                EmailAttachment  subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/promotionOfMembersAssured.jrxml");
@@ -168,7 +227,19 @@ public enum GLEndorsementType {
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 EmailAttachment subAttachment = new EmailAttachment(fileName,"application/pdf", file);
-                emailAttachment.setSubAttachments(subAttachment);
+                emailAttachments.add(subAttachment);
+
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "member_addition_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             String fileName = "Promotion of Members Assured_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
@@ -204,8 +275,20 @@ public enum GLEndorsementType {
             for (Insured insured : insureds){
                 dependentOptional =  insured.getInsuredDependents().parallelStream().filter(dependent->dependent.getNoOfAssured()!=null).findAny();
             }
+            List<EmailAttachment> emailAttachments = Lists.newArrayList();
             if (insuredOptional.isPresent() || dependentOptional.isPresent()) {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationship.jrxml");
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "new_category_Dr_Cr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                EmailAttachment  subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             else {
                 pdfData =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/endorsement/additionNewCategoryRelationshipMemberDetails.jrxml");
@@ -217,7 +300,19 @@ public enum GLEndorsementType {
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 EmailAttachment subAttachment = new EmailAttachment(fileName,"application/pdf", file);
-                emailAttachment.setSubAttachments(subAttachment);
+                emailAttachments.add(subAttachment);
+
+                byte[] creditNote =  PDFGeneratorUtils.createPDFReportByList(glEndorsementDetailDto, "jasperpdf/template/grouplife/policy/DebitCredit.jrxml");
+                String creditFileName = "new_category_DrCr_Note"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
+                File creditFile = new File(creditFileName);
+                FileOutputStream creditFileOutputStream = new FileOutputStream(creditFile);
+                creditFileOutputStream.write(creditNote);
+                creditFileOutputStream.flush();
+                creditFileOutputStream.close();
+                subAttachment = new EmailAttachment(creditFileName,"application/pdf", creditFile);
+                emailAttachments.add(subAttachment);
+
+                emailAttachment.setSubAttachments(emailAttachments);
             }
             String fileName = "Addition New Category Reletionship_"+glEndorsementDetailDto.get(0).getEndorsementNumber()+".pdf";
             File file = new File(fileName);
