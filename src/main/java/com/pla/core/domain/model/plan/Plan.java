@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.pla.core.domain.event.PlanCoverageAssociationEvent;
-import com.pla.core.domain.event.PlanCreatedEvent;
-import com.pla.core.domain.event.PlanDeletedEvent;
-import com.pla.core.domain.event.PlanWithdrawnEvent;
+import com.pla.core.domain.event.*;
 import com.pla.core.domain.exception.PlanValidationException;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
@@ -18,6 +15,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.DateTime;
@@ -55,6 +53,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     private Term premiumTerm;
     private Term policyTerm;
     private Set<PlanCoverage> coverages = new HashSet<PlanCoverage>();
+    private ScheduleToken scheduleToken;
 
     Plan() {
 
@@ -115,7 +114,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
-            super.registerEvent(new PlanCreatedEvent(planId, this.planDetail.getLaunchDate()));
+            super.registerEvent(new PlanUpdatedEvent(planId, this.planDetail.getLaunchDate()));
             if (this.planDetail.withdrawalDate != null) {
                 super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
             }
@@ -383,4 +382,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return SumAssuredType.INCOME_MULTIPLIER.equals(this.sumAssured.getSumAssuredType());
     }
 
+    public void setScheduleToken(ScheduleToken scheduleToken) {
+        this.scheduleToken = scheduleToken;
+    }
 }

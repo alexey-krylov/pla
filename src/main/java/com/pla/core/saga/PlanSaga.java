@@ -1,13 +1,11 @@
 package com.pla.core.saga;
 
-import com.pla.core.domain.event.PlanCreatedEvent;
-import com.pla.core.domain.event.PlanExpireEvent;
-import com.pla.core.domain.event.PlanLaunchEvent;
-import com.pla.core.domain.event.PlanWithdrawnEvent;
+import com.pla.core.domain.event.*;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.presentation.command.ExpirePlanCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
+import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
@@ -52,7 +50,22 @@ public class PlanSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling Plan Withdrawn Event .....", event);
         }
         DateTime launchDate = event.getLaunchDate();
-        eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
+        Plan plan = planMongoRepository.load(event.getPlanId());
+        ScheduleToken scheduleToken = eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
+        plan.setScheduleToken(scheduleToken);
+    }
+
+    @StartSaga
+    @SagaEventHandler(associationProperty = "planId")
+    public void handle(PlanUpdatedEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling Plan updating Event .....", event);
+        }
+        DateTime launchDate = event.getLaunchDate();
+        Plan plan = planMongoRepository.load(event.getPlanId());
+        eventScheduler.cancelSchedule(plan.getScheduleToken());
+        ScheduleToken scheduleToken = eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
+        plan.setScheduleToken(scheduleToken);
     }
 
     @SagaEventHandler(associationProperty = "planId")
