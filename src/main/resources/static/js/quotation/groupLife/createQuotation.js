@@ -345,14 +345,15 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                                 });
 
                         }
-                        if (data.data) {
+                    } else{
+                        if(data.data){
                             $scope.showDownload = false;
 
-                        } else {
+                        }else{
                             $scope.showDownload = true;
-
                         }
                     }
+
                 });
             };
             $scope.premiumInstallment = false;

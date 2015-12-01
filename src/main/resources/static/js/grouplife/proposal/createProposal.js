@@ -628,14 +628,15 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                             saveStep();
 
                         }
-                        if (data.data) {
+                    } else{
+                        if(data.data){
                             $scope.showDownload = false;
 
-                        } else {
+                        }else{
                             $scope.showDownload = true;
-
                         }
                     }
+
                 });
             };
             $scope.updatePremiumDetail = function (proposalId) {
