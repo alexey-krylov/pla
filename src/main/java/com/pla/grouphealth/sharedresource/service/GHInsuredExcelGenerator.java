@@ -7,6 +7,7 @@ import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
@@ -53,6 +54,7 @@ public class GHInsuredExcelGenerator {
         }
         Map<Integer, List<String>> constraintCellDataMap = Maps.newHashMap();
         constraintCellDataMap.put(headers.indexOf("Gender"), Gender.getAllGender());
+        constraintCellDataMap.put(headers.indexOf("Premium Type"), PremiumType.getAllPremiumType());
         constraintCellDataMap.put(headers.indexOf("Relationship"), Relationship.getAllRelation());
         constraintCellDataMap.put(headers.indexOf("Occupation"), getAllOccupationClassification());
         constraintCellDataMap.put(headers.indexOf("Category"), OccupationCategory.getAllCategory());

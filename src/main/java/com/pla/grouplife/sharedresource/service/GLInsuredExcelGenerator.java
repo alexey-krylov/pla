@@ -7,6 +7,7 @@ import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
@@ -56,6 +57,7 @@ public class GLInsuredExcelGenerator {
         constraintCellDataMap.put(headers.indexOf("Relationship"), Relationship.getAllRelation());
         constraintCellDataMap.put(headers.indexOf("Occupation"), getAllOccupationClassification());
         constraintCellDataMap.put(headers.indexOf("Category"), OccupationCategory.getAllCategory());
+        constraintCellDataMap.put(headers.indexOf("Premium Type"), PremiumType.getAllPremiumType());
         HSSFWorkbook workbook = ExcelGeneratorUtil.generateExcelWithDvConstraintCell(headers, excelData, constraintCellDataMap);
         return workbook;
     }

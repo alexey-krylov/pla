@@ -250,9 +250,6 @@ public class GLQuotationService {
     public boolean isValidInsuredTemplate(String quotationId, HSSFWorkbook insuredTemplateWorkbook, boolean samePlanForAllCategory, boolean samePlanForAllRelationship) {
         AgentDetailDto agentDetailDto = getAgentDetail(new QuotationId(quotationId));
         List<PlanId> agentPlans = getAgentAuthorizedPlans(agentDetailDto.getAgentId());
-        ProductLineGeneralInformation productLineInformation = glQuotationFinder.getGHProductLineInformation();
-        int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
         return glInsuredExcelParser.isValidInsuredExcel(insuredTemplateWorkbook, samePlanForAllCategory, samePlanForAllRelationship, agentPlans);
     }
 
@@ -309,6 +306,7 @@ public class GLQuotationService {
                 insuredDto.setOccupationClass(insured.getOccupationClass());
                 insuredDto.setOccupationCategory(insured.getCategory());
                 insuredDto.setNoOfAssured(insured.getNoOfAssured());
+                insuredDto.setPremiumType(insured.getPremiumType());
                 PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                 insuredDto = insuredDto.addPlanPremiumDetail(planPremiumDetailDto);

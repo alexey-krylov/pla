@@ -2,10 +2,12 @@ package com.pla.grouplife.sharedresource.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -770,8 +772,66 @@ public enum GLInsuredExcelHeader {
             }
             return errorMessage;
         }
-    },
-    PLAN_PREMIUM("Plan Premium") {
+    }, PREMIUM_TYPE("Premium Type") {
+        @Override
+        public String getAllowedValue(InsuredDto insuredDto) {
+            return insuredDto.getPremiumType() != null ? insuredDto.getPremiumType().toString() : "";
+        }
+
+        @Override
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDto.setPremiumType(isNotEmpty(cellValue) ? PremiumType.valueOf(cellValue.toUpperCase()) : null);
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            insuredDependentDto.setPremiumType(isNotEmpty(cellValue) ? PremiumType.valueOf(cellValue.toUpperCase()) : null);
+            return insuredDependentDto;
+        }
+
+        @Override
+        public String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto) {
+            return insuredDependentDto.getPremiumType() != null ? insuredDependentDto.getPremiumType().toString() : "";
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                Cell planPremiumCell = row.getCell(excelHeaders.indexOf(PLAN_PREMIUM.name()));
+                String planPremium = getCellValue(planPremiumCell);
+                if(PremiumType.RATE.toString().equalsIgnoreCase(value) && isEmpty(planPremium)){
+                    errorMessage = errorMessage + "Premium Plan cannot be empty for Premium Type - Rate.";
+                    return errorMessage;
+                }
+                if(PremiumType.RATE.toString().equalsIgnoreCase(value) && isNotEmpty(planPremium)){
+                    if(new BigDecimal(planPremium).signum() == -1) {
+                        errorMessage = errorMessage + "Premium Plan cannot be negative value for Premium Type - Rate.";
+                    }
+                    if(!(new BigDecimal(100).compareTo(new BigDecimal(planPremium)) >= 0)) {
+                        errorMessage = errorMessage + "Premium Plan cannot be greater than 100 for Premium Type - Rate.";
+                    }
+                    if(isNotEmpty(errorMessage))
+                        return errorMessage;
+                }
+                if(!PremiumType.checkIfValidConstant(value)){
+                    errorMessage = errorMessage + "Premium Type is not valid.";
+                    return errorMessage;
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    }, PLAN_PREMIUM("Plan Premium") {
         @Override
         public String getAllowedValue(InsuredDto insuredDto) {
             String premium = insuredDto.getPlanPremiumDetail().getPremiumAmount() != null ? insuredDto.getPlanPremiumDetail().getPremiumAmount().toString() : "";
@@ -794,11 +854,19 @@ public enum GLInsuredExcelHeader {
             String firstName = getCellValue(firstNameCell);
             Cell dateOfBirthCell = row.getCell(headers.indexOf(DATE_OF_BIRTH.getDescription()));
             String dateOfBirth = getCellValue(dateOfBirthCell);
-            if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
-                planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
-            }
-            if (isNotEmpty(firstName) && isNotEmpty(dateOfBirth) && isNotEmpty(cellValue)) {
-                planPremium = BigDecimal.valueOf(Double.valueOf(cellValue)).multiply(new BigDecimal(1));
+            Cell annualLimitCell = row.getCell(headers.indexOf(SUM_ASSURED.getDescription()));
+            String annualLimit = getCellValue(annualLimitCell);
+            Cell premiumTypeCell = row.getCell(headers.indexOf(PREMIUM_TYPE.getDescription()));
+            String premiumType = getCellValue(premiumTypeCell);
+            if(premiumType.equalsIgnoreCase(PremiumType.RATE.toString())){
+                planPremium = calculatePlanPremiumForPremiumTypeRate(cellValue, annualLimit, noOfAssuredCellValue);
+            } else {
+                if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
+                    planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));
+                }
+                if (isNotEmpty(firstName) && isNotEmpty(dateOfBirth) && isNotEmpty(cellValue)) {
+                    planPremium = BigDecimal.valueOf(Double.valueOf(cellValue)).multiply(new BigDecimal(1));
+                }
             }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
             planPremiumDetailDto.setPremiumAmount(planPremium);
@@ -854,6 +922,13 @@ public enum GLInsuredExcelHeader {
             return errorMessage;
         }
     };
+
+    private static BigDecimal calculatePlanPremiumForPremiumTypeRate(String cellValue, String annualLimit, String noOfAssuredCellValue) {
+        if(isNotEmpty(noOfAssuredCellValue))
+            return ((new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000))).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredCellValue));
+        else
+            return (new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000));
+    }
 
     private String description;
 

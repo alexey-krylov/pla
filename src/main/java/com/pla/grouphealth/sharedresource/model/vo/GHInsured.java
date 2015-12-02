@@ -2,6 +2,7 @@ package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,6 +52,8 @@ public class GHInsured {
 
     private Set<GHInsuredDependent> insuredDependents;
 
+    private PremiumType premiumType;
+
     private GHPlanPremiumDetail planPremiumDetail;
 
     private String existingIllness;
@@ -72,6 +75,7 @@ public class GHInsured {
         this.lastName = insuredBuilder.getLastName();
         this.dateOfBirth = insuredBuilder.getDateOfBirth();
         this.gender = insuredBuilder.getGender();
+        this.premiumType = insuredBuilder.getPremiumType();
         this.category = insuredBuilder.getCategory();
         this.insuredDependents = insuredBuilder.getInsuredDependents();
         this.occupationClass = insuredBuilder.getOccupation();

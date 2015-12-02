@@ -67,7 +67,7 @@ public class GHInsuredFactory {
                         .withOccupation(insuredDto.getOccupationClass()).withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName())
                         .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).
                         withGender(insuredDto.getGender()).withMinAndMaxAge(insuredDto.getMinAgeEntry(), insuredDto.getMaxAgeEntry())
-                        .withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured());
+                        .withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured()).withPremiumType(insuredDto.getPremiumType());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId()) : coveragePremiumDetail.getPremium();
                     if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null  && premiumDetail.getPremiumAmount()== null) {

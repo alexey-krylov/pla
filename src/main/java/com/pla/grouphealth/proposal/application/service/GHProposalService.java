@@ -320,6 +320,7 @@ public class GHProposalService {
                 insuredDto.setOccupationClass(insured.getOccupationClass());
                 insuredDto.setOccupationCategory(insured.getOccupationCategory());
                 insuredDto.setNoOfAssured(insured.getNoOfAssured());
+                insuredDto.setPremiumType(insured.getPremiumType());
                 insuredDto.setMinAgeEntry(insured.getMinAgeEntry());
                 insuredDto.setMaxAgeEntry(insured.getMaxAgeEntry());
                 insuredDto.setExistingIllness(insured.getExistingIllness());

@@ -2,6 +2,7 @@ package com.pla.grouplife.sharedresource.model.vo;
 
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
@@ -53,6 +54,8 @@ public class InsuredBuilder {
     private Integer noOfAssured;
 
     private String familyId;
+
+    private PremiumType premiumType;
 
     InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
         checkArgument(insuredPlan != null);
@@ -126,6 +129,10 @@ public class InsuredBuilder {
         return this;
     }
 
+    public InsuredBuilder withPremiumType(PremiumType premiumType) {
+        this.premiumType = premiumType;
+        return this;
+    }
 
     public InsuredBuilder withFamilyId(String familyId) {
         this.familyId = familyId;

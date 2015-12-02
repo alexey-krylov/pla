@@ -300,6 +300,7 @@ public class GHQuotationService {
                 insuredDto.setLastName(insured.getLastName());
                 insuredDto.setDateOfBirth(insured.getDateOfBirth());
                 insuredDto.setGender(insured.getGender());
+                insuredDto.setPremiumType(insured.getPremiumType());
                 insuredDto.setCategory(insured.getCategory());
                 insuredDto.setOccupationClass(insured.getOccupationClass());
                 insuredDto.setOccupationCategory(insured.getOccupationCategory());
