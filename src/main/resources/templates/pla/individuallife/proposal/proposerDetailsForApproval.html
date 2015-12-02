@@ -2,7 +2,7 @@
     <accordion close-others="true">
         <accordion-group is-open="accordionStatus.proposerDetails.agents" ng-class="{'accordion-error':isAgentEmpty}">
             <accordion-heading>
-                Agent
+                Broker/Agent/Direct
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.agents, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.agents}"></i>
             </accordion-heading>
@@ -12,14 +12,14 @@
                     Sum of commission % is not 100..Please update commission % to ensure it should be 100
                 </p>
                 <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-xs pull-right"
-                        data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Agent</strong>
+                        data-toggle="modal" data-target="#agentModal" style="margin-bottom: 5px"><strong>Add Broker/Agent/Direct</strong>
                 </button>
 
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Agent Code</th>
-                        <th>Agent Name</th>
+                        <th>Broker/Agent/Direct Code</th>
+                        <th>Broker/Agent/Direct Name</th>
                         <th>Commission %</th>
                     </tr>
                     </thead>

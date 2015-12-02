@@ -94,12 +94,12 @@
                     <ng-form name="step1">
                         <div class="bs-callout  bs-callout-info" style="margin-bottom: 7px">
                             <div class="alert alert-info" ng-show="agentNotFound">
-                                <strong>Agent Not Found.Please try again</strong>
+                                <strong>Broker/Agent/Direct Not Found.Please try again</strong>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group required">
-                                        <label class="control-label">Agent ID</label>
+                                        <label class="control-label">Broker/Agent/Direct ID</label>
 
                                         <div class="input-group">
                                             <input type="text" class="form-control input-sm" name="agentId"
@@ -129,7 +129,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group required">
-                                        <label class="control-label">Agent Name</label>
+                                        <label class="control-label">Broker/Agent/Direct Name</label>
                                         <input type="text" class="form-control input-sm" ng-readonly="true"
                                                ng-required="true" name="agentName"
                                                ng-model="proposalDetails.basic.agentName"/>
@@ -157,14 +157,14 @@
                                 </div>
                                 <div class="col-lg-3" ng-if="proposalDetails.basic.isCommissionOverridden">
                                     <div class="form-group required">
-                                        <label class="control-label">Agent Commission % (of Final Premium)</label>
+                                        <label class="control-label">Broker/Agent/Direct Commission % (of Final Premium)</label>
                                         <input type="text" class="form-control input-sm" min="0.1" ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/" ng-required="true"
                                                ng-disabled="isViewMode" name="agentCommissionPercentage" ng-model="proposalDetails.basic.agentCommissionPercentage"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-3" ng-if="!proposalDetails.basic.isCommissionOverridden">
                                     <div class="form-group">
-                                        <label class="control-label">Agent Commission % (of Final Premium)</label>
+                                        <label class="control-label">Broker/Agent/Direct Commission % (of Final Premium)</label>
                                         <input type="text" class="form-control input-sm" ng-disabled="!proposalDetails.basic.brokerCommissionRate"
                                                name="agentCommissionPercentage" ng-model="proposalDetails.basic.agentCommissionPercentage"/>
                                     </div>
