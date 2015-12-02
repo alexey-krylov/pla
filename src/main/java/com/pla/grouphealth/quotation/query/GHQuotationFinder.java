@@ -84,4 +84,8 @@ public class GHQuotationFinder {
         Query query = new Query(criteria);
         return mongoTemplate.findOne(query, ProductLineGeneralInformation.class, "product_line_information");
     }
+
+    public String getCoverageNameByCode(String coverageCode){
+        return ghFinder.getCoverageNameByCoverageCode(coverageCode);
+    }
 }

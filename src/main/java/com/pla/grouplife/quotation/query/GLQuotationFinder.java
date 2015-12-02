@@ -182,6 +182,14 @@ public class GLQuotationFinder {
         return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode));
     }
 
+    public String findCoverageNameByCoverageCode(String coverageCode) {
+        List<Map<String,Object>> optionalCoverages =  namedParameterJdbcTemplate.query(FIND_COVERAGE_BY_CODE_QUERY, new MapSqlParameterSource().addValue("coverageCode", coverageCode), new ColumnMapRowMapper());
+        if (isNotEmpty(optionalCoverages)){
+            return (String)optionalCoverages.get(0).get("coverageName");
+        }
+        return "";
+    }
+
     public ProductLineGeneralInformation getGHProductLineInformation() {
         Criteria criteria = Criteria.where("productLine").is("GROUP_LIFE");
         Query query = new Query(criteria);

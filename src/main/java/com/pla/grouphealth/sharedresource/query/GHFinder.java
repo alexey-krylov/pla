@@ -61,6 +61,7 @@ public class GHFinder {
     public static final String findActivePlansTagToAgentById = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN " +
             "plan_coverage_benefit_assoc p ON p.plan_id = a.plan_id WHERE agent_id=:agentId AND p.line_of_business=:lineOfBusiness AND p.plan_status = 'LAUNCHED'";
 
+    private static final String getCoverageNameByCoverageCode = " SELECT coverage_name coverageName FROM coverage WHERE coverage_code= :coverageCode ";
 
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
@@ -166,6 +167,14 @@ public class GHFinder {
 
     public List<Map<String, Object>> getActivePlanTagToAgentById(String agentId,String lineOfBusiness) {
         return namedParameterJdbcTemplate.query(findActivePlansTagToAgentById, new MapSqlParameterSource().addValue("agentId", agentId).addValue("lineOfBusiness", lineOfBusiness), new ColumnMapRowMapper());
+    }
+
+    public String getCoverageNameByCoverageCode(String coverageCode) {
+        List<Map<String,Object>> coverageNames = namedParameterJdbcTemplate.query(getCoverageNameByCoverageCode, new MapSqlParameterSource().addValue("coverageCode", coverageCode),new ColumnMapRowMapper());
+        if (isNotEmpty(coverageNames)){
+           return  (String) coverageNames.get(0).get("coverageName");
+        }
+        return "";
     }
 
     public Map<String, Object> getActiveInactiveAgentById(String agentId) {

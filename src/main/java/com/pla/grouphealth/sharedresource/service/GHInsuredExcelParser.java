@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
-import com.pla.grouphealth.sharedresource.dto.RelationshipPlanDataHolder;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -343,6 +342,10 @@ public class GHInsuredExcelParser {
     }
 
     private String validateOptionalCoverageCell(List<String> headers, Row row, List<OptionalCoverageCellHolder> optionalCoverageCellHolders) {
+        List<String> securityCover = Lists.newArrayList("Cash & Security Optional Covers 1",
+                "Cash & Security Optional Covers 2", "Cash & Security Optional Covers 3",
+                "Cash & Security Optional Covers 4");
+        List<String> securityCoverGiven = Lists.newArrayList();
         Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
         Cell noOfAssuredCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.NO_OF_ASSURED.getDescription()));
         String planCode = getCellValue(planCell);
@@ -356,6 +359,16 @@ public class GHInsuredExcelParser {
             String optionalCoverageCode = getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell());
             if (optionalCoverageCode.indexOf(".") != -1) {
                 optionalCoverageCode = optionalCoverageCode.substring(0, optionalCoverageCode.indexOf("."));
+            }
+            if (isNotEmpty(optionalCoverageCode) && isValidCoverage(finalPlanCode, optionalCoverageCode)){
+                String securityOptionalCover = ghQuotationFinder.getCoverageNameByCode(optionalCoverageCode);
+                if (securityCover.contains(securityOptionalCover)){
+                    securityCoverGiven.add(securityOptionalCover);
+                }
+                if (securityCoverGiven.size()>1){
+                    errorMessages.add(" Multiple security optional covers cannot be given for " + finalPlanCode + ".");
+                }
+                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
                 errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");

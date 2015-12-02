@@ -317,6 +317,11 @@ public class GLInsuredExcelParser {
     }
 
     private String validateOptionalCoverageCell(List<String> headers, Row row, List<OptionalCoverageCellHolder> optionalCoverageCellHolders) {
+        List<String> securityCover = Lists.newArrayList("Cash & Security Optional Covers 1",
+                "Cash & Security Optional Covers 2", "Cash & Security Optional Covers 3",
+                "Cash & Security Optional Covers 4");
+        List<String> securityCoverGiven = Lists.newArrayList();
+
         Cell planCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.PLAN.getDescription()));
         Cell noOfAssuredCell = row.getCell(headers.indexOf(GLInsuredExcelHeader.NO_OF_ASSURED.getDescription()));
         String planCode = getCellValue(planCell);
@@ -330,6 +335,16 @@ public class GLInsuredExcelParser {
             String optionalCoverageCode = getCellValue(optionalCoverageCellHolder.getOptionalCoverageCell());
             if (optionalCoverageCode.indexOf(".") != -1) {
                 optionalCoverageCode = optionalCoverageCode.substring(0, optionalCoverageCode.indexOf("."));
+            }
+            if (isNotEmpty(optionalCoverageCode) && isValidCoverage(finalPlanCode, optionalCoverageCode)){
+                String securityOptionalCover = glQuotationFinder.findCoverageNameByCoverageCode(optionalCoverageCode);
+                if (securityCover.contains(securityOptionalCover)){
+                    securityCoverGiven.add(securityOptionalCover);
+                }
+                if (securityCoverGiven.size()>1){
+                    errorMessages.add(" Multiple security optional covers cannot be given for " + finalPlanCode + ".");
+                }
+                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
                 errorMessages.add("Coverage code: " + optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
