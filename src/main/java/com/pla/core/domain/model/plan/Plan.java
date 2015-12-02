@@ -66,7 +66,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
             this.status = PlanStatus.DRAFT;
             copyPropertiesFromPlanBuilder(planBuilder);
             if (planBuilder.getPlanDetail() != null) {
-                super.registerEvent(new PlanCreatedEvent(planId, new DateTime(planDetail.getLaunchDate(), DateTimeZone.getDefault())));
+                super.registerEvent(new PlanCreatedEvent(planId, planDetail.getLaunchDate()));
                 if (this.planDetail.withdrawalDate != null) {
                     super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
                 }
@@ -115,7 +115,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         try {
             Preconditions.checkState(this.status == PlanStatus.DRAFT, "Plan in draft status can only be updated.");
             copyPropertiesFromPlanBuilder(planBuilder);
-            super.registerEvent(new PlanUpdatedEvent(planId, new DateTime(planDetail.getLaunchDate(), DateTimeZone.getDefault())));
+            super.registerEvent(new PlanUpdatedEvent(planId, this.planDetail.getLaunchDate()));
             if (this.planDetail.withdrawalDate != null) {
                 super.registerEvent(new PlanWithdrawnEvent(planId, this.planDetail.withdrawalDate));
             }
