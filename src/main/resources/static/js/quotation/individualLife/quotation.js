@@ -390,22 +390,42 @@
                     }
 
                 });
+                $scope.isClientValid=false;
+
+                $scope.resetClientInfo=function(){
+                    $scope.proposedAssured.title='';
+                    $scope.proposedAssured.surname='';
+                    $scope.proposedAssured.firstName='';
+                    $scope.proposedAssured.nrc='';
+                    $scope.proposedAssured.opportunityId='';
+                    $scope.proposedAssured.clientId='';
+                    $scope.isClientValid=false;
+                }
                 $scope.searchProposedAssuredByClientId=function(){
-                    //proposedAssured.clientId
-                    $http.get('/pla/individuallife/proposal/getclientid/' + $scope.proposedAssured.clientId)
-                        .success(function (response) {
-                            $scope.serverError = false;
-                            $scope.proposedAssured.title=response.data.title;
-                            $scope.proposedAssured.surname=response.data.surname;
-                            $scope.proposedAssured.firstName=response.data.firstName;
-                            $scope.proposedAssured.nrc=response.data.nrc;
-                            $scope.proposedAssured.opportunityId=response.opportunityId;
-                        }).error(function (response, status, headers, config) {
-                            $scope.serverError = true;
-                            $scope.serverErrMsg = response.message;
-                            $scope.proposedAssured={};
-                            $scope.proposedAssured.clientId='';
-                        });
+                    if($scope.proposedAssured.clientId){
+                        $http.get('/pla/individuallife/proposal/getclientid/' + $scope.proposedAssured.clientId)
+                            .success(function (response) {
+                                $scope.serverError = false;
+                                $scope.proposedAssured.title=response.data.title;
+                                $scope.proposedAssured.surname=response.data.surname;
+                                $scope.proposedAssured.firstName=response.data.firstName;
+                                $scope.proposedAssured.nrc=response.data.nrc;
+                                $scope.proposedAssured.opportunityId=response.opportunityId;
+                                $scope.isClientValid=true;
+                            }).error(function (response, status, headers, config) {
+                                $scope.serverError = true;
+                                $scope.serverErrMsg = response.message;
+                                //$scope.proposedAssured={};
+                                $scope.proposedAssured.title='';
+                                $scope.proposedAssured.surname='';
+                                $scope.proposedAssured.firstName='';
+                                $scope.proposedAssured.nrc='';
+                                $scope.proposedAssured.opportunityId='';
+                                $scope.proposedAssured.clientId='';
+                                $scope.isClientValid=false;
+                            });
+
+                    }
                 }
                 $scope.originalProposer = {};
                 if ($scope.quotationId) {
@@ -445,6 +465,15 @@
                             //console.log('selectedPlan1'+JSON.stringify(selectedPlan));
                             $scope.selectedPlan = selectedPlan;
 
+                            if(response.planDetailDto && response.planDetailDto.riderDetails){
+                                var i=response.planDetailDto.riderDetails.length - 1;
+                                for(i;response.planDetailDto.riderDetails.length > 0;){
+                                    if(response.planDetailDto.riderDetails[i].sumAssured == null && response.planDetailDto.riderDetails[i].coverTerm == null){
+                                        response.planDetailDto.riderDetails.splice(i,1);
+                                        i=response.planDetailDto.riderDetails.length - 1;
+                                    }
+                                }
+                            }
                             $scope.planDetailDto = response.planDetailDto;
                             $scope.selectedItem = 1;
                             $scope.stepsSaved["1"] = true;
@@ -506,14 +535,15 @@
 
                  }
                  });*/
-
+                $scope.searchRiders=[];
                 $scope.riderDetailCalling = function () {
                     //alert('calling Rider Details...');
                     $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.plan.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
                         .success(function (response) {
-                            $scope.planDetailDto.riderDetails = response;
-                        });
+                            //$scope.planDetailDto.riderDetails = response;
+                            $scope.searchRiders=response;
 
+                        });
                 }
 
                 /*$scope.$watch('plan.planId', function (newval) {
@@ -545,6 +575,7 @@
                     if ($scope.quotationId) {
                         return;
                     }
+                    $timeout(3);
                     $http.post('createquotation',
                         angular.extend($scope.proposedAssured, {
                             agentId: $scope.quotation.agentId,
@@ -668,6 +699,40 @@
                         });
                 };
 
+                $scope.selectOptionalCover=function(riderSelected){
+                    if(riderSelected){
+                        var riderChoose=_.findWhere($scope.searchRiders, {coverageName: riderSelected});
+                        if(riderChoose){
+                            if($scope.planDetailDto.riderDetails == null){
+                                $scope.planDetailDto.riderDetails=[];
+                            }
+                            $scope.planDetailDto.riderDetails.push(riderChoose);
+                        }
+                        // ReArranging the searchRiders List
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: riderSelected});
+                        if(riderSelected == 'Cash & Security Optional Covers 1'){
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                        }
+                        else if(riderSelected == 'Cash & Security Optional Covers 2'){
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                        }
+                        else if(riderSelected == 'Cash & Security Optional Covers 3'){
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                        }
+                        else if(riderSelected == 'Cash & Security Optional Covers 4'){
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                            $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                        }
+                    }
+                }
+
                 $scope.$on('changed.fu.wizard', function (name, event, data) {
                     $scope.selectedItem = data.step;
                     if (data && data.step == 5) {
@@ -680,6 +745,17 @@
                                 $scope.serverError = true;
                                 $scope.serverErrMsg = response.message;
                             });
+                        $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
+                            .success(function (response) {
+                                //$scope.planDetailDto.riderDetails = response;
+                                $scope.searchRiders=response;
+
+                            });
+
+
+                    }
+                    if (data && data.step == 4) {
+                        $scope.riderDetailCalling();
                     }
                 });
                 $scope.$on('finished.fu.wizard', function (name, event, data) {

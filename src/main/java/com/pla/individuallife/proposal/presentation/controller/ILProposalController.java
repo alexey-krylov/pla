@@ -388,7 +388,7 @@ public class ILProposalController {
         if (ilClientDetailDto!=null){
             return new ResponseEntity(Result.success("Client details Found",ilClientDetailDto),HttpStatus.OK);
         }
-        return new ResponseEntity(Result.failure("Client details Not Found"),HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(Result.failure("Client details Not Found for " + clientId),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getproposalnumber/{proposalId}")

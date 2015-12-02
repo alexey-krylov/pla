@@ -33,8 +33,11 @@
                                 proposedAssured="proposedAssured"></policyterm>
 
                 </div>
-                <div class="form-group" ng-if="proposalPlanDetail.riderDetails.length >0">
+                <div class="form-group" ng-if="searchRiders.length >0">
                     <label class="control-label">Riders Applied For</label>
+                    <select class="form-control input-sm" name="riderApplied" ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.riderSelected"
+                            ng-options="searchRider.coverageName as searchRider.coverageName for searchRider in searchRiders" ng-change="selectOptionalCover(proposalPlanDetail.riderSelected)">
+                    </select>
                     <!--<input type="text" class="form-control input-sm" name="ridersAppliedFor" ng-model="proposalPlanDetail.ridersapplied"/>-->
 
                     <!-- <select class="form-control input-sm" name="ridersAppliedFor" ng-disabled="mode=='new' || mode=='view'" ng-options="searchRider.coverageName for searchRider in searchRiders"

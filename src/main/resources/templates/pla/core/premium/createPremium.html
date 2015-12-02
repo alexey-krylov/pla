@@ -168,12 +168,21 @@
                     <div class="form-group col-md-6 required">
                         <label class="control-label">Influencing Factors</label>
 
-                        <div th:each="premiumInfluencingFactors: ${T(com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor).values()}">
+                        <!--<div th:each="premiumInfluencingFactors: ${T(com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor).values()}">
                             <input name="premiumInfluencingFactors" type="checkbox"
                                    th:field="*{createPremiumCommand.premiumInfluencingFactors}"
                                    th:id="${{premiumInfluencingFactors}}" th:value="${{premiumInfluencingFactors}}"/>
                             <label th:text="${{premiumInfluencingFactors.description}}"></label>
+                        </div>-->
+                        <input type="hidden" name="premiumInfluencingFactors" class="form-control input-lg" ng-model="createPremium.premiumInfluencingFactors"  value="{{createPremium.premiumInfluencingFactors}}"/>
+                        <div ng-repeat="influencingFactor in mulSelect">
+                            <div class="action-checkbox">
+                                <input id="{{influencingFactor.code}}" type="checkbox" value="{{influencingFactor.code}}" ng-click="toggleSelection($event,influencingFactor.code)"/>
+                                <label for="{{influencingFactor.code}}"></label>
+                                {{influencingFactor.description}}
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="row">
@@ -206,6 +215,8 @@
 </div>
 <script type="application/javascript">
     function downloadTemplate() {
+        var str =createPremium.premiumInfluencingFactors;
+        createPremium.premiumInfluencingFactors= str.join(',');
         $('#premiumForm').attr('action', 'downloadpremiumtemplate');
         return true;
     }

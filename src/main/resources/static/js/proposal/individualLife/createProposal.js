@@ -403,6 +403,62 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                  }
 
             }
+
+            $scope.$on('changed.fu.wizard', function (name, event, data) {
+                $scope.selectedWizard = data.step;
+                if (data && data.step == 3 || data && data.step == 4) {
+                    var age = $scope.proposedAssured.dateOfBirth;
+                    var ageNextBirthday = moment().diff(new moment(new Date(age)), 'years') + 1;
+
+                    $http.get("getridersforplan/" +$scope.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
+                        $scope.searchRiders = response;
+                        console.log('RiderDetails1..' + JSON.stringify($scope.searchRiders));
+                        if($scope.proposalPlanDetail.riderDetails != null && $scope.proposalPlanDetail.riderDetails.length > 0){
+                            for(i in $scope.proposalPlanDetail.riderDetails){
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: $scope.proposalPlanDetail.riderDetails[i].coverageName})
+                            }
+                        }
+                    }).error(function (response, status, headers, config) {
+                        var check = status;
+                    });
+                }
+            });
+
+            $scope.proposalPlanDetail.riderDetails=[];
+            $scope.selectOptionalCover=function(riderSelected){
+                if(riderSelected){
+                    var riderChoose=_.findWhere($scope.searchRiders, {coverageName: riderSelected});
+                    if(riderChoose){
+                        if($scope.proposalPlanDetail.riderDetails == null){
+                            $scope.proposalPlanDetail.riderDetails=[];
+                        }
+                        $scope.proposalPlanDetail.riderDetails.push(riderChoose);
+
+                    }
+                    // ReArranging the searchRiders List
+                    $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: riderSelected});
+                    if(riderSelected == 'Cash & Security Optional Covers 1'){
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                    }
+                    else if(riderSelected == 'Cash & Security Optional Covers 2'){
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                    }
+                    else if(riderSelected == 'Cash & Security Optional Covers 3'){
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                    }
+                    else if(riderSelected == 'Cash & Security Optional Covers 4'){
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                    }
+                }
+            }
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
                     $scope.selectedWizard = 1;
@@ -707,7 +763,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             $http.get("getridersforplan/" + response.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
                                 $scope.searchRiders = response;
                                 console.log('RiderDetails1..' + JSON.stringify($scope.searchRiders));
-                                $scope.proposalPlanDetail.riderDetails = response;
+                                //$scope.proposalPlanDetail.riderDetails = response;
                                 //console.log('Riders Details From Db is:' +JSON.stringify(response));
                                 //console.log($scope.searchRiders);
 
@@ -1430,17 +1486,17 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     alert("Please select proposedAssured date of birth in Between" + $scope.plan.planDetail.minEntryAge + "And" + $scope.plan.planDetail.maxEntryAge);
                     return;
                 }
-                var tempRequest = {
+               /* var tempRequest = {
                     "riderDetails": $scope.searchRiders
-                };
-                tempRequest = angular.extend($scope.proposalPlanDetail, tempRequest);
+                };*/
+                var tempRequest = angular.extend($scope.proposalPlanDetail, tempRequest);
 
                 var request = {
                     "proposalPlanDetail": tempRequest,
                     "beneficiaries": $scope.beneficiariesList,
                     "proposalId": $scope.proposal.proposalId
                 };
-                //console.log('Final to Plan DB..' + JSON.stringify(request));
+                console.log('Final to Plan DB..' + JSON.stringify(request));
                 $http.post('updateplan', request).success(function (response, status, headers, config) {
                     $scope.stepsSaved[$scope.selectedWizard] = true;
                     $scope.proposal = response;
