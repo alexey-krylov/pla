@@ -47,6 +47,10 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         }
     });
 
+    $http.get('/pla/core/premium/getpremiuminfluencingfactors').success(function (data) {
+        $scope.mulSelect = data;
+    });
+
     $scope.$watch('createPremium.planId', function (newValue, oldValue) {
         if (newValue) {
             var planId = $scope.createPremium.planId;
@@ -66,6 +70,26 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
         }
     });
 
+    $scope.createPremium.premiumInfluencingFactors=[];
+
+    $scope.toggleSelection=function($event,influencingFactorCode) {
+        var checkbox = $event.target;
+        if(checkbox.checked)
+        {
+            $scope.createPremium.premiumInfluencingFactors.push(influencingFactorCode);
+        }
+        else
+        {
+            for (var i = 0; i < $scope.createPremium.premiumInfluencingFactors.length; i++) {
+
+                if($scope.createPremium.premiumInfluencingFactors[i] == influencingFactorCode)
+                {
+                    $scope.createPremium.premiumInfluencingFactors.splice(i, 1);
+                }
+            }
+        }
+    }
+
     $scope.$watch('createPremium.effectiveFrom', function (newValue, oldValue) {
         if (newValue) {
             if (!moment($scope.createPremium.effectiveFrom, 'DD/MM/YYYY').isValid()) {
@@ -77,7 +101,7 @@ App.controller('CreatePremiumController', ['$scope', '$http', function ($scope, 
 
     $scope.isDownloadTemplateEnabled=function(){
 
-        if($scope.createPremium.planId && $scope.createPremium.definedFor && $scope.createPremium.premiumFactor){
+        if($scope.createPremium.planId && $scope.createPremium.definedFor && $scope.createPremium.premiumFactor && $scope.createPremium.premiumInfluencingFactors.length >0 ){
             return true;
         }
         else{

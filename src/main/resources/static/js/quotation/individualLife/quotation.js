@@ -464,16 +464,6 @@
                             selectedPlan=response.planDetail.planDetail;
                             //console.log('selectedPlan1'+JSON.stringify(selectedPlan));
                             $scope.selectedPlan = selectedPlan;
-
-                            if(response.planDetailDto && response.planDetailDto.riderDetails){
-                                var i=response.planDetailDto.riderDetails.length - 1;
-                                for(i;response.planDetailDto.riderDetails.length > 0;){
-                                    if(response.planDetailDto.riderDetails[i].sumAssured == null && response.planDetailDto.riderDetails[i].coverTerm == null){
-                                        response.planDetailDto.riderDetails.splice(i,1);
-                                        i=response.planDetailDto.riderDetails.length - 1;
-                                    }
-                                }
-                            }
                             $scope.planDetailDto = response.planDetailDto;
                             $scope.selectedItem = 1;
                             $scope.stepsSaved["1"] = true;
