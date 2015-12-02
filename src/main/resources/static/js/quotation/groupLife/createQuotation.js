@@ -17,6 +17,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             '</div>',
             restrict: 'E',
             transclude: true,
+
             replace: true,
             scope: true,
             link: function postLink(scope, element, attrs) {
@@ -316,6 +317,25 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
             }
             $scope.errorMessage='';
+
+            $scope.$watch('selectedItem', function (newVal, oldVal) {
+              //  console.log("STEP"+newVal);
+              //  console.log(!$scope.stepsSaved[newVal]);
+                if (newVal == 3) {
+                    $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/" + $scope.quotationId)
+                        .success(function (response) {
+                            console.log(response);
+                            // $scope.validateGLQuotation = data;
+                            if (response.data) {
+                                $scope.showModal = true;
+                                $scope.errorMessage=response.message;
+
+                            }
+                        });
+                }
+            });
+
+
             $scope.savePlanDetails = function () {
 
                 $upload.upload({
@@ -329,10 +349,9 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                            // alert("called");
                             $scope.quotationId = data.id;
                             $timeout($scope.updatePremiumDetail($scope.quotationId), 500);
-                            $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/" + $scope.quotationId)
+                            $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/"+ $scope.quotationId)
                                 .success(function (response) {
                                     console.log(response);
-                                    // $scope.validateGLQuotation = data;
                                     if (response.data) {
                                         $scope.showModal = true;
                                         $scope.errorMessage=response.message;
@@ -343,6 +362,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                                     }
 
                                 });
+
 
                         }
                     } else{
