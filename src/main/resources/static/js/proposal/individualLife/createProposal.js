@@ -418,6 +418,35 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: $scope.proposalPlanDetail.riderDetails[i].coverageName})
                             }
                         }
+
+                        //ReArranging in SearchRider Regarding  Specified Plan of Cash &Security optional Cover
+                        var j=0;
+                        for(j;j< $scope.proposalPlanDetail.riderDetails.length;j++){
+                            if($scope.proposalPlanDetail.riderDetails[j].coverageName == 'Cash & Security Optional Covers 1'){
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                                break;
+                            }
+                            else if($scope.proposalPlanDetail.riderDetails[j].coverageName == 'Cash & Security Optional Covers 2'){
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                                break;
+                            }
+                            else if($scope.proposalPlanDetail.riderDetails[j].coverageName == 'Cash & Security Optional Covers 3'){
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                                break;
+                            }
+                            else if($scope.proposalPlanDetail.riderDetails[j].coverageName == 'Cash & Security Optional Covers 4'){
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                                $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                                break;
+                            }
+                        }
                     }).error(function (response, status, headers, config) {
                         var check = status;
                     });

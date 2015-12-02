@@ -735,17 +735,48 @@
                                 $scope.serverError = true;
                                 $scope.serverErrMsg = response.message;
                             });
-                        $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
-                            .success(function (response) {
-                                //$scope.planDetailDto.riderDetails = response;
-                                $scope.searchRiders=response;
-
-                            });
-
-
                     }
                     if (data && data.step == 4) {
-                        $scope.riderDetailCalling();
+                        $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
+                            .success(function (response) {
+                                $scope.searchRiders=response;
+                                var i=0;
+                                if($scope.planDetailDto.riderDetails != null && $scope.planDetailDto.riderDetails.length > 0){
+                                    for(i;i< $scope.planDetailDto.riderDetails.length;i++){
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: $scope.planDetailDto.riderDetails[i].coverageName})
+                                    }
+                                }
+
+                                //ReArranging in SearchRider Regarding  Specified Plan
+                                //var coverage = _.findWhere($scope.planDetailDto.riderDetails, {coverageId: searchRider.coverageId});
+                                var j=0;
+                                for(j;j< $scope.planDetailDto.riderDetails.length;j++){
+                                    if($scope.planDetailDto.riderDetails[j].coverageName == 'Cash & Security Optional Covers 1'){
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                                        break;
+                                    }
+                                    else if($scope.planDetailDto.riderDetails[j].coverageName == 'Cash & Security Optional Covers 2'){
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                                        break;
+                                    }
+                                    else if($scope.planDetailDto.riderDetails[j].coverageName == 'Cash & Security Optional Covers 3'){
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 4'});
+                                        break;
+                                    }
+                                    else if($scope.planDetailDto.riderDetails[j].coverageName == 'Cash & Security Optional Covers 4'){
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 2'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
+                                        $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 1'});
+                                        break;
+                                    }
+                                }
+                            });
                     }
                 });
                 $scope.$on('finished.fu.wizard', function (name, event, data) {

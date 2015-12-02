@@ -1,6 +1,7 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.sharedresource.dto.*;
@@ -35,9 +36,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Service
 public class ILQuotationFinder {
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
     public static final String FIND_AGENT_BY_ID_QUERY = "select * from agent_team_branch_view where agentId =:agentId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_WITH_RIDER_QUERY =
             " SELECT  r.`coverage_id` AS COVERAGEID, r.`cover_term` AS COVERTERM, r.`sum_assured` AS RIDER_SA, " +
@@ -50,22 +48,18 @@ public class ILQuotationFinder {
             " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED  " +
             " FROM individual_life_quotation il LEFT JOIN occupation_class oc ON il.occupation = oc.description " +
             " WHERE quotation_id =:quotationId";
-
+    public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
+    public static final String  findQuotationByQuotationNumberQuery = " SELECT * FROM individual_life_quotation WHERE parent_quotation_id=:parentQuotationId ";
     private static String findQuotation = "SELECT DISTINCT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ', " +
             "   COALESCE(surname,'')) AS proposedName,CONCAT(proposer_first_name,' ',proposer_surname) AS proposerName,  " +
             "   il_quotation_status AS quotationStatus, quotation_id AS quotation_id, quotation_number AS quotationNumber, " +
             "   generated_on AS generatedOn,version_number AS versionNumber,COALESCE(p.plan_name,'') planName FROM individual_life_quotation IL LEFT JOIN agent A   ON IL.agent_id = A.agent_id " +
             "   LEFT JOIN plan_coverage_benefit_assoc p ON p.plan_id = IL.plan_id ";
-
     public static final String QUOTATION_SEARCH_QUERY = findQuotation +" WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
             " OR IL.proposer_nrc_number= :nrcNumber OR il.agent_id = :agentCode OR IL.il_quotation_status=:quotationStatus order by version_number desc";
-
     public static final String findSharedQuotationByQuotationNumberQuery = findQuotation +" WHERE  IL.quotation_number= :quotationNumber  AND IL.il_quotation_status= '"+ ILQuotationStatus.SHARED.name()+"' ORDER BY version_number desc";
-
-    public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
-
-    public static final String  findQuotationByQuotationNumberQuery = " SELECT * FROM individual_life_quotation WHERE parent_quotation_id=:parentQuotationId ";
-
+    @Autowired
+    private MongoTemplate mongoTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
@@ -132,7 +126,7 @@ public class ILQuotationFinder {
         for (Map<String, Object> m : optionalCoverages) {
             coverageReferenceMap.put(m.get("coverage_id").toString(), m);
         }
-        List<RiderDetailDto> riderDetailDtoList = new ArrayList<>();
+        Set<RiderDetailDto> riderDetailDtoList = Sets.newLinkedHashSet();
         if (quotation.getRiderDetails() != null && quotation.getRiderDetails().size() > 0) {
             for (RiderDetail rider : quotation.getRiderDetails()) {
                 RiderDetailDto riderDetailDto = new RiderDetailDto();
@@ -145,15 +139,7 @@ public class ILQuotationFinder {
                 riderDetailDtoList.add(riderDetailDto);
             }
         }
-
-        for (String coverageId : coverageReferenceMap.keySet()) {
-            RiderDetailDto riderDetailDto = new RiderDetailDto();
-            Map m = coverageReferenceMap.get(coverageId);
-            riderDetailDto.setCoverageName(m.get("coverage_name").toString());
-            riderDetailDto.setCoverageId(coverageId);
-            riderDetailDtoList.add(riderDetailDto);
-        }
-        planDetailDto.setRiderDetails(new HashSet<RiderDetailDto>(riderDetailDtoList));
+        planDetailDto.setRiderDetails(riderDetailDtoList);
         dto.setPlanDetailDto(planDetailDto);
         dto.setProposedAssured(proposedAssuredDto);
         dto.setProposer(proposerDto);
