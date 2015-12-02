@@ -641,6 +641,23 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             }
             $scope.errorMessage='';
+            $scope.$watch('selectedItem', function (newVal, oldVal) {
+                //  console.log("STEP"+newVal);
+                //  console.log(!$scope.stepsSaved[newVal]);
+                if (newVal == 3) {
+                    $http.get("/pla/grouphealth/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                        .success(function (response) {
+                            console.log(response);
+                            // $scope.validateGLQuotation = data;
+                            if (response.data) {
+                                $scope.showModal = true;
+                                $scope.errorMessage=response.message;
+
+                            }
+                        });
+                }
+            });
+
 
 
             $scope.savePlanDetails = function () {
