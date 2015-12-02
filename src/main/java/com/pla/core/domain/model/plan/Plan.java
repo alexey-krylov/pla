@@ -391,6 +391,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
     public Plan updateWithdrawalDate(DateTime withdrawalDate){
         this.planDetail.withdrawalDate = withdrawalDate;
         super.registerEvent(new PlanWithdrawnEvent(planId, withdrawalDate));
+        super.registerEvent(new PlanUpdateWithdrawalEvent(planId, withdrawalDate));
         return this;
     }
 

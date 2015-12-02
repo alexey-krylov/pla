@@ -346,22 +346,24 @@ public class GroupLifeProposalController {
         }
     }
 
-    @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGLProposal/{proposalId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/isValidPremiumAndPersons/{proposalId}", method = RequestMethod.GET)
     @ResponseBody
-    public Result validateIfLessThanMinimumNoOfPersonsForGLProposal(@PathVariable("proposalId") String proposalId) {
+    public Result isValidPremiumAndPersons(@PathVariable("proposalId") String proposalId) {
         try {
-            return glProposalService.validateIfLessThanMinimumNoOfPersonsForGLProposal(new ProposalId(proposalId));
-        } catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(e.getMessage(), Boolean.FALSE);
-        }
-    }
-
-    @RequestMapping(value = "/validateIfLessThanMinimumPremiumForGLProposal/{proposalId}", method = RequestMethod.GET)
-    @ResponseBody
-    public Result validateIfLessThanMinimumPremiumForGLProposal(@PathVariable("proposalId") String proposalId) {
-        try {
-            return glProposalService.validateIfLessThanMinimumPremiumForGLProposal(new ProposalId(proposalId));
+            boolean isMinimumNoPersons  = glProposalService.validateIfLessThanMinimumNoOfPersonsForGLProposal(new ProposalId(proposalId));
+            boolean isMinimumPremium =  glProposalService.validateIfLessThanMinimumPremiumForGLProposal(new ProposalId(proposalId));
+            if (!isMinimumPremium && !isMinimumNoPersons){
+                return Result.failure("Total Premium and Total Number of Members is less than the specified Minimum", Boolean.TRUE);
+            }
+            else  if (!isMinimumPremium){
+                return  Result.failure("Total Premium is less than the specified Minimum",Boolean.TRUE);
+            }
+            else  if (!isMinimumNoPersons){
+                return  Result.failure("Total Number of Members is less than the specified Minimum",Boolean.TRUE);
+            }
+            else {
+                return Result.success();
+            }
         } catch (Exception e){
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);

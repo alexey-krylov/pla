@@ -182,7 +182,7 @@ public enum GLEndorsementType {
             fileOutputStream.close();
             return emailAttachment.withAttachment(fileName,"application/pdf", file);
         }
-    }, MEMBER_PROMOTION("Promotion") {
+    }, MEMBER_PROMOTION("Increase In Sum Assured") {
         @Override
         public List<GLEndorsementExcelHeader> getAllowedExcelHeaders() {
             return Arrays.asList(GLEndorsementExcelHeader.CLIENT_ID, GLEndorsementExcelHeader.OLD_ANNUAL_INCOME, GLEndorsementExcelHeader.NEW_ANNUAL_INCOME);

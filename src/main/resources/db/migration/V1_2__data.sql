@@ -701,7 +701,7 @@ INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Lif
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured - Gender','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Member Addition','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Member Deletion','GROUP');
-INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Promotion','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Increase In Sum Assured','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Introduction of New category','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Premium Adjustment','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Agent','GROUP');
