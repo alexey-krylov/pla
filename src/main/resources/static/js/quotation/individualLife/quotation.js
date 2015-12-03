@@ -368,6 +368,10 @@
                     } else {
                         returnval = true;
                     }
+                    if($scope.isRiderDeleted){
+                        $scope.stepsSaved["4"] = false;
+                        returnval=false;
+                    }
                     //console.log('Form Name ' + stepForm.$name + returnval);
                     return returnval;
                 };
@@ -608,40 +612,6 @@
                     }
                 });
 
-                $scope.isRiderValid = function () {
-                    var riderValid;
-                    if ($scope.planDetailDto) {
-                        if ($scope.planDetailDto.riderDetails) {
-                            if ($scope.planDetailDto.riderDetails.length > 0) {
-                                for (var i = 0; i < $scope.planDetailDto.riderDetails.length; i++) {
-                                    if ($scope.planDetailDto.riderDetails[i].sumAssured == null && $scope.planDetailDto.riderDetails[i].coverTerm == null) {
-                                        riderValid = "false";
-                                        break;
-                                    }
-                                    else if ($scope.planDetailDto.riderDetails[i].sumAssured != null && $scope.planDetailDto.riderDetails[i].coverTerm != null) {
-                                        riderValid = "false";
-                                        break;
-                                    }
-                                    else {
-                                        riderValid = "true";
-                                    }
-                                }
-                            }
-                            else {
-                                riderValid = "false";
-                            }
-
-                        }
-                    }
-
-                    if (riderValid == "false") {
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-
                 $scope.saveStep2 = function (stepForm) {
                     stepForm.$setPristine();
                     var request = {proposedAssured: $scope.proposedAssured};
@@ -673,6 +643,7 @@
                 };
 
                 $scope.saveStep4 = function (stepForm) {
+                    $scope.isRiderDeleted=false;
                     stepForm.$setPristine();
                     $scope.planDetailDto.planId = $scope.plan.planId;
                     var request = angular.extend($scope.planDetailDto, {
@@ -690,6 +661,10 @@
                 };
 
                 $scope.selectOptionalCover=function(riderSelected){
+
+                    if($scope.isRiderDeleted){
+                        $scope.isRiderDeleted=false;
+                    }
                     if(riderSelected){
                         var riderChoose=_.findWhere($scope.searchRiders, {coverageName: riderSelected});
                         if(riderChoose){
@@ -723,6 +698,80 @@
                     }
                 }
 
+                $scope.searchRidersCopy=[];
+                $scope.isRiderDeleted=false;
+                $scope.deleteRider=function(coverageName){
+                    $scope.isRiderDeleted=true;
+
+                    // Deleting the Selected Rider From PlanDetail's Rider List
+                    $scope.planDetailDto.riderDetails=_.reject($scope.planDetailDto.riderDetails, {coverageName:coverageName});
+
+                    // ReArranging the Rider which has deleted into searchRiders List
+
+                    if(coverageName == 'Cash & Security Optional Covers 1'){
+                        var coverage1=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 2'});
+                        if(coverage1){
+                            $scope.searchRiders.push(coverage1);
+                        }
+                        var coverage2=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 3'});
+                        if(coverage2){
+                            $scope.searchRiders.push(coverage2);
+                        }
+                        var coverage3=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 4'});
+                        if(coverage3){
+                            $scope.searchRiders.push(coverage3);
+                        }
+                    }
+                    else if(coverageName == 'Cash & Security Optional Covers 2'){
+                        var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
+                        if(coverage1){
+                            $scope.searchRiders.push(coverage1);
+                        }
+                        var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 3'});
+                        if(coverage2){
+                            $scope.searchRiders.push(coverage2);
+                        }
+                        var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 4'});
+                        if(coverage3){
+                            $scope.searchRiders.push(coverage3);
+                        }
+                    }
+                    else if(coverageName == 'Cash & Security Optional Covers 3'){
+                        var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
+                        if(coverage1){
+                            $scope.searchRiders.push(coverage1);
+                        }
+                        var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 2'});
+                        if(coverage2){
+                            $scope.searchRiders.push(coverage2);
+                        }
+                        var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 4'});
+                        if(coverage3){
+                            $scope.searchRiders.push(coverage3);
+                        }
+                    }
+                    else if(coverageName == 'Cash & Security Optional Covers 4'){
+                        var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
+                        if(coverage1){
+                            $scope.searchRiders.push(coverage1);
+                        }
+                        var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 2'});
+                        if(coverage2){
+                            $scope.searchRiders.push(coverage2);
+                        }
+                        var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 3'});
+                        if(coverage3){
+                            $scope.searchRiders.push(coverage3);
+                        }
+                    }
+                    else{
+                        var coverage=_.findWhere($scope.searchRidersCopy,{coverageName: coverageName});
+                        if(coverage){
+                            $scope.searchRiders.push(coverage);
+                        }
+                    }
+                    $scope.planDetailDto.riderSelected='';
+                }
                 $scope.$on('changed.fu.wizard', function (name, event, data) {
                     $scope.selectedItem = data.step;
                     if (data && data.step == 5) {
@@ -739,6 +788,7 @@
                     if (data && data.step == 4) {
                         $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
                             .success(function (response) {
+                                angular.copy(response,$scope.searchRidersCopy);
                                 $scope.searchRiders=response;
                                 var i=0;
                                 if($scope.planDetailDto.riderDetails != null && $scope.planDetailDto.riderDetails.length > 0){
