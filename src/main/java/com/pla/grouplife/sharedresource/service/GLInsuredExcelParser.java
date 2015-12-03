@@ -167,6 +167,7 @@ public class GLInsuredExcelParser {
         Row headerRow = rowIterator.next();
         List<Row> dataRows = Lists.newArrayList(rowIterator);
         final List<String> headers = getHeaders(headerRow);
+        Set<String> optionalCoverageHeaders = getAllOptionalCoverageHeaders(headers);
         boolean isValidHeader = isValidHeader(headers, agentPlans);
         if (!isValidHeader) {
             raiseNotValidHeaderException();
@@ -192,9 +193,6 @@ public class GLInsuredExcelParser {
         } else if (!isSamePlanForAllRelationshipCategory) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
-        if(checkIfSameOptionalCoverage(insuredDependentMap, headers)){
-            raiseSameOptionalCoverageException();
-        }
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
@@ -213,7 +211,8 @@ public class GLInsuredExcelParser {
                 });
                 duplicateRowErrorMessage = duplicateRowErrorMessage + rowNumbers[0] + ".\n";
             }
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage)) {
+            String sameOptionalCoverageErrorMessage = checkIfSameOptionalCoverage(currentRow, headers, optionalCoverageHeaders);
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -228,6 +227,7 @@ public class GLInsuredExcelParser {
             }
             errorMessage = errorMessage + "\n" + coverageErrorMessage;
             errorMessage = errorMessage + duplicateRowErrorMessage;
+            errorMessage = errorMessage +" \n "+ sameOptionalCoverageErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }

@@ -13,6 +13,7 @@ import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.nthdimenzion.utils.UtilValidator;
@@ -164,9 +165,9 @@ public class QuotationProposalUtilityService {
     private static BigDecimal getPremiumDetail(BigDecimal planPremium, Integer noOfAssured) {
         BigDecimal sumOfPlanPremiumAndNoOfAssured = BigDecimal.ZERO;
         sumOfPlanPremiumAndNoOfAssured = planPremium.add(sumOfPlanPremiumAndNoOfAssured);
-            if(noOfAssured != null){
-                return new BigDecimal(noOfAssured).multiply(sumOfPlanPremiumAndNoOfAssured);
-            }
+        if(noOfAssured != null){
+            return new BigDecimal(noOfAssured).multiply(sumOfPlanPremiumAndNoOfAssured);
+        }
         return sumOfPlanPremiumAndNoOfAssured;
     }
 
@@ -238,22 +239,18 @@ public class QuotationProposalUtilityService {
         return isPremiumLessThenMinimumConfiguredPremiumGL(groupLifeProposal, minimumPremium);
     }
 
-    public static boolean checkIfSameOptionalCoverage(Map<Row, List<Row>> insuredDependentMap, List<String> headers) {
-        Set<String> optionalCoverageHeaders = getAllOptionalCoverageHeaders(headers);
+    public static String checkIfSameOptionalCoverage(Row currentRow, List<String> headers, Set<String> optionalCoverageHeaders) {
         Set<String> optionalCoverageSet = Sets.newHashSet();
-        for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            for(String optionalCoverageHeader : optionalCoverageHeaders) {
-                Cell optionalCoverageHeaderCell = getCellByName(row, headers, optionalCoverageHeader);
-                String optionalCoverage = getCellValue(optionalCoverageHeaderCell);
-                if(UtilValidator.isNotEmpty(optionalCoverage) && !optionalCoverageSet.add(optionalCoverage))
-                    return Boolean.TRUE;
-            }
+        for(String optionalCoverageHeader : optionalCoverageHeaders) {
+            Cell optionalCoverageHeaderCell = getCellByName(currentRow, headers, optionalCoverageHeader);
+            String optionalCoverage = getCellValue(optionalCoverageHeaderCell);
+            if(UtilValidator.isNotEmpty(optionalCoverage) && !optionalCoverageSet.add(optionalCoverage))
+                return "Same optional cover added twice ...Please check";
         }
-        return Boolean.FALSE;
+        return StringUtils.EMPTY;
     }
 
-    private static Set<String> getAllOptionalCoverageHeaders(List<String> headers) {
+    public static Set<String> getAllOptionalCoverageHeaders(List<String> headers) {
         Set<String> optionalCoverageHeaders = Sets.newLinkedHashSet();
         for(String header : headers){
             String headerWithoutWhitespace = header.trim().replaceAll("//s+","");
