@@ -798,7 +798,7 @@
         <div ng-switch-when="SPECIFIED_VALUES">
             <select class="form-control input-sm" ng-model="planDetailDto.sumAssured" name="sumAssured"
                     ng-options="value.text as value.text for value in plan.sumAssured.sumAssuredValue"
-                    ng-required="true"></select>
+                    view-enabled="" ng-required="true"></select>
         </div>
         <div ng-switch-when="RANGE">
             <input type="number" view-enabled="" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"

@@ -433,9 +433,11 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                                 $scope.bankDetails = $scope.rcvProposal.premiumPaymentDetails.bankDetails;
                             }
                                 if($scope.rcvProposal.premiumPaymentDetails.premiumDetail != null){
-                                    $scope.premiumResponse.planAnnualPremium = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.planAnnualPremium;
-                                    $scope.premiumResponse.totalPremium = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.totalPremium;
-                                    $scope.premiumResponse.riderPremiums = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.riderPremiums;
+                                    $scope.premiumResponse = $scope.rcvProposal.premiumPaymentDetails.premiumDetail;
+
+                                    //$scope.premiumResponse.planAnnualPremium = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.planAnnualPremium;
+                                    //$scope.premiumResponse.totalPremium = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.totalPremium;
+                                    //$scope.premiumResponse.riderPremiums = $scope.rcvProposal.premiumPaymentDetails.premiumDetail.riderPremiums;
                                 }
 
                         }

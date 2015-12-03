@@ -430,8 +430,10 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                 if (newval != undefined) {
                     if (newval != 'INDIVIDUAL_LIFE') {
                         $scope.clientType = 'GROUP';
+                        $scope.plan.planDetail.planType='NON_INVESTMENT';
                     } else {
                         $scope.clientType = 'INDIVIDUAL';
+                        $scope.plan.planDetail.planType='';
                     }
                 }
             });
