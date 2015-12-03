@@ -639,12 +639,12 @@
                                 <div class="form-group">
                                     <label>{{premiumData.planName}}</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.planAnnualPremium"/>
+                                           ng-model="premiumData.planAnnualPremium |number:2"/>
                                 </div>
                                 <div class="form-group" ng-repeat="rider in premiumData.riderPremium">
                                     <label>{{rider.coverageName.coverageName}}</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="rider.annualPremium"/>
+                                           ng-model="rider.annualPremium |number:2"/>
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -673,27 +673,27 @@
                                 <div class="form-group">
                                     <label>Total Annual Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.annualPremium"/>
+                                           ng-model="premiumData.annualPremium |number:2"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Semi-Annual Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.semiannualPremium"/>
+                                           ng-model="premiumData.semiannualPremium |number:2"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Quarterly Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.quarterlyPremium"/>
+                                           ng-model="premiumData.quarterlyPremium |number:2"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Monthly Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.monthlyPremium"/>
+                                           ng-model="premiumData.monthlyPremium |number:2"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Total Premium</label>
                                     <input type="text" class="form-control input-sm" readonly="true"
-                                           ng-model="premiumData.totalPremium"/>
+                                           ng-model="premiumData.totalPremium |number:2"/>
                                 </div>
                             </div>
                         </div>

@@ -474,22 +474,22 @@
                         <div class="form-group">
                             <label>Annual Payment</label>
                             <input type="input" readonly="true" class="form-control input-sm"
-                                   ng-model="premiumData.annualPremium"/>
+                                   ng-model="premiumData.annualPremium |number:2"/>
                         </div>
                         <div class="form-group">
                             <label>Semi-Annual Payment</label>
                             <input type="input" readonly="true" class="form-control input-sm"
-                                   ng-model="premiumData.semiannualPremium"/>
+                                   ng-model="premiumData.semiannualPremium |number:2"/>
                         </div>
                         <div class="form-group">
                             <label>Quarterly Payment</label>
                             <input type="input" readonly="true" class="form-control input-sm"
-                                   ng-model="premiumData.quarterlyPremium"/>
+                                   ng-model="premiumData.quarterlyPremium |number:2"/>
                         </div>
                         <div class="form-group">
                             <label>Monthly Payment</label>
                             <input type="input" readonly="true" class="form-control input-sm"
-                                   ng-model="premiumData.monthlyPremium"/>
+                                   ng-model="premiumData.monthlyPremium |number:2"/>
                         </div>
                     </div>
 
@@ -498,7 +498,7 @@
                             <div class="form-group">
                                 <label>Total Premium payable</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
-                                       ng-model="premiumData.totalPremium"/>
+                                       ng-model="premiumData.totalPremium |number:2"/>
                             </div>
                         </div>
                     </div>
