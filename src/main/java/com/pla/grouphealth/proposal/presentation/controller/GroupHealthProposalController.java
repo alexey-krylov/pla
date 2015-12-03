@@ -348,15 +348,15 @@ public class GroupHealthProposalController {
     @ResponseBody
     public Result isValidPremiumAndPersons(@PathVariable("proposalId") String proposalId) {
         try {
-            boolean isMinimumNoPersons  = ghProposalService.validateIfLessThanMinimumNoOfPersonsForGHProposal(new ProposalId(proposalId));
-            boolean isMinimumPremium = ghProposalService.validateIfLessThanMinimumPremiumForGHProposal(new ProposalId(proposalId));
-            if (!isMinimumPremium && !isMinimumNoPersons){
+            boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGH  = ghProposalService.validateIfLessThanMinimumNoOfPersonsForGHProposal(new ProposalId(proposalId));
+            boolean isPremiumLessThenMinimumConfiguredPremiumGH = ghProposalService.validateIfLessThanMinimumPremiumForGHProposal(new ProposalId(proposalId));
+            if (isPremiumLessThenMinimumConfiguredPremiumGH && isNoOfPersonsLessThenMinimumConfiguredPersonsGH){
                 return Result.failure("Total Premium and Total Number of Members is less than the specified Minimum", Boolean.TRUE);
             }
-            else  if (!isMinimumPremium){
+            else  if (isPremiumLessThenMinimumConfiguredPremiumGH){
                 return  Result.failure("Total Premium is less than the specified Minimum",Boolean.TRUE);
             }
-            else  if (!isMinimumNoPersons){
+            else  if (isNoOfPersonsLessThenMinimumConfiguredPersonsGH){
                 return  Result.failure("Total Number of Members is less than the specified Minimum",Boolean.TRUE);
             }
             else {

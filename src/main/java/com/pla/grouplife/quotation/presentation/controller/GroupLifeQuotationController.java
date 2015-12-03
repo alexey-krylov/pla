@@ -364,15 +364,15 @@ public class GroupLifeQuotationController {
     @ResponseBody
     public Result validateIfLessThanMinimumNoOfPersonsForGLQuotation(@PathVariable("quotationid") String quotationId) {
         try {
-            boolean isMinimumNoPersons = glQuotationService.validateIfLessThanMinimumNoOfPersonsForGLQuotation(new QuotationId(quotationId));
-            boolean isMinimumPremium =  glQuotationService.validateIfLessThanMinimumPremiumForGLQuotation(new QuotationId(quotationId));
-            if (!isMinimumPremium && !isMinimumNoPersons){
+            boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGL = glQuotationService.validateIfLessThanMinimumNoOfPersonsForGLQuotation(new QuotationId(quotationId));
+            boolean isPremiumLessThenMinimumConfiguredPremiumGL =  glQuotationService.validateIfLessThanMinimumPremiumForGLQuotation(new QuotationId(quotationId));
+            if (isPremiumLessThenMinimumConfiguredPremiumGL && isNoOfPersonsLessThenMinimumConfiguredPersonsGL){
                 return Result.failure("Total Premium and Total Number of Members is less than the specified Minimum", Boolean.TRUE);
             }
-            else  if (!isMinimumPremium){
+            else if (isPremiumLessThenMinimumConfiguredPremiumGL){
                 return  Result.failure("Total Premium is less than the specified Minimum",Boolean.TRUE);
             }
-            else  if (!isMinimumNoPersons){
+            else if (isNoOfPersonsLessThenMinimumConfiguredPersonsGL){
                 return  Result.failure("Total Number of Members is less than the specified Minimum",Boolean.TRUE);
             }
             else {

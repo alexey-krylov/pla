@@ -366,30 +366,19 @@ public class GroupHealthQuotationController {
         return ghQuotationService.getPremiumDetail(new QuotationId(quotationId));
     }
 
-   /* @RequestMapping(value = "/validateIfLessThanMinimumNoOfPersonsForGHQuotation/{quotationid}", method = RequestMethod.GET)
-    @ResponseBody
-    public Result validateIfLessThanMinimumNoOfPersonsForGHQuotation(@PathVariable("quotationid") String quotationId) {
-        try {
-            return ghQuotationService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(new QuotationId(quotationId));
-        } catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(e.getMessage(), Boolean.FALSE);
-        }
-    }
-*/
     @RequestMapping(value = "/isValidPremiumAndPerson/{quotationid}", method = RequestMethod.GET)
     @ResponseBody
     public Result validateIfLessThanMinimumPremiumForGHQuotation(@PathVariable("quotationid") String quotationId) {
         try {
-            Boolean isValidPremium =  ghQuotationService.validateIfLessThanMinimumPremiumForGHQuotation(new QuotationId(quotationId));
-            Boolean isValidMinimumPerson = ghQuotationService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(new QuotationId(quotationId));
-            if (!isValidPremium && !isValidMinimumPerson){
+            Boolean isPremiumLessThenMinimumConfiguredPremiumGH =  ghQuotationService.validateIfLessThanMinimumPremiumForGHQuotation(new QuotationId(quotationId));
+            Boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGH = ghQuotationService.validateIfLessThanMinimumNoOfPersonsForGHQuotation(new QuotationId(quotationId));
+            if (isPremiumLessThenMinimumConfiguredPremiumGH && isNoOfPersonsLessThenMinimumConfiguredPersonsGH){
                 return  Result.failure("Total Premium and Total Number of Members is less than the specified Minimum", Boolean.TRUE);
             }
-            else  if (!isValidPremium){
+            else if (isPremiumLessThenMinimumConfiguredPremiumGH){
                 return  Result.failure("Total Premium is less than the specified Minimum",Boolean.TRUE);
             }
-            else  if (!isValidMinimumPerson){
+            else if (isNoOfPersonsLessThenMinimumConfiguredPersonsGH){
                 return  Result.failure("Total Number of Members is less than the specified Minimum",Boolean.TRUE);
             }
             else {

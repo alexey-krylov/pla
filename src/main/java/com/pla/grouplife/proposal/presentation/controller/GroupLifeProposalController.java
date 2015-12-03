@@ -350,15 +350,15 @@ public class GroupLifeProposalController {
     @ResponseBody
     public Result isValidPremiumAndPersons(@PathVariable("proposalId") String proposalId) {
         try {
-            boolean isMinimumNoPersons  = glProposalService.validateIfLessThanMinimumNoOfPersonsForGLProposal(new ProposalId(proposalId));
-            boolean isMinimumPremium =  glProposalService.validateIfLessThanMinimumPremiumForGLProposal(new ProposalId(proposalId));
-            if (!isMinimumPremium && !isMinimumNoPersons){
+            boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGL  = glProposalService.validateIfLessThanMinimumNoOfPersonsForGLProposal(new ProposalId(proposalId));
+            boolean isPremiumLessThenMinimumConfiguredPremiumGL =  glProposalService.validateIfLessThanMinimumPremiumForGLProposal(new ProposalId(proposalId));
+            if (isPremiumLessThenMinimumConfiguredPremiumGL && isNoOfPersonsLessThenMinimumConfiguredPersonsGL){
                 return Result.failure("Total Premium and Total Number of Members is less than the specified Minimum", Boolean.TRUE);
             }
-            else  if (!isMinimumPremium){
+            else  if (isPremiumLessThenMinimumConfiguredPremiumGL){
                 return  Result.failure("Total Premium is less than the specified Minimum",Boolean.TRUE);
             }
-            else  if (!isMinimumNoPersons){
+            else  if (isNoOfPersonsLessThenMinimumConfiguredPersonsGL){
                 return  Result.failure("Total Number of Members is less than the specified Minimum",Boolean.TRUE);
             }
             else {

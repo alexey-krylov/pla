@@ -7,7 +7,6 @@ import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformatio
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
 import com.pla.grouphealth.sharedresource.dto.CategoryPlanDataHolder;
-import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouphealth.sharedresource.dto.RelationshipPlanDataHolder;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
@@ -19,7 +18,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 
@@ -120,24 +122,43 @@ public class QuotationProposalUtilityService {
     }
 
 
-    public static boolean isPremiumGreaterThenMinimumConfiguredPremiumGH(Set<GHInsured> insuredDtos, int minimumPremium) {
-        BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
+    public static boolean isPremiumLessThenMinimumConfiguredPremiumGH(GroupHealthQuotation groupHealthQuotation, int minimumPremium) {
+        /*BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
         for (GHInsured ghInsured : insuredDtos) {
             totalPremiumInExcel = totalPremiumInExcel.add(ghInsured.getPlanPremiumDetail().getPremiumAmount());
-        }
-        if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
-            return Boolean.TRUE;
-        return Boolean.FALSE;
+        }*/
+        BigDecimal totalPayablePremium = groupHealthQuotation.getPremiumDetail() != null ? groupHealthQuotation.getPremiumDetail().getNetTotalPremium() : new BigDecimal(0);
+        if(totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 0)
+            return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
-    public static boolean isPremiumGreaterThenMinimumConfiguredPremiumGL(Set<Insured> insuredDtos, int minimumPremium) {
-        BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
+    public static boolean isPremiumLessThenMinimumConfiguredPremiumGH(GroupHealthProposal groupHealthProposal, int minimumPremium) {
+        BigDecimal totalPayablePremium = groupHealthProposal.getPremiumDetail() != null ? groupHealthProposal.getPremiumDetail().getNetTotalPremium() : new BigDecimal(0);
+        if(totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 0)
+            return Boolean.FALSE;
+        return Boolean.TRUE;
+    }
+
+    public static boolean isPremiumLessThenMinimumConfiguredPremiumGL(GroupLifeQuotation groupLifeQuotation, int minimumPremium) {
+       /* BigDecimal totalPremiumInExcel = BigDecimal.ZERO;
         for (Insured ghInsured : insuredDtos) {
             totalPremiumInExcel = totalPremiumInExcel.add(ghInsured.getPlanPremiumDetail().getPremiumAmount());
         }
         if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
             return Boolean.TRUE;
-        return Boolean.FALSE;
+        return Boolean.FALSE;*/
+        BigDecimal totalPayablePremium = groupLifeQuotation.getPremiumDetail() != null ? groupLifeQuotation.getPremiumDetail().getNetTotalPremium() : new BigDecimal(0);
+        if(totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 0)
+            return Boolean.FALSE;
+        return Boolean.TRUE;
+    }
+
+    public static boolean isPremiumLessThenMinimumConfiguredPremiumGL(GroupLifeProposal groupLifeProposal, int minimumPremium) {
+        BigDecimal totalPayablePremium = groupLifeProposal.getPremiumDetail() != null ? groupLifeProposal.getPremiumDetail().getNetTotalPremium() : new BigDecimal(0);
+        if(totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 0)
+            return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
     private static BigDecimal getPremiumDetail(BigDecimal planPremium, Integer noOfAssured) {
@@ -149,7 +170,7 @@ public class QuotationProposalUtilityService {
         return sumOfPlanPremiumAndNoOfAssured;
     }
 
-    public static boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(Set<GHInsured> insuredDtos, int minimumConfiguredPersons) {
+    public static boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGH(Set<GHInsured> insuredDtos, int minimumConfiguredPersons) {
         int totalNumberOfPersonInExcel = 0;
         for (GHInsured ghInsured : insuredDtos) {
             if(ghInsured.getNoOfAssured() != null){
@@ -159,11 +180,11 @@ public class QuotationProposalUtilityService {
             }
         }
         if(totalNumberOfPersonInExcel >= minimumConfiguredPersons)
-            return Boolean.TRUE;
-        return Boolean.FALSE;
+            return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
-    public static boolean isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(Set<Insured> insuredDtos, int minimumConfiguredPersons) {
+    public static boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGL(Set<Insured> insuredDtos, int minimumConfiguredPersons) {
         int totalNumberOfPersonInExcel = 0;
         for (Insured ghInsured : insuredDtos) {
             if(ghInsured.getNoOfAssured() != null){
@@ -173,48 +194,48 @@ public class QuotationProposalUtilityService {
             }
         }
         if(totalNumberOfPersonInExcel >= minimumConfiguredPersons)
-            return Boolean.TRUE;
-        return Boolean.FALSE;
+            return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
     public static boolean validateIfLessThanMinimumNoOfPersonsForGHQuotation(GroupHealthQuotation groupHealthQuotation, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return isNoOfPersonsLessThenMinimumConfiguredPersonsGH(groupHealthQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
     public static boolean validateIfLessThanMinimumPremiumForGHQuotation(GroupHealthQuotation groupHealthQuotation, ProductLineGeneralInformation productLineInformation) {
         int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthQuotation.getInsureds(), minimumPremium);
+        return isPremiumLessThenMinimumConfiguredPremiumGH(groupHealthQuotation, minimumPremium);
     }
 
     public static boolean validateIfLessThanMinimumNoOfPersonsForGLQuotation(GroupLifeQuotation groupLifeQuotation, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return isNoOfPersonsLessThenMinimumConfiguredPersonsGL(groupLifeQuotation.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
     public static boolean validateIfLessThanMinimumPremiumForGLQuotation(GroupLifeQuotation groupLifeQuotation, ProductLineGeneralInformation productLineInformation) {
         int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeQuotation.getInsureds(), minimumPremium);
+        return isPremiumLessThenMinimumConfiguredPremiumGL(groupLifeQuotation, minimumPremium);
     }
 
     public static boolean validateIfLessThanMinimumNoOfPersonsForGHProposal(GroupHealthProposal groupHealthProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGH(groupHealthProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return isNoOfPersonsLessThenMinimumConfiguredPersonsGH(groupHealthProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
     public static boolean validateIfLessThanMinimumPremiumForGHProposal(GroupHealthProposal groupHealthProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return isPremiumGreaterThenMinimumConfiguredPremiumGH(groupHealthProposal.getInsureds(), minimumPremium);
+        return isPremiumLessThenMinimumConfiguredPremiumGH(groupHealthProposal, minimumPremium);
     }
 
     public static boolean validateIfLessThanMinimumNoOfPersonsForGLProposal(GroupLifeProposal groupLifeProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumNumberOfPersonPerPolicy = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_NUMBER_OF_PERSON_PER_POLICY);
-        return isNoOfPersonsGreaterThenMinimumConfiguredPersonsGL(groupLifeProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
+        return isNoOfPersonsLessThenMinimumConfiguredPersonsGL(groupLifeProposal.getInsureds(), minimumNumberOfPersonPerPolicy);
     }
 
     public static boolean validateIfLessThanMinimumPremiumForGLProposal(GroupLifeProposal groupLifeProposal, ProductLineGeneralInformation productLineInformation) {
         int minimumPremium = getMinimumValueForGivenCriteria(productLineInformation, PolicyProcessMinimumLimitType.MINIMUM_PREMIUM);
-        return isPremiumGreaterThenMinimumConfiguredPremiumGL(groupLifeProposal.getInsureds(), minimumPremium);
+        return isPremiumLessThenMinimumConfiguredPremiumGL(groupLifeProposal, minimumPremium);
     }
 
     public static boolean checkIfSameOptionalCoverage(Map<Row, List<Row>> insuredDependentMap, List<String> headers) {
