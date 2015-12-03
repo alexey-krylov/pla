@@ -344,7 +344,6 @@ public class GLInsuredExcelParser {
                 if (securityCoverGiven.size()>1){
                     errorMessages.add(" Multiple security optional covers cannot be given for " + finalPlanCode + ".");
                 }
-                errorMessages.add(optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
                 errorMessages.add("Coverage code: " + optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
