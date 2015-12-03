@@ -180,7 +180,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14"/>
 				</textElement>
-				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
+				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be insured are  employees):]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="75" y="189" width="777" height="36" backcolor="#19197D" uuid="cc4f1ed3-c456-4be6-a93c-042f00e5e431">

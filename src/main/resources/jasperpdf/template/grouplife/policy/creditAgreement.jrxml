@@ -51,7 +51,7 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Trebuchet MS" size="14"/>
 					</textElement>
-					<text><![CDATA[  Policy Holder ( Name and address of the Company Of which the lives to be assured are employees ):]]></text>
+					<text><![CDATA[  Policy Holder ( Name and address of the Company Of which the lives to be  insured are employees ):]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="60" width="50" height="20" uuid="4074e5ab-f8c5-4bed-8ead-3c0de35bfa09"/>
@@ -139,7 +139,7 @@
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[6. It is warranted that this Agreement and Schedule shall be read in conjunction with, and form part of the Policy/contract of insurance and drawn in terms of S.76 (i) of the Insurance Act, 1997.]]></text>
+				<text><![CDATA[6.Â It is warranted that this Agreement and Schedule shall be read in conjunction with, and form part of the Policy/contract of insurance and drawn in terms of S.76 (i) of the Insurance Act, 1997.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="120" y="480" width="740" height="50" uuid="199379e4-fdd3-4718-90f5-cd44fe344fc0"/>
@@ -167,14 +167,14 @@
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[Witness ………………………………………………………..]]></text>
+				<text><![CDATA[Witness â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦..]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="120" y="740" width="360" height="40" uuid="8d048fec-1f4f-4281-a61b-6c6f4270a749"/>
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[Signed for and on behalf of ………………………………..
+				<text><![CDATA[Signed for and on behalf of â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦..
 (Name of Policyholder)
 ]]></text>
 			</staticText>
@@ -183,14 +183,14 @@
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[Witness ………………………………………………………..]]></text>
+				<text><![CDATA[Witness â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦..]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="120" y="1050" width="730" height="40" uuid="3a66ab84-d280-4927-b9c1-19582bbf4447"/>
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[Signed for and on behalf of Professional life Assurance Limited       Date …………………………….
+				<text><![CDATA[Signed for and on behalf of Professional life Assurance Limited       Date â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦.
 ]]></text>
 			</staticText>
 			<staticText>
@@ -198,14 +198,14 @@
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[Witness ………………………………………………………..]]></text>
+				<text><![CDATA[Witness â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦..]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="121" y="1110" width="730" height="50" uuid="6654461c-c336-480e-bb83-15f2f4487ce4"/>
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[Witness ………………………………………………………..]]></text>
+				<text><![CDATA[Witness â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦..]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="110" y="1310" width="730" height="150" uuid="9fa23052-fd4b-4aff-af05-2a7fd860fb06"/>
@@ -321,7 +321,7 @@
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[ Date …………………………….]]></text>
+				<text><![CDATA[ Date â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦.]]></text>
 			</staticText>
 		</band>
 	</detail>

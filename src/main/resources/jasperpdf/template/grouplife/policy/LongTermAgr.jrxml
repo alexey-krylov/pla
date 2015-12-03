@@ -227,7 +227,7 @@ duly authorized representative]]></text>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be assured are  employees):]]></text>
+				<text><![CDATA[ Policy  Holder (Name and address of Company of which the lives  to be insured are  employees):]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="140" y="70" width="300" height="30" uuid="fc417800-25c3-4184-82f2-b8ffc4dcf452"/>

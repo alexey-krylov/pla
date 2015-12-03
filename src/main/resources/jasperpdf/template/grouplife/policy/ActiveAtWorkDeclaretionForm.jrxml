@@ -121,7 +121,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS" size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Policy  Holder (Name and address of Company of which the lives  to be assured are employees):]]></text>
+				<text><![CDATA[Policy  Holder (Name and address of Company of which the lives  to be insured are employees):]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="150" y="100" width="510" height="30" uuid="dfb176b9-3c07-4ec4-92f2-538aabb89c81"/>

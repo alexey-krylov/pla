@@ -47,21 +47,21 @@
 				<textElement>
 					<font fontName="Trebuchet MS" size="12"/>
 				</textElement>
-				<text><![CDATA[1.      CONTRACT ]]></text>
+				<text><![CDATA[1.Â Â Â Â Â  CONTRACT ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="80" width="650" height="80" uuid="ea22b116-953b-4327-8cd8-8a51a9bb6a55"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[This policy and the proposal thereof a copy of which is attached hereto and made a part hereof, as well as the duly attested entries in the Register of Lives Assured (Costing Schedule) shall constitute the entire contract between the parties. All statements made by the Policy holder or made by a life assured where these are different persons shall in the absence of fraud be deemed representations and not warranties. No such statement shall void this policy or be used in defence of a claim hereunder, unless such statement is contained in the said proposal and a copy thereof is attached to the policy when issued. Special provisions shall be valid only when endorsed on this policy or confirmed in writing by Professional Life. No agent but only a duly authorised officer of Professional Life has the power on behalf of the assurance Company to extend the time for the payment of premium or in any way to modify this contract. Any payment in respect of this policy whether of premium, sum assured or otherwise shall be made in Zambian currency at Professional Life Assurance Head Office in Lusaka.]]></text>
+				<text><![CDATA[This policy and the proposal thereof a copy of which is attached hereto and made a part hereof, as well as the duly attested entries in the Register of Lives Assured (Costing Schedule) shall constitute the entire contract between the parties. All statements made by the Policy holder or made by a life insured where these are different persons shall in the absence of fraud be deemed representations and not warranties. No such statement shall void this policy or be used in defence of a claim hereunder, unless such statement is contained in the said proposal and a copy thereof is attached to the policy when issued. Special provisions shall be valid only when endorsed on this policy or confirmed in writing by Professional Life. No agent but only a duly authorised officer of Professional Life has the power on behalf of the assurance Company to extend the time for the payment of premium or in any way to modify this contract. Any payment in respect of this policy whether of premium, sum insured or otherwise shall be made in Zambian currency at Professional Life Assurance Head Office in Lusaka.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="170" width="170" height="20" uuid="b3cd46d6-101e-46bb-a07c-5bd7444c73cf"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[2.      INCONTESTABLE]]></text>
+				<text><![CDATA[2.Â Â Â Â Â  INCONTESTABLE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="200" width="570" height="20" uuid="547ebf5b-7f50-42ca-a16f-e780e7933fbd"/>
@@ -75,21 +75,21 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[3.      LIVES ASSURED.]]></text>
+				<text><![CDATA[3.Â Â Â Â Â  LIVES ASSURED.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="250" width="650" height="50" uuid="18cfd608-daca-42dc-a925-322b115d876c"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[The persons to be assured under this policy are such persons as described or defined in the first article on whose death the Policy holder is liable to pay a death benefit in accordance with the Rules and conditions of the Scheme or arrangements as stated in the said article. It is a condition of the continuance of the Policy that each such person shall be assured hereunder for an amount neither more nor less than the death benefit which the Policy holder is liable to pay and that no other persons shall be assured hereunder unless with the consent of Professional Life.]]></text>
+				<text><![CDATA[The persons to be insured under this policy are such persons as described or defined in the first article on whose death the Policy holder is liable to pay a death benefit in accordance with the Rules and conditions of the Scheme or arrangements as stated in the said article. It is a condition of the continuance of the Policy that each such person shall be insured hereunder for an amount neither more nor less than the death benefit which the Policy holder is liable to pay and that no other persons shall be insured hereunder unless with the consent of Professional Life.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="300" width="130" height="20" uuid="053aa715-d6ea-4d1e-b0fa-a438c8550d29"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[4.      ELIGIBILITY.]]></text>
+				<text><![CDATA[4.Â Â Â Â Â  ELIGIBILITY.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="320" width="650" height="50" uuid="be9096c1-595b-4d65-979e-6592b93fcd84"/>
@@ -103,21 +103,21 @@
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[5.      REGISTER OF LIVES ASSURED.]]></text>
+				<text><![CDATA[5.Â Â Â Â Â  REGISTER OF LIVES ASSURED.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="400" width="650" height="40" uuid="b8fe0485-2bc7-4fdb-9211-03112356fc93"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[Professional Life shall prepare and maintain a REGISTER OF LIVES assured (Costing Schedule) containing details of the name, date of birth of each life assured the amount for which he is assured together with the date of commencement of his assurance. A copy of the Register shall be kept by the Policy holder.]]></text>
+				<text><![CDATA[Professional Life shall prepare and maintain a REGISTER OF LIVES insured (Costing Schedule) containing details of the name, date of birth of each life insured the amount for which he is insured together with the date of commencement of his assurance. A copy of the Register shall be kept by the Policy holder.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="450" width="320" height="20" uuid="e8316126-052f-4308-9e86-3d47badee4d7"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[6.      INFORMATION ABOUT LIVES ASSURED]]></text>
+				<text><![CDATA[6.Â Â Â Â Â  INFORMATION ABOUT LIVES ASSURED]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="520" width="528" height="20" uuid="32be520e-fad1-46a2-8b42-6c7f3e9579fa"/>
@@ -131,21 +131,21 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[The Policy holder shall notify Professional Life in writing of all increases or decreases in the sums assured taking effect during the policy year. No assurance shall be granted for a member of the Scheme or for an increase in a sum assured for which no information has been notified as aforesaid]]></text>
+				<text><![CDATA[The Policy holder shall notify Professional Life in writing of all increases or decreases in the sums insured taking effect during the policy year. No assurance shall be granted for a member of the Scheme or for an increase in a sum insured for which no information has been notified as aforesaid]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="500" width="330" height="20" uuid="98fc126b-2c57-47f8-b1ce-ec30a1093e0b"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[7.      PAYMENT OF PREMIUM.]]></text>
+				<text><![CDATA[7.Â Â Â Â Â  PAYMENT OF PREMIUM.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="540" width="358" height="20" uuid="757747ff-5687-4148-92b0-91c5e60c665f"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[8.      GRACE PERIOD]]></text>
+				<text><![CDATA[8.Â Â Â Â Â  GRACE PERIOD]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="560" width="650" height="40" uuid="5768d47d-e671-4591-acd1-c52ba1bc0590"/>
@@ -159,14 +159,14 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[9.      COMMENCEMENT OF ASSURANCE. ]]></text>
+				<text><![CDATA[9.Â Â Â Â Â  COMMENCEMENT OF ASSURANCE. ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="620" width="650" height="30" uuid="63ab5edf-0bad-4886-bd97-e49a31591f85"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[The assurance granted under this policy in respect of a life assured shall commence on the date on which he first becomes eligible to join the Scheme according to Article 2.4]]></text>
+				<text><![CDATA[The assurance granted under this policy in respect of a life insured shall commence on the date on which he first becomes eligible to join the Scheme according to Article 2.4]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="650" width="294" height="30" uuid="9b6efb24-88fc-4ea1-a17d-a640be21d11f"/>
@@ -180,31 +180,31 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[The assurance granted under this policy in respect of a life assured shall terminate on the earliest of the following dates.
-• The date on which the life assured reaches the age of Fifty-five (55).
-• The date on which the life assured leaves the service of the employer or otherwise ceases to be eligible for membership of the scheme.
-• The date on which premium in respect of the life assured ceases to be paid.]]></text>
+				<text><![CDATA[The assurance granted under this policy in respect of a life insured shall terminate on the earliest of the following dates.
+â€¢ The date on which the life insured reaches the age of Fifty-five (55).
+â€¢ The date on which the life insured leaves the service of the employer or otherwise ceases to be eligible for membership of the scheme.
+â€¢ The date on which premium in respect of the life insured ceases to be paid.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="730" width="220" height="30" uuid="33604424-f7ae-4327-8348-c3e0d3324eab"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[11.      MISSTATEMENT.]]></text>
+				<text><![CDATA[11.Â Â Â Â Â  MISSTATEMENT.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="760" width="649" height="30" uuid="8e90bf09-ee34-492c-b7bd-e1bcb0a34f29"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[If the date of birth notified to Professional Life Limited  in respect of any life assured proves to be incorrect no greater benefit shall be payable by Professional Life than would have been received had the premiums paid in respect of such life assured had the or date of birth been correctly stated at the outset.]]></text>
+				<text><![CDATA[If the date of birth notified to Professional Life Limited  in respect of any life insured proves to be incorrect no greater benefit shall be payable by Professional Life than would have been received had the premiums paid in respect of such life insured had the or date of birth been correctly stated at the outset.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="790" width="160" height="20" uuid="8893d723-74a0-466c-bb68-bb89abb3df26"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[12.      NOTICE OF CLAIM]]></text>
+				<text><![CDATA[12.Â Â Â Â Â  NOTICE OF CLAIM]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="810" width="650" height="30" uuid="fb35b0b7-c35a-499e-a8dd-94cee5d8ee14"/>
@@ -218,7 +218,7 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[13.      EXCLUSIONS.]]></text>
+				<text><![CDATA[13.Â Â Â Â Â  EXCLUSIONS.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="860" width="649" height="40" uuid="5195ea44-d939-49ea-b01c-f1cd5ced9d44"/>
@@ -226,9 +226,9 @@
 					<font fontName="Times New Roman"/>
 				</textElement>
 				<text><![CDATA[If the death of the Life Assured should result directly or indirectly from:-
-• Participation in war, whether declared or not, war-like action, civil war, insurrection, riot, civil commotion or other acts of violence.
-• Engaging in aviation other than as a fare paying passenger on a regular route of a recognised airline. 
- No sum assured hereunder on that person's life shall be payable by Professional Life.]]></text>
+â€¢ Participation in war, whether declared or not, war-like action, civil war, insurrection, riot, civil commotion or other acts of violence.
+â€¢ Engaging in aviation other than as a fare paying passenger on a regular route of a recognised airline. 
+ No sum insured hereunder on that person's life shall be payable by Professional Life.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="900" width="340" height="20" uuid="d4fc6b41-f71e-41e0-96f0-5175adb9b957"/>
@@ -243,15 +243,15 @@
 					<font fontName="Times New Roman"/>
 				</textElement>
 				<text><![CDATA[By giving three months' notice in writing to the Policy holder, Professional Life may, as from any renewal date:
-• Amend the terms of this policy
-• Terminate the Policy.]]></text>
+â€¢ Amend the terms of this policy
+â€¢ Terminate the Policy.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="970" width="269" height="20" uuid="b07ac525-5e62-470a-932f-8fa39a7f55ef"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[15.      RENEWAL AND REINSTATEMENT]]></text>
+				<text><![CDATA[15.Â Â Â Â Â  RENEWAL AND REINSTATEMENT]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="990" width="650" height="30" uuid="c4247976-2d36-4919-9622-ec01517f2c88"/>
@@ -265,21 +265,21 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[16.      ASSIGNMENT. ]]></text>
+				<text><![CDATA[16.Â Â Â Â Â  ASSIGNMENT. ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="1050" width="610" height="30" uuid="3bc91348-1f15-433f-bb03-98ad01e8d364"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[The benefits received by this policy are neither assignable nor chargeable by the lives assured.]]></text>
+				<text><![CDATA[The benefits received by this policy are neither assignable nor chargeable by the lives insured.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="1080" width="420" height="20" uuid="632173b1-f3fc-4b0a-848f-056a60359f5c"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[17.      ARBITRATION. ]]></text>
+				<text><![CDATA[17.Â Â Â Â Â  ARBITRATION. ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="1110" width="649" height="45" uuid="5264bd5a-1f8d-4b83-a9ff-6b5dc03ee1ff"/>
