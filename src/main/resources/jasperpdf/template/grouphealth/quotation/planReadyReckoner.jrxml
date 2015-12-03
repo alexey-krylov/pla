@@ -68,7 +68,7 @@
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Sum Assured:]]></text>
+						<text><![CDATA[Sum Insured:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="129" y="1" width="359" height="19" uuid="ee9c61ec-d65b-4ab2-bce4-eed2d44e2ae1"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-10T10:56:06 -->
+<!-- 2015-12-03T11:47:37 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GHPolicy" pageWidth="960" pageHeight="1460" orientation="Landscape" columnWidth="960" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="632d0d79-4743-4a00-8577-9b9631ed5dd2">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
@@ -79,18 +79,18 @@
 				<text><![CDATA[Policy]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="40" y="40" width="70" height="30" uuid="96c3e1bf-e40d-45ab-8f9f-a2338b42cdf2"/>
+				<reportElement x="40" y="40" width="260" height="30" uuid="96c3e1bf-e40d-45ab-8f9f-a2338b42cdf2"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS"/>
 				</textElement>
-				<text><![CDATA[Agent Name :]]></text>
+				<text><![CDATA[Broker/Agent/Direct Name :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="40" y="70" width="60" height="30" uuid="032a7e98-a436-487f-8348-f292a94d6cbe"/>
+				<reportElement x="40" y="70" width="220" height="30" uuid="032a7e98-a436-487f-8348-f292a94d6cbe"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Trebuchet MS"/>
 				</textElement>
-				<text><![CDATA[Agent Code :]]></text>
+				<text><![CDATA[Broker/Agent/Direct Code :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="600" y="40" width="100" height="30" uuid="0f4105c8-cb62-490d-8d1f-5a4077c9105a"/>
@@ -292,12 +292,12 @@
 				<subreportExpression><![CDATA["jasperpdf/jasper/individuallife/policy/coverages.jasper"]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="110" y="40" width="100" height="30" uuid="49f2bc02-18e4-4e30-b48f-30c9c7838a21"/>
+				<reportElement x="170" y="40" width="230" height="30" uuid="49f2bc02-18e4-4e30-b48f-30c9c7838a21"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{agentName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="110" y="70" width="100" height="30" uuid="0086f168-cca7-4811-840c-76fb19e6fc96"/>
+				<reportElement x="170" y="70" width="230" height="30" uuid="0086f168-cca7-4811-840c-76fb19e6fc96"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 			</textField>

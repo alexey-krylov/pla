@@ -90,7 +90,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="20" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Sum Assured]]></text>
+					<text><![CDATA[Sum Insured]></text>
 				</staticText>
 			</frame>
 			<frame>

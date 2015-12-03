@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-12-02T18:37:44 -->
+<!-- 2015-12-03T12:29:57 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -333,7 +333,7 @@
 						<textElement>
 							<font fontName="Trebuchet MS" size="12"/>
 						</textElement>
-						<text><![CDATA[Total Sum Assured :]]></text>
+						<text><![CDATA[Total Sum Insured :]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="5" y="62" width="133" height="20" uuid="cc188b88-d190-4432-b7e0-4cd4f9b656bd"/>
@@ -351,15 +351,15 @@
 					</staticText>
 					<staticText>
 						<reportElement x="6" y="102" width="449" height="15" uuid="97ad0b8f-0ee4-496b-ba31-7523b278b325"/>
-						<text><![CDATA[Assured Details(as an annexure to the Policy)]]></text>
+						<text><![CDATA[Insured Details(as an annexure to the Policy)]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="7" y="118" width="896" height="19" uuid="2e688624-f14e-4c0b-b83d-42a66e83dfb2"/>
-						<text><![CDATA[Sum assured in respect of each Life Assured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
+						<text><![CDATA[Sum Insured in respect of each Life Insured : An amount secured by the Annual Premium calculated in accordance with the rates (Also See Special Provisions No. 12)]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="7" y="138" width="784" height="20" uuid="41b217e9-c418-4da2-9d5d-5334eaa4a19b"/>
-						<text><![CDATA[Event of happening upon which the sum assured in respect of a particular life becomes payable : Death]]></text>
+						<text><![CDATA[Event of happening upon which the sum Insured in respect of a particular life becomes payable : Death]]></text>
 					</staticText>
 				</frame>
 				<frame>
@@ -480,7 +480,7 @@
 					</staticText>
 					<staticText>
 						<reportElement x="147" y="52" width="413" height="19" uuid="7d08074e-5e79-4167-a011-e58470f73320"/>
-						<text><![CDATA[To be calculated from year to year in respect of each of the Lives Assured]]></text>
+						<text><![CDATA[To be calculated from year to year in respect of each of the Lives Insured]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="7" y="71" width="88" height="16" uuid="8ce4fa2e-a94c-455c-a877-012d9c7050d6"/>
@@ -526,7 +526,7 @@
 					<textElement>
 						<font fontName="Trebuchet MS"/>
 					</textElement>
-					<text><![CDATA[Unless it shall be otherwise agreed by Professional Life assurance Limited in respect of every member on entry into the scheme and when he qualifies for an increase in  the sum assured, there shall be furnished to Professional Life Assurance a proposal and declaration signed by him/or the employer and such other evidence of his health as Professional Life may require. If in the opinion of Professional Life there is any special hazard in respect of any member, special restrictions may be imposed or an extra premium charged. If the evidence of health is not to the satisfaction of Professional Life, the sum assured may be modified as Professional Life, at its absolute discretion thinks fit]]></text>
+					<text><![CDATA[Unless it shall be otherwise agreed by Professional Life assurance Limited in respect of every member on entry into the scheme and when he qualifies for an increase in  the sum assured, there shall be furnished to Professional Life Assurance a proposal and declaration signed by him/or the employer and such other evidence of his health as Professional Life may require. If in the opinion of Professional Life there is any special hazard in respect of any member, special restrictions may be imposed or an extra premium charged. If the evidence of health is not to the satisfaction of Professional Life, the sum insured may be modified as Professional Life, at its absolute discretion thinks fit]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="762" y="61" width="130" height="16" uuid="97b4b074-cf75-4985-8a02-ac501902a4f7"/>
@@ -1005,7 +1005,7 @@ You may also email at help@insurance.com
 				</staticText>
 			</frame>
 			<rectangle>
-				<reportElement x="-1" y="190" width="961" height="140" uuid="eb11affc-f40c-4de3-9bd2-4cb8dc81e954"/>
+				<reportElement x="-1" y="200" width="961" height="130" uuid="eb11affc-f40c-4de3-9bd2-4cb8dc81e954"/>
 			</rectangle>
 			<rectangle>
 				<reportElement x="0" y="170" width="959" height="30" backcolor="#00195F" uuid="7c5f3eb8-bddf-4b5d-8afd-2c54cb045d90"/>

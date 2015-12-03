@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-12-03T12:21:18 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -185,7 +187,7 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement x="127" y="19" width="80" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
+					<reportElement x="127" y="19" width="199" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
 					<box>
 						<topPen lineColor="#F22522"/>
 						<leftPen lineColor="#F22522"/>
@@ -195,10 +197,10 @@
 					<textElement verticalAlignment="Middle" markup="none">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Agent Name :]]></text>
+					<text><![CDATA[ Broker/Agent/Direct Name :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="220" y="21" width="131" height="21" uuid="25ea9c54-ed97-4601-a698-b5f99234ae2d">
+					<reportElement x="296" y="21" width="174" height="21" uuid="25ea9c54-ed97-4601-a698-b5f99234ae2d">
 						<property name="local_mesure_unitx" value="pixel"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle"/>
@@ -229,16 +231,16 @@
 					<text><![CDATA[Policy Servicing Office :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="219" y="60" width="100" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
+					<reportElement x="296" y="60" width="189" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="120" y="56" width="87" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
+					<reportElement x="120" y="56" width="204" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[  Agent Code :]]></text>
+					<text><![CDATA[  Broker/Agent/Direct Code :]]></text>
 				</staticText>
 				<frame>
 					<reportElement x="114" y="87" width="704" height="89" uuid="0e3101b6-cec3-4a28-b43d-c6f61a07c359"/>
@@ -365,7 +367,7 @@
 						<textElement textAlignment="Right" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Total Sum Assured :]]></text>
+						<text><![CDATA[Total Sum Insured :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="210" y="101" width="100" height="15" uuid="55e7cd55-8851-4e98-aab1-9b85679d0931"/>
@@ -541,7 +543,7 @@
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font size="12" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Sum Assured]]></text>
+									<text><![CDATA[Sum Insured]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -602,7 +604,7 @@
 				<staticText>
 					<reportElement x="38" y="10" width="692" height="80" uuid="5979e608-1ef8-4ffb-a8c5-92693a6d5225"/>
 					<text><![CDATA[Note:                                                                                                                                                                                                                                                                                                          1.  Cover is granted subject to completion of an 'Active at Work' declaration.
-2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum assured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives assured showing a breakdown of the premium for each life assured will be provided with the policy document.
+2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum insured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives insured showing a breakdown of the premium for each life Insured will be provided with the policy document.
 ]]></text>
 				</staticText>
 			</frame>

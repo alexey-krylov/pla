@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-11-19T12:01:44 -->
+<!-- 2015-12-03T11:46:00 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -118,7 +118,7 @@
 					<rightPen lineWidth="0.6" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<staticText>
-					<reportElement x="26" y="14" width="80" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
+					<reportElement x="26" y="14" width="186" height="24" uuid="942b9f26-51ec-4c2b-bc2d-5dfe337ec718"/>
 					<box>
 						<topPen lineColor="#F22522"/>
 						<leftPen lineColor="#F22522"/>
@@ -128,10 +128,10 @@
 					<textElement verticalAlignment="Middle" markup="none">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Agent Name :]]></text>
+					<text><![CDATA[Broker/Agent/Direct Name :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="117" y="16" width="188" height="21" uuid="25ea9c54-ed97-4601-a698-b5f99234ae2d">
+					<reportElement x="175" y="16" width="265" height="21" uuid="25ea9c54-ed97-4601-a698-b5f99234ae2d">
 						<property name="local_mesure_unitx" value="pixel"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle"/>
@@ -150,16 +150,16 @@
 					<textFieldExpression><![CDATA[$F{agentMobileNumber}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="121" y="56" width="100" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
+					<reportElement x="175" y="56" width="265" height="15" uuid="ba824947-a77a-416a-80cc-8c1257048ce0"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{agentCode}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="28" y="52" width="85" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
+					<reportElement x="28" y="52" width="184" height="20" uuid="adf044ed-7118-4885-8628-16e1d83764ce"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Agent Code :]]></text>
+					<text><![CDATA[Broker/Agent/Direct Code :]]></text>
 				</staticText>
 				<frame>
 					<reportElement x="25" y="81" width="704" height="107" uuid="0e3101b6-cec3-4a28-b43d-c6f61a07c359"/>
@@ -237,7 +237,7 @@
 						<textElement>
 							<font size="14" isBold="true"/>
 						</textElement>
-						<text><![CDATA[Proposed Assured]]></text>
+						<text><![CDATA[Proposed Insured]]></text>
 					</staticText>
 					<staticText>
 						<reportElement x="9" y="24" width="51" height="19" uuid="bc10e285-9c9f-41f0-8cbe-c2ed5516cf80"/>

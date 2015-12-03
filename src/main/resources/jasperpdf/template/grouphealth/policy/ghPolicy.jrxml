@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-12-02T18:46:57 -->
+<!-- 2015-12-03T12:03:36 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="1000" pageHeight="1100" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -369,7 +369,7 @@
 						<textElement textAlignment="Left" verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
-						<text><![CDATA[ Total Sum Assured :]]></text>
+						<text><![CDATA[ Total Sum Insured :]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true">
 						<reportElement x="153" y="111" width="100" height="15" uuid="55e7cd55-8851-4e98-aab1-9b85679d0931"/>
@@ -532,7 +532,7 @@
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font size="12" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Sum Assured]]></text>
+									<text><![CDATA[Sum Insured]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -598,7 +598,7 @@
 				<staticText>
 					<reportElement x="10" y="41" width="937" height="58" uuid="5979e608-1ef8-4ffb-a8c5-92693a6d5225"/>
 					<text><![CDATA[
-2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum assured would be paid on accidental death.                                                                                                                                                                                              ]]></text>
+2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum insured would be paid on accidental death.                                                                                                                                                                                              ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="10" y="21" width="937" height="19" uuid="309bd7e5-754c-406d-b3aa-e6d2b608a0f6"/>
@@ -613,7 +613,7 @@
 				</staticText>
 				<staticText>
 					<reportElement x="10" y="116" width="939" height="30" uuid="074e6cc2-4f22-406d-9e91-ee5c8d8832e3"/>
-					<text><![CDATA[ 3.  A Register of lives assured showing a breakdown of the premium for each life assured will be provided with the policy document.
+					<text><![CDATA[ 3.  A Register of lives insured showing a breakdown of the premium for each life Insured will be provided with the policy document.
 ]]></text>
 				</staticText>
 			</frame>
