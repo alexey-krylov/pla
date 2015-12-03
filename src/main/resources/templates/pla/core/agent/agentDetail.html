@@ -47,10 +47,10 @@
                                 <option th:text="${agentDetail.agentProfile.title}"></option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label  class="control-label">First Name</label>
-                            <input type="text" class="form-control input-sm" disabled="true" th:field="${agentDetail.agentProfile.firstName}"/>
-                        </div>
+                       <div class="form-group">
+                         <label  class="control-label">Surname</label>
+                         <input type="text" class="form-control input-sm" name="surname" disabled="true" th:field="${agentDetail.agentProfile.lastName}"/>
+                         </div>
                         <div class="form-group">
                             <label  class="control-label">Agent ID</label>
                             <input type="text" class="form-control input-sm" disabled="true" th:field="${agentDetail.agentId}"/>
@@ -80,10 +80,10 @@
                             <label  >Employee ID</label>
                             <input type="text" class="form-control input-sm" disabled="true" th:field="${agentDetail.agentProfile.employeeId}"/>
                         </div>
-                        <div class="form-group">
-                            <label  class="control-label">Surname</label>
-                            <input type="text" class="form-control input-sm" name="surname" disabled="true" th:field="${agentDetail.agentProfile.lastName}"/>
-                        </div>
+                         <div class="form-group">
+                             <label  class="control-label">First Name</label>
+                             <input type="text" class="form-control input-sm" disabled="true" th:field="${agentDetail.agentProfile.firstName}"/>
+                           </div>
                         <div class="form-group">
                             <label  class="control-label">Designation</label>
                             <input type="text" class="form-control input-sm" name="designation" disabled="true" th:field="${agentDetail.agentProfile.designationDto.description}"/>
