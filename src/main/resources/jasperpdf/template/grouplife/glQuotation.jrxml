@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-12-03T15:53:47 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quotation" pageWidth="842" pageHeight="1500" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="957e75dd-e876-4376-9d34-ee0e5f53cdeb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -98,35 +100,35 @@
 	<pageHeader>
 		<band height="118" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="-1" width="780" height="119" uuid="fa6a7357-91e7-4f4b-8661-21c0b790e5ef"/>
+				<reportElement x="0" y="-1" width="78" height="119" uuid="fa6a7357-91e7-4f4b-8661-21c0b790e5ef"/>
 				<subreportExpression><![CDATA["jasperpdf/jasper/header.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement x="205" y="12" width="366" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Group Life Quotation]]></text>
+			</staticText>
 			<frame>
-				<reportElement x="0" y="0" width="800" height="60" uuid="4d727345-90bd-4816-8cd8-c980e20542a0"/>
+				<reportElement x="0" y="1" width="802" height="79" uuid="4d727345-90bd-4816-8cd8-c980e20542a0"/>
 				<box>
 					<topPen lineWidth="0.6" lineStyle="Double"/>
 					<leftPen lineWidth="0.6" lineStyle="Double"/>
 					<bottomPen lineWidth="0.6" lineStyle="Double"/>
 					<rightPen lineWidth="0.6" lineStyle="Double"/>
 				</box>
-				<staticText>
-					<reportElement x="212" y="11" width="366" height="30" uuid="e55211fe-d850-41ac-b5d4-02a060976fee"/>
-					<textElement textAlignment="Center" verticalAlignment="Top">
-						<font fontName="Arial" size="14" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Group Life Quotation]]></text>
-				</staticText>
 			</frame>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="776" splitType="Stretch">
 			<frame>
-				<reportElement x="-20" y="-20" width="800" height="675" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4">
+				<reportElement x="0" y="0" width="802" height="776" uuid="3e3c739a-dd56-4b8c-85ba-494ac85a39f4">
 					<propertyExpression name="valuedClientDiscount"><![CDATA[$F{valuedClientDiscount}]]></propertyExpression>
 				</reportElement>
 				<box>
@@ -441,7 +443,7 @@
 					</textField>
 				</frame>
 				<subreport>
-					<reportElement positionType="Float" x="18" y="581" width="755" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>
+					<reportElement positionType="Float" x="7" y="591" width="743" height="33" uuid="e2ddcdb0-a869-4c1d-a93a-16b20833ca13"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{annexure})]]></dataSourceExpression>
 					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/insureddetailsubreport.jasper"]]></subreportExpression>
 				</subreport>
@@ -481,7 +483,7 @@
 				<staticText>
 					<reportElement x="38" y="10" width="692" height="80" uuid="5979e608-1ef8-4ffb-a8c5-92693a6d5225"/>
 					<text><![CDATA[Note:                                                                                                                                                                                                                                                                                                          1.  Cover is granted subject to completion of an 'Active at Work' declaration.
-2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum assured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives assured showing a breakdown of the premium for each life assured will be provided with the policy document.
+2.  For members above the FCL medical underwriting information will be required depending on the amount by which the sum insured exceeds the FCL.The minimum requirement is completion of a medical questionnaire and an HIV test.  In the event of a member not providing the medical information  required, cover will be restricted to the FCL in the event of death arising from natural causes.However the full sum insured would be paid on accidental death.                                                                                                                                                                                               3.  A Register of lives insured showing a breakdown of the premium for each life insured will be provided with the policy document.
 ]]></text>
 				</staticText>
 			</frame>
