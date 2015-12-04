@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.core.dto.AgentDto;
+import com.pla.sharedkernel.domain.model.PlanStatus;
 import org.joda.time.DateTime;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,8 @@ public class AgentFinder {
 
     public static final String FIND_ALL_BROKER_BY_STATUS_QUERY = "select * from agent_team_branch_view where agentStatus IN (:agentStatuses) and channelCode='BROKER'";
 
-    public static final String FIND_AGENT_PLAN_QUERY = "SELECT agent_id AS agentId,plan_id AS planId FROM `agent_authorized_plan`";
+    public static final String FIND_AGENT_PLAN_QUERY = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN plan_coverage_benefit_assoc p " +
+            " ON a.plan_id = p.plan_id WHERE p.plan_status != '"+ PlanStatus.WITHDRAWN.name()+"'";
 
     public static final String FIND_AGENT_CONTACT_QUERY = "SELECT agent_id AS agentId,email_id AS emailId,fax_number AS faxNumber,line_of_business AS lineOfBusiness,person_name AS personName,salutation,work_phone_number AS workPhoneNumber FROM `agent_contact_persons`";
 
