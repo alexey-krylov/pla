@@ -2,6 +2,7 @@ package com.pla.grouphealth.sharedresource.dto;
 
 import com.google.common.collect.Lists;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -48,6 +49,8 @@ public class GHInsuredDto {
     private String occupationCategory;
 
     private Integer noOfAssured;
+
+    private PremiumType premiumType;
 
     private String existingIllness;
 
@@ -121,6 +124,8 @@ public class GHInsuredDto {
         private List<GHCoveragePremiumDetailDto> coveragePremiumDetails;
 
         private Integer noOfAssured;
+
+        private PremiumType premiumType;
 
         public GHInsuredDependentDto addPlanPremiumDetail(GHPlanPremiumDetailDto planPremiumDetailDto) {
             this.planPremiumDetail = planPremiumDetailDto;

@@ -1,6 +1,7 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.Getter;
@@ -40,6 +41,8 @@ public class GHInsuredBuilder {
     private String category;
 
     private Set<GHInsuredDependent> insuredDependents;
+
+    private PremiumType premiumType;
 
     private GHPlanPremiumDetail planPremiumDetail;
 
@@ -116,6 +119,11 @@ public class GHInsuredBuilder {
         this.noOfAssured = noOfAssured;
         return this;
     }
+    public GHInsuredBuilder withPremiumType(PremiumType premiumType) {
+        this.premiumType = premiumType;
+        return this;
+    }
+
 
     public GHInsuredBuilder withCoveragePremiumDetail(GHCoveragePremiumDetailBuilder ghCoveragePremiumDetailBuilder) {
         GHCoveragePremiumDetail coveragePremiumDetail = new GHCoveragePremiumDetail(ghCoveragePremiumDetailBuilder.getCoverageName(), ghCoveragePremiumDetailBuilder.getCoverageCode(), new CoverageId(ghCoveragePremiumDetailBuilder.getCoverageId()), ghCoveragePremiumDetailBuilder.getPremium(), ghCoveragePremiumDetailBuilder.getPremiumVisibility(), ghCoveragePremiumDetailBuilder.getSumAssured());

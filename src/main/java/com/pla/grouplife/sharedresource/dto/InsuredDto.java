@@ -2,6 +2,7 @@ package com.pla.grouplife.sharedresource.dto;
 
 import com.pla.grouplife.sharedresource.model.vo.InsuredBuilder;
 import com.pla.sharedkernel.domain.model.Gender;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -51,6 +52,8 @@ public class InsuredDto {
     private String occupationCategory;
 
     private Integer noOfAssured;
+
+    private PremiumType premiumType;
 
     private Set<InsuredDependentDto> insuredDependents;
 
@@ -143,6 +146,8 @@ public class InsuredDto {
         private List<CoveragePremiumDetailDto> coveragePremiumDetails;
 
         private Integer noOfAssured;
+
+        private PremiumType premiumType;
 
         private String familyId;
 
