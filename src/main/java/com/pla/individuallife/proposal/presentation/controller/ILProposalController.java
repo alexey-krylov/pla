@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.query.MasterFinder;
+import com.pla.core.query.PremiumFinder;
 import com.pla.individuallife.proposal.application.command.*;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.exception.ILProposalException;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by pradyumna on 21-05-2015.
@@ -73,7 +75,8 @@ public class ILProposalController {
     @Autowired
     private ILClientService ilClientService;
 
-
+    @Autowired
+    private PremiumFinder premiumFinder;
 
     @ResponseBody
     @RequestMapping(value = "/create" , method = RequestMethod.POST)
@@ -505,7 +508,22 @@ public class ILProposalController {
     @ResponseBody
     public Set<Map<String, Object>> searchPlan(@RequestParam(value = "agentIds",required = false)List<String> agentIds,@RequestParam(value = "proposedAssuredAge",required = false) Integer proposedAssuredAge) {
         Set<Map<String, Object>> planList = proposalFinder.getPlans(agentIds,proposedAssuredAge);
-        return planList;
+        Set<String> planCoverageDetail  = premiumFinder.findPlanAndCoveragePremiumDetail();
+        if (isNotEmpty(planList)){
+            return planList.parallelStream().filter(new Predicate<Map<String, Object>>() {
+                @Override
+                public boolean test(Map<String, Object> planDetailMap) {
+                    return planCoverageDetail.contains(planDetailMap.get("plan_id")!=null?(String)planDetailMap.get("plan_id"):"");
+                }
+            }).map(new Function<Map<String,Object>, Map<String ,Object>>() {
+                @Override
+                public Map<String, Object> apply(Map<String, Object> planDetailMap) {
+                    return planDetailMap;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return Collections.EMPTY_SET;
+
     }
 
     @RequestMapping(value = "/getmandatorydocuments/{proposalId}", method = RequestMethod.GET)

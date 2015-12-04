@@ -213,6 +213,7 @@ public class ILQuotationController {
         PremiumDetailDto dto = null;
         try {
             dto = ilQuotationService.getPremiumDetail(new QuotationId(quotationId));
+
         } catch (IllegalArgumentException iag) {
             return new ResponseEntity(Result.failure(iag.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
