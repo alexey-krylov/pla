@@ -43,7 +43,7 @@ public class AgentFinder {
 
     public static final String FIND_ALL_BROKER_BY_STATUS_QUERY = "select * from agent_team_branch_view where agentStatus IN (:agentStatuses) and channelCode='BROKER'";
 
-    public static final String FIND_AGENT_PLAN_QUERY = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN plan_coverage_benefit_assoc p " +
+    public static final String FIND_AGENT_PLAN = "SELECT a.agent_id AS agentId,a.plan_id AS planId FROM `agent_authorized_plan` a INNER JOIN plan_coverage_benefit_assoc p " +
             " ON a.plan_id = p.plan_id WHERE p.plan_status != '"+ PlanStatus.WITHDRAWN.name()+"'";
 
     public static final String FIND_AGENT_CONTACT_QUERY = "SELECT agent_id AS agentId,email_id AS emailId,fax_number AS faxNumber,line_of_business AS lineOfBusiness,person_name AS personName,salutation,work_phone_number AS workPhoneNumber FROM `agent_contact_persons`";
@@ -121,7 +121,7 @@ public class AgentFinder {
     }
 
     public List<Map<String, Object>> getAllAgentPlan() {
-        return namedParameterJdbcTemplate.query(FIND_AGENT_PLAN_QUERY, new ColumnMapRowMapper());
+        return namedParameterJdbcTemplate.query(FIND_AGENT_PLAN, new ColumnMapRowMapper());
     }
 
     public List<Map<String, Object>> getAllAgentContacts() {
