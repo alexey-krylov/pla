@@ -65,11 +65,6 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private boolean samePlanForAllCategory;
 
-    @Override
-    public ProposalId getIdentifier() {
-        return proposalId;
-    }
-
     public GroupLifeProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
         checkArgument(quotation != null, "Quotation ID cannot be blank");
@@ -79,6 +74,11 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.proposalNumber = proposalNumber;
         this.proposalStatus = GLProposalStatus.DRAFT;
         this.productType = "INSURANCE";
+    }
+
+    @Override
+    public ProposalId getIdentifier() {
+        return proposalId;
     }
 
     public GroupLifeProposal copyTo(GroupLifeProposal groupLifeProposal) {
@@ -149,7 +149,9 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupLifeProposal markApproverApproval(String approvedBy, DateTime approvedOn, String comment, GLProposalStatus status) {
         this.proposalStatus = status;
-        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        }
         if (GLProposalStatus.APPROVED.equals(this.proposalStatus)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
@@ -160,13 +162,17 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupLifeProposal markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = GLProposalStatus.PENDING_FIRST_PREMIUM;
-        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        }
         return this;
     }
 
     public GroupLifeProposal markASINForce(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = GLProposalStatus.IN_FORCE;
-        registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new GLProposalStatusAuditEvent(this.getProposalId(), GLProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        }
         registerEvent(new GLProposalToPolicyEvent(this.proposalId));
         return this;
     }

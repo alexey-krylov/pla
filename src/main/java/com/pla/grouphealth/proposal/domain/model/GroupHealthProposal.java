@@ -70,11 +70,6 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private boolean samePlanForAllCategory;
 
-    @Override
-    public ProposalId getIdentifier() {
-        return proposalId;
-    }
-
     public GroupHealthProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
         checkArgument(quotation != null, "Quotation ID cannot be blank");
@@ -84,6 +79,11 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         this.proposalNumber = proposalNumber;
         this.proposalStatus = ProposalStatus.DRAFT;
         this.productType = "INSURANCE";
+    }
+
+    @Override
+    public ProposalId getIdentifier() {
+        return proposalId;
     }
 
     public GroupHealthProposal copyTo(GroupHealthProposal groupHealthProposal) {
@@ -148,7 +148,9 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupHealthProposal markApproverApproval(String approvedBy, DateTime approvedOn, String comment, ProposalStatus status) {
         this.proposalStatus = status;
-        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)){
+            registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        }
         if (ProposalStatus.APPROVED.equals(this.proposalStatus)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
@@ -158,13 +160,17 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupHealthProposal markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ProposalStatus.PENDING_FIRST_PREMIUM;
-        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)){
+            registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        }
         return this;
     }
 
     public GroupHealthProposal markASINForce(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ProposalStatus.IN_FORCE;
-        registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new GHProposalStatusAuditEvent(this.getProposalId(), ProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        }
         registerEvent(new GHProposalToPolicyEvent(this.proposalId));
         return this;
     }
