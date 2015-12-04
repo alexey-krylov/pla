@@ -465,7 +465,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     return true;
                 }
             };
-
             $scope.isSurrenderReq = function () {
                 if ($scope.clientType == 'INDIVIDUAL')
                     return 'required';
@@ -521,6 +520,18 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                                 $scope.cancel();
 
                             };
+
+
+                            $scope.baseAgeRetrival=function(){
+                                if($scope.newCoverage.coverageType == 'BASE'){
+                                    $scope.newCoverage.minAge=$scope.plan.planDetail.minEntryAge;
+                                    $scope.newCoverage.maxAge=$scope.plan.planDetail.maxEntryAge;
+                                }
+                                else{
+                                    $scope.newCoverage.minAge='';
+                                    $scope.newCoverage.maxAge='';
+                                }
+                            }
 
                             /**
                              *

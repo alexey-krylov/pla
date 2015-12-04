@@ -91,11 +91,20 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                 "lineOfBusinessId": "GROUP_LIFE",
                 "value": "Group Life"
             },]
+
+            // Keeping The Copy of Line Of Business List
+            $scope.lineOfBusinessListCopy=[];
+            angular.copy($scope.lineOfBusinessList,$scope.lineOfBusinessListCopy);
+
             $scope.contact={};
             $scope.agentDetails.contactPersonDetails=[];
             $scope.contactPersonDetailsCopy=[];
             $scope.edit=false;
             $scope.addContactPerson=function(contact,tab1Status){
+                var retContact = _.findWhere($scope.lineOfBusinessListCopy, {lineOfBusinessId: contact.lineOfBusinessId});
+                if(retContact && !$scope.edit){
+                    contact=angular.extend(contact,{value:retContact.value});
+                }
                 if($scope.agentDetails.contactPersonDetails && $scope.agentDetails.contactPersonDetails.length == 0){
                     $scope.agentDetails.contactPersonDetails.push(contact);
                     //$scope.contact={};
@@ -157,6 +166,23 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
                                 if($scope.agentDetails.contactPersonDetails[i].lineOfBusinessId){
                                     $scope.lineOfBusinessList=_.reject($scope.lineOfBusinessList,{"lineOfBusinessId":$scope.agentDetails.contactPersonDetails[i].lineOfBusinessId});
                                 }
+                            }
+
+                            /***
+                             * Setting value Attribute Additionally to Retrival AgentDetail.ContactPerson Details
+                             * For Displaying in the Table
+                             */
+
+                            for(i in $scope.agentDetails.contactPersonDetails){
+                                if($scope.agentDetails.contactPersonDetails[i].lineOfBusinessId){
+
+                                    var retContact = _.findWhere($scope.lineOfBusinessListCopy, {lineOfBusinessId: $scope.agentDetails.contactPersonDetails[i].lineOfBusinessId});
+                                    if(retContact){
+                                        $scope.agentDetails.contactPersonDetails[i]=angular.extend($scope.agentDetails.contactPersonDetails[i],{value:retContact.value});
+                                    }
+                                    //$scope.agentDetails.contactPersonDetails[i].lineOfBusinessId;
+                                }
+
                             }
                         }
                     });
