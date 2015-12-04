@@ -100,6 +100,7 @@ angular.module('brokerModule', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'm
             $scope.agentDetails.contactPersonDetails=[];
             $scope.contactPersonDetailsCopy=[];
             $scope.edit=false;
+
             $scope.addContactPerson=function(contact,tab1Status){
                 var retContact = _.findWhere($scope.lineOfBusinessListCopy, {lineOfBusinessId: contact.lineOfBusinessId});
                 if(retContact && !$scope.edit){
