@@ -8,7 +8,7 @@
             </accordion-heading>
 
             <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;">
-                <div class="form-group "  ng-repeat="document in documentList" >
+                <div class="form-group "  ng-repeat="document in documentList |orderBy:'documentName'" >
                     <label class="col-sm-3 control-label">{{document.documentName}}</label>
                     <div class="col-md-1"></div>
                     <div class="col-md-8 input-group" style="line-height: 30px; vertical-align: middle !important;">
