@@ -6,6 +6,8 @@
 
 package com.pla.core.domain.model.plan.premium;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.generalinformation.DiscountFactorOrganizationInformation;
 import com.pla.core.domain.model.generalinformation.ModelFactorOrganizationInformation;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
@@ -50,6 +52,9 @@ public class Premium {
     @Getter
     private Set<PremiumItem> premiumItems;
 
+    @Getter
+    private Set<PremiumItem> singlePremiumItems;
+
     private LocalDate effectiveFrom;
 
     private LocalDate validTill;
@@ -61,7 +66,7 @@ public class Premium {
     @Getter
     private List<PremiumInfluencingFactor> premiumInfluencingFactors;
 
-    private Premium(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Set<PremiumItem> premiumItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+    private Premium(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Set<PremiumItem> premiumItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors, Set<PremiumItem> singlePremiumItems) {
         checkArgument(premiumId != null);
         checkArgument(planId != null);
         checkArgument(effectiveFrom != null);
@@ -75,16 +80,49 @@ public class Premium {
         this.premiumFactor = premiumFactor;
         this.premiumRateFrequency = premiumRateFrequency;
         this.premiumInfluencingFactors = premiumInfluencingFactors;
+        this.singlePremiumItems = singlePremiumItems;
     }
 
-    public static Premium createPremiumWithPlan(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
-        Set<PremiumItem> premiumItems = createPremiumItems(premiumExcelLineItems);
-        return new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactors);
+    public static Premium createPremiumWithPlan(PremiumId premiumId, PlanId planId, LocalDate effectiveFrom, Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>>  premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+        Set<PremiumItem> premiumItems;
+        Set<PremiumItem> singlePremiumItems = Sets.newHashSet();
+        if(premiumExcelLineItems.size() > 1){
+            List<Map<Map<PremiumInfluencingFactor, String>, Double>> singlePremiumItemsList = Lists.newArrayList();
+            List<Map<Map<PremiumInfluencingFactor, String>, Double>> otherPremiumItemsList = Lists.newArrayList();
+            for(String key : premiumExcelLineItems.keySet()){
+                if(key.equalsIgnoreCase("SINGLE")) {
+                    singlePremiumItemsList = premiumExcelLineItems.get(key);
+                } else{
+                    otherPremiumItemsList = premiumExcelLineItems.get(key);
+                }
+            }
+            premiumItems = createPremiumItems(otherPremiumItemsList);
+            singlePremiumItems = createPremiumItems(singlePremiumItemsList);
+        } else{
+            premiumItems = createPremiumItems(premiumExcelLineItems.entrySet().iterator().next().getValue());
+        }
+        return new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactors, singlePremiumItems);
     }
 
-    public static Premium createPremiumWithPlanAndCoverage(PremiumId premiumId, PlanId planId, CoverageId coverageId, LocalDate effectiveFrom, List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
-        Set<PremiumItem> premiumItems = createPremiumItems(premiumExcelLineItems);
-        Premium premium = new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactors);
+    public static Premium createPremiumWithPlanAndCoverage(PremiumId premiumId, PlanId planId, CoverageId coverageId, LocalDate effectiveFrom, Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>>  premiumExcelLineItems, PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
+        Set<PremiumItem> premiumItems;
+        Set<PremiumItem> singlePremiumItems = Sets.newHashSet();
+        if(premiumExcelLineItems.size() > 1){
+            List<Map<Map<PremiumInfluencingFactor, String>, Double>> singlePremiumItemsList = Lists.newArrayList();
+            List<Map<Map<PremiumInfluencingFactor, String>, Double>> otherPremiumItemsList = Lists.newArrayList();
+            for(String key : premiumExcelLineItems.keySet()){
+                if(key.equalsIgnoreCase("SINGLE")) {
+                    singlePremiumItemsList = premiumExcelLineItems.get(key);
+                } else{
+                    otherPremiumItemsList = premiumExcelLineItems.get(key);
+                }
+            }
+            premiumItems = createPremiumItems(otherPremiumItemsList);
+            singlePremiumItems = createPremiumItems(singlePremiumItemsList);
+        } else{
+            premiumItems = createPremiumItems(premiumExcelLineItems.entrySet().iterator().next().getValue());
+        }
+        Premium premium = new Premium(premiumId, planId, effectiveFrom, premiumItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactors, singlePremiumItems);
         premium.coverageId = coverageId;
         return premium;
     }

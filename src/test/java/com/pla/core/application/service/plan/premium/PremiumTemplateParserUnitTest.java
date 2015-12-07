@@ -135,7 +135,7 @@ public class PremiumTemplateParserUnitTest {
 
     @Test
     public void givenPremiumInfluencingFactorCoverageIdAndPlan_when_thenItShouldReturnTotalNumberOfPremiumCombination() {
-        int totalNumberOfPremiumCombination = premiumTemplateParser.getTotalNoOfPremiumCombination(Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM), new CoverageId("1"), plan);
+        int totalNumberOfPremiumCombination = premiumTemplateParser.getTotalNoOfPremiumCombination(Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM), new CoverageId("1"), plan, premiumSheet.getSheetName());
         assertThat(totalNumberOfPremiumCombination, is(1));
     }
 

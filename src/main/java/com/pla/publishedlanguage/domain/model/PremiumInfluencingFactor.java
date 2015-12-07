@@ -42,7 +42,7 @@ public enum PremiumInfluencingFactor {
         }
 
         @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
+        public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
             return isEmpty(value) ? false : coverageId.getCoverageId() == null ? plan.isValidSumAssured(BigDecimal.valueOf(Double.valueOf(value.trim()).longValue())) : plan.isValidCoverageSumAssured(BigDecimal.valueOf(Double.valueOf(value.trim()).longValue()), coverageId);
         }
 
@@ -68,7 +68,7 @@ public enum PremiumInfluencingFactor {
         }
 
         @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
+        public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
             return isEmpty(value) ? false : coverageId.getCoverageId() == null ? plan.isValidAge(Integer.valueOf(value.trim())) : plan.isValidCoverageAge(Integer.valueOf(value.trim()), coverageId);
         }
 
@@ -94,7 +94,7 @@ public enum PremiumInfluencingFactor {
         }
 
         @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
+        public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
             return isEmpty(value) ? false : coverageId.getCoverageId() == null ? plan.isValidPolicyTerm(Integer.valueOf(value.trim())) : plan.isValidCoverageTerm(Integer.valueOf(value.trim()), coverageId);
         }
 
@@ -116,7 +116,10 @@ public enum PremiumInfluencingFactor {
         }
 
         @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
+        public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
+            if(sheet.equalsIgnoreCase("SINGLE")){
+                return isEmpty(value) ? false : value.equalsIgnoreCase("Single");
+            }
             return isEmpty(value) ? false : plan.isValidPremiumTerm(Integer.valueOf(value.trim()));
         }
 
@@ -131,7 +134,7 @@ public enum PremiumInfluencingFactor {
         }
 
         @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
+        public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
             return isEmpty(value) ? false : (value.trim().equals(Gender.MALE.name()) || value.trim().equals(Gender.FEMALE.name()));
         }
 
@@ -146,7 +149,7 @@ public enum PremiumInfluencingFactor {
         }
 
         @Override
-        public boolean isValidValue(Plan plan, CoverageId coverageId, String value) {
+        public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
             return isNotEmpty(value);
         }
 
@@ -168,7 +171,7 @@ public enum PremiumInfluencingFactor {
 
     public abstract String[] getAllowedValues(Plan plan, CoverageId coverageId);
 
-    public abstract boolean isValidValue(Plan plan, CoverageId coverageId, String value);
+    public abstract boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet);
 
     public abstract String getErrorMessage(String value);
 }

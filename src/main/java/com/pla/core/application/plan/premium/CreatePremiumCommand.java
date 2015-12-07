@@ -25,7 +25,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class CreatePremiumCommand {
 
-    private List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumLineItem;
+    private Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>>  premiumLineItem;
     @NotNull
     private String planId;
 

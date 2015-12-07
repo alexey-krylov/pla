@@ -306,9 +306,9 @@ public class PremiumCalculatorUnitTest {
         PremiumTemplateParser premiumTemplateParser = new PremiumTemplateParser(masterFinder);
         InputStream inputStream = PremiumCalculatorUnitTest.class.getClassLoader().getResourceAsStream("testdata/endtoend/premium/" + premiumSetUpFileName);
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = Lists.newArrayList(PremiumInfluencingFactor.SUM_ASSURED, PremiumInfluencingFactor.AGE, PremiumInfluencingFactor.POLICY_TERM, PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM, PremiumInfluencingFactor.GENDER);
-        premiumExcelLineItems = premiumTemplateParser.parseAndTransformToPremiumData(new HSSFWorkbook(inputStream), premiumInfluencingFactorList);
+        Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> record = premiumTemplateParser.parseAndTransformToPremiumData(new HSSFWorkbook(inputStream), premiumInfluencingFactorList, PremiumTermType.REGULAR);
         PremiumId premiumId = new PremiumId("1");
-        return Premium.createPremiumWithPlan(premiumId, planId, premiumSetupDate, premiumExcelLineItems, premiumFactor, premiumRateFrequency, premiumInfluencingFactorList);
+        return Premium.createPremiumWithPlan(premiumId, planId, premiumSetupDate, record, premiumFactor, premiumRateFrequency, premiumInfluencingFactorList);
 
     }
 }

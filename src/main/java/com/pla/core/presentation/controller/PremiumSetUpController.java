@@ -146,7 +146,7 @@ public class PremiumSetUpController {
                 outputStream.flush();
                 outputStream.close();
             } else {
-                List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumLineItem = premiumService.parsePremiumTemplate(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId());
+                Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> premiumLineItem = premiumService.parsePremiumTemplate(premiumTemplateWorkbook, createPremiumCommand.getPremiumInfluencingFactors(), createPremiumCommand.getPlanId(), createPremiumCommand.getCoverageId(), plan.getPremiumTermType());
                 createPremiumCommand.setPremiumLineItem(premiumLineItem);
                 commandGateway.send(createPremiumCommand);
                 modelAndView.setViewName("redirect:listpremium");

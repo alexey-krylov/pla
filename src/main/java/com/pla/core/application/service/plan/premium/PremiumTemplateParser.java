@@ -8,10 +8,12 @@ package com.pla.core.application.service.plan.premium;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.pla.core.application.exception.PremiumTemplateParseException;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.query.MasterFinder;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -49,13 +51,15 @@ public class PremiumTemplateParser {
 
     public boolean validatePremiumDataForAGivenPlanAndCoverage(HSSFWorkbook hssfWorkbook, Plan plan, CoverageId coverageId, List<PremiumInfluencingFactor> premiumInfluencingFactors) throws IOException, PremiumTemplateParseException {
         boolean isValidPremiumTemplate = true;
-        HSSFSheet premiumSheet = hssfWorkbook.getSheetAt(0);
+        Set<String> sheets = getSheetNamesByPremiumTermType(plan.getPremiumTermType());
+        for(String sheet : sheets) {
+            HSSFSheet premiumSheet = hssfWorkbook.getSheet(sheet);
             Iterator<Row> rowsIterator = premiumSheet.iterator();
             Row headerRow = rowsIterator.next();
             if (!isValidHeader(headerRow, premiumInfluencingFactors)) {
                 raiseHeaderInvalidException();
             }
-        int noOfExpectedPremiumRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan);
+            int noOfExpectedPremiumRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan, sheet);
             int noOfRowNonEmptyRow = getNoOfNonEmptyRow(premiumSheet);
             if (noOfRowNonEmptyRow != noOfExpectedPremiumRow) {
                 raiseNumberRowMismatchException(noOfExpectedPremiumRow, noOfRowNonEmptyRow);
@@ -74,7 +78,7 @@ public class PremiumTemplateParser {
                         validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
                         continue;
                     }
-                    boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, getCellValue(cell));
+                    boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, getCellValue(cell), sheet);
                     if (!isValidValue) {
                         isValidPremiumTemplate = false;
                         validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(getCellValue(cell));
@@ -98,6 +102,7 @@ public class PremiumTemplateParser {
                     createErrorCellAndWriteErrorMessage(errorCellNumber, validValueErrorMessage, duplicateRowErrorMessage, headerRow, row);
                 }
             }
+        }
         return isValidPremiumTemplate;
     }
 
@@ -253,45 +258,50 @@ public class PremiumTemplateParser {
 
 
     // TODO :  write test
-    public List<Map<Map<PremiumInfluencingFactor, String>, Double>> parseAndTransformToPremiumData(HSSFWorkbook hssfWorkbook, List<PremiumInfluencingFactor> premiumInfluencingFactors) {
-        HSSFSheet premiumSheet = hssfWorkbook.getSheetAt(0);
-        Iterator<Row> rowsIterator = premiumSheet.iterator();
-        Row headerRow = rowsIterator.next();
-        int premiumCellNumber = getCellNumberFor(AppConstants.PREMIUM_CELL_HEADER_NAME, Lists.newArrayList(headerRow.cellIterator()));
-        Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = buildInfluencingFactorAndCellIndexMap(headerRow, premiumInfluencingFactors);
-        List<Row> validRows = Lists.newArrayList(rowsIterator);
-        List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumInfluencingFactorLineItem = Lists.newArrayList();
-        for (Row dataRow : validRows) {
-            Map<Map<PremiumInfluencingFactor, String>, Double> premiumLineItemMap = Maps.newHashMap();
-            Map<PremiumInfluencingFactor, String> influencingFactorValueMap = Maps.newHashMap();
-            for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-                int cellNumber = influencingFactorCellIndexMap.get(premiumInfluencingFactor);
-                Cell cell = dataRow.getCell(cellNumber);
-                if (cell == null) {
-                    raiseNotValidTemplateException();
+    public Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> parseAndTransformToPremiumData(HSSFWorkbook hssfWorkbook, List<PremiumInfluencingFactor> premiumInfluencingFactors, PremiumTermType premiumTermType) {
+        Set<String> sheets = getSheetNamesByPremiumTermType(premiumTermType);
+        Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> record = Maps.newHashMap();
+        for(String sheet :  sheets) {
+            HSSFSheet premiumSheet = hssfWorkbook.getSheet(sheet);
+            Iterator<Row> rowsIterator = premiumSheet.iterator();
+            Row headerRow = rowsIterator.next();
+            int premiumCellNumber = getCellNumberFor(AppConstants.PREMIUM_CELL_HEADER_NAME, Lists.newArrayList(headerRow.cellIterator()));
+            Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = buildInfluencingFactorAndCellIndexMap(headerRow, premiumInfluencingFactors);
+            List<Row> validRows = Lists.newArrayList(rowsIterator);
+            List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumInfluencingFactorLineItem = Lists.newArrayList();
+            for (Row dataRow : validRows) {
+                Map<Map<PremiumInfluencingFactor, String>, Double> premiumLineItemMap = Maps.newHashMap();
+                Map<PremiumInfluencingFactor, String> influencingFactorValueMap = Maps.newHashMap();
+                for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+                    int cellNumber = influencingFactorCellIndexMap.get(premiumInfluencingFactor);
+                    Cell cell = dataRow.getCell(cellNumber);
+                    if (cell == null) {
+                        raiseNotValidTemplateException();
+                    }
+                    String cellValue = getCellValue(cell);
+                    influencingFactorValueMap.put(premiumInfluencingFactor, cellValue);
                 }
-                String cellValue = getCellValue(cell);
-                influencingFactorValueMap.put(premiumInfluencingFactor, cellValue);
+                Cell premiumCell = dataRow.getCell(premiumCellNumber);
+                premiumLineItemMap.put(influencingFactorValueMap, premiumCell.getNumericCellValue());
+                premiumInfluencingFactorLineItem.add(premiumLineItemMap);
             }
-            Cell premiumCell = dataRow.getCell(premiumCellNumber);
-            premiumLineItemMap.put(influencingFactorValueMap, premiumCell.getNumericCellValue());
-            premiumInfluencingFactorLineItem.add(premiumLineItemMap);
+            record.put(sheet, premiumInfluencingFactorLineItem);
         }
-        return premiumInfluencingFactorLineItem;
+        return record;
     }
 
 
-    int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
+    int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan, String premiumSheet) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            String[] data = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
+            String[] data = getAllowedValues(premiumInfluencingFactor, plan, coverageId, premiumSheet);
             Integer lengthOfAllowedValues = data.length == 0 ? 1 : data.length;
             noOfRow = noOfRow * lengthOfAllowedValues;
         }
         return noOfRow;
     }
 
-    private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
+    private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId, String sheetName) {
         if (PremiumInfluencingFactor.OCCUPATION_CLASS.equals(premiumInfluencingFactor)) {
             List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
             occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
@@ -302,6 +312,8 @@ public class PremiumTemplateParser {
             }
             return categories;
         }
+        if(premiumInfluencingFactor.equals(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM) &&  sheetName.equalsIgnoreCase(PremiumTermType.SINGLE.toString()))
+            return new String[]{"Single"};
         return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
     }
 
@@ -318,4 +330,25 @@ public class PremiumTemplateParser {
         }
         return cellValue;
     }
+    private Set<String> getSheetNamesByPremiumTermType(PremiumTermType premiumTermType) {
+        String premiumTermTypeString = premiumTermType.name();
+        switch(premiumTermTypeString){
+            case "REGULAR" :
+                return  Sets.newHashSet("REGULAR");
+            case "SPECIFIED_VALUES" :
+                return  Sets.newHashSet("SPECIFIED_VALUES");
+            case "SPECIFIED_AGES" :
+                return  Sets.newHashSet("SPECIFIED_AGES");
+            case "SINGLE" :
+                return  Sets.newHashSet("SINGLE");
+            case "SINGLE_REGULAR" :
+                return  Sets.newHashSet("SINGLE","REGULAR");
+            case "SINGLE_SPECIFIED_VALUES" :
+                return  Sets.newHashSet("SINGLE","SPECIFIED_VALUES");
+            case "SINGLE_SPECIFIED_AGES" :
+                return  Sets.newHashSet("SINGLE","SPECIFIED_AGES");
+        }
+        return Collections.emptySet();
+    }
+
 }

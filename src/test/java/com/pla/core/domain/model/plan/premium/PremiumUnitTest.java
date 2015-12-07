@@ -35,7 +35,8 @@ public class PremiumUnitTest {
     CoverageId coverageId;
     Premium premium;
     PremiumItem premiumItem;
-    List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItems;
+    List<Map<Map<PremiumInfluencingFactor, String>, Double>> premiumExcelLineItemsList;
+    Map<String,List<Map<Map<PremiumInfluencingFactor, String>, Double>>> premiumExcelLineItems;
     List<PremiumInfluencingFactor> premiumInfluencingFactors;
     Set<PremiumItem> premiumItems;
     Set<DiscountFactorOrganizationInformation> discountFactorItems;
@@ -47,15 +48,16 @@ public class PremiumUnitTest {
         premiumId = new PremiumId("PR001");
         coverageId = new CoverageId("C001");
         premiumItems = Sets.newLinkedHashSet();
-
-        premiumExcelLineItems = Lists.newArrayList();
+        premiumExcelLineItems = Maps.newHashMap();
+        premiumExcelLineItemsList = Lists.newArrayList();
         Map<Map<PremiumInfluencingFactor, String>, Double> premiumExcelItemMap = Maps.newLinkedHashMap();
         Map<PremiumInfluencingFactor, String> premiumInfluencingFactorMap = Maps.newLinkedHashMap();
         premiumInfluencingFactorMap.put(PremiumInfluencingFactor.AGE, "Age");
         premiumInfluencingFactorMap.put(PremiumInfluencingFactor.POLICY_TERM, "Policy Term");
         premiumInfluencingFactorMap.put(PremiumInfluencingFactor.SUM_ASSURED, "Sum Assured");
         premiumExcelItemMap.put(premiumInfluencingFactorMap, 100.00);
-        premiumExcelLineItems.add(premiumExcelItemMap);
+        premiumExcelLineItemsList.add(premiumExcelItemMap);
+        premiumExcelLineItems.put("REGULAR", premiumExcelLineItemsList);
         premiumItem = PremiumItem.createCoveragePremiumItem(premiumExcelItemMap);
         premiumItems.add(premiumItem);
 

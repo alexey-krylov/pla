@@ -12,6 +12,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.PremiumFactor;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -67,9 +68,9 @@ public class PremiumService {
         return isValidTemplate;
     }
 
-    public List<Map<Map<PremiumInfluencingFactor, String>, Double>> parsePremiumTemplate(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId) {
+    public Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> parsePremiumTemplate(HSSFWorkbook hssfWorkbook, PremiumInfluencingFactor[] premiumInfluencingFactors, String planId, String coverageId, PremiumTermType premiumTermType) {
         List<PremiumInfluencingFactor> premiumInfluencingFactorList = isNotEmpty(premiumInfluencingFactors) ? Arrays.asList(premiumInfluencingFactors) : new ArrayList<>();
-        return premiumTemplateParser.parseAndTransformToPremiumData(hssfWorkbook, premiumInfluencingFactorList);
+        return premiumTemplateParser.parseAndTransformToPremiumData(hssfWorkbook, premiumInfluencingFactorList, premiumTermType);
     }
 
     public List<Map> getAllPremium() {
