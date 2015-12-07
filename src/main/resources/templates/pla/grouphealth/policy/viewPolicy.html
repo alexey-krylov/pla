@@ -458,21 +458,21 @@
                     </div>
                     <div class="col-lg-3" ng-hide="isPolicyTermNot365 || inappropriatePolicyTerm" disable-all-fields="isViewMode">
                         <div class="form-group">
-                            <label><input type="radio" class="" ng-model="policyDetails.premium.optedPremiumFrequency |number:2"
+                            <label><input type="radio" class="" ng-model="policyDetails.premium.optedPremiumFrequency"
                                           value="ANNUALLY" style="margin-right:5px;"/>Annual Payment</label>
 
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.annualPremium"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="policyDetails.premium.annualPremium"/>
                         </div>
                         <div class="form-group">
-                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency |number:2"
+                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
                                           value="SEMI_ANNUALLY" style="margin-right:5px;"/>Semi-Annual Payment</label>
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.semiannualPremium"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="policyDetails.premium.semiannualPremium"/>
 
                         </div>
                         <div class="form-group">
-                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency |number:2"
+                            <label><input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
                                           value="QUARTERLY" style="margin-right:5px;"/>Quarterly Payment</label>
 
                             <input type="number" readonly="true" class="form-control input-sm"
@@ -482,16 +482,16 @@
                             <label> <input type="radio" ng-model="policyDetails.premium.optedPremiumFrequency"
                                            value="MONTHLY" style="margin-right:5px;"/>Monthly Payment</label>
 
-                            <input type="text" readonly="true" class="form-control input-sm"
-                                   ng-model="policyDetails.premium.monthlyPremium |number:2"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="policyDetails.premium.monthlyPremium"/>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-3 col-lg-offset-9" style="padding-right: 27px;padding-left: 6px">
                             <div class="form-group">
                                 <label >Total Premium payable</label>
-                                <input type="text" readonly="true" class="form-control input-sm"
-                                       ng-model="policyDetails.premium.totalPremium |number:2"/>
+                                <input type="input" readonly="true" class="form-control input-sm"
+                                       converter-Decimal="" ng-model="policyDetails.premium.totalPremium"/>
                             </div>
                         </div>
                     </div>
