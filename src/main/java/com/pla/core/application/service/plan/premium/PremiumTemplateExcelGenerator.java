@@ -7,9 +7,11 @@
 package com.pla.core.application.service.plan.premium;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.query.MasterFinder;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,8 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -55,50 +59,83 @@ public class PremiumTemplateExcelGenerator {
 
     public HSSFWorkbook generatePremiumTemplate(List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId) throws IOException {
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook();
-        int noOfExcelRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan);
-        HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(plan.getPlanDetail().getPlanName());
-        HSSFRow headerRow = createRowWithCellData(0, convertToStringArray(premiumInfluencingFactors), premiumSheet);
-        HSSFCell premiumCell = headerRow.createCell(premiumInfluencingFactors.size());
-        premiumCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        premiumCell.setCellValue(AppConstants.PREMIUM_CELL_HEADER_NAME);
-        createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId, premiumTemplateWorkbook, premiumSheet);
+        Set<String> sheets = getSheetNamesByPremiumTermType(plan.getPremiumTermType());
+        for(String sheet : sheets){
+            HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(sheet);
+            int noOfExcelRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan, premiumSheet);
+            HSSFRow headerRow = createRowWithCellData(0, convertToStringArray(premiumInfluencingFactors), premiumSheet);
+            HSSFCell premiumCell = headerRow.createCell(premiumInfluencingFactors.size());
+            premiumCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+            premiumCell.setCellValue(AppConstants.PREMIUM_CELL_HEADER_NAME);
+            createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId, premiumTemplateWorkbook, premiumSheet);
+        }
         return premiumTemplateWorkbook;
     }
 
-    private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan) {
+    private Set<HSSFSheet> createSheetByPremiumTermType(Plan plan, HSSFWorkbook premiumTemplateWorkbook) {
+        Set<HSSFSheet> sheets = Sets.newLinkedHashSet();
+        Set<String> sheetNames = getSheetNamesByPremiumTermType(plan.getPremiumTermType());
+        for(String sheetName : sheetNames){
+            HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(sheetName);
+            sheets.add(premiumSheet);
+        }
+        return sheets;
+    }
+
+    private Set<String> getSheetNamesByPremiumTermType(PremiumTermType premiumTermType) {
+        String premiumTermTypeString = premiumTermType.name();
+        switch(premiumTermTypeString){
+            case "REGULAR" :
+                return  Sets.newHashSet("REGULAR");
+            case "SPECIFIED_VALUES" :
+                return  Sets.newHashSet("SPECIFIED_VALUES");
+            case "SPECIFIED_AGES" :
+                return  Sets.newHashSet("SPECIFIED_AGES");
+            case "SINGLE" :
+                return  Sets.newHashSet("SINGLE");
+            case "SINGLE_REGULAR" :
+                return  Sets.newHashSet("SINGLE","REGULAR");
+            case "SINGLE_SPECIFIED_VALUES" :
+                return  Sets.newHashSet("SINGLE","SPECIFIED_VALUES");
+            case "SINGLE_SPECIFIED_AGES" :
+                return  Sets.newHashSet("SINGLE","SPECIFIED_AGES");
+        }
+        return Collections.emptySet();
+    }
+
+    private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan, HSSFSheet hssfSheet) {
         Integer noOfRow = 1;
         for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-            String[] data = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
+            String[] data = getAllowedValues(premiumInfluencingFactor, plan, coverageId, hssfSheet.getSheetName());
             Integer lengthOfAllowedValues = data.length == 0 ? 1 : data.length;
             noOfRow = noOfRow * lengthOfAllowedValues;
         }
         return noOfRow;
     }
 
-    private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId, HSSFWorkbook premiumTemplateWorkbook, HSSFSheet premiumSheet) {
+    private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId, HSSFWorkbook premiumTemplateWorkbook, HSSFSheet sheets) {
         for (int cellNumber = 0; cellNumber < premiumInfluencingFactors.size(); cellNumber++) {
             String columnIndex = String.valueOf((char) (65 + cellNumber));
             PremiumInfluencingFactor premiumInfluencingFactor = premiumInfluencingFactors.get(cellNumber);
-            HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name());
-            String[] planData = getAllowedValues(premiumInfluencingFactor, plan, coverageId);
+            HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name()+sheets.getSheetName());
+            String[] planData = getAllowedValues(premiumInfluencingFactor, plan, coverageId, sheets.getSheetName());
             createNamedRowWithCell(planData, hiddenSheetForNamedCell, cellNumber);
             HSSFName namedCell = premiumTemplateWorkbook.createName();
-            namedCell.setNameName(premiumInfluencingFactor.name());
-            String formula = premiumInfluencingFactor.name() + "!$" + columnIndex + "$1:$" + columnIndex + "$";
+            namedCell.setNameName(premiumInfluencingFactor.name()+sheets.getSheetName());
+            String formula = premiumInfluencingFactor.name()+sheets.getSheetName() + "!$" + columnIndex + "$1:$" + columnIndex + "$";
             namedCell.setRefersToFormula(formula + (planData.length == 0 ? 1 : planData.length));
-            DVConstraint constraint = DVConstraint.createFormulaListConstraint(premiumInfluencingFactor.name());
+            DVConstraint constraint = DVConstraint.createFormulaListConstraint(premiumInfluencingFactor.name()+sheets.getSheetName());
             CellRangeAddressList addressList = new CellRangeAddressList(1, lastRowNumber, cellNumber, cellNumber);
             HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
             dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
             dataValidation.createErrorBox("Error", "Provide proper " + premiumInfluencingFactor.getDescription() + " value");
             premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), true);
-            premiumSheet.addValidationData(dataValidation);
+            sheets.addValidationData(dataValidation);
         }
-
     }
 
-    private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId) {
-         if (PremiumInfluencingFactor.OCCUPATION_CLASS.equals(premiumInfluencingFactor)) {
+    private String[] getAllowedValues(PremiumInfluencingFactor premiumInfluencingFactor, Plan plan, CoverageId coverageId, String sheetName) {
+        if (PremiumInfluencingFactor.OCCUPATION_CLASS.equals(premiumInfluencingFactor)) {
             List<Map<String, Object>> occupationCategories = masterFinder.getAllOccupationClass();
             occupationCategories = isNotEmpty(occupationCategories) ? occupationCategories : Lists.newArrayList();
             String[] categories = new String[occupationCategories.size()];
@@ -108,6 +145,8 @@ public class PremiumTemplateExcelGenerator {
             }
             return categories;
         }
+        if(premiumInfluencingFactor.equals(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM) &&  sheetName.equalsIgnoreCase(PremiumTermType.SINGLE.toString()))
+            return new String[]{"Single"};
         return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
     }
 

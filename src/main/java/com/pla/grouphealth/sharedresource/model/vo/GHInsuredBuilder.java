@@ -58,6 +58,8 @@ public class GHInsuredBuilder {
 
     private Integer noOfAssured;
 
+    private String rateOfPremium;
+
 
     GHInsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
         checkArgument(insuredPlan != null);
@@ -124,6 +126,11 @@ public class GHInsuredBuilder {
         return this;
     }
 
+    public GHInsuredBuilder withRateOfPremium(String rateOfPremium) {
+        this.rateOfPremium = rateOfPremium;
+        return this;
+    }
+
 
     public GHInsuredBuilder withCoveragePremiumDetail(GHCoveragePremiumDetailBuilder ghCoveragePremiumDetailBuilder) {
         GHCoveragePremiumDetail coveragePremiumDetail = new GHCoveragePremiumDetail(ghCoveragePremiumDetailBuilder.getCoverageName(), ghCoveragePremiumDetailBuilder.getCoverageCode(), new CoverageId(ghCoveragePremiumDetailBuilder.getCoverageId()), ghCoveragePremiumDetailBuilder.getPremium(), ghCoveragePremiumDetailBuilder.getPremiumVisibility(), ghCoveragePremiumDetailBuilder.getSumAssured());
@@ -149,5 +156,4 @@ public class GHInsuredBuilder {
     public GHInsured build() {
         return new GHInsured(this);
     }
-
 }

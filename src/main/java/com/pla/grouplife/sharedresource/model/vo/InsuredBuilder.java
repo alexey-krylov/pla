@@ -57,6 +57,8 @@ public class InsuredBuilder {
 
     private PremiumType premiumType;
 
+    private String rateOfPremium;
+
     InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
         checkArgument(insuredPlan != null);
         PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured,incomeMultiplier );
@@ -131,6 +133,11 @@ public class InsuredBuilder {
 
     public InsuredBuilder withPremiumType(PremiumType premiumType) {
         this.premiumType = premiumType;
+        return this;
+    }
+
+    public InsuredBuilder withRateOfPremium(String rateOfPremium) {
+        this.rateOfPremium = rateOfPremium;
         return this;
     }
 

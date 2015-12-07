@@ -54,6 +54,8 @@ public class GHInsured {
 
     private PremiumType premiumType;
 
+    private String rateOfPremium;
+
     private GHPlanPremiumDetail planPremiumDetail;
 
     private String existingIllness;
@@ -86,7 +88,7 @@ public class GHInsured {
         this.minAgeEntry = insuredBuilder.getMinAgeEntry();
         this.maxAgeEntry = insuredBuilder.getMaxAgeEntry();
         this.noOfAssured = insuredBuilder.getNoOfAssured();
-
+        this.rateOfPremium = insuredBuilder.getRateOfPremium();
     }
 
     public static GHInsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {

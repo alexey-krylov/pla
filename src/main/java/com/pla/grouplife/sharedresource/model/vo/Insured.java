@@ -57,6 +57,8 @@ public class Insured {
 
     private PremiumType premiumType;
 
+    private String rateOfPremium;
+
     private Set<InsuredDependent> insuredDependents;
 
     private PlanPremiumDetail planPremiumDetail;
@@ -86,6 +88,7 @@ public class Insured {
         this.coveragePremiumDetails = insuredBuilder.getCoveragePremiumDetails();
         this.noOfAssured = insuredBuilder.getNoOfAssured();
         this.premiumType = insuredBuilder.getPremiumType();
+        this.rateOfPremium = insuredBuilder.getRateOfPremium();
         if (isNotEmpty(insuredBuilder.getFamilyId())) {
             this.familyId = new FamilyId(insuredBuilder.getFamilyId());
         }

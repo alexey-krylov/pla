@@ -50,54 +50,54 @@ public class PremiumTemplateParser {
     public boolean validatePremiumDataForAGivenPlanAndCoverage(HSSFWorkbook hssfWorkbook, Plan plan, CoverageId coverageId, List<PremiumInfluencingFactor> premiumInfluencingFactors) throws IOException, PremiumTemplateParseException {
         boolean isValidPremiumTemplate = true;
         HSSFSheet premiumSheet = hssfWorkbook.getSheetAt(0);
-        Iterator<Row> rowsIterator = premiumSheet.iterator();
-        Row headerRow = rowsIterator.next();
-        if (!isValidHeader(headerRow, premiumInfluencingFactors)) {
-            raiseHeaderInvalidException();
-        }
+            Iterator<Row> rowsIterator = premiumSheet.iterator();
+            Row headerRow = rowsIterator.next();
+            if (!isValidHeader(headerRow, premiumInfluencingFactors)) {
+                raiseHeaderInvalidException();
+            }
         int noOfExpectedPremiumRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan);
-        int noOfRowNonEmptyRow = getNoOfNonEmptyRow(premiumSheet);
-        if (noOfRowNonEmptyRow != noOfExpectedPremiumRow) {
-            raiseNumberRowMismatchException(noOfExpectedPremiumRow, noOfRowNonEmptyRow);
-        }
-        Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = buildInfluencingFactorAndCellIndexMap(headerRow, premiumInfluencingFactors);
-        List<Row> allRows = Lists.newArrayList(rowsIterator);
-        List<Row> allRowsToBeCompared = Lists.newArrayList(allRows);
-        int premiumCellNumber = getCellNumberFor(AppConstants.PREMIUM_CELL_HEADER_NAME, transformCellIteratorToList(headerRow.cellIterator()));
-        for (Row row : allRows) {
-            String validValueErrorMessage = "";
-            for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
-                int cellIndex = influencingFactorCellIndexMap.get(premiumInfluencingFactor);
-                Cell cell = row.getCell(cellIndex);
-                if (cell == null) {
-                    isValidPremiumTemplate = false;
-                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
-                    continue;
+            int noOfRowNonEmptyRow = getNoOfNonEmptyRow(premiumSheet);
+            if (noOfRowNonEmptyRow != noOfExpectedPremiumRow) {
+                raiseNumberRowMismatchException(noOfExpectedPremiumRow, noOfRowNonEmptyRow);
+            }
+            Map<PremiumInfluencingFactor, Integer> influencingFactorCellIndexMap = buildInfluencingFactorAndCellIndexMap(headerRow, premiumInfluencingFactors);
+            List<Row> allRows = Lists.newArrayList(rowsIterator);
+            List<Row> allRowsToBeCompared = Lists.newArrayList(allRows);
+            int premiumCellNumber = getCellNumberFor(AppConstants.PREMIUM_CELL_HEADER_NAME, transformCellIteratorToList(headerRow.cellIterator()));
+            for (Row row : allRows) {
+                String validValueErrorMessage = "";
+                for (PremiumInfluencingFactor premiumInfluencingFactor : premiumInfluencingFactors) {
+                    int cellIndex = influencingFactorCellIndexMap.get(premiumInfluencingFactor);
+                    Cell cell = row.getCell(cellIndex);
+                    if (cell == null) {
+                        isValidPremiumTemplate = false;
+                        validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getDescription() + " is missing";
+                        continue;
+                    }
+                    boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, getCellValue(cell));
+                    if (!isValidValue) {
+                        isValidPremiumTemplate = false;
+                        validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(getCellValue(cell));
+                    }
                 }
-                boolean isValidValue = premiumInfluencingFactor.isValidValue(plan, coverageId, getCellValue(cell));
-                if (!isValidValue) {
+                Cell premiumCell = row.getCell(premiumCellNumber);
+                String premiumValue = getCellValue(premiumCell);
+                if (isEmpty(premiumValue)) {
                     isValidPremiumTemplate = false;
-                    validValueErrorMessage = validValueErrorMessage + "\n" + premiumInfluencingFactor.getErrorMessage(getCellValue(cell));
+                    validValueErrorMessage = validValueErrorMessage + "\n" + " Premium value is missing";
+                }
+                String duplicateRowNumbers = checkAndGetDuplicateWithRow(row, allRowsToBeCompared, premiumCellNumber);
+                int errorCellNumber = premiumInfluencingFactors.size() + 1;
+                String duplicateRowErrorMessage = "";
+                if (isNotEmpty(duplicateRowNumbers.trim())) {
+                    isValidPremiumTemplate = false;
+                    duplicateRowErrorMessage = "This row is duplicate with row(s): " + duplicateRowNumbers;
+                }
+                if (isNotEmpty(validValueErrorMessage.trim()) || isNotEmpty(duplicateRowErrorMessage.trim())) {
+                    isValidPremiumTemplate = false;
+                    createErrorCellAndWriteErrorMessage(errorCellNumber, validValueErrorMessage, duplicateRowErrorMessage, headerRow, row);
                 }
             }
-            Cell premiumCell = row.getCell(premiumCellNumber);
-            String premiumValue = getCellValue(premiumCell);
-            if (isEmpty(premiumValue)) {
-                isValidPremiumTemplate = false;
-                validValueErrorMessage = validValueErrorMessage + "\n" + " Premium value is missing";
-            }
-            String duplicateRowNumbers = checkAndGetDuplicateWithRow(row, allRowsToBeCompared, premiumCellNumber);
-            int errorCellNumber = premiumInfluencingFactors.size() + 1;
-            String duplicateRowErrorMessage = "";
-            if (isNotEmpty(duplicateRowNumbers.trim())) {
-                isValidPremiumTemplate = false;
-                duplicateRowErrorMessage = "This row is duplicate with row(s): " + duplicateRowNumbers;
-            }
-            if (isNotEmpty(validValueErrorMessage.trim()) || isNotEmpty(duplicateRowErrorMessage.trim())) {
-                isValidPremiumTemplate = false;
-                createErrorCellAndWriteErrorMessage(errorCellNumber, validValueErrorMessage, duplicateRowErrorMessage, headerRow, row);
-            }
-        }
         return isValidPremiumTemplate;
     }
 

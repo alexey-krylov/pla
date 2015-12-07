@@ -839,6 +839,9 @@ public enum GLInsuredExcelHeader {
                 BigDecimal premiumAmount = insuredDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDto.getNoOfAssured()));
                 premium = premiumAmount.toPlainString();
             }
+            if(insuredDto.getPremiumType().equals(PremiumType.RATE)){
+                premium = insuredDto.getRateOfPremium();
+            }
             return premium;
         }
 
@@ -860,6 +863,7 @@ public enum GLInsuredExcelHeader {
             String premiumType = getCellValue(premiumTypeCell);
             if(premiumType.equalsIgnoreCase(PremiumType.RATE.toString())){
                 planPremium = calculatePlanPremiumForPremiumTypeRate(cellValue, annualLimit, noOfAssuredCellValue);
+                insuredDto.setRateOfPremium(cellValue);
             } else {
                 if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(cellValue)) {
                     planPremium = BigDecimal.valueOf(Double.valueOf(noOfAssuredCellValue)).multiply(BigDecimal.valueOf(Double.valueOf(cellValue)));

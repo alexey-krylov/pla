@@ -52,6 +52,8 @@ public class GHInsuredDto {
 
     private PremiumType premiumType;
 
+    private String rateOfPremium;
+
     private String existingIllness;
 
     private Integer minAgeEntry;

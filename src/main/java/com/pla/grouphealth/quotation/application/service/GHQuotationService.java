@@ -308,6 +308,7 @@ public class GHQuotationService {
                 insuredDto.setMinAgeEntry(insured.getMinAgeEntry());
                 insuredDto.setMaxAgeEntry(insured.getMaxAgeEntry());
                 insuredDto.setExistingIllness(insured.getExistingIllness());
+                insuredDto.setRateOfPremium(insured.getRateOfPremium());
                 GHPlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 GHInsuredDto.GHPlanPremiumDetailDto planPremiumDetailDto = new GHInsuredDto.GHPlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                 insuredDto = insuredDto.addPlanPremiumDetail(planPremiumDetailDto);

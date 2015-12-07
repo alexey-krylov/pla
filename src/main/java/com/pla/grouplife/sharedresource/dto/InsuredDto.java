@@ -55,6 +55,8 @@ public class InsuredDto {
 
     private PremiumType premiumType;
 
+    private String rateOfPremium;
+
     private Set<InsuredDependentDto> insuredDependents;
 
     private PlanPremiumDetailDto planPremiumDetail;
