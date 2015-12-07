@@ -702,7 +702,36 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.$watch('selectedItem', function (newVal, oldVal) {
                 //  console.log("STEP"+newVal);
                 //  console.log(!$scope.stepsSaved[newVal]);
-                if (newVal == 3) {
+                if (mode == 'view' && status == 'return') {
+                    if (newVal == 4) {
+
+                        $http.get("/pla/grouplife/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                            .success(function (response) {
+                                console.log(response);
+                                // $scope.validateGLQuotation = data;
+                                if (response.data) {
+                                    $scope.showModal = true;
+                                    $scope.errorMessage = response.message;
+
+                                }
+                            });
+                    }
+                }else if(mode == 'edit' && status == 'return'){
+                    if (newVal == 4) {
+
+                        $http.get("/pla/grouplife/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                            .success(function (response) {
+                                console.log(response);
+                                // $scope.validateGLQuotation = data;
+                                if (response.data) {
+                                    $scope.showModal = true;
+                                    $scope.errorMessage = response.message;
+
+                                }
+                            });
+                    }
+
+                } else if (newVal == 3) {
                     $http.get("/pla/grouplife/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
                         .success(function (response) {
                             console.log(response);
