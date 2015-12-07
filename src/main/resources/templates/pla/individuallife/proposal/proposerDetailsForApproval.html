@@ -95,7 +95,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Mobile Number</label>
-                    <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="proposer.mobileNumber"/>
+                    <input type="text" class="form-control input-sm" ng-required="true" maxlength="10" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="proposer.mobileNumber"/>
 
                     <div class="error" ng-messages="proposerForm.mobileNumber.$error" ng-if="proposerForm.mobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Mobile Number</small>
@@ -221,7 +221,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Spouse's Mobile Number</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseMobileNumber" ng-pattern="/^\d+$/" ng-minlength="10" ng-maxLength="10" ng-model="proposerSpouse.mobileNumber"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseMobileNumber" ng-pattern="/^\d+$/" ng-minlength="10" maxlength="10" ng-maxLength="10" ng-model="proposerSpouse.mobileNumber"/>
 
                     <div class="error" ng-messages="proposerSpouseForm.spouseMobileNumber.$error" ng-if="proposerSpouseForm.spouseMobileNumber.$dirty">
                         <small class="error" ng-message="required">Please enter Spouse's Mobile Number</small>
@@ -360,7 +360,7 @@
                 </div>
                 <div class="form-group" ng-if="proposerEmploymentTypeStaus">
                     <label class="control-label">Work phone</label>
-                    <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="proposerEmployment.workPhone"/>
+                    <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-minlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="proposerEmployment.workPhone"/>
 
                     <div class="error" ng-messages="proposerEmploymentForm.workPhone.$error" ng-if="proposerEmploymentForm.workPhone.$dirty">
                         <small ng-message="maxlength">Only 10 Number are allowed.</small>
@@ -444,7 +444,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Home Phone</label>
-                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="proposerResidential.homePhone"/>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="proposerResidential.homePhone"/>
 
                     <div class="error" ng-messages="proposerResidentForm.residentPhone.$error" ng-if="proposerResidentForm.residentPhone.$dirty">
                         <small ng-message="maxlength">Only 10 characters are allowed.</small>
