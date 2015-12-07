@@ -126,15 +126,26 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
     }
 
     public Integer getTotalNoOfLifeCovered() {
-        Integer totalNoOfLifeCovered = insureds.size();
-        Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
+        Integer totalNoOfLifeCovered = 0;
+        totalNoOfLifeCovered = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
             @Override
             public int applyAsInt(Insured value) {
-                return isNotEmpty(value.getInsuredDependents()) ? value.getInsuredDependents().size() : 0;
+                return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;
             }
         }).sum();
-        totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
-        return totalNoOfLifeCovered;
+        Integer dependentSize = 0;
+        for (Insured insured : insureds){
+            if (isNotEmpty(insured.getInsuredDependents())) {
+                dependentSize = insured.getInsuredDependents().parallelStream().mapToInt(new ToIntFunction<InsuredDependent>() {
+                    @Override
+                    public int applyAsInt(InsuredDependent value) {
+                        return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;
+                    }
+                }).sum();
+            }
+            dependentSize = +dependentSize;
+        }
+        return totalNoOfLifeCovered + dependentSize;
     }
 
     public BigDecimal getTotalSumAssured() {

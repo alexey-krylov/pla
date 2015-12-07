@@ -244,15 +244,26 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
 
     public Integer getTotalNoOfLifeCovered() {
-        Integer totalNoOfLifeCovered = insureds.size();
-        Integer dependentSize = insureds.stream().mapToInt(new ToIntFunction<GHInsured>() {
+        Integer totalNoOfLifeCovered = 0;
+        totalNoOfLifeCovered = insureds.stream().mapToInt(new ToIntFunction<GHInsured>() {
             @Override
             public int applyAsInt(GHInsured value) {
-                return isNotEmpty(value.getInsuredDependents()) ? value.getInsuredDependents().size() : 0;
+                return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;
             }
         }).sum();
-        totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
-        return totalNoOfLifeCovered;
+        Integer dependentSize = 0;
+        for (GHInsured insured : insureds){
+            if (isNotEmpty(insured.getInsuredDependents())) {
+                dependentSize = insured.getInsuredDependents().parallelStream().mapToInt(new ToIntFunction<GHInsuredDependent>() {
+                    @Override
+                    public int applyAsInt(GHInsuredDependent value) {
+                        return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;
+                    }
+                }).sum();
+            }
+            dependentSize = +dependentSize;
+        }
+        return totalNoOfLifeCovered + dependentSize;
     }
 
     public BigDecimal getTotalSumAssured() {

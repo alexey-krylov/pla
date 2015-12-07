@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.pla.grouplife.quotation.domain.exception.QuotationException.raiseQuotationNotModifiableException;
@@ -233,11 +234,28 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
     }
 
 
+
     public Integer getTotalNoOfLifeCovered() {
-        Integer totalNoOfLifeCovered = insureds.size();
-        Integer dependentSize = insureds.stream().mapToInt(insured -> isNotEmpty(insured.getInsuredDependents()) ? insured.getInsuredDependents().size() : 0).sum();
-        totalNoOfLifeCovered = totalNoOfLifeCovered + dependentSize;
-        return totalNoOfLifeCovered;
+        Integer totalNoOfLifeCovered = 0;
+        totalNoOfLifeCovered = insureds.stream().mapToInt(new ToIntFunction<Insured>() {
+            @Override
+            public int applyAsInt(Insured value) {
+                return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;
+            }
+        }).sum();
+        Integer dependentSize = 0;
+        for (Insured insured : insureds){
+            if (isNotEmpty(insured.getInsuredDependents())) {
+                dependentSize = insured.getInsuredDependents().parallelStream().mapToInt(new ToIntFunction<InsuredDependent>() {
+                    @Override
+                    public int applyAsInt(InsuredDependent value) {
+                        return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;
+                    }
+                }).sum();
+            }
+            dependentSize = +dependentSize;
+        }
+        return totalNoOfLifeCovered + dependentSize;
     }
 
     public BigDecimal getTotalSumAssured() {

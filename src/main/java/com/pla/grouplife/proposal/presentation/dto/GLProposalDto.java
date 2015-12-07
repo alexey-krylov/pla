@@ -22,6 +22,8 @@ public class GLProposalDto {
 
     private String proposalStatus;
 
+    private String proposalStatusDescription;
+
     private String proposalNumber;
 
     private String proposerName;

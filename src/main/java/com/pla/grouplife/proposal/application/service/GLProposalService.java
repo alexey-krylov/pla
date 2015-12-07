@@ -268,11 +268,13 @@ public class GLProposalService {
                 String proposalId = map.get("_id").toString();
                 AgentDetailDto agentDetailDto = getActiveInactiveAgentDetail(new ProposalId(proposalId));
                 DateTime submittedOn = map.get("submittedOn") != null ? new DateTime(map.get("submittedOn")) : null;
-                String proposalStatus = map.get("proposalStatus") != null ? (String) map.get("proposalStatus") : "";
+                GLProposalStatus status = map.get("proposalStatus") != null ? GLProposalStatus.valueOf((String) map.get("proposalStatus")) :null;
+                String proposalStatus = status!=null?status.name():"";
                 String proposalNumber = map.get("proposalNumber") != null ? ((ProposalNumber) map.get("proposalNumber")).getProposalNumber() : "";
                 Proposer proposerMap = map.get("proposer") != null ? (Proposer) map.get("proposer") : null;
                 String proposerName = proposerMap != null ? proposerMap.getProposerName() : "";
                 GLProposalDto glProposalDto = new GLProposalDto(proposalId, submittedOn, agentDetailDto.getAgentId(), agentDetailDto.getAgentName(), proposalStatus, proposalNumber, proposerName);
+                glProposalDto.setProposalStatusDescription(status!=null?status.getDescription():"");
                 return glProposalDto;
             }
         }).collect(Collectors.toList());
