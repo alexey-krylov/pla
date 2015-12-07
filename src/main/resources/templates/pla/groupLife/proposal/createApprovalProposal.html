@@ -203,7 +203,7 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group " style="margin-top: 20px">
-                                        <label class="control-label">Change Broker Commission Rates %</label>
+                                        <label class="control-label">Change Commission Rates %</label>
                                         <label class="radio-inline">
                                         <input type="checkbox" name="brokerCommissionRate" ng-click="toggleSelection($event)" ng-model="proposalDetails.basic.isCommissionOverridden"/>
                                         </label>
@@ -462,13 +462,13 @@
                             <ng-form name="premiumForm" novalidate="true">
                                 <div class="row">
                                     <div class="col-lg-6" disable-all-fields="isViewMode">
-                                        <div class="form-group required">
+                                        <!--<div class="form-group required">
                                             <label class="control-label">Add-On Benefits</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                                    ng-required="true" name="addOnBenefits"
                                                    ng-model="proposalDetails.premium.addOnBenefit"
                                                    ng-blur="recalculatePremium();" value="0"/>
-                                        </div>
+                                        </div>-->
                                         <div class="form-group">
                                             <label class="control-label">Profit and Solvency Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
@@ -541,28 +541,28 @@
                             <label><input type="radio" class="" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                           value="ANNUALLY" style="margin-right:5px;"/>Annual Payment</label>
 
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.annualPremium"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="proposalDetails.premium.annualPremium"/>
                         </div>
                         <div class="form-group">
                             <label><input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                           value="SEMI_ANNUALLY" style="margin-right:5px;"/>Semi-Annual Payment</label>
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.semiannualPremium"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="proposalDetails.premium.semiannualPremium"/>
                         </div>
                         <div class="form-group">
                             <label><input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                           value="QUARTERLY" style="margin-right:5px;"/>Quarterly Payment</label>
 
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.quarterlyPremium"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="proposalDetails.premium.quarterlyPremium"/>
                         </div>
                         <div class="form-group">
                             <label> <input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                            value="MONTHLY" style="margin-right:5px;"/>Monthly Payment</label>
 
-                            <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.monthlyPremium"/>
+                            <input type="input" readonly="true" class="form-control input-sm"
+                                   converter-Decimal="" ng-model="proposalDetails.premium.monthlyPremium"/>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5px">
@@ -570,7 +570,7 @@
                             <div class="form-group">
                                 <label>Total Premium payable</label>
                                 <input type="input" readonly="true" class="form-control input-sm"
-                                       ng-model="proposalDetails.premium.totalPremium"/>
+                                       converter-Decimal="" ng-model="proposalDetails.premium.totalPremium"/>
                             </div>
                         </div>
                     </div>

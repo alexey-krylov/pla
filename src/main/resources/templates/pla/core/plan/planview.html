@@ -43,7 +43,7 @@
                                                ng-click="open($event)" min-date="dateWithDraw" datepicker-popup="dd/MM/yyyy"
                                                ng-model="plan.planDetail.withdrawalDate"
                                                datepicker-options="datePickerSettings.dateOptions"
-                                               is-open="datePickerSettings.isOpened" close-text="Close"
+                                               ng-disabled="true" is-open="datePickerSettings.isOpened" close-text="Close"
                                                show-button-bar="false"
                                                onkeypress="return isNumeric(event)"/>
                                         <span class="input-group-btn">

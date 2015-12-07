@@ -230,7 +230,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Plan Annual Premium</label>
-                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumResponse.planAnnualPremium |number:2" ng-disabled="mode=='new'||mode=='view'" name="premiumResponse.planAnnualPremium" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-readonly="true" converter-Decimal="" ng-model="premiumResponse.planAnnualPremium" ng-disabled="mode=='new'||mode=='view'" name="premiumResponse.planAnnualPremium" ng-maxlength="100"/>
                 </div>
 
                 <!--<div class="form-group">
@@ -241,7 +241,7 @@
 
                 <div class="form-group">
                     <label class="control-label">Total Annual Premium Payable</label>
-                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumResponse.totalPremium |number:2" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-readonly="true" converter-Decimal="" ng-model="premiumResponse.totalPremium" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100"/>
                 </div>
             </div>
             <div class="col-md-6">
@@ -249,8 +249,8 @@
                     <div>
                         <td>{{rider.coverageName.coverageName}} Annual Premium </td>
                         <td>
-                            <input type="text" ng-readonly="true" ng-model="rider.annualPremium |number:2"
-                                   ng-disabled="mode=='new'||mode=='view'" class="form-control input-sm" view-enabled=""/>
+                            <input type="text" ng-readonly="true" ng-model="rider.annualPremium"
+                                   ng-disabled="mode=='new'||mode=='view'" class="form-control input-sm" converter-Decimal="" view-enabled=""/>
                         </td>
                     </div>
                 </div>
@@ -261,11 +261,11 @@
                 </div>-->
                 <div class="form-group">
                     <label class="control-label">Frequency Premium Payable</label>
-                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumPaymentDetails.premiumFrequencyPayable |number:2"  ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-readonly="true" converter-Decimal="" ng-model="premiumPaymentDetails.premiumFrequencyPayable"  ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Policy Fee</label>
-                    <input type="text" class="form-control input-sm" ng-readonly="true" ng-model="premiumPaymentDetails.policyFee |number:2"  ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
+                    <input type="text" class="form-control input-sm" ng-readonly="true" converter-Decimal="" ng-model="premiumPaymentDetails.policyFee"  ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100"/>
                 </div>
             </div>
         </accordion-group>
