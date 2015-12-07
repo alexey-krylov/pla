@@ -193,6 +193,7 @@ public class GHInsuredExcelParser {
         }
         final List<String> headers = getHeaders(headerRow);
         Set<String> optionalCoverageHeaders = getAllOptionalCoverageHeaders(headers);
+        Set<String> optionalCoverageBenefitHeaders = getAllOptionalCoverageBenefitHeaders(headers);
         boolean isValidHeader = isValidHeader(headers, agentPlans);
         if (!isValidHeader) {
             raiseNotValidHeaderException();
@@ -238,7 +239,8 @@ public class GHInsuredExcelParser {
                 duplicateRowErrorMessage = duplicateRowErrorMessage + rowNumbers[0] + ".\n";
             }
             String sameOptionalCoverageErrorMessage = checkIfSameOptionalCoverage(currentRow, headers, optionalCoverageHeaders);
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage)) {
+            String sameOptionalCoverageBenefitsErrorMessage = checkIfSameOptionalCoverageBenefits(currentRow, headers, optionalCoverageBenefitHeaders);
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(sameOptionalCoverageBenefitsErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -251,9 +253,10 @@ public class GHInsuredExcelParser {
                 errorMessageHeaderCell.setCellValue(AppConstants.ERROR_CELL_HEADER_NAME);
                 errorMessageHeaderCell.setCellStyle(cellStyle);
             }
-            errorMessage = errorMessage + "\n" + coverageErrorMessage;
-            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage;
+            errorMessage = errorMessage + " \n " + coverageErrorMessage;
+            errorMessage = errorMessage + " \n " + duplicateRowErrorMessage;
             errorMessage = errorMessage +" \n "+ sameOptionalCoverageErrorMessage;
+            errorMessage = errorMessage +" \n "+ sameOptionalCoverageBenefitsErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Created by Mohan Sharma on 11/20/2015.
@@ -101,7 +102,7 @@ public class QuotationProposalUtilityService {
 
     public static int getMinimumValueForGivenCriteria(ProductLineGeneralInformation productLineInformation, PolicyProcessMinimumLimitType policyProcessMinimumLimitType) {
         Set<PolicyProcessMinimumLimitItem> policyProcessMinimumLimitItems = getPolicyProcessMinimumLimitItems(productLineInformation);
-        if(UtilValidator.isNotEmpty(policyProcessMinimumLimitItems)){
+        if(isNotEmpty(policyProcessMinimumLimitItems)){
             for(PolicyProcessMinimumLimitItem policyProcessMinimumLimitItem : policyProcessMinimumLimitItems){
                 if(policyProcessMinimumLimitItem.getPolicyProcessMinimumLimitType().equals(policyProcessMinimumLimitType)){
                     return policyProcessMinimumLimitItem.getValue();
@@ -244,17 +245,45 @@ public class QuotationProposalUtilityService {
         for(String optionalCoverageHeader : optionalCoverageHeaders) {
             Cell optionalCoverageHeaderCell = getCellByName(currentRow, headers, optionalCoverageHeader);
             String optionalCoverage = getCellValue(optionalCoverageHeaderCell);
-            if(UtilValidator.isNotEmpty(optionalCoverage) && !optionalCoverageSet.add(optionalCoverage))
+            if(isNotEmpty(optionalCoverage) && !optionalCoverageSet.add(optionalCoverage))
                 return "Same optional cover added twice ...Please check";
         }
         return StringUtils.EMPTY;
     }
 
+    public static String checkIfSameOptionalCoverageBenefits(Row currentRow, List<String> headers, Set<String> optionalCoverageBenefitHeaders) {
+        String errorMessage = StringUtils.EMPTY;
+        for(String optionalCoverageBenefitHeader : optionalCoverageBenefitHeaders) {
+            Cell optionalCoverageHeaderCell = getCellByName(currentRow, headers, optionalCoverageBenefitHeader);
+            String optionalCoverage = getCellValue(optionalCoverageHeaderCell);
+            for(String optionalCoverageBenefitHdr : optionalCoverageBenefitHeaders) {
+                Cell optionalCoverageHdrCell = getCellByName(currentRow, headers, optionalCoverageBenefitHdr);
+                String optionalCvg = getCellValue(optionalCoverageHdrCell);
+                if(!optionalCoverageBenefitHeader.equalsIgnoreCase(optionalCoverageBenefitHdr) && optionalCoverageBenefitHeader.trim().replaceAll("\\d*$", "").equalsIgnoreCase(optionalCoverageBenefitHdr.trim().replaceAll("\\d*$", ""))) {
+                    if (isNotEmpty(optionalCoverage) && isNotEmpty(optionalCvg)&& optionalCoverage.equalsIgnoreCase(optionalCvg))
+                        errorMessage = errorMessage + "Same optional cover added twice for "+optionalCoverageBenefitHeader+" and "+optionalCoverageBenefitHdr+";\n";
+                }
+            }
+        }
+        return errorMessage;
+    }
+
     public static Set<String> getAllOptionalCoverageHeaders(List<String> headers) {
         Set<String> optionalCoverageHeaders = Sets.newLinkedHashSet();
         for(String header : headers){
-            String headerWithoutWhitespace = header.trim().replaceAll("//s+","");
-            if(headerWithoutWhitespace.startsWith("OptionalCoverage") && headerWithoutWhitespace.matches("^OptionalCoverage\\d$")){
+            String headerWithoutWhitespace = header.trim().replaceAll("//s+",""); // replace all withspace from string
+            if(headerWithoutWhitespace.startsWith("OptionalCoverage") && headerWithoutWhitespace.matches("^OptionalCoverage\\d$")){ //find all string which contains OptionalCoverageSomeDigit
+                optionalCoverageHeaders.add(header);
+            }
+        }
+        return optionalCoverageHeaders;
+    }
+
+    public static Set<String> getAllOptionalCoverageBenefitHeaders(List<String> headers) {
+        Set<String> optionalCoverageHeaders = Sets.newLinkedHashSet();
+        for(String header : headers){
+            String headerWithoutWhitespace = header.trim().replaceAll("//s+",""); // replace all withspace from string
+            if(headerWithoutWhitespace.startsWith("OptionalCoverage") && headerWithoutWhitespace.matches("^OptionalCoverage\\d\\s+Benefit\\d$")){ //find all string which contains OptionalCoverageSomeDigitBenefitSomeDigit
                 optionalCoverageHeaders.add(header);
             }
         }
