@@ -6,6 +6,7 @@ import com.pla.grouplife.sharedresource.event.GLProposalToPolicyEvent;
 import com.pla.grouplife.sharedresource.event.GLQuotationConvertedToProposalEvent;
 import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Quotation;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
 import lombok.AccessLevel;
@@ -61,6 +62,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private Industry industry;
 
+    private OpportunityId opportunityId;
+
     private boolean samePlanForAllRelation;
 
     private boolean samePlanForAllCategory;
@@ -94,6 +97,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         groupLifeProposal.proposerDocuments = this.proposerDocuments;
         groupLifeProposal.productType = this.productType;
         groupLifeProposal.industry = this.industry;
+        groupLifeProposal.opportunityId = this.opportunityId;
         groupLifeProposal.samePlanForAllCategory = this.samePlanForAllCategory;
         groupLifeProposal.samePlanForAllRelation = this.samePlanForAllRelation;
         return groupLifeProposal;
@@ -213,4 +217,11 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         this.samePlanForAllCategory = samePlanForAllCategory;
         return this;
     }
+
+
+    public GroupLifeProposal updateWithOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId = opportunityId;
+        return this;
+    }
+
 }

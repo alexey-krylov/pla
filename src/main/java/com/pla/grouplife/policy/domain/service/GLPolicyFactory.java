@@ -9,6 +9,7 @@ import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
@@ -50,6 +51,7 @@ public class GLPolicyFactory {
         Set<Insured> insureds = new HashSet((List) proposalMap.get("insureds"));
         PremiumDetail premiumDetail = (PremiumDetail) proposalMap.get("premiumDetail");
         Industry industry = (Industry) proposalMap.get("industry");
+        OpportunityId opportunityId = proposalMap.get("opportunityId")!=null?(OpportunityId) proposalMap.get("opportunityId"):null;
         Proposer proposer = (Proposer) proposalMap.get("proposer");
         ProposalNumber proposalNumber = (ProposalNumber) proposalMap.get("proposalNumber");
         Set<GLProposerDocument> proposerDocuments = proposalMap.get("proposerDocuments") != null ? new HashSet<>((List) proposalMap.get("proposerDocuments")) : null;
@@ -66,7 +68,7 @@ public class GLPolicyFactory {
         groupLifePolicy.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage);
+                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage).addOpportunityId(opportunityId);
         return groupLifePolicy;
     }
 
@@ -103,8 +105,7 @@ public class GLPolicyFactory {
     private Map<Relationship, List<Integer>> groupDependentSequenceByRelation(Set<InsuredDependent> insuredDependents) {
         Map<Relationship, List<Integer>> dependentSequenceMap = Maps.newHashMap();
         final int[] currentSequence = {3};
-        insuredDependents.forEach(insuredDependent -> {
-            if (dependentSequenceMap.get(insuredDependent.getRelationship()) == null) {
+        insuredDependents.forEach(insuredDependent -> {if (dependentSequenceMap.get(insuredDependent.getRelationship()) == null) {
                 List<Integer> sequenceList = new ArrayList<Integer>();
                 sequenceList.add((Relationship.SPOUSE.equals(insuredDependent.getRelationship()) ? 2 : currentSequence[0]));
                 currentSequence[0] = currentSequence[0] + 1;

@@ -10,6 +10,7 @@ import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.sharedkernel.domain.model.Quotation;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
 import com.pla.sharedkernel.identifier.QuotationId;
@@ -47,6 +48,7 @@ public class GroupLifeProposalFactory {
         String quotationNumber = (String) quotationMap.get("quotationNumber");
         Industry industry = (Industry) quotationMap.get("industry");
         Integer versionNumber = (Integer) quotationMap.get("versionNumber");
+        OpportunityId opportunityId = quotationMap.get("opportunityId")!=null?(OpportunityId) quotationMap.get("opportunityId"):null;
         Map proposalMap = glProposalFinder.findProposalByQuotationNumber(quotationNumber);
         ProposalNumber proposalNumber = proposalMap != null ? (ProposalNumber) proposalMap.get("proposalNumber") : new ProposalNumber(glProposalNumberGenerator.getProposalNumber(GroupLifeProposal.class, LocalDate.now()));
         Quotation quotation = new Quotation(quotationNumber, versionNumber, new QuotationId(quotationId));
@@ -58,7 +60,7 @@ public class GroupLifeProposalFactory {
         groupLifeProposal.updateFlagSamePlanForAllRelation(samePlanForAllRelation);
         groupLifeProposal.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
         groupLifeProposal = groupLifeProposal.updateWithAgentId(agentId,null,null).updateWithProposer(proposer)
-                .updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail).updateWithIndustry(industry);
+                .updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail).updateWithIndustry(industry).updateWithOpportunityId(opportunityId);
         return groupLifeProposal;
     }
 }

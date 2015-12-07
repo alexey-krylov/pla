@@ -17,6 +17,7 @@ import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,9 @@ public class GroupLifeProposalService {
         if (industryMap != null) {
             Industry industry = new Industry((String) industryMap.get("industryId"), (String) industryMap.get("industryName"), (BigDecimal) industryMap.get("industryFactor"));
             groupLifeProposal = groupLifeProposal.updateWithIndustry(industry);
+        }
+        if (proposerDto.getOpportunityId()!=null){
+            groupLifeProposal = groupLifeProposal.updateWithOpportunityId(new OpportunityId(proposerDto.getOpportunityId()));
         }
         return groupLifeProposal;
     }

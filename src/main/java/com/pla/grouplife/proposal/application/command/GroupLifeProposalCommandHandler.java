@@ -127,7 +127,7 @@ public class GroupLifeProposalCommandHandler {
         Set<Insured> insureds = glInsuredFactory.createInsuredDetail(insuredDtos);
         GroupLifeProposal groupLifeQuotation = groupLifeProposalRepository.load(new ProposalId(updateGLProposalWithInsuredCommand.getProposalId()));
         groupLifeQuotation = groupLifeProposalService.updateInsured(groupLifeQuotation, insureds, updateGLProposalWithInsuredCommand.getUserDetails());
-        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(BigDecimal.valueOf(20), 365, BigDecimal.valueOf(5), BigDecimal.valueOf(5), BigDecimal.valueOf(5));
+        PremiumDetailDto premiumDetailDto = new PremiumDetailDto(BigDecimal.valueOf(0), 365, BigDecimal.valueOf(5), BigDecimal.valueOf(5), BigDecimal.valueOf(5));
         groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllRelation(updateGLProposalWithInsuredCommand.isSamePlanForAllRelation());
         groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllCategory(updateGLProposalWithInsuredCommand.isSamePlanForAllCategory());
         groupLifeQuotation = groupLifeProposalService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLProposalWithInsuredCommand.getUserDetails());

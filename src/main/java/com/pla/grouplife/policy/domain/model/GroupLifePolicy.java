@@ -4,6 +4,7 @@ import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -53,6 +54,8 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     private Industry industry;
 
+    private OpportunityId opportunityId;
+
     private BigDecimal agentCommissionPercentage = BigDecimal.ZERO;
 
     private Boolean isCommissionOverridden = Boolean.FALSE;
@@ -90,6 +93,11 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     public GroupLifePolicy addIndustry(Industry industry) {
         this.industry = industry;
+        return this;
+    }
+
+    public GroupLifePolicy addOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId = opportunityId;
         return this;
     }
 
