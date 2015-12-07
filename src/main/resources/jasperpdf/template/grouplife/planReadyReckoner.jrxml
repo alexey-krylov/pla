@@ -121,7 +121,7 @@
 				<subreport>
 					<reportElement positionType="Float" x="331" y="141" width="360" height="23" isPrintWhenDetailOverflows="true" uuid="7c6e8f21-838d-47bc-891d-8cab28f90efa"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{coverageDetails})]]></dataSourceExpression>
-					<subreportExpression><![CDATA["jasperpdf/jasper/grouphealth/quotation/coverage.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["jasperpdf/jasper/grouplife/coverage.jasper"]]></subreportExpression>
 				</subreport>
 				<staticText>
 					<reportElement positionType="Float" x="227" y="141" width="85" height="21" isPrintWhenDetailOverflows="true" uuid="cb18c4ee-10be-45fe-bba0-603cc0a9e054"/>
