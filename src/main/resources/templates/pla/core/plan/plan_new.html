@@ -45,7 +45,7 @@
                             <div class="form-group required">
 
                                 <label class="control-label">Line of Business/Product Line</label>
-                                <select class="form-control input-sm" id="lineOfBusinessId"
+                                <select class="form-control input-sm" id="lineOfBusinessId" ng-change="changeLineOfBusinessId()"
                                         ng-model="plan.planDetail.lineOfBusinessId" name="lineOfBusinessId" ng-required="true">
                                     <option value="INDIVIDUAL_LIFE">Individual Life</option>
                                     <option value="GROUP_HEALTH">Group Health</option>
@@ -234,7 +234,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-3" ng-if="plan.planDetail.lineOfBusinessId == 'INDIVIDUAL_LIFE'">
                             <div class="form-group required">
                                 <label class="control-label" style="display: block;">Is it a Funeral Cover?</label>
                                 <label class="radio-inline">

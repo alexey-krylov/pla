@@ -426,15 +426,31 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
 
             $scope.clientType = $scope.plan.planDetail.clientType;
 
-            $scope.$watch('plan.planDetail.lineOfBusinessId', function (newval, oldval) {
+            /*$scope.$watch('plan.planDetail.lineOfBusinessId', function (newval, oldval) {
                 if (newval != undefined) {
                     if (newval != 'INDIVIDUAL_LIFE') {
                         $scope.clientType = 'GROUP';
+                        $scope.plan.planDetail.planType='NON_INVESTMENT';
                     } else {
                         $scope.clientType = 'INDIVIDUAL';
+                        $scope.plan.planDetail.planType='';
                     }
                 }
-            });
+            });*/
+
+            $scope.changeLineOfBusinessId=function(){
+                if($scope.plan.planDetail.lineOfBusinessId != undefined){
+
+                    if ($scope.plan.planDetail.lineOfBusinessId != 'INDIVIDUAL_LIFE') {
+                        $scope.clientType = 'GROUP';
+                        $scope.plan.planDetail.planType='NON_INVESTMENT';
+                    } else {
+                        $scope.clientType = 'INDIVIDUAL';
+                        $scope.plan.planDetail.planType='';
+                    }
+
+                }
+            };
 
             $scope.$watch('clientType', function (val, old) {
                 if (!angular.isUndefined(val)) {
@@ -463,7 +479,6 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                     return true;
                 }
             };
-
             $scope.isSurrenderReq = function () {
                 if ($scope.clientType == 'INDIVIDUAL')
                     return 'required';
@@ -519,6 +534,18 @@ app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routePa
                                 $scope.cancel();
 
                             };
+
+
+                            $scope.baseAgeRetrival=function(){
+                                if($scope.newCoverage.coverageType == 'BASE'){
+                                    $scope.newCoverage.minAge=$scope.plan.planDetail.minEntryAge;
+                                    $scope.newCoverage.maxAge=$scope.plan.planDetail.maxEntryAge;
+                                }
+                                else{
+                                    $scope.newCoverage.minAge='';
+                                    $scope.newCoverage.maxAge='';
+                                }
+                            }
 
                             /**
                              *

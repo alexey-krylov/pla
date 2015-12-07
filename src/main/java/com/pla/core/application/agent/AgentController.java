@@ -12,6 +12,7 @@ import com.pla.core.domain.model.agent.Agent;
 import com.pla.core.dto.ChannelTypeDto;
 import com.pla.core.dto.DesignationDto;
 import com.pla.core.query.AgentFinder;
+import com.pla.core.query.PremiumFinder;
 import com.pla.core.query.TeamFinder;
 import com.pla.publishedlanguage.contract.ISMEGateway;
 import com.pla.publishedlanguage.domain.model.EmployeeDto;
@@ -33,8 +34,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -60,6 +66,9 @@ public class AgentController {
     private TeamFinder teamFinder;
 
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private PremiumFinder premiumFinder;
 
     @Autowired
     public AgentController(CommandGateway commandGateway, AgentFinder agentFinder, SequenceGenerator sequenceGenerator, TeamFinder teamFinder, ISMEGateway smeGateway, MongoTemplate mongoTemplate) {
@@ -238,7 +247,21 @@ public class AgentController {
     @ResponseBody
     public List<Map<String, Object>> searchPlan(@RequestParam("agentId") String agentId) {
         List<Map<String, Object>> planList = agentFinder.searchPlanByAgentId(agentId);
-        return planList;
+        Set<String> planIds = premiumFinder.findPlanAndCoveragePremiumDetail();
+        if (isNotEmpty(planList)){
+            return planList.parallelStream().filter(new Predicate<Map<String, Object>>() {
+                @Override
+                public boolean test(Map<String, Object> planDetailMap) {
+                    return planIds.contains(planDetailMap.get("plan_id")!=null?(String)planDetailMap.get("plan_id"):"");
+                }
+            }).map(new Function<Map<String,Object>, Map<String ,Object>>() {
+                @Override
+                public Map<String, Object> apply(Map<String, Object> planDetailMap) {
+                    return planDetailMap;
+                }
+            }).collect(Collectors.toList());
+        }
+        return Collections.EMPTY_LIST;
     }
 
 }

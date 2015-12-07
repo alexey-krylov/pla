@@ -494,20 +494,20 @@
                                           value="ANNUALLY" style="margin-right:5px;"/>Annual Payment</label>
 
                             <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.annualPremium |number:2"/>
+                                   ng-model="proposalDetails.premium.annualPremium"/>
                         </div>
                         <div class="form-group">
                             <label><input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                           value="SEMI_ANNUALLY" style="margin-right:5px;"/>Semi-Annual Payment</label>
                             <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.semiannualPremium |number:2"/>
+                                   ng-model="proposalDetails.premium.semiannualPremium"/>
                         </div>
                         <div class="form-group">
                             <label><input type="radio" ng-model="proposalDetails.premium.optedPremiumFrequency"
                                           value="QUARTERLY" style="margin-right:5px;"/>Quarterly Payment</label>
 
                             <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.quarterlyPremium |number:2"/>
+                                   ng-model="proposalDetails.premium.quarterlyPremium"/>
                         </div>
 
                         <div class="form-group">
@@ -515,7 +515,7 @@
                                            value="MONTHLY" style="margin-right:5px;"/>Monthly Payment</label>
 
                             <input type="number" readonly="true" class="form-control input-sm"
-                                   ng-model="proposalDetails.premium.monthlyPremium |number:2"/>
+                                   ng-model="proposalDetails.premium.monthlyPremium"/>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5px">
@@ -523,7 +523,7 @@
                             <div class="form-group">
                                 <label>Total Premium payable</label>
                                 <input type="number" readonly="true" class="form-control input-sm"
-                                       ng-model="proposalDetails.premium.totalPremium |number:2"/>
+                                       ng-model="proposalDetails.premium.totalPremium"/>
                             </div>
                         </div>
                     </div>
@@ -551,7 +551,7 @@
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
 
-                                    <div class="form-group " ng-repeat="document in documentList">
+                                    <div class="form-group " ng-repeat="document in documentList |orderBy:'documentName'">
                                         <label class="col-sm-5 control-label">{{document.documentName}}</label>
 
                                         <div class="input-group">

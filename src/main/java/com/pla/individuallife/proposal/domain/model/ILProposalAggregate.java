@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * Created by pradyumna on 22-05-2015.
  */
@@ -219,7 +221,9 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
     public ILProposalAggregate submitApproval(DateTime approvedOn,  String comment, ILProposalStatus status,String approvedBy) {
         this.proposalStatus = status;
-        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), status, approvedBy, comment, approvedOn));
+        }
         if (ILProposalStatus.APPROVED.equals(status)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
@@ -237,13 +241,17 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
     public ILProposalAggregate markASFirstPremiumPending(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ILProposalStatus.PENDING_FIRST_PREMIUM;
-        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ILProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ILProposalStatus.PENDING_FIRST_PREMIUM, approvedBy, comment, approvedOn));
+        }
         return this;
     }
 
     public ILProposalAggregate markASINForce(String approvedBy, DateTime approvedOn, String comment) {
         this.proposalStatus = ILProposalStatus.IN_FORCE;
-        registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ILProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        if (isNotEmpty(comment)) {
+            registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), ILProposalStatus.IN_FORCE, approvedBy, comment, approvedOn));
+        }
         registerEvent(new ILProposalToPolicyEvent(this.proposalId));
         return this;
     }

@@ -155,13 +155,17 @@
                     <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group required">
+                                <div class="form-group required"  ng-if="!edit">
                                     <label class="control-label">Line of Business</label>
                                     <select class="form-control input-sm" view-enabled=""
                                             ng-required="true" ng-model="contact.lineOfBusinessId"
                                             ng-disabled="edit" name="lineOfBusiness1" ng-options="lineOfBusiness.lineOfBusinessId as lineOfBusiness.value for lineOfBusiness in lineOfBusinessList">
                                         <option value=" ">--- Select Line of Business --- </option>
                                     </select>
+                                </div>
+                                <div class="form-group" ng-if="edit">
+                                    <label class="control-label">Line of Business</label>
+                                    <input class="form-control input-sm" ng-model="contact.value" type="text" ng-disabled="true"  />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -236,7 +240,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="contacts in agentDetails.contactPersonDetails">
-                                            <td>{{contacts.lineOfBusinessId}}</td>
+                                            <td>{{contacts.value}}</td>
                                             <td>{{contacts.title}}</td>
                                             <td>{{contacts.fullName}}</td>
                                             <td>{{contacts.emailId}}</td>
