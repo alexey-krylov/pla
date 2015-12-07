@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.application.command;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.policy.domain.service.GLEndorsementUniqueNumberGenerator;
 import com.pla.grouplife.endorsement.application.service.GLEndorsementService;
@@ -19,6 +20,7 @@ import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.joda.time.DateTime;
@@ -30,10 +32,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -64,6 +63,8 @@ public class GLEndorsementCommandHandler {
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
+    @Autowired
+    private SequenceGenerator sequenceGenerator;
 
     @Autowired
     public GLEndorsementCommandHandler(Repository<GroupLifeEndorsement> glEndorsementMongoRepository, GroupLifeEndorsementService groupLifeEndorsementService, GLEndorsementUniqueNumberGenerator glEndorsementUniqueNumberGenerator, GroupLifeEndorsementRoleAdapter glEndorsementRoleAdapter, GLEndorsementService glEndorsementService) {
@@ -96,19 +97,19 @@ public class GLEndorsementCommandHandler {
     * */
     private GLEndorsement populateGLEndorsement(GLEndorsement glEndorsement, GLEndorsementInsuredDto glEndorsementInsuredDto, GLEndorsementType glEndorsementType) {
         if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
             glEndorsement.addMemberEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.MEMBER_PROMOTION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
             glEndorsement.addPremiumEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
             glEndorsement.addMemberDeletionEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
             glEndorsement.addNewCategoryRelationEndorsement(glMemberEndorsement);
         }
         return glEndorsement;
@@ -240,6 +241,55 @@ public class GLEndorsementCommandHandler {
         groupLifeEndorsement = groupLifeEndorsementService.populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, approveGLEndorsementCommand.getUserDetails(), premiumDetailDto, industry);
         groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment(), endorseNumber);
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
+    }
+
+
+    private Set<Insured> populateFamilyId(Set<Insured> insureds) {
+        Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(Insured.class);
+        final Integer[] sequenceNumber = {((Integer) entitySequenceMap.get("sequenceNumber")) + 1};
+        insureds.forEach(insured -> {
+            if (insured.getNoOfAssured() == null && insured.getCategory()!=null) {
+                String selfFamilySequence = sequenceNumber[0] + "01";
+                sequenceNumber[0] = sequenceNumber[0] + 1;
+                FamilyId familyId = new FamilyId(selfFamilySequence);
+                insured = insured.updateWithFamilyId(familyId);
+            }
+            if (isNotEmpty(insured.getInsuredDependents())) {
+                Map<Relationship, List<Integer>> relationshipSequenceMap = groupDependentSequenceByRelation(insured.getInsuredDependents());
+                insured.getInsuredDependents().forEach(insuredDependent -> {
+                    if (insuredDependent.getNoOfAssured() == null) {
+                        List<Integer> sequenceList = relationshipSequenceMap.get(insuredDependent.getRelationship());
+                        String selfFamilySequence = sequenceNumber[0].toString() + sequenceList.get(0);
+                        sequenceList.remove(0);
+                        sequenceNumber[0] = sequenceNumber[0] + 1;
+                        relationshipSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
+                        FamilyId familyId = new FamilyId(selfFamilySequence);
+                        insuredDependent = insuredDependent.updateWithFamilyId(familyId);
+                    }
+                });
+            }
+        });
+        sequenceGenerator.updateSequence(sequenceNumber[0], (Integer) entitySequenceMap.get("sequenceId"));
+        return insureds;
+    }
+
+    private Map<Relationship, List<Integer>> groupDependentSequenceByRelation(Set<InsuredDependent> insuredDependents) {
+        Map<Relationship, List<Integer>> dependentSequenceMap = Maps.newHashMap();
+        final int[] currentSequence = {3};
+        insuredDependents.forEach(insuredDependent -> {
+            if (dependentSequenceMap.get(insuredDependent.getRelationship()) == null) {
+                List<Integer> sequenceList = new ArrayList<Integer>();
+                sequenceList.add((Relationship.SPOUSE.equals(insuredDependent.getRelationship()) ? 2 : currentSequence[0]));
+                currentSequence[0] = currentSequence[0] + 1;
+                dependentSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
+            } else {
+                List<Integer> sequenceList = dependentSequenceMap.get(insuredDependent.getRelationship());
+                currentSequence[0] = sequenceList.get((sequenceList.size() - 1));
+                currentSequence[0] = currentSequence[0] + 1;
+                sequenceList.add(currentSequence[0]);
+            }
+        });
+        return dependentSequenceMap;
     }
 
 }

@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.grouplife.endorsement.application.service.GroupLifeEndorsementChecker;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
@@ -17,6 +18,7 @@ import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
@@ -60,6 +62,9 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
     private GLQuotationFinder glQuotationFinder;
     @Autowired
     private GLPolicyFinder glPolicyFinder;
+
+    @Autowired
+    private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
 
     @Override
     protected String validateRow(Row row, List<String> headers, GLEndorsementExcelValidator endorsementExcelValidator) {
@@ -125,6 +130,8 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         }
         Map policyMap = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {

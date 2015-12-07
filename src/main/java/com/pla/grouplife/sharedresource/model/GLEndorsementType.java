@@ -257,7 +257,7 @@ public enum GLEndorsementType {
                     GLEndorsementExcelHeader.SALUTATION, GLEndorsementExcelHeader.FIRST_NAME, GLEndorsementExcelHeader.LAST_NAME,GLEndorsementExcelHeader.DATE_OF_BIRTH,
                     GLEndorsementExcelHeader.GENDER, GLEndorsementExcelHeader.OCCUPATION, GLEndorsementExcelHeader.CATEGORY,
                     GLEndorsementExcelHeader.RELATIONSHIP,  GLEndorsementExcelHeader.NO_OF_ASSURED, GLEndorsementExcelHeader.PLAN,
-                    GLEndorsementExcelHeader.INCOME_MULTIPLIER, GLEndorsementExcelHeader.SUM_ASSURED, GLEndorsementExcelHeader.PLAN_PREMIUM);
+                    GLEndorsementExcelHeader.INCOME_MULTIPLIER, GLEndorsementExcelHeader.SUM_ASSURED, GLEndorsementExcelHeader.PREMIUM_TYPE,GLEndorsementExcelHeader.PLAN_PREMIUM);
         }
 
         @Override

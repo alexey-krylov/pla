@@ -3,6 +3,7 @@ package com.pla.grouplife.endorsement.application.service.excel.parser;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.grouplife.endorsement.application.service.GroupLifeEndorsementChecker;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
@@ -12,6 +13,7 @@ import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -46,6 +48,9 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
     @Autowired
     private GLPolicyFinder glPolicyFinder;
 
+    @Autowired
+    private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
+
     @Override
     public boolean isValidExcel(HSSFWorkbook excelFile, PolicyId policyId) {
         boolean isValidTemplate = true;
@@ -58,15 +63,18 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         }
         Map policyMap = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         GLEndorsementExcelValidator glEndorsementExcelValidator = new GLEndorsementExcelValidator(policyId, insureds, planAdapter);
         Cell errorMessageHeaderCell = null;
         for (Row currentRow : dataRows) {
             String invalidCombinationMessage = buildErrorMessageIfInvalidCategoryRelationCombination(currentRow, insureds,headers);
+            String totalLivesExceededErrorMessage =  groupLifeEndorsementChecker.getTotalNoOfLivesCovered(currentRow,insureds,headers);
             String invalidDetailAssuredMessage = buildErrorMessageIfInvalidDetailsAssure(currentRow, insureds, headers);
             String errorMessage = validateRow(currentRow, headers, glEndorsementExcelValidator);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, headers);
             String duplicateRowErrorMessage = buildDuplicateRowMessage(duplicateRows);
-            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(invalidCombinationMessage) && isEmpty(invalidDetailAssuredMessage)) {
+            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(invalidCombinationMessage) && isEmpty(invalidDetailAssuredMessage) && isEmpty(totalLivesExceededErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -74,7 +82,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                 errorMessageHeaderCell = createErrorMessageHeaderCell(excelFile, headerRow, headers);
             }
             Cell errorMessageCell = currentRow.createCell(headers.size());
-            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage + "\n" +invalidCombinationMessage + "\n" +invalidDetailAssuredMessage;
+            errorMessage = errorMessage + "\n" + duplicateRowErrorMessage + "\n" +invalidCombinationMessage + "\n" +invalidDetailAssuredMessage + "\n" +totalLivesExceededErrorMessage;
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
@@ -164,10 +172,12 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         Optional<Insured> insuredOptional  = insureds.parallelStream().filter(new Predicate<Insured>() {
             @Override
             public boolean test(Insured insured) {
-                return (Relationship.SELF.equals(relationship) && insured.getCategory().equals(category));
+                return (Relationship.SELF.equals(relationship) && insured.getCategory()!=null? insured.getCategory().equals(category):false);
             }
         }).findAny();
         if (insuredOptional.isPresent()){
@@ -186,11 +196,13 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         for (Insured insured : insureds){
             Optional<InsuredDependent> dependentOptional =  insured.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
                 @Override
                 public boolean test(InsuredDependent insuredDependent) {
-                    return (insuredDependent.getRelationship().equals(relationship) && insuredDependent.getCategory().equals(category));
+                    return (insuredDependent.getRelationship()!=null?insuredDependent.getRelationship().equals(relationship):false && insuredDependent.getCategory()!=null?insuredDependent.getCategory().equals(category):false);
                 }
             }).findAny();
             if (dependentOptional.isPresent()){
@@ -314,7 +326,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         String relationCellValue = getCellValue(relationshipCell);
         boolean isExists  = false;
         for (Insured insured :insureds){
-            isExists = insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue);
+            isExists = insured.getCategory()!=null?insured.getCategory().equals(categoryCellValue):false && Relationship.SELF.description.equals(relationCellValue);
             if (!isExists){
                 Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
                 for (InsuredDependent insuredDependent :insuredDependents){
@@ -345,9 +357,9 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             if (insured.getNoOfAssured()==null){
                 isDetailsAssured  =true;
             }
-            if (insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue)){
+            if (insured.getCategory()!=null?insured.getCategory().equals(categoryCellValue):false && Relationship.SELF.description.equals(relationCellValue)){
                 if (isNotEmpty(noOfAssuredCellValue) && insured.getNoOfAssured()==null){
-                        isInvalid =true;
+                    isInvalid =true;
                     break;
                 }
                 else if (insured.getNoOfAssured()!=null && isEmpty(noOfAssuredCellValue)){
@@ -362,7 +374,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
                     if (insuredDependent.getNoOfAssured()==null){
                         isDetailsAssured = true;
                     }
-                    if (insuredDependent.getCategory().equals(categoryCellValue) && insuredDependent.getRelationship().description.equals(relationCellValue)) {
+                    if (insuredDependent.getCategory()!=null?insuredDependent.getCategory().equals(categoryCellValue):false &&insuredDependent.getRelationship()!=null? insuredDependent.getRelationship().description.equals(relationCellValue):false) {
                         if (isNotEmpty(noOfAssuredCellValue)&& insuredDependent.getNoOfAssured()==null) {
                             isInvalid = true;
                             break;

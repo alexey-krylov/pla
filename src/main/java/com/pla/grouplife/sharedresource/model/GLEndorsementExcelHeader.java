@@ -550,6 +550,35 @@ public enum GLEndorsementExcelHeader {
             return insuredDetailMap;
         }
     },
+    PREMIUM_TYPE("Premium Type") {
+        @Override
+        public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
+            boolean isValid = glEndorsementExcelValidator.isValidPlanPremium(row, value, excelHeaders);
+            return isValid ? "" : "Plan Premium cannot be blank";
+        }
+
+        @Override
+        public InsuredDto populate(InsuredDto insuredDto, String value) {
+            return insuredDto;
+        }
+
+        @Override
+        public InsuredDto.InsuredDependentDto populate(InsuredDto.InsuredDependentDto insuredDependentDto, String value) {
+            return insuredDependentDto;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDetail(Map<Integer, String> insuredDetailMap, InsuredDto insured, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PLAN_PREMIUM.getDescription()),"");
+            return insuredDetailMap;
+        }
+
+        @Override
+        public Map<Integer, String> getInsuredDependentDetail(Map<Integer, String> insuredDetailMap, InsuredDto.InsuredDependentDto insuredDependentDto, List<String> excelHeaderInString) {
+            insuredDetailMap.put(excelHeaderInString.indexOf(PLAN_PREMIUM.getDescription()),"");
+            return insuredDetailMap;
+        }
+    },
     PLAN_PREMIUM("Plan Premium") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {

@@ -3,6 +3,7 @@ package com.pla.grouplife.endorsement.application.service.excel.parser;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.grouplife.endorsement.application.service.GroupLifeEndorsementChecker;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
@@ -14,6 +15,7 @@ import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -50,6 +52,9 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
     @Autowired
     private IPlanAdapter planAdapter;
 
+    @Autowired
+    private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
+
     @Override
     protected String validateRow(Row row, List<String> headers, GLEndorsementExcelValidator endorsementExcelValidator) {
         Set<String> errorMessages = Sets.newHashSet();
@@ -76,6 +81,8 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
         }
         Map glPolicyMap = glFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) glPolicyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) glPolicyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         GLEndorsementExcelValidator glEndorsementExcelValidator = new GLMemberDeletionRowValidator(policyId, insureds, planAdapter);
         Cell errorMessageHeaderCell = null;
         for (Row currentRow : dataRows) {
@@ -249,6 +256,8 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         if (isNotEmpty(clientId)) {
             Optional<Insured> insuredOptional = insureds.parallelStream().filter(new Predicate<Insured>() {
                 @Override
@@ -324,6 +333,8 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
         Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
         for (Insured insured : insureds){
             Optional<InsuredDependent> dependentOptional =  insured.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
                 @Override

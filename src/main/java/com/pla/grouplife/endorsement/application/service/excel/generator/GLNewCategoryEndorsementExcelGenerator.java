@@ -22,6 +22,7 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.OccupationCategory;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -96,12 +97,12 @@ public class GLNewCategoryEndorsementExcelGenerator extends AbstractGLEndorsemen
                 }
                 rowCellData.add(insuredDependentDetailMap);
             }
-
         }
         constraintCellDataMap.put(excelHeaderInString.indexOf("Gender"), Gender.getAllGender());
         constraintCellDataMap.put(excelHeaderInString.indexOf("Relationship"), Relationship.getAllRelation());
         constraintCellDataMap.put(excelHeaderInString.indexOf("Occupation"), getAllOccupationClassification());
         constraintCellDataMap.put(excelHeaderInString.indexOf("Category"), OccupationCategory.getAllCategory());
+        constraintCellDataMap.put(excelHeaderInString.indexOf(GLEndorsementExcelHeader.PREMIUM_TYPE.getDescription()), PremiumType.getAllPremiumType());
         HSSFWorkbook workbook = createExcel(excelHeaderInString, rowCellData, constraintCellDataMap);
         return workbook;
     }
