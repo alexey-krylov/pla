@@ -23,7 +23,6 @@ import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.apache.commons.beanutils.BeanUtils;
 import org.bson.types.ObjectId;
-import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
@@ -151,7 +150,7 @@ public class GroupLifeEndorsementService {
         Date expiryDate = (Date) policyDetail.get("expiredDate");
         LocalDate expiredOn = new LocalDate(expiryDate);
         int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
-        int endorsementDuration = Days.daysBetween(new LocalDate(),expiredOn).getDays()+1;
+        int endorsementDuration = Days.daysBetween(LocalDate.now(),expiredOn).getDays();
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
         insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration, isMemberPromotion);
         groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);
