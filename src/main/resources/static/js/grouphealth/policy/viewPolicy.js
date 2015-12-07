@@ -1,5 +1,47 @@
 angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
+    .directive('modal', function () {
+        return {
+            template: '<div class="modal fade">' +
+            '<div class="modal-dialog modal-sm">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<h4 class="modal-title">{{ title }}</h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-transclude></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            link: function postLink(scope, element, attrs) {
+                scope.title = attrs.title;
+
+                scope.$watch(attrs.visible, function (value) {
+                    if (value == true)
+                        $(element).modal('show');
+                    else
+                        $(element).modal('hide');
+                });
+
+                $(element).on('shown.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+            }
+        };
+    })
+
 
     .directive('converterDecimal', function ($filter) {
         var FLOAT_REGEXP_1 = /^\$?\d+.(\d{3})*(\,\d*)$/; //Numbers like: 1.123,56
@@ -48,6 +90,8 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 $scope.isViewMode = true;
 
             }
+            $scope.showModal = false;
+
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -109,6 +153,44 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                     $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
                 }
             }
+
+
+
+
+            $scope.proceedToNext = function () {
+                saveStep();
+                $scope.showModal = false;
+
+
+            }
+            $scope.errorMessage='';
+            $scope.$watch('selectedItem', function (newVal, oldVal) {
+                //  console.log("STEP"+newVal);
+                //  console.log(!$scope.stepsSaved[newVal]);
+                if (newVal == 4) {
+
+                    $http.get("/pla/grouphealth/policy/getproposalid/" + $scope.policyId).success(function (data, status) {
+                        //console.log(data);
+                        $scope.proposalId=data.proposalId;
+                        $http.get("/pla/grouphealth/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                            .success(function (response) {
+                                console.log(response);
+                                // $scope.validateGLQuotation = data;
+                                if (response.data) {
+                                    $scope.showModal = true;
+                                    $scope.errorMessage=response.message;
+
+                                }
+                            });
+                    });
+
+
+
+
+
+                }
+            });
+
 
             $scope.isUploadEnabledForAdditionalDocument = function () {
                 var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);

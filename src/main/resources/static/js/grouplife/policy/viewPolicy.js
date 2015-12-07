@@ -1,5 +1,47 @@
 angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
+    .directive('modal', function () {
+        return {
+            template: '<div class="modal fade">' +
+            '<div class="modal-dialog modal-sm">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<h4 class="modal-title">{{ title }}</h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-transclude></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            link: function postLink(scope, element, attrs) {
+                scope.title = attrs.title;
+
+                scope.$watch(attrs.visible, function (value) {
+                    if (value == true)
+                        $(element).modal('show');
+                    else
+                        $(element).modal('hide');
+                });
+
+                $(element).on('shown.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+            }
+        };
+    })
+
 
     .directive('converterDecimal', function ($filter) {
         var FLOAT_REGEXP_1 = /^\$?\d+.(\d{3})*(\,\d*)$/; //Numbers like: 1.123,56
@@ -23,7 +65,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                     } else if (FLOAT_REGEXP_4.test(viewValue)) {
                         ctrl.$setValidity('float', true);
                         return parseFloat(viewValue.replace(',', '.'));
-                    }else {
+                    } else {
                         ctrl.$setValidity('float', false);
                         return undefined;
                     }
@@ -31,7 +73,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
                 ctrl.$formatters.unshift(
                     function (modelValue) {
-                        return $filter('number')(parseFloat(modelValue) , 2);
+                        return $filter('number')(parseFloat(modelValue), 2);
                     }
                 );
             }
@@ -48,6 +90,8 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 $scope.isViewMode = true;
 
             }
+            $scope.showModal = false;
+
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
@@ -115,6 +159,33 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 }
 
             };
+            $scope.proceedToNext = function () {
+                saveStep();
+                $scope.showModal = false;
+
+
+            }
+            $scope.errorMessage = '';
+            $scope.$watch('selectedItem', function (newVal, oldVal) {
+                //  console.log("STEP"+newVal);
+                //  console.log(!$scope.stepsSaved[newVal]);
+                if (newVal == 4) {
+                    $http.get("/pla/grouplife/policy/getproposalid/" + $scope.policyId).success(function (data, status) {
+                        //console.log(data);
+                        $scope.proposalId = data.proposalId;
+                        $http.get("/pla/grouplife/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                            .success(function (response) {
+                                console.log(response);
+                                // $scope.validateGLQuotation = data;
+                                if (response.data) {
+                                    $scope.showModal = true;
+                                    $scope.errorMessage = response.message;
+
+                                }
+                            });
+                    });
+                }
+            });
 
             $scope.uploadAdditionalDocument = function () {
                 //alert('Upload');
@@ -160,14 +231,11 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
                 }
             }
 
-            $scope.isBrowseDisable=function(document)
-            {
-                if(document.fileName == null && document.submitted)
-                {
+            $scope.isBrowseDisable = function (document) {
+                if (document.fileName == null && document.submitted) {
                     return true;
                 }
-                else
-                {
+                else {
                     return false;
                 }
             }
@@ -206,11 +274,11 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
 
             $http.get("/pla/grouplife/policy/getproposalid/" + $scope.policyId).success(function (data, status) {
                 //console.log(data);
-                $scope.proposalId=data.proposalId;
-                console.log('ProposalIDRCV'+ JSON.stringify($scope.proposalId));
+                $scope.proposalId = data.proposalId;
+                console.log('ProposalIDRCV' + JSON.stringify($scope.proposalId));
                 $http.get("/pla/grouplife/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
                     //  console.log(data);
-                    $scope.approvalCommentList=data;
+                    $scope.approvalCommentList = data;
                 });
             });
 
@@ -235,8 +303,8 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             $scope.changeAgent = false;
             console.log($scope.policyDetails.basic['active']);
             if (!$scope.policyDetails.basic['active']) {
-               // $('#agentModal').modal('show');
-               // $scope.changeAgent = true;
+                // $('#agentModal').modal('show');
+                // $scope.changeAgent = true;
                 //$scope.stepsSaved["2"] = !$scope.changeAgent;
                 $scope.stepsSaved["2"] = true;
 
