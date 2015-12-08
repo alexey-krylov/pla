@@ -100,7 +100,7 @@ public class ILProposalFactory {
                 return new ILRiderDetail(riderDetailDto.getCoverageId(),riderDetailDto.getSumAssured(),riderDetailDto.getCoverTerm(),riderDetailDto.getWaiverOfPremium(),"");
             }
         }).collect(Collectors.toSet());
-        ProposalPlanDetail planDetail = new ProposalPlanDetail(proposalPlanDetail.getPlanId(),"",proposalPlanDetail.getPolicyTerm(),proposalPlanDetail.getPremiumPaymentTerm(),proposalPlanDetail.getSumAssured(),riderDetails);
+        ProposalPlanDetail planDetail = new ProposalPlanDetail(proposalPlanDetail.getPlanId(),"",proposalPlanDetail.getPolicyTerm(), proposalPlanDetail.getPremiumPaymentType(), proposalPlanDetail.getPremiumPaymentTerm(),proposalPlanDetail.getSumAssured(),riderDetails);
         return planDetail;
     }
 

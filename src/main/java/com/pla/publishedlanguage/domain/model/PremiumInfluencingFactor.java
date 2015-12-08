@@ -118,7 +118,7 @@ public enum PremiumInfluencingFactor {
         @Override
         public boolean isValidValue(Plan plan, CoverageId coverageId, String value, String sheet) {
             if(sheet.equalsIgnoreCase("SINGLE")){
-                return isEmpty(value) ? false : value.equalsIgnoreCase("Single");
+                return isEmpty(value) ? false : value.equalsIgnoreCase("1");
             }
             return isEmpty(value) ? false : plan.isValidPremiumTerm(Integer.valueOf(value.trim()));
         }

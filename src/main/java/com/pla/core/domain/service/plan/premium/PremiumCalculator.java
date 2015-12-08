@@ -55,13 +55,22 @@ public class PremiumCalculator implements IPremiumCalculator {
     }
 
     @Override
-    public List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, LineOfBusinessEnum lineOfBusinessEnum) {
+    public List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, LineOfBusinessEnum lineOfBusinessEnum, boolean compoundPremiumType, String premiumPaymentType) {
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
         boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
         if (!hasAllInfluencingFactor) {
             raiseInfluencingFactorMismatchException();
         }
-        Set<PremiumItem> premiumItems = premium.getPremiumItems();
+        Set<PremiumItem> premiumItems;
+        if(compoundPremiumType){
+            if(premiumPaymentType.equalsIgnoreCase("SINGLE")){
+                premiumItems = premium.getSinglePremiumItems();
+            } else{
+                premiumItems = premium.getPremiumItems();
+            }
+        } else{
+            premiumItems = premium.getPremiumItems();
+        }
         List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
         checkArgument(isNotEmpty(organizationGeneralInformations), "Configure Organizational Level Information");
         PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
@@ -75,13 +84,22 @@ public class PremiumCalculator implements IPremiumCalculator {
     }
 
     @Override
-    public List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured) {
+    public List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, boolean compoundPremiumType, String premiumPaymentType) {
         Premium premium = premiumFinder.findPremium(premiumCalculationDto);
         boolean hasAllInfluencingFactor = premium.hasAllInfluencingFactor(premiumCalculationDto.getInfluencingFactors());
         if (!hasAllInfluencingFactor) {
             raiseInfluencingFactorMismatchException();
         }
-        Set<PremiumItem> premiumItems = premium.getPremiumItems();
+        Set<PremiumItem> premiumItems;
+        if(compoundPremiumType){
+            if(premiumPaymentType.equalsIgnoreCase("SINGLE")){
+                premiumItems = premium.getSinglePremiumItems();
+            } else{
+                premiumItems = premium.getPremiumItems();
+            }
+        } else{
+            premiumItems = premium.getPremiumItems();
+        }
         PremiumItem premiumItem = findPremiumItem(premiumItems, premiumCalculationDto.getPremiumCalculationInfluencingFactorItems());
         List<OrganizationGeneralInformation> organizationGeneralInformations = organizationGeneralInformationRepository.findAll();
         checkArgument(isNotEmpty(organizationGeneralInformations));

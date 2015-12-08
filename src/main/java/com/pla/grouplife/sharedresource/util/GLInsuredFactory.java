@@ -15,6 +15,7 @@ import com.pla.publishedlanguage.dto.AgentLoadingFactorDto;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -111,7 +112,7 @@ public class GLInsuredFactory {
         if (isNotEmpty(coverageId)) {
             premiumCalculationDto = premiumCalculationDto.addCoverage(new CoverageId(coverageId));
         }
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal(sumAssured).setScale(0,BigDecimal.ROUND_FLOOR), LineOfBusinessEnum.GROUP_LIFE);
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal(sumAssured).setScale(0,BigDecimal.ROUND_FLOOR), LineOfBusinessEnum.GROUP_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         BigDecimal annualBasicPremium = ComputedPremiumDto.getAnnualPremium(computedPremiums);
         return annualBasicPremium;
     }

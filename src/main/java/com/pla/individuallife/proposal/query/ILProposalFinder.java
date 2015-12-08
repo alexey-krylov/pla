@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.pla.core.domain.model.CoverageName;
+import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.domain.model.plan.premium.Premium;
@@ -23,11 +24,13 @@ import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.domain.model.PlanStatus;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.ProposalId;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -280,6 +283,9 @@ public class ILProposalFinder {
                 return new PremiumDetailDto();
             }
         }
+        Plan plan = (Plan)planFinder.findPlanByPlanId(new PlanId(planDetail.getPlanId()));
+        boolean compoundPremiumType = checkIfMultiplePremiumSheets(plan.getPremiumTermType());
+        String premiumPaymentType = planDetail.getPremiumPaymentType();
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
         DateTime dob = new DateTime(((ProposedAssured) proposal.get("proposedAssured")).getDateOfBirth());
@@ -305,7 +311,7 @@ public class ILProposalFinder {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, occupationCode);
         }
 
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto, planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0,BigDecimal.ROUND_FLOOR):BigDecimal.ONE);
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto, planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0,BigDecimal.ROUND_FLOOR):BigDecimal.ONE, compoundPremiumType, premiumPaymentType);
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
         BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
@@ -346,7 +352,7 @@ public class ILProposalFinder {
                     RiderPremiumDto rd = new RiderPremiumDto();
                     rd.setCoverageId(new CoverageId(rider.getCoverageId()));
                     rd.setCoverageName(new CoverageName(coverageFinder.getCoverageDetail(rider.getCoverageId()).get("coverageName").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0):BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto,planDetail.getSumAssured()!=null?planDetail.getSumAssured().setScale(0):BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE, compoundPremiumType, premiumPaymentType);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     rd.setSemiAnnualPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
                     rd.setQuarterlyPremium(ComputedPremiumDto.getQuarterlyPremium(computedPremiums));
@@ -537,5 +543,8 @@ public class ILProposalFinder {
         }
     }
 
-
+    private boolean checkIfMultiplePremiumSheets(PremiumTermType premiumTermType) {
+        Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
+        return sheets.size() > 1;
+    }
 }

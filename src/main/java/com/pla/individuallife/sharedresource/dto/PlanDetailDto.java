@@ -19,6 +19,8 @@ public class PlanDetailDto {
 
     private Integer policyTerm;
 
+    private String premiumPaymentType;
+
     private Integer premiumPaymentTerm;
 
     private BigDecimal sumAssured;

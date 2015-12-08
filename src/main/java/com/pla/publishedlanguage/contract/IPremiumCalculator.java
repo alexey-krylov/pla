@@ -18,9 +18,9 @@ import java.util.List;
 
 public interface IPremiumCalculator {
 
-    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, LineOfBusinessEnum lineOfBusinessEnum);
+    List<ComputedPremiumDto> calculateBasicPremium(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, LineOfBusinessEnum lineOfBusinessEnum, boolean compoundPremiumType, String premiumPaymentType);
 
-    List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured);
+    List<ComputedPremiumDto> calculateBasicPremiumWithPolicyFee(PremiumCalculationDto premiumCalculationDto, BigDecimal sumAssured, boolean compoundPremiumType, String premiumPaymentType);
 
     List<ComputedPremiumDto> calculateModalPremium(BasicPremiumDto basicPremiumDto);
 

@@ -17,6 +17,7 @@ import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PremiumId;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -105,7 +106,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         assertEquals(new BigDecimal("5000.50"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList).setScale(2,BigDecimal.ROUND_CEILING));
         assertEquals(new BigDecimal("1562.16"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList).setScale(2, BigDecimal.ROUND_CEILING));
         assertEquals(new BigDecimal("3394.84"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList).setScale(2, BigDecimal.ROUND_CEILING));
@@ -129,7 +130,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         assertEquals(new BigDecimal("3699.0000"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
     }
 
@@ -161,7 +162,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.PER_THOUSAND, PremiumRateFrequency.YEARLY, "premiumsetupdatawithpremiumrate.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal("55000").setScale(1,BigDecimal.ROUND_HALF_UP),LineOfBusinessEnum.INDIVIDUAL_LIFE );
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal("55000").setScale(1,BigDecimal.ROUND_HALF_UP),LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         assertEquals(new BigDecimal("1237.50"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("620.235000"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("315.810000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
@@ -187,7 +188,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         assertEquals(new BigDecimal("2160.71605"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1616.16160"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("5000.5"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
@@ -215,7 +216,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.MONTHLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE );
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         assertEquals(new BigDecimal("45837.94"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList).setScale(2,BigDecimal.ROUND_CEILING));
     }
 
@@ -247,7 +248,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.PER_THOUSAND, PremiumRateFrequency.MONTHLY, "premiumsetupdatawithpremiumrate.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal("55000").setScale(1,BigDecimal.ROUND_HALF_UP), LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal("55000").setScale(1,BigDecimal.ROUND_HALF_UP), LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
         assertEquals(new BigDecimal("1139.118750"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1185.030000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
         assertEquals(new BigDecimal("1166.591250"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
@@ -271,7 +272,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE );
+        premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
     }
 
     /**
@@ -299,7 +300,7 @@ public class PremiumCalculatorUnitTest {
         Premium premium = createPremium(PremiumFactor.FLAT_AMOUNT, PremiumRateFrequency.YEARLY, "premiumsetupdatawithflatpremium.xls");
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
-        premiumCalculator.calculateBasicPremium(premiumCalculationDto,BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE);
+        premiumCalculator.calculateBasicPremium(premiumCalculationDto,BigDecimal.ONE, LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
     }
 
     private Premium createPremium(PremiumFactor premiumFactor, PremiumRateFrequency premiumRateFrequency, String premiumSetUpFileName) throws IOException {

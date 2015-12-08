@@ -123,6 +123,7 @@ public class ILQuotationCommandHandler {
         PlanDetailDto dto = cmd.getPlanDetailDto();
         PlanDetail planDetail = new PlanDetail(new PlanId(dto.getPlanId())
                 , dto.getPolicyTerm(), dto.getPremiumPaymentTerm(), dto.getSumAssured());
+        planDetail.setPremiumPaymentType(dto.getPremiumPaymentType());
         Set<RiderDetail> riders = new HashSet();
         if (dto.getRiderDetails() != null) {
             for (RiderDetailDto each : dto.getRiderDetails()) {

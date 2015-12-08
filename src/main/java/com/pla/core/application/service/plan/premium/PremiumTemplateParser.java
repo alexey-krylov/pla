@@ -14,6 +14,7 @@ import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.query.MasterFinder;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
 import com.pla.sharedkernel.domain.model.PremiumTermType;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -51,7 +52,8 @@ public class PremiumTemplateParser {
 
     public boolean validatePremiumDataForAGivenPlanAndCoverage(HSSFWorkbook hssfWorkbook, Plan plan, CoverageId coverageId, List<PremiumInfluencingFactor> premiumInfluencingFactors) throws IOException, PremiumTemplateParseException {
         boolean isValidPremiumTemplate = true;
-        Set<String> sheets = getSheetNamesByPremiumTermType(plan.getPremiumTermType());
+        PremiumTermType premiumTermType = plan.getPremiumTermType();
+        Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
         for(String sheet : sheets) {
             HSSFSheet premiumSheet = hssfWorkbook.getSheet(sheet);
             Iterator<Row> rowsIterator = premiumSheet.iterator();
@@ -259,7 +261,7 @@ public class PremiumTemplateParser {
 
     // TODO :  write test
     public Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> parseAndTransformToPremiumData(HSSFWorkbook hssfWorkbook, List<PremiumInfluencingFactor> premiumInfluencingFactors, PremiumTermType premiumTermType) {
-        Set<String> sheets = getSheetNamesByPremiumTermType(premiumTermType);
+        Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
         Map<String, List<Map<Map<PremiumInfluencingFactor, String>, Double>>> record = Maps.newHashMap();
         for(String sheet :  sheets) {
             HSSFSheet premiumSheet = hssfWorkbook.getSheet(sheet);
@@ -313,7 +315,7 @@ public class PremiumTemplateParser {
             return categories;
         }
         if(premiumInfluencingFactor.equals(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM) &&  sheetName.equalsIgnoreCase(PremiumTermType.SINGLE.toString()))
-            return new String[]{"Single"};
+            return new String[]{"1"};
         return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
     }
 
@@ -330,25 +332,4 @@ public class PremiumTemplateParser {
         }
         return cellValue;
     }
-    private Set<String> getSheetNamesByPremiumTermType(PremiumTermType premiumTermType) {
-        String premiumTermTypeString = premiumTermType.name();
-        switch(premiumTermTypeString){
-            case "REGULAR" :
-                return  Sets.newHashSet("REGULAR");
-            case "SPECIFIED_VALUES" :
-                return  Sets.newHashSet("SPECIFIED_VALUES");
-            case "SPECIFIED_AGES" :
-                return  Sets.newHashSet("SPECIFIED_AGES");
-            case "SINGLE" :
-                return  Sets.newHashSet("SINGLE");
-            case "SINGLE_REGULAR" :
-                return  Sets.newHashSet("SINGLE","REGULAR");
-            case "SINGLE_SPECIFIED_VALUES" :
-                return  Sets.newHashSet("SINGLE","SPECIFIED_VALUES");
-            case "SINGLE_SPECIFIED_AGES" :
-                return  Sets.newHashSet("SINGLE","SPECIFIED_AGES");
-        }
-        return Collections.emptySet();
-    }
-
 }

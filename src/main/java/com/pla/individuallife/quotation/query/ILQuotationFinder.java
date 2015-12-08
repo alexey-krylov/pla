@@ -1,11 +1,16 @@
 package com.pla.individuallife.quotation.query;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
+import com.pla.core.repository.PlanRepository;
 import com.pla.individuallife.quotation.domain.model.*;
 import com.pla.individuallife.sharedresource.dto.*;
 import com.pla.sharedkernel.domain.model.CoverageType;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -64,6 +69,9 @@ public class ILQuotationFinder {
 
     @Autowired
     private ILQuotationRepository ilQuotationRepository;
+
+    @Autowired
+    private PlanRepository planRepository;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -216,4 +224,24 @@ public class ILQuotationFinder {
         }).collect(Collectors.toList());
     }
 
+    public Map<String, Set> getPremiumPaymentType(PlanId planId) {
+        Plan plan = planRepository.findOne(planId);
+        return constructPremiumTypeMapFromPlan(plan);
+    }
+
+    private Map<String, Set> constructPremiumTypeMapFromPlan(Plan plan) {
+        PremiumTermType premiumTermType = plan.getPremiumTermType();
+        Map<String, Set> premiumTypeMap = Maps.newLinkedHashMap();
+        Set<String> sheetNames = premiumTermType.getSheetNamesByPremiumTermType();
+        sheetNames.forEach(s -> {
+            if (s.equalsIgnoreCase("SINGLE")) {
+                premiumTypeMap.put(s, Sets.newHashSet("Single"));
+            } else if(s.equalsIgnoreCase("SPECIFIED_AGES")) {
+                premiumTypeMap.put(s, plan.getPremiumTerm().getMaturityAges());
+            } else{
+                premiumTypeMap.put(s, plan.getPremiumTerm().getValidTerms());
+            }
+        });
+        return premiumTypeMap;
+    }
 }

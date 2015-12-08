@@ -59,7 +59,8 @@ public class PremiumTemplateExcelGenerator {
 
     public HSSFWorkbook generatePremiumTemplate(List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId) throws IOException {
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook();
-        Set<String> sheets = getSheetNamesByPremiumTermType(plan.getPremiumTermType());
+        PremiumTermType premiumTermType = plan.getPremiumTermType();
+        Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
         for(String sheet : sheets){
             HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(sheet);
             int noOfExcelRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan, premiumSheet);
@@ -74,33 +75,13 @@ public class PremiumTemplateExcelGenerator {
 
     private Set<HSSFSheet> createSheetByPremiumTermType(Plan plan, HSSFWorkbook premiumTemplateWorkbook) {
         Set<HSSFSheet> sheets = Sets.newLinkedHashSet();
-        Set<String> sheetNames = getSheetNamesByPremiumTermType(plan.getPremiumTermType());
+        PremiumTermType premiumTermType = plan.getPremiumTermType();
+        Set<String> sheetNames = premiumTermType.getSheetNamesByPremiumTermType();
         for(String sheetName : sheetNames){
             HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(sheetName);
             sheets.add(premiumSheet);
         }
         return sheets;
-    }
-
-    private Set<String> getSheetNamesByPremiumTermType(PremiumTermType premiumTermType) {
-        String premiumTermTypeString = premiumTermType.name();
-        switch(premiumTermTypeString){
-            case "REGULAR" :
-                return  Sets.newHashSet("REGULAR");
-            case "SPECIFIED_VALUES" :
-                return  Sets.newHashSet("SPECIFIED_VALUES");
-            case "SPECIFIED_AGES" :
-                return  Sets.newHashSet("SPECIFIED_AGES");
-            case "SINGLE" :
-                return  Sets.newHashSet("SINGLE");
-            case "SINGLE_REGULAR" :
-                return  Sets.newHashSet("SINGLE","REGULAR");
-            case "SINGLE_SPECIFIED_VALUES" :
-                return  Sets.newHashSet("SINGLE","SPECIFIED_VALUES");
-            case "SINGLE_SPECIFIED_AGES" :
-                return  Sets.newHashSet("SINGLE","SPECIFIED_AGES");
-        }
-        return Collections.emptySet();
     }
 
     private int getTotalNoOfPremiumCombination(List<PremiumInfluencingFactor> premiumInfluencingFactors, CoverageId coverageId, Plan plan, HSSFSheet hssfSheet) {
@@ -146,7 +127,7 @@ public class PremiumTemplateExcelGenerator {
             return categories;
         }
         if(premiumInfluencingFactor.equals(PremiumInfluencingFactor.PREMIUM_PAYMENT_TERM) &&  sheetName.equalsIgnoreCase(PremiumTermType.SINGLE.toString()))
-            return new String[]{"Single"};
+            return new String[]{"1"};
         return premiumInfluencingFactor.getAllowedValues(plan, coverageId);
     }
 

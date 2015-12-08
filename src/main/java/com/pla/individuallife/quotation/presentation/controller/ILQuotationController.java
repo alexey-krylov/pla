@@ -18,6 +18,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +33,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -289,4 +289,14 @@ public class ILQuotationController {
         return Result.success("Email sent successfully");
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "getPremiumPaymentType/{planId}")
+    @ApiOperation(httpMethod = "GET", value = "This call to get premium payment type for a plan")
+    @ResponseBody
+    public Map<String, Set> getPremiumPaymentType(@PathVariable("planId") String planId, HttpServletResponse response) throws IOException {
+        if(isEmpty(planId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Plan Id cannot be empty");
+            return Collections.EMPTY_MAP;
+        }
+        return  ilQuotationFinder.getPremiumPaymentType(new PlanId(planId));
+    }
 }

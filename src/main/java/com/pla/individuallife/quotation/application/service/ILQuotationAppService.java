@@ -4,9 +4,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
+import com.pla.core.repository.PlanRepository;
+import com.pla.individuallife.quotation.domain.model.PlanDetail;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
@@ -18,12 +21,14 @@ import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.publishedlanguage.domain.model.PremiumInfluencingFactor;
+import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -57,6 +62,8 @@ public class ILQuotationAppService {
 
     @Autowired
     private PlanFinder planFinder;
+    @Autowired
+    private PlanRepository planRepository;
 
     @Autowired
     public ILQuotationAppService(ILQuotationFinder ilQuotationFinder, IPremiumCalculator premiumCalculator, PremiumFinder premiumFinder) {
@@ -66,13 +73,13 @@ public class ILQuotationAppService {
     }
 
     public PremiumDetailDto getPremiumDetail(QuotationId quotationId) {
-
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto();
-
         Set<RiderPremiumDto> riderPremiumDtoSet = new HashSet<RiderPremiumDto>();
-
         Map quotation = ilQuotationFinder.getQuotationForPremiumById(quotationId.getQuotationId());
-
+        Plan plan = planRepository.findOne(new PlanId(quotation.get("PLANID").toString()));
+        boolean compoundPremiumType = checkIfMultiplePremiumSheets(plan.getPremiumTermType());
+        PlanDetail planDetail = (PlanDetail) quotation.get("planDetail");
+        String premiumPaymentType = planDetail.getPremiumPaymentType();
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
         LocalDate dob = new LocalDate(quotation.get("ASSURED_DOB"));
@@ -98,7 +105,7 @@ public class ILQuotationAppService {
                 premiumCalculationDto.addInfluencingFactorItemValue(PremiumInfluencingFactor.OCCUPATION_CLASS, quotation.get("ASSURED_OCCUPATION").toString());
         }
         BigDecimal planSumAssured = quotation.get("SUMASSURED")!=null?(BigDecimal) quotation.get("SUMASSURED"):BigDecimal.ONE;
-        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto, planSumAssured);
+        List<ComputedPremiumDto> computedPremiums = premiumCalculator.calculateBasicPremiumWithPolicyFee(premiumCalculationDto, planSumAssured, compoundPremiumType, premiumPaymentType);
         premiumDetailDto.setPlanAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
 
         BigDecimal totalPremium = premiumDetailDto.getPlanAnnualPremium();
@@ -141,7 +148,7 @@ public class ILQuotationAppService {
                     rd.setCoverageId(new CoverageId(rider.get("COVERAGEID").toString()));
                     if (rider.get("COVERAGENAME") != null)
                         rd.setCoverageName(new CoverageName(rider.get("COVERAGENAME").toString()));
-                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, coverageSumAssured, LineOfBusinessEnum.INDIVIDUAL_LIFE);
+                    computedPremiums = premiumCalculator.calculateBasicPremium(premiumCalculationDto, coverageSumAssured, LineOfBusinessEnum.INDIVIDUAL_LIFE, compoundPremiumType, premiumPaymentType);
                     rd.setAnnualPremium(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     totalPremium = totalPremium.add(ComputedPremiumDto.getAnnualPremium(computedPremiums));
                     semiAnnualPremium = semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPremium(computedPremiums));
@@ -159,6 +166,11 @@ public class ILQuotationAppService {
         premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(premiumDetailDto.getQuarterlyFee()).setScale(2, BigDecimal.ROUND_HALF_UP));
         premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(premiumDetailDto.getSemiAnnualFee()).setScale(2, BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
+    }
+
+    private boolean checkIfMultiplePremiumSheets(PremiumTermType premiumTermType) {
+        Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
+        return sheets.size() > 1;
     }
 
     public List<ILSearchQuotationResultDto> searchQuotation(ILSearchQuotationDto searchIlQuotationDto) {
