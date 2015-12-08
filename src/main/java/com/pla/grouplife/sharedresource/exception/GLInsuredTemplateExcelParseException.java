@@ -14,6 +14,10 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
     }
 
     public static void raiseNotValidFirstHeaderException() {
+        throw new GLInsuredTemplateExcelParseException("First row should contain relationship as Self.");
+    }
+
+    public static void raiseFileIsBlank() {
         throw new GLInsuredTemplateExcelParseException("Please share either proposed assured details or number of proposed assured.");
     }
 

@@ -592,11 +592,11 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         String relationCellValue = getCellValue(relationshipCell);
         boolean isExists  = false;
         for (Insured insured :insureds){
-            isExists = insured.getCategory().equals(categoryCellValue) && Relationship.SELF.description.equals(relationCellValue);
+            isExists = insured.getCategory()!=null?insured.getCategory().equals(categoryCellValue):false && Relationship.SELF.description.equals(relationCellValue);
             if (!isExists){
-                Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                Set<InsuredDependent> insuredDependents =insured.getInsuredDependents()!=null?insured.getInsuredDependents():Sets.newLinkedHashSet();
                 for (InsuredDependent insuredDependent :insuredDependents){
-                    if (insuredDependent.getCategory().equals(categoryCellValue)&& insuredDependent.getRelationship().description.equals(relationCellValue)){
+                    if (insuredDependent.getCategory()!=null?insuredDependent.getCategory().equals(categoryCellValue):false && insuredDependent.getRelationship()!=null?insuredDependent.getRelationship().description.equals(relationCellValue):false){
                         isExists = true;
                         break;
                     }
