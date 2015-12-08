@@ -69,7 +69,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         Cell errorMessageHeaderCell = null;
         for (Row currentRow : dataRows) {
             String invalidCombinationMessage = buildErrorMessageIfInvalidCategoryRelationCombination(currentRow, insureds,headers);
-            String totalLivesExceededErrorMessage =  groupLifeEndorsementChecker.getTotalNoOfLivesCovered(currentRow,insureds,headers);
+            String totalLivesExceededErrorMessage = "";
             String invalidDetailAssuredMessage = buildErrorMessageIfInvalidDetailsAssure(currentRow, insureds, headers);
             String errorMessage = validateRow(currentRow, headers, glEndorsementExcelValidator);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, headers);

@@ -19,7 +19,6 @@ import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -192,7 +191,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         boolean isCoverageExist = this.getCoverages().stream().filter(new Predicate<PlanCoverage>() {
             @Override
             public boolean test(PlanCoverage planCoverage) {
-                return coverageId.equals(planCoverage.getCoverageId());
+                return coverageId.equals(planCoverage.getCoverageId()) && CoverageType.OPTIONAL.equals(planCoverage.getCoverageType());
             }
         }).findAny().isPresent();
         return isCoverageExist;
