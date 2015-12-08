@@ -172,7 +172,7 @@
 
                                     <div class="form-group">
                                         <label class="control-label">Opportunity ID</label>
-                                        <input type="text" class="form-control input-sm" ng-disabled="true" name="opportunityId " ng-model="proposedAssured.opportunityId"/>
+                                        <input type="text" class="form-control input-sm" ng-disabled="uneditable || isClientValid" name="opportunityId " ng-model="proposedAssured.opportunityId"/>
                                     </div>
 
                                     <div class="form-group required">
@@ -832,10 +832,11 @@
                     </select>
         </div>
         <div ng-switch-when="RANGE">
+            {{maxOptionalCoverage}}
             <input type="number" view-enabled="" class="form-control input-sm"
                    min="{{coverage.coverageSumAssured.minSumInsured}}"
                     name="sumAssuredPlanRider"
-                    ng-required="true" validate-optsumassured="" max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
+                    ng-init="maxOptionalCoverage=coverage.coverageSumAssured.maxSumInsured" ng-required="true" validate-optsumassured="" max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
             <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
                 <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
                 <small ng-message="max">Sum Assured cannot be more than {{maxOptionalCoverage}}.</small>
