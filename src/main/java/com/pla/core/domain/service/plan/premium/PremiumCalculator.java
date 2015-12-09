@@ -63,7 +63,7 @@ public class PremiumCalculator implements IPremiumCalculator {
         }
         Set<PremiumItem> premiumItems;
         if(compoundPremiumType){
-            if(premiumPaymentType.equalsIgnoreCase("SINGLE")){
+            if(premiumPaymentType.equalsIgnoreCase("SINGLE_PREMIUM")){
                 premiumItems = premium.getSinglePremiumItems();
             } else{
                 premiumItems = premium.getPremiumItems();
@@ -92,7 +92,7 @@ public class PremiumCalculator implements IPremiumCalculator {
         }
         Set<PremiumItem> premiumItems;
         if(compoundPremiumType){
-            if(premiumPaymentType.equalsIgnoreCase("SINGLE")){
+            if(premiumPaymentType.equalsIgnoreCase("SINGLE_PREMIUM")){
                 premiumItems = premium.getSinglePremiumItems();
             } else{
                 premiumItems = premium.getPremiumItems();

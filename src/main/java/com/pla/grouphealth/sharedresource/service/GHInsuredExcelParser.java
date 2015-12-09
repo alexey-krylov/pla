@@ -19,7 +19,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.nthdimenzion.common.AppConstants;
+import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -230,7 +233,7 @@ public class GHInsuredExcelParser {
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         List<Row> rowList = Lists.newArrayList(dataRows.iterator());
-        Set<String> newCategoryRelationErrorMessage = getCategoryWhichDoesNotSelfRelation(rowList,headers);
+        Set<String> newCategoryRelationErrorMessage = getCategoryWhichDoesNotSelfRelation(rowList, headers);
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
             List<String> excelHeaders = GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
@@ -475,6 +478,11 @@ public class GHInsuredExcelParser {
         List<OptionalCoverageCellHolder> optionalCoverageCellHolders = Lists.newArrayList();
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
         int count = 1;
+        Cell dateOfBirthCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.DATE_OF_BIRTH.getDescription()));
+        String dateOfBirthCellValue = getCellValue(dateOfBirthCell);
+        int age = isNotEmpty(dateOfBirthCellValue) ? AppUtils.getAgeOnNextBirthDate(LocalDate.parse(dateOfBirthCellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT))) : 0;
+        Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
+        String plan = getCellValue(planCell);
         for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
             for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
                 String coverageHeader = AppConstants.OPTIONAL_COVERAGE_HEADER + count;
@@ -500,7 +508,16 @@ public class GHInsuredExcelParser {
                         }
                         benefitCount++;
                     }
-                    optionalCoverageCellHolders.add(optionalCoverageCellHolder);
+                    if(isNotEmpty(dateOfBirthCellValue)){
+                        String coverageCode = getCellValue(cell);
+                        if(isNotEmpty(coverageCode)) {
+                            coverageCode = String.valueOf(new BigDecimal(coverageCode).intValue());
+                            if (planAdapter.isValidCoverageAgeForGivenCoverageCode(plan, coverageCode, age))
+                                optionalCoverageCellHolders.add(optionalCoverageCellHolder);
+                        }
+                    } else {
+                        optionalCoverageCellHolders.add(optionalCoverageCellHolder);
+                    }
                 }
                 count++;
             }

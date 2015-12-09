@@ -78,8 +78,7 @@ public class ILQuotationAppService {
         Map quotation = ilQuotationFinder.getQuotationForPremiumById(quotationId.getQuotationId());
         Plan plan = planRepository.findOne(new PlanId(quotation.get("PLANID").toString()));
         boolean compoundPremiumType = checkIfMultiplePremiumSheets(plan.getPremiumTermType());
-        PlanDetail planDetail = (PlanDetail) quotation.get("planDetail");
-        String premiumPaymentType = planDetail.getPremiumPaymentType();
+        String premiumPaymentType =  (String) quotation.get("premiumPaymentType");
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(quotation.get("PLANID").toString()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 
         LocalDate dob = new LocalDate(quotation.get("ASSURED_DOB"));

@@ -189,7 +189,18 @@ public class PlanAdapterImpl implements IPlanAdapter {
             return false;
         }
         Plan plan = plans.get(0);
-        return plan.isValidCoverageAgeRange(age, new CoverageId(coverageId));
+        return plan.isValidCoverageAge(age, new CoverageId(coverageId));
+    }
+
+    @Override
+    public boolean isValidCoverageAgeForGivenCoverageCode(String planCode, String coverageCode, int age) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        Map coverage = coverageFinder.getCoverageDetailByCode(coverageCode);
+        return plan.isValidCoverageAge(age, new CoverageId(coverage.get("coverageId").toString()));
     }
 
     @Override

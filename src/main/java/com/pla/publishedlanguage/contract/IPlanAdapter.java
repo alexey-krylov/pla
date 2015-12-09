@@ -40,6 +40,8 @@ public interface IPlanAdapter {
 
     boolean isValidCoverageAge(String planCode, String coverageId, int age);
 
+    boolean isValidCoverageAgeForGivenCoverageCode(String planCode, String coverageCode, int age);
+
     boolean hasPlanContainsIncomeMultiplierSumAssured(String planCode);
 
     boolean isValidPlanCode(String planCode);
