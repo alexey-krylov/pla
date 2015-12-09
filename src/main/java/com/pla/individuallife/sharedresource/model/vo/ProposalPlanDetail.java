@@ -1,5 +1,6 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,6 @@ public class ProposalPlanDetail {
 
     private BigDecimal sumAssured;
 
-    private Set<ILRiderDetail> riderDetails;
+    private Set<ILRiderDetail> riderDetails= Sets.newLinkedHashSet();
 
 }

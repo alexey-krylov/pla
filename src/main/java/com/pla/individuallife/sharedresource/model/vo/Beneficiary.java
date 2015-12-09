@@ -9,6 +9,8 @@ import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+
 /**
  * Created by pradyumna on 22-05-2015.
  */
@@ -36,7 +38,7 @@ public class Beneficiary {
                 Objects.equal(firstName, that.firstName) &&
                         Objects.equal(surname, that.surname) &&
                         Objects.equal(dateOfBirth, that.dateOfBirth)
-        ) || Objects.equal(nrc, that.nrc);
+        ) || Objects.equal(isEmpty(nrc)?null:nrc, isEmpty(that.nrc)?null:that.nrc);
     }
 
     @Override
