@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
+import com.pla.grouplife.sharedresource.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
@@ -198,6 +200,11 @@ public class GHInsuredExcelParser {
         if (!isValidHeader) {
             raiseNotValidHeaderException();
         }
+        boolean isFileBlank = isFileBlank(dataRows);
+        if (isFileBlank) {
+            raiseFileIsBlank();
+        }
+
         boolean isFirstRowContainsSelfRelationship = isFirstRowContainsSelfRelationship(dataRows, headers);
         if (!isFirstRowContainsSelfRelationship) {
             raiseNotValidFirstHeaderException();
@@ -222,12 +229,20 @@ public class GHInsuredExcelParser {
 
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
+        List<Row> rowList = Lists.newArrayList(dataRows.iterator());
+        Set<String> newCategoryRelationErrorMessage = getCategoryWhichDoesNotSelfRelation(rowList,headers);
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
             List<String> excelHeaders = GHInsuredExcelHeader.getAllowedHeaderForParser(planAdapter, agentPlans);
             String errorMessage = validateRow(currentRow, excelHeaders, agentPlans);
             List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, currentRow, agentPlans);
             String coverageErrorMessage = validateOptionalCoverageCell(headers, currentRow, optionalCoverageCellHolders);
+            Cell categoryCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.CATEGORY.getDescription()));
+            String categoryCellValue = getCellValue(categoryCell);
+            String categoryDoesNotHaveSelfRelationErrorMessage = "";
+            if (newCategoryRelationErrorMessage.contains(categoryCellValue)){
+                categoryDoesNotHaveSelfRelationErrorMessage = "The Given Category does not contain the self relation";
+            }
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders);
             String duplicateRowErrorMessage = "";
             if (isNotEmpty(duplicateRows)) {
@@ -240,7 +255,7 @@ public class GHInsuredExcelParser {
             }
             String sameOptionalCoverageErrorMessage = checkIfSameOptionalCoverage(currentRow, headers, optionalCoverageHeaders);
             String sameOptionalCoverageBenefitsErrorMessage = checkIfSameOptionalCoverageBenefits(currentRow, headers, optionalCoverageBenefitHeaders);
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(sameOptionalCoverageBenefitsErrorMessage)) {
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(sameOptionalCoverageBenefitsErrorMessage) && isEmpty(categoryDoesNotHaveSelfRelationErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -257,12 +272,38 @@ public class GHInsuredExcelParser {
             errorMessage = errorMessage + " \n " + duplicateRowErrorMessage;
             errorMessage = errorMessage +" \n "+ sameOptionalCoverageErrorMessage;
             errorMessage = errorMessage +" \n "+ sameOptionalCoverageBenefitsErrorMessage;
+            errorMessage = errorMessage +" \n "+ categoryDoesNotHaveSelfRelationErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
     }
 
+    private Set<String> getCategoryWhichDoesNotSelfRelation(List<Row> rowList,List<String> headers) {
+        if (isNotEmpty(rowList)){
+            Map<String,Boolean> categoryRelationMap = Maps.newLinkedHashMap();
+            for (Row currentRow : rowList){
+                Cell categoryCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.CATEGORY.getDescription()));
+                String categoryCellValue = getCellValue(categoryCell);
+                Cell relationCell = currentRow.getCell(headers.indexOf(GLInsuredExcelHeader.RELATIONSHIP.getDescription()));
+                if (categoryRelationMap.get(categoryCellValue)==null) {
+                    categoryRelationMap.put(categoryCellValue, Boolean.TRUE);
+                }
+                String relationCellValue = getCellValue(relationCell);
+                if (Relationship.SELF.description.equals(relationCellValue)) {
+                    categoryRelationMap.put(categoryCellValue,Boolean.FALSE);
+                }
+            }
+            Set<String> category = Sets.newLinkedHashSet();
+            for (Map.Entry<String, Boolean> categoryMap : categoryRelationMap.entrySet()){
+                if (categoryMap.getValue().equals(Boolean.TRUE)){
+                    category.add(categoryMap.getKey());
+                }
+            }
+            return category;
+        }
+        return Collections.EMPTY_SET;
+    }
     private List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
         List<Row> duplicateRows = Lists.newArrayList();
         Cell firstNameCell = currentRow.getCell(headers.indexOf(GHInsuredExcelHeader.FIRST_NAME.name()));
@@ -515,6 +556,27 @@ public class GHInsuredExcelParser {
         Cell relationshipCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.RELATIONSHIP.getDescription()));
         String relationship = getCellValue(relationshipCell);
         return Relationship.SELF.description.equals(relationship);
+    }
+
+    private boolean isFileBlank(List<Row> dataRows) {
+        Optional<Row> rowOptional = dataRows.parallelStream().filter(new Predicate<Row>() {
+            @Override
+            public boolean test(Row row) {
+                return isRowEmpty(row);
+            }
+        }).findAny();
+        return !rowOptional.isPresent();
+    }
+
+    public static boolean isRowEmpty(Row row) {
+        List<Cell> cells = Lists.newArrayList(row.cellIterator());
+        Optional<Cell> cellOptional = cells.parallelStream().filter(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell cell) {
+                return (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK);
+            }
+        }).findAny();
+        return cellOptional.isPresent();
     }
 
     private Map<Row, List<Row>> groupByRelationship(List<Row> dataRows, List<String> headers) {
