@@ -156,7 +156,13 @@
                                             <li><a th:href="@{/core/clientsummary/groupclientsummary}">Group</a></li>
                                         </ul>
                                     </li>
-
+                                    <li class="dropdown"><a href="#">Pay Point  <i style="margin-top:12px;" class="glyphicon glyphicon-chevron-right "></i></a>
+                                        <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
+                                            <li><a th:href="@{/core/paypoint/search}">Search</a></li>
+                                            <li><a th:href="@{/core/paypoint/create}">Create PayPoint</a></li>
+                                            <li><a th:href="@{/core/paypoint/update}">Update PayPoint</a></li>
+                                          </ul>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -340,8 +346,8 @@
                                             <li class='dropdown'><a href="#">Claim Intimation</a>
                                                 <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
 
-                                                    <!--<li><a th:href="@{/indivisuallife/claim/openclaimsearchpage}">Claim Search-->
-                                                    <!--</a></li>-->
+                                                    <li><a th:href="@{/indivisuallife/claim//openpolicysearchpage}">policy Search
+                                                    </a></li>
                                                     <li><a th:href="@{/indivisuallife/claim/openclaimsettlementpage}">Claim
                                                         Settlement</a></li>
                                                     <li><a th:href="@{/indivisuallife/claim/opensurrenderclaimpage}">Surrender
