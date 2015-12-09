@@ -808,15 +808,15 @@ public enum GLInsuredExcelHeader {
                 Cell planPremiumCell = row.getCell(excelHeaders.indexOf(PLAN_PREMIUM.name()));
                 String planPremium = getCellValue(planPremiumCell);
                 if(PremiumType.RATE.toString().equalsIgnoreCase(value) && isEmpty(planPremium)){
-                    errorMessage = errorMessage + "Premium Plan cannot be empty for Premium Type - Rate.";
+                    errorMessage = errorMessage + "Premium Rate cannot be empty.";
                     return errorMessage;
                 }
                 if(PremiumType.RATE.toString().equalsIgnoreCase(value) && isNotEmpty(planPremium)){
                     if(new BigDecimal(planPremium).signum() == -1) {
-                        errorMessage = errorMessage + "Premium Plan cannot be negative value for Premium Type - Rate.";
+                        errorMessage = errorMessage + "Premium Rate cannot be negative value.";
                     }
-                    if(!(new BigDecimal(100).compareTo(new BigDecimal(planPremium)) >= 0)) {
-                        errorMessage = errorMessage + "Premium Plan cannot be greater than 100 for Premium Type - Rate.";
+                    if(!(new BigDecimal(1000).compareTo(new BigDecimal(planPremium)) >= 0)) {
+                        errorMessage = errorMessage + "Premium Rate cannot be greater than 1000.";
                     }
                     if(isNotEmpty(errorMessage))
                         return errorMessage;
