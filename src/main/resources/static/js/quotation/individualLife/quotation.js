@@ -184,7 +184,7 @@
                     $scope.premiumTerms = function () {
                         var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                         //console.log('plan*** '+JSON.stringify($scope.plan));
-                        if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM')) {
+                        if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentType=='OTHER_PREMIUM')) {
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
                             if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
                                 return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
@@ -201,7 +201,7 @@
                                 return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
 
                             });*/
-                        } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM')) {
+                        } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentType=='OTHER_PREMIUM')) {
                              if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
                                  return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
                                      return $scope.planDetailDto.policyTerm >= parseInt(term.text) && ageNextBirthday <=parseInt(term.text);
@@ -231,7 +231,7 @@
 
                         if ($scope.plan && $scope.plan.premiumTermType === 'REGULAR') {
                             $scope.planDetailDto.premiumPaymentTerm = newval;
-                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM') {
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.planDetailDto.premiumPaymentType=='OTHER_PREMIUM') {
                             $scope.planDetailDto.premiumPaymentTerm = newval;
                         }
 
@@ -239,11 +239,11 @@
                     $scope.$watch('planDetailDto.policyTerm', function (newval) {
                         if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE') {
                             $scope.planDetailDto.premiumPaymentTerm = 1;
-                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM') {
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.planDetailDto.premiumPaymentType=='SINGLE_PREMIUM') {
                             $scope.planDetailDto.premiumPaymentTerm = 1;
-                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM') {
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentType=='SINGLE_PREMIUM') {
                             $scope.planDetailDto.premiumPaymentTerm = 1;
-                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM') {
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentType=='SINGLE_PREMIUM') {
                             $scope.planDetailDto.premiumPaymentTerm = 1;
                         }
                     });

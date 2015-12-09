@@ -543,7 +543,9 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 }
             });
             $scope.backToApproverPortlet = function () {
-                $window.location.href = 'viewApprovalEndorsement';
+                //$window.location.href = 'viewApprovalEndorsement';
+                $window.location.href = 'openapprovalendorsement';
+
             }
 
 

@@ -614,13 +614,13 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Premium Payment Term Type</label>
-                                    <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTermType" ng-change="clearPolicyTerm()" name="premiumPaymentType" ng-required="true">
+                                    <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentType" ng-change="clearPolicyTerm()" name="premiumPaymentType" ng-required="true">
                                         <option value="">-- Select Payment Term Type --</option>
                                         <option value="SINGLE_PREMIUM">Single Premium </option>
                                         <option value="OTHER_PREMIUM">Other Premiums</option>
                                     </select>
                                 </div>
-                                <div class="form-group required" ng-if="planDetailDto.premiumPaymentTermType">
+                                <div class="form-group required" ng-if="planDetailDto.premiumPaymentType">
                                     <label class="control-label">Premium Payment Term</label>
                                     <premiumterm plan="plan" proposedAssured="proposedAssured"></premiumterm>
                                 </div>
@@ -943,32 +943,32 @@
         </div>
 
         <div ng-switch-when="SINGLE_REGULAR">
-            <input ng-if="planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+            <input ng-if="planDetailDto.premiumPaymentType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
                    readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
 
             <input type="number" class="form-control input-sm" readonly="true" value=""
-                   ng-if="planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM'" ng-model="planDetailDto.premiumPaymentTerm"
+                   ng-if="planDetailDto.premiumPaymentType=='OTHER_PREMIUM'" ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
         </div>
 
         <div ng-switch-when="SINGLE_SPECIFIED_VALUES">
-            <input ng-if="planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+            <input ng-if="planDetailDto.premiumPaymentType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
                    readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
 
             <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
-                    ng-if="planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM'" name="premiumTerm"
+                    ng-if="planDetailDto.premiumPaymentType=='OTHER_PREMIUM'" name="premiumTerm"
                     ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',planDetailDto.policyTerm)"
                     ng-required="true"></select>
         </div>
         <div ng-switch-when="SINGLE_SPECIFIED_AGES">
-            <input ng-if="planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+            <input ng-if="planDetailDto.premiumPaymentType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
                    readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
 
             <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
-                    ng-if="planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM'" name="premiumTerm"
+                    ng-if="planDetailDto.premiumPaymentType=='OTHER_PREMIUM'" name="premiumTerm"
                     ng-options="value.text as value.text for value in premiumTerms()"
                     ng-required="true"></select>
         </div>
