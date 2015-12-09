@@ -140,6 +140,19 @@
                             return $scope.coverage.coverageSumAssured.sumAssuredType;
                         }
                     }
+                    $scope.$watch('rider.sumAssured',function(newVal){
+                        if(newVal && $scope.planDetailDto.sumAssured){
+                            if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
+                                if($scope.coverage.coverageSumAssured.maxSumInsured <=$scope.planDetailDto.sumAssured){
+                                    $scope.maxOptionalCoverage=$scope.coverage.coverageSumAssured.maxSumInsured;
+                                }
+                                else{
+                                    $scope.maxOptionalCoverage=$scope.planDetailDto.sumAssured;
+                                }
+                            }
+
+                        }
+                    });
 
                     $scope.$watch('planDetailDto.sumAssured', function (newval) {
                         if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
@@ -171,7 +184,7 @@
                     $scope.premiumTerms = function () {
                         var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                         //console.log('plan*** '+JSON.stringify($scope.plan));
-                        if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
+                        if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM')) {
                             var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
                             if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
                                 return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
@@ -188,7 +201,7 @@
                                 return ageNextBirthday + parseInt(term.text) <= $scope.planDetailDto.policyTerm;
 
                             });*/
-                        } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
+                        } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM')) {
                              if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
                                  return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
                                      return $scope.planDetailDto.policyTerm >= parseInt(term.text) && ageNextBirthday <=parseInt(term.text);
@@ -218,15 +231,21 @@
 
                         if ($scope.plan && $scope.plan.premiumTermType === 'REGULAR') {
                             $scope.planDetailDto.premiumPaymentTerm = newval;
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM') {
+                            $scope.planDetailDto.premiumPaymentTerm = newval;
                         }
 
                     })
                     $scope.$watch('planDetailDto.policyTerm', function (newval) {
-
                         if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE') {
                             $scope.planDetailDto.premiumPaymentTerm = 1;
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM') {
+                            $scope.planDetailDto.premiumPaymentTerm = 1;
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM') {
+                            $scope.planDetailDto.premiumPaymentTerm = 1;
+                        }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM') {
+                            $scope.planDetailDto.premiumPaymentTerm = 1;
                         }
-
                     });
                 }]
             };
@@ -387,6 +406,10 @@
                 $scope.proposedAssured = {};
                 $scope.uneditable = false;
                 $scope.proposerSameAsProposedAssured = false;
+
+                $scope.clearPolicyTerm=function(){
+                    $scope.planDetailDto.policyTerm='';
+                };
 
                 $scope.isSaveDisabled = function (stepForm) {
                     var returnval = true;

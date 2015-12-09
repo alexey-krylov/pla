@@ -613,6 +613,14 @@
                                     <sumassured ng-model="planDetail.sumAssured"></sumassured>
                                 </div>
                                 <div class="form-group required">
+                                    <label class="control-label">Premium Payment Term Type</label>
+                                    <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTermType" ng-change="clearPolicyTerm()" name="premiumPaymentType" ng-required="true">
+                                        <option value="">-- Select Payment Term Type --</option>
+                                        <option value="SINGLE_PREMIUM">Single Premium </option>
+                                        <option value="OTHER_PREMIUM">Other Premiums</option>
+                                    </select>
+                                </div>
+                                <div class="form-group required" ng-if="planDetailDto.premiumPaymentTermType">
                                     <label class="control-label">Premium Payment Term</label>
                                     <premiumterm plan="plan" proposedAssured="proposedAssured"></premiumterm>
                                 </div>
@@ -832,11 +840,10 @@
                     </select>
         </div>
         <div ng-switch-when="RANGE">
-            {{maxOptionalCoverage}}
             <input type="number" view-enabled="" class="form-control input-sm"
                    min="{{coverage.coverageSumAssured.minSumInsured}}"
                     name="sumAssuredPlanRider"
-                    ng-init="maxOptionalCoverage=coverage.coverageSumAssured.maxSumInsured" ng-required="true" validate-optsumassured="" max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
+                    ng-required="true" validate-optsumassured="" max="{{maxOptionalCoverage}}" ng-model="rider.sumAssured" />
             <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
                 <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
                 <small ng-message="max">Sum Assured cannot be more than {{maxOptionalCoverage}}.</small>
@@ -934,6 +941,38 @@
                    readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
                    name="premiumTerm"/>
         </div>
+
+        <div ng-switch-when="SINGLE_REGULAR">
+            <input ng-if="planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+                   readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
+                   name="premiumTerm"/>
+
+            <input type="number" class="form-control input-sm" readonly="true" value=""
+                   ng-if="planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM'" ng-model="planDetailDto.premiumPaymentTerm"
+                   name="premiumTerm"/>
+        </div>
+
+        <div ng-switch-when="SINGLE_SPECIFIED_VALUES">
+            <input ng-if="planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+                   readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
+                   name="premiumTerm"/>
+
+            <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
+                    ng-if="planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM'" name="premiumTerm"
+                    ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',planDetailDto.policyTerm)"
+                    ng-required="true"></select>
+        </div>
+        <div ng-switch-when="SINGLE_SPECIFIED_AGES">
+            <input ng-if="planDetailDto.premiumPaymentTermType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+                   readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
+                   name="premiumTerm"/>
+
+            <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentTerm"
+                    ng-if="planDetailDto.premiumPaymentTermType=='OTHER_PREMIUM'" name="premiumTerm"
+                    ng-options="value.text as value.text for value in premiumTerms()"
+                    ng-required="true"></select>
+        </div>
+
     </div>
 </script>
 <footer class="footer" th:include="fragments/common :: footer"></footer>
