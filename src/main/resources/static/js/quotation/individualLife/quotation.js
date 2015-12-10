@@ -490,6 +490,54 @@
 
                     }
                 }
+                /****
+                 *
+                 * Seraching ProposerClientId Related Data
+                 */
+                $scope.isClientProposerValid=false;
+                $scope.searchProposerByClientId=function(){
+                    if($scope.proposer.clientId){
+                        $http.get('/pla/individuallife/proposal/getclientid/' + $scope.proposer.clientId)
+                            .success(function (response) {
+                                $scope.serverError = false;
+                                $scope.proposer.title=response.data.title;
+                                $scope.proposer.surname=response.data.surname;
+                                $scope.proposer.firstName=response.data.firstName;
+                                $scope.proposer.nrc=response.data.nrc;
+                                $scope.proposer.dateOfBirth=response.data.dateOfBirth;
+                                $scope.proposer.emailAddress=response.data.emailAddress;
+                                $scope.proposer.mobileNumber=response.data.mobileNumber;
+                                $scope.isClientProposerValid=true;
+                            }).error(function (response, status, headers, config) {
+                                $scope.serverError = true;
+                                $scope.serverErrMsg = response.message;
+                                $scope.proposer.title='';
+                                $scope.proposer.surname='';
+                                $scope.proposer.firstName='';
+                                $scope.proposer.nrc='';
+                                $scope.proposer.opportunityId='';
+                                $scope.proposer.clientId='';
+                                $scope.proposer.dateOfBirth='';
+                                $scope.proposer.emailAddress='';
+                                $scope.proposer.mobileNumber='';
+                                $scope.isClientProposerValid=false;
+                            });
+
+                    }
+                }
+                $scope.resetProposerClientIdInfo=function(){
+                    $scope.proposer.title='';
+                    $scope.proposer.surname='';
+                    $scope.proposer.firstName='';
+                    $scope.proposer.nrc='';
+                    $scope.proposer.opportunityId='';
+                    $scope.proposer.clientId='';
+                    $scope.proposer.dateOfBirth='';
+                    $scope.proposer.emailAddress='';
+                    $scope.proposer.mobileNumber='';
+                    $scope.proposerAge='';
+                    $scope.isClientProposerValid=false;
+                }
                 $scope.originalProposer = {};
                 if ($scope.quotationId) {
                     $scope.uneditable = true;
