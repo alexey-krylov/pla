@@ -282,6 +282,34 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.searchRider = {};
             $scope.tempCoverages = {}; //meant For Temp
             $scope.premiumResponse = {};
+            $scope.isClientValid=false;
+            $scope.searchRidersCopy=[];
+            $scope.isRiderDeleted=false;
+
+            $scope.searchProposerByClientId=function(){
+                if($scope.proposer.clientId){
+                    var clientId=$scope.proposer.clientId;
+                    $http.get('/pla/individuallife/proposal/getclientid/' + $scope.proposer.clientId)
+                        .success(function (response) {
+                            $scope.serverError = false;
+                            $scope.proposer=response.data;
+                            $scope.proposer.clientId=clientId;
+                            $scope.isClientValid=true;
+                        }).error(function (response, status, headers, config) {
+                            $scope.serverError = true;
+                            $scope.serverErrMsg = response.message;
+                            $scope.proposer={};
+                            //$scope.proposedAssured={};
+                            $scope.proposer.clientId='';
+                            $scope.isClientValid=false;
+                        });
+
+                }
+            }
+            $scope.resetClientInfo=function(){
+                $scope.isClientValid=false;
+                $scope.proposer={};
+            }
 
             $scope.isBrowseDisable=function(document)
             {
@@ -447,6 +475,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     var ageNextBirthday = moment().diff(new moment(new Date(age)), 'years') + 1;
 
                     $http.get("getridersforplan/" +$scope.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
+                        angular.copy(response,$scope.searchRidersCopy);
                         $scope.searchRiders = response;
                         console.log('RiderDetails1..' + JSON.stringify($scope.searchRiders));
                         if($scope.proposalPlanDetail.riderDetails != null && $scope.proposalPlanDetail.riderDetails.length > 0){
@@ -523,6 +552,93 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         $scope.searchRiders=_.reject($scope.searchRiders, {coverageName: 'Cash & Security Optional Covers 3'});
                     }
                 }
+            }
+
+            $scope.deleteRider=function(coverageName,formName){
+                //alert('CovreageName'+coverageName+""+'Form Name: '+JSON.stringify(formName));
+                $scope.isRiderDeleted=true;
+
+                // Deleting the Selected Rider From PlanDetail's Rider List
+                $scope.proposalPlanDetail.riderDetails=_.reject($scope.proposalPlanDetail.riderDetails, {coverageName:coverageName});
+
+                // ReArranging the Rider which has deleted into searchRiders List
+
+                if(coverageName == 'Cash & Security Optional Covers 1'){
+                    var coverage1=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 2'});
+                    if(coverage1){
+                        $scope.searchRiders.push(coverage1);
+                    }
+                    var coverage2=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 3'});
+                    if(coverage2){
+                        $scope.searchRiders.push(coverage2);
+                    }
+                    var coverage3=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 4'});
+                    if(coverage3){
+                        $scope.searchRiders.push(coverage3);
+                    }
+                }
+                else if(coverageName == 'Cash & Security Optional Covers 2'){
+                    var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
+                    if(coverage1){
+                        $scope.searchRiders.push(coverage1);
+                    }
+                    var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 3'});
+                    if(coverage2){
+                        $scope.searchRiders.push(coverage2);
+                    }
+                    var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 4'});
+                    if(coverage3){
+                        $scope.searchRiders.push(coverage3);
+                    }
+                }
+                else if(coverageName == 'Cash & Security Optional Covers 3'){
+                    var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
+                    if(coverage1){
+                        $scope.searchRiders.push(coverage1);
+                    }
+                    var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 2'});
+                    if(coverage2){
+                        $scope.searchRiders.push(coverage2);
+                    }
+                    var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 4'});
+                    if(coverage3){
+                        $scope.searchRiders.push(coverage3);
+                    }
+                }
+                else if(coverageName == 'Cash & Security Optional Covers 4'){
+                    var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
+                    if(coverage1){
+                        $scope.searchRiders.push(coverage1);
+                    }
+                    var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 2'});
+                    if(coverage2){
+                        $scope.searchRiders.push(coverage2);
+                    }
+                    var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 3'});
+                    if(coverage3){
+                        $scope.searchRiders.push(coverage3);
+                    }
+                }
+                else{
+                    var coverage=_.findWhere($scope.searchRidersCopy,{coverageName: coverageName});
+                    if(coverage){
+                        $scope.searchRiders.push(coverage);
+                    }
+                }
+                $scope.proposalPlanDetail.riderSelected='';
+                $scope.nextButtonCheck(formName);
+            }
+            $scope.nextButtonCheck=function(formName){
+
+                if($scope.isRiderDeleted){
+                    if(formName == 3){
+                        $scope.stepsSaved["3"] = false;
+                    }
+                    else if(formName == 4){
+                        $scope.stepsSaved["4"] = false;
+                    }
+                }
+                $scope.isRiderDeleted=false;
             }
             if ($scope.proposalId) {
                 $http.get("/pla/individuallife/proposal/getproposal/" + $scope.proposalId + "?mode=view").success(function (response, status, headers, config) {
@@ -1628,10 +1744,10 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             $scope.proposalPlanDetail.planId = planResponse.proposalPlanDetail.planId;
                         }
 
-                        if ($scope.proposalPlanDetail != null && $scope.proposalPlanDetail.riderDetails != null) {
+                        /*if ($scope.proposalPlanDetail != null && $scope.proposalPlanDetail.riderDetails != null) {
                             $scope.searchRiders = $scope.rcvProposal.proposalPlanDetail.riderDetails;
 
-                        }
+                        }*/
                         if ($scope.rcvProposal.beneficiaries != null) {
                             $scope.beneficiariesList = $scope.rcvProposal.beneficiaries;
                         }

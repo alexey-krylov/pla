@@ -63,6 +63,7 @@
                         <!--<th>
                             WaiverOfPremium
                         </th>-->
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -117,6 +118,11 @@
                             <input type="number"  ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"   ng-model="searchRider.waiverOfPremium" value="{{searchRider.waiverOfPremium}}"/>
                             &lt;!&ndash; <div contenteditable="true" ng-model="row.update" ng-blur="test(row)" ng-change="test(row)" >{{row.commission}}</div>&ndash;&gt;
                         </td>-->
+                        <td>
+                            <div>
+                                <button type="button" class="btn btn-primary btn-xs" view-enabled="" ng-click="deleteRider(searchRider.coverageName,4)" title="Delete Rider"><i class="glyphicon glyphicon-trash"></i></button>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
 
