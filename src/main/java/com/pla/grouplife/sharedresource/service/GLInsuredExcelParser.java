@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.sharedresource.service.GHInsuredExcelHeader;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
@@ -18,7 +19,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.nthdimenzion.common.AppConstants;
+import org.nthdimenzion.presentation.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -414,6 +418,11 @@ public class GLInsuredExcelParser {
         List<OptionalCoverageCellHolder> optionalCoverageCellHolders = Lists.newArrayList();
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
         int count = 1;
+        Cell dateOfBirthCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.DATE_OF_BIRTH.getDescription()));
+        String dateOfBirthCellValue = getCellValue(dateOfBirthCell);
+        int age = isNotEmpty(dateOfBirthCellValue) ? AppUtils.getAgeOnNextBirthDate(LocalDate.parse(dateOfBirthCellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT))) : 0;
+        Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
+        String plan = String.valueOf(new BigDecimal(getCellValue(planCell)).intValue());
         for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
             for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
                 String coverageHeader = (AppConstants.OPTIONAL_COVERAGE_HEADER + count);
@@ -426,7 +435,13 @@ public class GLInsuredExcelParser {
                 OptionalCoverageCellHolder optionalCoverageCellHolder = null;
                 if (isNotEmpty(getCellValue(optionalCoverageCell))) {
                     optionalCoverageCellHolder = new OptionalCoverageCellHolder(optionalCoverageCell, optionalCoverageSACell, optionalCoveragePremiumCell);
-                    optionalCoverageCellHolders.add(optionalCoverageCellHolder);
+                    if(isNotEmpty(dateOfBirthCellValue)){
+                        String coverageCode = String.valueOf(new BigDecimal(getCellValue(optionalCoverageCell)).intValue());
+                        if (planAdapter.isValidCoverageAgeForGivenCoverageCode(plan, coverageCode, age))
+                            optionalCoverageCellHolders.add(optionalCoverageCellHolder);
+                    } else {
+                        optionalCoverageCellHolders.add(optionalCoverageCellHolder);
+                    }
                 }
                 count++;
             }

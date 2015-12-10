@@ -336,6 +336,7 @@ public class GLProposalService {
                 insuredDto.setOccupationCategory(insured.getCategory());
                 insuredDto.setNoOfAssured(insured.getNoOfAssured());
                 insuredDto.setPremiumType(insured.getPremiumType());
+                insuredDto.setRateOfPremium(insured.getRateOfPremium());
                 PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
                 InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = new InsuredDto.PlanPremiumDetailDto(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getPlanCode(), planPremiumDetail.getPremiumAmount(), planPremiumDetail.getSumAssured());
                 insuredDto = insuredDto.addPlanPremiumDetail(planPremiumDetailDto);

@@ -482,7 +482,7 @@ public class GHInsuredExcelParser {
         String dateOfBirthCellValue = getCellValue(dateOfBirthCell);
         int age = isNotEmpty(dateOfBirthCellValue) ? AppUtils.getAgeOnNextBirthDate(LocalDate.parse(dateOfBirthCellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT))) : 0;
         Cell planCell = row.getCell(headers.indexOf(GHInsuredExcelHeader.PLAN.getDescription()));
-        String plan = getCellValue(planCell);
+        String plan = String.valueOf(new BigDecimal(getCellValue(planCell)).intValue());
         for (PlanCoverageDetailDto planCoverageDetailDto : planCoverageDetailDtoList) {
             for (PlanCoverageDetailDto.CoverageDto coverageDto : planCoverageDetailDto.getCoverageDtoList()) {
                 String coverageHeader = AppConstants.OPTIONAL_COVERAGE_HEADER + count;
@@ -509,12 +509,9 @@ public class GHInsuredExcelParser {
                         benefitCount++;
                     }
                     if(isNotEmpty(dateOfBirthCellValue)){
-                        String coverageCode = getCellValue(cell);
-                        if(isNotEmpty(coverageCode)) {
-                            coverageCode = String.valueOf(new BigDecimal(coverageCode).intValue());
-                            if (planAdapter.isValidCoverageAgeForGivenCoverageCode(plan, coverageCode, age))
-                                optionalCoverageCellHolders.add(optionalCoverageCellHolder);
-                        }
+                        String coverageCode = String.valueOf(new BigDecimal(getCellValue(cell)).intValue());
+                        if (planAdapter.isValidCoverageAgeForGivenCoverageCode(plan, coverageCode, age))
+                            optionalCoverageCellHolders.add(optionalCoverageCellHolder);
                     } else {
                         optionalCoverageCellHolders.add(optionalCoverageCellHolder);
                     }
