@@ -842,7 +842,11 @@ ADD COLUMN `monthly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `quarterly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `semiannual_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `total_premium` decimal(19,2) DEFAULT NULL,
-ADD COLUMN `premium_payment_type` varchar(255) DEFAULT NULL;
+ADD COLUMN `premium_payment_type` varchar(255) DEFAULT NULL,
+ADD COLUMN `annual_fee` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `monthly_fee` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `quarterly_fee` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `semi_annual_fee` decimal(19,2) DEFAULT NULL;
 
 DROP TABLE IF EXISTS `individual_quotation_rider`;
 CREATE TABLE `individual_quotation_rider` (

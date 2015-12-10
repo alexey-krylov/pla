@@ -154,6 +154,12 @@ public class ILQuotationCommandHandler {
         planDetail.setQuarterlyPremium(premiumDetailDto.getQuarterlyPremium());
         planDetail.setMonthlyPremium(premiumDetailDto.getMonthlyPremium());
         planDetail.setTotalPremium(premiumDetailDto.getTotalPremium());
+
+        planDetail.setAnnualFee(premiumDetailDto.getAnnualFee());
+        planDetail.setSemiAnnualFee(premiumDetailDto.getSemiAnnualFee());
+        planDetail.setQuarterlyFee(premiumDetailDto.getQuarterlyFee());
+        planDetail.setMonthlyFee(premiumDetailDto.getMonthlyFee());
+
         if (premiumDetailDto.getRiderPremium() != null) {
             for (RiderPremiumDto each : premiumDetailDto.getRiderPremium()) {
                 riders.stream().forEach(t -> {

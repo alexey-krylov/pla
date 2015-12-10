@@ -9,7 +9,7 @@ import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.core.repository.PlanRepository;
-import com.pla.individuallife.quotation.domain.model.PlanDetail;
+import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILSearchQuotationDto;
@@ -28,7 +28,6 @@ import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -62,6 +61,7 @@ public class ILQuotationAppService {
 
     @Autowired
     private PlanFinder planFinder;
+
     @Autowired
     private PlanRepository planRepository;
 
@@ -76,6 +76,7 @@ public class ILQuotationAppService {
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto();
         Set<RiderPremiumDto> riderPremiumDtoSet = new HashSet<RiderPremiumDto>();
         Map quotation = ilQuotationFinder.getQuotationForPremiumById(quotationId.getQuotationId());
+        Map policyFeeMap = ilQuotationFinder.findPolicyFeeBy((String)quotation.get("quotationNumber"));
         Plan plan = planRepository.findOne(new PlanId(quotation.get("PLANID").toString()));
         boolean compoundPremiumType = checkIfMultiplePremiumSheets(plan.getPremiumTermType());
         String premiumPaymentType =  (String) quotation.get("PREMIUMPAYMENT_TYPE");
@@ -111,11 +112,27 @@ public class ILQuotationAppService {
         BigDecimal semiAnnualPremium = ComputedPremiumDto.getSemiAnnualPremium(computedPremiums);
         BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
         BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
-
-        premiumDetailDto.setAnnualFee(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums));
-        premiumDetailDto.setQuarterlyFee(ComputedPremiumDto.getQuarterlyFee(computedPremiums));
-        premiumDetailDto.setSemiAnnualFee(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums));
-        premiumDetailDto.setMonthlyFee(ComputedPremiumDto.getMonthlyFee(computedPremiums));
+        ILQuotationStatus ilQuotationStatus = ILQuotationStatus.valueOf((String)quotation.get("status"));
+        BigDecimal annualFee;
+        BigDecimal semiAnnualFee;
+        BigDecimal quarterlyFee;
+        BigDecimal monthlyFee;
+        if (!Arrays.asList(ILQuotationStatus.GENERATED,ILQuotationStatus.SHARED).contains(ilQuotationStatus) && (Integer)quotation.get("versionNumber")==0) {
+            annualFee = ComputedPremiumDto.getAnnualPolicyFee(computedPremiums);
+            quarterlyFee = ComputedPremiumDto.getQuarterlyFee(computedPremiums);
+            semiAnnualFee = ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums);
+            monthlyFee = ComputedPremiumDto.getMonthlyFee(computedPremiums);
+        }
+        else {
+            annualFee = policyFeeMap.get("annualFee")!=null?(BigDecimal)policyFeeMap.get("annualFee"):BigDecimal.ZERO;
+            quarterlyFee =policyFeeMap.get("monthlyFee")!=null?(BigDecimal)policyFeeMap.get("monthlyFee"):BigDecimal.ZERO;
+            monthlyFee = policyFeeMap.get("quarterlyFee")!=null?(BigDecimal)policyFeeMap.get("quarterlyFee"):BigDecimal.ZERO;
+            semiAnnualFee = policyFeeMap.get("semiAnnualFee")!=null?(BigDecimal) policyFeeMap.get("semiAnnualFee"):BigDecimal.ZERO;
+        }
+        premiumDetailDto.setAnnualFee(annualFee);
+        premiumDetailDto.setSemiAnnualFee(semiAnnualFee);
+        premiumDetailDto.setQuarterlyFee(quarterlyFee);
+        premiumDetailDto.setMonthlyFee(monthlyFee);
 
         List<Map<String, Object>> riderList = ilQuotationFinder.getQuotationForPremiumWithRiderById(quotationId.getQuotationId());
 
@@ -158,12 +175,12 @@ public class ILQuotationAppService {
             }
         }
         premiumDetailDto.setRiderPremium(riderPremiumDtoSet);
-        premiumDetailDto.setTotalPremium(totalPremium.add(premiumDetailDto.getAnnualFee()));
+        premiumDetailDto.setTotalPremium(totalPremium.add(annualFee));
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(quotation.get("PLANID").toString())));
-        premiumDetailDto.setAnnualPremium(totalPremium.add(premiumDetailDto.getAnnualFee()).setScale(2, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(premiumDetailDto.getMonthlyFee()).setScale(2, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(premiumDetailDto.getQuarterlyFee()).setScale(2, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(premiumDetailDto.getSemiAnnualFee()).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.add(annualFee).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(monthlyFee).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(quarterlyFee).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(semiAnnualFee).setScale(2, BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 

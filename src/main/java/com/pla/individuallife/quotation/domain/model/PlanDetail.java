@@ -35,6 +35,14 @@ public class PlanDetail {
 
     private BigDecimal totalPremium;
 
+    private BigDecimal annualFee;
+
+    private BigDecimal semiAnnualFee;
+
+    private BigDecimal monthlyFee;
+
+    private BigDecimal quarterlyFee;
+
     PlanDetail() {
     }
 

@@ -48,11 +48,14 @@ public class ILQuotationFinder {
                     " FROM individual_life_quotation_rider r  INNER JOIN coverage c " +
                     " ON r.`coverage_id` = c.`coverage_id` " +
                     " WHERE r.`quotation_id` =:quotationId";
-    public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, " +
-            " gender AS ASSURED_GENDER, policy_term AS POLICYTERM, IFNULL(oc.code,'') AS ASSURED_OCCUPATION,  " +
-            " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED, premium_payment_type as PREMIUMPAYMENT_TYPE " +
-            " FROM individual_life_quotation il LEFT JOIN occupation_class oc ON il.occupation = oc.description " +
+
+    public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB,  " +
+            "             gender AS ASSURED_GENDER, policy_term AS POLICYTERM, IFNULL(oc.code,'') AS ASSURED_OCCUPATION,   " +
+            "             premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED, premium_payment_type AS PREMIUMPAYMENT_TYPE, " +
+            "             annual_fee annualFee,monthly_fee monthlyFee,quarterly_fee quarterlyFee,semi_annual_fee semiAnnualFee ,il_quotation_status status,version_number versionNumber ,quotation_number quotationNumber " +
+            "             FROM individual_life_quotation il LEFT JOIN occupation_class oc ON il.occupation = oc.description " +
             " WHERE quotation_id =:quotationId";
+
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";
     public static final String  findQuotationByQuotationNumberQuery = " SELECT * FROM individual_life_quotation WHERE parent_quotation_id=:parentQuotationId ";
     private static String findQuotation = "SELECT DISTINCT CONCAT(COALESCE(A.FIRST_NAME,' '), ' ', COALESCE(A.last_name,'')) AS agentName, CONCAT(COALESCE(IL.first_name,' '), ' ', " +
@@ -63,6 +66,8 @@ public class ILQuotationFinder {
     public static final String QUOTATION_SEARCH_QUERY = findQuotation +" WHERE LOWER(IL.proposer_first_name) LIKE :proposerName OR IL.quotation_number= :quotationNumber " +
             " OR IL.proposer_nrc_number= :nrcNumber OR il.agent_id = :agentCode OR IL.il_quotation_status=:quotationStatus order by version_number desc";
     public static final String findSharedQuotationByQuotationNumberQuery = findQuotation +" WHERE  IL.quotation_number= :quotationNumber  AND IL.il_quotation_status= '"+ ILQuotationStatus.SHARED.name()+"' ORDER BY version_number desc";
+
+    public static final String findQuotationDetailByQuotationNumberQuery = " SELECT DISTINCT annual_fee annualFee,monthly_fee monthlyFee,quarterly_fee quarterlyFee,semi_annual_fee semiAnnualFee FROM individual_life_quotation WHERE quotation_number= :quotationNumber AND  il_quotation_status IN ('GENERATED','SHARED') LIMIT 1";
     @Autowired
     private MongoTemplate mongoTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -171,6 +176,16 @@ public class ILQuotationFinder {
         SqlParameterSource sqlParameterSource  = new MapSqlParameterSource("quotationNumber",quotationNumber);
         return namedParameterJdbcTemplate.query(findSharedQuotationByQuotationNumberQuery,sqlParameterSource, new BeanPropertyRowMapper(ILSearchQuotationResultDto.class));
     }
+
+    public Map<String,Object> findPolicyFeeBy(String quotationNumber) {
+        SqlParameterSource sqlParameterSource  = new MapSqlParameterSource("quotationNumber",quotationNumber);
+        List<Map<String,Object>> policyFeeMap  = namedParameterJdbcTemplate.query(findQuotationDetailByQuotationNumberQuery,sqlParameterSource, new ColumnMapRowMapper());
+        if (isNotEmpty(policyFeeMap)){
+            return policyFeeMap.get(0);
+        }
+        return Collections.EMPTY_MAP;
+    }
+
 
     public List<ILQuotation> findQuotationByQuotNumberAndStatusByExcludingGivenQuotId(String quotationNumber, QuotationId quotationId, String quotationStatus) {
         SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("quotationNumber",quotationNumber).addValue("quotationId",quotationId.getQuotationId()).addValue("quotationStatus",quotationStatus);
