@@ -50,7 +50,7 @@ public class ILQuotationFinder {
                     " WHERE r.`quotation_id` =:quotationId";
     public static final String FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY = "SELECT quotation_id AS QUOTATIONID, plan_id AS PLANID, date_of_birth AS ASSURED_DOB, " +
             " gender AS ASSURED_GENDER, policy_term AS POLICYTERM, IFNULL(oc.code,'') AS ASSURED_OCCUPATION,  " +
-            " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED, premium_payment_type as premiumPaymentType " +
+            " premium_payment_term AS PREMIUMPAYMENT_TERM, sum_assured AS SUMASSURED, premium_payment_type as PREMIUMPAYMENT_TYPE " +
             " FROM individual_life_quotation il LEFT JOIN occupation_class oc ON il.occupation = oc.description " +
             " WHERE quotation_id =:quotationId";
     public static final String findILQuotationByQuotationNumberQuery = "SELECT * FROM individual_life_quotation WHERE quotation_number=:quotationNumber AND quotation_id !=:quotationId AND il_quotation_status=:quotationStatus";

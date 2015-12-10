@@ -841,7 +841,8 @@ ADD COLUMN `annual_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `monthly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `quarterly_premium` decimal(19,2) DEFAULT NULL,
 ADD COLUMN `semiannual_premium` decimal(19,2) DEFAULT NULL,
-ADD COLUMN `total_premium` decimal(19,2) DEFAULT NULL;
+ADD COLUMN `total_premium` decimal(19,2) DEFAULT NULL,
+ADD COLUMN `premium_payment_type` varchar(255) DEFAULT NULL;
 
 DROP TABLE IF EXISTS `individual_quotation_rider`;
 CREATE TABLE `individual_quotation_rider` (

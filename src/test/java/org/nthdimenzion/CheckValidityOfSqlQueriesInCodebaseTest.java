@@ -94,7 +94,7 @@ public class CheckValidityOfSqlQueriesInCodebaseTest {
     private List<Query> filterInValidQueries(List<Query> queries) {
         List<Query> invalidQueries = Lists.newArrayList();
         for (Query query : queries) {
-            if (!query.fieldName.equals("FIND_QUOTATION_BY_ID_FOR_PREMIUM_QUERY") && !query.isValidSql) {
+            if (!query.isValidSql) {
                 invalidQueries.add(query);
             }
         }

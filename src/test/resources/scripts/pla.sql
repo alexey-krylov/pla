@@ -549,6 +549,7 @@ DROP TABLE IF EXISTS `individual_life_quotation`;
   `quotation_creator` varchar(255) DEFAULT NULL,
   `quotation_number` varchar(255) DEFAULT NULL,
   `version_number` int(11) NOT NULL,
+  `premium_payment_type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`quotation_id`),
   KEY `FK_aiyhilehr449calfhsithdoo1` (`parent_quotation_id`),
   CONSTRAINT `FK_aiyhilehr449calfhsithdoo1` FOREIGN KEY (`parent_quotation_id`) REFERENCES `individual_quotation_ar` (`quotation_ar_id`)
