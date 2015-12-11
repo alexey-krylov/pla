@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
+import java.util.List;
+
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -17,7 +19,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Setter(value = AccessLevel.PACKAGE)
 public class GHProposerContactDetail {
 
-    private ContactPersonDetail contactPersonDetail;
+    private List<ContactPersonDetail> contactPersonDetail;
 
     private String addressLine1;
 
@@ -41,8 +43,8 @@ public class GHProposerContactDetail {
         this.emailAddress = emailAddress;
     }
 
-    public GHProposerContactDetail addContactPersonDetail(String contactPersonName, String contactPersonEmail, String mobileNumber, String workPhoneNumber) {
-        this.contactPersonDetail = new ContactPersonDetail(contactPersonEmail, contactPersonName, mobileNumber, workPhoneNumber);
+    public GHProposerContactDetail addContactPersonDetail(List<ContactPersonDetail> contactPersonDetail) {
+        this.contactPersonDetail = contactPersonDetail;
         return this;
     }
 

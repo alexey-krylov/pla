@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * Created by Samir on 4/9/2015.
  */
@@ -30,13 +34,7 @@ public class ProposerDto {
 
     private String emailAddress;
 
-    private String contactPersonName;
-
-    private String contactPersonEmail;
-
-    private String contactPersonMobileNumber;
-
-    private String contactPersonWorkPhoneNumber;
+    private List<ContactPersonDetailDto> contactPersonDetail;
 
     private String opportunityId;
 
@@ -48,7 +46,7 @@ public class ProposerDto {
 
     public ProposerDto(GHProposer proposer) {
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
-        GHProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail != null ? proposerContactDetail.getContactPersonDetail() : null;
+        List<ContactPersonDetailDto> contactPersonDetail = proposerContactDetail != null ?transformContactPersonDetail(proposerContactDetail.getContactPersonDetail()) : null;
         this.proposerName = proposer.getProposerName();
         this.proposerCode = proposer.getProposerCode();
         this.addressLine1 = proposerContactDetail != null ? proposerContactDetail.getAddressLine1() : "";
@@ -57,9 +55,20 @@ public class ProposerDto {
         this.province = proposerContactDetail != null ? proposerContactDetail.getProvince() : "";
         this.town = proposerContactDetail != null ? proposerContactDetail.getTown() : "";
         this.emailAddress = proposerContactDetail != null ? proposerContactDetail.getEmailAddress() : "";
-        this.contactPersonName = contactPersonDetail != null ? contactPersonDetail.getContactPersonName() : "";
+        this.contactPersonDetail = contactPersonDetail;
+       /* this.contactPersonName = contactPersonDetail != null ? contactPersonDetail.getContactPersonName() : "";
         this.contactPersonEmail = contactPersonDetail != null ? contactPersonDetail.getContactPersonEmail() : "";
         this.contactPersonMobileNumber = contactPersonDetail != null ? contactPersonDetail.getMobileNumber() : "";
-        this.contactPersonWorkPhoneNumber = contactPersonDetail != null ? contactPersonDetail.getWorkPhoneNumber() : "";
+        this.contactPersonWorkPhoneNumber = contactPersonDetail != null ? contactPersonDetail.getWorkPhoneNumber() : "";*/
+    }
+
+    private List<ContactPersonDetailDto> transformContactPersonDetail(List<GHProposerContactDetail.ContactPersonDetail> contactPersonDetail){
+        return contactPersonDetail.parallelStream().map(new Function<GHProposerContactDetail.ContactPersonDetail, ContactPersonDetailDto>() {
+            @Override
+            public ContactPersonDetailDto apply(GHProposerContactDetail.ContactPersonDetail contactPersonDetail) {
+               return new ContactPersonDetailDto(contactPersonDetail.getContactPersonName(),contactPersonDetail.getContactPersonEmail(),
+                        contactPersonDetail.getMobileNumber(),contactPersonDetail.getWorkPhoneNumber());
+            }
+        }).collect(Collectors.toList());
     }
 }

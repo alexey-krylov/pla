@@ -53,11 +53,12 @@ public class GroupHealthQuotationTest {
         groupHealthQuotation.updateWithAgent(new AgentId("22"));
     }
 
+
     @Test
     public void itShouldUpdateProposeDetailOfDraftedGLQuotation() {
         GHProposerBuilder proposerBuilder = GHProposer.getProposerBuilder("NthDimenzion", "Nth001").
-                withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com")
-                .withContactPersonDetail("Jones", "abc@gmail.com", "9916971270", "657576576");
+                withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com");
+
 
         GHProposer proposer = proposerBuilder.build();
         GroupHealthQuotation groupHealthQuotation = this.groupHealthQuotation.updateWithProposer(proposer);
@@ -65,8 +66,6 @@ public class GroupHealthQuotationTest {
 
         GHProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
         GHProposerContactDetail updatedProposerContactDetail = updatedProposerDetail.getContactDetail();
-        GHProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail.getContactPersonDetail();
-        GHProposerContactDetail.ContactPersonDetail updatedContactPersonDetail = updatedProposerContactDetail.getContactPersonDetail();
 
         assertEquals(proposerBuilder.getProposerName(), updatedProposerDetail.getProposerName());
         assertEquals(proposerBuilder.getProposerCode(), updatedProposerDetail.getProposerCode());
@@ -76,10 +75,7 @@ public class GroupHealthQuotationTest {
         assertEquals(proposerContactDetail.getPostalCode(), updatedProposerContactDetail.getPostalCode());
         assertEquals(proposerContactDetail.getProvince(), updatedProposerContactDetail.getProvince());
         assertEquals(proposerContactDetail.getTown(), updatedProposerContactDetail.getTown());
-        assertEquals(contactPersonDetail.getContactPersonName(), updatedContactPersonDetail.getContactPersonName());
-        assertEquals(contactPersonDetail.getContactPersonEmail(), updatedContactPersonDetail.getContactPersonEmail());
-        assertEquals(contactPersonDetail.getMobileNumber(), updatedContactPersonDetail.getMobileNumber());
-        assertEquals(contactPersonDetail.getWorkPhoneNumber(), updatedContactPersonDetail.getWorkPhoneNumber());
+
 
     }
 
@@ -90,12 +86,10 @@ public class GroupHealthQuotationTest {
         assertEquals(newAgentId, updatedGlQuotation.getAgentId());
     }
 
-
     @Test
     public void whenGLQuotationIsGeneratedItShouldRegisterProposerAddedEvent() {
         GHProposerBuilder proposerBuilder = GHProposer.getProposerBuilder("NthDimenzion", "Nth001").
-                withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com")
-                .withContactPersonDetail("Jones", "abc@gmail.com", "9916971270", "657576576");
+                withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com");
 
         GHProposer proposer = proposerBuilder.build();
         GroupHealthQuotation groupHealthQuotation = this.groupHealthQuotation.updateWithProposer(proposer);

@@ -267,12 +267,12 @@ public class GLInsuredFactory {
     }
 
 
-    public Set<Insured> calculateProratePremiumForInsureds(PremiumDetailDto premiumDetailDto, Set<Insured> insureds, int policyTerm, int endorsementDuration, boolean isMemberPromotion) {
+    public Set<Insured> calculateProratePremiumForInsureds(PremiumDetailDto premiumDetailDto, Set<Insured> insureds, int policyTerm, int endorsementDuration, boolean isMemberPromotion,boolean isNewCategory) {
         for (Insured insured : insureds) {//computePlanBasicAnnualPremium
             PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
             if (planPremiumDetail!=null && planPremiumDetail.getPlanId()!=null) {
                 String occupationClass = glFinder.getOccupationClass(insured.getOccupationClass());
-                BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? planPremiumDetail.getPremiumAmount() :
+                BigDecimal insuredPlanProratePremium = (insured.getNoOfAssured() != null || !isNewCategory ) ? planPremiumDetail.getPremiumAmount() :
                         premiumDetailDto.getPolicyTermValue() != 365 ?
                                 computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
                                         getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null) :
@@ -314,7 +314,7 @@ public class GLInsuredFactory {
             for (InsuredDependent insuredDependent : insured.getInsuredDependents()) {
                 PlanPremiumDetail insuredDependentPlanPremiumDetail = insuredDependent.getPlanPremiumDetail();
                 String dependentOccupationClass = glFinder.getOccupationClass(insuredDependent.getOccupationClass());
-                BigDecimal insuredDependentPlanProratePremium = insuredDependent.getNoOfAssured() != null ? insuredDependentPlanPremiumDetail.getPremiumAmount() :
+                BigDecimal insuredDependentPlanProratePremium = (insuredDependent.getNoOfAssured() != null || !isNewCategory)? insuredDependentPlanPremiumDetail.getPremiumAmount() :
                         premiumDetailDto.getPolicyTermValue() != 365 ? computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null) :
                                 computePlanBasicAnnualPremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentPlanPremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), null);
                 if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {

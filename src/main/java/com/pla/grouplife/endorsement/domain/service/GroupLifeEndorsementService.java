@@ -134,8 +134,11 @@ public class GroupLifeEndorsementService {
     public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeQuotation, UserDetails userDetails, PremiumDetailDto premiumDetailDto,Industry industry) throws ParseException {
         Set<Insured> insureds = Sets.newLinkedHashSet();
         boolean isMemberPromotion = false;
-        if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeQuotation.getEndorsementType()))
+        boolean isNewCategory = false;
+        if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeQuotation.getEndorsementType())) {
             insureds = groupLifeQuotation.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
+            isNewCategory = true;
+        }
         else if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(groupLifeQuotation.getEndorsementType()))
             insureds = groupLifeQuotation.getEndorsement().getMemberEndorsement().getInsureds();
         else if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(groupLifeQuotation.getEndorsementType()))
@@ -152,7 +155,7 @@ public class GroupLifeEndorsementService {
         int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
         int endorsementDuration = Days.daysBetween(LocalDate.now(),expiredOn).getDays();
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
-        insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration, isMemberPromotion);
+        insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration, isMemberPromotion,isNewCategory);
         groupLifeQuotation = updateInsured(groupLifeQuotation, insureds, userDetails);
         groupLifeQuotation = updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, userDetails,industry);
         return groupLifeQuotation;

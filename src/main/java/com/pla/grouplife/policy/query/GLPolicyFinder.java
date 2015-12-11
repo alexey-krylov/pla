@@ -45,6 +45,10 @@ public class GLPolicyFinder {
         return mongoTemplate.findOne(query, Map.class, GL_POLICY_COLLECTION_NAME);
     }
 
+    public Map findActiveMemberFromPolicyByPolicyId(String policyId){
+        Map policyMap  = glFinder.findActiveMemberFromPolicyByPolicyId(policyId);
+         return policyMap;
+    }
 
 
 }

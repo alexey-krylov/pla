@@ -127,7 +127,7 @@ public class GroupLifeQuotationController {
             proposerDto.setAddressLine1(clientDetailDto.getAddress1());
             proposerDto.setAddressLine2(clientDetailDto.getAddress2());
             proposerDto.setPostalCode(clientDetailDto.getPostalCode());
-            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setEmailAddress(clientDetailDto.getEmailAddress());
             proposerDto.setTown(clientDetailDto.getTown());
             proposerDto.setProvince(clientDetailDto.getProvince());
             proposerDto.setProposerCode(proposerCode);

@@ -78,7 +78,7 @@ public class GroupLifeQuotationService {
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerName(), proposerDto.getProposerCode());
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
-                .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
+                .withContactPersonDetail(proposerDto.getContactPersonDetail());
         groupLifeQuotation = glQuotationProcessor.updateWithProposer(groupLifeQuotation, proposerBuilder.build());
         Map<String, Object> industryMap = glFinder.findIndustryById(proposerDto.getIndustryId());
         if (industryMap != null) {

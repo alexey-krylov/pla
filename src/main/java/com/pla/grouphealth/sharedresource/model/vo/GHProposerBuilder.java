@@ -1,6 +1,11 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.grouphealth.sharedresource.dto.ContactPersonDetailDto;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -36,9 +41,17 @@ public class GHProposerBuilder {
         return this;
     }
 
-    public GHProposerBuilder withContactPersonDetail(String contactPersonName, String contactPersonEmail, String mobileNumber, String workPhoneNumber) {
+    public GHProposerBuilder withContactPersonDetail(List<ContactPersonDetailDto> contactPersonDetailDto) {
         checkArgument(proposerContactDetail != null);
-        this.proposerContactDetail = this.proposerContactDetail.addContactPersonDetail(contactPersonName, contactPersonEmail, mobileNumber, workPhoneNumber);
+       List<GHProposerContactDetail.ContactPersonDetail> contactPersonDetail  = contactPersonDetailDto.parallelStream().map(new Function<ContactPersonDetailDto, GHProposerContactDetail.ContactPersonDetail>() {
+            @Override
+            public GHProposerContactDetail.ContactPersonDetail apply(ContactPersonDetailDto contactPersonDetailDto) {
+                GHProposerContactDetail ghProposerContactDetail = new GHProposerContactDetail();
+               return ghProposerContactDetail.new ContactPersonDetail(contactPersonDetailDto.getContactPersonName(),contactPersonDetailDto.getContactPersonEmail(),
+                        contactPersonDetailDto.getContactPersonMobileNumber(),contactPersonDetailDto.getContactPersonWorkPhoneNumber());
+            }
+        }).collect(Collectors.toList());
+        this.proposerContactDetail = this.proposerContactDetail.addContactPersonDetail(contactPersonDetail);
         return this;
     }
 

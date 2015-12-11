@@ -1,6 +1,5 @@
 package com.pla.grouplife.endorsement.application.service;
 
-import com.google.common.collect.Lists;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
 import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
@@ -18,13 +17,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
-import java.util.stream.Collectors;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -132,57 +128,6 @@ public class GroupLifeEndorsementChecker {
         return insureds;
     }
 
-    public List<Insured> removeDeletedInsured(List<GroupLifeEndorsement> groupLifeEndorsements,List<Insured> insureds){
-        List<Insured> deletedMembers = Lists.newArrayList();
-        groupLifeEndorsements.parallelStream().filter(new Predicate<GroupLifeEndorsement>() {
-            @Override
-            public boolean test(GroupLifeEndorsement groupLifeEndorsement) {
-                return groupLifeEndorsement.getEndorsementType().equals(GLEndorsementType.ASSURED_MEMBER_DELETION);
-            }
-        }).map(new Function<GroupLifeEndorsement, Set<Insured>>() {
-            @Override
-            public Set<Insured> apply(GroupLifeEndorsement groupLifeEndorsement) {
-                return groupLifeEndorsement.getEndorsement().getMemberDeletionEndorsements().getInsureds();
-            }
-        }).map(new Function<Set<Insured>, Insured>() {
-            @Override
-            public Insured apply(Set<Insured> insureds) {
-                insureds.forEach(insured->{
-                    deletedMembers.add(insured);
-                });
-                return null;
-            }
-        }).collect(Collectors.toList());
-        return insureds.parallelStream().filter(new Predicate<Insured>() {
-            @Override
-            public boolean test(Insured insured) {
-                Optional<Insured> insuredOptional = deletedMembers.parallelStream().filter(new Predicate<Insured>() {
-                    @Override
-                    public boolean test(Insured deletedInsured) {
-                        if (deletedInsured.getNoOfAssured()!=null) {
-                            if (deletedInsured.getCategory().equals(insured.getCategory())){
-                                return insured.getNoOfAssured().compareTo(deletedInsured.getNoOfAssured())<0;
-                            }
-                            return false;
-                        }
-                        else {
-                            return deletedInsured.getFamilyId().getFamilyId().equals(insured.getFamilyId().getFamilyId());
-                        }
-                    }
-                }).findAny();
-                if (insuredOptional.isPresent()) {
-                    return false;
-                }
-                return true;
-            }
-        }).map(new Function<Insured, Insured>() {
-            @Override
-            public Insured apply(Insured insured) {
-                return insured;
-            }
-        }).collect(Collectors.toList());
-    }
-
     public String getTotalNoOfLivesCovered(Row currentRow,List<Insured> insureds,List<String> headers){
         Cell categoryCell =  currentRow.getCell(headers.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
         String category = getCellValue(categoryCell);
@@ -203,10 +148,10 @@ public class GroupLifeEndorsementChecker {
             noOfLivesCovered =  insureds.parallelStream().filter(new Predicate<Insured>() {
                 @Override
                 public boolean test(Insured insured) {
-                    return insured.getNoOfAssured()==null?insured.getCategory().equals(category) && Relationship.SELF.description.equals(relationship):
-                            insured.getCategory().equals(category) && Relationship.SELF.description.equals(relationship) && firstName.equals(insured.getFirstName())
-                            && nrc.equals(insured.getNrcNumber()) && dob.equals(insured.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT)) &&
-                            gender.equals(insured.getGender().name());
+                    return insured.getNoOfAssured()==null?insured.getCategory()!=null?insured.getCategory().equals(category):false && Relationship.SELF.description.equals(relationship):
+                            insured.getCategory()!=null? insured.getCategory().equals(category):false && Relationship.SELF.description.equals(relationship) && firstName.equals(insured.getFirstName()!=null?insured.getFirstName():false)
+                            && nrc.equals(insured.getNrcNumber()!=null?insured.getNrcNumber():false) && dob.equals(insured.getDateOfBirth()!=null?insured.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):false) &&
+                            gender.equals(insured.getGender()!=null?insured.getGender().name():false);
                 }
             }).mapToInt(new ToIntFunction<Insured>() {
                 @Override
@@ -217,10 +162,10 @@ public class GroupLifeEndorsementChecker {
                         dependentSize=  value.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
                             @Override
                             public boolean test(InsuredDependent insuredDependent) {
-                                  return insuredDependent.getNoOfAssured()==null?insuredDependent.getCategory().equals(category) && Relationship.SELF.description.equals(relationship):
-                                          insuredDependent.getCategory().equals(category) && insuredDependent.getRelationship().description.equals(relationship) && firstName.equals(insuredDependent.getFirstName())
-                                                && nrc.equals(insuredDependent.getNrcNumber()) && dob.equals(insuredDependent.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT)) &&
-                                                gender.equals(insuredDependent.getGender().name());
+                                return insuredDependent.getNoOfAssured()==null?insuredDependent.getCategory()!=null?insuredDependent.getCategory().equals(category):false && Relationship.SELF.description.equals(relationship):
+                                        insuredDependent.getCategory()!=null? insuredDependent.getCategory().equals(category):false && Relationship.SELF.description.equals(relationship) && firstName.equals(insuredDependent.getFirstName()!=null?insuredDependent.getFirstName():false)
+                                                && nrc.equals(insuredDependent.getNrcNumber()!=null?insuredDependent.getNrcNumber():false) && dob.equals(insuredDependent.getDateOfBirth()!=null?insuredDependent.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):false) &&
+                                                gender.equals(insuredDependent.getGender()!=null?insuredDependent.getGender().name():false);
                             }
                         }).mapToInt(new ToIntFunction<InsuredDependent>() {
                             @Override

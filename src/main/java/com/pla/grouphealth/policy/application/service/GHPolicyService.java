@@ -410,12 +410,12 @@ public class GHPolicyService {
     public GHPolicyMailDto getPreScriptedEmail(PolicyId policyId) {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findOne(policyId);
         String subject = "PLA Insurance - Group Health - Policy ID : " + groupHealthPolicy.getPolicyNumber().getPolicyNumber();
-        String mailAddress = groupHealthPolicy.getProposer().getContactDetail() != null ? groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail() : "";
+        String mailAddress = groupHealthPolicy.getProposer().getContactDetail() != null ?isNotEmpty( groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail())?groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonEmail() : "":"";
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupHealthPolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         emailContent.put("contactPersonName",
-                groupHealthPolicy.getProposer().getContactDetail() != null ? groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName() : "");
+                groupHealthPolicy.getProposer().getContactDetail() != null ? isNotEmpty(groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail())?groupHealthPolicy.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonName() : "":"");
         emailContent.put("proposerName", groupHealthPolicy.getProposer().getProposerName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
@@ -468,7 +468,7 @@ public class GHPolicyService {
         ghPolicyDetailDto.setProposerName(proposer.getProposerName());
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         if (proposerContactDetail != null) {
-            ghPolicyDetailDto.setTelephoneNumber(proposerContactDetail.getContactPersonDetail() != null ? proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber() : "");
+            ghPolicyDetailDto.setTelephoneNumber(isNotEmpty(proposerContactDetail.getContactPersonDetail() )? proposerContactDetail.getContactPersonDetail().get(0).getWorkPhoneNumber() : "");
             Map<String, Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
             Map<String, Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
             ghPolicyDetailDto.setAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));

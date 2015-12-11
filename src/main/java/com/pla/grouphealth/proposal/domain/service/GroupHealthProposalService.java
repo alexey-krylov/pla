@@ -63,7 +63,7 @@ public class GroupHealthProposalService {
         }
         GHProposerBuilder proposerBuilder = GHProposer.getProposerBuilder(proposerDto.getProposerName(), proposerDto.getProposerCode());
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
-                .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
+                .withContactPersonDetail(proposerDto.getContactPersonDetail());
         groupHealthProposal = ghProposalProcessor.updateWithProposer(groupHealthProposal, proposerBuilder.build());
         if (isNotEmpty(proposerDto.getOpportunityId())) {
             OpportunityId opportunityId = new OpportunityId(proposerDto.getOpportunityId());

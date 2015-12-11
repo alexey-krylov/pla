@@ -15,7 +15,6 @@ import com.pla.publishedlanguage.contract.IClientProvider;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
-import com.pla.sharedkernel.identifier.QuotationId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import net.sf.jasperreports.engine.JRException;
@@ -180,7 +179,7 @@ public class GroupHealthProposalController {
             proposerDto.setAddressLine1(clientDetailDto.getAddress1());
             proposerDto.setAddressLine2(clientDetailDto.getAddress2());
             proposerDto.setPostalCode(clientDetailDto.getPostalCode());
-            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setEmailAddress(clientDetailDto.getEmailAddress());
             proposerDto.setTown(clientDetailDto.getTown());
             proposerDto.setProvince(clientDetailDto.getProvince());
             proposerDto.setProposerCode(proposerCode);

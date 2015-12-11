@@ -13,6 +13,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -59,6 +60,7 @@ public class Insured {
 
     private String rateOfPremium;
 
+    @Setter
     private Set<InsuredDependent> insuredDependents;
 
     private PlanPremiumDetail planPremiumDetail;
@@ -68,6 +70,8 @@ public class Insured {
     private FamilyId familyId;
 
     private Relationship relationship;
+
+    private Boolean isInsuredDeleted = Boolean.FALSE;
 
     Insured(InsuredBuilder insuredBuilder) {
         checkArgument(insuredBuilder != null);
@@ -134,4 +138,15 @@ public class Insured {
         this.familyId = familyId;
         return this;
     }
+
+    public Insured updateWithDeletedMembers(List<String> deletedFamilyIds) {
+        if (deletedFamilyIds.contains(this.familyId!=null?this.familyId.getFamilyId():"")){
+            this.isInsuredDeleted = Boolean.TRUE;
+        }
+        for (InsuredDependent insuredDependent :this.insuredDependents){
+            insuredDependent.updateWithDeletedMembers(deletedFamilyIds);
+        }
+        return this;
+    }
+
 }

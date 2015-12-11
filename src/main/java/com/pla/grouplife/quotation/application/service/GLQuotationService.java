@@ -20,7 +20,6 @@ import com.pla.grouplife.sharedresource.service.GLInsuredExcelGenerator;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
-import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -34,7 +33,6 @@ import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
-import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -45,7 +43,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getMinimumValueForGivenCriteria;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -95,14 +92,17 @@ public class GLQuotationService {
         return pdfData;
     }
 
+    /*
+    * @TODO get the contact person name and email Id from the List of contact persons
+    * */
     public GLQuotationMailDto getPreScriptedEmail(String quotationId) {
         GroupLifeQuotation groupLifeQuotation = glQuotationRepository.findOne(new QuotationId(quotationId));
         String subject = "PLA Insurance - Group Life - Quotation ID : " + groupLifeQuotation.getQuotationNumber();
-        String mailAddress = groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail();
+        String mailAddress = isNotEmpty(groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail())?groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonEmail():"";
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupLifeQuotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
-        emailContent.put("contactPersonName", groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName());
+        emailContent.put("contactPersonName", isNotEmpty(groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail()) ? groupLifeQuotation.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonName() : "");
         emailContent.put("proposerName", groupLifeQuotation.getProposer().getProposerName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
@@ -127,7 +127,7 @@ public class GLQuotationService {
         Proposer proposer = quotation.getProposer();
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
-        glQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
+        glQuotationDetailDto.setProposerPhoneNumber(isNotEmpty(proposerContactDetail.getContactPersonDetail())?proposerContactDetail.getContactPersonDetail().get(0).getWorkPhoneNumber():"");
         Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
         Map<String, Object> townGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
         glQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));

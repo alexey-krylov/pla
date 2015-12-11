@@ -1,6 +1,12 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import com.google.common.collect.Lists;
+import com.pla.grouplife.sharedresource.dto.ContactPersonDetailDto;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -36,9 +42,19 @@ public class ProposerBuilder {
         return this;
     }
 
-    public ProposerBuilder withContactPersonDetail(String contactPersonName, String contactPersonEmail, String mobileNumber, String workPhoneNumber) {
+    public ProposerBuilder withContactPersonDetail(List<ContactPersonDetailDto> contactPersonDetailDto) {
+        contactPersonDetailDto = Lists.newArrayList();
+        contactPersonDetailDto.add(new ContactPersonDetailDto("efwu","swr","4444444444","4444444444444"));
         checkArgument(proposerContactDetail != null);
-        this.proposerContactDetail = this.proposerContactDetail.addContactPersonDetail(contactPersonName, contactPersonEmail, mobileNumber, workPhoneNumber);
+        List<ProposerContactDetail.ContactPersonDetail> contactPersonDetail  = contactPersonDetailDto.parallelStream().map(new Function<ContactPersonDetailDto, ProposerContactDetail.ContactPersonDetail>() {
+            @Override
+            public ProposerContactDetail.ContactPersonDetail apply(ContactPersonDetailDto contactPersonDetailDto) {
+                ProposerContactDetail proposerContactDetail1 = new ProposerContactDetail();
+                return proposerContactDetail1.new ContactPersonDetail(contactPersonDetailDto.getContactPersonName(),contactPersonDetailDto.getContactPersonEmail(),
+                        contactPersonDetailDto.getContactPersonMobileNumber(),contactPersonDetailDto.getContactPersonWorkPhoneNumber());
+            }
+        }).collect(Collectors.toList());
+        this.proposerContactDetail = this.proposerContactDetail.addContactPersonDetail(contactPersonDetail);
         return this;
     }
 

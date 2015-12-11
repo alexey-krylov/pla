@@ -79,7 +79,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
         if (!isValidHeader(headers, allowedHeaders)) {
             raiseNotValidHeaderException();
         }
-        Map glPolicyMap = glFinder.findPolicyById(policyId.getPolicyId());
+        Map glPolicyMap = glFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) glPolicyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) glPolicyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
@@ -254,7 +254,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
     //TODO populate plan and sum assured detail
     private InsuredDto findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category,String clientId,InsuredDto insuredDto) {
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
-        Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        Map<String,Object> policyMap  = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
@@ -272,7 +272,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
                 InsuredBuilder insuredBuilder = new InsuredBuilder();
                 insuredBuilder.withInsuredName(insured.getSalutation(),insured.getFirstName(),insured.getLastName())
                 .withInsuredNrcNumber(insured.getNrcNumber()).withCompanyName(insured.getCompanyName()).withDateOfBirth(insured.getDateOfBirth())
-                .withGender(insured.getGender()).withCategory(insured.getCategory());
+                .withGender(insured.getGender()).withCategory(insured.getCategory()).withFamilyId(insured.getFamilyId().getFamilyId());
                 insuredDto = insuredBuilder.buildInsuredDto();
                 Integer noOfAssured = insured.getNoOfAssured() != null ? insured.getNoOfAssured() : 1;
                 PlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
@@ -296,7 +296,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
                         InsuredBuilder insuredBuilder = new InsuredBuilder();
                         insuredBuilder.withInsuredName(insuredDependent.getSalutation(),insuredDependent.getFirstName(),insuredDependent.getLastName())
                                 .withInsuredNrcNumber(insuredDependent.getNrcNumber()).withCompanyName(insuredDependent.getCompanyName()).withDateOfBirth(insuredDependent.getDateOfBirth())
-                                .withGender(insuredDependent.getGender()).withCategory(insuredDependent.getCategory());
+                                .withGender(insuredDependent.getGender()).withCategory(insuredDependent.getCategory()).withFamilyId(insuredDependent.getFamilyId().getFamilyId());
                         insuredDto = insuredBuilder.buildInsuredDto();
                         Integer noOfInsuredDependent = insuredDependent.getNoOfAssured() != null ? insuredDependent.getNoOfAssured() : 1;
                         PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
@@ -331,7 +331,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
     //TODO populate plan and sum assured detail
     private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipOfDependentsFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
-        Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        Map<String,Object> policyMap  = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());

@@ -2,7 +2,6 @@ package com.pla.grouplife.proposal.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.mongodb.gridfs.GridFSDBFile;
-import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
 import com.pla.grouplife.proposal.application.command.*;
 import com.pla.grouplife.proposal.application.service.GLProposalService;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalApproverCommentDto;
@@ -146,7 +145,7 @@ public class GroupLifeProposalController {
             proposerDto.setAddressLine1(clientDetailDto.getAddress1());
             proposerDto.setAddressLine2(clientDetailDto.getAddress2());
             proposerDto.setPostalCode(clientDetailDto.getPostalCode());
-            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setEmailAddress(clientDetailDto.getEmailAddress());
             proposerDto.setTown(clientDetailDto.getTown());
             proposerDto.setProvince(clientDetailDto.getProvince());
             proposerDto.setProposerCode(proposerCode);

@@ -16,6 +16,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -219,5 +220,12 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
     @Override
     public PolicyId getIdentifier() {
         return policyId;
+    }
+
+    public GroupLifePolicy updateWithDeletedMember(List<String> deletedFamilyIds) {
+        this.getInsureds().forEach(insured->{
+            insured.updateWithDeletedMembers(deletedFamilyIds);
+        });
+        return this;
     }
 }
