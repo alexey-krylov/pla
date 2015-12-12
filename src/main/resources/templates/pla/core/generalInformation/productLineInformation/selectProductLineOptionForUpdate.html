@@ -1132,6 +1132,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="panel panel-default" id="panel33" ng-class="forms.form13.$valid ? '' : 'errorClass'">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeThree">
+                                        Financial Threshold
+                                    </a><i class="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseThreeThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form  novalidate="true" role="form" name="forms.form13">
+                                        <div class="row">
+                                            <div class="form-group col-md-4 required">
+                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="Threshold Limit"   >Threshold Limit</label>
+                                                <p class="input-group">
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^[0-9]{1,}(\.?[0-9]{2})?$/" ng-model="items.thresholdSumAssured" value="{{items.thresholdSumAssured}}" ng-required="true"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
 
                        <!-- <div class="panel panel-default" id="panel133" ng-class="forms.form13.$valid ? '' : 'errorClass'">

@@ -72,6 +72,8 @@ public class ProductLineGeneralInformation {
 
     private int moratoriumPeriod;
 
+    private BigDecimal thresholdSumAssured = BigDecimal.ZERO;
+
 
     private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessEnum productLineId) {
         this.productLineInformationId = productLineInformationId;
@@ -160,6 +162,13 @@ public class ProductLineGeneralInformation {
             return this;
         }
         this.moratoriumPeriod = moratoriumPeriod;
+        return this;
+    }
+
+    public ProductLineGeneralInformation withThresholdSumAssured(BigDecimal thresholdSumAssured){
+        if (LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(this.productLine)){
+            this.thresholdSumAssured = thresholdSumAssured;
+        }
         return this;
     }
 

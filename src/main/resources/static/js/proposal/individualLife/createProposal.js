@@ -206,17 +206,29 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
         }
     })
 
-    .directive('sumassured', function ($compile) {
+    .directive('sumassured',['$http', function ($http, $compile) {
         return {
             templateUrl: 'plan-sumassured.tpl',
             // element must have ng-model attribute.
             require: 'ngModel',
             link: function (scope, elem, attrs, ctrl) {
                 if (!ctrl)return;
+                scope.$watch('proposalPlanDetail.sumAssured', function (n,o) {
+                    if(n){
+                        scope.errorMessage='';
+                        $http.get("/pla/individuallife/quotation/isSumAssuredGreaterThenThresholdLimit?sumAssured="+n).success(function(response){
+                            //   alert(response.message);
+                            if(response.status== 500){
+                                scope.errorMessage=response.message;
+                            }
+                        });
+                        //console.log('value changed, new value is: ' + n);
+                    }
 
+                });
             }
         };
-    })
+    }])
     .directive('converterDecimal', function ($filter) {
         var FLOAT_REGEXP_1 = /^\$?\d+.(\d{3})*(\,\d*)$/; //Numbers like: 1.123,56
         var FLOAT_REGEXP_2 = /^\$?\d+,(\d{3})*(\.\d*)$/; //Numbers like: 1,123.56

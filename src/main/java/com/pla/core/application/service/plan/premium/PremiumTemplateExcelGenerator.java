@@ -61,6 +61,7 @@ public class PremiumTemplateExcelGenerator {
         HSSFWorkbook premiumTemplateWorkbook = new HSSFWorkbook();
         PremiumTermType premiumTermType = plan.getPremiumTermType();
         Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
+        int counter = 1;
         for(String sheet : sheets){
             HSSFSheet premiumSheet = premiumTemplateWorkbook.createSheet(sheet);
             int noOfExcelRow = getTotalNoOfPremiumCombination(premiumInfluencingFactors, coverageId, plan, premiumSheet);
@@ -68,7 +69,8 @@ public class PremiumTemplateExcelGenerator {
             HSSFCell premiumCell = headerRow.createCell(premiumInfluencingFactors.size());
             premiumCell.setCellType(Cell.CELL_TYPE_NUMERIC);
             premiumCell.setCellValue(AppConstants.PREMIUM_CELL_HEADER_NAME);
-            createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId, premiumTemplateWorkbook, premiumSheet);
+            createRowWithDvConstraintCellData(noOfExcelRow, premiumInfluencingFactors, plan, coverageId, premiumTemplateWorkbook, premiumSheet, counter);
+            counter++;
         }
         return premiumTemplateWorkbook;
     }
@@ -94,23 +96,23 @@ public class PremiumTemplateExcelGenerator {
         return noOfRow;
     }
 
-    private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId, HSSFWorkbook premiumTemplateWorkbook, HSSFSheet sheets) {
+    private void createRowWithDvConstraintCellData(int lastRowNumber, List<PremiumInfluencingFactor> premiumInfluencingFactors, Plan plan, CoverageId coverageId, HSSFWorkbook premiumTemplateWorkbook, HSSFSheet sheets, int counter) {
         for (int cellNumber = 0; cellNumber < premiumInfluencingFactors.size(); cellNumber++) {
             String columnIndex = String.valueOf((char) (65 + cellNumber));
             PremiumInfluencingFactor premiumInfluencingFactor = premiumInfluencingFactors.get(cellNumber);
-            HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name()+sheets.getSheetName());
+            HSSFSheet hiddenSheetForNamedCell = premiumTemplateWorkbook.createSheet(premiumInfluencingFactor.name()+counter);
             String[] planData = getAllowedValues(premiumInfluencingFactor, plan, coverageId, sheets.getSheetName());
             createNamedRowWithCell(planData, hiddenSheetForNamedCell, cellNumber);
             HSSFName namedCell = premiumTemplateWorkbook.createName();
-            namedCell.setNameName(premiumInfluencingFactor.name()+sheets.getSheetName());
-            String formula = premiumInfluencingFactor.name()+sheets.getSheetName() + "!$" + columnIndex + "$1:$" + columnIndex + "$";
+            namedCell.setNameName(premiumInfluencingFactor.name()+counter);
+            String formula = premiumInfluencingFactor.name()+counter + "!$" + columnIndex + "$1:$" + columnIndex + "$";
             namedCell.setRefersToFormula(formula + (planData.length == 0 ? 1 : planData.length));
-            DVConstraint constraint = DVConstraint.createFormulaListConstraint(premiumInfluencingFactor.name()+sheets.getSheetName());
+            DVConstraint constraint = DVConstraint.createFormulaListConstraint(premiumInfluencingFactor.name()+counter);
             CellRangeAddressList addressList = new CellRangeAddressList(1, lastRowNumber, cellNumber, cellNumber);
             HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
             dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
             dataValidation.createErrorBox("Error", "Provide proper " + premiumInfluencingFactor.getDescription() + " value");
-            premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), true);
+            premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), false);
             sheets.addValidationData(dataValidation);
         }
     }

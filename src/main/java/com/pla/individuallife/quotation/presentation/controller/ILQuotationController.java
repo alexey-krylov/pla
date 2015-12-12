@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
@@ -77,7 +78,7 @@ public class ILQuotationController {
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView searchQuotation(ILSearchQuotationDto ilSearchDto) {
         ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(ilSearchDto));
+        modelAndView.addObject("searchResult", ilQuotationService.searchQuotation(ilSearchDto));
         modelAndView.addObject("searchCriteria", ilSearchDto);
         modelAndView.setViewName("pla/quotation/individuallife/index");
         return modelAndView;
@@ -157,7 +158,7 @@ public class ILQuotationController {
     @ApiOperation(httpMethod = "GET", value = "This call for edit quotation screen.")
     @ResponseBody
     public List<RiderDetailDto> getRidersForPlan(@PathVariable("planId") String planId,@PathVariable("proposedAssuredDOB") Integer proposedAssuredDOB) {
-       return  ilQuotationFinder.findCoveragesByPlanAndAssuredDOB(planId, proposedAssuredDOB);
+        return  ilQuotationFinder.findCoveragesByPlanAndAssuredDOB(planId, proposedAssuredDOB);
     }
 
 
@@ -298,5 +299,20 @@ public class ILQuotationController {
             return Collections.EMPTY_MAP;
         }
         return  ilQuotationFinder.getPremiumPaymentType(new PlanId(planId));
+    }
+
+    @RequestMapping(value = "/isSumAssuredGreaterThenThresholdLimit", method = RequestMethod.GET)
+    @ResponseBody
+    public Result validateIfSumAssuredGreaterThenThresholdLimit(@RequestParam BigDecimal sumAssured) {
+        try {
+            Boolean isSumAssuredGreaterThenThresholdLimit =  ilQuotationService.validateIfSumAssuredGreaterThenThresholdLimit(sumAssured);
+            if (isSumAssuredGreaterThenThresholdLimit){
+                return  Result.failure("Sum Assured is greater than Threshold Limit", Boolean.TRUE);
+            }
+            return Result.success();
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
     }
 }

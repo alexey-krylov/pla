@@ -3,6 +3,7 @@ package com.pla.individuallife.quotation.query;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.repository.PlanRepository;
@@ -258,5 +259,11 @@ public class ILQuotationFinder {
             }
         });
         return premiumTypeMap;
+    }
+
+    public ProductLineGeneralInformation getILProductLineInformation() {
+        Criteria criteria = Criteria.where("productLine").is("INDIVIDUAL_LIFE");
+        Query query = new Query(criteria);
+        return mongoTemplate.findOne(query, ProductLineGeneralInformation.class, "product_line_information");
     }
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class GeneralInformationDto {
     private List<DiscountFactorInformationDto> discountFactorItems;
     private List<ModalFactorInformationDto> modelFactorItems;
     private ServiceTaxDto serviceTax;
-
+    private BigDecimal thresholdSumAssured = BigDecimal.ZERO;
     public GeneralInformationDto() {
     }
 }

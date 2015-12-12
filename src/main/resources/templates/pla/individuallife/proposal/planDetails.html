@@ -145,6 +145,9 @@
                     <label class="control-label" ng-if="selectPlanResponse">Sum Assured</label>
                     <!-- <input type="number" class="form-control input-sm" name="sumAssured"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured"/>-->
                     <sumassured ng-model="proposalPlanDetail.sumAssured"></sumassured>
+                    <div class="error" ng-show="errorMessage">
+                        <small>{{errorMessage}}.</small>
+                    </div>
                 </div>
                 <div class="form-group required">
                     <label class="control-label" ng-if="selectPlanResponse">Premium Payment Term</label>

@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.CoverageName;
 import com.pla.core.domain.model.agent.AgentId;
+import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.core.repository.PlanRepository;
+import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
 import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
@@ -299,5 +301,12 @@ public class ILQuotationAppService {
         agentDetailDto.setAgentMobileNumber(agentDetail.get("mobileNumber") != null ? (String) agentDetail.get("mobileNumber") : "");
         //agentDetailDto.setAgentSalutation(agentDetail.get("title") != null ? (String) agentDetail.get("title") : "");
         return agentDetailDto;
+    }
+
+    public Boolean validateIfSumAssuredGreaterThenThresholdLimit(BigDecimal sumAssured) {
+        ProductLineGeneralInformation productLineInformation = ilQuotationFinder.getILProductLineInformation();
+        if(productLineInformation == null)
+            return Boolean.FALSE;
+        return QuotationProposalUtilityService.validateIfSumAssuredGreaterThenThresholdLimit(sumAssured, productLineInformation.getThresholdSumAssured());
     }
 }

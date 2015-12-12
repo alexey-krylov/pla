@@ -17,17 +17,30 @@
             datepickerPopupConfig.closeText = 'Done';
             datepickerPopupConfig.closeOnDateSelection = true;
         }])
-        .directive('sumassured', function ($compile) {
+        .directive('sumassured',['$http', function ($http, $compile) {
             return {
                 templateUrl: 'plan-sumassured.tpl',
                 // element must have ng-model attribute.
                 require: 'ngModel',
                 link: function (scope, elem, attrs, ctrl) {
+                    scope.$watch('planDetailDto.sumAssured', function (n,o) {
+                        if(n){
+                            scope.errorMessage='';
+                            $http.get("/pla/individuallife/quotation/isSumAssuredGreaterThenThresholdLimit?sumAssured="+n).success(function(response){
+                             //   alert(response.message);
+                                if(response.status== 500){
+                                    scope.errorMessage=response.message;
+                                }
+                            });
+                            //console.log('value changed, new value is: ' + n);
+                        }
+
+                    });
                     if (!ctrl)return;
 
                 }
             };
-        })
+        }])
         .directive('viewEnabled', function () {
             return {
                 link: function (scope, elem, attr, ctrl) {
@@ -384,7 +397,6 @@
                 $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
                     $scope.occupations = response;
                 });
-
                 //Geting All ConfiguredPlan
                 $scope.cfgPlanList=[];
                 $scope.getBasicPlanDetails=function(){
@@ -396,7 +408,9 @@
 
                 }
 
-
+                $scope.action = function(){
+                    alert("invoked");
+                };
                 $scope.todayDate = new Date();
                 $scope.todayDate.setDate($scope.todayDate.getDate() - 1);
 

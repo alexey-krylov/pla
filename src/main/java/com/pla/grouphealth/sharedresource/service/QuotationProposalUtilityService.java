@@ -289,4 +289,8 @@ public class QuotationProposalUtilityService {
         }
         return optionalCoverageHeaders;
     }
+
+    public static Boolean validateIfSumAssuredGreaterThenThresholdLimit(BigDecimal sumAssured, BigDecimal thresholdSumAssured) {
+        return sumAssured.compareTo(thresholdSumAssured) == 1;
+    }
 }
