@@ -21,5 +21,7 @@ public class UploadInsuredDetailDto {
 
     private boolean applyIndustryLoadingFactor;
 
+    private String schemeName;
+
 
 }

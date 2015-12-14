@@ -27,4 +27,6 @@ public class UpdateGLProposalWithInsuredCommand {
     private boolean samePlanForAllRelation;
 
     private boolean samePlanForAllCategory;
+
+    private String schemeName;
 }

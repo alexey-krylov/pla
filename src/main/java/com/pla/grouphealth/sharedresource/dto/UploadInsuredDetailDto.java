@@ -22,4 +22,6 @@ public class UploadInsuredDetailDto {
     private String proposalId;
 
     private boolean considerMoratoriumPeriod;
+
+    private String schemeName;
 }

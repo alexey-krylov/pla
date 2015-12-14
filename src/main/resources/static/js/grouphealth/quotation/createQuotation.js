@@ -143,6 +143,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             $scope.quotationDetails.plan.considerMoratoriumPeriod = proposerDetails.considerMoratoriumPeriod;
             $scope.quotationDetails.plan.samePlanForAllRelation=proposerDetails.samePlanForAllRelation;
             $scope.quotationDetails.plan.samePlanForAllCategory=proposerDetails.samePlanForAllCategory;
+            $scope.quotationDetails.plan.schemeName=proposerDetails.schemeName;
 
             // console.log(getQueryParameter('quotationId'));
             // console.log($scope.quotationId);

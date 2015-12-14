@@ -67,6 +67,8 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     private boolean samePlanForAllCategory;
 
+    private String schemeName;
+
     public GroupLifePolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
         checkArgument(policyNumber != null, "Policy number cannot be empty");
@@ -215,6 +217,12 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     public GroupLifePolicy updateFlagSamePlanForAllCategory(boolean samePlanForAllCategory) {
         this.samePlanForAllCategory = samePlanForAllCategory;
+        return this;
+    }
+
+
+    public GroupLifePolicy withSchemeName(String schemeName) {
+        this.schemeName = schemeName;
         return this;
     }
     @Override

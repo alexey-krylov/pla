@@ -414,6 +414,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             $scope.proposalDetails.plan.considerMoratoriumPeriod = proposerDetails.considerMoratoriumPeriod;
             $scope.proposalDetails.plan.samePlanForAllRelation = proposerDetails.samePlanForAllRelation;
             $scope.proposalDetails.plan.samePlanForAllCategory = proposerDetails.samePlanForAllCategory;
+            $scope.proposalDetails.plan.schemeName = proposerDetails.schemeName;
             if (mode == 'view') {
                 $scope.dropdown = [
                     {

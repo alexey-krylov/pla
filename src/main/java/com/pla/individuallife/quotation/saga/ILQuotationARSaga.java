@@ -68,7 +68,6 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
     @Autowired
     private transient CommandGateway commandGateway;
 
-    private int noOfReminderSent;
 
     @Autowired
     private transient ISMEGateway smeGateway;

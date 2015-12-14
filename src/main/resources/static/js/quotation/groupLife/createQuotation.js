@@ -142,6 +142,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             $scope.quotationDetails.proposer = proposerDetails;
             $scope.quotationDetails.plan.samePlanForAllRelation = proposerDetails.samePlanForAllRelation
             $scope.quotationDetails.plan.samePlanForAllCategory = proposerDetails.samePlanForAllCategory;
+            $scope.quotationDetails.plan.schemeName = proposerDetails.schemeName;
 
             if (proposerDetails && proposerDetails.proposerCode) {
                 $scope.proposerCodeDisabled = true;

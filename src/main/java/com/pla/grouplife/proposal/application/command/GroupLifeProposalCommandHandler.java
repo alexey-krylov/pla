@@ -130,7 +130,7 @@ public class GroupLifeProposalCommandHandler {
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(BigDecimal.valueOf(0), 365, BigDecimal.valueOf(5), BigDecimal.valueOf(5), BigDecimal.valueOf(5));
         groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllRelation(updateGLProposalWithInsuredCommand.isSamePlanForAllRelation());
         groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllCategory(updateGLProposalWithInsuredCommand.isSamePlanForAllCategory());
-        groupLifeQuotation = groupLifeProposalService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLProposalWithInsuredCommand.getUserDetails());
+        groupLifeQuotation = groupLifeProposalService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLProposalWithInsuredCommand.getUserDetails()).updateWithSchemeName(updateGLProposalWithInsuredCommand.getSchemeName());
         groupLifeProposalRepository.add(groupLifeQuotation);
         return groupLifeQuotation.getIdentifier().getProposalId();
     }

@@ -47,7 +47,7 @@ public class GHProposerBuilder {
             @Override
             public GHProposerContactDetail.ContactPersonDetail apply(ContactPersonDetailDto contactPersonDetailDto) {
                 GHProposerContactDetail ghProposerContactDetail = new GHProposerContactDetail();
-               return ghProposerContactDetail.new ContactPersonDetail(contactPersonDetailDto.getContactPersonName(),contactPersonDetailDto.getContactPersonEmail(),
+               return ghProposerContactDetail.new ContactPersonDetail(contactPersonDetailDto.getContactPersonEmail(),contactPersonDetailDto.getContactPersonName(),
                         contactPersonDetailDto.getContactPersonMobileNumber(),contactPersonDetailDto.getContactPersonWorkPhoneNumber());
             }
         }).collect(Collectors.toList());

@@ -44,6 +44,8 @@ public class ProposerDto {
 
     private boolean samePlanForAllCategory;
 
+    private String schemeName;
+
     public ProposerDto(GHProposer proposer) {
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         List<ContactPersonDetailDto> contactPersonDetail = proposerContactDetail != null ?transformContactPersonDetail(proposerContactDetail.getContactPersonDetail()) : null;
@@ -56,10 +58,7 @@ public class ProposerDto {
         this.town = proposerContactDetail != null ? proposerContactDetail.getTown() : "";
         this.emailAddress = proposerContactDetail != null ? proposerContactDetail.getEmailAddress() : "";
         this.contactPersonDetail = contactPersonDetail;
-       /* this.contactPersonName = contactPersonDetail != null ? contactPersonDetail.getContactPersonName() : "";
-        this.contactPersonEmail = contactPersonDetail != null ? contactPersonDetail.getContactPersonEmail() : "";
-        this.contactPersonMobileNumber = contactPersonDetail != null ? contactPersonDetail.getMobileNumber() : "";
-        this.contactPersonWorkPhoneNumber = contactPersonDetail != null ? contactPersonDetail.getWorkPhoneNumber() : "";*/
+
     }
 
     private List<ContactPersonDetailDto> transformContactPersonDetail(List<GHProposerContactDetail.ContactPersonDetail> contactPersonDetail){

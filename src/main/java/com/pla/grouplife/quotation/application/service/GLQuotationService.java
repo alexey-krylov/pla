@@ -434,6 +434,7 @@ public class GLQuotationService {
         Map quotation = glQuotationFinder.getQuotationById(quotationId.getQuotationId());
         boolean samePlanForAllRelation = quotation.get("samePlanForAllRelation") != null ? (boolean) quotation.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = quotation.get("samePlanForAllCategory") != null ? (boolean) quotation.get("samePlanForAllCategory") : false;
+        String schemeName = quotation.get("schemeName") != null ? (String) quotation.get("schemeName") : "";
         Proposer proposer = (Proposer) quotation.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (quotation.get("opportunityId") != null) {
@@ -446,6 +447,7 @@ public class GLQuotationService {
         }
         proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
+        proposerDto.setSchemeName(schemeName);
         return proposerDto;
     }
 

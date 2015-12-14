@@ -39,6 +39,8 @@ import java.util.stream.Collectors;
 public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public static final String DOCUMENT_NAME = "PLAN";
+
+    public static final String DIRECT_AGENT_CODE = "000000";
     @Id
     @AggregateIdentifier
     @JsonSerialize(using = ToStringSerializer.class)
@@ -73,6 +75,7 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
                         this.planDetail.lineOfBusinessId, this.planDetail.getClientType(), this.planDetail.planType, this.planDetail.launchDate, this.planDetail.withdrawalDate,
                         this.planDetail.funeralCover,
                         Collections.unmodifiableMap(derivedCoverages())));
+                super.registerEvent(new UpdateDirectAgentWithPlanEvent(planId,DIRECT_AGENT_CODE));
             }
         } catch (Exception t) {
             t.printStackTrace();

@@ -313,6 +313,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             $scope.policyDetails.proposer = policyDetails;
             $scope.policyDetails.plan.samePlanForAllRelation = policyDetails.samePlanForAllRelation;
             $scope.policyDetails.plan.samePlanForAllCategory = policyDetails.samePlanForAllCategory;
+            $scope.policyDetails.plan.schemeName = policyDetails.schemeName;
 
             if (policyDetails) {
                 if (policyDetails.contactPersonDetail) {

@@ -195,10 +195,12 @@ public class GHPolicyService {
         Map proposal = ghPolicyFinder.findPolicyById(policyId.getPolicyId());
         boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
+        String schemeName = proposal.get("schemeName") != null ? (String) proposal.get("schemeName") : "";
         GHProposer proposer = (GHProposer) proposal.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
+        proposerDto.setSchemeName(schemeName);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());

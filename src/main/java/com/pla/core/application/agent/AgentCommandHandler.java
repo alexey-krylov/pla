@@ -42,7 +42,6 @@ public class AgentCommandHandler {
             LOGGER.error("*****Saving agent failed*****", e);
             throw new AgentApplicationException(e.getMessage());
         }
-
     }
 
     @CommandHandler
@@ -56,6 +55,19 @@ public class AgentCommandHandler {
             LOGGER.error("*****Update agent failed*****", e);
             throw new AgentApplicationException(e.getMessage());
         }
-
     }
+
+    @CommandHandler
+    public void updateDirectAgentWithPlanCommandHandler(UpdateDirectAgentWithPlanCommand updateDirectAgentWithPlanCommand) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("*****Update Direct agent with newly created plan Command Received*****" + updateDirectAgentWithPlanCommand);
+        }
+        try {
+            agentService.updateAgent(updateDirectAgentWithPlanCommand.getPlanId(), updateDirectAgentWithPlanCommand.getAgentId());
+        } catch (Exception e) {
+            LOGGER.error("*****Update agent failed*****", e);
+            throw new AgentApplicationException(e.getMessage());
+        }
+    }
+
 }

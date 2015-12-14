@@ -1,5 +1,6 @@
 package com.pla.grouplife.sharedresource.dto;
 
+import com.google.common.collect.Lists;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
 import com.pla.grouplife.sharedresource.model.vo.ProposerContactDetail;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class ProposerDto {
 
     private String emailAddress;
 
-    List<ContactPersonDetailDto> contactPersonDetail;
+    List<ContactPersonDetailDto> contactPersonDetail = Lists.newArrayList();
 
     private String opportunityId;
 
@@ -45,6 +46,8 @@ public class ProposerDto {
     private boolean samePlanForAllCategory;
 
     private Boolean hasUploaded = Boolean.FALSE;
+
+    private String schemeName;
 
     public ProposerDto(Proposer proposer) {
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();

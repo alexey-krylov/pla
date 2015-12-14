@@ -47,6 +47,7 @@ public class GroupHealthProposalFactory {
         boolean samePlanForAllCategory = quotationMap.get("samePlanForAllCategory") != null ? (boolean) quotationMap.get("samePlanForAllCategory") : false;
         String quotationNumber = (String) quotationMap.get("quotationNumber");
         Integer versionNumber = (Integer) quotationMap.get("versionNumber");
+        String schemeName = quotationMap.get("schemeName")!=null?(String) quotationMap.get("schemeName"):"";
         Map proposalMap = ghProposalFinder.findProposalByQuotationNumber(quotationNumber);
         ProposalNumber proposalNumber = proposalMap != null ? (ProposalNumber) proposalMap.get("proposalNumber") : new ProposalNumber(ghProposalNumberGenerator.getProposalNumber(GroupHealthProposal.class, LocalDate.now()));
         Quotation quotation = new Quotation(quotationNumber, versionNumber,quotationId);
@@ -58,7 +59,7 @@ public class GroupHealthProposalFactory {
         groupHealthProposal.updateFlagSamePlanForAllRelation(samePlanForAllRelation);
         groupHealthProposal.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
         groupHealthProposal.updateFlagMoratoriumPeriodApplicable(moratoriumPeriodApplicable);
-        groupHealthProposal = groupHealthProposal.updateWithAgent(agentId, BigDecimal.ZERO,Boolean.FALSE).updateWithProposer(proposer).updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail);
+        groupHealthProposal = groupHealthProposal.updateWithAgent(agentId, BigDecimal.ZERO,Boolean.FALSE).updateWithProposer(proposer).updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail).updateWithSchemeName(schemeName);
         return groupHealthProposal;
     }
 }

@@ -70,6 +70,8 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     private boolean samePlanForAllCategory;
 
+    private String  schemeName;
+
     public GroupHealthProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
         checkArgument(quotation != null, "Quotation ID cannot be blank");
@@ -102,6 +104,7 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
         groupHealthProposal.moratoriumPeriodApplicable = this.moratoriumPeriodApplicable;
         groupHealthProposal.samePlanForAllCategory = this.samePlanForAllCategory;
         groupHealthProposal.samePlanForAllRelation = this.samePlanForAllRelation;
+        groupHealthProposal.schemeName = this.schemeName;
         return groupHealthProposal;
     }
 
@@ -213,6 +216,11 @@ public class GroupHealthProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupHealthProposal updateFlagMoratoriumPeriodApplicable(boolean moratoriumPeriodApplicable) {
         this.moratoriumPeriodApplicable = moratoriumPeriodApplicable;
+        return this;
+    }
+
+    public GroupHealthProposal updateWithSchemeName(String schemeName) {
+        this.schemeName = schemeName;
         return this;
     }
 }
