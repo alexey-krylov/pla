@@ -183,7 +183,62 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 }
             });
 
-            $scope.$watch('quotationDetails.proposer.province', function (newVal, oldVal) {
+            $scope.contactDetails = {};
+            $scope.showtable = false;
+            $scope.contactPersonDetail = [];
+            if (proposerDetails) {
+                if (proposerDetails.contactPersonDetail) {
+                    $scope.contactPersonDetail = proposerDetails.contactPersonDetail;
+                }
+
+            }
+
+            $scope.$watch('contactPersonDetail', function (newVal, oldVal) {
+                // console.log("*********************WATCH*********************************");
+                //  console.log($scope.contactPersonDetail);
+                if (newVal) {
+                    if (newVal.length > 0) {
+                        $scope.showtable = true;
+
+                    } else {
+                        $scope.showtable = false;
+                        $scope.stepsSaved["2"] = false;
+                    }
+
+                }
+
+            });
+
+            $scope.addContactDetail = function (contactDetails) {
+                console.log(contactDetails);
+                $scope.contactPersonDetail.push(contactDetails);
+                if ($scope.contactPersonDetail.length > 0) {
+                    $scope.showtable = true;
+                }
+
+                $scope.stepsSaved["2"] = false;
+
+                $scope.contactDetails = {};
+
+            }
+            $scope.deleteCurrentRow = function (index) {
+
+                $scope.contactPersonDetail.splice(index, 1);
+                if ($scope.contactPersonDetail.length <= 0) {
+                    $scope.showtable = false;
+                    $scope.stepsSaved["2"] = false;
+
+                }
+            }
+            $scope.editCurrentRow = function (contactDetails, index) {
+                $scope.contactDetails = contactDetails;
+                //  $scope.stepsSaved["2"] = false;
+                $scope.contactPersonDetail.splice(index, 1);
+
+
+            }
+
+           $scope.$watch('quotationDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {
                     $scope.getProvinceDetails(newVal);
                 }
@@ -322,6 +377,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             };
 
             $scope.saveProposerDetails = function () {
+                $scope.quotationDetails.proposer.contactPersonDetail = $scope.contactPersonDetail;
                 $http.post("/pla/quotation/grouphealth/updatewithproposerdetail", angular.extend({},
                     {proposerDto: $scope.quotationDetails.proposer},
                     {"quotationId": $scope.quotationId}))

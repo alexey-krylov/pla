@@ -67,7 +67,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     } else if (FLOAT_REGEXP_4.test(viewValue)) {
                         ctrl.$setValidity('float', true);
                         return parseFloat(viewValue.replace(',', '.'));
-                    }else {
+                    } else {
                         ctrl.$setValidity('float', false);
                         return undefined;
                     }
@@ -75,13 +75,13 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
                 ctrl.$formatters.unshift(
                     function (modelValue) {
-                        return $filter('number')(parseFloat(modelValue) , 2);
+                        return $filter('number')(parseFloat(modelValue), 2);
                     }
                 );
             }
         };
     })
-.controller('quotationCtrl', ['$scope', '$http', '$timeout', '$location', '$route', '$upload', 'provinces', 'industries', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
+    .controller('quotationCtrl', ['$scope', '$http', '$timeout', '$location', '$route', '$upload', 'provinces', 'industries', 'getProvinceAndCityDetail', 'globalConstants', 'agentDetails', 'stepsSaved', 'proposerDetails',
         'quotationNumber', 'getQueryParameter', '$window', 'checkIfInsuredUploaded', 'premiumData',
         function ($scope, $http, $timeout, $location, $route, $upload, provinces, industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, quotationNumber, getQueryParameter,
                   $window, checkIfInsuredUploaded, premiumData) {
@@ -224,10 +224,12 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 angular.extend($scope.quotationDetails.basic, {agentName: null, branchName: null, teamName: null});
             };
 
-            $scope.isSaveDisabled = function (formName) {
-                return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode == 'new')
-            };
+          /*  $scope.isSaveDisabled = function (formName) {
+                console.log(formName);
+                    return formName.$invalid || ($scope.stepsSaved[$scope.selectedItem] && !mode == 'new');
 
+            };
+*/
             $scope.searchAgent = function () {
                 $http.get("/pla/quotation/grouplife/getagentdetail/" + $scope.quotationDetails.basic.agentId)
                     .success(function (data) {
@@ -285,6 +287,67 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                     });
             };
 
+            $scope.contactDetails = {};
+            $scope.showtable = false;
+           $scope.contactPersonDetail = [];
+            if (proposerDetails) {
+                if (proposerDetails.contactPersonDetail) {
+                    $scope.contactPersonDetail = proposerDetails.contactPersonDetail;
+                }
+
+            }
+
+            $scope.$watch('contactPersonDetail', function (newVal, oldVal) {
+               // console.log("*********************WATCH*********************************");
+              //  console.log($scope.contactPersonDetail);
+                if (newVal) {
+                    if (newVal.length > 0) {
+                        $scope.showtable = true;
+
+                    } else {
+                        $scope.showtable = false;
+                        $scope.stepsSaved["2"] = false;
+                    }
+
+                }
+
+            });
+
+            $scope.addContactDetail = function (contactDetails) {
+                console.log(contactDetails);
+                $scope.contactPersonDetail.push(contactDetails);
+                if ($scope.contactPersonDetail.length > 0) {
+                    $scope.showtable = true;
+                }
+
+                $scope.stepsSaved["2"] = false;
+
+                $scope.contactDetails = {};
+
+            }
+            $scope.deleteCurrentRow = function (index) {
+
+                $scope.contactPersonDetail.splice(index, 1);
+                if ($scope.contactPersonDetail.length <= 0) {
+                    $scope.showtable = false;
+                    $scope.stepsSaved["2"] = false;
+
+                }
+            }
+            $scope.editCurrentRow = function (contactDetails, index) {
+                $scope.contactDetails = contactDetails;
+              //  $scope.stepsSaved["2"] = false;
+                $scope.contactPersonDetail.splice(index, 1);
+
+
+            }
+            $scope.setTownVal = function (val) {
+                if (val) {
+                    $scope.quotationDetails.proposer.town = '';
+                }
+
+
+            }
 
             $scope.$watch('quotationId', function (newval, oldval) {
                 if (newval && newval != oldval) {
@@ -321,6 +384,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             };
 
             $scope.saveProposerDetails = function () {
+               $scope.quotationDetails.proposer.contactPersonDetail = $scope.contactPersonDetail;
                 $http.post("/pla/quotation/grouplife/updatewithproposerdetail", angular.extend({},
                     {proposerDto: $scope.quotationDetails.proposer},
                     {"quotationId": $scope.quotationId}))
@@ -352,11 +416,11 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
 
             }
-            $scope.errorMessage='';
+            $scope.errorMessage = '';
 
             $scope.$watch('selectedItem', function (newVal, oldVal) {
-              //  console.log("STEP"+newVal);
-              //  console.log(!$scope.stepsSaved[newVal]);
+                //  console.log("STEP"+newVal);
+                //  console.log(!$scope.stepsSaved[newVal]);
                 if (newVal == 3) {
                     $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/" + $scope.quotationId)
                         .success(function (response) {
@@ -364,7 +428,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                             // $scope.validateGLQuotation = data;
                             if (response.data) {
                                 $scope.showModal = true;
-                                $scope.errorMessage=response.message;
+                                $scope.errorMessage = response.message;
 
                             }
                         });
@@ -382,15 +446,15 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
                 }).success(function (data, status, headers, config) {
                     if (data.status == "200") {
                         if (data.id) {
-                           // alert("called");
+                            // alert("called");
                             $scope.quotationId = data.id;
                             $timeout($scope.updatePremiumDetail($scope.quotationId), 500);
-                            $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/"+ $scope.quotationId)
+                            $http.get("/pla/quotation/grouplife/isValidPremiumAndPersons/" + $scope.quotationId)
                                 .success(function (response) {
                                     console.log(response);
                                     if (response.data) {
                                         $scope.showModal = true;
-                                        $scope.errorMessage=response.message;
+                                        $scope.errorMessage = response.message;
 
                                     } else {
                                         saveStep();
@@ -401,11 +465,11 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
 
                         }
-                    } else{
-                        if(data.data){
+                    } else {
+                        if (data.data) {
                             $scope.showDownload = false;
 
-                        }else{
+                        } else {
                             $scope.showDownload = true;
                         }
                     }

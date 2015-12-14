@@ -54,6 +54,17 @@
 
 
     <nth-alert></nth-alert>
+    <modal title="Alert" visible="showModal" data-backdrop="static" data-keyboard="false">
+        <div class="form-group">{{errorMessage}}</div>
+
+        <div class="modal-footer" style="padding-left:0px;padding-right: 0px;">
+            <button type="button" ng-click="proceedToNext()" class="btn btn-primary">Proceed</button>
+            <button type="button" class="btn btn-danger" ng-click="back()">Cancel</button>
+            <!--data-dismiss="modal"-->
+
+        </div>
+    </modal>
+
     <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
         <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
@@ -124,21 +135,21 @@
 
                             </div>
                         </div>
-                        <div class="" >
+                        <div class="">
                             <div style="height:300px;overflow-y:scroll;border:1px solid grey;margin-top:10px;margin-bottom: 10px;">
-                                <table class="table table-striped table-bordered"  style="margin-top:5px; ">
+                                <table class="table table-striped table-bordered" style="margin-top:5px; ">
                                     <thead>
-                                    <tr  >
-                                        <th >UserName</th>
-                                        <th >Date And Time</th>
+                                    <tr>
+                                        <th>UserName</th>
+                                        <th>Date And Time</th>
                                         <th>Comments</th>
                                     </tr>
                                     </thead>
-                                    <tbody >
-                                    <tr ng-repeat="approvalComment in approvalCommentList" >
-                                        <td >{{approvalComment.modifiedBy}} </td>
-                                        <td >{{approvalComment.id.time | date:'dd/MM/yyyy h:mm a'}} </td>
-                                        <td style="width:75%;">{{approvalComment.comment}} </td>
+                                    <tbody>
+                                    <tr ng-repeat="approvalComment in approvalCommentList">
+                                        <td>{{approvalComment.modifiedBy}}</td>
+                                        <td>{{approvalComment.id.time | date:'dd/MM/yyyy h:mm a'}}</td>
+                                        <td style="width:75%;">{{approvalComment.comment}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -233,12 +244,13 @@
                     </div>
                 </div>
                 <div class="step-pane" data-step="3">
-                    <ng-form name="step3">
+
                         <accordion close-others="true">
+                            <ng-form name="step3">
                             <accordion-group is-open="accordionStatus.proposer">
                                 <accordion-heading>
                                     PolicyHolder Details <i class="pull-right glyphicon"
-                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
+                                                            ng-class="{'glyphicon-chevron-down': accordionStatus.proposer, 'glyphicon-chevron-right': !accordionStatus.proposer}"></i>
                                 </accordion-heading>
                                 <div class="col-lg-6" disable-all-fields="isViewMode">
                                     <div class="form-group required">
@@ -312,70 +324,38 @@
                                     </div>-->
                                 </div>
                             </accordion-group>
-                            <accordion-group is-open="accordionStatus.contact">
+                    </ng-form>
+
+                    <accordion-group is-open="accordionStatus.contact">
                                 <accordion-heading>
                                     Contact Details <i class="pull-right glyphicon"
                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.contact, 'glyphicon-chevron-right': !accordionStatus.contact}"></i>
                                 </accordion-heading>
-                                <div class="col-lg-6" disable-all-fields="isViewMode">
-                                    <div class="form-group required">
-                                        <label class="control-label">Contact Person Details</label>
-                                        <input type="text" class="form-control input-sm" name="contactPersonDetails"
-                                               onkeypress="return isEnterKey(event)" maxlength="100" ng-required="true"
-                                               ng-model="policyDetails.proposer.contactPersonName"/>
-                                    </div>
-                                    <div class="form-group required">
-                                        <label class="control-label">Mobile Number</label>
-                                        <input type="text" class="form-control input-sm" maxlength="10" minlength="10"
-                                               name="mobileNumber" onkeypress="return isEnterKey(event)"
-                                               ng-required="true" ng-pattern="numberPattern"
-                                               ng-model="policyDetails.proposer.contactPersonMobileNumber"/>
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Contact Person</th>
+                                        <th>Mobile Number</th>
+                                        <th>Email</th>
+                                        <th>Work Phone</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                        <div ng-show="step3.mobileNumber.$invalid &amp;&amp; step3.mobileNumber.$dirty">
-                                            <small class="error"
-                                                   ng-show="!step3.mobileNumber.$error.pattern &amp;&amp; step3.mobileNumber.$error.minlength">
-                                                Please enter a valid mobile number.
-                                            </small>
-                                            <small class="error" ng-show="step3.mobileNumber.$error.pattern">
-                                                Only numbers are allowed.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6" disable-all-fields="isViewMode">
-                                    <div class="form-group">
-                                        <label class="control-label">Email</label>
-                                        <input type="email" class="form-control input-sm"
-                                               onkeypress="return isEnterKey(event)" name="email"
-                                               ng-model="policyDetails.proposer.contactPersonEmail"/>
+                                    <tr ng-repeat="contactDetail in contactPersonDetail">
+                                        <td><span>{{contactDetail.contactPersonName}}</span>
+                                        </td>
+                                        <td><span>{{contactDetail.contactPersonMobileNumber}}</span>
+                                        </td>
+                                        <td><span>{{contactDetail.contactPersonEmail}}</span></td>
+                                        <td><span>{{contactDetail.contactPersonWorkPhoneNumber}}</span></td>
 
-                                        <div ng-show="step3.email.$invalid &amp;&amp; step3.email.$dirty">
-                                            <small class="error" ng-show="step3.email.$error.email">
-                                                Please enter a valid emailId.
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="form-group required">
-                                        <label class="control-label">Work Phone</label>
-                                        <input type="text" class="form-control input-sm" maxlength="13" minlength="13"
-                                               name="workPhone" onkeypress="return isEnterKey(event)" ng-required="true"
-                                               ng-pattern="numberPattern"
-                                               ng-model="policyDetails.proposer.contactPersonWorkPhoneNumber"/>
+                                    </tr>
+                                    </tbody>
+                                </table>
 
-                                        <div ng-show="step3.workPhone.$invalid &amp;&amp; step3.workPhone.$dirty">
-                                            <small class="error"
-                                                   ng-show="!step3.workPhone.$error.pattern &amp;&amp; step3.workPhone.$error.minlength">
-                                                Please enter a valid mobile number.
-                                            </small>
-                                            <small class="error" ng-show="step2.workPhone.$error.pattern">
-                                                Only numbers are allowed.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
                             </accordion-group>
                         </accordion>
-                    </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
@@ -449,14 +429,14 @@
                             <ng-form name="premiumForm" novalidate="true">
                                 <div class="row">
                                     <div class="col-lg-6" disable-all-fields="isViewMode">
-                                       <!-- <div class="form-group required">
-                                            <label class="control-label">Add-On Benefits</label>
-                                            <input class="form-control input-sm" onkeypress="return isNumeric(event)"
-                                                   ng-required="true" name="addOnBenefits"
-                                                   ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
-                                                   ng-model="policyDetails.premium.addOnBenefit"
-                                                   ng-blur="recalculatePremium();" value="0"/>
-                                        </div>-->
+                                        <!-- <div class="form-group required">
+                                             <label class="control-label">Add-On Benefits</label>
+                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                                    ng-required="true" name="addOnBenefits"
+                                                    ng-pattern="/^(^[0-9]{1,2})+(\.[0-9]{1,2})?$/"
+                                                    ng-model="policyDetails.premium.addOnBenefit"
+                                                    ng-blur="recalculatePremium();" value="0"/>
+                                         </div>-->
                                         <div class="form-group">
                                             <label class="control-label">Profit and Solvency Loading</label>
                                             <input class="form-control input-sm" onkeypress="return isNumeric(event)"
@@ -600,7 +580,8 @@
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
                                                     ng-file-select=""
-                                                    ng-model="document.documentAttached" ng-disabled="isBrowseDisable(document)">Browse
+                                                    ng-model="document.documentAttached"
+                                                    ng-disabled="isBrowseDisable(document)">Browse
                                             </button>
                                             <label class="form-control input-sm"
                                                    style="border:1px solid #ccc;width:380px;">{{document.documentAttached[0].name}} </label>
@@ -674,7 +655,8 @@
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-hide="!checkDocumentAttached">Upload
+                                            ng-click="uploadAdditionalDocument()" ng-hide="!checkDocumentAttached">
+                                        Upload
                                     </button>
 
                                 </div>

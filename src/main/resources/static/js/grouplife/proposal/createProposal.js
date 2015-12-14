@@ -64,7 +64,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     } else if (FLOAT_REGEXP_4.test(viewValue)) {
                         ctrl.$setValidity('float', true);
                         return parseFloat(viewValue.replace(',', '.'));
-                    }else {
+                    } else {
                         ctrl.$setValidity('float', false);
                         return undefined;
                     }
@@ -72,16 +72,16 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
                 ctrl.$formatters.unshift(
                     function (modelValue) {
-                        return $filter('number')(parseFloat(modelValue) , 2);
+                        return $filter('number')(parseFloat(modelValue), 2);
                     }
                 );
             }
         };
     })
 
-    .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces','industries', 'getProvinceAndCityDetail', 'globalConstants',
+    .controller('proposalCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'industries', 'getProvinceAndCityDetail', 'globalConstants',
         'agentDetails', 'stepsSaved', 'proposerDetails', 'proposalNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
-        function ($scope, $http, $timeout, $upload, provinces,industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber,
+        function ($scope, $http, $timeout, $upload, provinces, industries, getProvinceAndCityDetail, globalConstants, agentDetails, stepsSaved, proposerDetails, proposalNumber,
                   getQueryParameter, $window, premiumData, documentList) {
 
             var mode = getQueryParameter("mode");
@@ -126,32 +126,32 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             if (status == 'return') {
                 $scope.isReturnStatus = true;
 
-                $http.get("/pla/grouplife/proposal/getapprovercomments/"+ $scope.proposalId).success(function (data, status) {
+                $http.get("/pla/grouplife/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
                     console.log(data);
-                    $scope.approvalCommentList=data;
+                    $scope.approvalCommentList = data;
                 });
 
             }
             var method = getQueryParameter("method");
             if (method == 'approval') {
                 $scope.isViewMode = true;
-                $scope.stepsSaved["1"] =true;
+                $scope.stepsSaved["1"] = true;
                 $http.get("/pla/grouplife/proposal/getapprovercomments/" + $scope.proposalId).success(function (data, status) {
                     // console.log(data);
-                    $scope.approvalCommentList=data;
+                    $scope.approvalCommentList = data;
                 });
 
             }
 
 
             if (status == 'return') {
-                $scope.stepsSaved["1"] =true;
+                $scope.stepsSaved["1"] = true;
             }
 
-            $scope.toggleSelection=function($event){
+            $scope.toggleSelection = function ($event) {
                 var checkbox = $event.target;
-                if(!checkbox.checked){
-                    $scope.proposalDetails.basic.agentCommissionPercentage='';
+                if (!checkbox.checked) {
+                    $scope.proposalDetails.basic.agentCommissionPercentage = '';
                 }
             }
             $scope.uploadDocumentFiles = function () {
@@ -164,7 +164,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         $upload.upload({
                             url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:true},
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId, mandatory: true},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -178,61 +178,61 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             };
             $scope.isSaveDisabled = function (formName) {
-                return formName.$invalid ;
+                return formName.$invalid;
             };
-            $scope.getCurrentVal=function(val){
+            $scope.getCurrentVal = function (val) {
 
-                $scope.proposalDetails.proposer.town='';
+                $scope.proposalDetails.proposer.town = '';
 
             }
 
             $scope.additionalDocumentList = [{}];
-            $http.get("/pla/grouplife/proposal/getadditionaldocuments/"+ $scope.proposalId).success(function (data, status) {
+            $http.get("/pla/grouplife/proposal/getadditionaldocuments/" + $scope.proposalId).success(function (data, status) {
                 console.log(data);
-                $scope.additionalDocumentList=data;
-                $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+                $scope.additionalDocumentList = data;
+                $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
 
             });
 
             $scope.addAdditionalDocument = function () {
                 $scope.additionalDocumentList.unshift({});
-                $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+                $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
             };
 
-            $scope.removeAdditionalDocument = function (index,gridFsDocId) {
-                if(gridFsDocId) {
+            $scope.removeAdditionalDocument = function (index, gridFsDocId) {
+                if (gridFsDocId) {
                     $http.post("/pla/grouplife/proposal/removeGLProposalAdditionalDocument?proposalId=" + $scope.proposalId + "&gridFsDocId=" + gridFsDocId).success(function (data, status) {
                         console.log(data);
                         if (data.status == '200') {
                             $scope.additionalDocumentList.splice(index, 1);
-                            $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+                            $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
                         }
                     });
-                }else{
+                } else {
                     $scope.additionalDocumentList.splice(index, 1);
-                    $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
                 }
 
 
-                           };
-            $scope.callAdditionalDoc = function(file){
-                if(file[0]){
-                    $scope.checkDocumentAttached=$scope.isUploadEnabledForAdditionalDocument();
+            };
+            $scope.callAdditionalDoc = function (file) {
+                if (file[0]) {
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
                 }
             }
 
-            $scope.isUploadEnabledForAdditionalDocument = function(){
-                var enableAdditionalUploadButton= ($scope.additionalDocumentList!=null);
+            $scope.isUploadEnabledForAdditionalDocument = function () {
+                var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
-                  //  alert(i+"--"+files)
-                   // alert(i+"--"+document.content);
-                    if(!(files || document.content)){
-                        enableAdditionalUploadButton=false;
+                    //  alert(i+"--"+files)
+                    // alert(i+"--"+document.content);
+                    if (!(files || document.content)) {
+                        enableAdditionalUploadButton = false;
                         break;
                     }
                 }
@@ -244,12 +244,12 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
-                    $scope.additional=true;
+                    $scope.additional = true;
                     if (files) {
                         $upload.upload({
                             url: '/pla/grouplife/proposal/uploadmandatorydocument',
                             file: files,
-                            fields: {documentId: document.documentId, proposalId: $scope.proposalId,mandatory:false},
+                            fields: {documentId: document.documentId, proposalId: $scope.proposalId, mandatory: false},
                             method: 'POST'
                         }).progress(function (evt) {
 
@@ -274,22 +274,20 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
             }
 
-            $scope.documentNameLengthTest=function(){
-                var enableUploadButton= true;
-                for(var i=0;i < $scope.documentList.length;i++){
-                    if($scope.documentList[i].documentAttached != null && $scope.documentList[i].documentAttached[0] != null){
-                        if($scope.documentList[i].documentAttached[0].name.length >100)
-                        {
-                            enableUploadButton=false;
+            $scope.documentNameLengthTest = function () {
+                var enableUploadButton = true;
+                for (var i = 0; i < $scope.documentList.length; i++) {
+                    if ($scope.documentList[i].documentAttached != null && $scope.documentList[i].documentAttached[0] != null) {
+                        if ($scope.documentList[i].documentAttached[0].name.length > 100) {
+                            enableUploadButton = false;
                             break;
                         }
                     }
                 }
-                if(enableUploadButton){
+                if (enableUploadButton) {
                     return true;
                 }
-                else
-                {
+                else {
                     return false
                 }
             }
@@ -330,19 +328,19 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.changeAgent = false;
             console.log($scope.proposalDetails.basic['active']);
-            if (!$scope.proposalDetails.basic['active'] && status != 'return' && method != 'approval' && mode!='view') {
-                if(!$scope.isViewMode){
+            if (!$scope.proposalDetails.basic['active'] && status != 'return' && method != 'approval' && mode != 'view') {
+                if (!$scope.isViewMode) {
                     $('#agentModal').modal('show');
                 }
                 $scope.changeAgent = true;
                 $scope.stepsSaved["1"] = !$scope.changeAgent;
-            }else if (!$scope.proposalDetails.basic['active'] && mode=='view' ) {
+            } else if (!$scope.proposalDetails.basic['active'] && mode == 'view') {
 
                 $scope.stepsSaved["1"] = true;
                 // alert("hi");
             }
-            if(!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus==true && method == 'approval' ){
-                if(!$scope.isViewMode){
+            if (!$scope.proposalDetails.basic['active'] && $scope.isReturnStatus == true && method == 'approval') {
+                if (!$scope.isViewMode) {
                     $('#agentModal').modal('show');
                 }
                 $scope.changeAgent = true;
@@ -352,8 +350,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
 
             $scope.proposalDetails.proposer = proposerDetails;
-            $scope.proposalDetails.plan.samePlanForAllRelation=proposerDetails.samePlanForAllRelation;
-            $scope.proposalDetails.plan.samePlanForAllCategory=proposerDetails.samePlanForAllCategory;
+            $scope.proposalDetails.plan.samePlanForAllRelation = proposerDetails.samePlanForAllRelation;
+            $scope.proposalDetails.plan.samePlanForAllCategory = proposerDetails.samePlanForAllCategory;
             if (mode == 'view') {
                 $scope.dropdown = [
                     {
@@ -362,24 +360,25 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     }
                 ];
 
-            }/*else {
+            }
+            /*else {
              $scope.dropdown = [
-                    {
-                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
-                        "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
-                    },
-                    {
-                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
-                        "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
-                    }
-                ];
-            }*/
+             {
+             "text": "<a><img src=\"/pla/images/xls-icon.png\">Ready Reckoner</a>",
+             "href": "/pla/grouplife/proposal/downloadplandetail/" + $scope.proposalId
+             },
+             {
+             "text": "<a><img src=\"/pla/images/xls-icon.png\">Template</a>",
+             "href": "/pla/grouplife/proposal/downloadinsuredtemplate/" + $scope.proposalId
+             }
+             ];
+             }*/
             $scope.$watchCollection('[proposalId,showDownload]', function (n) {
                 if (n[0]) {
                     $scope.pId = n[0];
-                      console.log(n[0]);
+                    console.log(n[0]);
                     console.log(n[1]);
-               //     alert($scope.showDownload);
+                    //     alert($scope.showDownload);
                     if (n[1]) {
                         $scope.dropdown = [
                             {
@@ -436,7 +435,80 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     $scope.fileName = n[0].name
                 }
             });
+            $scope.contactDetails = {};
+            $scope.showtable = false;
+            $scope.contactPersonDetail = [];
+            if (proposerDetails) {
+                if (proposerDetails.contactPersonDetail) {
+                    $scope.contactPersonDetail = proposerDetails.contactPersonDetail;
+                }
 
+            }
+
+            $scope.$watch('contactPersonDetail', function (newVal, oldVal) {
+                // console.log("*********************WATCH*********************************");
+                //  console.log($scope.contactPersonDetail);
+                if (newVal) {
+                    if (newVal.length > 0) {
+                        $scope.showtable = true;
+
+                    } else {
+                        $scope.showtable = false;
+                        if(mode== 'edit' && status=='return'){
+                            $scope.stepsSaved["3"] = false;
+                        }else if(mode== 'edit'){
+                            $scope.stepsSaved["2"] = false;
+                        }
+                    }
+
+                }
+
+            });
+
+            $scope.addContactDetail = function (contactDetails) {
+                console.log(contactDetails);
+                $scope.contactPersonDetail.push(contactDetails);
+                if ($scope.contactPersonDetail.length > 0) {
+                    $scope.showtable = true;
+                }
+                if (mode == 'edit' && status == 'return') {
+                    $scope.stepsSaved["3"] = false;
+                } else if (mode == 'edit') {
+                    $scope.stepsSaved["2"] = false;
+
+                }else{
+                    $scope.stepsSaved["2"] = false;
+
+                }
+
+                $scope.contactDetails = {};
+
+            }
+            $scope.deleteCurrentRow = function (index) {
+
+                $scope.contactPersonDetail.splice(index, 1);
+                if ($scope.contactPersonDetail.length <= 0) {
+                    $scope.showtable = false;
+
+                }
+                if (mode == 'edit' && status == 'return') {
+                    $scope.stepsSaved["3"] = false;
+                } else if (mode == 'edit') {
+                    $scope.stepsSaved["2"] = false;
+
+                }else{
+                    $scope.stepsSaved["2"] = false;
+
+                }
+
+            }
+            $scope.editCurrentRow = function (contactDetails, index) {
+                $scope.contactDetails = contactDetails;
+                //  $scope.stepsSaved["2"] = false;
+                $scope.contactPersonDetail.splice(index, 1);
+
+
+            }
 
 
             $scope.openNewTab = function (event) {
@@ -510,10 +582,10 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     {premiumDetailDto: $scope.proposalDetails.premium},
                     {"proposalId": $scope.proposalId})).success(function (data) {
                     // console.log(data.data);
-                    var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null|| $scope.selectedInstallment!=null;
-                    console.log("enableSaveButton--"+enableSaveButton);
-                        $scope.disableSaveButton=false;
-                    $scope.stepsSaved["4"]=$scope.disableSaveButton;
+                    var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency != null || $scope.selectedInstallment != null;
+                    console.log("enableSaveButton--" + enableSaveButton);
+                    $scope.disableSaveButton = false;
+                    $scope.stepsSaved["4"] = $scope.disableSaveButton;
                     $scope.proposalDetails.premium = data.data;
                     $scope.proposalDetails.premium.totalPremium = data.data.totalPremium;
                     if (data.data.annualPremium) {
@@ -530,21 +602,21 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             };
 
-            $scope.submitAdditionalDocument = function(){
-               $http.post('/pla/grouplife/proposal/submit', angular.extend({},
+            $scope.submitAdditionalDocument = function () {
+                $http.post('/pla/grouplife/proposal/submit', angular.extend({},
                     {"proposalId": $scope.proposalId})).success(function (data) {
-                   if (data.status == "200") {
-                       saveStep();
-                       $('#searchFormProposal').val($scope.proposalId);
-                       $('#searchForm').submit();
-                   }
+                    if (data.status == "200") {
+                        saveStep();
+                        $('#searchFormProposal').val($scope.proposalId);
+                        $('#searchForm').submit();
+                    }
 
                 });
 
             }
-            $scope.submitComments = function(comment){
+            $scope.submitComments = function (comment) {
                 $http.post('/pla/grouplife/proposal/submit', angular.extend({},
-                    {"proposalId": $scope.proposalId,comment:comment})).success(function (data) {
+                    {"proposalId": $scope.proposalId, comment: comment})).success(function (data) {
                     if (data.status == "200") {
                         saveStep();
                         $('#searchFormProposal').val($scope.proposalId);
@@ -555,53 +627,53 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             }
 
-            $scope.disableSaveButton=false;
-            $scope.$watch( 'proposalDetails.premium.optedPremiumFrequency',function(newValue, oldValue){
-                console.log("$scope.proposalDetails.premium.optedPremiumFrequency::"+$scope.proposalDetails.premium.optedPremiumFrequency);
-                console.log("$scope.selectedInstallment::"+$scope.selectedInstallment);
-                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null || $scope.selectedInstallment!=null;
-                console.log("enableSaveButton--"+enableSaveButton)
-                if(newValue){
-                    $scope.disableSaveButton=enableSaveButton;
+            $scope.disableSaveButton = false;
+            $scope.$watch('proposalDetails.premium.optedPremiumFrequency', function (newValue, oldValue) {
+                console.log("$scope.proposalDetails.premium.optedPremiumFrequency::" + $scope.proposalDetails.premium.optedPremiumFrequency);
+                console.log("$scope.selectedInstallment::" + $scope.selectedInstallment);
+                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency != null || $scope.selectedInstallment != null;
+                console.log("enableSaveButton--" + enableSaveButton)
+                if (newValue) {
+                    $scope.disableSaveButton = enableSaveButton;
 
-                }else{
-                    $scope.disableSaveButton=enableSaveButton;
-                    if($scope.isReturnStatus == false){
-                        $scope.stepsSaved["4"]=enableSaveButton;
-                    }else{
-                        $scope.stepsSaved["5"]=enableSaveButton;
+                } else {
+                    $scope.disableSaveButton = enableSaveButton;
+                    if ($scope.isReturnStatus == false) {
+                        $scope.stepsSaved["4"] = enableSaveButton;
+                    } else {
+                        $scope.stepsSaved["5"] = enableSaveButton;
                     }
 
 
                 }
                 if (method == 'approval') {
-                    $scope.stepsSaved["5"]=true;
+                    $scope.stepsSaved["5"] = true;
                 }
 
             });
 
-            $scope.approveProposal = function(){
+            $scope.approveProposal = function () {
                 var request = angular.extend({comment: $scope.comment},
                     {"proposalId": $scope.proposalId});
 
                 $http.post('/pla/grouplife/proposal/approve', request).success(function (data) {
-                    if(data.status==200){
+                    if (data.status == 200) {
 
-                        $window.location.href="/pla/grouplife/proposal/openapprovalproposal";
+                        $window.location.href = "/pla/grouplife/proposal/openapprovalproposal";
 
                     }
 
                 });
             }
-            $scope.comment='';
-            $scope.returnProposal = function(){
-                var request = angular.extend({comment: $scope.comment},{"proposalId": $scope.proposalId});
+            $scope.comment = '';
+            $scope.returnProposal = function () {
+                var request = angular.extend({comment: $scope.comment}, {"proposalId": $scope.proposalId});
 
                 $http.post('/pla/grouplife/proposal/return', request).success(function (data) {
-                    if(data.status==200){
+                    if (data.status == 200) {
 
 
-                        $window.location.href="/pla/grouplife/proposal/openapprovalproposal";
+                        $window.location.href = "/pla/grouplife/proposal/openapprovalproposal";
 
                     }
 
@@ -619,10 +691,10 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                      {"proposalId": $scope.proposalId}))
                      .success(function (data) {
                      });*/
-                   // console.log(data);
-                  //  console.log("*******************"+$scope.selectedItem);
-                    if(data.status== '200'){
-                        $scope.stepsSaved["4"]=true;
+                    // console.log(data);
+                    //  console.log("*******************"+$scope.selectedItem);
+                    if (data.status == '200') {
+                        $scope.stepsSaved["4"] = true;
                         saveStep();
                     }
 
@@ -632,12 +704,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             $scope.setSelectedInstallment = function (selectedInstallment) {
                 $scope.selectedInstallment = selectedInstallment;
-                $scope.proposalDetails.premium.optedPremiumFrequency=null;
-                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency!=null|| $scope.selectedInstallment!=null;
-                console.log("enableSaveButton--"+enableSaveButton);
-                    $scope.disableSaveButton=enableSaveButton;
-               // $scope.stepsSaved["4"]=enableSaveButton;
-
+                $scope.proposalDetails.premium.optedPremiumFrequency = null;
+                var enableSaveButton = $scope.proposalDetails.premium.optedPremiumFrequency != null || $scope.selectedInstallment != null;
+                console.log("enableSaveButton--" + enableSaveButton);
+                $scope.disableSaveButton = enableSaveButton;
+                // $scope.stepsSaved["4"]=enableSaveButton;
 
 
             };
@@ -683,6 +754,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             };
 
             $scope.saveProposerDetails = function () {
+                $scope.proposalDetails.proposer.contactPersonDetail = $scope.contactPersonDetail;
                 $http.post("/pla/grouplife/proposal/updatewithproposerdetail", angular.extend({},
                     {proposerDto: $scope.proposalDetails.proposer},
                     {"proposalId": $scope.proposalId}))
@@ -698,7 +770,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
 
             }
-            $scope.errorMessage='';
+            $scope.errorMessage = '';
             $scope.$watch('selectedItem', function (newVal, oldVal) {
                 //  console.log("STEP"+newVal);
                 //  console.log(!$scope.stepsSaved[newVal]);
@@ -716,7 +788,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                                 }
                             });
                     }
-                }else if(mode == 'edit' && status == 'return'){
+                } else if (mode == 'edit' && status == 'return') {
                     if (newVal == 4) {
 
                         $http.get("/pla/grouplife/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
@@ -738,7 +810,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                             // $scope.validateGLQuotation = data;
                             if (response.data) {
                                 $scope.showModal = true;
-                                $scope.errorMessage=response.message;
+                                $scope.errorMessage = response.message;
 
                             }
                         });
@@ -753,7 +825,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     fields: $scope.proposalDetails.plan,
                     file: $scope.fileSaved
                 }).success(function (data, status, headers, config) {
-                  //  console.log(data.status);
+                    //  console.log(data.status);
                     if (data.status == "200") {
                         if (data.id) {
                             $scope.proposalId = data.id;
@@ -764,7 +836,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                                     // $scope.validateGLQuotation = data;
                                     if (response.data) {
                                         $scope.showModal = true;
-                                        $scope.errorMessage=response.message;
+                                        $scope.errorMessage = response.message;
 
                                     } else {
                                         saveStep();
@@ -774,11 +846,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                                 });
 
                         }
-                    } else{
-                        if(data.data){
+                    } else {
+                        if (data.data) {
                             $scope.showDownload = false;
 
-                        }else{
+                        } else {
                             $scope.showDownload = true;
                         }
                     }
@@ -851,13 +923,13 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        var status =getQueryParameter('status');
-                       // console.log("**************RETURN STATUS********************");
-                       console.log(status);
-                        if(status == 'return'){
+                        var status = getQueryParameter('status');
+                        // console.log("**************RETURN STATUS********************");
+                        console.log(status);
+                        if (status == 'return') {
                             stepsSaved["2"] = true;
                             stepsSaved["4"] = true;
-                        }else{
+                        } else {
                             stepsSaved["1"] = true;
                             stepsSaved["3"] = true;
                         }
@@ -867,7 +939,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         return {};
                     }
                 }],
-                proposerDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http,getQueryParameter) {
+                proposerDetails: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouplife/proposal/getproposerdetail/' + queryParam).success(function (response, status, headers, config) {
@@ -875,10 +947,10 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-                        var status =getQueryParameter('status');
-                        if(status == 'return'){
+                        var status = getQueryParameter('status');
+                        if (status == 'return') {
                             stepsSaved["3"] = true;
-                        }else{
+                        } else {
                             stepsSaved["2"] = true;
                         }
 
@@ -902,14 +974,14 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                         return 1;
                     }
                 }],
-                premiumData: ['$q', '$http','getQueryParameter', function ($q, $http,getQueryParameter) {
+                premiumData: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                     if (queryParam && !_.isEmpty(queryParam)) {
                         var deferred = $q.defer();
                         $http.get('/pla/grouplife/proposal/getpremiumdetail/' + queryParam).success(function (response, status, headers, config) {
-                            var status =getQueryParameter('status');
-                            if(status == 'return'){
+                            var status = getQueryParameter('status');
+                            if (status == 'return') {
                                 stepsSaved["5"] = true;
-                            }else{
+                            } else {
                                 stepsSaved["4"] = true;
                             }
 
