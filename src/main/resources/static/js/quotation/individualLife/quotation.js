@@ -829,7 +829,9 @@
 
                     // ReArranging the Rider which has deleted into searchRiders List
 
-                    if(coverageName == 'Cash & Security Optional Covers 1'){
+                    if(coverageName == 'Cash & Security Optional Covers 1' ||coverageName == 'Cash & Security Optional Covers 2'
+                        || coverageName == 'Cash & Security Optional Covers 3' || coverageName == 'Cash & Security Optional Covers 4'){
+
                         var coverage1=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 2'});
                         if(coverage1){
                             $scope.searchRiders.push(coverage1);
@@ -842,8 +844,12 @@
                         if(coverage3){
                             $scope.searchRiders.push(coverage3);
                         }
+                        var coverage4=_.findWhere($scope.searchRidersCopy, {coverageName: 'Cash & Security Optional Covers 1'});
+                        if(coverage4){
+                            $scope.searchRiders.push(coverage4);
+                        }
                     }
-                    else if(coverageName == 'Cash & Security Optional Covers 2'){
+                    /*else if(coverageName == 'Cash & Security Optional Covers 2'){
                         var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
                         if(coverage1){
                             $scope.searchRiders.push(coverage1);
@@ -884,7 +890,7 @@
                         if(coverage3){
                             $scope.searchRiders.push(coverage3);
                         }
-                    }
+                    }*/
                     else{
                         var coverage=_.findWhere($scope.searchRidersCopy,{coverageName: coverageName});
                         if(coverage){
@@ -907,6 +913,13 @@
                             });
                     }
                     if (data && data.step == 4) {
+                        if($scope.plan.premiumTermType != 'SINGLE_REGULAR' || $scope.plan.premiumTermType != 'SINGLE_SPECIFIED_VALUES' || $scope.plan.premiumTermType != 'SINGLE_SPECIFIED_AGES'){
+                            $scope.planDetailDto.premiumPaymentType ='OTHER_PREMIUM';
+                            $scope.premiumTypeReadOnly=true;
+                        }
+                        else{
+                            $scope.premiumTypeReadOnly=false;
+                        }
                         $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
                             .success(function (response) {
                                 angular.copy(response,$scope.searchRidersCopy);
