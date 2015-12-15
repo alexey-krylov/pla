@@ -63,7 +63,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                     } else if (FLOAT_REGEXP_4.test(viewValue)) {
                         ctrl.$setValidity('float', true);
                         return parseFloat(viewValue.replace(',', '.'));
-                    }else {
+                    } else {
                         ctrl.$setValidity('float', false);
                         return undefined;
                     }
@@ -71,7 +71,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
                 ctrl.$formatters.unshift(
                     function (modelValue) {
-                        return $filter('number')(parseFloat(modelValue) , 2);
+                        return $filter('number')(parseFloat(modelValue), 2);
                     }
                 );
             }
@@ -89,6 +89,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             if (mode == 'view') {
                 $scope.isViewMode = true;
                 $scope.isEditMode = true;
+
             } else if (mode == 'edit') {
                 $scope.isEditMode = false;
             }
@@ -160,6 +161,83 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             if (status == 'return') {
                 $scope.stepsSaved["1"] = true;
             }
+            $scope.contactDetails = {};
+            $scope.showtable = false;
+            $scope.contactPersonDetail = [];
+            if (proposerDetails) {
+                if (proposerDetails.contactPersonDetail) {
+                    $scope.contactPersonDetail = proposerDetails.contactPersonDetail;
+                }
+
+            }
+
+            $scope.$watch('contactPersonDetail', function (newVal, oldVal) {
+                // console.log("*********************WATCH*********************************");
+                //  console.log($scope.contactPersonDetail);
+                if (newVal) {
+                    if (newVal.length > 0) {
+                        $scope.showtable = true;
+
+                    } else {
+                        $scope.showtable = false;
+                        if(mode== 'edit' && status=='return'){
+                            $scope.stepsSaved["3"] = false;
+                        }else if(mode== 'edit'){
+                            $scope.stepsSaved["2"] = false;
+                        }else{
+                            $scope.stepsSaved["2"] = false;
+
+                        }
+                    }
+
+                }
+
+            });
+
+            $scope.addContactDetail = function (contactDetails) {
+                console.log(contactDetails);
+                $scope.contactPersonDetail.push(contactDetails);
+                if ($scope.contactPersonDetail.length > 0) {
+                    $scope.showtable = true;
+                }
+                if (mode == 'edit' && status == 'return') {
+                    $scope.stepsSaved["3"] = false;
+                } else if (mode == 'edit') {
+                    $scope.stepsSaved["2"] = false;
+
+                }else{
+                    $scope.stepsSaved["2"] = false;
+
+                }
+
+                $scope.contactDetails = {};
+
+            }
+            $scope.deleteCurrentRow = function (index) {
+
+                $scope.contactPersonDetail.splice(index, 1);
+                if ($scope.contactPersonDetail.length <= 0) {
+                    $scope.showtable = false;
+
+                }
+                if (mode == 'edit' && status == 'return') {
+                    $scope.stepsSaved["3"] = false;
+                } else if (mode == 'edit') {
+                    $scope.stepsSaved["2"] = false;
+
+                }else{
+                    $scope.stepsSaved["2"] = false;
+
+                }
+
+            }
+            $scope.editCurrentRow = function (contactDetails, index) {
+                $scope.contactDetails = contactDetails;
+                //  $scope.stepsSaved["2"] = false;
+                $scope.contactPersonDetail.splice(index, 1);
+
+
+            }
 
             $scope.uploadDocumentFiles = function () {
                 // console.log($scope.documentList.length);
@@ -201,8 +279,8 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             };
 
-            $scope.removeAdditionalDocument = function (index,gridFsDocId) {
-                if(gridFsDocId) {
+            $scope.removeAdditionalDocument = function (index, gridFsDocId) {
+                if (gridFsDocId) {
                     $http.post("/pla/grouphealth/proposal/removeGHProposalAdditionalDocument?proposalId=" + $scope.proposalId + "&gridFsDocId=" + gridFsDocId).success(function (data, status) {
                         console.log(data);
                         if (data.status == '200') {
@@ -210,7 +288,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                             $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
                         }
                     });
-                }else{
+                } else {
                     $scope.additionalDocumentList.splice(index, 1);
                     $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
@@ -394,7 +472,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                 }
             });
 
-            $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
+           $scope.$watch('proposalDetails.proposer.province', function (newVal, oldVal) {
                 if (newVal) {
                     $scope.getProvinceDetails(newVal);
                 }
@@ -659,11 +737,13 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
             };
 
             $scope.saveProposerDetails = function () {
+                $scope.proposalDetails.proposer.contactPersonDetail = $scope.contactPersonDetail;
                 $http.post("/pla/grouphealth/proposal/updatewithproposerdetail", angular.extend({},
                     {proposerDto: $scope.proposalDetails.proposer},
                     {"proposalId": $scope.proposalId}))
                     .success(function (data) {
                         if (data.status == "200") {
+
                             saveStep();
                         }
                     });
@@ -675,24 +755,53 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
 
             }
-            $scope.errorMessage='';
+            $scope.errorMessage = '';
             $scope.$watch('selectedItem', function (newVal, oldVal) {
                 //  console.log("STEP"+newVal);
                 //  console.log(!$scope.stepsSaved[newVal]);
-                if (newVal == 3) {
+                if (mode == 'view' && status == 'return') {
+                    if (newVal == 4) {
+
+                        $http.get("/pla/grouphealth/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                            .success(function (response) {
+                                console.log(response);
+                                // $scope.validateGLQuotation = data;
+                                if (response.data) {
+                                    $scope.showModal = true;
+                                    $scope.errorMessage = response.message;
+
+                                }
+                            });
+                    }
+                }else if(mode == 'edit' && status == 'return'){
+                    if (newVal == 4) {
+
+                        $http.get("/pla/grouphealth/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
+                            .success(function (response) {
+                                console.log(response);
+                                // $scope.validateGLQuotation = data;
+                                if (response.data) {
+                                    $scope.showModal = true;
+                                    $scope.errorMessage = response.message;
+
+                                }
+                            });
+                    }
+
+                } else if (newVal == 3) {
                     $http.get("/pla/grouphealth/proposal/isValidPremiumAndPersons/" + $scope.proposalId)
                         .success(function (response) {
                             console.log(response);
                             // $scope.validateGLQuotation = data;
                             if (response.data) {
                                 $scope.showModal = true;
-                                $scope.errorMessage=response.message;
+                                $scope.errorMessage = response.message;
 
                             }
                         });
                 }
-            });
 
+            });
 
 
             $scope.savePlanDetails = function () {
@@ -712,7 +821,7 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                                     // $scope.validateGLQuotation = data;
                                     if (response.data) {
                                         $scope.showModal = true;
-                                        $scope.errorMessage=response.message;
+                                        $scope.errorMessage = response.message;
 
                                     } else {
                                         saveStep();
@@ -722,11 +831,11 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
                                 });
 
                         }
-                    } else{
-                        if(data.data){
+                    } else {
+                        if (data.data) {
                             $scope.showDownload = false;
 
-                        }else{
+                        } else {
                             $scope.showDownload = true;
                         }
                     }
