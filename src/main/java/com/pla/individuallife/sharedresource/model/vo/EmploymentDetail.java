@@ -19,7 +19,7 @@ public class EmploymentDetail {
     private String workPhone;
     private Address address;
 
-    EmploymentDetail(String occupationId, String occupationClass, String employer, DateTime employmentDate, String employmentTypeId, String workPhone, Address address) {
+   public EmploymentDetail(String occupationId, String occupationClass, String employer, DateTime employmentDate, String employmentTypeId, String workPhone, Address address) {
         this.occupationId = occupationId;
         this.occupationClass = occupationClass;
         this.employer = employer;
