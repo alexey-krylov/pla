@@ -36,6 +36,16 @@
 
 </script>
 
+<style>
+    .my-form {
+        transition:all linear 0.5s;
+        background: transparent;
+    }
+    .my-form.ng-invalid {
+        border-color: red;
+    }
+</style>
+
 <div class="container fuelux" ng-controller="createProposalCtrl">
     <nth-alert></nth-alert>
     <form>

@@ -37,7 +37,7 @@
                 </table>
             </div>
         </accordion-group>
-        <accordion-group is-open="accordionStatus.proposerDetails.proposer" ng-form="proposerForm">
+        <accordion-group is-open="accordionStatus.proposerDetails.proposer" ng-form="proposerForm" class="my-form">
             <accordion-heading>
                 Proposer<i class="pull-right glyphicon"
                            ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.proposer, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.proposer}"></i>
@@ -224,7 +224,7 @@
         </accordion-group>
 
 
-        <accordion-group is-open="accordionStatus.proposerDetails.spouseDetails" ng-form="proposerSpouseForm" ng-if="spouseChoice">
+        <accordion-group is-open="accordionStatus.proposerDetails.spouseDetails" ng-form="proposerSpouseForm" ng-if="spouseChoice" class="my-form">
             <accordion-heading>
                 Spouse Details <i class="pull-right glyphicon"
                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.spouseDetails}"></i>
@@ -275,7 +275,7 @@
         </accordion-group>
 
 
-        <accordion-group is-open="accordionStatus.proposerDetails.employment" ng-form="proposerEmploymentForm">
+        <accordion-group is-open="accordionStatus.proposerDetails.employment" ng-form="proposerEmploymentForm" class="my-form">
             <accordion-heading>
                 Employment Details <i class="pull-right glyphicon"
                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -393,7 +393,7 @@
         </accordion-group>
 
 
-        <accordion-group is-open="accordionStatus.proposerDetails.resident" ng-form="proposerResidentForm">
+        <accordion-group is-open="accordionStatus.proposerDetails.resident" ng-form="proposerResidentForm" class="my-form">
             <accordion-heading>
                 Residential Details <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.resident, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.resident}"></i>

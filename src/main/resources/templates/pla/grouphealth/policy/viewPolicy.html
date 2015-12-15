@@ -401,7 +401,7 @@
                                 <label class="control-label">Scheme Name</label>
                                 <input class="form-control input-sm"
                                        name="schemeName"
-                                       ng-pattern="/^[a-zA-Z ]*$/"
+                                       ng-disabled="isViewMode" ng-pattern="/^[a-zA-Z ]*$/"
                                        ng-model="policyDetails.plan.schemeName"/>
                             </div>
                         </div>

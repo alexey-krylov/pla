@@ -491,6 +491,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-lg-4 col-lg-offset-3">
+                            <div class="form-group ">
+                                <label class="control-label">Scheme Name</label>
+                                <input class="form-control input-sm"
+                                       name="schemeName"
+                                       ng-pattern="/^[a-zA-Z ]*$/"
+                                       ng-model="proposalDetails.plan.schemeName"/>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>

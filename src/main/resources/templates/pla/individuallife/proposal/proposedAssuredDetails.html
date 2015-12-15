@@ -2,7 +2,7 @@
     <div ng-init="setForm(step1);"></div>
     <accordion close-others="true">
         <accordion-group is-open="accordionStatus.proposedAssuredDetails.proposedAssured" ng-form="proposedAssuredDetails"
-                         ng-class="{'accordion-error':hasAccordionError(proposedAssuredDetails)}">
+                         class="my-form" ng-class="{'accordion-error':hasAccordionError(proposedAssuredDetails)}">
             <accordion-heading>
                 Proposed Assured <i class="pull-right glyphicon"
                                     ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.proposedAssured, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.proposedAssured}"></i>
@@ -174,7 +174,7 @@
             </div>
         </accordion-group>
 
-        <accordion-group is-open="accordionStatus.proposedAssuredDetails.spouseDetails" ng-form="spouseDetails" ng-if="spouseChoice">
+        <accordion-group is-open="accordionStatus.proposedAssuredDetails.spouseDetails" ng-form="spouseDetails" ng-if="spouseChoice" class="my-form">
             <accordion-heading>
                 Spouse Details <i class="pull-right glyphicon"
                                   ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.spouseDetails, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.spouseDetails}"></i>
@@ -226,7 +226,7 @@
         </accordion-group>
 
 
-        <accordion-group is-open="accordionStatus.proposedAssuredDetails.employment" ng-form="employmentDetails">
+        <accordion-group is-open="accordionStatus.proposedAssuredDetails.employment" ng-form="employmentDetails" class="my-form">
             <accordion-heading>
                 Employment Details <i class="pull-right glyphicon"
                                       ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.employment}"></i>
@@ -342,7 +342,7 @@
         </accordion-group>
 
 
-        <accordion-group is-open="accordionStatus.proposedAssuredDetails.resident" ng-form="residentDetails">
+        <accordion-group is-open="accordionStatus.proposedAssuredDetails.resident" ng-form="residentDetails" class="my-form">
             <accordion-heading>
                 Residential Details <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.proposedAssuredDetails.resident, 'glyphicon-chevron-right': !accordionStatus.proposedAssuredDetails.resident}"></i>
