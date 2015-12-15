@@ -754,7 +754,7 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDto.setPremiumType(isNotEmpty(cellValue) ? PremiumType.valueOf(cellValue.toUpperCase()) : null);
+            insuredDto.setPremiumType(isNotEmpty(cellValue) ? PremiumType.valueOf(cellValue.toUpperCase()) : PremiumType.AMOUNT);
             return insuredDto;
         }
 
@@ -763,7 +763,7 @@ public enum GHInsuredExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            insuredDependentDto.setPremiumType(isNotEmpty(cellValue) ? PremiumType.valueOf(cellValue.toUpperCase()) : null);
+            insuredDependentDto.setPremiumType(isNotEmpty(cellValue) ? PremiumType.valueOf(cellValue.toUpperCase()) : PremiumType.AMOUNT);
             return insuredDependentDto;
         }
 
@@ -778,8 +778,23 @@ public enum GHInsuredExcelHeader {
             try {
                 Cell planPremiumCell = row.getCell(excelHeaders.indexOf(PLAN_PREMIUM.name()));
                 String planPremium = getCellValue(planPremiumCell);
+                Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.name()));
+                String noOfAssured = getCellValue(noOfAssuredCell);
+                Cell maxAgeCell = row.getCell(excelHeaders.indexOf(MAX_ENTRY_AGE.name()));
+                String maxAge = getCellValue(maxAgeCell);
+                Cell minAgeCell = row.getCell(excelHeaders.indexOf(MIN_ENTRY_AGE.name()));
+                String minAge = getCellValue(minAgeCell);
+
+                if(isEmpty(noOfAssured) && (isNotEmpty(maxAge) || isNotEmpty(minAge)) && isEmpty(value)){
+                    errorMessage = errorMessage + "Premium Type cannot be empty.";
+                    return errorMessage;
+                }
                 if(PremiumType.RATE.toString().equalsIgnoreCase(value) && isEmpty(planPremium)){
                     errorMessage = errorMessage + "Premium Rate cannot be empty.";
+                    return errorMessage;
+                }
+                if(PremiumType.AMOUNT.toString().equalsIgnoreCase(value) && isEmpty(planPremium)){
+                    errorMessage = errorMessage + "Premium Amount cannot be empty.";
                     return errorMessage;
                 }
                 if(PremiumType.RATE.toString().equalsIgnoreCase(value) && isNotEmpty(planPremium)){
@@ -791,6 +806,14 @@ public enum GHInsuredExcelHeader {
                     }
                     if(isNotEmpty(errorMessage))
                         return errorMessage;
+                }
+                if(isNotEmpty(noOfAssured) && isEmpty(value)){
+                    errorMessage = errorMessage + "Premium Type is empty for given number of assured.";
+                    return errorMessage;
+                }
+                if(isEmpty(noOfAssured) && isEmpty(value) && isNotEmpty(planPremium)){
+                    errorMessage = errorMessage + "Premium Type cannot be empty.";
+                    return errorMessage;
                 }
                 if(!PremiumType.checkIfValidConstant(value)){
                     errorMessage = errorMessage + "Premium Type is not valid.";

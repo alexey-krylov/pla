@@ -7,6 +7,7 @@
 package com.pla.sharedkernel.domain.model;
 
 import com.google.common.collect.Lists;
+import org.nthdimenzion.utils.UtilValidator;
 
 import java.util.List;
 
@@ -47,6 +48,8 @@ public enum PremiumType {
             if(premiumType.description.equalsIgnoreCase(value))
                 return Boolean.TRUE;
         }
+        if(UtilValidator.isEmpty(value))
+            return Boolean.TRUE;
         return Boolean.FALSE;
     }
 }
