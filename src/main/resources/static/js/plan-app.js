@@ -351,6 +351,22 @@ app.controller('PlanViewController', ['$scope', 'plan', 'activeCoverages','$http
         $scope.resolveRelationship = function (relation) {
             return _.findWhere(relations, {val: relation}).desc;
         }
+
+        var planTermTypes = [
+            {val: 'SPECIFIED_VALUES', desc: 'Specified values'},
+            {val: 'MATURITY_AGE_DEPENDENT', desc: 'Maturity age dependent'},
+            {val: 'REGULAR', desc: 'Regular'},
+            {val: 'SPECIFIED_AGES', desc: 'Specified ages'},
+            {val: 'SINGLE', desc: 'Single'},
+            {val: 'SINGLE_REGULAR', desc: 'Single regular'},
+            {val: 'SINGLE_SPECIFIED_VALUES', desc: 'Single specified values'},
+            {val: 'AGE_DEPENDENT', desc: 'Age dependent'},
+            {val: 'POLICY_TERM', desc: 'Policy term'},
+            {val: 'SINGLE_SPECIFIED_AGES', desc: 'Single specified ages'}];
+        $scope.resolvePlanTermType=function(planTermType){
+            return _.findWhere(planTermTypes, {val: planTermType}).desc;
+        }
+
     }
 ])
 app.controller('PlanSetupController', ['$scope', '$http', '$location', '$routeParams', '$templateCache', '$bsmodal', '$log', 'plan', 'activeCoverages', 'endorsementTypes',

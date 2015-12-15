@@ -153,7 +153,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <h4>Policy Term Type</h4>
+                                            <span>{{resolvePlanTermType(plan.policyTermType)}}</span>
+                                        </div>
+
+                                        <div class="col-md-6">
                                             <h4>Policy Terms</h4>
 
                                             <div ng-if="plan.policyTermType=='SPECIFIED_VALUES'">
@@ -171,7 +176,11 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <h4>Premium Term Type</h4>
+                                            <span>{{resolvePlanTermType(plan.premiumTermType)}}</span>
+                                        </div>
+                                        <div class="col-md-6">
                                             <h4>Premium Term</h4>
 
                                             <div ng-if="plan.premiumTermType=='REGULAR'">
@@ -221,7 +230,7 @@
                                         <h5>{{getCoverageName(planCoverage.coverageId)}}</h5>
 
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <dl class="dl-horizontal">
                                                     <dt>Coverage Cover</dt>
                                                     <dd>{{planCoverage.coverageCover}}</dd>
@@ -229,18 +238,31 @@
                                                     <dd>{{planCoverage.coverageType}}</dd>
                                                 </dl>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <dl class="dl-horizontal">
                                                     <dt>Deductible Type</dt>
                                                     <dd>{{planCoverage.deductibleType}}</dd>
+                                                    <dt>Deductible Amount</dt>
+                                                    <dd>{{planCoverage.deductibleAmount}}</dd>
+                                                    <!--<dt>Tax Applicable</dt>
+                                                    <dd>
+                                                        <span ng-if="planCoverage.taxApplicable">Yes</span>
+                                                        <span ng-if="!planCoverage.taxApplicable">No</span>
+                                                    </dd>-->
+                                                </dl>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <dl class="dl-horizontal">
                                                     <dt>Tax Applicable</dt>
                                                     <dd>
                                                         <span ng-if="planCoverage.taxApplicable">Yes</span>
                                                         <span ng-if="!planCoverage.taxApplicable">No</span>
                                                     </dd>
+                                                    <dt>Waiting Period</dt>
+                                                    <dd>{{planCoverage.waitingPeriod}}</dd>
                                                 </dl>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <dl class="dl-horizontal">
                                                     <dt>Minimum Entry Age</dt>
                                                     <dd>{{planCoverage.minAge}}</dd>
@@ -260,19 +282,19 @@
                                                     </span>
                                             </div>
                                             <div ng-if="planCoverage.coverageSumAssured.sumAssuredType=='RANGE'">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <dl class="dl-horizontal">
                                                         <dt>Minimum Amount</dt>
                                                         <dd>{{planCoverage.coverageSumAssured.minSumInsured}}</dd>
                                                     </dl>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <dl class="dl-horizontal">
                                                         <dt>Maximum Amount</dt>
                                                         <dd>{{planCoverage.coverageSumAssured.maxSumInsured}}</dd>
                                                     </dl>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <dl class="dl-horizontal">
                                                         <dt>Multiples Of</dt>
                                                         <dd>{{planCoverage.coverageSumAssured.multiplesOf}}</dd>
@@ -288,12 +310,48 @@
                                                 </div>
                                             </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <h5>Cover Term</h5>
+                                                <div>
+                                                    <span>
+                                                        {{resolvePlanTermType(planCoverage.coverageTermType)}}
+                                                    </span>&nbsp;
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" ng-if="planCoverage.coverageTermType != 'POLICY_TERM' ">
+                                                <h5>Valid Terms</h5>
+                                                <div>
+                                                     <span ng-repeat="term in planCoverage.coverageTerm.validTerms">{{term.text}}&nbsp;<b
+                                                             ng-if="!$last">,</b>&nbsp;
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                     <span ng-repeat="term in planCoverage.coverageTerm.maturityAges">{{term.text}}&nbsp;<b
+                                                             ng-if="!$last">,</b>&nbsp;
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" ng-if="planCoverage.maturityAmounts.length > 0">
+                                            <div class="col-md-6">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Maturity Year</th>
+                                                        <th>Guaranteed Survival Benefit Amount</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="row in planCoverage.maturityAmounts">
+                                                        <td>{{row.maturityYear}}</td>
+                                                        <td>{{row.guaranteedSurvivalBenefitAmount}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                         <h6 class="text-muted">Benefits</h6>
-
                                         <div class="row" ng-repeat="benefit in planCoverage.planCoverageBenefits">
                                             <div class="col-md-4">
 
