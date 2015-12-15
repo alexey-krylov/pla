@@ -352,6 +352,14 @@ public enum GLInsuredExcelHeader {
             if (!isValidDate(value)) {
                 errorMessage = errorMessage + "Date of birth should be in format(dd/MM/yyyy).";
             }
+            if(isNotEmpty(value)) {
+                Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
+                String planCode = String.valueOf(Double.valueOf(getCellValue(planCell)).intValue());
+                int age = AppUtils.getAgeOnNextBirthDate(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
+                if (!planAdapter.isValidPlanAge(planCode, age)) {
+                    errorMessage = errorMessage + " Age is not valid for plan " + planCode + ".";
+                }
+            }
             return errorMessage;
         }
     },
