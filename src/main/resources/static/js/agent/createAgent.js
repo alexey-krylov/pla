@@ -274,6 +274,7 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         .success(function(response, status, headers, config){
                             if(response.status=="200"){
                                 $scope.contactDetailsForm.$submitted=true;
+                                $window.location = '/pla/core/agent/listagent';
                             }
                         })
                         .error(function(response, status, headers, config){
