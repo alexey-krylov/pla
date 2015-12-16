@@ -54,7 +54,8 @@ App.controller('CreateTeamController',['$scope','$http','$templateCache','$timeo
                 if(data.status==200){
                     // $scope.alert = {title:'Success Message! ', content:data.message, type: 'success'};
                     // $scope.reset();
-                   $window.location.reload();
+                   //$window.location.reload();
+                    $window.location='/pla/core/team/view';
                 }else if(data.status==500){
                //  $scope.alert = {title:'Error Message! ', content:data.message, type: 'danger'};
                 }

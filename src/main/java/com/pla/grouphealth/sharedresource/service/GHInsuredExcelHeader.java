@@ -833,7 +833,7 @@ public enum GHInsuredExcelHeader {
                 BigDecimal premiumAmount = insuredDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDto.getNoOfAssured()));
                 premium = premiumAmount.toPlainString();
             }
-            if(insuredDto.getPremiumType().equals(PremiumType.RATE)){
+            if(PremiumType.RATE.equals(insuredDto.getPremiumType() != null ? insuredDto.getPremiumType() : "")){
                 premium = insuredDto.getRateOfPremium();
             }
             return premium;
@@ -947,21 +947,17 @@ public enum GHInsuredExcelHeader {
         }
     };
 
-    private static BigDecimal calculatePlanPremiumForPremiumTypeRate(String cellValue, String annualLimit, String noOfAssuredCellValue) {
-        if(isNotEmpty(noOfAssuredCellValue))
-            return ((new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000))).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredCellValue));
-        else
-            return (new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000));
-    }
-
     private String description;
 
     GHInsuredExcelHeader(String description) {
         this.description = description;
     }
 
-    public String getDescription() {
-        return description;
+    private static BigDecimal calculatePlanPremiumForPremiumTypeRate(String cellValue, String annualLimit, String noOfAssuredCellValue) {
+        if(isNotEmpty(noOfAssuredCellValue))
+            return ((new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000))).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredCellValue));
+        else
+            return (new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000));
     }
 
     public static List<String> getAllHeader() {
@@ -979,7 +975,6 @@ public enum GHInsuredExcelHeader {
         }
         return headers;
     }
-
 
     public static List<String> getAllowedHeaders(IPlanAdapter planAdapter, List<PlanId> planIds) {
         List<PlanCoverageDetailDto> planCoverageDetailDtoList = planAdapter.getPlanAndCoverageDetail(planIds);
@@ -1036,6 +1031,10 @@ public enum GHInsuredExcelHeader {
             }
         }
         return ImmutableList.copyOf(headers);
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public abstract String getAllowedValue(GHInsuredDto insuredDto);

@@ -2,7 +2,6 @@ package com.pla.grouplife.sharedresource.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
@@ -862,7 +861,7 @@ public enum GLInsuredExcelHeader {
                 BigDecimal premiumAmount = insuredDto.getPlanPremiumDetail().getPremiumAmount().divide(new BigDecimal(insuredDto.getNoOfAssured()));
                 premium = premiumAmount.toPlainString();
             }
-            if(insuredDto.getPremiumType().equals(PremiumType.RATE)){
+            if(PremiumType.RATE.equals(insuredDto.getPremiumType() != null ? insuredDto.getPremiumType() : "")){
                 premium = insuredDto.getRateOfPremium();
             }
             return premium;
@@ -950,17 +949,17 @@ public enum GLInsuredExcelHeader {
         }
     };
 
+    private String description;
+
+    GLInsuredExcelHeader(String description) {
+        this.description = description;
+    }
+
     private static BigDecimal calculatePlanPremiumForPremiumTypeRate(String cellValue, String annualLimit, String noOfAssuredCellValue) {
         if(isNotEmpty(noOfAssuredCellValue))
             return ((new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000))).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(noOfAssuredCellValue));
         else
             return (new BigDecimal(cellValue).multiply(new BigDecimal(annualLimit))).divide(new BigDecimal(1000));
-    }
-
-    private String description;
-
-    GLInsuredExcelHeader(String description) {
-        this.description = description;
     }
 
     public static List<String> getAllHeader() {
