@@ -112,7 +112,7 @@ public class PremiumTemplateExcelGenerator {
             HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
             dataValidation.setErrorStyle(DataValidation.ErrorStyle.INFO);
             dataValidation.createErrorBox("Error", "Provide proper " + premiumInfluencingFactor.getDescription() + " value");
-            premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), false);
+            premiumTemplateWorkbook.setSheetHidden(premiumTemplateWorkbook.getSheetIndex(hiddenSheetForNamedCell), true);
             sheets.addValidationData(dataValidation);
         }
     }
