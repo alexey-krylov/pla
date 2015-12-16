@@ -59,7 +59,7 @@ public class AgentFinder {
      */
     private static final String SEARCH_PLAN_BY_AGENT_ID = "SELECT C.* FROM AGENT A JOIN agent_authorized_plan b " +
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
-            "ON B.`plan_id`=C.`plan_id` where A.agent_id=:agentId and c.line_of_business=:lineOfBusiness group by C.plan_id";
+            "ON B.`plan_id`=C.`plan_id` where A.agent_id=:agentId and c.line_of_business=:lineOfBusiness and c.plan_status='LAUNCHED' group by C.plan_id";
 
 
     public static final String findPolicyCommissionByAgentId = "SELECT a.designation_code  agentCode," +
