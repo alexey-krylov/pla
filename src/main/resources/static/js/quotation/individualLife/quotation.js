@@ -886,6 +886,9 @@
                         $http.get('getpremiumdetail/' + $scope.quotationId)
                             .success(function (response) {
                                 console.log('success ***');
+                                if($scope.serverError){
+                                    $scope.serverError = false;
+                                }
                                 $scope.premiumData = response;
                             }).error(function (response) {
                                 $scope.stepsSaved["5"] = false;
@@ -894,12 +897,13 @@
                             });
                     }
                     if (data && data.step == 4) {
-                        if($scope.plan.premiumTermType != 'SINGLE_REGULAR' || $scope.plan.premiumTermType != 'SINGLE_SPECIFIED_VALUES' || $scope.plan.premiumTermType != 'SINGLE_SPECIFIED_AGES'){
+                        if($scope.plan.premiumTermType === 'SINGLE' || $scope.plan.premiumTermType === 'SPECIFIED_VALUES' || $scope.plan.premiumTermType === 'SPECIFIED_AGES'){
                             $scope.planDetailDto.premiumPaymentType ='OTHER_PREMIUM';
                             $scope.premiumTypeReadOnly=true;
                         }
                         else{
                             $scope.premiumTypeReadOnly=false;
+                            $scope.planDetailDto.premiumPaymentType ='';
                         }
                         $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
                             .success(function (response) {

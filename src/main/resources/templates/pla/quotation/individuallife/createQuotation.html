@@ -628,7 +628,7 @@
                                     </div>
 
                                 </div>
-                                <div class="form-group required">
+                                <div class="form-group required" ng-if="!premiumTypeReadOnly">
                                     <label class="control-label">Premium Payment Term Type</label>
                                     <select view-enabled="" class="form-control input-sm" ng-model="planDetailDto.premiumPaymentType" ng-change="clearPolicyTerm()" name="premiumPaymentType" ng-required="true" ng-disabled="premiumTypeReadOnly">
                                         <option value="">-- Select Payment Term Type --</option>
