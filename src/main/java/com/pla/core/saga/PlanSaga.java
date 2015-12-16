@@ -56,11 +56,6 @@ public class PlanSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling Plan updating Event .....", event);
         }
         DateTime launchDate = event.getLaunchDate();
-        /*
-        * @TODO understand how snapshotevent works to cancel the published events
-        * */
-        /*Plan plan = planMongoRepository.load(event.getPlanId());
-        eventScheduler.cancelSchedule(plan.getScheduleToken());*/
         ScheduleToken scheduleToken = eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
         scheduledTokens.add(scheduleToken);
     }

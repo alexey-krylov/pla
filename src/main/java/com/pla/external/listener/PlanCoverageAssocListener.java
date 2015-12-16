@@ -8,6 +8,7 @@ import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.annotation.EventHandler;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -121,7 +122,7 @@ public class PlanCoverageAssocListener {
     public void handle(PlanLaunchEvent event) {
         String planId = event.getPlanId().toString();
         namedParameterJdbcTemplate.execute("update plan_coverage_benefit_assoc set plan_status='" + PlanStatus.LAUNCHED + "' where " +
-                        "plan_id='" + planId + "'",
+                        "plan_id='" + planId + "' AND launch_date='"+ new Date(DateTime.now().toDate().getTime())+"'",
                 new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
                     @Override
                     public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
