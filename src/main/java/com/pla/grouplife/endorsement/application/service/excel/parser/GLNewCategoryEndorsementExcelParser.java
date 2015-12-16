@@ -128,7 +128,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         } else if (samePlanForAllCategory && samePlanForAllRelation && (!isSamePlanForAllCategory && !isSamePlanForAllCategory)) {
             raiseNotSamePlanForAllCategoryAndRelationshipException();
         }
-        Map policyMap = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        Map policyMap = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());

@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.sharedkernel.identifier.QuotationId;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -208,5 +211,33 @@ public class GLFinder {
         }
         return Collections.EMPTY_LIST;
     }
-
+    public Map findActiveMemberFromPolicyByPolicyId(String policyId){
+        Map policyMap  = findPolicyById(policyId);
+        List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        List<Insured> activeInsureds =  insureds.parallelStream().filter(new Predicate<Insured>() {
+            @Override
+            public boolean test(Insured insured) {
+                Set<InsuredDependent> insuredDependents =  insured.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
+                    @Override
+                    public boolean test(InsuredDependent insuredDependent) {
+                        return !insuredDependent.getIsDependentDeleted();
+                    }
+                }).map(new Function<InsuredDependent, InsuredDependent>() {
+                    @Override
+                    public InsuredDependent apply(InsuredDependent insuredDependent) {
+                        return insuredDependent;
+                    }
+                }).collect(Collectors.toSet());
+                insured.setInsuredDependents(insuredDependents);
+                return !insured.getIsInsuredDeleted();
+            }
+        }).map(new Function<Insured, Insured>() {
+            @Override
+            public Insured apply(Insured insured) {
+                return insured;
+            }
+        }).collect(Collectors.toList());
+        policyMap.put("insureds",activeInsureds);
+        return policyMap;
+    }
 }

@@ -127,7 +127,7 @@ public class GroupLifeQuotationController {
             proposerDto.setAddressLine1(clientDetailDto.getAddress1());
             proposerDto.setAddressLine2(clientDetailDto.getAddress2());
             proposerDto.setPostalCode(clientDetailDto.getPostalCode());
-            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setEmailAddress(clientDetailDto.getEmailAddress());
             proposerDto.setTown(clientDetailDto.getTown());
             proposerDto.setProvince(clientDetailDto.getProvince());
             proposerDto.setProposerCode(proposerCode);
@@ -352,7 +352,7 @@ public class GroupLifeQuotationController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors", Boolean.TRUE);
             }
             List<InsuredDto> insuredDtos = glQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isApplyIndustryLoadingFactor(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory()));
+            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isApplyIndustryLoadingFactor(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory(),uploadInsuredDetailDto.getSchemeName()));
             return Result.success("Insured detail uploaded successfully", quotationId);
         } catch (Exception e) {
             e.printStackTrace();

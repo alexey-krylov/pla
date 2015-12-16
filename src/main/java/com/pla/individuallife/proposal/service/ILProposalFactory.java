@@ -53,8 +53,14 @@ public class ILProposalFactory {
             quotationProposerDto.setIsProposedAssured(cmd.getProposer().getIsProposedAssured());
             proposer = ProposerBuilder.getProposerBuilder(quotationProposerDto).createProposer();
             ProposedAssuredDto proposedAssuredDto = dto.getProposedAssured();
+
+           /*
+           * Given empty object as it routed from quotation to proposal...
+           * */
+            Address address  = new Address("","","","","");
+            EmploymentDetail employmentDetail = new EmploymentDetail("",proposedAssuredDto.getOccupation(),"",null,"","",address);
             proposedAssured = new ProposedAssured(proposedAssuredDto.getTitle(),proposedAssuredDto.getFirstName(),proposedAssuredDto.getSurname(),proposedAssuredDto.getNrc(),proposedAssuredDto.getDateOfBirth(),
-                    proposedAssuredDto.getGender(),proposedAssuredDto.getMobileNumber(),proposedAssuredDto.getEmailAddress(),proposedAssuredDto.getMaritalStatus(),null,null,null,null,null,null,proposedAssuredDto.getOtherName(),proposedAssuredDto.getRelationshipId(),proposedAssuredDto.getClientId());
+                    proposedAssuredDto.getGender(),proposedAssuredDto.getMobileNumber(),proposedAssuredDto.getEmailAddress(),proposedAssuredDto.getMaritalStatus(),proposedAssuredDto.getOccupation(),null,null,null,employmentDetail,null,proposedAssuredDto.getOtherName(),proposedAssuredDto.getRelationshipId(),proposedAssuredDto.getClientId());
             if (dto.isAssuredTheProposer()) {
                 proposedAssured =  withProposedAssure(quotationProposerDto);
             }

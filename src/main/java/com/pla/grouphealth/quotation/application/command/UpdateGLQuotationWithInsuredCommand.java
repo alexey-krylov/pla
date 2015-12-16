@@ -30,4 +30,6 @@ public class UpdateGLQuotationWithInsuredCommand {
 
     private boolean samePlanForAllCategory;
 
+    private String schemeName;
+
 }

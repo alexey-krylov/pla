@@ -2,6 +2,7 @@ package com.pla.grouplife.endorsement.domain.model;
 
 import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.domain.event.GLEndorsementStatusAuditEvent;
+import com.pla.grouplife.sharedresource.event.GLPolicyInsuredDeleteEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.grouplife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
@@ -19,8 +20,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -151,8 +156,43 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         if (isNotEmpty(comment)) {
             registerEvent(new GLEndorsementStatusAuditEvent(this.getEndorsementId(), EndorsementStatus.APPROVED, username, comment, submittedOn));
         }
+        raiseEventIfTypeIsMemberDeletion();
         return this;
     }
+
+    private void raiseEventIfTypeIsMemberDeletion() {
+        if (this.getEndorsementType().equals(GLEndorsementType.ASSURED_MEMBER_DELETION)){
+            Set<Insured>  deletedInsuredDetails = this.getEndorsement().getMemberDeletionEndorsements().getInsureds();
+            List<String> deletedInsuredFamilyIds = deletedInsuredDetails.parallelStream().filter(new Predicate<Insured>() {
+                @Override
+                public boolean test(Insured insured) {
+                    return insured.getNoOfAssured()==null;
+                }
+            }).map(new Function<Insured, String>() {
+                @Override
+                public String apply(Insured insured) {
+                    return insured.getFamilyId().getFamilyId();
+                }
+            }).collect(Collectors.toList());
+
+            for (Insured insured : deletedInsuredDetails){
+                insured.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
+                    @Override
+                    public boolean test(InsuredDependent insuredDependent) {
+                        return insuredDependent.getNoOfAssured()==null;
+                    }
+                }).map(new Function<InsuredDependent, String>() {
+                    @Override
+                    public String apply(InsuredDependent insuredDependent) {
+                        deletedInsuredFamilyIds.add(insuredDependent.getFamilyId().getFamilyId());
+                        return insuredDependent.getFamilyId().getFamilyId();
+                    }
+                }).collect(Collectors.toList());
+            }
+            registerEvent(new GLPolicyInsuredDeleteEvent(this.policy.getPolicyId(),deletedInsuredFamilyIds));
+        }
+    }
+
     /*
     * @TODO change according to the type
     * */
@@ -258,7 +298,7 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         }).sum();
         for (Insured insured : insureds){
             if (isNotEmpty(insured.getInsuredDependents())) {
-              Integer dependentSize = insured.getInsuredDependents().parallelStream().mapToInt(new ToIntFunction<InsuredDependent>() {
+                Integer dependentSize = insured.getInsuredDependents().parallelStream().mapToInt(new ToIntFunction<InsuredDependent>() {
                     @Override
                     public int applyAsInt(InsuredDependent value) {
                         return value.getNoOfAssured()!=null?value.getNoOfAssured():value.getCategory()!=null?1:0;

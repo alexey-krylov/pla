@@ -39,7 +39,6 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -255,6 +254,7 @@ public class GHProposalService {
         boolean moratoriumPeriodApplicable = proposal.get("moratoriumPeriodApplicable") != null ? (boolean) proposal.get("moratoriumPeriodApplicable") : false;
         boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
+        String schemeName = proposal.get("schemeName") != null ? (String) proposal.get("schemeName") : "";
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
@@ -263,6 +263,7 @@ public class GHProposalService {
         proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
         proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         proposerDto.setConsiderMoratoriumPeriod(moratoriumPeriodApplicable);
+        proposerDto.setSchemeName(schemeName);
         return proposerDto;
     }
 

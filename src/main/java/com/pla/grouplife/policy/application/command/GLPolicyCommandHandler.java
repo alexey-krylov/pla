@@ -44,6 +44,14 @@ public class GLPolicyCommandHandler {
         glPolicyMongoRepository.add(groupLifePolicy);
     }
 
+
+    @CommandHandler
+    public void memberDeleteCommandHandler(GroupLifePolicyMemberDeletionCommand groupLifePolicyMemberDeletionCommand) {
+        GroupLifePolicy groupLifePolicy = glPolicyMongoRepository.load(new PolicyId(groupLifePolicyMemberDeletionCommand.getPolicyId().getPolicyId()));
+        groupLifePolicy  = groupLifePolicy.updateWithDeletedMember(groupLifePolicyMemberDeletionCommand.getDeletedFamilyIds());
+    }
+
+
     @CommandHandler
     public void uploadMandatoryDocument(GLPolicyDocumentCommand glPolicyDocumentCommand) throws IOException {
         GroupLifePolicy groupLifePolicy = glPolicyMongoRepository.load(new PolicyId(glPolicyDocumentCommand.getPolicyId()));

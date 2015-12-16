@@ -182,8 +182,7 @@
                                                     <h6 ng-if="plan.planDetail.clientType=='INDIVIDUAL'">Age at Maturity
                                                         should not be more than {{plan.policyTerm.maxMaturityAge}}
                                                         year</h6>
-                                                    <h6 ng-if="plan.planDetail.clientType=='GROUP'">Premium Term for 365
-                                                        days only.</h6>
+                                                    <h6 ng-if="plan.planDetail.clientType=='GROUP'">Regular</h6>
                                                 </div>
                                                 <div ng-if="plan.policyTermType=='MATURITY_AGE_DEPENDENT'">
                                                     <span ng-repeat="term in plan.policyTerm.validTerms">{{term.text}}&nbsp;<b
@@ -251,6 +250,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-6">
                                             <h5>Sum Assured</h5>
 
                                             <div class="col-md-12"
@@ -286,6 +286,10 @@
                                                         {{planCoverage.coverageSumAssured.percentage}} % of plan Sum assured. <strong>Max Limit:</strong> {{planCoverage.coverageSumAssured.maxLimit}}
                                                     </span>
                                                 </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5>Cover Term</h5>
                                             </div>
                                         </div>
                                         <h6 class="text-muted">Benefits</h6>

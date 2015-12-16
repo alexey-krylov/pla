@@ -1,13 +1,12 @@
 package com.pla.external.listener;
 
-import com.pla.core.domain.event.PlanCoverageAssociationEvent;
-import com.pla.core.domain.event.PlanExpireEvent;
-import com.pla.core.domain.event.PlanLaunchEvent;
-import com.pla.core.domain.event.PlanUpdateWithdrawalEvent;
+import com.pla.core.application.agent.UpdateDirectAgentWithPlanCommand;
+import com.pla.core.domain.event.*;
 import com.pla.sharedkernel.domain.model.CoverageType;
 import com.pla.sharedkernel.domain.model.PlanStatus;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -35,6 +34,9 @@ import java.util.Map;
 public class PlanCoverageAssocListener {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    private CommandGateway commandGateway;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -154,5 +156,11 @@ public class PlanCoverageAssocListener {
                     }
                 });
     }
+
+    @EventHandler
+    public void handle(UpdateDirectAgentWithPlanEvent event) {
+        commandGateway.sendAndWait(new UpdateDirectAgentWithPlanCommand(event.getPlanId(),event.getAgentId()));
+    }
+
 
 }

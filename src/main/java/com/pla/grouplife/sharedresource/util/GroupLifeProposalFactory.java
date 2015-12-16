@@ -45,6 +45,7 @@ public class GroupLifeProposalFactory {
         Map quotationMap = glFinder.getQuotationById(quotationId);
         boolean samePlanForAllRelation = quotationMap.get("samePlanForAllRelation") != null ? (boolean) quotationMap.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = quotationMap.get("samePlanForAllCategory") != null ? (boolean) quotationMap.get("samePlanForAllCategory") : false;
+        String schemeName = quotationMap.get("schemeName")!=null?(String) quotationMap.get("schemeName"):"";
         String quotationNumber = (String) quotationMap.get("quotationNumber");
         Industry industry = (Industry) quotationMap.get("industry");
         Integer versionNumber = (Integer) quotationMap.get("versionNumber");
@@ -59,6 +60,7 @@ public class GroupLifeProposalFactory {
         GroupLifeProposal groupLifeProposal = new GroupLifeProposal(proposalId, quotation, proposalNumber);
         groupLifeProposal.updateFlagSamePlanForAllRelation(samePlanForAllRelation);
         groupLifeProposal.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
+        groupLifeProposal.updateWithSchemeName(schemeName);
         groupLifeProposal = groupLifeProposal.updateWithAgentId(agentId,null,null).updateWithProposer(proposer)
                 .updateWithInsureds(insureds).updateWithPremiumDetail(premiumDetail).updateWithIndustry(industry).updateWithOpportunityId(opportunityId);
         return groupLifeProposal;

@@ -88,7 +88,7 @@ public class GlQuotationCommandHandler {
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(BigDecimal.valueOf(0), 365, BigDecimal.valueOf(5), BigDecimal.valueOf(5), BigDecimal.valueOf(5));
         groupLifeQuotation = groupLifeQuotationService.updateWithPremiumDetail(groupLifeQuotation, premiumDetailDto, updateGLQuotationWithInsuredCommand.getUserDetails());
         groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllRelation(updateGLQuotationWithInsuredCommand.isSamePlanForAllRelation());
-        groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllCategory(updateGLQuotationWithInsuredCommand.isSamePlanForAllCategory());
+        groupLifeQuotation = groupLifeQuotation.updateFlagSamePlanForAllCategory(updateGLQuotationWithInsuredCommand.isSamePlanForAllCategory()).updateWithSchemeName(updateGLQuotationWithInsuredCommand.getSchemeName());
         if (isVersioningRequire) {
             glQuotationMongoRepository.add(groupLifeQuotation);
         }

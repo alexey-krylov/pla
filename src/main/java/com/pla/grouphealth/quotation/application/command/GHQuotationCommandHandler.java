@@ -105,7 +105,7 @@ public class GHQuotationCommandHandler {
         groupHealthQuotation = groupHealthQuotationService.updateWithPremiumDetail(groupHealthQuotation, premiumDetailDto, updateGLQuotationWithInsuredCommand.getUserDetails());
         groupHealthQuotation = groupHealthQuotation.updateWithMoratoriumPeriod(updateGLQuotationWithInsuredCommand.isConsiderMoratoriumPeriod());
         groupHealthQuotation = groupHealthQuotation.updateFlagSamePlanForAllRelation(updateGLQuotationWithInsuredCommand.isSamePlanForAllRelation());
-        groupHealthQuotation = groupHealthQuotation.updateFlagSamePlanForAllCategory(updateGLQuotationWithInsuredCommand.isSamePlanForAllCategory());
+        groupHealthQuotation = groupHealthQuotation.updateFlagSamePlanForAllCategory(updateGLQuotationWithInsuredCommand.isSamePlanForAllCategory()).updateWithSchemeName(updateGLQuotationWithInsuredCommand.getSchemeName());
         if (isVersioningRequire) {
             ghQuotationMongoRepository.add(groupHealthQuotation);
         }

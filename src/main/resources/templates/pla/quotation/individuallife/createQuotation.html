@@ -867,7 +867,7 @@
             </div>
         </div>
         <div ng-switch-when="DERIVED">
-            <input type="number" view-enabled="" class="form-control input-sm" min="{{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}"
+            <input type="number" view-enabled="" validate-optallowsumassured="" class="form-control input-sm" min="{{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}"
                    max="{{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}"
                    name="sumAssured"
                    ng-required="true" ng-model="rider.sumAssured"/>
@@ -877,6 +877,7 @@
                 </small>
                 <small ng-message="min">Sum Assured should be {{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}.
                 </small>
+                <small ng-message="invalidmaxLimit">Sum Assured should be in the range of {{coverage.coverageSumAssured.maxLimit}}</small>
             </div>
         </div>
         <!--<div ng-switch-when="INCOME_MULTIPLIER">

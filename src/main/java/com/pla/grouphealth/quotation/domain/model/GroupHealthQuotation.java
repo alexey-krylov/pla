@@ -68,6 +68,8 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
 
     private OpportunityId opportunityId;
 
+    private String schemeName;
+
 
     private GroupHealthQuotation(String quotationCreator, String quotationNumber, QuotationId quotationId, AgentId agentId, GHProposer proposer, GHQuotationStatus quotationStatus, int versionNumber) {
         checkArgument(isNotEmpty(quotationCreator));
@@ -128,6 +130,12 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
     public GroupHealthQuotation updateWithAgent(AgentId agentId) {
         checkInvariant();
         this.agentId = agentId;
+        return this;
+    }
+
+    public GroupHealthQuotation updateWithSchemeName(String schemeName) {
+        checkInvariant();
+        this.schemeName = schemeName;
         return this;
     }
 
@@ -210,6 +218,7 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         newQuotation.samePlanForAllCategory = this.samePlanForAllCategory;
         newQuotation.samePlanForAllRelation = this.samePlanForAllRelation;
         newQuotation.moratoriumPeriodApplicable = this.moratoriumPeriodApplicable;
+        newQuotation.schemeName = this.schemeName;
         return newQuotation;
     }
 

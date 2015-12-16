@@ -141,6 +141,29 @@
             }
         })
 
+        .directive('validateOptallowsumassured', function () {
+            return {
+                // restrict to an attribute type.
+                restrict: 'A',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    scope.$watch('rider.sumAssured', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        if (newval) {
+                            console.log('validating...***');
+                            if (scope.coverage && scope.coverage.coverageSumAssured.sumAssuredType == 'DERIVED') {
+                                var maxLimit = scope.coverage.coverageSumAssured.maxLimit;
+                                var valid = newval<=maxLimit;
+                                ctrl.$setValidity('invalidmaxLimit', valid);
+                            }
+                        }
+                        return valid ? newval : undefined;
+                    });
+                }
+            }
+        })
+
         .directive('coverageSumassured', function () {
             return {
                 restrict: 'E',
@@ -849,48 +872,6 @@
                             $scope.searchRiders.push(coverage4);
                         }
                     }
-                    /*else if(coverageName == 'Cash & Security Optional Covers 2'){
-                        var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
-                        if(coverage1){
-                            $scope.searchRiders.push(coverage1);
-                        }
-                        var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 3'});
-                        if(coverage2){
-                            $scope.searchRiders.push(coverage2);
-                        }
-                        var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 4'});
-                        if(coverage3){
-                            $scope.searchRiders.push(coverage3);
-                        }
-                    }
-                    else if(coverageName == 'Cash & Security Optional Covers 3'){
-                        var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
-                        if(coverage1){
-                            $scope.searchRiders.push(coverage1);
-                        }
-                        var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 2'});
-                        if(coverage2){
-                            $scope.searchRiders.push(coverage2);
-                        }
-                        var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 4'});
-                        if(coverage3){
-                            $scope.searchRiders.push(coverage3);
-                        }
-                    }
-                    else if(coverageName == 'Cash & Security Optional Covers 4'){
-                        var coverage1=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 1'});
-                        if(coverage1){
-                            $scope.searchRiders.push(coverage1);
-                        }
-                        var coverage2=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 2'});
-                        if(coverage2){
-                            $scope.searchRiders.push(coverage2);
-                        }
-                        var coverage3=_.findWhere($scope.searchRidersCopy,{coverageName: 'Cash & Security Optional Covers 3'});
-                        if(coverage3){
-                            $scope.searchRiders.push(coverage3);
-                        }
-                    }*/
                     else{
                         var coverage=_.findWhere($scope.searchRidersCopy,{coverageName: coverageName});
                         if(coverage){

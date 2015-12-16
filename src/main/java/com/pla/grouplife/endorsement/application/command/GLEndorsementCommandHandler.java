@@ -105,7 +105,7 @@ public class GLEndorsementCommandHandler {
             glEndorsement.addPremiumEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addMemberDeletionEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(glEndorsementType)) {

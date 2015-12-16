@@ -16,6 +16,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -65,6 +66,8 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
     private boolean samePlanForAllRelation;
 
     private boolean samePlanForAllCategory;
+
+    private String schemeName;
 
     public GroupLifePolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
         checkArgument(policyId != null, "Policy ID cannot be empty");
@@ -216,8 +219,21 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
         this.samePlanForAllCategory = samePlanForAllCategory;
         return this;
     }
+
+
+    public GroupLifePolicy withSchemeName(String schemeName) {
+        this.schemeName = schemeName;
+        return this;
+    }
     @Override
     public PolicyId getIdentifier() {
         return policyId;
+    }
+
+    public GroupLifePolicy updateWithDeletedMember(List<String> deletedFamilyIds) {
+        this.getInsureds().forEach(insured->{
+            insured.updateWithDeletedMembers(deletedFamilyIds);
+        });
+        return this;
     }
 }

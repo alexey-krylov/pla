@@ -68,6 +68,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private boolean samePlanForAllCategory;
 
+    private String  schemeName;
+
     public GroupLifeProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
         checkArgument(quotation != null, "Quotation ID cannot be blank");
@@ -100,6 +102,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         groupLifeProposal.opportunityId = this.opportunityId;
         groupLifeProposal.samePlanForAllCategory = this.samePlanForAllCategory;
         groupLifeProposal.samePlanForAllRelation = this.samePlanForAllRelation;
+        groupLifeProposal.schemeName = this.schemeName;
         return groupLifeProposal;
     }
 
@@ -210,6 +213,11 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupLifeProposal updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
         this.samePlanForAllRelation = samePlanForAllRelation;
+        return this;
+    }
+
+    public GroupLifeProposal updateWithSchemeName(String schemeName) {
+        this.schemeName = schemeName;
         return this;
     }
 

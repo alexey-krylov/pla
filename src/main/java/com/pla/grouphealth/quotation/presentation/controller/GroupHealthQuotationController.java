@@ -3,7 +3,6 @@ package com.pla.grouphealth.quotation.presentation.controller;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.quotation.application.command.*;
 import com.pla.grouphealth.quotation.application.service.GHQuotationService;
-import com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException;
 import com.pla.grouphealth.quotation.presentation.dto.GLQuotationMailDto;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.*;
@@ -90,7 +89,7 @@ public class GroupHealthQuotationController {
             proposerDto.setAddressLine1(clientDetailDto.getAddress1());
             proposerDto.setAddressLine2(clientDetailDto.getAddress2());
             proposerDto.setPostalCode(clientDetailDto.getPostalCode());
-            proposerDto.setContactPersonEmail(clientDetailDto.getEmailAddress());
+            proposerDto.setEmailAddress(clientDetailDto.getEmailAddress());
             proposerDto.setTown(clientDetailDto.getTown());
             proposerDto.setProvince(clientDetailDto.getProvince());
             proposerDto.setProposerCode(proposerCode);
@@ -352,7 +351,7 @@ public class GroupHealthQuotationController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors", Boolean.TRUE);
             }
             List<GHInsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isConsiderMoratoriumPeriod(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory()));
+            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isConsiderMoratoriumPeriod(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory(),uploadInsuredDetailDto.getSchemeName()));
             return Result.success("Insured detail uploaded successfully", quotationId);
         } catch (Exception e) {
             e.printStackTrace();

@@ -65,7 +65,7 @@ public class GroupLifeProposalService {
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder(proposerDto.getProposerName(), proposerDto.getProposerCode());
         proposerBuilder.withContactDetail(proposerDto.getAddressLine1(), proposerDto.getAddressLine2(), proposerDto.getPostalCode(), proposerDto.getProvince(), proposerDto.getTown(), proposerDto.getEmailAddress())
-                .withContactPersonDetail(proposerDto.getContactPersonName(), proposerDto.getContactPersonEmail(), proposerDto.getContactPersonMobileNumber(), proposerDto.getContactPersonWorkPhoneNumber());
+                .withContactPersonDetail(proposerDto.getContactPersonDetail());
         groupLifeProposal = glProposalProcessor.updateWithProposer(groupLifeProposal, proposerBuilder.build());
         Map<String, Object> industryMap = glFinder.findIndustryById(proposerDto.getIndustryId());
         if (industryMap != null) {

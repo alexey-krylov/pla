@@ -28,4 +28,6 @@ public class UpdateGHProposalWithInsuredCommand {
 
     private boolean samePlanForAllCategory;
 
+    private String schemeName;
+
 }

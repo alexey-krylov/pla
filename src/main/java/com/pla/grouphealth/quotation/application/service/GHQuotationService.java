@@ -33,7 +33,6 @@ import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
-import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -108,12 +107,12 @@ public class GHQuotationService {
     public GLQuotationMailDto getPreScriptedEmail(String quotationId) {
         GroupHealthQuotation groupHealthQuotation = ghQuotationRepository.findOne(new QuotationId(quotationId));
         String subject = "PLA Insurance - Group Health - Quotation ID : " + groupHealthQuotation.getQuotationNumber();
-        String mailAddress = groupHealthQuotation.getProposer().getContactDetail() != null ? groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail() : "";
+        String mailAddress = groupHealthQuotation.getProposer().getContactDetail() != null ?isNotEmpty( groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail())? groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonEmail() : "":"";
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupHealthQuotation.getGeneratedOn().toString(AppConstants.DD_MM_YYY_FORMAT));
         emailContent.put("contactPersonName",
-                groupHealthQuotation.getProposer().getContactDetail() != null ? groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName() : "");
+                groupHealthQuotation.getProposer().getContactDetail() != null ? isNotEmpty(groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail())?groupHealthQuotation.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonName() :"": "");
         emailContent.put("proposerName", groupHealthQuotation.getProposer().getProposerName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
@@ -140,7 +139,7 @@ public class GHQuotationService {
         ghQuotationDetailDto.setProposerName(proposer.getProposerName());
         GHProposerContactDetail proposerContactDetail = proposer.getContactDetail();
         if (proposerContactDetail != null) {
-            ghQuotationDetailDto.setProposerPhoneNumber(proposerContactDetail.getContactPersonDetail() != null ? proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber() : "");
+            ghQuotationDetailDto.setProposerPhoneNumber(isNotEmpty(proposerContactDetail.getContactPersonDetail()) ? proposerContactDetail.getContactPersonDetail().get(0).getWorkPhoneNumber() : "");
             Map<String, Object> provinceGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
             Map<String, Object> townGeoMap = ghQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
             ghQuotationDetailDto.setProposerAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
@@ -457,6 +456,7 @@ public class GHQuotationService {
         boolean moratoriumPeriodApplicable = quotation.get("moratoriumPeriodApplicable") != null ? (boolean) quotation.get("moratoriumPeriodApplicable") : false;
         boolean samePlanForAllRelation = quotation.get("samePlanForAllRelation") != null ? (boolean) quotation.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = quotation.get("samePlanForAllCategory") != null ? (boolean) quotation.get("samePlanForAllCategory") : false;
+        String schemeName = quotation.get("schemeName") != null ? (String) quotation.get("schemeName") : "";
         GHProposer proposer = (GHProposer) quotation.get("proposer");
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (quotation.get("opportunityId") != null) {
@@ -466,6 +466,7 @@ public class GHQuotationService {
         proposerDto.setConsiderMoratoriumPeriod(moratoriumPeriodApplicable);
         proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
         proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
+        proposerDto.setSchemeName(schemeName);
         return proposerDto;
     }
 

@@ -1,5 +1,6 @@
 package com.pla.grouplife.quotation.domain.model;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.quotation.domain.event.GLQuotationConvertedEvent;
 import com.pla.grouplife.quotation.domain.exception.QuotationException;
@@ -53,11 +54,11 @@ public class GroupLifeQuotationTest {
         groupLifeQuotation.updateWithAgent(new AgentId("22"));
     }
 
+
     @Test
     public void itShouldUpdateProposeDetailOfDraftedGLQuotation() {
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder("NthDimenzion", "Nth001").
-                withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com")
-                .withContactPersonDetail("Jones", "abc@gmail.com", "9916971270", "657576576");
+                withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com");
 
         Proposer proposer = proposerBuilder.build();
         GroupLifeQuotation groupLifeQuotation = this.groupLifeQuotation.updateWithProposer(proposer);
@@ -65,8 +66,6 @@ public class GroupLifeQuotationTest {
 
         ProposerContactDetail proposerContactDetail = proposerBuilder.getProposerContactDetail();
         ProposerContactDetail updatedProposerContactDetail = updatedProposerDetail.getContactDetail();
-        ProposerContactDetail.ContactPersonDetail contactPersonDetail = proposerContactDetail.getContactPersonDetail();
-        ProposerContactDetail.ContactPersonDetail updatedContactPersonDetail = updatedProposerContactDetail.getContactPersonDetail();
 
         assertEquals(proposerBuilder.getProposerName(), updatedProposerDetail.getProposerName());
         assertEquals(proposerBuilder.getProposerCode(), updatedProposerDetail.getProposerCode());
@@ -76,10 +75,6 @@ public class GroupLifeQuotationTest {
         assertEquals(proposerContactDetail.getPostalCode(), updatedProposerContactDetail.getPostalCode());
         assertEquals(proposerContactDetail.getProvince(), updatedProposerContactDetail.getProvince());
         assertEquals(proposerContactDetail.getTown(), updatedProposerContactDetail.getTown());
-        assertEquals(contactPersonDetail.getContactPersonName(), updatedContactPersonDetail.getContactPersonName());
-        assertEquals(contactPersonDetail.getContactPersonEmail(), updatedContactPersonDetail.getContactPersonEmail());
-        assertEquals(contactPersonDetail.getMobileNumber(), updatedContactPersonDetail.getMobileNumber());
-        assertEquals(contactPersonDetail.getWorkPhoneNumber(), updatedContactPersonDetail.getWorkPhoneNumber());
 
     }
 
@@ -95,7 +90,7 @@ public class GroupLifeQuotationTest {
     public void whenGLQuotationIsGeneratedItShouldRegisterProposerAddedEvent() {
         ProposerBuilder proposerBuilder = Proposer.getProposerBuilder("NthDimenzion", "Nth001").
                 withContactDetail("5th Block", "Kormangla", "560076", "Karnataka", "Bangalore", "info@nthdimenzion.com")
-                .withContactPersonDetail("Jones", "abc@gmail.com", "9916971270", "657576576");
+                .withContactPersonDetail(/*"Jones", "abc@gmail.com", "9916971270", "657576576"*/Lists.newArrayList());
 
         Proposer proposer = proposerBuilder.build();
         GroupLifeQuotation groupLifeQuotation = this.groupLifeQuotation.updateWithProposer(proposer);

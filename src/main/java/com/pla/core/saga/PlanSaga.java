@@ -1,5 +1,6 @@
 package com.pla.core.saga;
 
+import com.google.common.collect.Lists;
 import com.pla.core.domain.event.*;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.presentation.command.ExpirePlanCommand;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by Samir on 5/30/2015.
@@ -33,15 +36,7 @@ public class PlanSaga extends AbstractAnnotatedSaga {
     @Autowired
     private transient GenericMongoRepository<Plan> planMongoRepository;
 
-    @StartSaga
-    @SagaEventHandler(associationProperty = "planId")
-    public void handle(PlanWithdrawnEvent event) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Handling Plan Withdrawn Event .....", event);
-        }
-        DateTime withDrawnDate = event.getWithDrawlDate();
-        eventScheduler.schedule(withDrawnDate, new PlanExpireEvent(event.getPlanId()));
-    }
+    private List<ScheduleToken> scheduledTokens = Lists.newArrayList();
 
     @StartSaga
     @SagaEventHandler(associationProperty = "planId")
@@ -50,9 +45,8 @@ public class PlanSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling Plan Withdrawn Event .....", event);
         }
         DateTime launchDate = event.getLaunchDate();
-        Plan plan = planMongoRepository.load(event.getPlanId());
         ScheduleToken scheduleToken = eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
-        plan.setScheduleToken(scheduleToken);
+        scheduledTokens.add(scheduleToken);
     }
 
     @StartSaga
@@ -62,10 +56,13 @@ public class PlanSaga extends AbstractAnnotatedSaga {
             LOGGER.debug("Handling Plan updating Event .....", event);
         }
         DateTime launchDate = event.getLaunchDate();
-        Plan plan = planMongoRepository.load(event.getPlanId());
-        eventScheduler.cancelSchedule(plan.getScheduleToken());
+        /*
+        * @TODO understand how snapshotevent works to cancel the published events
+        * */
+        /*Plan plan = planMongoRepository.load(event.getPlanId());
+        eventScheduler.cancelSchedule(plan.getScheduleToken());*/
         ScheduleToken scheduleToken = eventScheduler.schedule(launchDate, new PlanLaunchEvent(event.getPlanId()));
-        plan.setScheduleToken(scheduleToken);
+        scheduledTokens.add(scheduleToken);
     }
 
     @SagaEventHandler(associationProperty = "planId")
@@ -74,6 +71,17 @@ public class PlanSaga extends AbstractAnnotatedSaga {
         Plan plan = planMongoRepository.load(event.getPlanId());
         plan.markLaunched();
         end();
+    }
+
+    @StartSaga
+    @SagaEventHandler(associationProperty = "planId")
+    public void handle(PlanWithdrawnEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling Plan Withdrawn Event .....", event);
+        }
+        DateTime withDrawnDate = event.getWithDrawlDate();
+        ScheduleToken scheduleToken = eventScheduler.schedule(withDrawnDate, new PlanExpireEvent(event.getPlanId()));
+        scheduledTokens.add(scheduleToken);
     }
 
     @SagaEventHandler(associationProperty = "planId")

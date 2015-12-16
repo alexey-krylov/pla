@@ -6,6 +6,7 @@
 
 package com.pla.core.domain.service;
 
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.*;
 import com.pla.core.dto.*;
 import com.pla.core.specification.AgentLicenseNumberIsUnique;
@@ -125,5 +126,14 @@ public class AgentService {
         Agent agentWithChannelType = agentWithPhysicalAddress.withChannelType(channelTypeDto.getChannelCode(), channelTypeDto.getChannelName());
         agentWithChannelType = agentWithChannelType.withRegistrationNumber(registrationNumber);
         return agentWithChannelType;
+    }
+
+    public Agent updateAgent(PlanId planId,String agentId) {
+        Set<PlanId> planIds = Sets.newLinkedHashSet();
+        planIds.add(planId);
+        JpaRepository<Agent, AgentId> agentRepository = jpaRepositoryFactory.getCrudRepository(Agent.class);
+        Agent agent = agentRepository.getOne(new AgentId(agentId));
+        agent.withPlans(planIds);
+        return agent;
     }
 }

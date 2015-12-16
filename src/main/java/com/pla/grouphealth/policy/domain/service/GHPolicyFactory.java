@@ -46,6 +46,7 @@ public class GHPolicyFactory {
         boolean samePlanForAllRelation = proposalMap.get("samePlanForAllRelation") != null ? (boolean) proposalMap.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = proposalMap.get("samePlanForAllCategory") != null ? (boolean) proposalMap.get("samePlanForAllCategory") : false;
         AgentId agentId = (AgentId) proposalMap.get("agentId");
+        String schemeName = proposalMap.get("schemeName")!=null?(String ) proposalMap.get("schemeName"):"";
         Set<GHInsured> insureds = new HashSet((List) proposalMap.get("insureds"));
         GHPremiumDetail premiumDetail = (GHPremiumDetail) proposalMap.get("premiumDetail");
         GHProposer proposer = (GHProposer) proposalMap.get("proposer");
@@ -59,7 +60,7 @@ public class GHPolicyFactory {
         Proposal proposal = new Proposal(proposalId, proposalNumber);
         GroupHealthPolicy groupHealthPolicy = new GroupHealthPolicy(policyId, policyNumber, proposal, policyInceptionDate, policyExpireDate);
         groupHealthPolicy.updateFlagSamePlanForAllRelation(samePlanForAllRelation);
-        groupHealthPolicy.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
+        groupHealthPolicy.updateFlagSamePlanForAllCategory(samePlanForAllCategory).updateWithSchemeName(schemeName);
         insureds = populateFamilyId(insureds);
         groupHealthPolicy = groupHealthPolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
                 .addPremium(premiumDetail).addDocuments(proposerDocuments);

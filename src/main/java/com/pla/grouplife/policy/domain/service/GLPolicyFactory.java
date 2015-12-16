@@ -48,6 +48,7 @@ public class GLPolicyFactory {
         boolean samePlanForAllRelation = proposalMap.get("samePlanForAllRelation") != null ? (boolean) proposalMap.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = proposalMap.get("samePlanForAllCategory") != null ? (boolean) proposalMap.get("samePlanForAllCategory") : false;
         AgentId agentId = (AgentId) proposalMap.get("agentId");
+        String  schemeName =proposalMap.get("schemeName")!=null? (String) proposalMap.get("schemeName"):"";
         Set<Insured> insureds = new HashSet((List) proposalMap.get("insureds"));
         PremiumDetail premiumDetail = (PremiumDetail) proposalMap.get("premiumDetail");
         Industry industry = (Industry) proposalMap.get("industry");
@@ -68,7 +69,7 @@ public class GLPolicyFactory {
         groupLifePolicy.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage).addOpportunityId(opportunityId);
+                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage).addOpportunityId(opportunityId).withSchemeName(schemeName);
         return groupLifePolicy;
     }
 
@@ -106,16 +107,16 @@ public class GLPolicyFactory {
         Map<Relationship, List<Integer>> dependentSequenceMap = Maps.newHashMap();
         final int[] currentSequence = {3};
         insuredDependents.forEach(insuredDependent -> {if (dependentSequenceMap.get(insuredDependent.getRelationship()) == null) {
-                List<Integer> sequenceList = new ArrayList<Integer>();
-                sequenceList.add((Relationship.SPOUSE.equals(insuredDependent.getRelationship()) ? 2 : currentSequence[0]));
-                currentSequence[0] = currentSequence[0] + 1;
-                dependentSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
-            } else {
-                List<Integer> sequenceList = dependentSequenceMap.get(insuredDependent.getRelationship());
-                currentSequence[0] = sequenceList.get((sequenceList.size() - 1));
-                currentSequence[0] = currentSequence[0] + 1;
-                sequenceList.add(currentSequence[0]);
-            }
+            List<Integer> sequenceList = new ArrayList<Integer>();
+            sequenceList.add((Relationship.SPOUSE.equals(insuredDependent.getRelationship()) ? 2 : currentSequence[0]));
+            currentSequence[0] = currentSequence[0] + 1;
+            dependentSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
+        } else {
+            List<Integer> sequenceList = dependentSequenceMap.get(insuredDependent.getRelationship());
+            currentSequence[0] = sequenceList.get((sequenceList.size() - 1));
+            currentSequence[0] = currentSequence[0] + 1;
+            sequenceList.add(currentSequence[0]);
+        }
         });
         return dependentSequenceMap;
     }

@@ -190,9 +190,11 @@ public class GLPolicyService {
         Proposer proposer = (Proposer) proposal.get("proposer");
         boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
+        String schemeName = proposal.get("schemeName") != null ? (String) proposal.get("schemeName") : "";
         ProposerDto proposerDto = new ProposerDto(proposer);
         proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
+        proposerDto.setSchemeName(schemeName);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
             proposerDto.setOpportunityId(opportunityId.getOpportunityId());
@@ -429,7 +431,7 @@ public class GLPolicyService {
         glQuotationDetailDto.setProposerName(proposer.getProposerName());
         glQuotationDetailDto.setPolicyHolderName(proposer.getProposerName());
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
-        glQuotationDetailDto.setTelephoneNumber(proposerContactDetail.getContactPersonDetail().getWorkPhoneNumber());
+        glQuotationDetailDto.setTelephoneNumber(isNotEmpty(proposerContactDetail.getContactPersonDetail())?proposerContactDetail.getContactPersonDetail().get(0).getContactPersonEmail():"");
         Map<String, Object> provinceGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getProvince());
         Map<String, Object> townGeoMap = glQuotationFinder.findGeoDetail(proposerContactDetail.getTown());
         glQuotationDetailDto.setAddress(proposerContactDetail.getAddress((String) townGeoMap.get("geoName"), (String) provinceGeoMap.get("geoName")));
@@ -708,11 +710,11 @@ public class GLPolicyService {
     public GLPolicyMailDto getPreScriptedEmail(PolicyId policyId) {
         GroupLifePolicy groupLifePolicy = glPolicyRepository.findOne(policyId);
         String subject = "PLA Insurance - Group Life - Policy ID : " + groupLifePolicy.getPolicyNumber().getPolicyNumber();
-        String mailAddress = groupLifePolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonEmail();
+        String mailAddress = groupLifePolicy.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonEmail();
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("mailSentDate", groupLifePolicy.getInceptionOn().toString(AppConstants.DD_MM_YYY_FORMAT));
-        emailContent.put("contactPersonName", groupLifePolicy.getProposer().getContactDetail().getContactPersonDetail().getContactPersonName());
+        emailContent.put("contactPersonName", isNotEmpty(groupLifePolicy.getProposer().getContactDetail().getContactPersonDetail())?groupLifePolicy.getProposer().getContactDetail().getContactPersonDetail().get(0).getContactPersonName():"");
         emailContent.put("proposerName", groupLifePolicy.getProposer().getProposerName());
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);

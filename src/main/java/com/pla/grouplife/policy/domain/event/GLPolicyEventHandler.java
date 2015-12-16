@@ -1,6 +1,8 @@
 package com.pla.grouplife.policy.domain.event;
 
+import com.pla.grouplife.sharedresource.event.GLPolicyInsuredDeleteEvent;
 import com.pla.grouplife.policy.application.command.GLProposalToPolicyCommand;
+import com.pla.grouplife.policy.application.command.GroupLifePolicyMemberDeletionCommand;
 import com.pla.grouplife.sharedresource.event.GLProposalToPolicyEvent;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.annotation.EventHandler;
@@ -20,4 +22,10 @@ public class GLPolicyEventHandler {
     public void handle(GLProposalToPolicyEvent event) {
         commandGateway.send(new GLProposalToPolicyCommand(event.getProposalId()));
     }
+
+    @EventHandler
+    public void handle(GLPolicyInsuredDeleteEvent event) {
+        commandGateway.send(new GroupLifePolicyMemberDeletionCommand(event.getPolicyId(),event.getDeletedFamilyIds()));
+    }
+
 }

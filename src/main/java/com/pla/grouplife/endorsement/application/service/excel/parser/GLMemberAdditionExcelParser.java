@@ -61,7 +61,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         if (!isValidHeader(headers, allowedHeaders)) {
             raiseNotValidHeaderException();
         }
-        Map policyMap = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        Map policyMap = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
@@ -69,7 +69,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         Cell errorMessageHeaderCell = null;
         for (Row currentRow : dataRows) {
             String invalidCombinationMessage = buildErrorMessageIfInvalidCategoryRelationCombination(currentRow, insureds,headers);
-            String totalLivesExceededErrorMessage = "";
+            String totalLivesExceededErrorMessage = groupLifeEndorsementChecker.getTotalNoOfLivesCovered(currentRow,insureds,headers);
             String invalidDetailAssuredMessage = buildErrorMessageIfInvalidDetailsAssure(currentRow, insureds, headers);
             String errorMessage = validateRow(currentRow, headers, glEndorsementExcelValidator);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, headers);
@@ -83,6 +83,9 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
             }
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessage = errorMessage + "\n" + duplicateRowErrorMessage + "\n" +invalidCombinationMessage + "\n" +invalidDetailAssuredMessage + "\n" +totalLivesExceededErrorMessage;
+            errorMessage = errorMessage + "\n" +invalidCombinationMessage;
+            errorMessage = errorMessage + "\n" +invalidDetailAssuredMessage + "\n" +totalLivesExceededErrorMessage;
+            errorMessage = errorMessage + "\n" +totalLivesExceededErrorMessage;
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
@@ -170,7 +173,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
     //TODO populate plan and sum assured detail
     private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
-        Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        Map<String,Object> policyMap  = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
@@ -194,7 +197,7 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
     //TODO populate plan and sum assured detail
     private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipOfDependentsFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
         noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
-        Map<String,Object> policyMap  = glPolicyFinder.findPolicyById(policyId.getPolicyId());
+        Map<String,Object> policyMap  = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
         insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
