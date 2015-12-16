@@ -897,7 +897,7 @@
                             });
                     }
                     if (data && data.step == 4) {
-                        if($scope.plan.premiumTermType === 'SINGLE' || $scope.plan.premiumTermType === 'SPECIFIED_VALUES' || $scope.plan.premiumTermType === 'SPECIFIED_AGES'){
+                        if($scope.plan.premiumTermType === 'SINGLE' || $scope.plan.premiumTermType === 'SPECIFIED_VALUES' || $scope.plan.premiumTermType === 'SPECIFIED_AGES' || $scope.plan.premiumTermType === 'REGULAR'){
                             $scope.planDetailDto.premiumPaymentType ='OTHER_PREMIUM';
                             $scope.premiumTypeReadOnly=true;
                         }
