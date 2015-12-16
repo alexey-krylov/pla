@@ -146,6 +146,12 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                         }
                     }
                 }
+                if(newVal == 4){
+                    $('#wizardStep').attr('disabled', true);
+                }
+                else{
+                    $('#wizardStep').attr('disabled', false);
+                }
             });
 
             $scope.$watch('agentDetails.contactDetail.geoDetail.provinceCode',function(newVal,oldVal){

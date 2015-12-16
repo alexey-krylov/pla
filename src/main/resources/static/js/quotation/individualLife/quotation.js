@@ -903,7 +903,7 @@
                         }
                         else{
                             $scope.premiumTypeReadOnly=false;
-                            $scope.planDetailDto.premiumPaymentType ='';
+                            //$scope.planDetailDto.premiumPaymentType ='';
                         }
                         $http.get('/pla/individuallife/quotation/getridersforplan/' + $scope.planDetailDto.planId + '/' + calculateAge($scope.proposedAssured.dateOfBirth))
                             .success(function (response) {
