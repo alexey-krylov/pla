@@ -36,6 +36,27 @@
                         }
 
                     });
+
+                    //rider.sumAssured
+
+                    $scope.$watch('rider.sumAssured', function (newval) {
+                        if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                            //$scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                            var percentageValue=$scope.planDetailDto.sumAssured *($scope.coverage.coverageSumAssured.percentage/100);
+                            if(percentageValue <= $scope.coverage.coverageSumAssured.maxLimit){
+                                $scope.maxPercentage=percentageValue;
+                                newval=percentageValue;
+                                $scope.isMaximumReached=false;
+                            }
+                            else{
+                                $scope.maxPercentage=$scope.coverage.coverageSumAssured.maxLimit;
+                                newval=$scope.coverage.coverageSumAssured.maxLimit;
+                                $scope.isMaximumReached=true;
+                            }
+                            console.log('Derived Type Came..');
+                        }
+                    });
+
                     if (!ctrl)return;
 
                 }
@@ -140,30 +161,6 @@
                 }
             }
         })
-
-        .directive('validateOptallowsumassured', function () {
-            return {
-                // restrict to an attribute type.
-                restrict: 'A',
-                // element must have ng-model attribute.
-                require: 'ngModel',
-                link: function (scope, ele, attrs, ctrl) {
-                    scope.$watch('rider.sumAssured', function (newval, oldval) {
-                        if (newval == oldval)return;
-                        if (newval) {
-                            console.log('validating...***');
-                            if (scope.coverage && scope.coverage.coverageSumAssured.sumAssuredType == 'DERIVED') {
-                                var maxLimit = scope.coverage.coverageSumAssured.maxLimit;
-                                var valid = newval<=maxLimit;
-                                ctrl.$setValidity('invalidmaxLimit', valid);
-                            }
-                        }
-                        return valid ? newval : undefined;
-                    });
-                }
-            }
-        })
-
         .directive('coverageSumassured', function () {
             return {
                 restrict: 'E',
@@ -190,9 +187,38 @@
                         }
                     });
 
+                    $scope.$watch('rider.sumAssured', function (newval) {
+                        if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                            //$scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                            var percentageValue=$scope.planDetailDto.sumAssured *($scope.coverage.coverageSumAssured.percentage/100);
+                            if(percentageValue <= $scope.coverage.coverageSumAssured.maxLimit){
+                                $scope.maxPercentage=percentageValue;
+                                newval=percentageValue;
+                                $scope.isMaximumReached=false;
+                            }
+                            else{
+                                $scope.maxPercentage=$scope.coverage.coverageSumAssured.maxLimit;
+                                newval=$scope.coverage.coverageSumAssured.maxLimit;
+                                $scope.isMaximumReached=true;
+                            }
+                            console.log('Derived Type Came..');
+                        }
+                    });
+
                     $scope.$watch('planDetailDto.sumAssured', function (newval) {
                         if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
-                            $scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                            //$scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                            var percentageValue=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                            if(percentageValue <= $scope.coverage.coverageSumAssured.maxLimit){
+                                $scope.maxPercentage=percentageValue;
+                                $scope.rider.sumAssured=percentageValue;
+                                $scope.isMaximumReached=false;
+                            }
+                            else{
+                                $scope.maxPercentage=$scope.coverage.coverageSumAssured.maxLimit;
+                                $scope.rider.sumAssured=$scope.coverage.coverageSumAssured.maxLimit;
+                                $scope.isMaximumReached=true;
+                            }
                             console.log('Derived Type Came..');
                         }
                         if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
@@ -205,6 +231,12 @@
                         }
 
                     });
+
+                    $scope.lessThanEqualTo = function (prop, val) {
+                        return function (item) {
+                            return item[prop] <= val;
+                        }
+                    }
 
                 }]
             }

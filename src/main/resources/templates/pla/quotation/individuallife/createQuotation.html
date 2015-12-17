@@ -867,17 +867,25 @@
             </div>
         </div>
         <div ng-switch-when="DERIVED">
-            <input type="number" view-enabled="" validate-optallowsumassured="" class="form-control input-sm" min="{{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}"
-                   max="{{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}"
+            <input type="number" view-enabled="" class="form-control input-sm" min="{{maxPercentage}}"
+                   max="{{maxPercentage}}"
                    name="sumAssured"
                    ng-required="true" ng-model="rider.sumAssured"/>
 
             <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step4.$dirty">
-                <small ng-message="max">Sum Assured should be {{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}.
+               <!-- <small ng-message="max">Sum Assured should be {{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}.
                 </small>
                 <small ng-message="min">Sum Assured should be {{coverage.coverageSumAssured.percentage * planDetailDto.sumAssured/100}}.
+                </small>-->
+                <small ng-message="max">Sum Assured should be {{maxPercentage}}.
                 </small>
-                <small ng-message="invalidmaxLimit">Sum Assured should be in the range of {{coverage.coverageSumAssured.maxLimit}}</small>
+                <small ng-message="min">Sum Assured should be {{maxPercentage}}.
+                </small>
+            </div>
+            <div ng-if="isMaximumReached">
+                <p style="color:red" ng-show="isMaximumReached">
+                    Cover Maximum Sum Assured Limited to {{coverage.coverageSumAssured.maxLimit}}
+                </p>
             </div>
         </div>
         <!--<div ng-switch-when="INCOME_MULTIPLIER">
