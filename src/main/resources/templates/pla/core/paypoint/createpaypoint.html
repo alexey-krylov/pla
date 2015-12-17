@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <!--/*-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet">
-    <script data-main="../../../../static/js/requireConfig" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
+    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet"/>
+    <script data-main="../../../../static/js/requireConfig"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <script src="/pla/js/paypoint/createpaypoint.js"></script>
     <!--*/-->
 </head>
 <body class="fuelux">
@@ -21,228 +22,219 @@
     });
 
 
+
 </script>
 <script type="text/ng-template" id="createpaypoint.html">
     <nth-alert></nth-alert>
-    <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible" ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
+    <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
+         ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
         <ul class="steps" style="margin-left: 0">
             <li data-step="1">
                 <span class="badge badge-info">1</span>Pay Point<span class="chevron"></span>
             </li>
         </ul>
-        <div class="actions">
-            <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
-                    class="glyphicon glyphicon-arrow-left"></span>Prev
-            </button>
-            <button type="button" class="btn btn-default btn-next" >Next<span
-                    class="glyphicon glyphicon-arrow-right"></span></button>
-        </div>
-       <div class="step-content">
+        <div class="step-content">
             <div class="step-pane active" data-step="1">
                 <ng-form name="PayPointForm">
+                    <div class="row bs-callout-info bs-callout-info">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Pay Point ID</label>
+                                <input type="text" class="form-control input-sm" name="payPointId"
+                                       ng-model="paypointCommand.payPointId"
+                                       placeholder="Enter PayPoint ID" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="12" ng-minlength="3"
+                                       ng-pattern="/^[a-zA-Z0-9]*$/"/>
 
-                <div class="row bs-callout-info bs-callout-info">
-                    <div class="col-md-6">
-                        <div class="form-group required">
-                            <label  class="control-label">Pay Point ID</label>
-                             <input type="text" class="form-control input-sm" name="payPointID" ng-model="payPointId"
-                                     placeholder="Enter PayPoint ID"
-                                     ng-required="true" ng-maxlength="12" ng-minlength="3" ng-pattern="{A-Za-Z0-9}"/>
+                                <div class="error" ng-messages="PayPointForm.payPointId.$error"
+                                     ng-if="PayPointForm.payPointId.$dirty">
+                                    <small class="error" ng-message="required">Please Enter Pay Point Name(alphabet)
+                                    </small>
+                                    <small ng-message="maxlength">Only Maximum 100 alphabet are allowed.</small>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group required">
-                            <label  class="control-label">Pay Point Name</label>
-                            <input type="text" class="form-control input-sm" name="payPointName" ng-model="payPointName"
-                                   placeholder="Enter PayPoint Name"
-                                   ng-required="true" ng-maxlength="100"  ng-pattern="/^[a-zA-Z ]*$/"/>
-                             <div class="error" ng-messages="PayPointForm.payPointName.$error" ng-if="PayPointForm.payPointName.$dirty">
-                                <small ng-message="pattern">Please Enter Pay Point Name </small>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Pay Point Name</label>
+                                <input type="text" class="form-control input-sm" name="payPointName"
+                                       ng-model="payPointProfileDto.payPointName"
+                                       placeholder="Enter PayPoint Name" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="100" ng-pattern="/^[a-zA-Z ]*$/"/>
 
+                                <div class="error" ng-messages="PayPointForm.payPointName.$error"
+                                     ng-if="PayPointForm.payPointName.$dirty">
+                                    <small class="error" ng-message="required">Please Enter Pay Point Name(alphabet)
+                                    </small>
+                                    <small ng-message="maxlength">Only Maximum 100 alphabet are allowed.</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                 <div class="row">
-                     <div class="col-md-6">
-                     <div class="form-group required">
-                         <label>Pay Point Status</label>
-                         <select class="form-control input-sm" name="payPointStatus" ng-model="payPointStatus"
-                                 ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true"></select>
-                         <div class="error" ng-messages="PayPointForm.payPointStatus.$error" ng-if="PayPointForm.payPointStatus.$dirty">
-                             <small ng-message="pattern">Please Enter Point Pay Point Status </small>
-                         </div>
-                        </div>
-                    </div>
-                     <div class="col-md-6">
-                      <div class="form-group required">
-                         <label>Pay Point Grade</label>
-                          <select class="form-control input-sm" name="payPointGrade" ng-model="payPointGrade"
-                                  ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true"></select>
-
-                          <div class="error" ng-messages="PayPointForm.payPointGrade.$error" ng-if="PayPointForm.payPointGrade.$dirty">
-                              <small ng-message="pattern">Please Enter Point Pay Point Grade</small>
-                          </div>
-
-                      </div>
-                   </div>
-                </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group required">
-                            <label  class="control-label">Staff Compliment</label>
-                            <input type="text" class="form-control input-sm" name="staffCompliment" ng-model="staffCompliment"
-                                   placeholder="Enter Staff Compliment"
-                                   ng-required="true" ng-maxlength="6"  ng-pattern="/^[0-9]*$/"/>
-
-                            <div class="error" ng-messages="PayPointForm.staffCompliment.$error" ng-if="PayPointForm.staffCompliment.$dirty">
-                                <small ng-message="pattern">Please Enter Staff Compliment.</small>
-                            </div>
-
-                        </div>
-                    </div>
-
-                      <div class="col-md-6">
-                          <div class="form-group required">
-                              <label  class="control-label">Minimum Income</label>
-                              <input type="text" class="form-control input-sm" name="minimumIncome" ng-model="minimumIncome"
-                                     placeholder="Enter Minimum Income"
-                                     ng-required="true" ng-maxlength="7"  ng-pattern="/^[0-9]*$/"/>
-                              <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                  <small ng-message="pattern">Please Enter Minimum Income.</small>
-                              </div>
-
-                          </div>
-                      </div>
-                 </div>
-
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">Pay Point Charge</label>
-                                <input type="text" class="form-control input-sm" name="payPointCharge" ng-model="payPointCharge"
-                                       placeholder="Enter Pay Point Charge"
-                                       ng-required="true" ng-maxlength="6"  ng-pattern="/^[0-9]*$/"/>
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
-                                </div>
+                                <label>Pay Point Status</label>
+                                <select class="form-control input-sm" name="payPointStatus"
+                                        ng-model="paypointCommand.payPointStatus" ng-disabled="mode =='view'"
+                                        ng-options="payPointData.payPointStatus as payPointData.description for payPointData in paypointStatusResponse"
+                                        ng-required="true"></select>
 
+                                <div class="error" ng-messages="PayPointForm.payPointStatus.$error"
+                                     ng-if="PayPointForm.payPointStatus.$dirty">
+                                    <small ng-message="pattern">Please Enter Point Pay Point Status</small>
+                                </div>
                             </div>
                         </div>
-
-                       </div>
-
-
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">First Name</label>
-                                <input type="text" class="form-control input-sm" name="firstName" ng-model="firstName"
-                                       placeholder="Enter First Name"
-                                       ng-required="true" ng-maxlength="50"  ng-pattern="/^[a-zA-Z]*$/"/>
+                                <label>Pay Point Grade</label>
+                                <select class="form-control input-sm" name="payPointGrade"
+                                        ng-model="paypointCommand.payPointGrade" ng-disabled="mode =='view'"
+                                        ng-options="payPoint.payPointGrade as payPoint.grade for payPoint in paypointGradeResponse"
+                                        ng-required="true"></select>
 
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group required">
-                                <label  class="control-label">SurName</label>
-                                <input type="text" class="form-control input-sm" name="surName" ng-model="surName"
-                                       placeholder="Enter SurName"
-                                       ng-required="true" ng-maxlength="50"  ng-pattern="/^[a-zA-Z]*$/"/>
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
+                                <div class="error" ng-messages="PayPointForm.payPointGrade.$error"
+                                     ng-if="PayPointForm.payPointGrade.$dirty">
+                                    <small ng-message="pattern">Please Enter Point Pay Point Grade</small>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">PhoneNumber</label>
-                                <input type="text" class="form-control input-sm" name="phoneNumber" ng-model="phoneNumber"
-                                       placeholder="Enter Phone Number"
-                                       ng-required="true" ng-maxlength="10"  ng-pattern="{0-9}"/>
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
+                                <label class="control-label">Staff Compliment</label>
+                                <input type="text" class="form-control input-sm" name="staffCompliment"
+                                       ng-model="payPointProfileDto.staffCompliment"
+                                       placeholder="Enter Staff Compliment" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="6" ng-pattern="/^[0-9]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.staffCompliment.$error"
+                                     ng-if="PayPointForm.staffCompliment.$dirty">
+                                    <small ng-message="pattern">only 6 digit allwoed.</small>
                                 </div>
-
-
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">SurName</label>
-                                <input type="text" class="form-control input-sm" name="surName" ng-model="surName"
-                                       placeholder="Enter SurName"
-                                       ng-required="true" ng-maxlength="50"  ng-pattern="{A-Za-z}"/>
+                                <label class="control-label">Minimum Income</label>
+                                <input type="text" class="form-control input-sm" name="minimumIncome"
+                                       ng-model="payPointProfileDto.minimumIncome"
+                                       placeholder="Enter Minimum Income" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="7" ng-pattern="/^[0-9]*$/"/>
 
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
+                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error"
+                                     ng-if="PayPointForm.minimumIncome.$dirty">
+                                    <small ng-message="pattern">Maximum allwoed 7 digit .</small>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">EmailID</label>
-                                <input type="email" class="form-control input-sm" name="emailId" ng-model="emailId"
-                                       placeholder="Enter EmailID"
-                                       ng-required="true"   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
+                                <label class="control-label">Pay Point Charge</label>
+                                <input type="text" class="form-control input-sm" name="payPointCharge"
+                                       ng-model="payPointProfileDto.payPointCharge"
+                                       placeholder="Enter Pay Point Charge" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="6" ng-pattern="/^[0-9]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.payPointCharge.$error"
+                                     ng-if="PayPointForm.payPointCharge.$dirty">
+                                    <small ng-message="pattern">Maximum allwoed 6 digit .</small>
                                 </div>
-
-
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">SurName</label>
-                                <input type="text" class="form-control input-sm" name="surName" ng-model="surName"
-                                       placeholder="Enter SurName"
-                                       ng-required="true" ng-maxlength="50"  ng-pattern="{A-Za-z}"/>
-                                <div class="error" ng-messages="PayPointForm.minimumIncome.$error" ng-if="PayPointForm.minimumIncome.$dirty">
-                                    <small ng-message="pattern">Please Enter Minimum Income.</small>
+                                <label class="control-label">First Name</label>
+                                <input type="text" class="form-control input-sm" name="firstName"
+                                       ng-model="payPointProfileDto.firstName"
+                                       placeholder="Enter First Name" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="50" ng-pattern="/^[a-zA-Z]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.firstName.$error"
+                                     ng-if="PayPointForm.firstName.$dirty">
+                                    <small ng-message="pattern">Maximum allwoed 50 alphanumeric .</small>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">pay Point Liasion</label>
-                                <input type="text" class="form-control input-sm" name="payPointLiasion" ng-model="payPointLiasion"
-                                       placeholder="Enter Pay Point Liasion"
-                                       ng-required="true"  ng-maxlength="50"  ng-pattern="/^[a-zA-Z ]*$/"/>
-                                <div class="error" ng-messages="PayPointForm.payPointLiasion.$error" ng-if="PayPointForm.payPointLiasion.$dirty">
+                                <label class="control-label">SurName</label>
+                                <input type="text" class="form-control input-sm" name="surName"
+                                       ng-model="payPointProfileDto.surName"
+                                       placeholder="Enter SurName" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="50" ng-pattern="/^[a-zA-Z]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.surName.$error"
+                                     ng-if="PayPointForm.surName.$dirty">
+                                    <small ng-message="pattern">Maximum allwoed 50 alphabet.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">PhoneNumber</label>
+                                <input type="text" class="form-control input-sm" name="phoneNumber"
+                                       ng-model="payPointProfileDto.phoneNumber"
+                                       placeholder="Enter Phone Number" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="10" ng-pattern="/^[0-9]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.phoneNumber.$error"
+                                     ng-if="PayPointForm.phoneNumber.$dirty">
+                                    <small ng-message="pattern">Maximum allwoed 10 digit</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">EmailID</label>
+                                <input type="email" class="form-control input-sm" name="emailId"
+                                       ng-model="payPointProfileDto.emailId"
+                                       placeholder="Enter EmailID" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.emailId.$error"
+                                     ng-if="PayPointForm.emailId.$dirty">
+                                    <small ng-message="pattern">Please Enter EmailID.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">pay Point Liasion</label>
+                                <input type="text" class="form-control input-sm" name="payPointLiasion"
+                                       ng-model="payPointProfileDto.payPointLiasion"
+                                       placeholder="Enter Pay Point Liasion" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-maxlength="50" ng-pattern="/^[a-zA-Z ]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.payPointLiasion.$error"
+                                     ng-if="PayPointForm.payPointLiasion.$dirty">
                                     <small ng-message="pattern">Please Enter Pay Point Liasion.</small>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">pay Point Liasion EmailID</label>
-                                <input type="email" class="form-control input-sm" name="payPointLiasionEmailId" ng-model="payPointLiasionEmailId"
-                                       placeholder="Enter Pay Point Liasion EmailID"
-                                       ng-required="true"   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
-                                <div class="error" ng-messages="PayPointForm.payPointLiasionEmailId.$error" ng-if="PayPointForm.payPointLiasionEmailId.$dirty">
+                                <label class="control-label">pay Point Liasion Email ID</label>
+                                <input type="email" class="form-control input-sm" name="payPointEmailId"
+                                       ng-model="payPointProfileDto.payPointEmailId"
+                                       placeholder="Enter Pay Point Liasion EmailID" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.payPointEmailId.$error"
+                                     ng-if="PayPointForm.payPointEmailId.$dirty">
                                     <small ng-message="pattern">Please Enter pay Point Liasion EmailID.</small>
 
                                 </div>
@@ -252,35 +244,33 @@
 
                     <div class="row">
                         <h3 style="margin-left: 10px">Submission Of Scheduled</h3>
-                     </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Prompt Date For submission of Schedules</label>
 
-                   <div class="row">
-                       <div class="col-md-6">
-                       <div class="form-group required">
-                           <label class="control-label">Prompt Date For submission of Schedules</label>
-                           <div class='input-group date'>
-                               <input type="text" class="form-control input-sm"
-                                      datepicker-popup=""
-                                      view-enabled=""
-                                      is-open="claimIntimationDate"
-                                      max-date="todayDate"
-                                      ng-model="claimDetails.dateOfBirth" name="submissionDate"/>
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup=""
+                                           view-enabled=""
+                                           is-open="submissionPromptDate"
+                                           max-date="todayDate" ng-disabled="mode =='view'"
+                                           ng-model="paypointCommand.promptDatePremium" name="submissionDate"/>
                                      <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                         ng-click="launchclaimDate($event)">
-                                     <i class="glyphicon glyphicon-calendar"></i></button>
+                                              ng-click="launchPromptDate($event)">
+                                          <i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
-                           </div>
-                           <div class="error" ng-messages="PayPointForm.submissionDate.$error" ng-if="PayPointForm.submissionDate.$dirty">
-                               <small ng-message="pattern">Please Enter Prompt Date For Submission Of Schedules.</small>
-
-                           </div>
-
-                       </div>
-                   </div>
-               </div>
-
-
+                                </div>
+                                <div class="error" ng-messages="PayPointForm.submissionDate.$error"
+                                     ng-if="PayPointForm.submissionDate.$dirty">
+                                    <small ng-message="pattern">Please Enter Prompt Date For Submission Of Schedules.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <h3 style="margin-left: 10px">Premium Collection</h3>
                     </div>
@@ -288,20 +278,24 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Prompt Date for premium collection</label>
+
                                 <div class='input-group date'>
                                     <input type="text" class="form-control input-sm"
                                            datepicker-popup=""
                                            view-enabled=""
-                                           is-open="claimIntimationDate"
-                                           max-date="todayDate"
-                                           ng-model="claimDetails.dateOfBirth" name="promptDate"/>
+                                           is-open="premiumDate"
+                                           max-date="todayDate" ng-disabled="mode =='view'"
+                                           ng-model="paypointCommand.promptDateSchedules" name="promptDate"/>
                                      <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                              ng-click="launchclaimDate($event)">
+                                              ng-click="launchPremiumDate($event)">
                                           <i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
-                                    <div class="error" ng-messages="PayPointForm.promptDate.$error" ng-if="PayPointForm.promptDate.$dirty">
-                                        <small ng-message="pattern">Please Enter Prompt Date for Premium Collection.</small>
+
+                                    <div class="error" ng-messages="PayPointForm.promptDate.$error"
+                                         ng-if="PayPointForm.promptDate.$dirty">
+                                        <small ng-message="pattern">Please Enter Prompt Date for Premium Collection.
+                                        </small>
 
                                     </div>
                                 </div>
@@ -309,175 +303,249 @@
                         </div>
                     </div>
                     <div class="row">
-                        <h3 style="margin-left: 10px">Contact Address</h3>
+                        <h3 style="margin-left: 10px">Physical Address</h3>
                     </div>
-                   <div class="row">
-                     <div class="col-md-6">
-                         <div class="form-group required">
-                             <label  >Address Line 1</label>
-                             <input type="text" class="form-control input-sm" name="contactAddressLine1" placeholder="Enter address" ng-required="true" ng-model="agentDetails.physicalAddress.physicalAddressLine1" ng-maxlength="100" ng-pattern="/^[a-zA-Z0-9]*$/"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label>Address Line 1</label>
+                                <input type="text" class="form-control input-sm" name="addressLine1"
+                                       ng-disabled="mode =='view'"
+                                       placeholder="Enter address" ng-required="true"
+                                       ng-model="payPointPhysicalAddress.addressLine1" ng-maxlength="100"
+                                       ng-pattern="/^[a-zA-Z0-9]*$/"/>
 
-                             <div class="error" ng-messages="PayPointForm.contactAddressLine1.$error" ng-if="PayPointForm.contactAddressLine1.$dirty">
-                                 <small ng-message="pattern">Please Enter Address Line 1 .</small>
-                             </div>
-                         </div>
-                     </div>
+                                <div class="error" ng-messages="PayPointForm.addressLine1.$error"
+                                     ng-if="PayPointForm.addressLine1.$dirty">
+                                    <small ng-message="pattern">Please Enter Address Line 1 .</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <div class="form-group">
+                                    <label>Address Line 2</label>
+                                    <input type="text" class="form-control input-sm" name="physicalAddressLine2"
+                                           ng-disabled="mode =='view'" placeholder="Enter address"
+                                           ng-model="payPointPhysicalAddress.addressLine2" ng-maxlength="100"
+                                           ng-pattern="/^[a-zA-Z0-9]*$/"/>
 
-                       <div class="col-md-6">
-                           <div class="form-group required">
-                               <div class="form-group">
-                                   <label  >Address Line 2</label>
-                                   <input type="text" class="form-control input-sm" name="contactAddressLine2" placeholder="Enter address"  ng-model="agentDetails.physicalAddress.contactAddressLine2" ng-maxlength="100" ng-pattern="/^[a-zA-Z0-9]*$/"/>
-                                   <div class="error" ng-messages="PayPointForm.contactAddressLine2.$error" ng-if="PayPointForm.contactAddressLine2.$dirty">
-                                       <small ng-message="pattern">Please Enter Address Line 2.</small>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-
+                                    <div class="error" ng-messages="PayPointForm.physicalAddressLine2.$error"
+                                         ng-if="PayPointForm.physicalAddressLine2.$dirty">
+                                        <small ng-message="pattern">Please Enter Address Line 2.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Postal Code</label>
-                                <input type="text" class="form-control input-sm" name="contactAdressPostalCode" placeholder="Enter postal code" ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"  maxlength="5"  minlength="5" />
+                                <input type="text" class="form-control input-sm" ng-disabled="mode =='view'"
+                                       name="physicalAdressPostalCode" placeholder="Enter postal code"
+                                       ng-model="contactAdressPostalCode.postalCode" maxlength="5" minlength="5"/>
 
-                                <div class="error" ng-messages="PayPointForm.contactAdressPostalCode.$error" ng-if="PayPointForm.contactAdressPostalCode.$dirty">
-                                    <small ng-message="pattern">Please Enter  Postal Code.</small>
+                                <div class="error" ng-messages="PayPointForm.physicalAdressPostalCode.$error"
+                                     ng-if="PayPointForm.physicalAdressPostalCode.$dirty">
+                                    <small ng-message="required">Please Enter Postal Code.</small>
 
                                 </div>
                             </div>
-                          </div>
-                        <div class="col-md-6">
-                         <div class="form-group required">
-                            <label  class="control-label">Province</label>
-                            <select class="form-control input-sm" name="contactAddressProvince" ng-model="agentDetails.physicalAddress.physicalGeoDetail.provinceCode" ng-change="getCurrentValTown(agentDetails.physicalAddress.physicalGeoDetail.provinceCode)"  ng-options="province.provinceId  as province.provinceName for province in provinces" ng-required="true"></select>
-
-                             <div class="error" ng-messages="PayPointForm.contactAddressProvince.$error" ng-if="PayPointForm.contactAddressProvince.$dirty">
-                                 <small ng-message="pattern">Please Select  Province .</small>
-
-                             </div>
                         </div>
-                       </div>
-                  </div>
-             <div class="row">
                         <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">Town</label>
-                                <select class="form-control input-sm" name="contactAddressCity" ng-model="contactAddressCity"
-                                        ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true"></select>
-                                <div class="error" ng-messages="PayPointForm.contactAddressCity.$error" ng-if="PayPointForm.contactAddressCity.$dirty">
-                                    <small ng-message="pattern">Please Enter Town.</small>
+                                <label class="control-label">Province</label>
+                                <select class="form-control input-sm" name="province"
+                                        ng-disabled="mode=='new'||mode=='view'"
+                                        ng-options="province.provinceId as province.provinceName for province in provinces"
+                                        ng-model="payPointPhysicalAddress.province" ng-required="true"
+                                        ng-change="getPayPoint(payPointPhysicalAddress.province)">
+                                </select>
+
+                                <div class="error" ng-messages="planBeneficiary.province.$error"
+                                     ng-if="PayPointForm.province.$dirty">
+                                    <small class="error" ng-message="required">Please enter Province</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Town
+                                </label>
+                                <select class="form-control input-sm" name="town"
+                                        ng-disabled="mode=='new'||mode=='view'" ng-required="true"
+                                        ng-model="payPointPhysicalAddress.town"
+                                        ng-options="city.geoId as city.geoName for city in physicalTown" />
+
+                                <div class="error" ng-messages="PayPointForm.town.$error"
+                                     ng-if="PayPointForm.town.$dirty">
+                                    <small ng-message="required">Please Enter Town.</small>
 
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <h3 style="margin-left: 10px">Physical Address</h3>
+                        <h3 style="margin-left: 10px">Contact Address</h3>
                     </div>
                     <div class="row">
-                       <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group required">
-                                <label  class="control-label">Address Line 1</label>
-                                <input type="text" class="form-control input-sm" name="physicalAddressLine1" placeholder="Enter address" ng-model="agentDetails.physicalAddressLine1.physicalAddressLine1" ng-required="true" ng-maxlength="100"/>
-                                <div class="error" ng-messages="PayPointForm.physicalAddressLine1.$error" ng-if="PayPointForm.physicalAddressLine1.$dirty">
+                                <label class="control-label">Address Line 1</label>
+                                <input type="text" class="form-control input-sm" name="physicalAddressLine1"
+                                       ng-disabled="mode =='view'" placeholder="Enter address"
+                                       ng-model="payPointContactAddress.addressLine1" ng-required="true"
+                                       ng-maxlength="100"/>
+
+                                <div class="error" ng-messages="PayPointForm.physicalAddressLine1.$error"
+                                     ng-if="PayPointForm.physicalAddressLine1.$dirty">
                                     <small ng-message="pattern">Please Enter Address Line 1 .</small>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label  >Postal Code</label>
-                                <input type="text" class="form-control input-sm" name="physicalPostalCode" placeholder="Enter postal code" ng-model="agentDetails.physicalAddress.physicalGeoDetail.postalCode"  maxlength="5"  minlength="5" ng-pattern="numberPattern"/>
-                                <div class="error" ng-messages="PayPointForm.physicalPostalCode.$error" ng-if="PayPointForm.physicalPostalCode.$dirty">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control input-sm" name="physicalPostalCode"
+                                       ng-disabled="mode =='view'" placeholder="Enter postal code"
+                                       ng-model="payPointContactAddress.postalCode" maxlength="5" minlength="5"
+                                       ng-pattern="numberPattern"/>
+
+                                <div class="error" ng-messages="PayPointForm.physicalPostalCode.$error"
+                                     ng-if="PayPointForm.physicalPostalCode.$dirty">
                                     <small ng-message="pattern">Please Enter Postal Code.</small>
                                 </div>
                             </div>
                             <div class="form-group required">
-                                <label  class="control-label">Town</label>
-                                <select class="form-control input-sm" name="physicalTown" ng-model="agentDetails.physicalAddress.physicalGeoDetail.cityCode"
-                                        ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true"></select>
-                                <div class="error" ng-messages="PayPointForm.physicalTown.$error" ng-if="PayPointForm.physicalTown.$dirty">
-                                    <small ng-message="pattern">Please Enter Town.</small>
+                                <label class="control-label">Province</label>
+                                <select class="form-control input-sm" name="province"
+                                        ng-disabled="mode=='new'||mode=='view'"
+                                        ng-options="province.provinceId as province.provinceName for province in provinces"
+                                        ng-model="payPointContactAddress.province" ng-required="true"
+                                        ng-change="getPaypointProvinceValue(payPointContactAddress.province)" ng-init="getPaypointProvinceValue(payPointContactAddress.province)">
+                                </select>
+
+                                <div class="error" ng-messages="payPointForm.province.$error"
+                                     ng-if="payPointForm.province.$dirty">
+                                    <small class="error" ng-message="required">Please enter Province</small>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label  >Address Line 2</label>
-                                <input type="text" class="form-control input-sm" name="physicalAddressLine2" placeholder="Enter address" ng-model="agentDetails.physicalAddress.physicalAddressLine2" ng-maxlength="100"/>
-                                <div class="error" ng-messages="PayPointForm.physicalAddressLine2.$error" ng-if="PayPointForm.physicalAddressLine2.$dirty">
-                                    <small ng-message="pattern">Please Enter Address Line 2.</small>
+                                <label>Address Line 2</label>
+                                <input type="text" class="form-control input-sm" name="physicalAddressLine2"
+                                       ng-disabled="mode =='view'" placeholder="Enter address"
+                                       ng-model="payPointContactAddress.addressLine2" ng-maxlength="100"/>
 
+                                <div class="error" ng-messages="PayPointForm.physicalAddressLine2.$error"
+                                     ng-if="PayPointForm.physicalAddressLine2.$dirty">
+                                    <small ng-message="pattern">Please Enter Address Line 2.</small>
                                 </div>
                             </div>
                             <div class="form-group required">
-                                <label  class="control-label">Province</label>
-                                <select class="form-control input-sm" name="physicalAddressProvince" ng-model="agentDetails.physicalAddress.physicalGeoDetail.provinceCode" ng-change="getCurrentValTown(agentDetails.physicalAddress.physicalGeoDetail.provinceCode)"  ng-options="province.provinceId  as province.provinceName for province in provinces" ng-required="true"></select>
-                                <div class="error" ng-messages="PayPointForm.physicalAddressProvince.$error" ng-if="PayPointForm.physicalAddressProvince.$dirty">
-                                    <small ng-message="pattern">Please Enter Province.</small>
+                                <label class="control-label">Town</label>
+                                <select class="form-control input-sm" name="town"
+                                        ng-disabled="mode=='new'||mode=='view'"
+                                        ng-required="true" ng-model="payPointContactAddress.town"
+                                        ng-options="city.geoId as city.geoName for city in physicalTown"/>
 
+                                <div class="error" ng-messages="PayPointForm.town.$error"
+                                     ng-if="PayPointForm.town.$dirty">
+                                    <small class="error" ng-message="required">Please enter Town</small>
                                 </div>
                             </div>
                         </div>
-                   </div>
-
+                    </div>
                     <div class="row">
                         <h3 style="margin-left: 10px">Payment Details</h3>
                     </div>
 
                     <div class="row">
-                     <div class="col-md-6">
-                        <div class="form-group required">
-                            <label  class="control-label">Preferred Payment Methods </label>
-                            <input type="text" class="form-control input-sm" name="paymentMethod" placeholder="Enter Preferred Payment Methods" ng-model="agentDetails.physicalAddress.paymentMethod" ng-required="true" ng-maxlength="100"/>
-                            <div class="error" ng-messages="PayPointForm.paymentMethod.$error" ng-if="PayPointForm.paymentMethod.$dirty">
-                                <small ng-message="pattern">Please Enter Preferred Payment Methods .</small>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Preferred Payment Methods </label>
+                                <input type="text" class="form-control input-sm" name="preferredPayPointMethod"
+                                       ng-disabled="mode =='view'" placeholder="Enter Preferred Payment Methods"
+                                       ng-model="payPointPaymentDto.preferredPayPointMethod" ng-required="true"
+                                       ng-maxlength="100"/>
+
+                                <div class="error" ng-messages="PayPointForm.preferredPayPointMethod.$error"
+                                     ng-if="PayPointForm.preferredPayPointMethod.$dirty">
+                                    <small ng-message="pattern">Please Enter Preferred Payment Methods .</small>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>DDACC ID</label>
+                                <input type="text" class="form-control input-sm" name="ddaccId"
+                                       ng-disabled="mode =='view'" placeholder="Enter DDACC ID"
+                                       ng-model="payPointPaymentDto.ddaccId" maxlength="7"
+                                       ng-pattern="/^[a-zA-Z0-9]*$/"/>
+
+                                <div class="error" ng-messages="PayPointForm.ddaccId.$error"
+                                     ng-if="PayPointForm.ddaccId.$dirty">
+                                    <small ng-message="pattern">Please Enter DDACC ID.</small>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="control-label">Bank Name</label>
+                                <select class="form-control input-sm" name="bankName"
+                                        ng-model="payPointPaymentDto.bankName" ng-disabled="mode =='view'"
+                                        ng-options="bankNameDetail.bankName as bankNameDetail.bankName for bankNameDetail in bankDetailsResponse"
+                                        ng-required="true"></select>
+
+                                <div class="error" ng-messages="PayPointForm.bankName.$error"
+                                     ng-if="PayPointForm.bankName.$dirty">
+                                    <small ng-message="pattern">Please Enter Bank Name.</small>
+
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>DDACC ID</label>
-                            <input type="text" class="form-control input-sm" name="ddaccID" placeholder="Enter DDACC ID" ng-model="agentDetails.physicalAddress.physicalGeoDetail.ddaccID"  maxlength="7"  ng-pattern="{0-9A-Za-z}"/>
-                            <div class="error" ng-messages="PayPointForm.ddaccID.$error" ng-if="PayPointForm.ddaccID.$dirty">
-                                <small ng-message="pattern">Please Enter DDACC ID.</small>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Bank Branch Name</label>
+                                <select class="form-control input-sm" name="branchname"
+                                        ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                        ng-disabled="mode =='view'"
+                                        ng-model="payPointPaymentDto.bankBranchName"
+                                        ng-selected="bankBranchDetail.bankCode" ng-required="true">
+                                </select>
 
+                                <div class="error" ng-messages="PayPointForm.branchname.$error"
+                                     ng-if="PayPointForm.branchname.$dirty">
+                                    <small ng-message="pattern">Please Enter Bank Branch Name.</small>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label>Bank Branch Sort Code</label>
+                                <input class="form-control input-md" ng-disabled="mode =='view'"
+                                       name="bankBranchCode" ng-model="payPointPaymentDto.bankBranchSortCode"
+                                       ng-required="true"/>
+
+                                <div class="error" ng-messages="PayPointForm.bankBranchCode.$error"
+                                     ng-if="PayPointForm.bankBranchCode.$dirty">
+                                    <small ng-message="pattern">Please Enter Bank Branch Sort Code.</small>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group required">
-                            <label  class="control-label">Bank Name</label>
-                            <select class="form-control input-sm" name="bankName" ng-model="bankName"
-                                    ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true"></select>
-                            <div class="error" ng-messages="PayPointForm.bankName.$error" ng-if="PayPointForm.bankName.$dirty">
-                                <small ng-message="pattern">Please Enter Bank Name.</small>
-
-                            </div>
-
-                        </div>
-                     </div>
-                     <div class="col-md-6">
-                       <div class="form-group required">`
-                         <label  class="control-label">Bank Branch Name</label>
-                           <select class="form-control input-sm" name="bankBranchName" ng-model="bankBranchName"
-                                ng-options="city.geoId as city.geoName for city in physicalCities" ng-required="true" ng-disabled="true" ></select>
-                           <div class="error" ng-messages="PayPointForm.bankBranchName.$error" ng-if="PayPointForm.bankBranchName.$dirty">
-                               <small ng-message="pattern">Please Enter Bank Branch Name.</small>
-
-                           </div>
-                         </div>
-                        <div class="form-group required">
-                           <label>Bank Branch Sort Code</label>
-                            <input class="form-control input-md"   name="bankBranchCode"  ng-model="bankBranchCode"  type="text" ng-disabled="true" ng-required="true"/>
-                            <div class="error" ng-messages="PayPointForm.bankBranchCode.$error" ng-if="PayPointForm.bankBranchCode.$dirty">
-                                <small ng-message="pattern">Please Enter Bank Branch Sort Code.</small>
-                            </div>
-                        </div>
-                       </div>
                     </div>
-              </ng-form>
-             </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="savePaypointDetail()"
+                                    ng-disabled="PayPointForm.$invalid" ng-if="!isViewMode">Save
+                            </button>
+                        </div>
+                    </div>
+                </ng-form>
             </div>
+        </div>
     </div>
-
     <style>
         .fuelux .checkbox-custom:before {
         font-family: "Glyphicons Halflings" !important;

@@ -1,37 +1,4 @@
-//(function (angular) {
-//    "use strict";
-//var app= angular.module('SearchPayPoint', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages']);
-//
-//app.config(["$routeProvider", function ($routeProvider) {
-//    $routeProvider.when('/', {
-//        templateUrl: 'searchpaypoint.html',
-//        controller: 'searchPayPointCtrl',
-//        resolve: {
-//
-//        }
-//    })
-//}])
-//    .config(['datepickerPopupConfig', function (datepickerPopupConfig) {
-//        datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
-//        datepickerPopupConfig.currentText = 'Today';
-//        datepickerPopupConfig.clearText = 'Clear';
-//        datepickerPopupConfig.closeText = 'Done';
-//        datepickerPopupConfig.closeOnDateSelection = true;
-//    }]);
-//    app.controller('searchPayPointCtrl', ['$scope', function ($scope) {
-//
-//            $scope.selectedItem = 1;
-//    }])
-//})(angular);
 
-/*
- define(["angular"],
- function(){
- angular.module("myApp",[])
- .controller('viewAgentCtrl',function($scope){
-
- })
- });*/
 var searchPayPointModule = (function(){
     var payPointServices = {};
     payPointServices.payPointSelected = undefined;
@@ -45,19 +12,19 @@ var searchPayPointModule = (function(){
        // alert(this.payPointName);
     };
     payPointServices.createPayPoint = function(){
-        window.location.href = "create";
+        window.location.href = "openpaypointpage";
     };
 
 //    payPointServices.createPayPoint = function () {
 //        window.location.href = "pla/core/paypoint/create";
 //    };
 
-    payPointServices.viewPayPoint =  function(){
+    payPointServices.viewPayPoint =  function(){//activate deactive when click radio button
         if (this.payPointSelected) {
             if ('PAYPOINT' === this.payPointName) {
-                window.location.href = "/pla/core/paypoint/view?payPointId=" + this.payPointSelected + "&mode=view";
-            } else {
-                window.location.href = "/pla/core/paypoint/view?payPointId=" + this.payPointSelected;
+               window.location.href = "/pla/core/paypoint/openpaypointpage?payPointId=" + this.payPointSelected +"&mode=view";
+           } else {
+                window.location.href = "/pla/core/paypoint/openpaypointpage?payPointId=" + this.payPointSelected + "&mode=view";
 
             }
         }
@@ -68,14 +35,13 @@ var searchPayPointModule = (function(){
             if ('BROKER' === this.payPointName) {
                 window.location.href = "/pla/core/paypoint/updatet?payPointId=" + this.payPointSelected + "&mode=edit";
             } else {
-                window.location.href = "/pla/core/paypoint/update?payPointId=" + this.payPointSelected;
+                window.location.href = "/pla/core/paypoint/update?payPointId=" + this.payPointSelected +"&mode=edit";
             }
         }
     };
     payPointServices.reload = function(){
         window.location.reload();
     };
-
 
     return payPointServices;
 })();
