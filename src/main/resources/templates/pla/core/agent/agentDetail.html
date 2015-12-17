@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!--/*-->
@@ -14,6 +14,19 @@
 <script>
     requirejs(['jquery','bootstrap','fuelux'],function($){
         $("#viewAgentWizard").wizard();
+
+
+        $('#viewAgentWizard').on('actionclicked.fu.wizard', function (evt, data) {
+            var index = data.step+1;
+            var label= $("ul li:first-child");
+            if(index == 3){
+                $('#wizardStep').attr('disabled', true);
+            }
+            else{
+                $('#wizardStep').attr('disabled', false);
+            }
+//            console.log("this is the current step label:", label);
+        });
     });
 </script>
 <div class="container">
@@ -31,7 +44,7 @@
         </ul>
         <div class="actions">
             <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span>Prev</button>
-            <button type="button" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
+            <button type="button" id="wizardStep" class="btn btn-default btn-next">Next<span class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
         <div class="step-content">
             <div class="step-pane" data-step="1">
