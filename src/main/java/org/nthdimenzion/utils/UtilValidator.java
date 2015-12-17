@@ -78,6 +78,18 @@ public class UtilValidator {
         return !isEmpty(array);
     }
 
+    public static boolean isEmpty(Object object){
+        if(object == null)
+            return true;
+        if(object instanceof Collection)
+            return isEmpty((Collection<?>) object);
+        if(object instanceof Map)
+            isEmpty((Map<?, ?>)object);
+        if(object instanceof String)
+            isEmpty((String)object);
+        return false;
+    }
+
     public static boolean validateEmail(String email) {
         return validatePattern(email, EMAIL_PATTERN);
     }

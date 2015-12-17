@@ -11,6 +11,7 @@
         <class>com.pla.core.domain.model.Region</class>
         <class>com.pla.core.domain.model.agent.Agent</class>
         <class>com.pla.core.domain.model.MandatoryDocument</class>
+        <class>com.pla.core.hcp.domain.model.HCP</class>
         <class>com.pla.core.domain.model.plan.commission.Commission</class>
         <class>com.pla.individuallife.quotation.domain.model.ILQuotation</class>
         <properties>

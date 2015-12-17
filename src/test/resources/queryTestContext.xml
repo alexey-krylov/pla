@@ -29,7 +29,7 @@
         <property name="persistenceUnitName" value="testnthdimenzion"/>
         <property name="packagesToScan">
             <list>
-                <value>com.pla.core.domain.model</value>
+                <value>com.pla</value>
             </list>
         </property>
         <property name="jpaVendorAdapter">
