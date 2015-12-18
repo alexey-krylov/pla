@@ -261,7 +261,7 @@ public class QuotationProposalUtilityService {
                 String optionalCvg = getCellValue(optionalCoverageHdrCell);
                 if(!optionalCoverageBenefitHeader.equalsIgnoreCase(optionalCoverageBenefitHdr) && optionalCoverageBenefitHeader.trim().replaceAll("\\d*$", "").equalsIgnoreCase(optionalCoverageBenefitHdr.trim().replaceAll("\\d*$", ""))) {
                     if (isNotEmpty(optionalCoverage) && isNotEmpty(optionalCvg)&& optionalCoverage.equalsIgnoreCase(optionalCvg))
-                        errorMessage = errorMessage + "Same optional cover added twice for "+optionalCoverageBenefitHeader+" and "+optionalCoverageBenefitHdr+";\n";
+                        errorMessage = errorMessage + "Same benefit added twice for "+optionalCoverage+";\n";
                 }
             }
         }
