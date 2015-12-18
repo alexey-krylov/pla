@@ -2,6 +2,7 @@ package com.pla.core.hcp.presentation.controller;
 
 import com.pla.core.hcp.application.command.CreateOrUpdateHCPCommand;
 import com.pla.core.hcp.application.service.HCPService;
+import com.pla.core.hcp.domain.model.HCP;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -31,13 +32,17 @@ public class HCPController {
 
     @RequestMapping(value = "/createOrUpdateHCP", method = RequestMethod.POST)
     @ResponseBody
-    public Result createHCP(@Valid @RequestBody CreateOrUpdateHCPCommand createOrUpdateHCPCommand, BindingResult bindingResult, ModelMap modelMap){
+    public Result createOrUpdateHCP(@Valid @RequestBody CreateOrUpdateHCPCommand createOrUpdateHCPCommand, BindingResult bindingResult, ModelMap modelMap){
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating HCP", bindingResult.getAllErrors());
         }
-        commandGateway.sendAndWait(createOrUpdateHCPCommand);
-        return Result.success();
+        try {
+            HCP hcp = commandGateway.sendAndWait(createOrUpdateHCPCommand);
+            return Result.success("HCP created successfully", hcp.getHcpCode());
+        } catch(Exception e){
+            return Result.failure(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/getHCPByHCPCode", method = RequestMethod.GET)
