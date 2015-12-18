@@ -148,6 +148,8 @@ angular.module('createAgent',['common','ngRoute','mgcrea.ngStrap.select','mgcrea
                 }
                 if(newVal == 4){
                     $('#wizardStep').attr('disabled', true);
+                }else if(getQueryParameter('agentId') && newVal == 3){
+                    $('#wizardStep').attr('disabled', true);
                 }
                 else{
                     $('#wizardStep').attr('disabled', false);
