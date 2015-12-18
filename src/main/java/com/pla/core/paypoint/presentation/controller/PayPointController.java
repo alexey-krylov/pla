@@ -3,6 +3,7 @@ package com.pla.core.paypoint.presentation.controller;
 import com.google.common.base.Preconditions;
 import com.pla.core.paypoint.application.command.PayPointCommand;
 import com.pla.core.paypoint.application.service.PayPointService;
+import com.pla.core.paypoint.domain.model.PayPoint;
 import com.pla.core.paypoint.domain.model.PayPointGrade;
 import com.pla.core.paypoint.domain.model.PayPointId;
 import com.pla.core.paypoint.domain.model.PayPointStatus;
@@ -45,7 +46,8 @@ public class PayPointController {
             Result.failure("Error in creating Paypoint", bindingResult.getAllErrors());
         }
         try {
-            commandGateway.sendAndWait(paypointCommand);
+            PayPoint payPoint = commandGateway.sendAndWait(paypointCommand);
+            return Result.success("paypoint created successfully.", payPoint.getPayPointId());
         } catch (PaypointApplicationException e) {
             LOGGER.error("Error in creating paypoint", e);
             return Result.failure(e.getMessage());
@@ -53,11 +55,10 @@ public class PayPointController {
             LOGGER.error("Error in creating paypoint", e);
             return Result.failure(e.getMessage());
         }
-        return Result.success("paypoint created successfully");
     }
 
     @RequestMapping(value = "/openpaypointpage", method = RequestMethod.GET)
-    public ModelAndView createPaypoint() {
+    public ModelAndView createPayPoint() {
         return new ModelAndView("pla/core/paypoint/createpaypoint");
     }
 
@@ -71,8 +72,8 @@ public class PayPointController {
     @RequestMapping(value ="/getAllList" , method=RequestMethod.GET)
     public ModelAndView search(){
         ModelAndView modelAndView = new ModelAndView();
-        List<Map<String,Object>> payPointList = paypointFinder.getAllPayPointDetail();
-        modelAndView.addObject("searchResult",payPointList);
+        List<PayPointCommand> payPointCommandList = payPointService.getAllPayPoints();
+        modelAndView.addObject("searchResult", payPointCommandList);
         modelAndView.setViewName("pla/core/paypoint/searchpaypoint");
         return modelAndView;
     }

@@ -14,15 +14,14 @@ public class PayPointCommandHandler {
 
     public PayPointService payPointService;
 
-    //private static final Logger LOGGER = LoggerFactory.getLogger(PayPointCommandHandler.class);
     @Autowired
     public PayPointCommandHandler(PayPointService payPointService){
         this.payPointService=payPointService;
     }
 
     @CommandHandler
-    public void createPayPoint(PayPointCommand paypointCommand){
-        PayPoint payPoint = payPointService.createPaypoint(paypointCommand);
+    public PayPoint createPayPoint(PayPointCommand paypointCommand){
+        return payPointService.createPaypoint(paypointCommand);
     }
 
 }

@@ -75,4 +75,8 @@ public class PayPoint implements ICrudEntity {
         payPointCommand = new PayPointPaymentDetail().createAndSetPropertiesToPayPointPaymentDto(this.payPointPaymentDetail, payPointCommand);
         return payPointCommand;
     }
+
+    public PayPointId getPayPointId() {
+        return payPointId;
+    }
 }
