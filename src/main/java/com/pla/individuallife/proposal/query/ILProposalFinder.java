@@ -287,7 +287,7 @@ public class ILProposalFinder {
             }
         }
         Plan plan = iPlanAdapter.getPlanByPlanId(new PlanId(planDetail.getPlanId()));
-        boolean compoundPremiumType = checkIfMultiplePremiumSheets(plan.getPremiumTermType());
+        boolean compoundPremiumType = plan != null ? checkIfMultiplePremiumSheets(plan.getPremiumTermType()) : Boolean.FALSE;
         String premiumPaymentType = planDetail.getPremiumPaymentType();
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);
 

@@ -2,6 +2,8 @@ package com.pla.core.hcp.presentation.controller;
 
 import com.pla.core.hcp.application.command.CreateOrUpdateHCPCommand;
 import com.pla.core.hcp.application.service.HCPService;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class HCPController {
 
     @RequestMapping(value = "/getHCPByHCPCode", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(httpMethod = "GET",value = "Get HCP for Given HCPCode")
     public CreateOrUpdateHCPCommand getHCPByHCPCode(@RequestParam String hcpCode, HttpServletResponse response) throws IOException {
         if (isEmpty(hcpCode)) {
             response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "hcpCode cannot be empty");
@@ -48,13 +51,22 @@ public class HCPController {
         return hcpService.getHCPByHCPCode(hcpCode);
     }
 
+    @RequestMapping(value = "/getAllHCP", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET",value = "Get the List of all HCP")
+    public List<CreateOrUpdateHCPCommand> getAllHCP() throws IOException {
+        return hcpService.getAllHCP();
+    }
+
     @RequestMapping(value = "/getAllHCPStatus", method = RequestMethod.GET)
-    public Set<String> getAllHCPStatus(){
+    @ApiOperation(httpMethod = "GET",value = "Get the List of all HCPStatus")
+    public @ResponseBody Set<String> getAllHCPStatus(){
         return hcpService.getAllHCPStatus();
     }
 
     @RequestMapping(value = "/getAllHCPCategories", method = RequestMethod.GET)
-    public List<Map<String, String>> getAllHCPCategories(){
+    @ApiOperation(httpMethod = "GET",value = "Get the List of all HCPCategories")
+    public @ResponseBody List<Map<String, String>> getAllHCPCategories(){
         return hcpService.getAllHCPCategories();
     }
 

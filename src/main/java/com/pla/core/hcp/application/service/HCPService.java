@@ -66,6 +66,17 @@ public class HCPService {
         return CreateOrUpdateHCPCommand.setPropertiesFromHCPEntity(hcp);
     }
 
+    public List<CreateOrUpdateHCPCommand> getAllHCP(){
+        List<HCP> hcp = hcpRepository.findAll();
+        List<CreateOrUpdateHCPCommand> createOrUpdateHCPCommandList = hcp.stream().map(new Function<HCP, CreateOrUpdateHCPCommand>() {
+            @Override
+            public CreateOrUpdateHCPCommand apply(HCP hcp) {
+                return CreateOrUpdateHCPCommand.setPropertiesFromHCPEntity(hcp);
+            }
+        }).collect(Collectors.toList());
+        return createOrUpdateHCPCommandList;
+    }
+
     public Set<String> getAllHCPStatus() {
         return Stream.of(HCPStatus.values()).map(HCPStatus :: name).collect(Collectors.toSet());
     }
