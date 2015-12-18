@@ -450,7 +450,7 @@
                                 <select class="form-control input-sm" name="town"
                                         ng-disabled="mode=='new'||mode=='view'"
                                         ng-required="true" ng-model="payPointContactAddress.town"
-                                        ng-options="city.geoId as city.geoName for city in physicalTown"/>
+                                        ng-options="city.geoId as city.geoName for city in town"/>
 
                                 <div class="error" ng-messages="PayPointForm.town.$error"
                                      ng-if="PayPointForm.town.$dirty">
