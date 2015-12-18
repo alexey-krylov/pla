@@ -5,15 +5,14 @@ import com.pla.core.hcp.application.service.HCPService;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import java.io.IOException;
+import java.util.*;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
@@ -48,4 +47,15 @@ public class HCPController {
         }
         return hcpService.getHCPByHCPCode(hcpCode);
     }
+
+    @RequestMapping(value = "/getAllHCPStatus", method = RequestMethod.GET)
+    public Set<String> getAllHCPStatus(){
+        return hcpService.getAllHCPStatus();
+    }
+
+    @RequestMapping(value = "/getAllHCPCategories", method = RequestMethod.GET)
+    public List<Map<String, String>> getAllHCPCategories(){
+        return hcpService.getAllHCPCategories();
+    }
+
 }
