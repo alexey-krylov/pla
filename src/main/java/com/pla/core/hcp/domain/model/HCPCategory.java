@@ -2,6 +2,8 @@ package com.pla.core.hcp.domain.model;
 
 import org.springframework.util.Assert;
 
+import java.util.stream.Stream;
+
 import static org.springframework.util.Assert.*;
 
 /**
@@ -19,7 +21,7 @@ public enum HCPCategory {
     public static HCPCategory getHCPCategory(String description) {
         notNull(description, "description cannot be empty for HCPCategory");
         for (HCPCategory hcpCategory : values()) {
-            if (hcpCategory.description.equalsIgnoreCase(description.trim())) {
+            if (hcpCategory.name().equalsIgnoreCase(description.trim())) {
                 return hcpCategory;
             }
         }
