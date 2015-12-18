@@ -340,4 +340,8 @@ public class PlanAdapterImpl implements IPlanAdapter {
         }
     }
 
+    public Plan getPlanByPlanId(PlanId planId){
+        return planRepository.findOne(planId);
+    }
+
 }

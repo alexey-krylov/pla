@@ -17,6 +17,7 @@ import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
+import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumCalculationDto;
@@ -87,6 +88,8 @@ public class ILProposalFinder {
     private PlanFinder planFinder;
     @Autowired
     private CoverageFinder coverageFinder;
+    @Autowired
+    IPlanAdapter iPlanAdapter;
 
 
     @Autowired
@@ -283,7 +286,7 @@ public class ILProposalFinder {
                 return new PremiumDetailDto();
             }
         }
-        Plan plan = (Plan)planFinder.findPlanByPlanId(new PlanId(planDetail.getPlanId()));
+        Plan plan = iPlanAdapter.getPlanByPlanId(new PlanId(planDetail.getPlanId()));
         boolean compoundPremiumType = checkIfMultiplePremiumSheets(plan.getPremiumTermType());
         String premiumPaymentType = planDetail.getPremiumPaymentType();
         PremiumCalculationDto premiumCalculationDto = new PremiumCalculationDto(new PlanId(planDetail.getPlanId()), LocalDate.now(), PremiumFrequency.ANNUALLY, 365);

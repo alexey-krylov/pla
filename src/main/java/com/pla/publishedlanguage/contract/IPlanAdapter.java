@@ -1,5 +1,6 @@
 package com.pla.publishedlanguage.contract;
 
+import com.pla.core.domain.model.plan.Plan;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
@@ -17,6 +18,8 @@ public interface IPlanAdapter {
     List<PlanCoverageDetailDto> getPlanAndCoverageDetail(List<PlanId> planIds);
 
     List<PlanCoverageDetailDto> getAllPlanAndCoverageDetail();
+
+    Plan getPlanByPlanId(PlanId planId);
 
     boolean isValidPlanForRelationship(String planCode, Relationship relationship);
 
