@@ -39,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -145,10 +146,14 @@ public class GroupHealthProposalController {
     public ModelAndView findSubmittedProposal(SearchGHProposalDto searchGHProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/proposal/viewApprovalProposal");
-        List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
-
-        modelAndView.addObject("searchResult", submittedProposals);
+        try {
+            List<GHProposalDto> submittedProposals = ghProposalService.searchProposal(searchGHProposalDto, new String[]{"PENDING_ACCEPTANCE"});
+            modelAndView.addObject("searchResult", submittedProposals);
+        }catch (Exception e){
+            modelAndView.addObject("searchResult", Collections.EMPTY_LIST);
+        }
         modelAndView.addObject("searchCriteria", searchGHProposalDto);
+
         return modelAndView;
     }
 

@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
-import org.nthdimenzion.common.crud.ICrudEntity;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import org.springframework.util.Assert;
 

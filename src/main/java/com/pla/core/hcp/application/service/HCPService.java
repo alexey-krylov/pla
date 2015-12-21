@@ -86,7 +86,8 @@ public class HCPService {
             @Override
             public Map<String, String> apply(HCPCategory hcpCategory) {
                 Map<String, String> resultSet = Maps.newHashMap();
-                resultSet.put(hcpCategory.name(), hcpCategory.description);
+                resultSet.put("name",hcpCategory.name());
+                resultSet.put("description",  hcpCategory.description);
                 return resultSet;
             }
         }).collect(Collectors.toList());

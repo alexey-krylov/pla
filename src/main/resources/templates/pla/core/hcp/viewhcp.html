@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <script src="../../../../static/js/hcp/searchhcp.js"></script>
+    <script src="../../../../static/js/mock/json2.js"></script>
+    <script src="../../../../static/js/mock/jquery.mockjax.js"></script>
+    <!--<script src="../../../../static/js/mock/viewhcpMock.js"></script>-->
+    <!--*/-->
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    var interval = setInterval(function(){
+        if(require.defined("basic")){
+            requirejs(['/pla/js/hcp/hcpdetail.js'],function(){
+                $(document).ready(function(){
+                    $('#hcp-table').dataTable({
+                        "fnDrawCallback":function(){
+                            $( "input[type=radio]" ).on( "click", function(){
+                                searchhcpModule.getTheItemSelected(this)
+                            });
+                        }
+                    });
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <span>List of hcp</span>
+                            </div>
+                            <div class="col-lg-6" style="text-align: right">
+                                <a type="button" class="btn btn-default btn-sm" onclick="searchhcpModule.createhcp()">Create </a>
+
+                                <button type="button" class="btn btn-default btn-sm" id="hcp-view" disabled="disabled" onclick="searchhcpModule.viewhcp()">View</button>
+                                <button type="button" class="btn btn-default btn-sm" id="hcp-update" disabled="disabled" onclick="searchhcpModule.updatehcp()">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered" id="hcp-table" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th >Hcp ID</th>
+                            <th >Hcp Name</th>
+                            <th>Hcp Status</th>
+                            <th>Hcp Town</th>
+                            <th>Hcp Province</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <form id="searchhcptForm">
+                            <tr th:each="hcp : ${searchResult}">
+                                <td>
+                                    <input type="radio" name="hcpCode" th:value="${hcp.hcpCode}"/>
+
+                                </td>
+                                <td th:text="${hcp.hcpCode}"></td>
+                                <td th:text="${hcp.hcpName}"></td>
+                                <td th:text="${hcp.hcpStatus}"></td>
+                                <td th:text="${hcp.town}"></td>
+                                <td th:text="${hcp.province}"></td>
+                            </tr>
+                        </form>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer" >
+                    <ul class="pagination" id="logs-pagination-default"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
