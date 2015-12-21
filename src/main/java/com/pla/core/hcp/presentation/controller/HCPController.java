@@ -4,18 +4,20 @@ import com.pla.core.hcp.application.command.CreateOrUpdateHCPCommand;
 import com.pla.core.hcp.application.service.HCPService;
 import com.pla.core.hcp.domain.model.HCP;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
@@ -29,6 +31,12 @@ public class HCPController {
     CommandGateway commandGateway;
     @Autowired
     HCPService hcpService;
+   @RequestMapping(value="/loadcreatepage",method=RequestMethod.GET)
+   public ModelAndView loadPage(){
+       ModelAndView modelAndView = new ModelAndView();
+       modelAndView.setViewName("pla/core/hcp/createhcp");
+       return  modelAndView;
+   }
 
     @RequestMapping(value = "/createOrUpdateHCP", method = RequestMethod.POST)
     @ResponseBody
@@ -56,11 +64,13 @@ public class HCPController {
         return hcpService.getHCPByHCPCode(hcpCode);
     }
 
-    @RequestMapping(value = "/getAllHCP", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(httpMethod = "GET",value = "Get the List of all HCP")
-    public List<CreateOrUpdateHCPCommand> getAllHCP() throws IOException {
-        return hcpService.getAllHCP();
+    @RequestMapping(value ="/getAllHCP" , method=RequestMethod.GET)
+    public ModelAndView getAllHCP(){
+        ModelAndView modelAndView = new ModelAndView();
+        List<CreateOrUpdateHCPCommand> hcpCommandList = hcpService.getAllHCP();
+        modelAndView.addObject("searchResult", hcpCommandList);
+        modelAndView.setViewName("pla/core/hcp/viewhcp");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/getAllHCPStatus", method = RequestMethod.GET)

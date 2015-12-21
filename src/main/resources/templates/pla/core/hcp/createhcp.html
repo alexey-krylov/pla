@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
+    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet"/>
+    <script data-main="../../../../static/js/requireConfig"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+
+    <!--*/-->
+</head>
+<body class="fuelux">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+<script>
+    requirejs(['main'],function(){
+        require(['/pla/js/hcp/createhcp.js'],function(){
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['createhcp']);
+            });
+        });
+    });
+
+
+
+</script>
+<script type="text/ng-template" id="createhcp.html">
+    <nth-alert></nth-alert>
+    <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
+         ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
+        <ul class="steps" style="margin-left: 0">
+            <li data-step="1">
+                <span class="badge badge-info">1</span>HCP<span class="chevron"></span>
+            </li>
+        </ul>
+        <div class="step-content">
+            <div class="step-pane active" data-step="1">
+                <ng-form name="hcpForm">
+                    <div class="row bs-callout-info bs-callout-info">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Activated On</label>
+
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm"
+                                           datepicker-popup=""
+                                           view-enabled=""
+                                           ng-required="true"
+                                           is-open="submissionActivatedDate"
+                                           max-date="todayDate" ng-disabled="mode =='view' || mode=='edit'"
+                                           ng-model="createOrUpdateHCPCommand.activatedOn" name="submissionDate"/>
+                                     <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                              ng-click="launchActivatedDate($event)">
+                                          <i class="glyphicon glyphicon-calendar"></i></button>
+                                     </span>
+                                </div>
+                                <div class="error" ng-messages="PayPointForm.submissionDate.$error"
+                                     ng-if="PayPointForm.submissionDate.$dirty">
+                                    <small ng-message="pattern">Please Enter Prompt Date For Submission Of Schedules.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Status</label>
+                                <select  class="form-control input-sm" name="hcpStatus"
+                                       ng-model="createOrUpdateHCPCommand.hcpStatus" ng-required="true"
+                                       ng-options="hcpData as hcpData for hcpData in hcpStatus"
+                                        />
+
+                                <div class="error" ng-messages="hcpForm.hcpStatus.$error"
+                                     ng-if="hcpForm.hcpStatus.$dirty">
+                                    <small class="error" ng-message="required">Please Enter Status
+                                    </small>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">HCP Name</label>
+                                <input type="text" class="form-control input-sm" name="hcpName"
+                                        ng-model="createOrUpdateHCPCommand.hcpName"  maxlength="100" minlength="1"
+                                        placeholder="Enter hcp name" ng-disabled="mode =='view'"
+                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
+
+                                <div class="error" ng-messages="hcpForm.hcpName.$error"
+                                     ng-if="hcpForm.hcpName.$dirty">
+                                    <small ng-message="required">Please Enter HCP Name</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">HCP Category</label>
+                                <select class="form-control input-sm" name="hcpCategory"
+                                        ng-model="createOrUpdateHCPCommand.hcpCategory" ng-disabled="mode =='view'"
+                                        ng-options="hcpCategory.description as hcpCategory.description for hcpCategory in hcpCategories"
+                                        ng-required="true"></select>
+
+                                <div class="error" ng-messages="hcpForm.hcpCategory.$error"
+                                     ng-if="hcpForm.hcpCategory.$dirty">
+                                    <small ng-message="required">Please Enter HCP Categorye</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">HCP Code</label>
+                                <input type="text" class="form-control input-sm" name="hcpCode"
+                                       ng-model="createOrUpdateHCPCommand.hcpCode"
+                                        ng-readonly="true"/>
+
+                                <div class="error" ng-messages="hcpForm.hcpCode.$error"
+                                     ng-if="hcpForm.hcpCode.$dirty">
+                                    <small ng-message="required">Please Enter HCP Code</small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">EmailID</label>
+                                <input type="email" class="form-control input-sm" name="emailId"
+                                       ng-model="createOrUpdateHCPCommand.emailId"
+                                       placeholder="Enter EmailID" ng-disabled="mode =='view'"
+                                       ng-required="true" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
+
+                                <div class="error" ng-messages="hcpForm.emailId.$error"
+                                     ng-if="hcpForm.emailId.$dirty">
+                                    <small ng-message="required">Please Enter EmailID.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Address Line 1</label>
+                                <input type="text" class="form-control input-sm" name="addressLine1"
+                                       ng-disabled="mode =='view'" placeholder="Enter address" ng-pattern="/^[a-zA-Z0-9]*$/"
+                                       ng-model="createOrUpdateHCPCommand.addressLine1" ng-required="true"
+                                       ng-maxlength="100"/>
+
+                                <div class="error" ng-messages="hcpForm.addressLine1.$error"
+                                     ng-if="hcpForm.addressLine1.$dirty">
+                                    <small ng-message="required">Please Enter Address Line 1 .</small>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control input-sm" name="postalCode"
+                                       ng-disabled="mode =='view'" placeholder="Enter postal code"
+                                       ng-model="createOrUpdateHCPCommand.postalCode"
+                                       ng-pattern="numberPattern"/>
+
+                                <div class="error" ng-messages="hcpForm.postalCode.$error"
+                                     ng-if="hcpForm.postalCode.$dirty">
+                                    <small ng-message="required">Please Enter Postal Code.</small>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Province</label>
+                                <select class="form-control input-sm" name="province"
+                                        ng-disabled="mode=='new'||mode=='view'"
+                                        ng-options="province.provinceId as province.provinceName for province in provinces"
+                                        ng-model="createOrUpdateHCPCommand.province" ng-required="true">
+                                </select>
+                                <div class="error" ng-messages="hcpForm.province.$error"
+                                     ng-if="hcpForm.province.$dirty">
+                                    <small class="error" ng-message="required">Please enter Province</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label>Address Line 2</label>
+                                <input type="text" class="form-control input-sm" name="addressLine2"
+                                       ng-disabled="mode =='view'" placeholder="Enter address"
+                                       ng-model="createOrUpdateHCPCommand.addressLine2" ng-maxlength="100"/>
+
+                                <div class="error" ng-messages="hcpForm.addressLine2.$error"
+                                     ng-if="hcpForm.addressLine2.$dirty">
+                                    <small ng-message="required">Please Enter Address Line 2.</small>
+                                </div>
+                            </div>
+                            </div>
+                         </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Town</label>
+                                <select class="form-control input-sm" name="town"
+                                        ng-disabled="mode=='new'||mode=='view'"
+                                        ng-required="true" ng-model="createOrUpdateHCPCommand.town"
+                                        ng-options="city.geoName as city.geoName for city in town"/>
+                                <div class="error" ng-messages="hcpForm.town.$error"
+                                     ng-if="hcpForm.town.$dirty">
+                                    <small class="error" ng-message="required">Please enter Town</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Work phone</label>
+                                <input type="text" class="form-control input-sm" name="workPhoneNumber"
+                                       ng-disabled="mode =='view'" placeholder="Enter Work phone"
+                                       ng-model="createOrUpdateHCPCommand.workPhoneNumber" ng-required="true" ng-pattern="/^[0-9]*$/"
+                                       maxlength="13" minlength="13"/>
+
+                                <div class="error" ng-messages="hcpForm.workPhoneNumber.$error"
+                                     ng-if="hcpForm.workPhoneNumber.$dirty">
+                                    <small ng-message="required">Please Enter Work phone .</small>
+                                </div>
+                            </div>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                        <h3 style="margin-left: 10px">Contact Person Detail</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Contact Person Details</label>
+                                <input type="text" class="form-control input-sm" name="contactPersonDetail"
+                                       ng-disabled="mode =='view'" placeholder="Enter address"
+                                       ng-model="createOrUpdateHCPCommand.contactPersonDetail" ng-required="true"
+                                       minlength="1" maxlength="100"/>
+
+                                <div class="error" ng-messages="hcpForm.contactPersonDetail.$error"
+                                     ng-if="hcpForm.contactPersonDetail.$dirty">
+                                    <small ng-message="required">Please Enter Contact Person Details .</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Mobile Number</label>
+                                <input type="text" class="form-control input-sm" name="contactPersonMobile"
+                                       ng-disabled="mode =='view'" placeholder="Enter Mobile Number"
+                                       ng-model="createOrUpdateHCPCommand.contactPersonMobile" ng-required="true"
+                                       maxlength="13" minlength="13"  ng-pattern="/^[0-9]*$/"/>
+
+                                <div class="error" ng-messages="hcpForm.contactPersonMobile.$error"
+                                     ng-if="hcpForm.contactPersonMobile.$dirty">
+                                    <small ng-message="required">Please Enter Mobile Number .</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Work phone</label>
+                                <input type="text" class="form-control input-sm" name="contactPersonWorkPhoneNumber"
+                                       ng-disabled="mode =='view'" placeholder="Enter address"  ng-pattern="/^[0-9]*$/"
+                                       ng-model="createOrUpdateHCPCommand.contactPersonWorkPhoneNumber" ng-required="true"
+                                       maxlength="13" minlength="13"/>
+
+                                <div class="error" ng-messages="hcpForm.contactPersonWorkPhoneNumber.$error"
+                                     ng-if="hcpForm.contactPersonWorkPhoneNumber.$dirty">
+                                    <small ng-message="required">Please Enter Work phone .</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Email Address</label>
+                                <input type="text" class="form-control input-sm" name="contactPersonEmailId"
+                                       ng-disabled="mode =='view'" placeholder="Enter address" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"
+                                       ng-model="createOrUpdateHCPCommand.contactPersonEmailId" ng-required="true"
+                                       ng-maxlength="100"/>
+
+                                <div class="error" ng-messages="hcpForm.contactPersonEmailId.$error"
+                                     ng-if="hcpForm.contactPersonEmailId.$dirty">
+                                    <small ng-message="required">Please Enter email Address .</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                    ng-click="savehcpDetail()" ng-disabled="mode=='view'|| hcpForm.$invalid"
+                                    >Save
+                            </button>
+                        </div>
+                    </div>
+                </ng-form>
+            </div>
+        </div>
+    </div>
+    <style>
+        .fuelux .checkbox-custom:before {
+        font-family: "Glyphicons Halflings" !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        font-variant: normal !important;
+        text-transform: none !important;
+        line-height: 1;
+        speak: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        border: 1px solid #adadad;
+        border-radius: 4px;
+        color: #fff;
+        content: " ";
+        font-size: 12px;
+        height: 18px;
+        left: 0;
+        padding: 1px 0 0 1px;
+        position: absolute;
+        top: 3px;
+        width: 18px;
+        }
+        .btn {
+        font-size: 12px;
+        }
+    </style>
+</script>
+<div class="ng-view container">
+
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
