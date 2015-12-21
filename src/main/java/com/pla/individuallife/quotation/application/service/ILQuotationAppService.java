@@ -127,8 +127,8 @@ public class ILQuotationAppService {
         }
         else {
             annualFee = policyFeeMap.get("annualFee")!=null?(BigDecimal)policyFeeMap.get("annualFee"):BigDecimal.ZERO;
-            quarterlyFee =policyFeeMap.get("monthlyFee")!=null?(BigDecimal)policyFeeMap.get("monthlyFee"):BigDecimal.ZERO;
-            monthlyFee = policyFeeMap.get("quarterlyFee")!=null?(BigDecimal)policyFeeMap.get("quarterlyFee"):BigDecimal.ZERO;
+            quarterlyFee =policyFeeMap.get("quarterlyFee")!=null?(BigDecimal)policyFeeMap.get("quarterlyFee"):BigDecimal.ZERO;
+            monthlyFee = policyFeeMap.get("monthlyFee")!=null?(BigDecimal)policyFeeMap.get("monthlyFee"):BigDecimal.ZERO;
             semiAnnualFee = policyFeeMap.get("semiAnnualFee")!=null?(BigDecimal) policyFeeMap.get("semiAnnualFee"):BigDecimal.ZERO;
         }
         premiumDetailDto.setAnnualFee(annualFee);

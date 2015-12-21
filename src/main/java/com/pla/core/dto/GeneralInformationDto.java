@@ -1,7 +1,10 @@
 package com.pla.core.dto;
 
+import com.pla.core.domain.model.generalinformation.ReinstatementInterest;
+import com.pla.core.domain.model.generalinformation.SurrenderCharges;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,6 +18,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class GeneralInformationDto {
 
     private String productLineInformationId;
@@ -36,6 +40,7 @@ public class GeneralInformationDto {
     private List<ModalFactorInformationDto> modelFactorItems;
     private ServiceTaxDto serviceTax;
     private BigDecimal thresholdSumAssured = BigDecimal.ZERO;
-    public GeneralInformationDto() {
-    }
+    private SurrenderCharges surrenderCharges;
+    private ReinstatementInterest reinstatementInterest;
+
 }

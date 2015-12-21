@@ -21,6 +21,7 @@ public class SurrenderProcessInformation {
 
     private Set<ProductLineProcessItem> surrenderProcessItems;
 
+
     public SurrenderProcessInformation(Set<ProductLineProcessItem> surrenderProcessItems) {
         this.surrenderProcessItems = surrenderProcessItems;
     }

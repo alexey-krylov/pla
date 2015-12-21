@@ -8,9 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.domain.model.Admin;
-import com.pla.core.domain.model.generalinformation.GeneralInformationProcessItem;
-import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
-import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.core.domain.model.generalinformation.*;
 import com.pla.core.dto.*;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
@@ -73,7 +71,7 @@ public class GeneralInformationService {
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems =  transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems =  transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
         ProductLineGeneralInformation productLineGeneralInformation = admin.createProductLineGeneralInformation(lineOfBusinessId, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,
-                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor(),generalInformationDto.getMoratoriumPeriod() );
+                premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor(),generalInformationDto.getMoratoriumPeriod(),generalInformationDto.getSurrenderCharges(),generalInformationDto.getReinstatementInterest() );
         mongoTemplate.save(productLineGeneralInformation);
         return AppConstants.SUCCESS;
     }
@@ -159,7 +157,7 @@ public class GeneralInformationService {
         List<Map<ProductLineProcessType,Integer>> enrollmentProcessItem = transformProductLine(generalInformationDto.getEnrollmentProcessItems());
         List<Map<ProductLineProcessType,Integer>> endorsementProcessItem = transformProductLine(generalInformationDto.getEndorsementProcessItems());
         List<Map<ProductLineProcessType,Integer>> claimProcessItem = transformProductLine(generalInformationDto.getClaimProcessItems());
-        List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem =transformProductLine(generalInformationDto.getReinstatementProcessItems());
+        List<Map<ProductLineProcessType,Integer>> reinstatementProcessItem = transformProductLine(generalInformationDto.getReinstatementProcessItems());
         List<Map<ProductLineProcessType,Integer>> maturityProcessItem = transformProductLine(generalInformationDto.getMaturityProcessItems());
         List<Map<ProductLineProcessType,Integer>> surrenderProcessItem = transformProductLine(generalInformationDto.getSurrenderProcessItems());
         List<Map<PolicyFeeProcessType,Integer>> policyFeeProcess  = transformProductLineFeeProcess(generalInformationDto.getPolicyFeeProcessItems());
@@ -167,7 +165,9 @@ public class GeneralInformationService {
         Map<PremiumFrequency, List<Map<ProductLineProcessType,Integer>>>  premiumFrequencyFollowUp =  transformPremiumFrequencyFollowUp(generalInformationDto.getPremiumFollowUpFrequency());
         List<Map<ModalFactorItem, BigDecimal>> modalFactorItems  = transformModalFactorItem(generalInformationDto.getModelFactorItems());
         List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems = transformDiscountFactorItem(generalInformationDto.getDiscountFactorItems());
-        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation,  quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor(), generalInformationDto.getMoratoriumPeriod());
+        SurrenderCharges surrenderCharges = generalInformationDto.getSurrenderCharges();
+        ReinstatementInterest reinstatementInterest =  generalInformationDto.getReinstatementInterest();
+        productLineGeneralInformation = admin.updateProductLineInformation(productLineGeneralInformation, quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFrequencyFollowUp,modalFactorItems,discountFactorItems,generalInformationDto.getAgeLoadingFactor(), generalInformationDto.getMoratoriumPeriod(),surrenderCharges,reinstatementInterest);
         productLineGeneralInformation.withThresholdSumAssured(generalInformationDto.getThresholdSumAssured());
         update = updateProductLineInformation(update, productLineGeneralInformation);
         mongoTemplate.updateFirst(findGeneralInformation, update, ProductLineGeneralInformation.class);
@@ -190,6 +190,8 @@ public class GeneralInformationService {
         update.set("ageLoadingFactor", updatedProductLineInformation.getAgeLoadingFactor());
         update.set("moratoriumPeriod", updatedProductLineInformation.getMoratoriumPeriod());
         update.set("thresholdSumAssured", updatedProductLineInformation.getThresholdSumAssured());
+        update.set("reinstatementInterest", updatedProductLineInformation.getReinstatementInterest());
+        update.set("surrenderCharges", updatedProductLineInformation.getSurrenderCharges());
         return update;
     }
 
@@ -282,6 +284,8 @@ public class GeneralInformationService {
             productLineInformationByBusinessId.put("ageLoadingFactor",productLineInformationMap.get("ageLoadingFactor"));
             productLineInformationByBusinessId.put("moratoriumPeriod",productLineInformationMap.get("moratoriumPeriod"));
             productLineInformationByBusinessId.put("thresholdSumAssured",productLineInformationMap.get("thresholdSumAssured"));
+            productLineInformationByBusinessId.put("reinstatementInterest",productLineInformationMap.get("reinstatementInterest"));
+            productLineInformationByBusinessId.put("surrenderCharges",productLineInformationMap.get("surrenderCharges"));
             productLineInformationList.add(productLineInformationByBusinessId);
         }
         return transformProductLineInformation(productLineInformationList);

@@ -1005,10 +1005,22 @@
                                     <form  novalidate="true" role="form" name="forms.form7">
                                         <div class="row">
                                             <div class="form-group col-md-4 required" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems">
-                                                <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
-                                                <p class="input-group">
-                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}"  ng-required="true"/>
-                                                </p>
+                                                <div>
+                                                    <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                                    <p class="input-group">
+                                                        <input type="text" class="form-control input-sm"   ng-model="reinstatementProcessItems.value" value="{{reinstatementProcessItems.value}}" />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4 required">
+                                                <label class="control-label">Interest</label>
+                                                <select class="form-control input-sm" name="type" ng-model="items.reinstatementInterest.reinstatementInterestType">
+                                                    <option value="">Select Interest</option>
+                                                    <option value="COMPOUND">Compound</option>
+                                                    <option value="SIMPLE">Simple</option>
+                                                </select>
+                                                <label class="control-label">Amount</label>
+                                                <input type="text" class="form-control input-sm " ng-pattern="/^\d{2}.\d{2}?$/" ng-model="items.reinstatementInterest.interest" value="{{items.reinstatementInterest.interest}}" />
                                             </div>
                                         </div>
                                     </form>
@@ -1078,8 +1090,18 @@
                                             <div class="form-group col-md-4 required" ng-repeat="surrenderProcessItems in items.surrenderProcessItems">
                                                 <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{surrenderProcessItems.fullDescription}}"   >{{surrenderProcessItems.description}}</label>
                                                 <p class="input-group">
-                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/"  ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
+                                                    <input type="number" class="form-control input-sm" min="1" ng-pattern="/^([0-9]{1,2})?$/" ng-model="surrenderProcessItems.value" value="{{surrenderProcessItems.value}}" ng-required="true"/>
                                                 </p>
+                                            </div>
+                                            <div class="form-group col-md-4 required">
+                                                <label class="control-label">Charges</label>
+                                                <select class="form-control input-sm" name="type" ng-model="items.surrenderCharges.surrenderChargesType">
+                                                    <option value="">Select Charges</option>
+                                                    <option value="AMOUNT">Amount</option>
+                                                    <option value="PERCENTAGE_OF_SURRENDER_AMOUNT">% of Surrender Amount</option>
+                                                </select>
+                                                <label class="control-label">Amount</label>
+                                                <input type="text" class="form-control input-sm " ng-pattern="/^\d{2}.\d{2}?$/" ng-model="items.surrenderCharges.amount" value="{{items.surrenderCharges.amount | number:2}}" />
                                             </div>
                                         </div>
                                     </form>

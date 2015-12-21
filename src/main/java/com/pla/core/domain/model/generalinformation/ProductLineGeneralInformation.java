@@ -74,6 +74,9 @@ public class ProductLineGeneralInformation {
 
     private BigDecimal thresholdSumAssured = BigDecimal.ZERO;
 
+    private ReinstatementInterest reinstatementInterest;
+
+    private SurrenderCharges surrenderCharges;
 
     private ProductLineGeneralInformation(String productLineInformationId, LineOfBusinessEnum productLineId) {
         this.productLineInformationId = productLineInformationId;
@@ -91,6 +94,16 @@ public class ProductLineGeneralInformation {
 
     public ProductLineGeneralInformation withQuotationProcessInformation(List<Map<ProductLineProcessType, Integer>> quotationProcessInformation) {
         this.quotationProcessInformation =  QuotationProcessInformation.create(quotationProcessInformation);
+        return this;
+    }
+
+    public ProductLineGeneralInformation withReinstatementInterest(ReinstatementInterest reinstatementInterest) {
+        this.reinstatementInterest = reinstatementInterest;
+        return this;
+    }
+
+    public ProductLineGeneralInformation withSurrenderCharges(SurrenderCharges surrenderCharges) {
+        this.surrenderCharges =  surrenderCharges;
         return this;
     }
 
@@ -182,19 +195,6 @@ public class ProductLineGeneralInformation {
         return premiumFollowUpFrequencyItems.getPremiumFollowUpFrequencyItems();
     }
 
-    private static class QuotationProcessInformationTransformer implements Function<Map<ProductLineProcessType,Integer>,ProductLineProcessItem> {
-
-        @Override
-        public ProductLineProcessItem apply(Map<ProductLineProcessType,Integer> productLineProcessItemMap) {
-            Map.Entry<ProductLineProcessType,Integer> entry = productLineProcessItemMap.entrySet().iterator().next();
-            if (!Arrays.asList(ProductLineProcessType.FIRST_REMAINDER, ProductLineProcessType.SECOND_REMAINDER, ProductLineProcessType.LAPSE).contains(entry.getKey())){
-                throw new GeneralInformationException("Premium Follow up frequency should not include "+entry.getKey());
-            }
-            ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
-            return productLineProcessItem;
-        }
-    }
-
     public int getProductLineProcessItemValue(ProcessType processType, ProductLineProcessType productLineProcessType) throws ProcessInfoException {
         ImmutableMap<ProcessType, Object> processTypeMap = ImmutableMap.of(QUOTATION, this.quotationProcessInformation,PROPOSAL, this.enrollmentProcessInformation);
         switch (processType){
@@ -233,5 +233,18 @@ public class ProductLineGeneralInformation {
 
     public int getMoratoriumPeriod(){
         return LineOfBusinessEnum.GROUP_HEALTH.equals(this.productLine)?this.moratoriumPeriod:0;
+    }
+
+    private static class QuotationProcessInformationTransformer implements Function<Map<ProductLineProcessType,Integer>,ProductLineProcessItem> {
+
+        @Override
+        public ProductLineProcessItem apply(Map<ProductLineProcessType,Integer> productLineProcessItemMap) {
+            Map.Entry<ProductLineProcessType,Integer> entry = productLineProcessItemMap.entrySet().iterator().next();
+            if (!Arrays.asList(ProductLineProcessType.FIRST_REMAINDER, ProductLineProcessType.SECOND_REMAINDER, ProductLineProcessType.LAPSE).contains(entry.getKey())){
+                throw new GeneralInformationException("Premium Follow up frequency should not include "+entry.getKey());
+            }
+            ProductLineProcessItem productLineProcessItem = new ProductLineProcessItem(entry.getKey(), entry.getValue());
+            return productLineProcessItem;
+        }
     }
 }

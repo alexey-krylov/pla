@@ -9,6 +9,9 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by Admin on 4/23/2015.
@@ -19,7 +22,7 @@ public enum GeneralInformationProcessItem {
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE);
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
                 if (!productLineProcessTypes.contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
@@ -37,7 +40,7 @@ public enum GeneralInformationProcessItem {
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE);
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
                 if (!productLineProcessTypes.contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
@@ -55,7 +58,7 @@ public enum GeneralInformationProcessItem {
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE);
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
                 if (!productLineProcessTypes.contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
@@ -74,8 +77,8 @@ public enum GeneralInformationProcessItem {
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            List<ProductLineProcessType> productLineProcessTypes = LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(lineOfBusinessId) ? Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.CHARGES) :
-                    Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES,ProductLineProcessType.INTEREST);
+            List<ProductLineProcessType> productLineProcessTypes = LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(lineOfBusinessId) ? Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE) :
+                    Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE);
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
                 if (!productLineProcessTypes.contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
@@ -93,8 +96,8 @@ public enum GeneralInformationProcessItem {
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newLinkedList();
-            List<ProductLineProcessType> productLineProcessTypes = LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(lineOfBusinessId) ? Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.INTEREST) :
-                    Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            List<ProductLineProcessType> productLineProcessTypes = LineOfBusinessEnum.INDIVIDUAL_LIFE.equals(lineOfBusinessId) ? Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE) :
+                    Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE);
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
                 if (!productLineProcessTypes.contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
@@ -112,7 +115,7 @@ public enum GeneralInformationProcessItem {
         @Override
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
-            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE, ProductLineProcessType.TYPE, ProductLineProcessType.CHARGES, ProductLineProcessType.INTEREST);
+            List<ProductLineProcessType> productLineProcessTypes = Arrays.asList(ProductLineProcessType.EARLY_DEATH_CRITERIA, ProductLineProcessType.LAPSE);
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
                 if (!productLineProcessTypes.contains(productLineProcessType)){
                     Map<String,Object> quotationProcessItems = Maps.newLinkedHashMap();
@@ -131,7 +134,7 @@ public enum GeneralInformationProcessItem {
         public List<Map<String, Object>> getOrganizationLevelProcessInformationItem(LineOfBusinessEnum lineOfBusinessId) {
             List<Map<String,Object>> productLineProcessList = Lists.newArrayList();
             for (ProductLineProcessType productLineProcessType : ProductLineProcessType.values()){
-                if (!Arrays.asList(ProductLineProcessType.LAPSE,ProductLineProcessType.TYPE,ProductLineProcessType.CHARGES,ProductLineProcessType.INTEREST).contains(productLineProcessType)) {
+                if (!Arrays.asList(ProductLineProcessType.LAPSE).contains(productLineProcessType)) {
                     Map<String, Object> quotationProcessItems = Maps.newLinkedHashMap();
                     quotationProcessItems.put("productLineProcessItem", productLineProcessType);
                     quotationProcessItems.put("value", 0);

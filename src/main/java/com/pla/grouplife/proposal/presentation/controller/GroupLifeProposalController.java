@@ -44,6 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -207,8 +208,12 @@ public class GroupLifeProposalController {
     public ModelAndView gotoApprovalProposalPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/proposal/viewApprovalProposal");
-        List<GLProposalDto> submittedProposals = glProposalService.searchProposal(new SearchGLProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
-        modelAndView.addObject("searchResult", submittedProposals);
+        try{
+            List<GLProposalDto> submittedProposals = glProposalService.searchProposal(new SearchGLProposalDto(), new String[]{"PENDING_ACCEPTANCE"});
+            modelAndView.addObject("searchResult", submittedProposals);
+        }catch (Exception e){
+            modelAndView.addObject("searchResult", Collections.EMPTY_LIST);
+    }
         modelAndView.addObject("searchCriteria", new SearchGLProposalDto());
         return modelAndView;
     }
@@ -219,8 +224,12 @@ public class GroupLifeProposalController {
     public ModelAndView findSubmittedProposal(SearchGLProposalDto searchGLProposalDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/proposal/viewApprovalProposal");
-        List<GLProposalDto> submittedProposals = glProposalService.searchProposal(searchGLProposalDto, new String[]{"PENDING_ACCEPTANCE"});
-        modelAndView.addObject("searchResult", submittedProposals);
+        try {
+            List<GLProposalDto> submittedProposals = glProposalService.searchProposal(searchGLProposalDto, new String[]{"PENDING_ACCEPTANCE"});
+            modelAndView.addObject("searchResult", submittedProposals);
+        }catch (Exception e){
+            modelAndView.addObject("searchResult", Collections.EMPTY_LIST);
+        }
         modelAndView.addObject("searchCriteria",searchGLProposalDto);
         return modelAndView;
 

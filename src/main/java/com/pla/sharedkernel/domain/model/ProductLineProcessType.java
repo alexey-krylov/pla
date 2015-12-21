@@ -42,24 +42,6 @@ public enum ProductLineProcessType {
         public String getFullDescriptionByProcess(String process, String status) {
             return "Early Death Criteria";
         }
-    },
-    TYPE("Type") {
-        @Override
-        public String getFullDescriptionByProcess(String process, String status) {
-            return "";
-        }
-    },
-    INTEREST("Interest") {
-        @Override
-        public String getFullDescriptionByProcess(String process, String status) {
-            return "";
-        }
-    },
-    CHARGES("Charges") {
-        @Override
-        public String getFullDescriptionByProcess(String process, String status) {
-            return "";
-        }
     };
 
 

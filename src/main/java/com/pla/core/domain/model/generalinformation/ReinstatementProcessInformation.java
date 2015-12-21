@@ -22,7 +22,7 @@ public class ReinstatementProcessInformation {
 
     private Set<ProductLineProcessItem> reinstatementProcessItems;
 
-    public ReinstatementProcessInformation(Set<ProductLineProcessItem> reinstatementProcessItems) {
+    public ReinstatementProcessInformation(Set<ProductLineProcessItem> reinstatementProcessItems ){
         this.reinstatementProcessItems = reinstatementProcessItems;
     }
 

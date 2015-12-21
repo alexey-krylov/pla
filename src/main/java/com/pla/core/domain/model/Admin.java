@@ -12,6 +12,8 @@ import com.pla.core.domain.exception.MandatoryDocumentException;
 import com.pla.core.domain.exception.TeamDomainException;
 import com.pla.core.domain.model.generalinformation.OrganizationGeneralInformation;
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
+import com.pla.core.domain.model.generalinformation.ReinstatementInterest;
+import com.pla.core.domain.model.generalinformation.SurrenderCharges;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
@@ -119,10 +121,10 @@ public class Admin {
                                                                              List<Map<ProductLineProcessType, Integer>> reinstatementProcessItem, List<Map<ProductLineProcessType, Integer>> endorsementProcessItem,
                                                                              List<Map<ProductLineProcessType, Integer>> claimProcessItem, List<Map<PolicyFeeProcessType, Integer>> policyFeeProcess, List<Map<PolicyProcessMinimumLimitType, Integer>> minimumLimitProcess,
                                                                              List<Map<ProductLineProcessType, Integer>> surrenderProcessItem, List<Map<ProductLineProcessType, Integer>> maturityProcessItem,
-                                                                             Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems, List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<String, Object> ageLoadingFactorMap, int moratoriumPeriod){
+                                                                             Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems, List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<String, Object> ageLoadingFactorMap, int moratoriumPeriod,SurrenderCharges surrenderCharges ,ReinstatementInterest reinstatementInterest){
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(lineOfBusinessId);
         productLineGeneralInformation =  assignProductLineProcess(quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem
-                ,premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems, ageLoadingFactorMap, productLineGeneralInformation,moratoriumPeriod);
+                ,premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems, ageLoadingFactorMap, productLineGeneralInformation,moratoriumPeriod,surrenderCharges,reinstatementInterest);
         return productLineGeneralInformation;
     }
 
@@ -145,15 +147,15 @@ public class Admin {
     public ProductLineGeneralInformation updateProductLineInformation(ProductLineGeneralInformation productLineGeneralInformation, List<Map<ProductLineProcessType, Integer>> quotationProcessItem, List<Map<ProductLineProcessType, Integer>> enrollmentProcessItem,
                                                                       List<Map<ProductLineProcessType, Integer>> reinstatementProcessItem, List<Map<ProductLineProcessType, Integer>> endorsementProcessItem,
                                                                       List<Map<ProductLineProcessType, Integer>> claimProcessItem, List<Map<PolicyFeeProcessType, Integer>> policyFeeProcess, List<Map<PolicyProcessMinimumLimitType, Integer>> minimumLimitProcess,
-                                                                      List<Map<ProductLineProcessType, Integer>> surrenderProcessItem, List<Map<ProductLineProcessType, Integer>> maturityProcessItem, Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems, List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<String, Object> ageLoadingFactorDto, int moratoriumPeriod){
-        productLineGeneralInformation = assignProductLineProcess(quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,ageLoadingFactorDto,productLineGeneralInformation,moratoriumPeriod);
+                                                                      List<Map<ProductLineProcessType, Integer>> surrenderProcessItem, List<Map<ProductLineProcessType, Integer>> maturityProcessItem, Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems, List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<String, Object> ageLoadingFactorDto, int moratoriumPeriod,SurrenderCharges surrenderCharges,ReinstatementInterest reinstatementInterest){
+        productLineGeneralInformation = assignProductLineProcess(quotationProcessItem,enrollmentProcessItem,reinstatementProcessItem,endorsementProcessItem,claimProcessItem,policyFeeProcess,minimumLimitProcess,surrenderProcessItem,maturityProcessItem,premiumFollowUpFrequencyItems,modalFactorItems,discountFactorItems,ageLoadingFactorDto,productLineGeneralInformation,moratoriumPeriod,surrenderCharges,reinstatementInterest);
         return productLineGeneralInformation;
     }
 
     private ProductLineGeneralInformation assignProductLineProcess(List<Map<ProductLineProcessType, Integer>> quotationProcessItem, List<Map<ProductLineProcessType, Integer>> enrollmentProcessItem,
                                                                    List<Map<ProductLineProcessType, Integer>> reinstatementProcessItem, List<Map<ProductLineProcessType, Integer>> endorsementProcessItem,
                                                                    List<Map<ProductLineProcessType, Integer>> claimProcessItem, List<Map<PolicyFeeProcessType, Integer>> policyFeeProcess, List<Map<PolicyProcessMinimumLimitType, Integer>> minimumLimitProcess,
-                                                                   List<Map<ProductLineProcessType, Integer>> surrenderProcessItem, List<Map<ProductLineProcessType, Integer>> maturityProcessItem, Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems, List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<String, Object> ageLoadingFactorMap, ProductLineGeneralInformation productLineGeneralInformation, int moratoriumPeriod) {
+                                                                   List<Map<ProductLineProcessType, Integer>> surrenderProcessItem, List<Map<ProductLineProcessType, Integer>> maturityProcessItem, Map<PremiumFrequency, List<Map<ProductLineProcessType, Integer>>> premiumFollowUpFrequencyItems, List<Map<ModalFactorItem, BigDecimal>> modalFactorItems, List<Map<DiscountFactorItem, BigDecimal>> discountFactorItems, Map<String, Object> ageLoadingFactorMap, ProductLineGeneralInformation productLineGeneralInformation, int moratoriumPeriod,SurrenderCharges surrenderCharges,ReinstatementInterest reinstatementInterest) {
         productLineGeneralInformation.withQuotationProcessInformation(quotationProcessItem);
         productLineGeneralInformation.withEnrollmentProcessGeneralInformation(enrollmentProcessItem);
         productLineGeneralInformation.withReinstatementProcessInformation(reinstatementProcessItem);
@@ -170,6 +172,8 @@ public class Admin {
         BigDecimal loadingFactor = ageLoadingFactorMap.get("loadingFactor")!=null?new BigDecimal(ageLoadingFactorMap.get("loadingFactor").toString()):BigDecimal.ZERO;
         productLineGeneralInformation.withAgeLoadingFactor(age,loadingFactor);
         productLineGeneralInformation.withMoratoriumPeriod(moratoriumPeriod);
+        productLineGeneralInformation.withReinstatementInterest(reinstatementInterest);
+        productLineGeneralInformation.withSurrenderCharges(surrenderCharges);
         return productLineGeneralInformation;
     }
 

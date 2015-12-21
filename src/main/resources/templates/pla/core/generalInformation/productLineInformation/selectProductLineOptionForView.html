@@ -909,14 +909,25 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-4" ng-repeat="reinstatementProcessItems in items.reinstatementProcessItems |orderBy:'description'">
-                                            <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                                <div>
+                                                    <label class="control-label"   data-placement="top" data-toggle="tooltip" tooltip="{{reinstatementProcessItems.fullDescription}}"  >{{reinstatementProcessItems.description}}</label>
+                                                    <p class="input-group">
+                                                        <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true" />
+                                                    </p>
+                                                </div>
+                                        </div>
+                                        <div class="form-group col-md-4 required">
+                                            <label class="control-label">Interest</label>
                                             <p class="input-group">
-                                                <input type="text" class="form-control input-sm"  value="{{reinstatementProcessItems.value}}" readonly="true" />
+                                                <input type="text" class="form-control input-sm"  value="{{items.reinstatementInterest.reinstatementInterestType}}" readonly="true" />
+                                            </p>
+
+                                            <label class="control-label">Amount</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm " readonly="true" value="{{items.reinstatementInterest.interest | number:2}}" />
                                             </p>
                                         </div>
-
                                     </div>
-
 
                                 </div>
                             </div>
@@ -984,6 +995,19 @@
                                                 <input type="text" class="form-control input-sm" value="{{surrenderProcessItems.value}}" readonly="true" />
                                             </p>
                                         </div>
+
+                                        <div class="form-group col-md-4 required">
+                                            <label class="control-label">Charges</label>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control input-sm" value="{{items.surrenderCharges.surrenderChargesType}}" readonly="true" />
+                                            </p>
+                                            <label class="control-label">Amount</label>
+                                            <p class="input-group">
+                                                <input type="number" class="form-control input-sm " readonly="true" value="{{items.surrenderCharges.amount | number:2}}" />
+                                            </p>
+
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
