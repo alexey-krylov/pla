@@ -50,6 +50,22 @@ public class ExcelGeneratorUtil {
         return workbook;
     }
 
+    public static HSSFWorkbook generateExcelWithDvConstraintCell(List<String> headers, List<Map<Integer, String>> rowCellData) {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = workbook.createSheet();
+        int rowNumber = 0;
+        createHeaderRowWithCell(hssfSheet, rowNumber, headers.size(), headers);
+        if (isEmpty(rowCellData)) {
+            createRowWithDvConstraintCellData(workbook, hssfSheet, 1, 50000, headers.size(), Maps.newHashMap());
+            return workbook;
+        }
+        for (Map<Integer, String> cellData : rowCellData) {
+            rowNumber = rowNumber + 1;
+            createRowWithDvConstraintCellData(workbook, hssfSheet, rowNumber, 50000, headers.size(), cellData);
+        }
+        return workbook;
+    }
+
     private static HSSFRow createRowWithCell(HSSFSheet hssfSheet, int rowNumber, int noOfCell, Map<Integer, String> cellData) {
         HSSFRow hssfRow = createRow(hssfSheet, rowNumber);
         for (int cellNumber = 0; cellNumber < noOfCell; cellNumber++) {
@@ -95,6 +111,16 @@ public class ExcelGeneratorUtil {
                     hssfSheet.addValidationData(dataValidation);
                 }
             }
+            if (isNotEmpty(cellData.get(cellNumber))) {
+                createStringCellAndValue(hssfRow, cellNumber, cellData.get(cellNumber));
+            }
+        }
+        return hssfRow;
+    }
+
+    private static HSSFRow createRowWithDvConstraintCellData(HSSFWorkbook workbook, HSSFSheet hssfSheet, int rowNumber, int lastRowNumber, int noOfCell, Map<Integer, String> cellData) {
+        HSSFRow hssfRow = createRow(hssfSheet, rowNumber);
+        for (int cellNumber = 0; cellNumber < noOfCell; cellNumber++) {
             if (isNotEmpty(cellData.get(cellNumber))) {
                 createStringCellAndValue(hssfRow, cellNumber, cellData.get(cellNumber));
             }

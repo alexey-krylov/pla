@@ -1,0 +1,56 @@
+package com.pla.core.hcp.domain.model;
+
+import com.google.common.collect.Sets;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.joda.time.LocalDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Set;
+
+/**
+ * Created by Mohan Sharma on 12/21/2015.
+ */
+@Document(collection = "hcp_rate")
+@NoArgsConstructor
+@Getter
+public class HCPRate {
+    @Id
+    private HCPRateId hcpRateId;
+    private String hcpName;
+    private HCPCode hcpCode;
+    private LocalDate fromDate;
+    private LocalDate toDate;
+    private Set<HCPServiceDetail> hcpServiceDetails = Sets.newHashSet();
+
+    public HCPRate updateWithHCPRateId(HCPRateId hcpRateId){
+        this.hcpRateId = hcpRateId;
+        return this;
+    }
+
+    public HCPRate updateWithHCPName(String hcpName){
+        this.hcpName = hcpName;
+        return this;
+    }
+
+    public HCPRate updateWithHCPCode(HCPCode hcpCode){
+        this.hcpCode = hcpCode;
+        return this;
+    }
+
+    public HCPRate updateWithFromDate(LocalDate fromDate){
+        this.fromDate = fromDate;
+        return this;
+    }
+
+    public HCPRate updateWithToDate(LocalDate toDate){
+        this.toDate = toDate;
+        return this;
+    }
+
+    public HCPRate updateWithHcpServiceDetails(Set<HCPServiceDetail> hcpServiceDetails){
+        this.hcpServiceDetails = hcpServiceDetails;
+        return this;
+    }
+}
