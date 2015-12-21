@@ -50,7 +50,7 @@ public class HCPRateService {
     }
 
     public HSSFWorkbook getHCPRateTemplateExcel(String hcpCode) {
-        HCPRate hcpRate = hcpRateRepository.findOne(new HCPRateId(hcpCode));
+        HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(hcpCode);
         Set<HCPServiceDetail> hcpServiceDetails = isEmpty(hcpRate) ? Sets.newHashSet() : hcpRate.getHcpServiceDetails();
         List<HCPServiceDetailDto> insuredDtoList = isNotEmpty(hcpServiceDetails) ? hcpServiceDetails.stream().map(new Function<HCPServiceDetail, HCPServiceDetailDto>() {
             @Override
