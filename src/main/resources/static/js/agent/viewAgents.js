@@ -13,11 +13,20 @@ var viewAgentModule = (function(){
     this.channelType = null;
     agentServices.getTheItemSelected = function(ele){
         this.agentSelected=$(ele).val();
-        $("#agent-update").prop("disabled","");
-        $("#agent-view").prop("disabled","");
+        //$("#agent-update").prop("disabled","");
+        //$("#agent-view").prop("disabled","");
 
         this.channelType = $(ele).parent().find('input[type=hidden]').val();
-       // alert(this.channelType);
+        //alert(this.channelType);
+
+        if(this.channelType === 'DIRECT'){
+            $("#agent-update").prop("disabled","false");
+            $("#agent-view").prop("disabled","");
+        }
+        else{
+            $("#agent-update").prop("disabled","");
+            $("#agent-view").prop("disabled","");
+        }
     };
     agentServices.createAgent = function(){
         window.location.href = "opencreatepage";
