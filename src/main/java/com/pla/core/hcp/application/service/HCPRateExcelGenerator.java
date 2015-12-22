@@ -47,7 +47,7 @@ public class HCPRateExcelGenerator {
         List<Map<Integer, String>> excelRowData = Lists.newArrayList();
         Map<Integer, String> excelDataMap = Maps.newHashMap();
         headers.forEach(header -> {
-                excelDataMap.put(headers.indexOf(header), HCPRateExcelHeader.valueOf(header).getAllowedValue(hcpServiceDetailDto));
+                excelDataMap.put(headers.indexOf(header), HCPRateExcelHeader.getHCPCategory(header).getAllowedValue(hcpServiceDetailDto));
         });
         excelRowData.add(excelDataMap);
         return excelRowData;

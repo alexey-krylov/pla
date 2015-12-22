@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.LocalJodaDateDeserializer;
 import org.nthdimenzion.presentation.LocalJodaDateSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,9 +35,9 @@ public class UploadHCPServiceRatesDto {
     private MultipartFile file;
     @NotNull(message = "fromDate must not be null")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fromDate;
+    private DateTime fromDate;
     @NotNull(message = "toDate must not be null")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate toDate;
+    private DateTime toDate;
 
 }

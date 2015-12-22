@@ -56,7 +56,7 @@ public class HCPRateService {
     public HSSFWorkbook getHCPRateTemplateExcel(String hcpCode) {
         HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(hcpCode);
         Set<HCPServiceDetail> hcpServiceDetails = isEmpty(hcpRate) ? Sets.newHashSet() : hcpRate.getHcpServiceDetails();
-        List<HCPServiceDetailDto> insuredDtoList = isNotEmpty(hcpServiceDetails) ? hcpServiceDetails.stream().map(new Function<HCPServiceDetail, HCPServiceDetailDto>() {
+        List<HCPServiceDetailDto> hcpServiceDetailDtos = isNotEmpty(hcpServiceDetails) ? hcpServiceDetails.stream().map(new Function<HCPServiceDetail, HCPServiceDetailDto>() {
             @Override
             public HCPServiceDetailDto apply(HCPServiceDetail hcpServiceDetail) {
                 HCPServiceDetailDto hcpServiceDetailDto = new HCPServiceDetailDto()
@@ -67,7 +67,7 @@ public class HCPRateService {
                 return hcpServiceDetailDto;
             }
         }).collect(Collectors.toList()) : Lists.newArrayList();
-        HSSFWorkbook hssfWorkbook = hcpRateExcelGenerator.generateInsuredExcel(insuredDtoList);
+        HSSFWorkbook hssfWorkbook = hcpRateExcelGenerator.generateInsuredExcel(hcpServiceDetailDtos);
         return hssfWorkbook;
     }
 

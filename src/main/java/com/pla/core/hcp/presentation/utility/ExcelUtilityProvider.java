@@ -57,7 +57,7 @@ public class ExcelUtilityProvider {
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
             List<String> excelHeaders = HCPRateExcelHeader.getAllowedHeaders();
-            String errorMessage = "";//validateRow(currentRow, excelHeaders);
+            String errorMessage = validateRow(currentRow, excelHeaders);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders);
             String duplicateRowErrorMessage = "";
             if (isNotEmpty(duplicateRows)) {

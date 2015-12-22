@@ -3,6 +3,7 @@ package com.pla.core.hcp.domain.model;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,8 +21,8 @@ public class HCPRate {
     private HCPRateId hcpRateId;
     private String hcpName;
     private HCPCode hcpCode;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+    private DateTime fromDate;
+    private DateTime toDate;
     private Set<HCPServiceDetail> hcpServiceDetails = Sets.newHashSet();
 
     public HCPRate updateWithHCPRateId(HCPRateId hcpRateId){
@@ -39,12 +40,12 @@ public class HCPRate {
         return this;
     }
 
-    public HCPRate updateWithFromDate(LocalDate fromDate){
+    public HCPRate updateWithFromDate(DateTime fromDate){
         this.fromDate = fromDate;
         return this;
     }
 
-    public HCPRate updateWithToDate(LocalDate toDate){
+    public HCPRate updateWithToDate(DateTime toDate){
         this.toDate = toDate;
         return this;
     }

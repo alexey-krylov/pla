@@ -4,6 +4,7 @@ import com.pla.core.hcp.domain.model.HCPRateId;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.joda.time.DateTime;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +20,6 @@ public class UploadHCPServiceRatesCommand {
     private Set<HCPServiceDetailDto> hcpServiceDetailDtos;
     private String hcpCode;
     private String hcpName;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+    private DateTime fromDate;
+    private DateTime toDate;
 }

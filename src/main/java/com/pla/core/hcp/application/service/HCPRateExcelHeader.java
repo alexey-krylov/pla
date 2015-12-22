@@ -65,7 +65,7 @@ public enum HCPRateExcelHeader {
     }, NORMAL("NORMAL"){
         @Override
         public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
-            return hcpServiceDetailDto.getNormalAmount() != null ? hcpServiceDetailDto.getNormalAmount().toString() : "";
+            return (isNotEmpty(hcpServiceDetailDto.getNormalAmount()) && hcpServiceDetailDto.getNormalAmount().compareTo(BigDecimal.ZERO) > 0) ? hcpServiceDetailDto.getNormalAmount().toString() : "";
         }
 
         @Override
@@ -77,7 +77,7 @@ public enum HCPRateExcelHeader {
         public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
-                if(new BigDecimal(value).signum() == -1) {
+                if(isNotEmpty(value) && new BigDecimal(value).signum() == -1) {
                     errorMessage = errorMessage + "Normal Amount cannot be negative.";
                 }
             } catch (Exception e) {
@@ -89,7 +89,7 @@ public enum HCPRateExcelHeader {
     }, AFTER_HOURS("AFTER HRS") {
         @Override
         public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
-            return isNotEmpty(hcpServiceDetailDto.getAfterHours()) ? String.valueOf(hcpServiceDetailDto.getAfterHours()) : "";
+            return (isNotEmpty(hcpServiceDetailDto.getAfterHours()) && hcpServiceDetailDto.getAfterHours() > 0) ? String.valueOf(hcpServiceDetailDto.getAfterHours()) : "";
         }
 
         @Override
@@ -101,7 +101,7 @@ public enum HCPRateExcelHeader {
         public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
-                if(new BigDecimal(value).signum() == -1) {
+                if(isNotEmpty(value) && new BigDecimal(value).signum() == -1) {
                     errorMessage = errorMessage + "Normal Amount cannot be negative.";
                 }
             } catch (Exception e) {
