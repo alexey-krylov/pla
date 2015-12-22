@@ -49,21 +49,21 @@ public class GLClaimFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public static final String GET_ALL_MANDATORY_DOCUMENT_QUERY = "SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
+    public static final String GET_ALL_MANDATORY_DOCUMENT = "SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
             " FROM mandatory_document";
 
-    public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY ="SELECT d.document_name documentName,d.document_code documentCode,d.is_provided status " +
+    public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT ="SELECT d.document_name documentName,d.document_code documentCode,d.is_provided status " +
             " FROM mandatory_documents md INNER JOIN document d ON md.document_code=d.document_code " +
             " WHERE document_id=:documentId ORDER BY d.document_name";
 
-    public static final String GET_MANDATORY_DOCUMENT_BY_ID_QUERY =" SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
+    public static final String GET_MANDATORY_DOCUMENT_BY_ID =" SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS " +
             "  FROM mandatory_document WHERE document_id =:documentId";
 
-    public static final String GET_COVERAGE_ID_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY = "SELECT coverage_id coverageId FROM mandatory_document WHERE  " +
+    public static final String GET_COVERAGE_ID_ASSOCIATED_WITH_PLAN_AND_PROCESS = "SELECT coverage_id coverageId FROM mandatory_document WHERE  " +
             " plan_id=:planId " +
             " AND PROCESS=:processType";
 
-    public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY = " SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS FROM mandatory_document WHERE  " +
+    public static final String GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS = " SELECT document_id documentId,coverage_id coverageId,plan_id planId,PROCESS PROCESS FROM mandatory_document WHERE  " +
             " plan_id=:planId " +
             " AND PROCESS=:processType";
 
@@ -286,11 +286,11 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
     public List<ClaimMandatoryDocumentDto> getMandatoryDocuments(SearchDocumentDetailDto searchDocumentDetailDto, ProcessType processType){
         SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("planId",searchDocumentDetailDto.getPlanId()).addValue("processType", processType.toString());
-        List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments =  namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY, sqlParameterSource, new BeanPropertyRowMapper<ClaimMandatoryDocumentDto>(ClaimMandatoryDocumentDto.class));
-       // List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments =  namedParameterJdbcTemplate.queryForList(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY, sqlParameterSource,ClaimMandatoryDocumentDto.class);
+        List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments =  namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS, sqlParameterSource, new BeanPropertyRowMapper<ClaimMandatoryDocumentDto>(ClaimMandatoryDocumentDto.class));
+       // List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments =  namedParameterJdbcTemplate.queryForList(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS, sqlParameterSource,ClaimMandatoryDocumentDto.class);
         for (ClaimMandatoryDocumentDto mandatoryDocumentDto : listOfMandatoryDocuments){
             SqlParameterSource parameterSource = new MapSqlParameterSource("documentId",mandatoryDocumentDto.getDocumentId());
-            Map  listOfDocument = namedParameterJdbcTemplate.queryForMap(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, parameterSource);
+            Map  listOfDocument = namedParameterJdbcTemplate.queryForMap(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT, parameterSource);
             mandatoryDocumentDto.setDocumentCode((String)listOfDocument.get("document_code"));
             mandatoryDocumentDto.setDocumentName((String)listOfDocument.get("document_name"));
         }
@@ -300,10 +300,10 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
     public List<ClaimMandatoryDocumentDto> getAllMandatoryDocuments(String planId, ProcessType processType) {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId).addValue("processType", processType.toString());
-        List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY, sqlParameterSource, new BeanPropertyRowMapper<ClaimMandatoryDocumentDto>(ClaimMandatoryDocumentDto.class));
+        List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS, sqlParameterSource, new BeanPropertyRowMapper<ClaimMandatoryDocumentDto>(ClaimMandatoryDocumentDto.class));
         for (ClaimMandatoryDocumentDto mandatoryDocumentDto : listOfMandatoryDocuments) {
             SqlParameterSource parameterSource = new MapSqlParameterSource("documentId", mandatoryDocumentDto.getDocumentId());
-            Map listOfDocument = namedParameterJdbcTemplate.queryForMap(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, parameterSource);
+            Map listOfDocument = namedParameterJdbcTemplate.queryForMap(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT, parameterSource);
             mandatoryDocumentDto.setDocumentCode((String) listOfDocument.get("document_code"));
             mandatoryDocumentDto.setDocumentName((String) listOfDocument.get("document_name"));
         }
@@ -313,7 +313,7 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
     public List<MandatoryDocumentDto> getAllClaimMandatoryDocuments(String planId, ProcessType processType) {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId).addValue("processType", processType.toString());
-        List<MandatoryDocumentDto> listOfMandatoryDocuments = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS_QUERY, sqlParameterSource, new BeanPropertyRowMapper<MandatoryDocumentDto>(MandatoryDocumentDto.class));
+        List<MandatoryDocumentDto> listOfMandatoryDocuments = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS, sqlParameterSource, new BeanPropertyRowMapper<MandatoryDocumentDto>(MandatoryDocumentDto.class));
         for (MandatoryDocumentDto mandatoryDocumentDto : listOfMandatoryDocuments) {
             Long docId=mandatoryDocumentDto.getDocumentId();
             listOfMandatoryDocuments=getMandatoryDocumentById( docId);
@@ -322,8 +322,8 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
     }
  public List<MandatoryDocumentDto> getMandatoryDocumentById(Long documentId){
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("documentId",documentId);
-        List<MandatoryDocumentDto> mandatoryDocumentDtos =  namedParameterJdbcTemplate.query(GET_MANDATORY_DOCUMENT_BY_ID_QUERY, sqlParameterSource, new BeanPropertyRowMapper(MandatoryDocumentDto.class));
-        List<Map<String,Object>>  listOfDocument = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT_QUERY, sqlParameterSource, new ColumnMapRowMapper());
+        List<MandatoryDocumentDto> mandatoryDocumentDtos =  namedParameterJdbcTemplate.query(GET_MANDATORY_DOCUMENT_BY_ID, sqlParameterSource, new BeanPropertyRowMapper(MandatoryDocumentDto.class));
+        List<Map<String,Object>>  listOfDocument = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_MANDATORY_DOCUMENT, sqlParameterSource, new ColumnMapRowMapper());
         for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos){
             List<String> document = Lists.newArrayList();
             for (Map<String,Object> documents :listOfDocument) {
