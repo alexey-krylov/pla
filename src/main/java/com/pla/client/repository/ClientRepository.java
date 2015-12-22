@@ -19,7 +19,12 @@ public interface ClientRepository extends MongoRepository<Client, ClientId> {
     * */
 
 
-     @Query(value = "{'clientName' : ?0,'dateOfBirth' : ?1,'gender' : ?2,'nrcNumber' : ?3 }")
+     @Query( value = "{'clientName' : ?0,'dateOfBirth' : ?1,'gender' : ?2,'nrcNumber' : ?3 }")
     public List<Client> findByClientNameAndDateOfBirthAndGenderAndNrcNumber(String clientName,DateTime date,Gender gender,String nrcNumber);
 
- }
+    @Query( value = "{'clientName' : ?0,'address1' : ?1,'town' : ?2}")
+    public List<Client> findByClientNameAndAddress1AndTownAndEmailAddress(String clientName,String address1,String town,String email);
+}
+
+
+

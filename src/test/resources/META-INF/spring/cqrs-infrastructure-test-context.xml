@@ -86,6 +86,7 @@
             <mongo:converter>
                 <bean class="com.pla.individuallife.proposal.repository.ObjectIdToProposalIdConverter"/>
             </mongo:converter>
+
         </mongo:custom-converters>
     </mongo:mapping-converter>
 
@@ -127,7 +128,9 @@
     <extension:mongo-repository id="glEndorsementMongoRepository"
                                 aggregate-type="com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement"
                                 mongo-template="mongoTemplate"/>
-
+    <extension:mongo-repository id="glClaimMongoRepository"
+                                aggregate-type="com.pla.grouplife.claim.domain.model.GroupLifeClaim"
+                                mongo-template="mongoTemplate"/>
     <bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
         <constructor-arg name="dbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="converter" ref="mappingConverter"/>

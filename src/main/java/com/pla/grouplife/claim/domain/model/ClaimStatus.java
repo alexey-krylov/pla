@@ -2,14 +2,11 @@ package com.pla.grouplife.claim.domain.model;
 
 import lombok.Getter;
 
-/**
- * Created by Admin on 9/22/2015.
- */
+
 @Getter
 public enum ClaimStatus {
 
-    INTIMATED("Claim Intimated"),RECEIVED("Claim Received"),CANCELLED("Cancelled"),APPROVING("Approving"),PROCESSING("Processing"),APPROVED("Approved"),REPUDIATED("Repudiated"),
-    HOLD("Claim Request on hold"),PAID("Paid");
+INTIMATED("Claim Intimated"),EVALUATION("Claim Registered"),CANCELLED("Cancelled"),ROUTED("Routed to UnderWriter"),APPROVED("Approved"),REPUDIATED("Repudiated"),AWAITING("Awaiting Disbursement"),PAID("Paid");
 
 
     private String description;
@@ -17,4 +14,22 @@ public enum ClaimStatus {
     ClaimStatus(String description){
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return  description;
+    }
+ /*
+    public static List<Map<String,Object>> getAllClaimStatus(){
+        return Arrays.asList(ClaimStatus.values()).parallelStream().map(new Function<ClaimStatus, Map<String,Object>>() {
+            @Override
+            public Map<String, Object> apply(ClaimStatus claimStatus) {
+                Map<String,Object> claimStatusMap = Maps.newLinkedHashMap();
+                claimStatusMap.put("claimStatus",claimStatus.name());
+                claimStatusMap.put("description",claimStatus.toString());
+                return claimStatusMap;
+            }
+        }).collect(Collectors.toList());
+    }
+     */
 }

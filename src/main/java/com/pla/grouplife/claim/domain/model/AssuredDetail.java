@@ -14,6 +14,7 @@ import java.math.BigDecimal;
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
 public class AssuredDetail {
@@ -38,6 +39,10 @@ public class AssuredDetail {
 
     private BigDecimal annualIncome;
 
+   // private BigDecimal sumAssured;
+
+    //private BigDecimal reserveAmount;
+
     private String occupationClass;
 
     private String occupationCategory;
@@ -47,4 +52,8 @@ public class AssuredDetail {
     private FamilyId familyId;
 
     private Relationship relationship;
+
+   // private MainAssuredDetails mainAssuredDetails;
+
+
 }

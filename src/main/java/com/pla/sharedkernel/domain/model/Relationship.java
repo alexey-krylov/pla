@@ -34,4 +34,9 @@ public enum Relationship {
         }
         return allRelations;
     }
+    @Override
+    public String toString() {
+        return  description;
+    }
 }
+

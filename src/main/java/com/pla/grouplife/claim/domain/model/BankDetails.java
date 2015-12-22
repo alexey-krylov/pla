@@ -1,11 +1,14 @@
 package com.pla.grouplife.claim.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by Mirror on 8/19/2015.
  */
 @Getter
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class BankDetails {
 
     private String bankName;

@@ -1,5 +1,6 @@
 package com.pla.publishedlanguage.dto;
 
+import com.pla.core.dto.ClientPolicyDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ClientDetailDto {
 
     private String clientCode;
@@ -43,6 +45,9 @@ public class ClientDetailDto {
 
     private List<ClientDocumentDetailDto> clientDocumentDetailDtoList;
 
+    private List<ClientPolicyDetailDto> clientPolicyDetailDtoList;
+
+    private List<ClientPolicyDetailDto> clientProposalDetailDtoList;
 
     public ClientDetailDto(String clientCode, String clientName, String address1, String address2, String postalCode, String province, String town, String emailAddress) {
         this.clientCode = clientCode;
@@ -53,13 +58,28 @@ public class ClientDetailDto {
         this.province = province;
         this.town = town;
         this.emailAddress = emailAddress;
+
     }
+    public  ClientDetailDto updateWithClientDocuments(List<ClientDocumentDetailDto> clientDocumentDetailDtoList){
+        this.clientDocumentDetailDtoList=clientDocumentDetailDtoList;
+        return this;
+    }
+
+   public ClientDetailDto updateWithClientProposalDetails(List<ClientPolicyDetailDto> clientProposalDetailDtoList){
+       this.clientProposalDetailDtoList=clientProposalDetailDtoList;
+       return this;
+   }
+
+    public ClientDetailDto updateWithClientPolicyDetails(List<ClientPolicyDetailDto> clientPolicyDetailDtoList){
+        this.clientPolicyDetailDtoList=clientPolicyDetailDtoList;
+        return this;
+    }
+
 
     @Getter
     @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    public class ClientDocumentDetailDto {
+    public  class ClientDocumentDetailDto {
 
         private String documentId;
 
@@ -70,5 +90,15 @@ public class ClientDetailDto {
         private String routingLevel;
 
         private String documentContent;
+
+        public  ClientDocumentDetailDto(String documentId,String documentName, String documentType,String routingLevel,String documentContent){
+            this.documentId=documentId;
+            this.documentName=documentName;
+            this.documentType=documentType;
+            this.routingLevel=routingLevel;
+            this.documentContent=documentContent;
+
+        }
     }
+
 }

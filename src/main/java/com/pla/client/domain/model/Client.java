@@ -101,7 +101,7 @@ public class Client {
     * create builder and set that to client
     * */
 public Client updateClient(ClientBuilder clientBuilder){
-   // this.clientName = clientBuilder.getClientName();
+    this.clientName = clientBuilder.getClientName();
     this.address1  = clientBuilder.getAddress1();
     this.address2 = clientBuilder.getAddress2();
     this.postalCode = clientBuilder.getPostalCode();
@@ -109,7 +109,6 @@ public Client updateClient(ClientBuilder clientBuilder){
     this.town = clientBuilder.getTown();
     this.emailAddress = clientBuilder.getEmailAddress();
     this.withClientDocument(clientBuilder.getClientDocuments());
-
     return this;
 }
  }

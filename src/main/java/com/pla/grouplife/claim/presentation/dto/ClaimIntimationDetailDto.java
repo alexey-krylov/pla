@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class ClaimIntimationDetailDto {
     private Proposer proposer;
-    private AssuredDetailDto assuredDetailDto;
+    private AssuredDetailDto assuredDetail;
     private List<ClaimType> claimTypes;
 
     public ClaimIntimationDetailDto withProposer(Proposer proposer){
@@ -25,12 +25,12 @@ public class ClaimIntimationDetailDto {
     }
 
     public ClaimIntimationDetailDto withInsuredAssuredDetail(Insured insured){
-        this.assuredDetailDto = AssuredDetailDto.getInstance(insured);
+        this.assuredDetail = AssuredDetailDto.getInstance(insured);
         return this;
     }
 
     public ClaimIntimationDetailDto withInsuredDependentAssuredDetail(InsuredDependent insuredDependent){
-        this.assuredDetailDto = AssuredDetailDto.getInstance(insuredDependent);
+        this.assuredDetail = AssuredDetailDto.getInstance(insuredDependent);
         return this;
     }
 }

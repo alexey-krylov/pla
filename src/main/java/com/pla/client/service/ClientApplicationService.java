@@ -3,8 +3,10 @@ package com.pla.client.service;
 import com.pla.client.domain.model.Client;
 import com.pla.client.domain.model.ClientBuilder;
 import com.pla.client.repository.ClientRepository;
+import com.pla.core.query.ClientSummaryFinder;
 import com.pla.publishedlanguage.dto.ClientDetailDto;
 import com.pla.sharedkernel.event.ClientSummaryUpdatedEvent;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +21,20 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 public class ClientApplicationService {
 
     private ClientRepository clientRepository;
-
+    private ClientSummaryFinder clientSummaryFinder;
 
     @Autowired
-    public ClientApplicationService(ClientRepository clientRepository) {
+      public ClientApplicationService(ClientRepository clientRepository,ClientSummaryFinder clientSummaryFinder) {
         this.clientRepository = clientRepository;
+        this.clientSummaryFinder = clientSummaryFinder;
+    }
+  /*
+    @Autowired
+    public ClientApplicationService(ClientSummaryFinder clientSummaryFinder) {
+        this.clientSummaryFinder = clientSummaryFinder;
     }
 
+   */
 
     public boolean createClient(ClientDetailDto clientDetailDto) {
         ClientBuilder clientBuilder = new ClientBuilder(clientDetailDto.getClientName());
@@ -42,10 +51,9 @@ public class ClientApplicationService {
     * */
 
     public boolean updateClient(ClientSummaryUpdatedEvent clientUpdatedEvent) {
-        List<Client> clientList = clientRepository.findByClientNameAndDateOfBirthAndGenderAndNrcNumber(clientUpdatedEvent.getClientName(), clientUpdatedEvent.getDateOfBirth(),
-                clientUpdatedEvent.getGender(), clientUpdatedEvent.getNrcNumber());
 
-        checkArgument(isNotEmpty(clientList), "Client  can not be null");
+        List<Client> clientList =clientRepository.findByClientNameAndAddress1AndTownAndEmailAddress(clientUpdatedEvent.getClientName(), clientUpdatedEvent.getAddress1(), clientUpdatedEvent.getTown(), clientUpdatedEvent.getEmailAddress());
+        checkArgument(isNotEmpty(clientList), "Client Summary can not be null");
         checkArgument(clientList.size() == 1);
         Client client = clientList.get(0);
         List<ClientDetailDto.ClientDocumentDetailDto> addedDocumentList = clientUpdatedEvent.getClientDocuments();
@@ -58,5 +66,12 @@ public class ClientApplicationService {
         return true;
 
     }
+
+     public ClientDetailDto getClientSummaryDetail(String clientId,LineOfBusinessEnum lineOfBusiness){
+         return clientSummaryFinder.getClientDetail( clientId,lineOfBusiness.toString());
+
+
+     }
+
 
 }

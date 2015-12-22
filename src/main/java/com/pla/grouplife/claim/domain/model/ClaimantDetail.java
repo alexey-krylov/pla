@@ -33,6 +33,16 @@ public class ClaimantDetail {
 
     private String workPhone;
 
+    private String contactPersonName;
+
+    private  String contactPersonEmail;
+
+    private String  contactPersonMobile;
+
+    private String  contactPersonPhone;
+
+
+
    public ClaimantDetail(String proposerName, String addressLine1, String addressLine2, String postalCode, String province,
                          String town, String emailId, String mobileNumber, String workPhone){
 
@@ -48,4 +58,12 @@ public class ClaimantDetail {
 
 
    }
+  public ClaimantDetail withContactPersonDetails(String contactPersonName,String contactPersonEmail,String contactPersonMobile,String  contactPersonPhone){
+      this.contactPersonName=contactPersonName;
+      this.contactPersonEmail=contactPersonEmail;
+      this.contactPersonMobile=contactPersonMobile;
+      this.contactPersonName=contactPersonPhone;
+      return this;
+  }
+
 }
