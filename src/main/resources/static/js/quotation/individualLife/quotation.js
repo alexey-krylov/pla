@@ -38,20 +38,19 @@
                     });
 
                     //rider.sumAssured
-
-                    $scope.$watch('rider.sumAssured', function (newval) {
-                        if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                    scope.$watch('rider.sumAssured', function (newval) {
+                        if (scope.coverage && scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
                             //$scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
-                            var percentageValue=$scope.planDetailDto.sumAssured *($scope.coverage.coverageSumAssured.percentage/100);
-                            if(percentageValue <= $scope.coverage.coverageSumAssured.maxLimit){
-                                $scope.maxPercentage=percentageValue;
+                            var percentageValue=scope.planDetailDto.sumAssured *(scope.coverage.coverageSumAssured.percentage/100);
+                            if(percentageValue <= scope.coverage.coverageSumAssured.maxLimit){
+                                scope.maxPercentage=percentageValue;
                                 newval=percentageValue;
-                                $scope.isMaximumReached=false;
+                                scope.isMaximumReached=false;
                             }
                             else{
-                                $scope.maxPercentage=$scope.coverage.coverageSumAssured.maxLimit;
-                                newval=$scope.coverage.coverageSumAssured.maxLimit;
-                                $scope.isMaximumReached=true;
+                                scope.maxPercentage=scope.coverage.coverageSumAssured.maxLimit;
+                                newval=scope.coverage.coverageSumAssured.maxLimit;
+                                scope.isMaximumReached=true;
                             }
                             console.log('Derived Type Came..');
                         }
@@ -112,16 +111,45 @@
                             var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                             if (coverage.coverageTermType === 'SPECIFIED_VALUES') {
                                 var maxMaturityAge = coverage.coverageTerm.maxMaturityAge || 1000;
+                                if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                                    $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
+                                        //return ageNextBirthday + term.text <= maxMaturityAge;
+                                        return  term.text<=($scope.planDetailDto.policyTerm);
+                                        //return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
+                                    });
+                                }else if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                                    $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
+                                        //return ageNextBirthday + term.text <= maxMaturityAge;
+                                        return  term.text<=($scope.planDetailDto.policyTerm - ageNextBirthday)+1;
+                                        //return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
+                                    });
+                                }
+                                // Old Code..
+
+                                /*var maxMaturityAge = coverage.coverageTerm.maxMaturityAge || 1000;
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                     //return ageNextBirthday + term.text <= maxMaturityAge;
                                     return  term.text<=($scope.planDetailDto.policyTerm - ageNextBirthday)+1;
                                     //return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
-                                });
+                                });*/
                             } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
-                                $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+
+                                if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                                    $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+                                        return term.text <= (ageNextBirthday + $scope.planDetailDto.policyTerm) && (term.text > ageNextBirthday);
+                                    });
+                                }else if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                                    $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+                                        //return term.text > ageNextBirthday;
+                                        return term.text <= ($scope.planDetailDto.policyTerm) && (term.text > ageNextBirthday);
+                                    });
+
+                                }
+                                // Old Value
+                                /*$scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                     //return term.text > ageNextBirthday;
                                     return term.text <= (ageNextBirthday + $scope.planDetailDto.policyTerm) && (term.text > ageNextBirthday);
-                                });
+                                });*/
                             }
                             return coverage.coverageTermType;
                         } else {
