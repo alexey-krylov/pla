@@ -52,6 +52,6 @@ public class ClientUnitTest {
         assertThat(client.getClientDocuments().size(), is(2));
         assertThat(expectedAddress1, is(client.getAddress1()));
         assertThat(expectedAddress2,is(client.getAddress2()));
-        assertThat(provience,is(client.getProvience()));
+        assertThat(provience,is(client.getProvince()));
     }
 }

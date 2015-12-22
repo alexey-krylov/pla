@@ -1,8 +1,11 @@
 package com.pla.publishedlanguage.dto;
 
+import com.pla.sharedkernel.domain.model.Gender;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -21,6 +24,14 @@ public class ClientDetailDto {
     private String address1;
 
     private String address2;
+
+    private DateTime dateOfBirth;
+
+    private Gender gender;
+
+    private String nrcNumber;
+
+    private String companyName;
 
     private String postalCode;
 
@@ -46,6 +57,8 @@ public class ClientDetailDto {
 
     @Getter
     @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public class ClientDocumentDetailDto {
 
         private String documentId;

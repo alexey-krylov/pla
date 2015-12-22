@@ -38,6 +38,14 @@
             <mongo:converter>
                 <bean class="com.pla.sharedkernel.identifier.EndorsementIdToObjectIdConverter"/>
             </mongo:converter>
+
+            <mongo:converter>
+                <bean class="com.pla.grouplife.claim.repository.ObjectIdToClaimIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.grouplife.claim.repository.ClaimIdToObjectIdConverter"/>
+            </mongo:converter>
+
         </mongo:custom-converters>
     </mongo:mapping-converter>
 

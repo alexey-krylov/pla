@@ -114,7 +114,8 @@
                                 var maxMaturityAge = coverage.coverageTerm.maxMaturityAge || 1000;
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                     //return ageNextBirthday + term.text <= maxMaturityAge;
-                                    return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
+                                    return  term.text<=($scope.planDetailDto.policyTerm - ageNextBirthday)+1;
+                                    //return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
                                 });
                             } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
                                 $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {

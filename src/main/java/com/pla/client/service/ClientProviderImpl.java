@@ -21,7 +21,7 @@ public class ClientProviderImpl implements IClientProvider {
     public ClientDetailDto getClientDetail(String clientCode) {
         Client client = clientRepository.findOne(new ClientId(clientCode));
         if (client != null) {
-            ClientDetailDto clientDetailDto = new ClientDetailDto(client.getClientCode().getClientId(), client.getClientName(), client.getAddress1(), client.getAddress2(), client.getPostalCode(), client.getProvience(), client.getTown(), client.getEmailAddress());
+            ClientDetailDto clientDetailDto = new ClientDetailDto(client.getClientCode().getClientId(), client.getClientName(), client.getAddress1(), client.getAddress2(), client.getPostalCode(), client.getProvince(), client.getTown(), client.getEmailAddress());
             return clientDetailDto;
         }
         return null;
