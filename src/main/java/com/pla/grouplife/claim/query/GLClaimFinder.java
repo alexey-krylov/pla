@@ -198,6 +198,7 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
+
     public List<Map> getApprovedClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber,String[] statuses) {
         if (isEmpty(claimNumber) && isEmpty(policyNumber) && isEmpty(policyHolderName)&& isEmpty(clientId)&& isEmpty(assuredName)&& isEmpty(nrcNumber)) {
             return Lists.newArrayList();

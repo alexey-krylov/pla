@@ -87,6 +87,7 @@ public class GLClaimService {
         return transformedPolicies;
     }
 
+
     public List<GLPolicyDetailDto> searchGLPolicy(SearchPolicyDto searchPolicyDto) {
 
         List<Map> searchedPolices = glClaimFinder.searchPolicy(searchPolicyDto.getPolicyNumber(), searchPolicyDto.getPolicyHolderName(), searchPolicyDto.getClientId(), new String[]{"IN_FORCE"});

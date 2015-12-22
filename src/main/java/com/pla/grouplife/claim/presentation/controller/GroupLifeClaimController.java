@@ -168,6 +168,7 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
         return glClaimService.getClaimDetail(searchClaimDto);
     }
 
+
     @RequestMapping(value = "/claimregistration/updateclaim", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity updateClaim(@RequestBody GLClaimUpdateCommand glClaimUpdateCommand, HttpServletRequest request) {
