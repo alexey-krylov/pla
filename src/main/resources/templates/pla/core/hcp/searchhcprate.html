@@ -55,7 +55,7 @@
                                 <input type="text" class="form-control input-sm" name="hcpName"
                                        ng-disabled="mode =='view'" placeholder="Enter HCP Name"
                                        ng-model="uploadHCPServiceRatesDto.hcpName" ng-required="true"
-                                       minlength="1" maxlength="100"/>
+                                       minlength="1" maxlength="100" ng-pattern="/^[a-zA-Z ]*$/"/>
 
                                 <div class="error" ng-messages="hcpRateForm.hcpName.$error"
                                      ng-if="hcpRateForm.contactPersonDetail.$dirty">
@@ -69,7 +69,7 @@
                                 <input type="text" class="form-control input-sm" name="hcpCode"
                                        ng-disabled="mode =='view'" placeholder="Enter hcpCode"
                                        ng-model="uploadHCPServiceRatesDto.hcpCode" ng-required="true"
-                                       maxlength="13" minlength="13"  ng-pattern="/^[0-9]*$/"/>
+                                       maxlength="9" minlength="9"  ng-pattern="/^[a-zA-Z0-9]*$/"/>
 
                                 <div class="error" ng-messages="hcpRateForm.hcpCode.$error"
                                      ng-if="hcpRateForm.hcpCode.$dirty">
@@ -92,7 +92,7 @@
                                            ng-model="uploadHCPServiceRatesDto.fromDate" name="fromdate"/>
                                      <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                              ng-click="launchActivatedDate($event)">
+                                              ng-click="launchFromDate($event)">
                                           <i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
                                 </div>
@@ -117,7 +117,7 @@
                                            ng-model="uploadHCPServiceRatesDto.toDate" name="todate"/>
                                      <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                              ng-click="launchActivatedDate($event)">
+                                              ng-click="launchToDate($event)">
                                           <i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
                                 </div>
@@ -150,10 +150,10 @@
                     </div>
                     <div class="row bs-callout-info bs-callout-info">
                         <div class="form-group col-md-6">
-                            <button type="button" class="btn btn-primary  pull-right" data-animation="am-flip-x">Upload</button>
+                            <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" data-animation="am-flip-x">Upload</button>
                         </div>
                         <div class="form-group col-md-1">
-                            <button type="button" class="btn btn-danger  pull-right" data-animation="am-flip-x">cancel</button>
+                            <button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" data-animation="am-flip-x">cancel</button>
                         </div>
                     </div>
                 </ng-form>

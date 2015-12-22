@@ -47,6 +47,18 @@
             }
         });
 
+ $scope.launchFromDate = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.submissionfromdate= true;
+                };
+
+$scope.launchToDate = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.submissiontodate= true;
+                };
+
         $scope.$watch('fileSaved', function (n, o) {
             if (n && n.length) {
                 $scope.fileName = n[0].name
