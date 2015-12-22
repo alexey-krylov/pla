@@ -27,38 +27,36 @@
         $scope.fileSaved = null;
         $scope.fileName = null;
         $scope.$watchCollection('[uploadHCPServiceRatesDto.hcpCode,showDownload]', function (n) {
-            if (n[0]) {
-                $scope.qId = n[0];
-                if (n[1]) {
-                    $scope.dropdown = [{
-                        "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                        "href": "/pla/core/hcprate/downloadhcpratetemplate/" + $scope.qId
-                    }
-                    ];
-                } else {
-                    $scope.dropdown = [{
-                        "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                        "href": "/pla/core/hcprate/downloadhcpratetemplate/" + $scope.hcpCode
-                    },{
-                        "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
-                        "href": "/pla/core/hcprate/downloaderrorhcpratetemplate/" + $scope.qId
-                    }
-                    ];
+            $scope.qId = n[0];
+            if (n[1]) {
+                $scope.dropdown = [{
+                    "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
+                    "href": "/pla/core/hcprate/downloadhcpratetemplate/" + $scope.qId
                 }
+                ];
+            } else {
+                $scope.dropdown = [{
+                    "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
+                    "href": "/pla/core/hcprate/downloadhcpratetemplate/" + $scope.hcpCode
+                },{
+                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
+                    "href": "/pla/core/hcprate/downloaderrorhcpratetemplate/" + $scope.qId
+                }
+                ];
             }
         });
 
- $scope.launchFromDate = function ($event) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    $scope.submissionfromdate= true;
-                };
+        $scope.launchFromDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.submissionfromdate= true;
+        };
 
-$scope.launchToDate = function ($event) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    $scope.submissiontodate= true;
-                };
+        $scope.launchToDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.submissiontodate= true;
+        };
 
         $scope.$watch('fileSaved', function (n, o) {
             if (n && n.length) {
