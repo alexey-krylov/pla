@@ -1,5 +1,6 @@
 package com.pla.core.hcp.presentation.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class HCPServiceDetailDto {
     private String serviceDepartment;
     private String serviceAvailed;

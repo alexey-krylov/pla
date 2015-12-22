@@ -8,6 +8,7 @@ import com.pla.core.hcp.application.service.HCPRateExcelGenerator;
 import com.pla.core.hcp.application.service.HCPRateExcelHeader;
 import com.pla.core.hcp.domain.model.*;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
+import com.pla.core.hcp.presentation.utility.ExcelUtilityProvider;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -27,6 +28,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.pla.core.hcp.presentation.utility.ExcelUtilityProvider.*;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -40,13 +42,15 @@ public class HCPRateService {
     private HCPRateRepository hcpRateRepository;
     private HCPFinder hcpFinder;
     private HCPRateExcelGenerator hcpRateExcelGenerator;
+    private ExcelUtilityProvider excelUtilityProvider;
 
     @Autowired
-    public HCPRateService(JpaRepositoryFactory jpaRepositoryFactory, HCPFinder hcpFinder, HCPRateExcelGenerator hcpRateExcelGenerator, HCPRateRepository hcpRateRepository){
+    public HCPRateService(JpaRepositoryFactory jpaRepositoryFactory, HCPFinder hcpFinder, HCPRateExcelGenerator hcpRateExcelGenerator, HCPRateRepository hcpRateRepository, ExcelUtilityProvider excelUtilityProvider){
         hcpRepository = jpaRepositoryFactory.getCrudRepository(HCP.class);
         this.hcpRateRepository = hcpRateRepository;
         this.hcpFinder = hcpFinder;
         this.hcpRateExcelGenerator = hcpRateExcelGenerator;
+        this.excelUtilityProvider = excelUtilityProvider;
     }
 
     public HSSFWorkbook getHCPRateTemplateExcel(String hcpCode) {
@@ -68,7 +72,7 @@ public class HCPRateService {
     }
 
     public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook) {
-        return false;
+        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook);
     }
 
     public Set<HCPServiceDetailDto> transformToHCPServiceDetailDto(HSSFWorkbook insuredTemplateWorkbook) {
@@ -92,26 +96,16 @@ public class HCPRateService {
             String afterHours = getCellValue(currentRow.getCell(headers.indexOf(HCPRateExcelHeader.AFTER_HOURS.getDescription())));
             HCPServiceDetailDto hcpServiceDetailDto = new HCPServiceDetailDto()
                     .updateWithServiceDepartment(serviceDepartment)
-                    .updateWithServiceDepartment(serviceAvailed)
-                    .updateWithNormalAmount(new BigDecimal(normalAmount))
-                    .updateWithAfterHours(isNotEmpty(afterHours) ? Integer.parseInt(afterHours) : 0);
+                    .updateWithServiceAvailed(serviceAvailed)
+                    .updateWithNormalAmount(isNotEmpty(normalAmount) ? new BigDecimal(normalAmount) : BigDecimal.ZERO)
+                    .updateWithAfterHours(isNotEmpty(afterHours) ? new BigDecimal(afterHours).intValue() : 0);
             hcpServiceDetailDtos.add(hcpServiceDetailDto);
         }
         return hcpServiceDetailDtos;
     }
 
-    public List<String> getHeaders(Row headerRow) {
-        List<String> headers = Lists.newArrayList();
-        Iterator<Cell> cellIterator = headerRow.cellIterator();
-        while (cellIterator.hasNext()) {
-            Cell headerCell = cellIterator.next();
-            headers.add(headerCell.getStringCellValue());
-        }
-        return ImmutableList.copyOf(headers);
-    }
-
     public HCPRate uploadHCPServiceRates(UploadHCPServiceRatesCommand uploadHCPServiceRatesCommand) {
-        HCPRate hcpRate = hcpRateRepository.findOne(uploadHCPServiceRatesCommand.getHcpRateId());
+        HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(uploadHCPServiceRatesCommand.getHcpCode());
         if(isEmpty(hcpRate)) {
             hcpRate = new HCPRate().updateWithHCPRateId(new HCPRateId(new ObjectId().toString()));
         }

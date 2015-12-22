@@ -78,6 +78,10 @@ public class UtilValidator {
         return !isEmpty(array);
     }
 
+    public static boolean isNotEmpty(Object object){
+        return !isEmpty(object);
+    }
+
     public static boolean isEmpty(Object object){
         if(object == null)
             return true;

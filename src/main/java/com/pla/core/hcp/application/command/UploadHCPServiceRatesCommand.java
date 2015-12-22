@@ -4,8 +4,8 @@ import com.pla.core.hcp.domain.model.HCPRateId;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.joda.time.LocalDate;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
