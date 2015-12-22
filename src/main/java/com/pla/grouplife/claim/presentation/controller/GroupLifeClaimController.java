@@ -53,6 +53,7 @@ public class GroupLifeClaimController {
 
 
 
+
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView searchPolicy() {
         ModelAndView modelAndView = new ModelAndView();

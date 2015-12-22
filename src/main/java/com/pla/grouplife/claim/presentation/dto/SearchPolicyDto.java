@@ -21,6 +21,7 @@ public class SearchPolicyDto {
     private  String clientId;
 
 
+
     public SearchPolicyDto(String policyNumber,String policyHolderName,String clientId){
         this.policyNumber=policyNumber;
         this.policyHolderName=policyHolderName;

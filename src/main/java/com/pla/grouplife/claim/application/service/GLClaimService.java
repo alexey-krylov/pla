@@ -108,6 +108,7 @@ public class GLClaimService {
     }
 
 
+
     public List<ClaimIntimationDetailDto> getClaimIntimationRecord(SearchClaimIntimationDto searchClaimIntimationDto) {
         List<Map> searchedClaimRecords = glClaimFinder.getClaimIntimationDetail(searchClaimIntimationDto.getClaimNumber(), searchClaimIntimationDto.getPolicyNumber(),
                 searchClaimIntimationDto.getPolicyHolderName(), searchClaimIntimationDto.getPolicyHolderClientId(), searchClaimIntimationDto.getAssuredName(),

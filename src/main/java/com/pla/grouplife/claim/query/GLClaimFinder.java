@@ -174,6 +174,7 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
     }
 
+
     public List<Map> getClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber) {
 
         Criteria criteria = null;
