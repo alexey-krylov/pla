@@ -28,6 +28,12 @@
         });
     });
 </script>
+
+<script>
+function myFunction() {
+    alert("You pressed a key inside the input field");
+}
+</script>
 <script type="text/ng-template" id="searchhcprate.html">
     <nth-alert></nth-alert>
     <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
@@ -129,12 +135,12 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                        </div>
+                        <!--<div class="col-md-6">-->
+                        <!--</div>-->
                     </div>
                     <div class="row bs-callout-info bs-callout-info">
-                        <div class="col-lg-6 col-lg-offset-3">
-                            <div class="form-group">
+                        <div class="col-lg-9">
+                            <div class="form-group" style="margin-left:1px;margin-top:14px; ">
                                 <input type="text" class="form-control input-sm" ng-model="fileName"
                                        style="width: 62%;display: inline-block" ng-readonly="true"/>
                                 <button type="file" class="btn btn-default btn-sm" ng-file-select=""
