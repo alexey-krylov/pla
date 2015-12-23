@@ -20,24 +20,11 @@
                     controller: 'searchHcpRateController'
                 }
             )}]);
-app.directive('autoComplete', function($timeout) {
-    return function(scope, iElement, iAttrs) {
-        iElement.autocomplete({
-            source: scope[iAttrs.uiItems],
-            select: function() {
-                $timeout(function() {
-                    iElement.trigger('input');
-                }, 0);
-            }
-        });
-    };
-});
     app.controller('searchHcpRateController', ['$scope', '$http','$upload',  function ($scope, $http, $upload) {
         $scope.uploadHCPServiceRatesDto = {};
         $scope.showDownload = true;
         $scope.fileSaved = null;
         $scope.fileName = null;
-        $scope.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel", "francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit", "guillaume", "nicolas", "joseph"];
         $scope.$watchCollection('[uploadHCPServiceRatesDto.hcpCode,showDownload]', function (n) {
             $scope.qId = n[0];
             if (n[1]) {
@@ -76,7 +63,7 @@ app.directive('autoComplete', function($timeout) {
             }
         });
 
-        $scope.hcpCodes = [];
+        $scope.hcps = [];
 
         $scope.getAllHCPByHCPCode = function(){
             $http.get("/pla/core/hcp/getAllHCPByHCPCode?hcpCode="+$scope.uploadHCPServiceRatesDto.hcpCode).success(function(data){
