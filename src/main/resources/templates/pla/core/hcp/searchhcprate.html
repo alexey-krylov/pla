@@ -70,7 +70,6 @@
                                 <input type="text" class="form-control input-sm" name="hcpCode" list="hcpCodeDL"
                                        ng-disabled="mode =='view'" placeholder="Enter hcpCode"
                                        ng-model="uploadHCPServiceRatesDto.hcpCode" ng-required="true" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="getAllHCPByHCPCode()"/>
-
                                 <datalist id="hcpCodeDL">
                                     <option  data-ng-repeat="hcp in hcps" value="{{hcp.hcpCode}}"/>
                                 </datalist>

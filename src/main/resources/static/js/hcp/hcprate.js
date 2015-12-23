@@ -64,43 +64,39 @@
         });
 
         $scope.hcps = [];
-
         $scope.getAllHCPByHCPCode = function(){
             $http.get("/pla/core/hcp/getAllHCPByHCPCode?hcpCode="+$scope.uploadHCPServiceRatesDto.hcpCode).success(function(data){
                 $scope.hcps = data;
             }).error(function(){});
+            $scope.$watch('uploadHCPServiceRatesDto.hcpCode',function(newVal,oldVal){
+                if(newVal){
+                    var hcp = _.findWhere($scope.hcps, {hcpCode: newVal});
+                    if(hcp){
+                        $scope.uploadHCPServiceRatesDto.hcpName=hcp.hcpName;
+                    } else{
+                        $scope.uploadHCPServiceRatesDto.hcpName='';
+                    }
+                }
+
+            });
         };
 
         $scope.getAllHCPByHCPName = function(){
             $http.get("/pla/core/hcp/getAllHCPByHCPName?hcpName="+$scope.uploadHCPServiceRatesDto.hcpName).success(function(data){
                 $scope.hcps = data;
             }).error(function(){});
-        };
-         $scope.$watch('uploadHCPServiceRatesDto.hcpCode',function(newVal,oldVal){
-                    if(newVal){
-                        var hcp = _.findWhere($scope.hcps, {hcpCode: newVal});
-                        if(hcp){
-                            $scope.uploadHCPServiceRatesDto.hcpName=hcp.hcpName;
-                        } else{
-
-                            $scope.uploadHCPServiceRatesDto.hcpName='';
-                           }
-
-
+            $scope.$watch('uploadHCPServiceRatesDto.hcpName',function(newVal,oldVal){
+                if(newVal){
+                    var hcp = _.findWhere($scope.hcps, {hcpName: newVal});
+                    if(hcp){
+                        $scope.uploadHCPServiceRatesDto.hcpCode=hcp.hcpCode;
+                    } else {
+                        $scope.uploadHCPServiceRatesDto.hcpCode = '';
                     }
+                }
 
-                });
-        $scope.$watch('uploadHCPServiceRatesDto.hcpName',function(newVal,oldVal){
-                           if(newVal){
-                               var hcp = _.findWhere($scope.hcps, {hcpName: newVal});
-                               if(hcp){
-                                   $scope.uploadHCPServiceRatesDto.hcpCode=hcp.hcpCode;
-                               } else{
-                                $scope.uploadHCPServiceRatesDto.hcpName='';
-                               }
-                           }
-
-                       });
+            });
+        };
 
         $scope.uploadHCPRates = function () {
             console.log($scope.uploadHCPServiceRatesDto);
