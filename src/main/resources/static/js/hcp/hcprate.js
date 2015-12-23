@@ -81,7 +81,12 @@
                         var hcp = _.findWhere($scope.hcps, {hcpCode: newVal});
                         if(hcp){
                             $scope.uploadHCPServiceRatesDto.hcpName=hcp.hcpName;
-                        }
+                        } else{
+
+                            $scope.uploadHCPServiceRatesDto.hcpName='';
+                           }
+
+
                     }
 
                 });
@@ -90,6 +95,8 @@
                                var hcp = _.findWhere($scope.hcps, {hcpName: newVal});
                                if(hcp){
                                    $scope.uploadHCPServiceRatesDto.hcpCode=hcp.hcpCode;
+                               } else{
+                                $scope.uploadHCPServiceRatesDto.hcpName='';
                                }
                            }
 

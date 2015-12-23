@@ -34,7 +34,7 @@
          ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
         <ul class="steps" style="margin-left: 0">
             <li data-step="1">
-                <span class="badge badge-info">1</span>HCP<span class="chevron"></span>
+                <span class="badge badge-info"></span>HCP<span class="chevron"></span>
             </li>
         </ul>
         <div class="step-content">
@@ -149,7 +149,7 @@
                     </div>
                     <div class="row bs-callout-info bs-callout-info">
                         <div class="form-group col-md-6">
-                            <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" data-animation="am-flip-x" ng-click="uploadHCPRates()">Upload</button>
+                            <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" data-animation="am-flip-x" ng-disabled="hcpForm.$invalid"  ng-click="uploadHCPRates()">Upload</button>
                         </div>
                         <div class="form-group col-md-1">
                             <button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" data-animation="am-flip-x">cancel</button>
