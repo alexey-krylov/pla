@@ -8,7 +8,6 @@ import com.pla.grouplife.claim.application.service.GLClaimService;
 import com.pla.grouplife.claim.domain.model.*;
 import com.pla.grouplife.claim.exception.GLClaimException;
 import com.pla.grouplife.claim.presentation.dto.*;
-import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
@@ -64,17 +63,15 @@ public class GroupLifeClaimController {
 
 
     @RequestMapping(value = "/searchpolicy", method = RequestMethod.POST)
-    @ResponseBody
-    public List<GLPolicyDetailDto> getPolicyDetail(@RequestBody SearchPolicyDto searchPolicyDto) {
-       /*public ModelAndView searchPolicy(SearchPolicyDto searchPolicyDto){
+       public ModelAndView searchPolicy(SearchPolicyDto searchPolicyDto){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouplife/claim/searchPolicy");
-        modelAndView.addObject("searchResult", glClaimService.searchPolicy(searchPolicyDto));
+        modelAndView.setViewName("pla/groupLife/claim/searchPolicy");
+        modelAndView.addObject("searchResult", glClaimService.searchGLPolicy(searchPolicyDto));
         modelAndView.addObject("searchCriteria", searchPolicyDto);
         return modelAndView;
-         */
 
-        return glClaimService.searchGLPolicy(searchPolicyDto);
+
+//        return glClaimService.searchGLPolicy(searchPolicyDto);
 
     }
 

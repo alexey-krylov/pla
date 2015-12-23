@@ -50,6 +50,15 @@
 
 
 </script>
+<style>
+    .my-form {
+        transition:all linear 0.5s;
+        background: transparent;
+    }
+    .my-form.ng-invalid {
+        border-color: red;
+    }
+</style>
 <script type="text/ng-template" id="claimintimation.html">
     <nth-alert></nth-alert>
     <form name="quotationForm" novalidate="true" class="css-form ng-cloak" method="post" enctype="multipart/form-data">
@@ -60,7 +69,7 @@
                 <li data-step="2"><span class="badge">2</span>Assured Details<span class="chevron"></span></li>
                 <!--<li data-step="3"><span class="badge">3</span>Incedence Details<span class="chevron"></span></li>-->
                 <!--<li data-step="4"><span class="badge">4</span>Incident Details<span class="chevron"></span></li>-->
-                <li data-step="3"><span class="badge">2</span>Mandatory Document<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>Mandatory Document<span class="chevron"></span></li>
             </ul>
             <div class="actions">
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
@@ -132,11 +141,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                     <div class="row">
-
                                         <div class="col-md-4">
                                             <div class="form-group  ">
                                                 <label class="control-label">Category</label>
@@ -221,161 +226,134 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
                                 </div>
                             </accordion-group>
                         </accordion>
                         <accordion close-others="true">
-                            <accordion-group is-open="accordionStatusDocuments.additionalDocuments">
+                            <accordion-group is-open="accordionStatusDocuments.additionalDocuments" ng-form="claimantForm" class="my-form">
                                 <accordion-heading>
                                     Claimant Details <i class="pull-right glyphicon"
                                                         ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                     disable-all-fields="isViewMode">
 
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
+                                    <div class="col-md-6">
+                                            <div class="form-group required">
                                                 <label class="control-label">Proposer Name</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.proposerName" name="proposerName"
-                                                         ng-options="claimDetails.proposer.proposerName
-                                                         as ClaimantDetails.proposer.proposerName  for ClaimantDetails in claimIntimationDetailResponse">
-
-                                                </select>
+                                                <input type="text" class="form-control input-sm" name="proposerName"
+                                                       ng-model="claimantDetail.proposerName" ng-required="true"/>
                                             </div>
-                                        </div>
-
-
-
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <label class="control-label">Address Line 1</label>
-
-                                            <select  class="form-control input-sm" ng-model="claimDetails.addressLine1" name="addressLine1"
-                                                     ng-options="claimDetails.proposer.contactDetail.addressLine1
-                                                         as ClaimantDetails.proposer.contactDetail.addressLine1  for ClaimantDetails in claimIntimationDetailResponse">
-
+                                            <div class="form-group required">
+                                                <label class="control-label">Address Line 2</label>
+                                                <input type="text" class="form-control input-sm" name="addressLine2" ng-model="claimantDetail.addressLine2" ng-maxlength="100" ng-required="true"/>
+                                                <div class="error" ng-messages="claimantForm.addressLine2.$error" ng-if="claimantForm.addressLine2.$dirty">
+                                                    <small class="error" ng-message="required">Please enter Address Line 2</small>
+                                                    <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                                </div>
+                                            </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">Province</label>
+                                            <select class="form-control input-sm" name="province" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                    ng-model="claimantDetail.province" ng-required="true" ng-init="getProvinceValue(claimantDetail.province)" ng-change="getProvinceValue(claimantDetail.province)">
                                             </select>
-                                          </div>
-
+                                            <div class="error" ng-messages="claimantForm.province.$error" ng-if="claimantForm.province.$dirty">
+                                                <small class="error" ng-message="required">Please enter Province</small>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Address Line 2</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.addressLine2" name="addressLine2"
-                                                         ng-options="claimDetails.proposer.contactDetail.addressLine2
-                                                         as ClaimantDetails.proposer.contactDetail.addressLine2  for ClaimantDetails in claimIntimationDetailResponse">
+                                        <div class="form-group required">
+                                            <label class="control-label">email Address</label>
+                                            <input type="email" class="form-control input-sm"
+                                                   ng-required="true" name="emailAddress" ng-model="claimantDetail.emailId"/>
 
-                                                </select>
+                                            <div class="error" ng-messages="claimantForm.emailAddress.$error"  ng-if="claimantForm.emailAddress.$dirty">
+                                                <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required">
+                                            <label class="control-label">Contact Person Details</label>
+                                            <input type="text" class="form-control input-sm"
+                                                   ng-required="true" name="contactPersonDetail" ng-maxlength="100" ng-model="claimantDetail.contactPersonName" />
+
+                                            <div class="error" ng-messages="claimantForm.contactPersonDetail.$error"  ng-if="claimantForm.contactPersonDetail.$dirty">
+                                                <small class="error" ng-message="email">Please enter  Contact Person Details. </small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">Mobile Number</label>
+                                            <input type="text" class="form-control input-sm" name="mobileNumber" ng-pattern="/^\d+$/"
+                                                   maxlength="10" ng-minlength="10" ng-maxLength="10" ng-model="claimantDetail.mobileNumber"/>
+                                            <div class="error" ng-messages="claimantForm.mobileNumber.$error" ng-if="claimantForm.mobileNumber.$dirty">
+                                                <small class="error" ng-message="required">Please enter Mobile Number</small>
+                                                <small ng-message="maxlength">Only 10 number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                                                <small ng-message="pattern">Please enter a valid mobile number.</small>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group required">
+                                            <label class="control-label">Address Line 1</label>
+                                            <input type="text" class="form-control input-sm"
+                                                    name="addressLine1" ng-model="claimantDetail.addressLine1" ng-maxlength="100" ng-required="true"/>
 
-                                    <div class="row">
-
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <label class="control-label">Province</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.province" name="province"
-                                                         ng-options="claimDetails.proposer.contactDetail.province
-                                                         as ClaimantDetails.proposer.contactDetail.province  for ClaimantDetails in claimIntimationDetailResponse">
-
-                                                </select>
-                                                <!--<select class="form-control input-sm"  name="province"-->
-                                                        <!--ng-model="ClaimantDetails.province"-->
-                                                        <!--ng-options="province.provinceId  as province.provinceName for province in provinces" ng-change="getCurrentVal(proposalDetails.proposer.province)">-->
-                                                <!--</select>-->
+                                            <div class="error" ng-messages="claimantForm.addressLine1.$error" ng-if="claimantForm.addressLine1.$dirty">
+                                                <small class="error" ng-message="required">Please enter Address Line 2</small>
+                                                <small ng-message="maxlength">Only 100 characters are allowed.</small>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <label class="control-label">Town</label>
-                                                <!--<select class="form-control input-sm"  name="town"-->
-                                                        <!--ng-model="ClaimantDetails.town"-->
-                                                        <!--ng-options="city.geoId as city.geoName for city in cities">-->
-                                                <!--</select>-->
-
-                                                <select  class="form-control input-sm" ng-model="claimDetails.town" name="town"
-                                                         ng-options="claimDetails.proposer.contactDetail.town
-                                                         as ClaimantDetails.proposer.contactDetail.town  for ClaimantDetails in claimIntimationDetailResponse">
-
-                                                </select>
-
+                                        <div class="form-group required">
+                                            <label class="control-label">Postal Code</label>
+                                            <input type="text" class="form-control input-sm" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="claimantDetail.postalCode"/>
+                                            <div class="error" ng-messages="claimantForm.postalCode.$error" ng-if="claimantForm.postalCode.$dirty">
+                                                <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
                                             </div>
                                         </div>
 
+                                        <div class="form-group required">
+                                            <label class="control-label">Town</label>
+                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="claimantDetail.town"
+                                                    ng-options="city.geoId as city.geoName for city in towns"/>
 
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Postal Code</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.postalCode" name="postalCode"
-                                                         ng-options="claimDetails.proposer.contactDetail.postalCode
-                                                         as ClaimantDetails.proposer.contactDetail.postalCode  for ClaimantDetails in claimIntimationDetailResponse">
-
-                                                </select>
+                                            <div class="error" ng-messages="claimantForm.town.$error" ng-if="claimantForm.town.$dirty">
+                                                <small class="error" ng-message="required">Please enter Town</small>
+                                            </div>
                                         </div>
 
+                                        <div class="form-group required">
+                                            <label class="control-label">Work phone</label>
+                                            <input type="text" class="form-control input-sm" name="workPhone" ng-required="true" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/"
+                                                   ng-model="claimantDetail.workPhone"/>
 
+                                            <div class="error" ng-messages="claimantForm.workPhone.$error" ng-if="claimantForm.workPhone.$dirty">
+                                                <small ng-message="maxlength">Only 10 Number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 Numbers are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
 
+                                        <div class="form-group required">
+                                            <label class="control-label">Contact Person email Address</label>
+                                            <input type="email" class="form-control input-sm"
+                                                   ng-required="true" name="contactemailAddress" ng-model="claimantDetail.contactPersonEmail"/>
 
+                                            <div class="error" ng-messages="claimantForm.contactemailAddress.$error"  ng-if="claimantForm.contactemailAddress.$dirty">
+                                                <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">Contact Person Work phone</label>
+                                            <input type="text" class="form-control input-sm" name="contactPersonWorkPhone" ng-required="true" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/"
+                                                   ng-model="claimantDetail.contactPersonPhone"/>
+
+                                            <div class="error" ng-messages="claimantForm.contactPersonWorkPhone.$error" ng-if="claimantForm.contactPersonWorkPhone.$dirty">
+                                                <small ng-message="maxlength">Only 10 Number are allowed.</small>
+                                                <small ng-message="minlength">Minimum 10 Numbers are allowed.</small>
+                                                <small ng-message="pattern">Only Numeric are allowed.</small>
+                                            </div>
+                                        </div>
                                     </div>
-</div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="control-label">Email</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.emailAddress" name="emailAddress"
-                                                         ng-options="claimDetails.proposer.contactDetail.emailAddress
-                                                         as ClaimantDetails.proposer.contactDetail.emailAddress  for ClaimantDetails in claimIntimationDetailResponse">
-
-                                                </select>
-
-                                                <!--<div ng-show="step2.email.$invalid &amp;&amp; step2.email.$dirty">-->
-                                                    <!--<small class="error" ng-show="step2.email.$error.email">-->
-                                                        <!--Please enter a valid emailId.-->
-                                                    <!--</small>-->
-                                                <!--</div>-->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <label class="control-label">Work Phone</label>
-                                                <select class="form-control input-sm" ng-model="claimDetails.workPhoneNumber" name="workPhoneNumber"
-
-                                                        ng-options="claimDetails.proposer.contactDetail.contactPersonDetail.workPhoneNumber
-
-                                                        as claimantDetails.proposer.contactDetail.contactPersonDetail.workPhoneNumber
-
-                                                        for claimantDetails in claimIntimationDetailResponse">
-
-                                                </select>
-                                              </div>
-                                                <!--<div ng-show="step2.workPhone.$invalid &amp;&amp; step2.workPhone.$dirty">-->
-                                                    <!--<small class="error"-->
-                                                           <!--ng-show="!step2.workPhone.$error.pattern &amp;&amp; step2.workPhone.$error.minlength">-->
-                                                        <!--Please enter a valid work phone.-->
-                                                    <!--</small>-->
-                                                    <!--<small class="error" ng-show="step2.workPhone.$error.pattern">-->
-                                                        <!--Only numbers are allowed.-->
-                                                    <!--</small>-->
-                                                <!--</div>-->
-                                            </div>
-                                        </div>
-
-
-
-
-
-
-
-                                    </div>
-
-
                             </accordion-group>
                         </accordion>
                         <accordion close-others="true">
@@ -450,83 +428,57 @@
                         </accordion>
 
                         <accordion close-others="true">
-                            <accordion-group is-open="accordionStatusDocuments.bankdetails">
+                            <accordion-group is-open="accordionStatusDocuments.bankdetails" ng-form="bankDetailForm" class="my-form">
                                 <accordion-heading>
                                     Bank Details <i class="pull-right glyphicon"
                                                     ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.bankDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.bankDetails}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                     disable-all-fields="isViewMode">
-                                    <div class="row">
-                                        <div class="col-md-4">
-
+                                    <div class="col-md-6">
+                                        <div class="form-group required">
                                             <label class="control-label">Bank Name</label>
-                                            <select class="form-control input-sm"
-                                                    name="bankName"
-                                                    ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
-                                                    ng-model="bankDetails.bankName" >
+                                            <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetails"
+                                                    ng-model="bankDetails.bankName"  ng-required="true">
                                             </select>
-
-                                            <!--<div class="error" ng-messages="premiumBankDetail.bankName.$error" ng-if="premiumBankDetail.bankName.$dirty">-->
-                                                <!--<small class="error" ng-message="required">Please specify Bank Name.</small>-->
-                                            <!--</div>-->
-
-
+                                            <div class="error" ng-messages="bankDetailForm.bankName.$error" ng-if="bankDetailForm.bankName.$dirty">
+                                                <small class="error" ng-message="required">Please specify Bank Name.</small>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="control-label">Bank Branch Name</label>
 
-                                            <select class="form-control input-sm" name="branchname"
-                                                    ng-options="bankBranchDetail.branchName as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
-                                                    ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" >
+                                        <div class="form-group required">
+                                            <label class="control-label">Bank Account Type</label>
+                                            <select class="form-control input-sm" name="accountType" ng-model="bankDetails.bankAccountType">
+                                                <option  value="">Select Account Type</option>
+                                                <option  value="SAVING">Saving</option>
+                                                <option  value="CURRENT">Current</option>
                                             </select>
-
-                                            <!--<div class="error" ng-messages="premiumBankDetail.branchname.$error" ng-if="premiumBankDetail.branchname.$dirty">-->
-                                                <!--<small class="error" ng-message="required">Please specify Bank Branch Name.</small>-->
-                                            <!--</div>-->
-                                        </div>
-                                        <div ></div>
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <label class="control-label">Bank Account Type</label>
-
-                                                <select class="form-control input-sm" name="accountType" ng-model="bankDetails.bankAccountType" >
-                                                    <option  value="SAVING">Saving</option>
-                                                    <option  value="CURRENT">Current</option>
-                                                </select>
-
-                                                <!--<div class="error" ng-messages="premiumBankDetail.accountType.$error" ng-if="premiumBankDetail.accountType.$dirty">-->
-                                                    <!--<small class="error" ng-message="required">Please specify account type .</small>-->
-                                                <!--</div>-->
-
+                                            <div class="error" ng-messages="bankDetailForm.accountType.$error" ng-if="bankDetailForm.accountType.$dirty">
+                                                <small class="error" ng-message="required">Please specify account type .</small>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group " >
-                                                <label class="control-label">Bank Account Number</label>
-                                                <input type="text" class="form-control input-sm" ng-maxlength="13" ng-pattern="/^\d+$/"  ng-model="bankDetails.bankAccountNumber"
-                                                       name="bankAccountNumber"/>
-
-                                                <!--<div class="error" ng-messages="premiumBankDetail.bankAccountNumber.$error" ng-if="premiumBankDetail.bankAccountNumber.$dirty">-->
-                                                    <!--<small class="error" ng-message="required">Please specify Bank Name.</small>-->
-                                                    <!--<small ng-message="pattern">Only numeric are allowed.</small>-->
-                                                    <!--<small class="error" ng-message="maxlength">Upto 13 Numbers Allow.</small>-->
-                                                <!--</div>-->
-                                            </div>
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Branch Name</label>
+                                        <select class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                ng-model="bankDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" ng-required="true">
+                                        </select>
+                                        <div class="error" ng-messages="bankDetailForm.branchname.$error" ng-if="bankDetailForm.branchname.$dirty">
+                                            <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
                                         </div>
                                     </div>
 
+                                    <div class="form-group required">
+                                        <label class="control-label">Bank Account Number</label>
+                                        <input type="text" class="form-control input-sm" ng-required="true" ng-model="bankDetails.bankAccountNumber" ng-maxlength="17" name="bankAccountNumber"/>
 
+                                        <div class="error" ng-messages="bankDetailForm.bankAccountNumber.$error" ng-if="bankDetailForm.bankAccountNumber.$dirty">
+                                            <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                            <small class="error" ng-message="maxlength">Upto 17 Character Allow.</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </accordion-group>
                         </accordion>
-
-
-
-
-
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
