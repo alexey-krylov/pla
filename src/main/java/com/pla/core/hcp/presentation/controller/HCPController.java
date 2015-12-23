@@ -85,4 +85,17 @@ public class HCPController {
         return hcpService.getAllHCPCategories();
     }
 
+    @RequestMapping(value = "/searchhcprate",method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET",value = "Get Code and name for hcp rate")
+    public ModelAndView getHcpRate(@RequestParam String hcpName,@RequestParam String hcpCode) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("hcpresult", hcpService.getAllHCPMathingTheCriteria(hcpName, hcpCode));
+        return modelAndView;
+    }
+    @RequestMapping(value = "/gethcprate",method = RequestMethod.GET)
+    public ModelAndView hcpRate() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/hcp/searchhcprate");
+        return modelAndView;
+    }
 }

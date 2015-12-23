@@ -92,4 +92,8 @@ public class HCPService {
             }
         }).collect(Collectors.toList());
     }
+
+    public List<Map<String, Object>> getAllHCPMathingTheCriteria(String hcpName, String hcpCode) {
+        return hcpFinder.getAllHCPMathingTheCriteria(hcpName, hcpCode);
+    }
 }
