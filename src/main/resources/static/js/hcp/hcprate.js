@@ -1,7 +1,7 @@
 (function (angular) {
     "use strict";
     var app= angular.module('searchHcpRate', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
-        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages','angularFileUpload']);
+        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages','angularFileUpload', 'angucomplete-alt']);
     app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
         datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
         datepickerPopupConfig.currentText = 'Today';

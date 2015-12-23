@@ -20,7 +20,12 @@
             event.preventDefault();
         }
     }
-    requirejs(['main', 'angular-file-upload'], function () {
+    requirejs.config({
+        paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt'
+        }
+    });
+    requirejs(['main', 'angular-file-upload', 'angucomplete'], function () {
         require(['/pla/js/hcp/hcprate.js?t=19'], function () {
             angular.element(document).ready(function () {
                 angular.bootstrap(document, ['searchHcpRate']);
@@ -28,6 +33,12 @@
         });
     });
 </script>
+<style>
+    .angucomplete-dropdown {
+        overflow-y: auto;
+        max-height: 300px;
+    }
+</style>
 <script type="text/ng-template" id="searchhcprate.html">
     <nth-alert></nth-alert>
     <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
@@ -141,11 +152,11 @@
                                 <label class="control-label ">File</label>
                                 <div class="form-group" style="margin-left:1px;margin-top:px; ">
                                     <input type="text" class="form-control input-sm" ng-model="fileName"  name="file"  ng-required="true"
-                                           style="width: 62%;display: inline-block" ng-readonly="true"/>
-                                    <button type="file" class="btn btn-default btn-sm" ng-file-select=""
+                                       style="width: 62%;display: inline-block" ng-readonly="true"/>
+                                <button type="file" class="btn btn-default btn-sm" ng-file-select=""
                                             ng-model="fileSaved">
                                         <span class="glyphicon glyphicon-upload"></span>
-                                    </button>
+                                </button>
                                     <div class="error" ng-messages="hcpForm.file.$error"
                                          ng-if="hcpForm.file.$dirty">
                                         <small ng-message="pattern">
@@ -154,6 +165,15 @@
                                 </div>
                             </div>
                         </div>
+                        <!--<div data-angucomplete-alt="" id="ex5" placeholder="Search HCP" pause="300"
+                             selected-object="uploadHCPServiceRatesDto.hcpCode" disable-input="uneditable"
+                             remote-url="/pla/core/hcp/getAllHCPByHCPCode?hcpCode=" field-required="true"
+                             initial-value="uploadHCPServiceRatesDto.hcpCode"
+                             remote-url-data-field="" title-field="uploadHCPServiceRatesDto.hcpCode"
+                             minlength="3"
+                             input-class="form-control form-control-small"
+                             match-class="highlight">
+                        </div>-->
                     </div>
                     <div class="row bs-callout-info bs-callout-info">
                         <div class="form-group col-md-6">
@@ -169,29 +189,29 @@
     </div>
     <style>
         .fuelux .checkbox-custom:before {
-        font-family: "Glyphicons Halflings" !important;
-        font-style: normal !important;
-        font-weight: normal !important;
-        font-variant: normal !important;
-        text-transform: none !important;
-        line-height: 1;
-        speak: none;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        border: 1px solid #adadad;
-        border-radius: 4px;
-        color: #fff;
-        content: " ";
-        font-size: 12px;
-        height: 18px;
-        left: 0;
-        padding: 1px 0 0 1px;
-        position: absolute;
-        top: 3px;
-        width: 18px;
+            font-family: "Glyphicons Halflings" !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border: 1px solid #adadad;
+            border-radius: 4px;
+            color: #fff;
+            content: " ";
+            font-size: 12px;
+            height: 18px;
+            left: 0;
+            padding: 1px 0 0 1px;
+            position: absolute;
+            top: 3px;
+            width: 18px;
         }
         .btn {
-        font-size: 12px;
+            font-size: 12px;
         }
     </style>
 </script>
