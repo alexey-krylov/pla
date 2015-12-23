@@ -63,12 +63,23 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">HCP Name</label>
-                                <input type="text" class="form-control input-sm" name="hcpName" list="hcpNameDL"
+                                <!--<input type="text" class="form-control input-sm" name="hcpName" list="hcpNameDL"
                                        ng-disabled="mode =='view'" placeholder="Enter HCP Name"
                                        ng-model="uploadHCPServiceRatesDto.hcpName" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-change="getAllHCPByHCPName()"/>
                                 <datalist id="hcpNameDL">
                                     <option  data-ng-repeat="hcp in hcps" value="{{hcp.hcpName}}"/>
-                                </datalist>
+                                </datalist>-->
+                                <angucomplete-alt id="hcpName" placeholder="Search HCP" pause="300"
+                                     selected-object="getAllHCPByHCPName"
+                                     disable-input="uneditable"
+                                     remote-url="/pla/core/hcp/getAllHCPByHCPName?hcpName=" field-required="true"
+                                     initial-value="uploadHCPServiceRatesDto.hcpName"
+                                     remote-url-data-field="" title-field="hcpName"
+                                     minlength="2"
+                                     input-class="form-control form-control-small"
+                                     match-class="highlight" height="40px"
+                                     input-changed="clearHcpCode">
+                                </angucomplete-alt>
                                 <div class="error" ng-messages="hcpRateForm.hcpName.$error"
                                      ng-if="hcpRateForm.contactPersonDetail.$dirty">
                                     <small ng-message="required">Please Enter HCP Name .</small>
@@ -78,13 +89,22 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">HCP Code</label>
-                                <input type="text" class="form-control input-sm" name="hcpCode" list="hcpCodeDL"
+                                <!--<input type="text" class="form-control input-sm" name="hcpCode" list="hcpCodeDL"
                                        ng-disabled="mode =='view'" placeholder="Enter hcpCode"
                                        ng-model="uploadHCPServiceRatesDto.hcpCode" ng-required="true" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="getAllHCPByHCPCode()"/>
                                 <datalist id="hcpCodeDL">
                                     <option  data-ng-repeat="hcp in hcps" value="{{hcp.hcpCode}}"/>
-                                </datalist>
-
+                                </datalist>-->
+                                <angucomplete-alt id="hcpCode" placeholder="Search HCP" pause="300"
+                                     selected-object="getAllHCPByHCPCode" disable-input="uneditable"
+                                     remote-url="/pla/core/hcp/getAllHCPByHCPCode?hcpCode=" field-required="true"
+                                     initial-value="uploadHCPServiceRatesDto.hcpCode"
+                                     remote-url-data-field="" title-field="hcpCode"
+                                     minlength="2"
+                                     input-class="form-control form-control-small"
+                                     match-class="highlight"
+                                     input-changed="clearHcpName">
+                                </angucomplete-alt>
                                 <div class="error" ng-messages="hcpRateForm.hcpCode.$error"
                                      ng-if="hcpRateForm.hcpCode.$dirty">
                                     <small ng-message="required">Please Enter Mobile Number .</small>
@@ -165,15 +185,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div data-angucomplete-alt="" id="ex5" placeholder="Search HCP" pause="300"
-                             selected-object="uploadHCPServiceRatesDto.hcpCode" disable-input="uneditable"
-                             remote-url="/pla/core/hcp/getAllHCPByHCPCode?hcpCode=" field-required="true"
-                             initial-value="uploadHCPServiceRatesDto.hcpCode"
-                             remote-url-data-field="" title-field="uploadHCPServiceRatesDto.hcpCode"
-                             minlength="3"
-                             input-class="form-control form-control-small"
-                             match-class="highlight">
-                        </div>-->
                     </div>
                     <div class="row bs-callout-info bs-callout-info">
                         <div class="form-group col-md-6">
