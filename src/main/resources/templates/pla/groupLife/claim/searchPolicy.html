@@ -134,7 +134,6 @@
                             <th style="width: 1%"></th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyHolderName}">Policy HolderName</th>
-                            <th th:text="#{clientId}">clientId</th>
                             <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
@@ -146,7 +145,6 @@
                                     <td><input type="radio" name="proposalNumber" th:value="${policy.policyNumber}" value="5100000010315"/></td>
                                     <td th:text="${policy.policyNumber}">5100000010315</td>
                                     <td th:text="${policy.policyHolderName}"></td>
-                                    <td th:text="${policy.clientId}"></td>
                                     <td th:text="${policy.status}"></td>
                                 </tr>
                             </th:block>

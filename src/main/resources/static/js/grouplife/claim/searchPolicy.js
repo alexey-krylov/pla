@@ -29,9 +29,9 @@ var viewPolicyModule = (function () {
 
     };
      services.createPolicy = function () {
-           var policyId = this.selectedItem;
+           var proposalNumber = this.selectedItem;
 
-           window.location.href ="/pla/grouplife/claim/openclaimintimationpage/?policyId=" + policyId + "&mode=edit";
+           window.location.href ="/pla/grouplife/claim/openclaimintimationpage/?proposalNumber=" + proposalNumber + "&mode=edit";
           //  window.location.href ="/pla/grouplife/claim/openclaimintimationpage";
        };
 
