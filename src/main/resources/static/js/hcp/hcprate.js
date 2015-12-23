@@ -76,6 +76,24 @@
                 $scope.hcps = data;
             }).error(function(){});
         };
+         $scope.$watch('uploadHCPServiceRatesDto.hcpCode',function(newVal,oldVal){
+                    if(newVal){
+                        var hcp = _.findWhere($scope.hcps, {hcpCode: newVal});
+                        if(hcp){
+                            $scope.uploadHCPServiceRatesDto.hcpName=hcp.hcpName;
+                        }
+                    }
+
+                });
+        $scope.$watch('uploadHCPServiceRatesDto.hcpName',function(newVal,oldVal){
+                           if(newVal){
+                               var hcp = _.findWhere($scope.hcps, {hcpName: newVal});
+                               if(hcp){
+                                   $scope.uploadHCPServiceRatesDto.hcpCode=hcp.hcpCode;
+                               }
+                           }
+
+                       });
 
         $scope.uploadHCPRates = function () {
             console.log($scope.uploadHCPServiceRatesDto);
