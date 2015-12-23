@@ -28,10 +28,10 @@ var viewPolicyModule = (function () {
         window.location.href = "/pla/grouplife/claim/openclaimintimationpage/?policyId=" + policyId  + "&mode=view";
 
     };
-     services.createPolicy = function () {
-           var proposalNumber = this.selectedItem;
+     services.createIntimation = function () {
+           var policyNumber = this.selectedItem;
 
-           window.location.href ="/pla/grouplife/claim/openclaimintimationpage/?proposalNumber=" + proposalNumber + "&mode=edit";
+           window.location.href ="/pla/grouplife/claim/openclaimintimationpage/?policyNumber=" + policyNumber + "&mode=edit";
           //  window.location.href ="/pla/grouplife/claim/openclaimintimationpage";
        };
 
