@@ -74,16 +74,7 @@
                 fields: $scope.uploadHCPServiceRatesDto,
                 file: $scope.fileSaved
             }).success(function (data, status, headers, config) {
-                if (data.status == "200") {
-                    if(data.id) {
-                        $scope.quotationId = data.id;
-                        $timeout($scope.updatePremiumDetail($scope.quotationId), 500);
-                        $http.get("/pla/quotation/grouphealth/isValidPremiumAndPerson/" + $scope.quotationId)
-                            .success(function (response) {
-                                console.log(response);
-                            });
-                    }
-                } else{
+                if (data.status == "200") {} else {
                     if(data.data){
                         $scope.showDownload = false;
 
