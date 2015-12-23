@@ -37,7 +37,7 @@
                                 isDisabled = false;
                             }
                         });
-                        $("#search").prop("disabled", isDisabled);
+//                        $("#search").prop("disabled", isDisabled);
                     });
 
                     $('#policy-table').dataTable({
@@ -63,8 +63,8 @@
         <li>Group Life</li>
     </ol>
     </p>
-    <form method="post" action="search" novalidate="true" name="searchpolicyforGLPolicy"
-          id="searchpolicyforGLPolicy">
+    <form method="post" action="searchpolicy" novalidate="true" name="searchpolicy"
+          id="searchpolicy">
         <div class="row well well-sm" style="margin: 0;">
             <div class="col-md-2">
                 <h5 th:text="#{searchpolicy}" class="pull-left">Search policy</h5>
@@ -124,7 +124,7 @@
                         <!--<a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"-->
                            <!--onclick="viewPolicyModule.viewPolicy()">View</a>-->
                         <a type="button" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
-                           onclick="viewPolicyModule.createPolicy()">Proceed</a>
+                           onclick="viewPolicyModule.createPolicy()">Create</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -134,14 +134,23 @@
                             <th style="width: 1%"></th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyHolderName}">Policy HolderName</th>
-                            <th th:text="#{inceptionDate}">Inception Date</th>
-                            <th th:text="#{expiryDate}">Expiry Date</th>
+                            <th th:text="#{clientId}">clientId</th>
+                            <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         <form id="viewAgentsForm">
                             <!--/*/ <th:block th:each="policy : ${searchResult}"> /*/-->
-                            <tr>
+                            <th:block th:each="policy : ${searchResult}">
+                                <tr>
+                                    <td><input type="radio" name="proposalNumber" th:value="${policy.policyNumber}" value="5100000010315"/></td>
+                                    <td th:text="${policy.policyNumber}">5100000010315</td>
+                                    <td th:text="${policy.policyHolderName}"></td>
+                                    <td th:text="${policy.clientId}"></td>
+                                    <td th:text="${policy.status}"></td>
+                                </tr>
+                            </th:block>
+                            <!--<tr>
                                 <td>
                                     <input type="radio" name="policyId" th:value="${policy.policyId}"
                                            value="5100000010315"/>
@@ -156,7 +165,7 @@
                                 <td th:text="${#dates.format(policy.inceptionDate,'dd/MM/yyyy')}"></td>
                                 <td th:text="${#dates.format(policy.expiryDate,'dd/MM/yyyy')}"></td>
                             </tr>
-                            <!--/*-->
+                            &lt;!&ndash;/*&ndash;&gt;
                             <tr>
                                 <td><input type="radio" name="proposalNumber" value="5100000020415"/></td>
                                 <td>5100000020415</td>
@@ -176,7 +185,7 @@
                                 <td>Agent Name 3</td>
                                 <td>A003</td>
                                 <td>003</td>
-                            </tr>
+                            </tr>-->
                             <!--*/-->
                             <!--/*/ </th:block> /*/-->
                         </form>

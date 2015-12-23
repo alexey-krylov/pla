@@ -1,6 +1,6 @@
 
 var App = angular.module('claimIntimation', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
-                                               , 'ngSanitize', 'commonServices']);
+                                               , 'ngSanitize', 'commonServices', 'ngMessages','angularFileUpload']);
 
        App.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
             datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
@@ -11,17 +11,52 @@ var App = angular.module('claimIntimation', ['common', 'ngRoute', 'mgcrea.ngStra
 }
 ]);
 
-App.controller('ClaimIntimationController', ['$scope', '$http', '$timeout',   '$window',
-        function ($scope, $http, $timeout, $window) {
+App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$upload','provinces','bankDetails',
+        function ($scope, $http, $window,$upload,provinces,bankDetails) {
 //alert("********CONTROLLER INCLUDED***********");
-   $scope.schedule={};
-   $scope.searchObj = {};
-   $scope.referral={};
-   $scope.agency={};
-   $scope.selectedItem = 1;
-   $scope.saveAccidentObject={};
+        $scope.schedule={};
+        $scope.searchObj = {};
+        $scope.referral={};
+        $scope.agency={};
+        $scope.selectedItem = 1;
+        $scope.saveAccidentObject={};
+        $scope.provinces = [];
+        $scope.provinces = provinces;
+        $scope.towns=[];
+        $scope.bankDetails=[];
+        $scope.bankDetails=bankDetails;
+        $scope.bankBranchDetails=[];
+            /**
+             *
+             * @param province
+             * Getting List of Related Cities
+             */
+            $scope.getProvinceValue=function(province){
+                if(province){
+                    var provinceDetails1 = _.findWhere($scope.provinces, {provinceId: province});
+                    if(provinceDetails1){
+                        $scope.towns=provinceDetails1.cities;
+                    }
+                }
 
- $http.get("/pla/grouplife/claim/getclaimtype")
+            }
+            /***
+             * Getting List of Related Branch
+             */
+            $scope.$watch('bankDetails.bankName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    var bankCode = _.findWhere($scope.bankDetails, {bankName: newvalue});
+                    if (bankCode) {
+                        $http.get('/pla/individuallife/proposal/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetails = response;
+                        }).error(function (response, status, headers, config) {
+                        });
+                    }
+                }
+            });
+
+
+            $http.get("/pla/grouplife/claim/getclaimtype")
              .success(function (data) {
                 $scope.claimTypes = data
                     });
@@ -153,6 +188,24 @@ App.controller('ClaimIntimationController', ['$scope', '$http', '$timeout',   '$
                             templateUrl: 'claimintimation.html',
                             controller: 'ClaimIntimationController',
                            resolve: {
+                               provinces: ['$q', '$http', function ($q, $http) {
+                                   var deferred = $q.defer();
+                                   $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
+                                       deferred.resolve(response)
+                                   }).error(function (response, status, headers, config) {
+                                       deferred.reject();
+                                   });
+                                   return deferred.promise;
+                               }],
+                               bankDetails: ['$q', '$http', function ($q, $http) {
+                                   var deferred = $q.defer();
+                                   $http.get('/pla/individuallife/proposal/getAllBankNames').success(function (response, status, headers, config) {
+                                       deferred.resolve(response)
+                                   }).error(function (response, status, headers, config) {
+                                       deferred.reject();
+                                   });
+                                   return deferred.promise;
+                               }]
 
                                    }
                     }
