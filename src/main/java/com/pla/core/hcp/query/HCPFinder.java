@@ -43,4 +43,12 @@ public class HCPFinder {
     public List<Map<String, Object>> getAllHCPMathingTheCriteria(String hcpName, String hcpCode) {
         return namedParameterJdbcTemplate.queryForList(constructQueryByCriteria(hcpName, hcpCode),new MapSqlParameterSource("name","%"+hcpName+"%").addValue("code","%"+hcpCode+"%"));
     }
+
+    public List<Map<String, Object>> getAllHCPByHCPCode(String hcpCode) {
+        return namedParameterJdbcTemplate.queryForList("SELECT hcp_code as hcpCode, hcp_name as hcpName from hcp where hcp_code like :hcpCode order by hcp_name",new MapSqlParameterSource("hcpCode","%"+hcpCode+"%"));
+    }
+
+    public List<Map<String, Object>> getAllHCPByHCPName(String hcpName) {
+        return namedParameterJdbcTemplate.queryForList("SELECT hcp_code as hcpCode, hcp_name as hcpName from hcp where hcp_name like :hcpName order by hcp_name",new MapSqlParameterSource("hcpName","%"+hcpName+"%"));
+    }
 }

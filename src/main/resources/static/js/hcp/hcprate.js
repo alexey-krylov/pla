@@ -20,12 +20,24 @@
                     controller: 'searchHcpRateController'
                 }
             )}]);
-
+app.directive('autoComplete', function($timeout) {
+    return function(scope, iElement, iAttrs) {
+        iElement.autocomplete({
+            source: scope[iAttrs.uiItems],
+            select: function() {
+                $timeout(function() {
+                    iElement.trigger('input');
+                }, 0);
+            }
+        });
+    };
+});
     app.controller('searchHcpRateController', ['$scope', '$http','$upload',  function ($scope, $http, $upload) {
         $scope.uploadHCPServiceRatesDto = {};
         $scope.showDownload = true;
         $scope.fileSaved = null;
         $scope.fileName = null;
+        $scope.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel", "francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit", "guillaume", "nicolas", "joseph"];
         $scope.$watchCollection('[uploadHCPServiceRatesDto.hcpCode,showDownload]', function (n) {
             $scope.qId = n[0];
             if (n[1]) {
@@ -64,6 +76,20 @@
             }
         });
 
+        $scope.hcpCodes = [];
+
+        $scope.getAllHCPByHCPCode = function(){
+            $http.get("/pla/core/hcp/getAllHCPByHCPCode?hcpCode="+$scope.uploadHCPServiceRatesDto.hcpCode).success(function(data){
+                $scope.hcps = data;
+            }).error(function(){});
+        };
+
+        $scope.getAllHCPByHCPName = function(){
+            $http.get("/pla/core/hcp/getAllHCPByHCPName?hcpName="+$scope.uploadHCPServiceRatesDto.hcpName).success(function(data){
+                $scope.hcps = data;
+            }).error(function(){});
+        };
+
         $scope.uploadHCPRates = function () {
             console.log($scope.uploadHCPServiceRatesDto);
             $scope.uploadHCPServiceRatesDto.fromDate = formatDate($scope.uploadHCPServiceRatesDto.fromDate);
@@ -74,7 +100,8 @@
                 fields: $scope.uploadHCPServiceRatesDto,
                 file: $scope.fileSaved
             }).success(function (data, status, headers, config) {
-                if (data.status == "200") {} else {
+                if (data.status == "200") {
+                } else{
                     if(data.data){
                         $scope.showDownload = false;
 

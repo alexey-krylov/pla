@@ -96,4 +96,12 @@ public class HCPService {
     public List<Map<String, Object>> getAllHCPMathingTheCriteria(String hcpName, String hcpCode) {
         return hcpFinder.getAllHCPMathingTheCriteria(hcpName, hcpCode);
     }
+
+    public List<Map<String, Object>> getAllHCPByHCPCode(String hcpCode) {
+        return hcpFinder.getAllHCPByHCPCode(hcpCode);
+    }
+
+    public List<Map<String, Object>> getAllHCPByHCPName(String hcpName) {
+        return hcpFinder.getAllHCPByHCPName(hcpName);
+    }
 }

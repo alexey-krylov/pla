@@ -6,6 +6,7 @@ import com.pla.core.hcp.domain.model.HCP;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -87,11 +89,34 @@ public class HCPController {
 
     @RequestMapping(value = "/searchhcprate",method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET",value = "Get Code and name for hcp rate")
-    public ModelAndView getHcpRate(@RequestParam String hcpName,@RequestParam String hcpCode) throws IOException {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("hcpresult", hcpService.getAllHCPMathingTheCriteria(hcpName, hcpCode));
-        return modelAndView;
+    public List<Map<String, Object>> getHcpRate(@RequestParam String hcpName, @RequestParam String hcpCode, HttpServletResponse response) throws IOException {
+        if(isEmpty(hcpName) && isEmpty(hcpCode)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "HcpName and HcpCode both cannnot be empty");
+            return Collections.emptyList();
+        }
+        return hcpService.getAllHCPMathingTheCriteria(hcpName, hcpCode);
     }
+
+    @RequestMapping(value = "/getAllHCPByHCPCode",method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET",value = "Get Code and name for hcp rate")
+    public List<Map<String, Object>> getAllHCPByHCPCode(@RequestParam String hcpCode, HttpServletResponse response) throws IOException {
+        if(isEmpty(hcpCode)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "HCP Code both cannot be empty");
+            return Collections.emptyList();
+        }
+        return hcpService.getAllHCPByHCPCode(hcpCode);
+    }
+
+    @RequestMapping(value = "/getAllHCPByHCPName",method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET",value = "Get Code and name for hcp rate")
+    public List<Map<String, Object>> getAllHCPByHCPName(@RequestParam String hcpName, HttpServletResponse response) throws IOException {
+        if(isEmpty(hcpName)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "HCP Name both cannot be empty");
+            return Collections.emptyList();
+        }
+        return hcpService.getAllHCPByHCPName(hcpName);
+    }
+
     @RequestMapping(value = "/gethcprate",method = RequestMethod.GET)
     public ModelAndView hcpRate() {
         ModelAndView modelAndView = new ModelAndView();
