@@ -96,7 +96,7 @@ public class GroupLifeProposalService {
         }
         GLProposalProcessor glProposalProcessor = groupLifeProposalRoleAdapter.userToProposalProcessor(userDetails);
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
-        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail,groupLifeProposal.getTotalSemiAnnualPremiumForInsured()));
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail,groupLifeProposal.getTotalBasicPremiumForInsured()));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
             BigDecimal semiAnnualPremium = groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail, groupLifeProposal.getTotalSemiAnnualPremiumForInsured());
             BigDecimal quarterlyPremium = groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail, groupLifeProposal.getTotalQuarterlyPremiumForInsured());
