@@ -89,7 +89,9 @@ public class GroupHealthProposalService {
                 premiumDetailDto.getDiscounts(), premiumDetailDto.getWaiverOfExcessLoading(), premiumDetailDto.getVat(), premiumDetailDto.getPolicyTermValue());
         premiumDetail = premiumDetail.updateWithNetPremium(groupHealthProposal.getNetAnnualPremiumPaymentAmount(premiumDetail));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
-            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_HEALTH));
+            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), groupHealthProposal.getTotalSemiAnnualPremiumForInsured(),
+                    groupHealthProposal.getTotalQuarterlyPremiumForInsured(),groupHealthProposal.getTotalMonthlyPremiumForInsured(),
+                    LineOfBusinessEnum.GROUP_HEALTH));
             Set<GHFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GHFrequencyPremium>() {
                 @Override
                 public GHFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {

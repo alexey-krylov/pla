@@ -2,7 +2,6 @@ package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.google.common.collect.Sets;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,9 +18,9 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
  * Created by Samir on 4/23/2015.
  */
 @ValueObject
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
+@Setter
 public class GHPremiumDetail {
 
     private BigDecimal addOnBenefit;

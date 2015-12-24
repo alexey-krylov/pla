@@ -1,6 +1,7 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -10,10 +11,12 @@ import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/7/2015.
@@ -59,9 +62,13 @@ public class InsuredBuilder {
 
     private String rateOfPremium;
 
-    InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
+    InsuredBuilder(PlanId insuredPlan, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier,List<ComputedPremiumDto> computedPremiumDtos) {
         checkArgument(insuredPlan != null);
         PlanPremiumDetail planPremiumDetail = new PlanPremiumDetail(insuredPlan, planCode, premiumAmount, sumAssured,incomeMultiplier );
+        if (isNotEmpty(computedPremiumDtos))
+            planPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtos),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtos),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtos));
+        else
+            planPremiumDetail.updatePremiumAmount(premiumAmount,premiumAmount,premiumAmount);
         this.planPremiumDetail = planPremiumDetail;
     }
 
@@ -145,8 +152,13 @@ public class InsuredBuilder {
         this.familyId = familyId;
         return this;
     }
-    public InsuredBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured) {
+
+    public InsuredBuilder withCoveragePremiumDetail(String coverageName, String coverageCode, String coverageId, BigDecimal premium, BigDecimal sumAssured,List<ComputedPremiumDto> computedPremiumDtos) {
         CoveragePremiumDetail coveragePremiumDetail = new CoveragePremiumDetail(coverageName, coverageCode, new CoverageId(coverageId), premium, sumAssured);
+        if (isNotEmpty(computedPremiumDtos))
+            coveragePremiumDetail.updateWithPremium(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtos),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtos),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtos));
+        else
+            coveragePremiumDetail.updateWithPremium(premium,premium,premium);
         if (isEmpty(this.coveragePremiumDetails)) {
             this.coveragePremiumDetails = new HashSet<>();
         }

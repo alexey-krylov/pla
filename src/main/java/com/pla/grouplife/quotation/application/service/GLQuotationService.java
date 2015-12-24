@@ -143,7 +143,7 @@ public class GLQuotationService {
         glQuotationDetailDto.setAddOnBenefitsPercentage((premiumDetail.getAddOnBenefit() != null && !withOutSplit) ? premiumDetail.getAddOnBenefit().toString() + " %" : "");
         glQuotationDetailDto.setWaiverOfExcessLoadings("");
         glQuotationDetailDto.setWaiverOfExcessLoadingsPercentage("");
-        BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail);
+        BigDecimal totalPremiumAmount = quotation.getNetAnnualPremiumPaymentAmount(premiumDetail,quotation.getTotalBasicPremiumForInsured());
         totalPremiumAmount = totalPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal netPremiumOfInsured = withOutSplit ? quotation.getNetAnnualPremiumPaymentAmountWithoutDiscount(premiumDetail) : quotation.getTotalBasicPremiumForInsured();
         netPremiumOfInsured = netPremiumOfInsured.setScale(2, BigDecimal.ROUND_CEILING);

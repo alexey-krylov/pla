@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.application.command;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.policy.domain.service.GLEndorsementUniqueNumberGenerator;
@@ -133,7 +134,7 @@ public class GLEndorsementCommandHandler {
         Set<Insured> insureds = insuredDtos.stream().map(new Function<InsuredDto, Insured>() {
             @Override
             public Insured apply(InsuredDto insuredDto) {
-                final InsuredBuilder[] insuredBuilder = {insuredDto.getPlanPremiumDetail()!=null?Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured(), insuredDto.getPlanPremiumDetail().getIncomeMultiplier() ):
+                final InsuredBuilder[] insuredBuilder = {insuredDto.getPlanPremiumDetail()!=null?Insured.getInsuredBuilder(new PlanId(insuredDto.getPlanPremiumDetail().getPlanId()), insuredDto.getPlanPremiumDetail().getPlanCode(), insuredDto.getPlanPremiumDetail().getPremiumAmount(), insuredDto.getPlanPremiumDetail().getSumAssured(), insuredDto.getPlanPremiumDetail().getIncomeMultiplier(),null):
                         new InsuredBuilder()};
                 insuredBuilder[0].withCategory(insuredDto.getCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withAnnualIncome(insuredDto.getAnnualIncome()).withOccupation(insuredDto.getOccupationClass()).withOlAnnualIncome(insuredDto.getOldAnnualIncome()).
@@ -156,8 +157,7 @@ public class GLEndorsementCommandHandler {
             @Override
             public InsuredDependent apply(InsuredDto.InsuredDependentDto insuredDependentDto) {
                 InsuredDto.PlanPremiumDetailDto premiumDetail = insuredDependentDto.getPlanPremiumDetail();
-
-                final InsuredDependentBuilder[] insuredDependentBuilder = {InsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), premiumDetail.getPremiumAmount(), premiumDetail.getSumAssured())};
+                final InsuredDependentBuilder[] insuredDependentBuilder = {InsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), premiumDetail.getPremiumAmount(), Lists.newArrayList(), premiumDetail.getSumAssured())};
                 insuredDependentBuilder[0].withCategory(insuredDependentDto.getCategory()).withInsuredName(insuredDependentDto.getSalutation(), insuredDependentDto.getFirstName(), insuredDependentDto.getLastName())
                         .withInsuredNrcNumber(insuredDependentDto.getNrcNumber()).withCompanyName(insuredDependentDto.getCompanyName()).withOccupationClass(insuredDependentDto.getOccupationClass())
                         .withDateOfBirth(insuredDependentDto.getDateOfBirth()).withGender(insuredDependentDto.getGender()).withManNumber(insuredDependentDto.getManNumber()).withFamilyId(insuredDependentDto.getFamilyId())

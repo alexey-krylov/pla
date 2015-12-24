@@ -22,6 +22,10 @@ public class CoveragePremiumDetail {
 
     private BigDecimal premium;
 
+    private BigDecimal semiAnnualPremium;
+    private BigDecimal quarterlyPremium;
+    private BigDecimal monthlyPremium;
+
     private String coverageName;
 
     private BigDecimal sumAssured;
@@ -38,4 +42,12 @@ public class CoveragePremiumDetail {
         this.premium = premiumAmount;
         return this;
     }
+
+    public CoveragePremiumDetail updateWithPremium(BigDecimal semiAnnualPremium,BigDecimal quarterlyPremium,BigDecimal monthlyPremium) {
+        this.semiAnnualPremium  =semiAnnualPremium;
+        this.quarterlyPremium  =quarterlyPremium;
+        this.monthlyPremium = monthlyPremium;
+        return this;
+    }
+
 }

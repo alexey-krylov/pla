@@ -1,5 +1,6 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -56,13 +57,18 @@ public class GHInsuredDependentBuilder {
     private Integer noOfAssured;
 
 
-    GHInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
+    GHInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount,List<ComputedPremiumDto> computedPremiumDtos,BigDecimal sumAssured) {
         checkArgument(planId != null);
         checkArgument(isNotEmpty(planCode));
         checkArgument(premiumAmount != null);
         GHPlanPremiumDetail planPremiumDetail = new GHPlanPremiumDetail(planId, planCode, premiumAmount, sumAssured);
+        if (isNotEmpty(computedPremiumDtos))
+            planPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtos),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtos),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtos));
+        else
+            planPremiumDetail.updatePremiumAmount(premiumAmount,premiumAmount,premiumAmount);
         this.planPremiumDetail = planPremiumDetail;
     }
+
 
     public GHInsuredDependentBuilder withInsuredName(String salutation, String firstName, String lastName) {
         this.salutation = salutation;

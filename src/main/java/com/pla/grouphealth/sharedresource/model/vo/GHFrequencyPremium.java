@@ -21,6 +21,7 @@ public class GHFrequencyPremium {
 
     private PremiumFrequency premiumFrequency;
 
+    @Setter
     private BigDecimal premium;
 
     public GHFrequencyPremium(PremiumFrequency premiumFrequency, BigDecimal premium) {

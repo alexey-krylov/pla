@@ -133,9 +133,12 @@ public class GroupLifeQuotationService {
         GLQuotationProcessor glQuotationProcessor = quotationRoleAdapter.userToQuotationProcessor(userDetails);
         groupLifeQuotation = checkQuotationNeedForVersioningAndGetQuotation(glQuotationProcessor, groupLifeQuotation);
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
-        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail));
+        premiumDetail = premiumDetail.updateWithNetPremium(groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail,groupLifeQuotation.getTotalBasicPremiumForInsured()));
         if (premiumDetailDto.getPolicyTermValue() != null && premiumDetailDto.getPolicyTermValue() == 365) {
-            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(), LineOfBusinessEnum.GROUP_LIFE));
+            BigDecimal semiAnnualPremium = groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail, groupLifeQuotation.getTotalSemiAnnualPremiumForInsured());
+            BigDecimal quarterlyPremium = groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail, groupLifeQuotation.getTotalQuarterlyPremiumForInsured());
+            BigDecimal monthlyPremium = groupLifeQuotation.getNetAnnualPremiumPaymentAmount(premiumDetail, groupLifeQuotation.getTotalMonthlyPremiumForInsured());
+            List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateModalPremium(new BasicPremiumDto(PremiumFrequency.ANNUALLY, premiumDetail.getNetTotalPremium(),semiAnnualPremium,quarterlyPremium,monthlyPremium,LineOfBusinessEnum.GROUP_LIFE));
             Set<GLFrequencyPremium> policies = computedPremiumDtoList.stream().map(new Function<ComputedPremiumDto, GLFrequencyPremium>() {
                 @Override
                 public GLFrequencyPremium apply(ComputedPremiumDto computedPremiumDto) {
