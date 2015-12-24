@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 @Setter
 @ValueObject
 @AllArgsConstructor
+@EqualsAndHashCode
 public class PayPointPaymentDetail {
     private  String ddaccId;
     private  String bankName;

@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ValueObject
 @AllArgsConstructor
+@EqualsAndHashCode
 public class PayPointAddress {
     private String addressLine1;
     private String addressLine2;

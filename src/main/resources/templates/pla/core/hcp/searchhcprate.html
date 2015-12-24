@@ -76,8 +76,9 @@
                                      initial-value="uploadHCPServiceRatesDto.hcpName"
                                      remote-url-data-field="" title-field="hcpName"
                                      minlength="2"
-                                     input-class="form-control form-control-small"
-                                     match-class="highlight" height="40px"
+                                     input-name="hcpName"
+                                     input-class="form-control input-sm"
+                                     match-class="highlight"
                                      input-changed="clearHcpCode">
                                 </angucomplete-alt>
                                 <div class="error" ng-messages="hcpRateForm.hcpName.$error"
@@ -95,19 +96,20 @@
                                 <datalist id="hcpCodeDL">
                                     <option  data-ng-repeat="hcp in hcps" value="{{hcp.hcpCode}}"/>
                                 </datalist>-->
-                                <angucomplete-alt id="hcpCode" placeholder="Search HCP" pause="300"
+                                <angucomplete-alt id="hcpCode" placeholder="Search HCP" pause="300" ng-required="true"
                                      selected-object="getAllHCPByHCPCode" disable-input="uneditable"
                                      remote-url="/pla/core/hcp/getAllHCPByHCPCode?hcpCode=" field-required="true"
                                      initial-value="uploadHCPServiceRatesDto.hcpCode"
                                      remote-url-data-field="" title-field="hcpCode"
                                      minlength="2"
-                                     input-class="form-control form-control-small"
+                                     input-name="hcpCode"
+                                     input-class="form-control input-sm"
                                      match-class="highlight"
                                      input-changed="clearHcpName">
                                 </angucomplete-alt>
                                 <div class="error" ng-messages="hcpRateForm.hcpCode.$error"
                                      ng-if="hcpRateForm.hcpCode.$dirty">
-                                    <small ng-message="required">Please Enter Mobile Number .</small>
+                                    <small ng-message="required">Please Enter HCP Code  .</small>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +119,7 @@
                                 <label class="control-label">From Date</label>
 
                                 <div class='input-group date'>
-                                    <input type="text" class="form-control input-sm"
+                                    <input type="text" class="form-control input-sm" placeholder="Enter FromDate"
                                            datepicker-popup=""
                                            view-enabled=""
                                            ng-required="true"
@@ -142,7 +144,7 @@
                             <div class="form-group required">
                                 <label class="control-label">To Date</label>
                                 <div class='input-group date'>
-                                    <input type="text" class="form-control input-sm"
+                                    <input type="text" class="form-control input-sm" placeholder="Enter ToDate"
                                            datepicker-popup=""
                                            view-enabled=""
                                            ng-required="true"
@@ -171,7 +173,7 @@
                             <div class="form-group required">
                                 <label class="control-label ">File</label>
                                 <div class="form-group" style="margin-left:1px;margin-top:px; ">
-                                    <input type="text" class="form-control input-sm" ng-model="fileName"  name="file"  ng-required="true"
+                                    <input type="text" class="form-control input-sm" ng-model="fileName"  name="file"  ng-required="true" placeholder="Browse File"
                                        style="width: 62%;display: inline-block" ng-readonly="true"/>
                                 <button type="file" class="btn btn-default btn-sm" ng-file-select=""
                                             ng-model="fileSaved">
