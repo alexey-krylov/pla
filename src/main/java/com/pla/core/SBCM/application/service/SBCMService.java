@@ -1,10 +1,13 @@
 package com.pla.core.SBCM.application.service;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
 import com.pla.core.SBCM.query.SBCMFinder;
 import com.pla.core.SBCM.repository.SBCMRepository;
 import com.pla.core.domain.model.plan.Plan;
+import com.pla.core.domain.model.plan.PlanCoverage;
+import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.core.repository.PlanRepository;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -36,7 +39,7 @@ public class SBCMService {
     }
 
     public List<Map<String, Object>> getAllPlanWithCoverageAndBenefits(){
-        List<Plan> plans =planRepository.findAll();
+        List<Plan> plans = planRepository.findAll();
         return isNotEmpty(plans) ? plans.stream().map(new Function<Plan, Map<String, Object>>() {
             @Override
             public Map<String, Object> apply(Plan plan) {
@@ -48,9 +51,43 @@ public class SBCMService {
     private Map<String, Object> constructOptimizedDetailsMapFromPlan(Plan plan) {
         Map<String, Object> planMap = Maps.newHashMap();
         if(isNotEmpty(plan.getCoverages())){
-            planMap.put("planName", plan.getPlanDetail().getPlanName());
             planMap.put("planCode", plan.getPlanDetail().getPlanCode());
+            planMap.put("planName", plan.getPlanDetail().getPlanName());
+            planMap.put("coverages", getCoveragesFromPlan(plan));
         }
         return planMap;
+    }
+
+    private List<Map<String, Object>> getCoveragesFromPlan(Plan plan) {
+        return isNotEmpty(plan.getCoverages()) ? plan.getCoverages().stream().map(new Function<PlanCoverage, Map<String, Object>>() {
+            @Override
+            public Map<String, Object> apply(PlanCoverage planCoverage) {
+                return constructCoveragesAndRelatedBenefitsFromPlan(planCoverage);
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
+    private Map<String, Object> constructCoveragesAndRelatedBenefitsFromPlan(PlanCoverage planCoverage) {
+        Map<String, Object> coverageMap = Maps.newHashMap();
+        coverageMap.put("coverageCode", planCoverage.getCoverageCode());
+        coverageMap.put("coverageName", planCoverage.getCoverageName());
+        coverageMap.put("benefits", getBenefitsFromGivenCoverage(planCoverage));
+        return coverageMap;
+    }
+
+    private Object getBenefitsFromGivenCoverage(PlanCoverage planCoverage) {
+        return isNotEmpty(planCoverage.getPlanCoverageBenefits()) ? planCoverage.getPlanCoverageBenefits().stream().map(new Function<PlanCoverageBenefit, Map<String, Object>>() {
+            @Override
+            public Map<String, Object> apply(PlanCoverageBenefit planCoverageBenefit) {
+                return constructBenefitsFromGivenCoverage(planCoverageBenefit);
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
+    private Map<String, Object> constructBenefitsFromGivenCoverage(PlanCoverageBenefit planCoverageBenefit) {
+        Map<String, Object> benefitMap = Maps.newHashMap();
+        benefitMap.put("benefitName", planCoverageBenefit.getBenefitId());
+        benefitMap.put("benefitCode", planCoverageBenefit.getBenefitName());
+        return benefitMap;
     }
 }
