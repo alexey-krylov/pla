@@ -49,7 +49,7 @@ public class SBCMService {
     }
 
     private Map<String, Object> constructOptimizedDetailsMapFromPlan(Plan plan) {
-        Map<String, Object> planMap = Maps.newHashMap();
+        Map<String, Object> planMap = Maps.newLinkedHashMap();
         if(isNotEmpty(plan.getCoverages())){
             planMap.put("planCode", plan.getPlanDetail().getPlanCode());
             planMap.put("planName", plan.getPlanDetail().getPlanName());
@@ -68,11 +68,16 @@ public class SBCMService {
     }
 
     private Map<String, Object> constructCoveragesAndRelatedBenefitsFromPlan(PlanCoverage planCoverage) {
-        Map<String, Object> coverageMap = Maps.newHashMap();
-        coverageMap.put("coverageCode", planCoverage.getCoverageCode());
-        coverageMap.put("coverageName", planCoverage.getCoverageName());
+        Map<String, Object> coverageMap = Maps.newLinkedHashMap();
+        coverageMap.put("coverageId", planCoverage.getCoverageId());
+        coverageMap.put("coverageName", getCoverageName(planCoverage));
         coverageMap.put("benefits", getBenefitsFromGivenCoverage(planCoverage));
         return coverageMap;
+    }
+
+    private String getCoverageName(PlanCoverage planCoverage) {
+        Map<String, Object> coverage = sbcmFinder.getCoverageDetail(planCoverage.getCoverageId().toString());
+        return coverage.get("coverageName").toString();
     }
 
     private Object getBenefitsFromGivenCoverage(PlanCoverage planCoverage) {
@@ -85,7 +90,7 @@ public class SBCMService {
     }
 
     private Map<String, Object> constructBenefitsFromGivenCoverage(PlanCoverageBenefit planCoverageBenefit) {
-        Map<String, Object> benefitMap = Maps.newHashMap();
+        Map<String, Object> benefitMap = Maps.newLinkedHashMap();
         benefitMap.put("benefitName", planCoverageBenefit.getBenefitId());
         benefitMap.put("benefitCode", planCoverageBenefit.getBenefitName());
         return benefitMap;
