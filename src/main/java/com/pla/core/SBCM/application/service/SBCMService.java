@@ -91,8 +91,8 @@ public class SBCMService {
 
     private Map<String, Object> constructBenefitsFromGivenCoverage(PlanCoverageBenefit planCoverageBenefit) {
         Map<String, Object> benefitMap = Maps.newLinkedHashMap();
-        benefitMap.put("benefitName", planCoverageBenefit.getBenefitId());
-        benefitMap.put("benefitCode", planCoverageBenefit.getBenefitName());
+        benefitMap.put("benefitId", planCoverageBenefit.getBenefitId());
+        benefitMap.put("benefitName", planCoverageBenefit.getBenefitName());
         return benefitMap;
     }
 }
