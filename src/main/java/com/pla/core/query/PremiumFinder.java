@@ -7,6 +7,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -50,9 +51,13 @@ public class PremiumFinder {
             premiumCriteria.and("coverageId").is(null);
         }
         Query query = new Query(premiumCriteria);
+        /*
+        * Get the latest premium
+        * */
+        query.with(new Sort(Sort.Direction.DESC,"effectiveFrom"));
         List<Premium> premiums = mongoTemplate.find(query, Premium.class);
         checkArgument(isNotEmpty(premiums), "Premium cannot be computed as no premium setup found");
-        checkArgument(premiums.size() == 1);
+        /*checkArgument(premiums.size() == 1);*/
         return premiums.get(0);
     }
 
