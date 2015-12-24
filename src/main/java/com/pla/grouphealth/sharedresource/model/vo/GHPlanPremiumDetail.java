@@ -32,6 +32,12 @@ public class GHPlanPremiumDetail {
 
     private BigDecimal sumAssured;
 
+    private BigDecimal semiAnnualPremium;
+
+    private BigDecimal quarterlyPremium;
+
+    private BigDecimal monthlyPremium;
+
     private List<GHCoveragePremiumDetail> coveragePremiumDetails;
 
     GHPlanPremiumDetail(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
@@ -49,6 +55,14 @@ public class GHPlanPremiumDetail {
         this.premiumAmount = premiumAmount;
         return this;
     }
+
+    public GHPlanPremiumDetail updatePremiumAmount(BigDecimal semiAnnualPremium,BigDecimal quarterlyPremium,BigDecimal monthlyPremium) {
+        this.semiAnnualPremium = semiAnnualPremium;
+        this.quarterlyPremium  =quarterlyPremium;
+        this.monthlyPremium = monthlyPremium;
+        return this;
+    }
+
 
     public GHPlanPremiumDetail addAllCoveragePremiumDetail(List<GHCoveragePremiumDetail> ghCoveragePremiumDetails) {
         if (isEmpty(this.coveragePremiumDetails)) {

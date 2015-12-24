@@ -1,5 +1,7 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.PremiumType;
@@ -98,8 +100,8 @@ public class Insured {
         }
     }
 
-    public static InsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
-        return new InsuredBuilder(planId, planCode, premiumAmount, sumAssured,incomeMultiplier );
+    public static InsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier,List<ComputedPremiumDto> computedPremiumDtoList) {
+        return new InsuredBuilder(planId, planCode, premiumAmount, sumAssured,incomeMultiplier,computedPremiumDtoList);
     }
 
     public Insured updatePlanPremiumAmount(BigDecimal premiumAmount) {
@@ -114,16 +116,63 @@ public class Insured {
                 basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
             }
         }
-        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent());
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.ANNUALLY));
         return basicAnnualPremium;
     }
 
-    private BigDecimal getBasicAnnualPremiumForDependent() {
+    public BigDecimal getBasicSemiAnnualPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getSemiAnnualPremium();
+        if (isNotEmpty(coveragePremiumDetails)) {
+            for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.SEMI_ANNUALLY));
+        return basicAnnualPremium;
+    }
+
+    public BigDecimal getBasicQuarterlyPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getQuarterlyPremium();
+        if (isNotEmpty(coveragePremiumDetails)) {
+            for (CoveragePremiumDetail coveragePremiumDetail :coveragePremiumDetails) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.QUARTERLY));
+        return basicAnnualPremium;
+    }
+
+    public BigDecimal getBasicMonthlyPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getMonthlyPremium();
+        if (isNotEmpty(coveragePremiumDetails)) {
+            for (CoveragePremiumDetail coveragePremiumDetail :coveragePremiumDetails) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.MONTHLY));
+        return basicAnnualPremium;
+    }
+
+
+    private BigDecimal getBasicAnnualPremiumForDependent(PremiumFrequency premiumFrequency) {
         BigDecimal basicAnnualPremiumOfDependent = BigDecimal.ZERO;
         if (isNotEmpty(this.insuredDependents)) {
             for (InsuredDependent insuredDependent : this.insuredDependents) {
                 PlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
-                basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount(): BigDecimal.ZERO);
+                switch (premiumFrequency){
+                    case ANNUALLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
+                        break;
+                    case SEMI_ANNUALLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getSemiAnnualPremium() : BigDecimal.ZERO);
+                        break;
+                    case QUARTERLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getQuarterlyPremium() : BigDecimal.ZERO);
+                        break;
+                    case MONTHLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getMonthlyPremium() : BigDecimal.ZERO);
+                        break;
+                }
                 if (isNotEmpty(insuredDependent.getCoveragePremiumDetails())) {
                     for (CoveragePremiumDetail coveragePremiumDetail : insuredDependent.getCoveragePremiumDetails()) {
                         basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);

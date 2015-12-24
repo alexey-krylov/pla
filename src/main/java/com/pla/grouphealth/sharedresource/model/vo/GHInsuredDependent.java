@@ -1,5 +1,6 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -12,6 +13,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -84,8 +86,8 @@ public class GHInsuredDependent {
         this.noOfAssured = insuredDependentBuilder.getNoOfAssured();
     }
 
-    public static GHInsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
-        return new GHInsuredDependentBuilder(planId, planCode, premiumAmount, sumAssured);
+    public static GHInsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount,List<ComputedPremiumDto> computedPremiumDtoList, BigDecimal sumAssured) {
+        return new GHInsuredDependentBuilder(planId, planCode, premiumAmount,computedPremiumDtoList,sumAssured);
     }
 
     public GHInsuredDependent updatePlanPremiumAmount(BigDecimal insuredPlanProratePremium) {

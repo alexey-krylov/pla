@@ -162,6 +162,7 @@ public class GHInsuredDto {
             this.premiumAmount = premiumAmount;
             this.sumAssured = sumAssured;
         }
+
     }
 
     @Getter

@@ -1,5 +1,7 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
+import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.PremiumType;
@@ -12,6 +14,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -91,8 +94,8 @@ public class GHInsured {
         this.rateOfPremium = insuredBuilder.getRateOfPremium();
     }
 
-    public static GHInsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
-        return new GHInsuredBuilder(planId, planCode, premiumAmount, sumAssured);
+    public static GHInsuredBuilder getInsuredBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured,List<ComputedPremiumDto> computedPremiumDtoList) {
+        return new GHInsuredBuilder(planId, planCode, premiumAmount, sumAssured,computedPremiumDtoList);
     }
 
     public GHInsured updatePlanPremiumAmount(BigDecimal premiumAmount) {
@@ -107,9 +110,43 @@ public class GHInsured {
                 basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
             }
         }
-        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent());
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.ANNUALLY));
         return basicAnnualPremium;
     }
+
+    public BigDecimal getBasicSemiAnnualPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getSemiAnnualPremium();
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.SEMI_ANNUALLY));
+        return basicAnnualPremium;
+    }
+
+    public BigDecimal getBasicQuarterlyPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getQuarterlyPremium();
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.QUARTERLY));
+        return basicAnnualPremium;
+    }
+
+    public BigDecimal getBasicMonthlyPremium() {
+        BigDecimal basicAnnualPremium = planPremiumDetail.getMonthlyPremium();
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
+                basicAnnualPremium = basicAnnualPremium.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);
+            }
+        }
+        basicAnnualPremium = basicAnnualPremium.add(getBasicAnnualPremiumForDependent(PremiumFrequency.MONTHLY));
+        return basicAnnualPremium;
+    }
+
 
     public BigDecimal getBasicAnnualPlanPremiumIncludingNonVisibleCoveragePremium() {
         BigDecimal basicAnnualPremium = planPremiumDetail.getPremiumAmount();
@@ -139,12 +176,25 @@ public class GHInsured {
         return totalVisibleCoveragePremium;
     }
 
-    private BigDecimal getBasicAnnualPremiumForDependent() {
+    private BigDecimal getBasicAnnualPremiumForDependent(PremiumFrequency premiumFrequency) {
         BigDecimal basicAnnualPremiumOfDependent = BigDecimal.ZERO;
         if (isNotEmpty(this.insuredDependents)) {
             for (GHInsuredDependent insuredDependent : this.insuredDependents) {
                 GHPlanPremiumDetail planPremiumDetail = insuredDependent.getPlanPremiumDetail();
-                basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
+                switch (premiumFrequency){
+                    case ANNUALLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getPremiumAmount() : BigDecimal.ZERO);
+                        break;
+                    case SEMI_ANNUALLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getSemiAnnualPremium() : BigDecimal.ZERO);
+                        break;
+                    case QUARTERLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getQuarterlyPremium() : BigDecimal.ZERO);
+                        break;
+                    case MONTHLY:
+                        basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(planPremiumDetail != null ? planPremiumDetail.getMonthlyPremium() : BigDecimal.ZERO);
+                        break;
+                }
                 if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
                     for (GHCoveragePremiumDetail coveragePremiumDetail : planPremiumDetail.getCoveragePremiumDetails()) {
                         basicAnnualPremiumOfDependent = basicAnnualPremiumOfDependent.add(coveragePremiumDetail.getPremium() != null ? coveragePremiumDetail.getPremium() : BigDecimal.ZERO);

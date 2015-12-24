@@ -1,5 +1,6 @@
 package com.pla.grouplife.sharedresource.model.vo;
 
+import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -82,8 +83,8 @@ public class InsuredDependent {
         }
     }
 
-    public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured) {
-        return new InsuredDependentBuilder(planId, planCode, premiumAmount, sumAssured);
+    public static InsuredDependentBuilder getInsuredDependentBuilder(PlanId planId, String planCode, BigDecimal premiumAmount,List<ComputedPremiumDto> computedPremiumDtos, BigDecimal sumAssured) {
+        return new InsuredDependentBuilder(planId, planCode, premiumAmount,computedPremiumDtos, sumAssured);
     }
 
     public InsuredDependent updatePlanPremiumAmount(BigDecimal insuredPlanProratePremium) {

@@ -299,6 +299,32 @@ public class GroupHealthQuotation extends AbstractAggregateRoot<QuotationId> imp
         return totalBasicAnnualPremium;
     }
 
+    public BigDecimal getTotalSemiAnnualPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (GHInsured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicSemiAnnualPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+    public BigDecimal getTotalQuarterlyPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (GHInsured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicQuarterlyPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+    public BigDecimal getTotalMonthlyPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (GHInsured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicMonthlyPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+
+
     public BigDecimal getTotalPlanPremiumIncludingNonVisibilityCoveragePremium() {
         BigDecimal totalPlanPremium = BigDecimal.ZERO;
         for (GHInsured insured : this.insureds) {

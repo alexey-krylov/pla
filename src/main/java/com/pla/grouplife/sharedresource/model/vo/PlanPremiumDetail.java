@@ -28,6 +28,12 @@ public class PlanPremiumDetail {
 
     private BigDecimal sumAssured;
 
+    private BigDecimal semiAnnualPremium;
+
+    private BigDecimal quarterlyPremium;
+
+    private BigDecimal monthlyPremium;
+
     private BigDecimal incomeMultiplier;
 
     PlanPremiumDetail(PlanId planId, String planCode, BigDecimal premiumAmount, BigDecimal sumAssured, BigDecimal incomeMultiplier) {
@@ -41,6 +47,13 @@ public class PlanPremiumDetail {
 
     public PlanPremiumDetail updatePremiumAmount(BigDecimal premiumAmount){
         this.premiumAmount=premiumAmount;
+        return this;
+    }
+
+    public PlanPremiumDetail updatePremiumAmount(BigDecimal semiAnnualPremium, BigDecimal quarterlyPremium, BigDecimal monthlyPremium) {
+        this.semiAnnualPremium  =semiAnnualPremium;
+        this.quarterlyPremium = quarterlyPremium;
+        this.monthlyPremium = monthlyPremium;
         return this;
     }
 }

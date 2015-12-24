@@ -110,11 +110,11 @@ public class PremiumCalculator implements IPremiumCalculator {
     public List<ComputedPremiumDto> calculateModalPremium(BasicPremiumDto basicPremiumDto) {
         ProductLineGeneralInformation productLineGeneralInformation = productLineGeneralInformationRepository.findByProductLine(basicPremiumDto.getLineOfBusinessEnum());
         checkArgument(productLineGeneralInformation != null, "Product Line Information SetUp not available");
-        Set<ModelFactorOrganizationInformation> modelFactorItems = productLineGeneralInformation.getModalFactorProcessInformation().getModelFactorItems();
+//        Set<ModelFactorOrganizationInformation> modelFactorItems = productLineGeneralInformation.getModalFactorProcessInformation().getModelFactorItems();
         ComputedPremiumDto annualPremium = new ComputedPremiumDto(PremiumFrequency.ANNUALLY, basicPremiumDto.getBasicPremium());
-        ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, basicPremiumDto.getBasicPremium().multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
-        ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, basicPremiumDto.getBasicPremium().multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
-        ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, basicPremiumDto.getBasicPremium().multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+        ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, basicPremiumDto.getSemiAnnualPremium());
+        ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, basicPremiumDto.getQuarterlyPremium());
+        ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, basicPremiumDto.getMonthlyPremium());
         List<ComputedPremiumDto> computedPremiumDtoList = Lists.newArrayList();
         computedPremiumDtoList.add(annualPremium);
         computedPremiumDtoList.add(semiAnnualPremium);
@@ -196,7 +196,6 @@ public class PremiumCalculator implements IPremiumCalculator {
         ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, premium.getSemiAnnuallyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays,sumAssured ),BigDecimal.valueOf(semiannual));
         ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, premium.getQuarterlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), organizationGeneralInformation.getDiscountFactorItems(), noOfDays,sumAssured),BigDecimal.valueOf(quarterly));
         ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, premium.getMonthlyPremium(premiumItem, organizationGeneralInformation.getModelFactorItems(), noOfDays, sumAssured),BigDecimal.valueOf(monthly));
-
 
         List<ComputedPremiumDto> computedPremiumDtoList = Lists.newArrayList();
         computedPremiumDtoList.add(annualPremium);
