@@ -134,6 +134,14 @@
                     <!-- <input type="number" class="form-control input-sm" name="sumAssured"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.sumAssured"/>-->
                     <sumassured ng-model="proposalPlanDetail.sumAssured"></sumassured>
                 </div>
+                <div class="form-group required" ng-if="!premiumTypeReadOnly">
+                    <label class="control-label">Premium Payment Term Type</label>
+                    <select view-enabled="" class="form-control input-sm" ng-model="proposalPlanDetail.premiumPaymentType" ng-change="clearPolicyTerm()" name="premiumPaymentType" ng-required="true" ng-disabled="premiumTypeReadOnly">
+                        <option value="">-- Select Payment Term Type --</option>
+                        <option value="SINGLE_PREMIUM">Single Premium </option>
+                        <option value="OTHER_PREMIUM">Other Premiums</option>
+                    </select>
+                </div>
                 <div class="form-group required">
                     <label class="control-label" ng-if="selectPlanResponse">Premium Payment Term</label>
                     <!--<input type="number" class="form-control input-sm" name="plan"  ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.premiumPaymentTerm"/>-->
@@ -214,35 +222,41 @@
         <div ng-switch="getSumAssuredType(searchRider)">
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select view-enabled="" class="form-control input-sm" ng-model="searchRider.sumAssured" name="sumAssured"
-                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue"></select>
+                        ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in coverage.coverageSumAssured.sumAssuredValue">
+                        <option value="">--Select One--</option>
+                        </select>
             </div>
 
             <div ng-switch-when="RANGE">
-                {{coverage.sumAssured.minSumInsured}}
                 <input type="number" view-enabled="" class="form-control input-sm"
-                       ng-disabled="mode=='new'||mode=='view'" min="{{coverage.sumAssured.minSumInsured}}"
-                       name="sumAssured"
-                       max="{{coverage.sumAssured.maxSumInsured}}" ng-model="searchRider.sumAssured"/>
-                <div class="error" ng-messages="step4.sumAssured.$error">
-                    <small ng-message="min">Sum Assured cannot be less then {{coverage.sumAssured.minSumInsured}}.</small>
-                    <small ng-message="max">Sum Assured cannot be more than {{coverage.sumAssured.maxSumInsured}}.</small>
+                       ng-disabled="mode=='new'||mode=='view'" min="{{coverage.coverageSumAssured.minSumInsured}}"
+                       name="sumAssuredPlanA"
+                       validate-optsumassured="" ng-required="true" max="{{maxOptionalCoverage}}" ng-model="searchRider.sumAssured"/>
+                <div class="error" ng-messages="step4.sumAssuredPlanA.$error">
+                    <small ng-message="min">Sum Assured cannot be less then {{coverage.coverageSumAssured.minSumInsured}}.</small>
+                    <small ng-message="max">Sum Assured cannot be more than {{maxOptionalCoverage}}.</small>
+                    <small ng-message="invalidMultiple">Please enter multiples of {{coverage.coverageSumAssured.multiplesOf}}</small>
                 </div>
             </div>
             <div ng-switch-when="DERIVED">
-                <input type="number" view-enabled="" class="form-control input-sm" min="{{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}"
-                       ng-disabled="mode=='new'||mode=='view'" max="{{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}"
-                       name="sumAssured"
-                       ng-model="searchRider.sumAssured"/>
+                <input type="number" view-enabled="" class="form-control input-sm" min="{{maxPercentage}}"
+                       ng-disabled="mode=='new'||mode=='view'" max="{{maxPercentage}}"
+                       name="sumAssuredPlanRider"
+                       ng-required="true" ng-model="searchRider.sumAssured"/>
 
-                <div class="error" ng-messages="step4.sumAssured.$error" ng-if="step4.sumAssured.$dirty">
-                    <small ng-message="max">Sum Assured should be {{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}.
+                <div class="error" ng-messages="step4.sumAssuredPlanRider.$error" ng-if="step4.sumAssuredPlanRider.$dirty">
+                    <small ng-message="max">Sum Assured should be {{maxPercentage}}.
                     </small>
-                    <small ng-message="min">Sum Assured should be {{coverage.coverageSumAssured.percentage * proposalPlanDetail.sumAssured/100}}.
+                    <small ng-message="min">Sum Assured should be {{maxPercentage}}.
                     </small>
                 </div>
+                <div ng-if="isMaximumReached">
+                    <p style="color:red" ng-show="isMaximumReached">
+                        Cover Maximum Sum Assured Limited to {{coverage.coverageSumAssured.maxLimit}}
+                    </p>
+                </div>
             </div>
-            <div ng-switch-when="INCOME_MULTIPLIER">
-                {{coverage.sumAssured.incomeMultiplier}}
+           <!-- <div ng-switch-when="INCOME_MULTIPLIER">
                 <input type="number" view-enabled="" class="form-control input-sm" min="0"
                        ng-disabled="mode=='new'||mode=='view'" max="{{coverage.sumAssured.incomeMultiplier}}"
                        name="sumAssured"
@@ -252,27 +266,36 @@
                     <small ng-message="max">Sum Assured cannot be greater than {{coverage.sumAssured.incomeMultiplier}}.
                     </small>
                 </div>
-            </div>
+            </div>-->
         </div>
     </script>
 
     <script id="plan-coverage.tpl" type="text/ng-template">
         <div ng-switch="getCoverageTermType(searchRider)">
-            <!-- {{searchRider.coverTerm}}-->
             <div ng-switch-when="SPECIFIED_VALUES">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
-                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms"></select>
+                        ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms">
+                        <option value="">--Select One--</option>
+                        </select>
             </div>
             <div ng-switch-when="AGE_DEPENDENT">
                 <select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
-                        ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms"></select>
+                        ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-options="value.text as value.text for value in policyTerms">
+                        <option value="">--Select One--</option>
+                        </select>
             </div>
 
             <div ng-switch-when="POLICY_TERM" >
-                <input type="number" view-enabled="" class="form-control input-sm" min="0"
-                       ng-disabled="mode=='new'||mode=='view'" name="sumAssured"   ng-model="searchRider.coverTerm"/>
+                <input type="number" view-enabled="" class="form-control input-sm" min="{{proposalPlanDetail.policyTerm}}"
+                       ng-required="true" max="{{proposalPlanDetail.policyTerm}}" ng-disabled="mode=='new'||mode=='view'" name="coverTermA"   ng-model="searchRider.coverTerm"/>
                 <!--<select class="form-control input-sm" view-enabled="" ng-model="searchRider.coverTerm" name="policyTerm"
                         ng-options="value.text as value.text for value in policyTerms" ng-required="true"></select>-->
+                <div class="error" ng-messages="step4.coverTermA.$error" ng-if="step4.coverTermA.$dirty">
+                    <small ng-message="max">Optional Cover Term Should be {{proposalPlanDetail.policyTerm}}.
+                    </small>
+                    <small ng-message="min">Optional Cover Term Should be {{proposalPlanDetail.policyTerm}}.
+                    </small>
+                </div>
             </div>
         </div>
     </script>
@@ -292,7 +315,7 @@
                 <div class="error" ng-messages="step4.plansumAssured.$error" ng-if="step4.plansumAssured.$dirty">
                     <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
                     <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
-                    <small ng-message="invalidMultiple">Invalid Multiples.</small>
+                    <small ng-message="invalidMultiple">Please enter multiples of {{plan.sumAssured.multiplesOf}}</small>
                 </div>
             </div>
             <div ng-switch-when="INCOME_MULTIPLIER">
@@ -332,6 +355,35 @@
                 <input view-enabled="" type="number" class="form-control input-sm" ng-required="true"
                        ng-disabled="mode=='new'||mode=='view'" ng-model="proposalPlanDetail.premiumPaymentTerm"
                        name="premiumTerm"/>
+            </div>
+            <div ng-switch-when="SINGLE_REGULAR">
+                <input ng-if="proposalPlanDetail.premiumPaymentType=='SINGLE_PREMIUM'" ng-disabled="mode=='new'||mode=='view'" view-enabled="" type="number" class="form-control input-sm"
+                       readonly="true" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                       name="premiumTerm"/>
+
+                <input type="number" class="form-control input-sm" readonly="true" value=""
+                       ng-if="proposalPlanDetail.premiumPaymentType=='OTHER_PREMIUM'" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                       name="premiumTerm"/>
+            </div>
+            <div ng-switch-when="SINGLE_SPECIFIED_VALUES">
+                <input ng-if="proposalPlanDetail.premiumPaymentType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+                       readonly="true" ng-model="planDetailDto.premiumPaymentTerm"
+                       name="premiumTerm"/>
+
+                <select view-enabled="" class="form-control input-sm" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                        ng-if="proposalPlanDetail.premiumPaymentType=='OTHER_PREMIUM'" name="premiumTerm"
+                        ng-options="value.text as value.text for value in premiumTerms() | filter:lessThanEqualTo('text',proposalPlanDetail.policyTerm)"
+                        ng-required="true"></select>
+            </div>
+            <div ng-switch-when="SINGLE_SPECIFIED_AGES">
+                <input ng-if="proposalPlanDetail.premiumPaymentType=='SINGLE_PREMIUM'" view-enabled="" type="number" class="form-control input-sm"
+                       readonly="true" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                       name="premiumTerm"/>
+
+                <select view-enabled="" class="form-control input-sm" ng-model="proposalPlanDetail.premiumPaymentTerm"
+                        ng-if="proposalPlanDetail.premiumPaymentType=='OTHER_PREMIUM'" name="premiumTerm"
+                        ng-options="value.text as value.text for value in premiumTerms()"
+                        ng-required="true"></select>
             </div>
         </div>
     </script>

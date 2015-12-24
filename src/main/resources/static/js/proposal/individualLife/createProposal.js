@@ -78,14 +78,45 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                             var maxMaturityAge = coverage.coverageTerm.maxMaturityAge;
                             console.log('ageNextBirthdayCoverage *** SPECIFIED_VALUES***'+ageNextBirthday);
                             console.log('maxMaturityAgeTd***SPECIFIED_VALUES***'+JSON.stringify(maxMaturityAge));
-                            $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
+
+                            //New Code
+                            if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                                $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
+                                    //return ageNextBirthday + term.text <= maxMaturityAge;
+                                    return  term.text<=($scope.proposalPlanDetail.policyTerm);
+                                    //return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
+                                });
+                            }else if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                                $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
+                                    //return ageNextBirthday + term.text <= maxMaturityAge;
+                                    return  term.text<=($scope.proposalPlanDetail.policyTerm - ageNextBirthday)+1;
+                                    //return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text<=$scope.planDetailDto.policyTerm) ;
+                                });
+                            }
+
+                            //Old Code
+                           /* $scope.policyTerms = _.filter(coverage.coverageTerm.validTerms, function (term) {
                                 console.log("term>>>>>>>>"+"("+term.text+"+"+ageNextBirthday+")<="+maxMaturityAge);
                                 console.log('>>>>>>>>'+((term.text + ageNextBirthday) <= maxMaturityAge));
                                 return ((term.text + ageNextBirthday) <= maxMaturityAge) && (term.text <= $scope.proposalPlanDetail.policyTerm);
-                            });
+                            });*/
 
                         } else if (coverage.coverageTermType === 'AGE_DEPENDENT') {
-                            $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+
+                            //New Code
+                            if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                                $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+                                    return term.text <= (ageNextBirthday + $scope.proposalPlanDetail.policyTerm) && (term.text > ageNextBirthday);
+                                });
+                            }else if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                                $scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
+                                    //return term.text > ageNextBirthday;
+                                    return term.text <= ($scope.proposalPlanDetail.policyTerm) && (term.text > ageNextBirthday);
+                                });
+
+                            }
+                            //Old Code below
+                            /*$scope.policyTerms = _.filter(coverage.coverageTerm.maturityAges, function (term) {
                                 //console.log('CoverageTerm$scope.policyTerms**'+JSON.stringify($scope.policyTerms));
                                 //console.log('ageNextBirthdayCoverage'+ageNextBirthday);
                                 //console.log('PolicTerm'+$scope.proposalPlanDetail.policyTerm);
@@ -96,7 +127,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                                 //console.log("term **"+ term.text +" <= "+ (ageNextBirthday )+" +"+($scope.proposalPlanDetail.policyTerm) +"--> "+ (term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm)));
                                 //console.log('condition'+ term.text <= (ageNextBirthday +$scope.proposalPlanDetail.policyTerm));
                                 return (term.text <= (ageNextBirthday + $scope.proposalPlanDetail.policyTerm)) && (term.text> ageNextBirthday);
-                            });
+                            });*/
                         }
                         return coverage.coverageTermType;
                     } else {
@@ -150,15 +181,47 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.premiumTerms = function () {
                     //var ageNextBirthday = calculateAge($scope.proposedAssured.dateOfBirth);
                     var ageNextBirthday = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
-                    if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES') {
+                    if ($scope.plan.premiumTermType === 'SPECIFIED_VALUES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.planDetailDto.premiumPaymentType=='OTHER_PREMIUM')) {
                         var maxMaturityAge = $scope.plan.premiumTermType.maxMaturityAge || 1000;
-                        return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
+                        //New Code
+                        if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                            return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
+                                return parseInt(term.text) <= $scope.proposalPlanDetail.policyTerm;
+
+                            });
+                        }
+                        //Old Code..
+                       /* return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
                             return ageNextBirthday + parseInt(term.text) <= maxMaturityAge;
-                        });
-                    } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES') {
-                        return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                        });*/
+
+                        // New Code..
+                        else if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                            return _.filter($scope.plan.premiumTerm.validTerms, function (term) {
+                                return ageNextBirthday + parseInt(term.text) <= $scope.proposalPlanDetail.policyTerm;
+                            });
+                        }
+
+                    } else if ($scope.plan.premiumTermType === 'SPECIFIED_AGES' || ($scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.planDetailDto.premiumPaymentType=='OTHER_PREMIUM')) {
+
+                        //New Code
+                        if($scope.plan.policyTermType === 'MATURITY_AGE_DEPENDENT'){
+                            return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                                return $scope.proposalPlanDetail.policyTerm >= parseInt(term.text) && ageNextBirthday <=parseInt(term.text);
+                            });
+                        }
+
+                        //Old Code
+                        /*return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
                             return parseInt(term.text) > ageNextBirthday;
-                        });
+                        });*/
+                        //New Code
+                        else if($scope.plan.policyTermType === 'SPECIFIED_VALUES'){
+                            //console.log('Plan SPecified Values.. ***'+JSON.stringify($scope.plan));
+                            return _.filter($scope.plan.premiumTerm.maturityAges, function (term) {
+                                return $scope.proposalPlanDetail.policyTerm + ageNextBirthday >= parseInt(term.text) && ageNextBirthday <= parseInt(term.text);
+                            });
+                        }
                     }
                 };
 
@@ -177,7 +240,29 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             }]
         };
     })
-
+    .directive('validateOptsumassured', function () {
+        return {
+            // restrict to an attribute type.
+            restrict: 'A',
+            // element must have ng-model attribute.
+            require: 'ngModel',
+            link: function (scope, ele, attrs, ctrl) {
+                scope.$watch('searchRider.sumAssured', function (newval, oldval) {
+                    if (newval == oldval)return;
+                    if (newval) {
+                        console.log('validating...***');
+                        if (scope.coverage && scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
+                            var multiplesOf = scope.coverage.coverageSumAssured.multiplesOf;
+                            var modulus = parseInt(newval) % parseInt(multiplesOf);
+                            var valid = modulus == 0;
+                            ctrl.$setValidity('invalidMultiple', valid);
+                        }
+                    }
+                    return valid ? newval : undefined;
+                });
+            }
+        }
+    })
     .directive('coverageSumassured', function () {
         return {
             restrict: 'E',
@@ -196,11 +281,67 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
 
                $scope.$watch('proposalPlanDetail.sumAssured', function (newval) {
                     if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
-                        $scope.searchRider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                        var percentageValue=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                        //$scope.searchRider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                        if(percentageValue <= $scope.coverage.coverageSumAssured.maxLimit){
+                            $scope.maxPercentage=percentageValue;
+                            $scope.searchRider.sumAssured=percentageValue;
+                            $scope.isMaximumReached=false;
+                        }
+                        else{
+                            $scope.maxPercentage=$scope.coverage.coverageSumAssured.maxLimit;
+                            $scope.searchRider.sumAssured=$scope.coverage.coverageSumAssured.maxLimit;
+                            $scope.isMaximumReached=true;
+                        }
                         console.log('Derived Type Came..'+$scope.coverage.coverageSumAssured.percentage);
                     }
-
+                   if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
+                       if($scope.coverage.coverageSumAssured.maxSumInsured <=newval){
+                           $scope.maxOptionalCoverage=$scope.coverage.coverageSumAssured.maxSumInsured;
+                       }
+                       else{
+                           $scope.maxOptionalCoverage=newval;
+                       }
+                   }
                 });
+
+                $scope.$watch('searchRider.sumAssured',function(newVal){
+                    if(newVal && $scope.proposalPlanDetail.sumAssured){
+                        if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType == 'RANGE') {
+                            if($scope.coverage.coverageSumAssured.maxSumInsured <=$scope.proposalPlanDetail.sumAssured){
+                                $scope.maxOptionalCoverage=$scope.coverage.coverageSumAssured.maxSumInsured;
+                            }
+                            else{
+                                $scope.maxOptionalCoverage=$scope.proposalPlanDetail.sumAssured;
+                            }
+                        }
+
+                    }
+                });
+
+                $scope.$watch('searchRider.sumAssured', function (newval) {
+                    if ($scope.coverage && $scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                        //$scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                        var percentageValue=$scope.proposalPlanDetail.sumAssured *($scope.coverage.coverageSumAssured.percentage/100);
+                        if(percentageValue <= $scope.coverage.coverageSumAssured.maxLimit){
+                            $scope.maxPercentage=percentageValue;
+                            newval=percentageValue;
+                            $scope.isMaximumReached=false;
+                        }
+                        else{
+                            $scope.maxPercentage=$scope.coverage.coverageSumAssured.maxLimit;
+                            newval=$scope.coverage.coverageSumAssured.maxLimit;
+                            $scope.isMaximumReached=true;
+                        }
+                        console.log('Derived Type Came..');
+                    }
+                });
+
+                $scope.lessThanEqualTo = function (prop, val) {
+                    return function (item) {
+                        return item[prop] <= val;
+                    }
+                }
 
             }]
         }
@@ -212,7 +353,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             // element must have ng-model attribute.
             require: 'ngModel',
             link: function (scope, elem, attrs, ctrl) {
-                if (!ctrl)return;
+
                 scope.$watch('proposalPlanDetail.sumAssured', function (n,o) {
                     if(n){
                         scope.errorMessage='';
@@ -226,6 +367,27 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                     }
 
                 });
+
+                scope.$watch('searchRider.sumAssured', function (newval) {
+                    if (scope.coverage && scope.coverage.coverageSumAssured.sumAssuredType === 'DERIVED') {
+                        //$scope.rider.sumAssured=newval *($scope.coverage.coverageSumAssured.percentage/100);
+                        var percentageValue=scope.proposalPlanDetail.sumAssured *(scope.coverage.coverageSumAssured.percentage/100);
+                        if(percentageValue <= scope.coverage.coverageSumAssured.maxLimit){
+                            scope.maxPercentage=percentageValue;
+                            newval=percentageValue;
+                            scope.isMaximumReached=false;
+                        }
+                        else{
+                            scope.maxPercentage=scope.coverage.coverageSumAssured.maxLimit;
+                            newval=scope.coverage.coverageSumAssured.maxLimit;
+                            scope.isMaximumReached=true;
+                        }
+                        console.log('Derived Type Came..');
+                    }
+                });
+
+                if (!ctrl)return;
+
             }
         };
     }])
@@ -288,7 +450,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.documentList = [];
             $scope.proposal = {};
             $scope.searchRiders = [];
-            $scope.proposalId = getQueryParameter('proposalId')
+            $scope.proposalId = getQueryParameter('proposalId');
             $scope.quotationId = getQueryParameter('quotationId');
             $scope.proposalPlanDetail = {};
             $scope.searchRider = {};
@@ -297,6 +459,11 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
             $scope.isClientValid=false;
             $scope.searchRidersCopy=[];
             $scope.isRiderDeleted=false;
+
+            $scope.clearPolicyTerm=function(){
+                $scope.proposalPlanDetail.policyTerm='';
+            };
+
 
             $scope.searchProposerByClientId=function(){
                 if($scope.proposer.clientId){
@@ -485,6 +652,15 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 if (data && data.step == 3 || data && data.step == 4) {
                     var age = $scope.proposedAssured.dateOfBirth;
                     var ageNextBirthday = moment().diff(new moment(new Date(age)), 'years') + 1;
+
+                    if($scope.plan.premiumTermType === 'SINGLE' || $scope.plan.premiumTermType === 'SPECIFIED_VALUES' || $scope.plan.premiumTermType === 'SPECIFIED_AGES' || $scope.plan.premiumTermType === 'REGULAR'){
+                        $scope.proposalPlanDetail.premiumPaymentType ='OTHER_PREMIUM';
+                        $scope.premiumTypeReadOnly=true;
+                    }
+                    else{
+                        $scope.premiumTypeReadOnly=false;
+                        //$scope.planDetailDto.premiumPaymentType ='';
+                    }
 
                     $http.get("getridersforplan/" +$scope.proposalPlanDetail.planId + "/" + ageNextBirthday).success(function (response, status, headers, config) {
                         angular.copy(response,$scope.searchRidersCopy);
