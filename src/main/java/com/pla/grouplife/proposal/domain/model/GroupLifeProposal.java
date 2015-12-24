@@ -184,8 +184,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         return this;
     }
 
-    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail) {
-        BigDecimal totalBasicPremium = this.getTotalBasicPremiumForInsured();
+    public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail,BigDecimal totalBasicPremium) {
         BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
         BigDecimal valuedClientDiscountAmount = premiumDetail.getValuedClientDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getValuedClientDiscount().divide(new BigDecimal(100))));
         BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
@@ -210,6 +209,32 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         }
         return totalBasicAnnualPremium;
     }
+
+    public BigDecimal getTotalSemiAnnualPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (Insured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicSemiAnnualPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+    public BigDecimal getTotalQuarterlyPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (Insured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicQuarterlyPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+    public BigDecimal getTotalMonthlyPremiumForInsured() {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (Insured insured : this.insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicMonthlyPremium());
+        }
+        return totalBasicAnnualPremium;
+    }
+
+
 
     public GroupLifeProposal updateFlagSamePlanForAllRelation(boolean samePlanForAllRelation) {
         this.samePlanForAllRelation = samePlanForAllRelation;
