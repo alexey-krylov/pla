@@ -34,7 +34,7 @@ public class SBCMService {
         this.sbcmRepository = sbcmRepository;
         this.sbcmFinder = sbcmFinder;
     }
-    
+
     public List<Map<String, Object>> getAllPlanWithCoverageAndBenefits(){
         List<Plan> plans =planRepository.findAll();
         return isNotEmpty(plans) ? plans.stream().map(new Function<Plan, Map<String, Object>>() {
@@ -47,7 +47,7 @@ public class SBCMService {
 
     private Map<String, Object> constructOptimizedDetailsMapFromPlan(Plan plan) {
         Map<String, Object> planMap = Maps.newHashMap();
-        if(isEmpty(plan.getCoverages())){
+        if(isNotEmpty(plan.getCoverages())){
             planMap.put("planName", plan.getPlanDetail().getPlanName());
             planMap.put("planCode", plan.getPlanDetail().getPlanCode());
         }
