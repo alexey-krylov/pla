@@ -77,7 +77,7 @@ public class ProductLineInformationUnitTest {
     @Test
     public void givenReinstatementProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
-        productLineGeneralInformation = productLineGeneralInformation.withReinstatementProcessInformation(listOfProcessItems,null);
+        productLineGeneralInformation = productLineGeneralInformation.withReinstatementProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getReinstatementProcessInformation());
         Set<ProductLineProcessItem> productLineProcessItems = productLineGeneralInformation.getReinstatementProcessInformation().getReinstatementProcessItems();
@@ -197,7 +197,7 @@ public class ProductLineInformationUnitTest {
     @Test
     public void givenSurrenderProcessInformation_thenItShouldAddTheProcessTypesToProductLineInformation(){
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
-        productLineGeneralInformation = productLineGeneralInformation.withSurrenderProcessInformation(listOfProcessItems,null);
+        productLineGeneralInformation = productLineGeneralInformation.withSurrenderProcessInformation(listOfProcessItems);
 
         assertNotNull(productLineGeneralInformation.getSurrenderProcessInformation());
         Set<ProductLineProcessItem> productLineProcessItems = productLineGeneralInformation.getSurrenderProcessInformation().getSurrenderProcessItems();
