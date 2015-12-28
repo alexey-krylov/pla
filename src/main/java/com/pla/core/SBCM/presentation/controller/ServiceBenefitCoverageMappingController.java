@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Mohan Sharma on 12/24/2015.
@@ -30,9 +31,15 @@ public class ServiceBenefitCoverageMappingController {
         modelAndView.setViewName("pla/core/sbcm/createsbcm");
         return modelAndView;
     }
+
    @RequestMapping(value="/getAllPlanWithReletedBenifitCoverages" ,method =  RequestMethod.GET)
     public List<Map<String,Object>> getAllPlanWithReletedBenifitCoverages(){
        return sbcmService.getAllPlanWithCoverageAndBenefits();
    }
+
+    @RequestMapping(value="/getAllServicesFromHCPRate" ,method =  RequestMethod.GET)
+    public Set<String> getAllServicesFromHCPRate(){
+        return sbcmService.getAllServicesFromHCPRate();
+    }
 
 }
