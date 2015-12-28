@@ -19,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ServiceBenefitCoverageMapping {
     @Id
     private ServiceBenefitCoverageMappingId serviceBenefitCoverageMappingId;
-    private PlanId planId;
+    private String planCode;
     private String planName;
     private BenefitId benefitId;
     private String benefitName;
@@ -37,8 +37,8 @@ public class ServiceBenefitCoverageMapping {
         ACTIVE, INACTIVE;
     }
 
-    public ServiceBenefitCoverageMapping updateWithPlanCode(PlanId planId){
-        this.planId = planId;
+    public ServiceBenefitCoverageMapping updateWithPlanCode(String planCode){
+        this.planCode = planCode;
         return this;
     }
 

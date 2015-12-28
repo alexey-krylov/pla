@@ -141,9 +141,10 @@ public class SBCMService {
         }
         String benefitName = sbcmFinder.getBenefitNameByBenefitId(createSBCMCommand.getBenefitId());
         String coverageName = sbcmFinder.getCoverageNameByCoverageId(createSBCMCommand.getCoverageId());
-        Plan plan = planRepository.findOne(new PlanId(createSBCMCommand.getPlanCode()));
+        List<Plan> plans = planRepository.findPlanByCodeAndName(createSBCMCommand.getPlanCode());
+        Plan plan = isNotEmpty(plans) ? plans.get(0) : null;
         String planName = isNotEmpty(plan) ? plan.getPlanDetail().getPlanName() : StringUtils.EMPTY;
-        serviceBenefitCoverageMapping.updateWithPlanCode(new PlanId(createSBCMCommand.getPlanCode()));
+        serviceBenefitCoverageMapping.updateWithPlanCode(createSBCMCommand.getPlanCode());
         serviceBenefitCoverageMapping.updateWithPlanName(planName);
         serviceBenefitCoverageMapping.updateWithBenefitName(benefitName);
         serviceBenefitCoverageMapping.updateWithCoverageName(coverageName);

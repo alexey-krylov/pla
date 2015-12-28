@@ -6,13 +6,13 @@ import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -35,23 +35,24 @@ public class ServiceBenefitCoverageMappingController {
         return modelAndView;
     }
 
-   @RequestMapping(value="/getAllPlanWithRelatedBenefitCoverages" ,method =  RequestMethod.GET)
+    @RequestMapping(value="/getAllPlanWithRelatedBenefitCoverages" ,method =  RequestMethod.GET)
     public List<Map<String,Object>> getAllPlanWithRelatedBenefitCoverages(){
-       return sbcmService.getAllPlanWithCoverageAndBenefits();
-   }
+        return sbcmService.getAllPlanWithCoverageAndBenefits();
+    }
 
     @RequestMapping(value="/getAllServicesFromHCPRate" ,method =  RequestMethod.GET)
     public List<String> getAllServicesFromHCPRate(){
         return sbcmService.getAllServicesFromHCPRate();
     }
 
-    @RequestMapping(value = "/createServiceBenefitCoverageMapping", method = RequestMethod.GET)
-    public Result createServiceBenefitCoverageMapping(@ModelAttribute("createsbcmcommand") CreateSBCMCommand createSBCMCommand, BindingResult result){
+    @RequestMapping(value = "/createServiceBenefitCoverageMapping", method = RequestMethod.POST)
+    public Result createServiceBenefitCoverageMapping(@Valid @RequestBody CreateSBCMCommand createSBCMCommand, BindingResult result, ModelMap modelMap){
         if(result.hasErrors()){
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", result);
             return Result.failure("Error creating ServiceBenefitCoverageMapping", result.getAllErrors());
         }
         try {
-        ServiceBenefitCoverageMapping serviceBenefitCoverageMapping = commandGateway.sendAndWait(createSBCMCommand);
+            ServiceBenefitCoverageMapping serviceBenefitCoverageMapping = commandGateway.sendAndWait(createSBCMCommand);
             return Result.success("serviceBenefitCoverageMapping created successfully", serviceBenefitCoverageMapping.getServiceBenefitCoverageMappingId());
         } catch(Exception e){
             return Result.failure(e.getMessage());
