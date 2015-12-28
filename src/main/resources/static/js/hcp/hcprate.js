@@ -25,6 +25,8 @@
         $scope.showDownload = true;
         $scope.fileSaved = null;
         $scope.fileName = null;
+        $scope.uploadHCPServiceRatesDto.hcpName = '';
+        $scope.uploadHCPServiceRatesDto.hcpCode = '';
         $scope.$watchCollection('[uploadHCPServiceRatesDto.hcpCode,showDownload]', function (n) {
             $scope.qId = n[0];
             if (n[1]) {
@@ -66,17 +68,21 @@
         $scope.getAllHCPByHCPCode = function(data){
             console.log(data);
             if(data){
+                $scope.uploadHCPServiceRatesDto.hcpCode = data.title;
                 $http.get("/pla/core/hcp/getAllHCPByHCPCode?hcpCode="+data.title).success(function(data){
                     var hcp = data[0];
                     $scope.$broadcast('angucomplete-alt:changeInput', 'hcpName', hcp.hcpName);
+                    $scope.uploadHCPServiceRatesDto.hcpName = hcp.hcpName;
                 }).error(function(){});
             }
         };
         $scope.getAllHCPByHCPName = function(data){
             if(data){
+                $scope.uploadHCPServiceRatesDto.hcpName = data.title;
                 $http.get("/pla/core/hcp/getAllHCPByHCPName?hcpName="+data.title).success(function(data){
                     var hcp = data[0];
                     $scope.$broadcast('angucomplete-alt:changeInput', 'hcpCode', hcp.hcpCode);
+                    $scope.uploadHCPServiceRatesDto.hcpCode = hcp.hcpCode;
                 }).error(function(){});
             }
         };
