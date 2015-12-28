@@ -172,6 +172,10 @@
                         <small class="error" ng-message="required">Please enter Relationship</small>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label">Opportunity ID</label>
+                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'||readOnlyStatusProposedAssured" name="opportunityId " ng-model="proposedAssured.opportunityId"/>
+                </div>
             </div>
         </accordion-group>
 
