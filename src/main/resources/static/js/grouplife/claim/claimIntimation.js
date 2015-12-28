@@ -11,8 +11,8 @@ var App = angular.module('claimIntimation', ['common', 'ngRoute', 'mgcrea.ngStra
 }
 ]);
 
-App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$upload','provinces','bankDetails',
-        function ($scope, $http, $window,$upload,provinces,bankDetails) {
+App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$upload','getQueryParameter','provinces','bankDetails',
+        function ($scope, $http, $window,$upload,getQueryParameter,provinces,bankDetails) {
 //alert("********CONTROLLER INCLUDED***********");
         $scope.schedule={};
         $scope.searchObj = {};
@@ -26,6 +26,28 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.bankDetails=[];
         $scope.bankDetails=bankDetails;
         $scope.bankBranchDetails=[];
+        $scope.rcvPolicyNumber = getQueryParameter('policyNumber');
+        $scope.minIntimationDate=moment().add(0,'days').format("YYYY-MM-DD");
+        //$scope.minIntimationDate=moment().add(1,'days').format("YYYY-MM-DD");
+
+            /***
+             *
+             * @param $event for Claim intimation Date
+             */
+            $scope.open = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettings.isOpened = true;
+            };
+            $scope.datePickerSettings = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
             /**
              *
              * @param province
@@ -55,11 +77,24 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 }
             });
 
+            /***
+             * Geating All Details Of Particular PolicyNumber and Populating in GL ClaimIntimation Screen
+             */
+            if($scope.rcvPolicyNumber){
+                // Logic to Populate All The date to ClaimIntimation Class
+                $scope.policyNumber=$scope.rcvPolicyNumber;
+                $scope.claimIntimationDate=moment(new Date()).format('YYYY-MM-DD');
+
+            }
+
+
+/*
 
             $http.get("/pla/grouplife/claim/getclaimtype")
              .success(function (data) {
                 $scope.claimTypes = data
                     });
+*/
 
 
     $scope.items=[

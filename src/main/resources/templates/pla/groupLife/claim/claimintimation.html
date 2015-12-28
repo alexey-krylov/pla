@@ -67,8 +67,6 @@
                 <li data-step="1"><span class="badge badge-info">1</span>Claimant Details<span class="chevron"></span>
                 </li>
                 <li data-step="2"><span class="badge">2</span>Assured Details<span class="chevron"></span></li>
-                <!--<li data-step="3"><span class="badge">3</span>Incedence Details<span class="chevron"></span></li>-->
-                <!--<li data-step="4"><span class="badge">4</span>Incident Details<span class="chevron"></span></li>-->
                 <li data-step="3"><span class="badge">3</span>Mandatory Document<span class="chevron"></span></li>
             </ul>
             <div class="actions">
@@ -94,50 +92,41 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
-
-
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Claim Type</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.code" name="claimType"
+                                                <select  class="form-control input-sm" ng-model="claimType" name="claimType"
                                                         ng-options="claimTypeDetail.claimType as claimTypeDetail.claimType for claimTypeDetail in claimTypeDetailsResponse">
 
                                                 </select>
-
                                             </div>
                                         </div>
-
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Claim intimation Date</label>
                                                 <div class='input-group date'>
-                                                    <input type="text" class="form-control input-sm"
-                                                           datepicker-popup=""
-                                                           view-enabled=""
-                                                           is-open="claimIntimationDate"
-                                                           max-date="todayDate"
-                                                           ng-model="claimDetails.dateOfBirth" name="claimDate"/>
-                                             <span class="input-group-btn">
-                                           <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                                   ng-click="launchclaimDate($event)">
-                                               <i class="glyphicon glyphicon-calendar"></i></button>
-                                         </span>
+                                                    <input type="text" class="form-control input-sm" ng-required="true"
+                                                           ng-click="open($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                           ng-model="claimIntimationDate"
+                                                           datepicker-options="datePickerSettings.dateOptions"
+                                                           is-open="datePickerSettings.isOpened" close-text="Close"
+                                                           show-button-bar="false"
+                                                           onkeypress="return isNumeric(event)"/>
+                                        <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default btn-sm" ng-click="open($event)"><i
+                                              class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                   </span>
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Policy Number</label>
-                                                <input id="policy_number"
+                                                <input class="form-control input-md" id="policy_number"
                                                        name="policyNumber"
-                                                       ng-model="claimDetails.policyNumber"
-                                                       type="text"
-                                                       class="form-control input-md"
-                                                        />
-
-
+                                                       ng-model="policyNumber"
+                                                       type="text" ng-disabled="true"/>
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +143,6 @@
 
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                {{claimDetailsResponse}}
                                                 <label class="control-label">Relationship</label>
                                                 <select  class="form-control input-sm" ng-model="claimDetails.relationship" name="relationship"
                                                          ng-options="relationships for relationships in claimDetailsResponse.relationship">
