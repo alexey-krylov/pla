@@ -234,8 +234,22 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.$watch('proposalPlanDetail.policyTerm', function (newval) {
                     if ($scope.plan && $scope.plan.premiumTermType === 'REGULAR') {
                         $scope.proposalPlanDetail.premiumPaymentTerm = newval;
+                    }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.proposalPlanDetail.premiumPaymentType=='OTHER_PREMIUM') {
+                        $scope.proposalPlanDetail.premiumPaymentTerm = newval;
                     }
 
+                });
+
+                $scope.$watch('proposalPlanDetail.policyTerm', function (newval) {
+                    if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE') {
+                        $scope.proposalPlanDetail.premiumPaymentTerm = 1;
+                    }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_REGULAR' && $scope.proposalPlanDetail.premiumPaymentType=='SINGLE_PREMIUM') {
+                        $scope.proposalPlanDetail.premiumPaymentTerm = 1;
+                    }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_VALUES' && $scope.proposalPlanDetail.premiumPaymentType=='SINGLE_PREMIUM') {
+                        $scope.proposalPlanDetail.premiumPaymentTerm = 1;
+                    }else if ($scope.plan && $scope.plan.premiumTermType === 'SINGLE_SPECIFIED_AGES' && $scope.proposalPlanDetail.premiumPaymentType=='SINGLE_PREMIUM') {
+                        $scope.proposalPlanDetail.premiumPaymentTerm = 1;
+                    }
                 });
             }]
         };
