@@ -100,14 +100,17 @@ public class SBCMService {
         return benefitMap;
     }
 
-    public Set<String> getAllServicesFromHCPRate(){
+    public List<String> getAllServicesFromHCPRate(){
         List<HCPRate> hcpRateList = sbcmFinder.getAllServicesFromHCPRate();
-        return isNotEmpty(hcpRateList) ? hcpRateList.stream().map(new Function<HCPRate, Set<String>>() {
+        Set<String> services =  isNotEmpty(hcpRateList) ? hcpRateList.stream().map(new Function<HCPRate, Set<String>>() {
             @Override
             public Set<String> apply(HCPRate hcpRate) {
                 return isNotEmpty(hcpRate.getHcpServiceDetails()) ? getAllServicesFromHCPServiceDetail(hcpRate.getHcpServiceDetails()) : Collections.EMPTY_SET;
             }
         }).flatMap(Set::stream).collect(Collectors.toSet()) : Sets.newHashSet();
+        List<String> sortedServices =  Lists.newArrayList(services);
+        sortedServices.sort(String::compareTo);
+        return sortedServices;
     }
 
     private Set<String> getAllServicesFromHCPServiceDetail(Set<HCPServiceDetail> hcpServiceDetails) {
