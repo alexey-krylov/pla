@@ -10,7 +10,7 @@
                 resolve:{
                     plans: ['$q', '$http', function ($q, $http) {
                         var deferred = $q.defer();
-                        $http.get('/pla/core/sbcm/getAllPlanWithReletedBenifitCoverages').success(function (response, status, headers, config) {
+                        $http.get('/pla/core/sbcm/getAllPlanWithRelatedBenefitCoverages').success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();

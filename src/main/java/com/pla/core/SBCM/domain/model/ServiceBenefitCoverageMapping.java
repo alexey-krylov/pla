@@ -1,5 +1,8 @@
 package com.pla.core.SBCM.domain.model;
 
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.sharedkernel.identifier.BenefitId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +19,56 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ServiceBenefitCoverageMapping {
     @Id
     private ServiceBenefitCoverageMappingId serviceBenefitCoverageMappingId;
+    private PlanId planId;
+    private String planName;
+    private BenefitId benefitId;
+    private String benefitName;
+    private CoverageId coverageId;
+    private String coverageName;
+    private String service;
+    private Status status;
+
+    public enum Status {
+        ACTIVE, INACTIVE;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithPlanCode(PlanId planId){
+        this.planId = planId;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithPlanName(String planName){
+        this.planName = planName;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithBenefitId(BenefitId benefitId){
+        this.benefitId = benefitId;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithBenefitName(String benefitName){
+        this.benefitName = benefitName;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithCoverageId(CoverageId coverageId){
+        this.coverageId = coverageId;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithCoverageName(String coverageName){
+        this.coverageName = coverageName;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithService(String service){
+        this.service = service;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithStatus(Status status){
+        this.status = status;
+        return this;
+    }
 }

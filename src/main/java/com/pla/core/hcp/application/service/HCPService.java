@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Mohan Sharma on 12/17/2015.
@@ -43,9 +44,12 @@ public class HCPService {
 
     @Transactional
     public HCP createOrUpdateHCP(CreateOrUpdateHCPCommand createOrUpdateHCPCommand) {
-        String runningSequence = sequenceGenerator.getSequence(HCP.class);
-        runningSequence = String.format("%04d", Integer.parseInt(runningSequence.trim()));
-        String hcpCodeFormatted = createOrUpdateHCPCommand.getHcpCode() != null ? createOrUpdateHCPCommand.getHcpCode() : HCPCode.getHCPCode(StringUtils.substring(createOrUpdateHCPCommand.getTown(), 0, 3), runningSequence, createOrUpdateHCPCommand.getHcpCategory());
+        String runningSequence = StringUtils.EMPTY;
+        if(isEmpty(createOrUpdateHCPCommand.getHcpCode())) {
+            runningSequence = sequenceGenerator.getSequence(HCP.class);
+            runningSequence = String.format("%04d", Integer.parseInt(runningSequence.trim()));
+        }
+        String hcpCodeFormatted = isNotEmpty(createOrUpdateHCPCommand.getHcpCode()) ? createOrUpdateHCPCommand.getHcpCode() : HCPCode.getHCPCode(StringUtils.substring(createOrUpdateHCPCommand.getTown(), 0, 3), runningSequence, createOrUpdateHCPCommand.getHcpCategory());
         HCP hcp = hcpRepository.findOne(new HCPCode(hcpCodeFormatted));
         if(isEmpty(hcp)){
             hcp = new HCP();

@@ -3,6 +3,9 @@ package com.pla.core.SBCM.application.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.core.SBCM.application.command.CreateSBCMCommand;
+import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
+import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMappingId;
 import com.pla.core.SBCM.query.SBCMFinder;
 import com.pla.core.SBCM.repository.SBCMRepository;
 import com.pla.core.domain.model.plan.Plan;
@@ -12,6 +15,10 @@ import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.core.repository.PlanRepository;
+import com.pla.sharedkernel.identifier.BenefitId;
+import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
+import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +29,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -120,5 +128,28 @@ public class SBCMService {
                 return hcpServiceDetail.getServiceAvailed();
             }
         }).collect(Collectors.toSet());
+    }
+
+    public ServiceBenefitCoverageMapping createServiceBenefitCoverageMapping(CreateSBCMCommand createSBCMCommand) {
+        ServiceBenefitCoverageMapping serviceBenefitCoverageMapping;
+        if(isEmpty(createSBCMCommand.getServiceBenefitCoverageMappingId())){
+            serviceBenefitCoverageMapping = new ServiceBenefitCoverageMapping();
+        } else{
+            serviceBenefitCoverageMapping = sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId())) == null
+                    ? new ServiceBenefitCoverageMapping() : sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId()));
+        }
+        String benefitName = sbcmFinder.getBenefitNameByBenefitId(createSBCMCommand.getBenefitId());
+        String coverageName = sbcmFinder.getCoverageNameByCoverageId(createSBCMCommand.getCoverageId());
+        Plan plan = planRepository.findOne(new PlanId(createSBCMCommand.getPlanCode()));
+        String planName = isNotEmpty(plan) ? plan.getPlanDetail().getPlanName() : StringUtils.EMPTY;
+        serviceBenefitCoverageMapping.updateWithPlanCode(new PlanId(createSBCMCommand.getPlanCode()));
+        serviceBenefitCoverageMapping.updateWithPlanName(planName);
+        serviceBenefitCoverageMapping.updateWithBenefitName(benefitName);
+        serviceBenefitCoverageMapping.updateWithCoverageName(coverageName);
+        serviceBenefitCoverageMapping.updateWithBenefitId(new BenefitId(createSBCMCommand.getBenefitId()));
+        serviceBenefitCoverageMapping.updateWithCoverageId(new CoverageId(createSBCMCommand.getCoverageId()));
+        serviceBenefitCoverageMapping.updateWithService(createSBCMCommand.getService());
+        serviceBenefitCoverageMapping.updateWithStatus(isNotEmpty(createSBCMCommand.getStatus()) ? ServiceBenefitCoverageMapping.Status.valueOf(createSBCMCommand.getStatus()) : ServiceBenefitCoverageMapping.Status.ACTIVE);
+        return sbcmRepository.save(serviceBenefitCoverageMapping);
     }
 }
