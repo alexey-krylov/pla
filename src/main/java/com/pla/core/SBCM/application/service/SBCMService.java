@@ -19,6 +19,7 @@ import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.commons.lang.StringUtils;
+import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -133,10 +134,10 @@ public class SBCMService {
     public ServiceBenefitCoverageMapping createServiceBenefitCoverageMapping(CreateSBCMCommand createSBCMCommand) {
         ServiceBenefitCoverageMapping serviceBenefitCoverageMapping;
         if(isEmpty(createSBCMCommand.getServiceBenefitCoverageMappingId())){
-            serviceBenefitCoverageMapping = new ServiceBenefitCoverageMapping();
+            serviceBenefitCoverageMapping = new ServiceBenefitCoverageMapping().updateWithId(new ServiceBenefitCoverageMappingId(new ObjectId().toString()));
         } else{
             serviceBenefitCoverageMapping = sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId())) == null
-                    ? new ServiceBenefitCoverageMapping() : sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId()));
+                    ? new ServiceBenefitCoverageMapping().updateWithId(new ServiceBenefitCoverageMappingId(new ObjectId().toString())) : sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId()));
         }
         String benefitName = sbcmFinder.getBenefitNameByBenefitId(createSBCMCommand.getBenefitId());
         String coverageName = sbcmFinder.getCoverageNameByCoverageId(createSBCMCommand.getCoverageId());

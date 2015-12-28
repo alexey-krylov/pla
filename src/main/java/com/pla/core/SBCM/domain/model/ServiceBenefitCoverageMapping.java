@@ -28,6 +28,11 @@ public class ServiceBenefitCoverageMapping {
     private String service;
     private Status status;
 
+    public ServiceBenefitCoverageMapping updateWithId(ServiceBenefitCoverageMappingId serviceBenefitCoverageMappingId) {
+        this.serviceBenefitCoverageMappingId = serviceBenefitCoverageMappingId;
+        return this;
+    }
+
     public enum Status {
         ACTIVE, INACTIVE;
     }
