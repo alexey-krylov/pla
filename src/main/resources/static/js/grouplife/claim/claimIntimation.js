@@ -47,6 +47,22 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }
             }
+            /***
+             *@param $event for Claim incidence Date
+             */
+            $scope.openClaimIncidenceDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForIncidence.isOpened = true;
+            };
+            $scope.datePickerSettingsForIncidence = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
 
             /**
              *
