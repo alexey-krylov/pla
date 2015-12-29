@@ -28,11 +28,11 @@ public class PlanPremiumDetail {
 
     private BigDecimal sumAssured;
 
-    private BigDecimal semiAnnualPremium;
+    private BigDecimal semiAnnualPremium  = BigDecimal.ZERO;
 
-    private BigDecimal quarterlyPremium;
+    private BigDecimal quarterlyPremium = BigDecimal.ZERO;
 
-    private BigDecimal monthlyPremium;
+    private BigDecimal monthlyPremium = BigDecimal.ZERO;
 
     private BigDecimal incomeMultiplier;
 

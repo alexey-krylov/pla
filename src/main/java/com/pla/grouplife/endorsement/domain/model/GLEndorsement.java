@@ -34,6 +34,8 @@ public class GLEndorsement {
 
     private GLMemberEndorsement newCategoryRelationEndorsement;
 
+    private FreeCoverLimitEndorsement freeCoverLimitEndorsement;
+
     public GLEndorsement addMemberEndorsement(GLMemberEndorsement memberEndorsement) {
         this.memberEndorsement = memberEndorsement;
         return this;
@@ -86,6 +88,12 @@ public class GLEndorsement {
 
     public GLEndorsement addManNumberEndorsement(List<GLAssuredMANNumberEndorsement> manNumberEndorsements) {
         this.manNumberEndorsements = manNumberEndorsements;
+        return this;
+    }
+
+
+    public GLEndorsement createFCLEndorsement(FreeCoverLimitEndorsement freeCoverLimitEndorsement) {
+        this.freeCoverLimitEndorsement = freeCoverLimitEndorsement;
         return this;
     }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,4 +30,6 @@ public class UpdateGLProposalWithInsuredCommand {
     private boolean samePlanForAllCategory;
 
     private String schemeName;
+
+    private BigDecimal freeCoverLimit;
 }

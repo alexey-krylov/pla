@@ -3,6 +3,7 @@ package com.pla.individuallife.proposal.domain.model;
 import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class ILProposalProcessor {
 
     public ILProposalAggregate updateWithProposedAssuredAndAgentDetails(ILProposalAggregate proposalAggregate,ProposedAssured proposedAssured) {
         return proposalAggregate.updateWithProposedAssuredAndAgentDetails(proposedAssured);
+    }
+
+    public ILProposalAggregate updateWithOpportunityId(ILProposalAggregate proposalAggregate,OpportunityId opportunityId) {
+        return proposalAggregate.updateWithOpportunityId(opportunityId);
     }
 
     public ILProposalAggregate updateWithProposer(ILProposalAggregate aggregate, Proposer proposer, AgentCommissionShareModel agentCommissionShareModel, ProposalPlanDetail planDetail) {

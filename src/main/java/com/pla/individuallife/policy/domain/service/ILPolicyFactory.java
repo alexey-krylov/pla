@@ -8,6 +8,7 @@ import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.ProposalNumber;
@@ -48,6 +49,7 @@ public class ILPolicyFactory {
         Map proposalMap = ilProposalFinder.getProposalByProposalId(proposalId.getProposalId());
         ProposedAssured proposedAssured = (ProposedAssured) proposalMap.get("proposedAssured");
         Proposer proposer = (Proposer) proposalMap.get("proposer");
+        OpportunityId opportunityId = (OpportunityId) proposalMap.get("opportunityId");
         List<Beneficiary> beneficiaries = (List<Beneficiary>) proposalMap.get("beneficiaries");
         List<Question> questions = (List<Question>)proposalMap.get("compulsoryHealthStatement");
         GeneralDetails generalDetails =  (GeneralDetails) proposalMap.get("generalDetails");
@@ -82,7 +84,8 @@ public class ILPolicyFactory {
                 .withAdditionalDetails(additionaldetails)
                 .withPremiumPaymentDetails(premiumPaymentDetails)
                 .withProposalPlanDetail(proposalPlanDetail)
-                .withProposalDocuments(ilProposerDocuments);
+                .withProposalDocuments(ilProposerDocuments)
+                .withOpportunityId(opportunityId);
         return individualLifePolicy;
     }
 

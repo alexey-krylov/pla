@@ -10,6 +10,7 @@ import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.joda.time.DateTime;
@@ -118,6 +119,7 @@ public class ILPolicyFinder {
         dto.setPolicyNumber((PolicyNumber) policy.get("policyNumber"));
         dto.setInceptionOn(policy.get("inceptionOn") != null ? AppUtils.toString(new DateTime(policy.get("inceptionOn"))): null);
         dto.setExpiryDate(policy.get("expiredOn") != null ? AppUtils.toString(new DateTime(policy.get("expiredOn"))) : null);
+        dto.setOpportunityId(policy.get("opportunityId")!=null?((OpportunityId)policy.get("opportunityId")).getOpportunityId():"");
         dto.setProposerDocuments(policy.get("proposalDocuments") != null ? (List) policy.get("proposalDocuments") : Collections.EMPTY_LIST);
         return dto;
     }

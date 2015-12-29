@@ -14,7 +14,7 @@ public class ComputedPremiumDto {
 
     private PremiumFrequency premiumFrequency;
 
-    private BigDecimal premium;
+    private BigDecimal premium = BigDecimal.ZERO;
 
     private BigDecimal policyFee;
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -48,6 +49,8 @@ public class ProposerDto {
     private Boolean hasUploaded = Boolean.FALSE;
 
     private String schemeName;
+
+    private BigDecimal freeCoverLimit;
 
     public ProposerDto(Proposer proposer) {
         ProposerContactDetail proposerContactDetail = proposer.getContactDetail();

@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.application.command;
 
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import com.pla.individuallife.sharedresource.model.vo.ProposalPlanDetail;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,4 +19,5 @@ public class ILUpdateProposalWithProposedAssuredCommand {
     private ProposalPlanDetail planDetail;
     private UserDetails userDetails;
     private String proposalId;
+    private OpportunityId opportunityId;
 }

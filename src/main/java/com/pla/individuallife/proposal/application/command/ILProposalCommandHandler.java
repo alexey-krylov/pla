@@ -98,7 +98,9 @@ public class ILProposalCommandHandler {
             logger.debug(" ProposedAssured :: " + proposedAssured);
         }
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        aggregate = ilProposalProcessor.updateWithProposedAssuredAndAgentDetails(aggregate,proposedAssured);
+        aggregate = ilProposalProcessor.updateWithProposedAssuredAndAgentDetails(aggregate,proposedAssured)
+                .updateWithOpportunityId(cmd.getOpportunityId());
+
         ilProposalMongoRepository.add(aggregate);
         return aggregate.getIdentifier().getProposalId();
     }

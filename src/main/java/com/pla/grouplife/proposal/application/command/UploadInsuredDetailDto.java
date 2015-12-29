@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Samir on 4/14/2015.
  */
@@ -20,4 +22,6 @@ public class UploadInsuredDetailDto {
     private String proposalId;
 
     private String schemeName;
+
+    private BigDecimal freeCoverLimit;
 }

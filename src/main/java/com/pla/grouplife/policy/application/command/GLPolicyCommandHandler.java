@@ -41,6 +41,7 @@ public class GLPolicyCommandHandler {
     @CommandHandler
     public void createPolicy(GLProposalToPolicyCommand proposalToPolicyCommand) {
         GroupLifePolicy groupLifePolicy = glPolicyFactory.createPolicy(proposalToPolicyCommand.getProposalId());
+        groupLifePolicy.raiseEndorsementEventWhichAreExceedingFreeCoverLimit();
         glPolicyMongoRepository.add(groupLifePolicy);
     }
 

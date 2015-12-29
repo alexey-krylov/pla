@@ -66,4 +66,6 @@ public class ILPolicyDto {
 
     private List<ILProposerDocument> proposerDocuments;
 
+    private String opportunityId;
+
 }

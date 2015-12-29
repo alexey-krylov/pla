@@ -8,6 +8,7 @@ import com.pla.individuallife.proposal.domain.service.ProposalNumberGenerator;
 import com.pla.individuallife.quotation.query.ILQuotationFinder;
 import com.pla.individuallife.sharedresource.dto.*;
 import com.pla.individuallife.sharedresource.model.vo.*;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,7 @@ public class ILProposalFactory {
             dto.setPlanDetail(planDetail);
             ProposalPlanDetail proposalPlanDetail = withProposalPlanDetail(dto.getPlanDetailDto());
             aggregate = new ILProposalAggregate(cmd.getProposalId(), proposalNumber, proposedAssured, agentCommissionShareModel,proposer, dto.getQuotationNumber(),dto.getVersionNumber(),
-                    dto.getQuotationId().getQuotationId(),proposalPlanDetail, minAge,maxAge);
+                    dto.getQuotationId().getQuotationId(),proposalPlanDetail, minAge,maxAge,new OpportunityId(dto.getOpportunityId()));
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug(" ProposedAssured :: " + proposedAssured);

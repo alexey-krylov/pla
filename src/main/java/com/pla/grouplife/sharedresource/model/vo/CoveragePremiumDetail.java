@@ -22,9 +22,9 @@ public class CoveragePremiumDetail {
 
     private BigDecimal premium;
 
-    private BigDecimal semiAnnualPremium;
-    private BigDecimal quarterlyPremium;
-    private BigDecimal monthlyPremium;
+    private BigDecimal semiAnnualPremium  =BigDecimal.ZERO;
+    private BigDecimal quarterlyPremium =BigDecimal.ZERO ;
+    private BigDecimal monthlyPremium =BigDecimal.ZERO;
 
     private String coverageName;
 

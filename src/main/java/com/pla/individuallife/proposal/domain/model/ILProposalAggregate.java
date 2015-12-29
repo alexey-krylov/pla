@@ -9,6 +9,7 @@ import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.sharedkernel.event.GLProposerAddedEvent;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.ProposalId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import lombok.Getter;
@@ -57,6 +58,8 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
     private ILProposalStatus proposalStatus;
     private DateTime submittedOn;
+    private OpportunityId opportunityId;
+
 
     ILProposalAggregate() {
         beneficiaries = new ArrayList<Beneficiary>();
@@ -77,7 +80,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
 
 
-    public ILProposalAggregate(String proposalId, String proposalNumber, ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel, Proposer proposer, String quotationNumber, int versionNumber, String quotationId, ProposalPlanDetail proposalPlanDetail, int minAge, int maxAge) {
+    public ILProposalAggregate(String proposalId, String proposalNumber, ProposedAssured proposedAssured, AgentCommissionShareModel agentCommissionShareModel, Proposer proposer, String quotationNumber, int versionNumber, String quotationId, ProposalPlanDetail proposalPlanDetail, int minAge, int maxAge,OpportunityId opportunityId) {
         this.proposalNumber = proposalNumber;
         this.proposalId = new ProposalId(proposalId);
         assignProposer(proposer);
@@ -94,6 +97,7 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
         this.proposalPlanDetail = proposalPlanDetail;
         this.proposalStatus = ILProposalStatus.DRAFT;
         this.quotation = new Quotation(quotationNumber, versionNumber,quotationId.toString());
+        this.opportunityId = opportunityId;
     }
 
     public ILProposalAggregate updateWithProposer(Proposer proposer, AgentCommissionShareModel agentCommissionShareModel, ProposalPlanDetail planDetail) {
@@ -266,5 +270,10 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
     @Override
     public ProposalId getIdentifier() {
         return proposalId;
+    }
+
+    public ILProposalAggregate updateWithOpportunityId(OpportunityId opportunityId) {
+        this.opportunityId  = opportunityId;
+        return this;
     }
 }

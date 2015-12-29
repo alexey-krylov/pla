@@ -244,6 +244,7 @@ public class GLProposalService {
         boolean samePlanForAllRelation = proposal.get("samePlanForAllRelation") != null ? (boolean) proposal.get("samePlanForAllRelation") : false;
         boolean samePlanForAllCategory = proposal.get("samePlanForAllCategory") != null ? (boolean) proposal.get("samePlanForAllCategory") : false;
         String schemeName = proposal.get("schemeName") != null ? (String) proposal.get("schemeName") : "";
+        BigDecimal freeCoverLimit = proposal.get("freeCoverLimit") != null ? new BigDecimal((String) proposal.get("freeCoverLimit")) : BigDecimal.ZERO;
         ProposerDto proposerDto = new ProposerDto(proposer);
         if (proposal.get("opportunityId") != null) {
             OpportunityId opportunityId = (OpportunityId) proposal.get("opportunityId");
@@ -256,6 +257,7 @@ public class GLProposalService {
         proposerDto.setSamePlanForAllRelation(samePlanForAllRelation);
         proposerDto.setSamePlanForAllCategory(samePlanForAllCategory);
         proposerDto.setSchemeName(schemeName);
+        proposerDto.setFreeCoverLimit(freeCoverLimit);
         return proposerDto;
     }
 

@@ -4,6 +4,7 @@ import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.dto.ProposedAssuredDto;
 import com.pla.individuallife.sharedresource.dto.ProposerDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,6 +60,8 @@ public class ILProposalDto {
     private PremiumDetailDto premiumDetailDto;
 
     private Boolean hasQuotationNumber = Boolean.FALSE;
+
+    private String opportunityId;
 
 
 }

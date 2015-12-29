@@ -49,6 +49,7 @@ public class GLPolicyFactory {
         boolean samePlanForAllCategory = proposalMap.get("samePlanForAllCategory") != null ? (boolean) proposalMap.get("samePlanForAllCategory") : false;
         AgentId agentId = (AgentId) proposalMap.get("agentId");
         String  schemeName =proposalMap.get("schemeName")!=null? (String) proposalMap.get("schemeName"):"";
+        BigDecimal freeCoverLimit =proposalMap.get("freeCoverLimit")!=null? new BigDecimal((String) proposalMap.get("freeCoverLimit")):BigDecimal.ZERO;
         Set<Insured> insureds = new HashSet((List) proposalMap.get("insureds"));
         PremiumDetail premiumDetail = (PremiumDetail) proposalMap.get("premiumDetail");
         Industry industry = (Industry) proposalMap.get("industry");
@@ -69,7 +70,11 @@ public class GLPolicyFactory {
         groupLifePolicy.updateFlagSamePlanForAllCategory(samePlanForAllCategory);
         insureds = populateFamilyId(insureds);
         groupLifePolicy = groupLifePolicy.addAgentId(agentId).addProposer(proposer).addInsured(insureds)
-                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments).updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage).addOpportunityId(opportunityId).withSchemeName(schemeName);
+                .addPremium(premiumDetail).addIndustry(industry).addDocuments(proposerDocuments)
+                .updateWithCommissionPercentage(isCommissionOverridden,agentCommissionPercentage)
+                .addOpportunityId(opportunityId)
+                .withSchemeName(schemeName)
+                .withFCL(freeCoverLimit);
         return groupLifePolicy;
     }
 

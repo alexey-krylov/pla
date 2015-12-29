@@ -132,6 +132,11 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return this;
     }
 
+    public GroupLifeEndorsement withFCLEndorsement(GLEndorsement freeCoverLimitEndorsement){
+        this.endorsement = freeCoverLimitEndorsement;
+        return this;
+    }
+
     public GroupLifeEndorsement submitForApproval(DateTime now, String username, String comment) {
         this.submittedOn = now;
         this.status = EndorsementStatus.APPROVER_PENDING_ACCEPTANCE;

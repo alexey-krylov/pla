@@ -4,6 +4,7 @@ import com.pla.individuallife.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.domain.model.Proposal;
 import com.pla.sharedkernel.event.ILProposerAddedEvent;
+import com.pla.sharedkernel.identifier.OpportunityId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import lombok.Getter;
 import org.axonframework.domain.AbstractAggregateRoot;
@@ -45,6 +46,7 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
     private PolicyStatus policyStatus;
     private DateTime inceptionOn;
     private DateTime expiredOn;
+    private OpportunityId opportunityId;
 
 
     public IndividualLifePolicy(PolicyId policyId, PolicyNumber policyNumber, Proposal proposal, DateTime inceptionOn, DateTime expiredOn) {
@@ -129,6 +131,11 @@ public class IndividualLifePolicy extends AbstractAggregateRoot<PolicyId> {
 
     public IndividualLifePolicy withProposalDocuments(List<ILProposerDocument> proposalDocuments){
         this.proposalDocuments = proposalDocuments;
+        return this;
+    }
+
+    public IndividualLifePolicy withOpportunityId(OpportunityId opportunityId){
+        this.opportunityId = opportunityId;
         return this;
     }
 

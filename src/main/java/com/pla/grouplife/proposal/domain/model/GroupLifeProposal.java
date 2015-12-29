@@ -70,6 +70,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     private String  schemeName;
 
+    private BigDecimal freeCoverLimit;
+
     public GroupLifeProposal(ProposalId proposalId, Quotation quotation, ProposalNumber proposalNumber) {
         checkArgument(proposalId != null, "Proposal ID cannot be blank");
         checkArgument(quotation != null, "Quotation ID cannot be blank");
@@ -162,6 +164,7 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         if (GLProposalStatus.APPROVED.equals(this.proposalStatus)) {
             markASFirstPremiumPending(approvedBy, approvedOn, comment);
             markASINForce(approvedBy, approvedOn, comment);
+
         }
         return this;
     }
@@ -183,6 +186,8 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
         registerEvent(new GLProposalToPolicyEvent(this.proposalId));
         return this;
     }
+
+
 
     public BigDecimal getNetAnnualPremiumPaymentAmount(PremiumDetail premiumDetail,BigDecimal totalBasicPremium) {
         BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : totalBasicPremium.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
@@ -254,6 +259,11 @@ public class GroupLifeProposal extends AbstractAggregateRoot<ProposalId> {
 
     public GroupLifeProposal updateWithOpportunityId(OpportunityId opportunityId) {
         this.opportunityId = opportunityId;
+        return this;
+    }
+
+    public GroupLifeProposal updateWithFCL(BigDecimal freeCoverLimit){
+        this.freeCoverLimit = freeCoverLimit;
         return this;
     }
 

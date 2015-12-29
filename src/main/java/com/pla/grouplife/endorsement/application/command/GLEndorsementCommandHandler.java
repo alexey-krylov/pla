@@ -84,6 +84,17 @@ public class GLEndorsementCommandHandler {
     }
 
     @CommandHandler
+    public String handle(GLCreateFLCEndorsementCommand glCreateEndorsementCommand) {
+        GroupLifeEndorsement groupLifeEndorsement = groupLifeEndorsementService.createFCLEndorsement(glCreateEndorsementCommand.getPolicyId(), glCreateEndorsementCommand.getEndorsementType());
+        GLEndorsement glEndorsement  = new GLEndorsement();
+        glEndorsement.createFCLEndorsement(new FreeCoverLimitEndorsement(glCreateEndorsementCommand.getInsured(),glCreateEndorsementCommand.getFreeCoverLimit()));
+        groupLifeEndorsement.withFCLEndorsement(glEndorsement);
+
+        glEndorsementMongoRepository.add(groupLifeEndorsement);
+        return groupLifeEndorsement.getEndorsementId().getEndorsementId();
+    }
+
+    @CommandHandler
     public String handle(GLEndorsementCommand glEndorsementCommand) {
         GroupLifeEndorsement groupLifeEndorsement = glEndorsementMongoRepository.load(glEndorsementCommand.getEndorsementId());
         GLEndorsement glEndorsement = groupLifeEndorsement.getEndorsement() != null ? groupLifeEndorsement.getEndorsement() : new GLEndorsement();

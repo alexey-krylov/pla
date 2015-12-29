@@ -346,7 +346,7 @@ public class GroupLifeProposalController {
                 return Result.failure("Uploaded Insured template is not valid.Please download to check the errors", Boolean.TRUE);
             }
             List<InsuredDto> insuredDtos = glProposalService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getProposalId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory(),uploadInsuredDetailDto.getSchemeName()));
+            String quotationId = commandGateway.sendAndWait(new UpdateGLProposalWithInsuredCommand(uploadInsuredDetailDto.getProposalId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory(),uploadInsuredDetailDto.getSchemeName(),uploadInsuredDetailDto.getFreeCoverLimit()));
             return Result.success("Insured detail uploaded successfully", quotationId);
         } catch (Exception e) {
             e.printStackTrace();

@@ -18,9 +18,12 @@ import com.pla.publishedlanguage.contract.IPremiumCalculator;
 import com.pla.publishedlanguage.domain.model.BasicPremiumDto;
 import com.pla.publishedlanguage.domain.model.ComputedPremiumDto;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
+import com.pla.sharedkernel.domain.model.EndorsementNumber;
+import com.pla.sharedkernel.domain.model.Policy;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.Days;
@@ -84,6 +87,24 @@ public class GroupLifeEndorsementService {
         String policyNumber = ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber();
         String policyHolderName =  policyMap.get("proposer")!=null?((Proposer) policyMap.get("proposer")).getProposerName():null;
         return glEndorsementProcessor.createEndorsement(endorsementId, endorsementNumber, policyId, policyNumber, policyHolderName, glEndorsementType);
+    }
+
+    public GroupLifeEndorsement createFCLEndorsement(String policyId, GLEndorsementType glEndorsementType) {
+        String endorsementId = ObjectId.get().toString();
+        String endorsementNumber = glEndorsementNumberGenerator.getEndorsementNumber(GroupLifeEndorsement.class, LocalDate.now());
+        Map<String, Object> policyMap = glFinder.findPolicyById(policyId);
+        String policyNumber = ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber();
+        String policyHolderName =  policyMap.get("proposer")!=null?((Proposer) policyMap.get("proposer")).getProposerName():null;
+        return createFreeCoverLimitEndorsement(endorsementId, endorsementNumber, policyId, policyNumber, policyHolderName, glEndorsementType);
+    }
+
+
+    private GroupLifeEndorsement createFreeCoverLimitEndorsement(String endorsementIdInString, String endorsementNumberInString, String policyId, String policyNumber, String policyHolderName, GLEndorsementType endorsementType){
+        EndorsementId endorsementId = new EndorsementId(endorsementIdInString);
+        EndorsementNumber endorsementNumber = new EndorsementNumber(endorsementNumberInString);
+        Policy policy = new Policy(new PolicyId(policyId), new PolicyNumber(policyNumber), policyHolderName);
+        GroupLifeEndorsement groupLifeEndorsement = new GroupLifeEndorsement(endorsementId, endorsementNumber, policy, endorsementType);
+        return groupLifeEndorsement;
     }
 
     public List<GLEndorsementApproverCommentDto> findApproverComments(String endorsementId) {
@@ -224,8 +245,5 @@ public class GroupLifeEndorsementService {
         premiumDetailDto = premiumDetailDto.updateWithOptedFrequency(premiumDetail.getOptedFrequencyPremium() != null ? premiumDetail.getOptedFrequencyPremium().getPremiumFrequency() : null);
         return premiumDetailDto;
     }
-
-
-
 
 }
