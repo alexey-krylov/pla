@@ -63,23 +63,17 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">HCP Name</label>
-                                <!--<input type="text" class="form-control input-sm" name="hcpName" list="hcpNameDL"
-                                       ng-disabled="mode =='view'" placeholder="Enter HCP Name"
-                                       ng-model="uploadHCPServiceRatesDto.hcpName" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-change="getAllHCPByHCPName()"/>
-                                <datalist id="hcpNameDL">
-                                    <option  data-ng-repeat="hcp in hcps" value="{{hcp.hcpName}}"/>
-                                </datalist>-->
                                 <angucomplete-alt id="hcpName" placeholder="Search HCP" pause="300"
-                                     selected-object="getAllHCPByHCPName"
-                                     disable-input="uneditable"
-                                     remote-url="/pla/core/hcp/getAllHCPByHCPName?hcpName=" field-required="true"
-                                     initial-value="uploadHCPServiceRatesDto.hcpName"
-                                     remote-url-data-field="" title-field="hcpName"
-                                     minlength="2"
-                                     input-name="hcpName"
-                                     input-class="form-control input-sm"
-                                     match-class="highlight"
-                                     input-changed="clearHcpCode">
+                                                  selected-object="getAllHCPByHCPName"
+                                                  disable-input="uneditable"
+                                                  remote-url="/pla/core/hcp/getAllHCPByHCPName?hcpName=" field-required="true"
+                                                  initial-value="uploadHCPServiceRatesDto.hcpName"
+                                                  remote-url-data-field="" title-field="hcpName"
+                                                  minlength="2"
+                                                  input-name="hcpName"
+                                                  input-class="form-control input-sm"
+                                                  match-class="highlight"
+                                                  input-changed="clearHcpCode">
                                 </angucomplete-alt>
                                 <div class="error" ng-messages="hcpRateForm.hcpName.$error"
                                      ng-if="hcpRateForm.contactPersonDetail.$dirty">
@@ -90,22 +84,16 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">HCP Code</label>
-                                <!--<input type="text" class="form-control input-sm" name="hcpCode" list="hcpCodeDL"
-                                       ng-disabled="mode =='view'" placeholder="Enter hcpCode"
-                                       ng-model="uploadHCPServiceRatesDto.hcpCode" ng-required="true" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="getAllHCPByHCPCode()"/>
-                                <datalist id="hcpCodeDL">
-                                    <option  data-ng-repeat="hcp in hcps" value="{{hcp.hcpCode}}"/>
-                                </datalist>-->
                                 <angucomplete-alt id="hcpCode" placeholder="Search HCP" pause="300" ng-required="true"
-                                     selected-object="getAllHCPByHCPCode" disable-input="uneditable"
-                                     remote-url="/pla/core/hcp/getAllHCPByHCPCode?hcpCode=" field-required="true"
-                                     initial-value="uploadHCPServiceRatesDto.hcpCode"
-                                     remote-url-data-field="" title-field="hcpCode"
-                                     minlength="2"
-                                     input-name="hcpCode"
-                                     input-class="form-control input-sm"
-                                     match-class="highlight"
-                                     input-changed="clearHcpName">
+                                                  selected-object="getAllHCPByHCPCode" disable-input="uneditable"
+                                                  remote-url="/pla/core/hcp/getAllHCPByHCPCode?hcpCode=" field-required="true"
+                                                  initial-value="uploadHCPServiceRatesDto.hcpCode"
+                                                  remote-url-data-field="" title-field="hcpCode"
+                                                  minlength="2"
+                                                  input-name="hcpCode"
+                                                  input-class="form-control input-sm"
+                                                  match-class="highlight"
+                                                  input-changed="clearHcpName">
                                 </angucomplete-alt>
                                 <div class="error" ng-messages="hcpRateForm.hcpCode.$error"
                                      ng-if="hcpRateForm.hcpCode.$dirty">
@@ -164,9 +152,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!--<div class="col-md-6">-->
-                        <!--</div>-->
                     </div>
                     <div class="row bs-callout-info bs-callout-info">
                         <div class="col-lg-9">
@@ -174,11 +159,11 @@
                                 <label class="control-label ">File</label>
                                 <div class="form-group" style="margin-left:1px;margin-top:px; ">
                                     <input type="text" class="form-control input-sm" ng-model="fileName"  name="file"  ng-required="true" placeholder="Browse File"
-                                       style="width: 62%;display: inline-block" ng-readonly="true"/>
-                                <button type="file" class="btn btn-default btn-sm" ng-file-select=""
+                                           style="width: 62%;display: inline-block" ng-readonly="true"/>
+                                    <button type="file" class="btn btn-default btn-sm" ng-file-select=""
                                             ng-model="fileSaved">
                                         <span class="glyphicon glyphicon-upload"></span>
-                                </button>
+                                    </button>
                                     <div class="error" ng-messages="hcpForm.file.$error"
                                          ng-if="hcpForm.file.$dirty">
                                         <small ng-message="pattern">

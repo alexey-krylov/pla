@@ -52,25 +52,25 @@
                             <div class="form-group required">
                                 <label class="control-label">Plan</label>
                                 <select  class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.planCode"  maxlength="100" minlength="1"
-                                       ng-options="plan.planCode as plan.planName for plan in plans"
-                                       placeholder="Enter Product" ng-disabled="mode =='view'"
-                                       ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
+                                         ng-model="createsbcmcommand.planCode"  maxlength="100" minlength="1"
+                                         ng-options="plan.planCode as plan.planName for plan in plans"
+                                         placeholder="Enter Product" ng-disabled="mode =='view'"
+                                         ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
 
                                 <div class="error" ng-messages="hcpForm.hcpName.$error"
                                      ng-if="hcpForm.hcpName.$dirty">
                                     <small ng-message="required">Please Enter Product</small>
-                               </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">Coverage</label>
                                 <select  class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.coverageId"  maxlength="100" minlength="1"
-                                       ng-options="coverage.coverageId as coverage.coverageName for coverage  in coverages"
-                                       placeholder="Enter Coverage" ng-disabled="mode =='view'"
-                                       ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
+                                         ng-model="createsbcmcommand.coverageId"  maxlength="100" minlength="1"
+                                         ng-options="coverage.coverageId as coverage.coverageName for coverage  in coverages"
+                                         placeholder="Enter Coverage" ng-disabled="mode =='view'"
+                                         ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
                                 <div class="error" ng-messages="hcpForm.hcpName.$error"
                                      ng-if="hcpForm.hcpName.$dirty">
                                     <small ng-message="required">Please Enter Coverage</small>
@@ -78,16 +78,16 @@
 
                             </div>
                         </div>
-                  </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">Benefit</label>
-                               <select class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.benefitId"  maxlength="100" minlength="1"
-                                       ng-options="benefit.benefitId as benefit.benefitName for benefit in benefits"
-                                       placeholder="Enter Benifit" ng-disabled="mode =='view'"
-                                       ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
+                                <select class="form-control input-sm" name="product"
+                                        ng-model="createsbcmcommand.benefitId"  maxlength="100" minlength="1"
+                                        ng-options="benefit.benefitId as benefit.benefitName for benefit in benefits"
+                                        placeholder="Enter Benifit" ng-disabled="mode =='view'"
+                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
 
                                 <div class="error" ng-messages="hcpForm.hcpName.$error"
                                      ng-if="hcpForm.hcpName.$dirty">
@@ -100,10 +100,10 @@
                             <div class="form-group required">
                                 <label class="control-label">Services</label>
                                 <select class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.service"  maxlength="100" minlength="1"
-                                       placeholder="Enter Services" ng-disabled="mode =='view'"
-                                       ng-options="service as service for service in services"
-                                       ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
+                                        ng-model="createsbcmcommand.service"  maxlength="100" minlength="1"
+                                        placeholder="Enter Services" ng-disabled="mode =='view'"
+                                        ng-options="service as service for service in services"
+                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
 
                                 <div class="error" ng-messages="hcpForm.hcpName.$error"
                                      ng-if="hcpForm.hcpName.$dirty">
@@ -112,50 +112,49 @@
 
                             </div>
                         </div>
-                  </div>
+                    </div>
 
-            <div class="row bs-callout-info bs-callout-info">
-                <div class="form-group col-md-6">
-                    <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" ng-if="mode!='view'" data-animation="am-flip-x" ng-disabled="hcpForm.$invalid"  ng-click="saveHCPRates()">save</button>
-                </div>
-                <div class="form-group col-md-1">
-                    <button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" ng-if="mode !='view'" data-animation="am-flip-x">cancel</button>
-                </div>
+                    <div class="row bs-callout-info bs-callout-info">
+                        <div class="form-group col-md-6">
+                            <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" ng-if="mode!='view'" data-animation="am-flip-x" ng-disabled="hcpForm.$invalid"  ng-click="saveHCPRates()">save</button>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" ng-if="mode !='view'" data-animation="am-flip-x">cancel</button>
+                        </div>
+                    </div>
+                </ng-form>
             </div>
-            </ng-form>
         </div>
-    </div>
     </div>
     <style>
         .fuelux .checkbox-custom:before {
-        font-family: "Glyphicons Halflings" !important;
-        font-style: normal !important;
-        font-weight: normal !important;
-        font-variant: normal !important;
-        text-transform: none !important;
-        line-height: 1;
-        speak: none;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        border: 1px solid #adadad;
-        border-radius: 4px;
-        color: #fff;
-        content: " ";
-        font-size: 12px;
-        height: 18px;
-        left: 0;
-        padding: 1px 0 0 1px;
-        position: absolute;
-        top: 3px;
-        width: 18px;
+            font-family: "Glyphicons Halflings" !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border: 1px solid #adadad;
+            border-radius: 4px;
+            color: #fff;
+            content: " ";
+            font-size: 12px;
+            height: 18px;
+            left: 0;
+            padding: 1px 0 0 1px;
+            position: absolute;
+            top: 3px;
+            width: 18px;
         }
         .btn {
-        font-size: 12px;
+            font-size: 12px;
         }
     </style>
 </script>
 <div class="ng-view container">
-
 </div>
 <footer class="footer" th:include="fragments/common :: footer">
 </footer>

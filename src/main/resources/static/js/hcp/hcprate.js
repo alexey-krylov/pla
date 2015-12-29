@@ -20,6 +20,7 @@
                     controller: 'searchHcpRateController'
                 }
             )}]);
+
     app.controller('searchHcpRateController', ['$scope', '$http','$upload',  function ($scope, $http, $upload) {
         $scope.uploadHCPServiceRatesDto = {};
         $scope.showDownload = true;
