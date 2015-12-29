@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +56,14 @@ public class ServiceBenefitCoverageMappingController {
         } catch(Exception e){
             return Result.failure(e.getMessage());
         }
+    }
+
+    @RequestMapping(value="/getAllSBCM",method = RequestMethod.GET)
+    public ModelAndView getAllSBCM(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("searchResult",sbcmService.getAllSBCM());
+        modelAndView.setViewName("pla/core/SBCM/searchsbcm");
+        return modelAndView;
     }
 
 }

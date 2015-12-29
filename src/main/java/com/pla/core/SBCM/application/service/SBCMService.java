@@ -17,7 +17,6 @@ import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.core.repository.PlanRepository;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -154,4 +153,15 @@ public class SBCMService {
         serviceBenefitCoverageMapping.updateWithStatus(isNotEmpty(createSBCMCommand.getStatus()) ? ServiceBenefitCoverageMapping.Status.valueOf(createSBCMCommand.getStatus()) : ServiceBenefitCoverageMapping.Status.ACTIVE);
         return sbcmRepository.save(serviceBenefitCoverageMapping);
     }
+
+    public List<CreateSBCMCommand> getAllSBCM(){
+        List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAll();
+        return isNotEmpty(sbcms) ? sbcms.parallelStream().map(new Function<ServiceBenefitCoverageMapping, CreateSBCMCommand>() {
+            @Override
+            public CreateSBCMCommand apply(ServiceBenefitCoverageMapping serviceBenefitCoverageMapping) {
+               return new CreateSBCMCommand(serviceBenefitCoverageMapping.getPlanName(), serviceBenefitCoverageMapping.getBenefitName(), serviceBenefitCoverageMapping.getCoverageName(), serviceBenefitCoverageMapping.getService(),serviceBenefitCoverageMapping.getPlanCode());
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
 }
