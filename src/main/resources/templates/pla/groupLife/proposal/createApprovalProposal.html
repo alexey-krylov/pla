@@ -520,6 +520,17 @@
                     <div class="row" style="margin-top: 5px">
                         <div class="col-lg-4 col-lg-offset-3">
                             <div class="form-group ">
+                                <label class="control-label">FCL</label>
+                                <input class="form-control input-sm" onkeypress="return isNumeric(event)"
+                                       name="freeCoverLimit"
+                                       ng-pattern="/^(^[0-9]{1,7})+(\.[0-9]{1,2})?$/"
+                                       ng-model="proposalDetails.plan.freeCoverLimit"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-lg-4 col-lg-offset-3">
+                            <div class="form-group ">
                                 <label class="control-label">Scheme Name</label>
                                 <input class="form-control input-sm"
                                        name="schemeName"

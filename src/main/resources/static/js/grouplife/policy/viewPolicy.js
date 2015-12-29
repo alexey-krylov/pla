@@ -314,6 +314,7 @@ angular.module('viewPolicy', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgc
             $scope.policyDetails.plan.samePlanForAllRelation = policyDetails.samePlanForAllRelation;
             $scope.policyDetails.plan.samePlanForAllCategory = policyDetails.samePlanForAllCategory;
             $scope.policyDetails.plan.schemeName = policyDetails.schemeName;
+            $scope.policyDetails.plan.freeCoverLimit = policyDetails.freeCoverLimit;
 
             if (policyDetails) {
                 if (policyDetails.contactPersonDetail) {

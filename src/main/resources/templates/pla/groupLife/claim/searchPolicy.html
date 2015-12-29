@@ -142,7 +142,7 @@
                             <!--/*/ <th:block th:each="policy : ${searchResult}"> /*/-->
                             <th:block th:each="policy : ${searchResult}">
                                 <tr>
-                                    <td><input type="radio" name="proposalNumber" th:value="${policy.policyNumber}" value="5100000010315"/></td>
+                                    <td><input type="radio" name="policyId" th:value="${policy.policyId}" value="5100000010315"/></td>
                                     <td th:text="${policy.policyNumber}">5100000010315</td>
                                     <td th:text="${policy.policyHolderName}"></td>
                                     <td th:text="${policy.status}"></td>

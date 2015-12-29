@@ -11,8 +11,8 @@ var App = angular.module('claimIntimation', ['common', 'ngRoute', 'mgcrea.ngStra
 }
 ]);
 
-App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$upload','getQueryParameter','provinces','bankDetails',
-        function ($scope, $http, $window,$upload,getQueryParameter,provinces,bankDetails) {
+App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$upload','getQueryParameter','provinces','bankDetails','globalConstants','occupations',
+        function ($scope, $http, $window,$upload,getQueryParameter,provinces,bankDetails,globalConstants,occupations) {
 //alert("********CONTROLLER INCLUDED***********");
         $scope.schedule={};
         $scope.searchObj = {};
@@ -26,9 +26,14 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.bankDetails=[];
         $scope.bankDetails=bankDetails;
         $scope.bankBranchDetails=[];
-        $scope.rcvPolicyNumber = getQueryParameter('policyNumber');
+        $scope.rcvPolicyId = getQueryParameter('policyId');
         $scope.minIntimationDate=moment().add(0,'days').format("YYYY-MM-DD");
+        $scope.isAdvanceSearchEnable=false;
         //$scope.minIntimationDate=moment().add(1,'days').format("YYYY-MM-DD");
+        $scope.titles = globalConstants.title;
+        $scope.occupations = [];
+        $scope.occupations=occupations;
+        $scope.assuredDetails={};
 
             /***
              *
@@ -63,6 +68,42 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }
             }
+            /**
+             *
+             * @param $event for Advance Search Assured DOB
+             */
+            $scope.openAssuredDOB = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForAssuredDOB.isOpened = true;
+            };
+            $scope.datePickerSettingsForAssuredDOB = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
+            /***
+             *
+             * @param $event for Assured Details Date Of Birth
+             */
+            $scope.openDob = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForDOB.isOpened = true;
+            };
+            $scope.datePickerSettingsForDOB = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
 
             /**
              *
@@ -96,16 +137,56 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             /***
              * Geating All Details Of Particular PolicyNumber and Populating in GL ClaimIntimation Screen
              */
-            if($scope.rcvPolicyNumber){
+            if($scope.rcvPolicyId){
                 // Logic to Populate All The date to ClaimIntimation Class
-                $scope.policyNumber=$scope.rcvPolicyNumber;
+                //$scope.policyNumber=$scope.rcvPolicyNumber;
                 $scope.claimIntimationDate=moment(new Date()).format('YYYY-MM-DD');
 
             }
+            /**
+             * Openning Advance Search panel
+             */
+            $scope.openAdvaceSearch=function(){
+                //alert('Advance Search');
+                $scope.isAdvanceSearchEnable=true;
+            }
 
+            /**
+             * Calculating Nex DOB
+             */
+            $scope.calculateAssuredDOB=function(){
+                if ($scope.assuredDetails.dob) {
+                    $scope.assuredDetails.nextDob = moment().diff(new moment(new Date($scope.assuredDetails.dob)), 'years') + 1;
+                    //alert('dateof Birth');
+                }
+            }
+            /***
+             * category HardCoded List
+             *
+             */
+            $scope.claimDetailsResponse={"category":["manger","self"],
+                "relationship":["manger","self"]
+            };
+
+            /**
+             * Claim Detail HarCoded Value
+             */
+            $scope.claimantDetail={
+                "proposerName":"sca",
+                "addressLine1":"dsa",
+                "addressLine2":"asa",
+                "postalCode":"1212121",
+                "province":"PR-LUA",
+                "town":"CI-SAM",
+                "workPhone":"2222222222",
+                "contactPersonEmail":"mail@mail.com",
+                "emailId":"mail@mail.com",
+                "contactPersonName":"ascas",
+                "mobileNumber":"2222222222",
+                "contactPersonPhone":"2222222222"
+            }
 
 /*
-
             $http.get("/pla/grouplife/claim/getclaimtype")
              .success(function (data) {
                 $scope.claimTypes = data
@@ -251,6 +332,15 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                                bankDetails: ['$q', '$http', function ($q, $http) {
                                    var deferred = $q.defer();
                                    $http.get('/pla/individuallife/proposal/getAllBankNames').success(function (response, status, headers, config) {
+                                       deferred.resolve(response)
+                                   }).error(function (response, status, headers, config) {
+                                       deferred.reject();
+                                   });
+                                   return deferred.promise;
+                               }],
+                               occupations: ['$q', '$http', function ($q, $http) {
+                                   var deferred = $q.defer();
+                                   $http.get('/pla/individuallife/proposal/getAllOccupation').success(function (response, status, headers, config) {
                                        deferred.resolve(response)
                                    }).error(function (response, status, headers, config) {
                                        deferred.reject();
