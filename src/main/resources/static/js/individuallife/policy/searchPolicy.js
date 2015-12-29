@@ -270,6 +270,7 @@ angular.module('searchPolicy', ['common', 'ngRoute', 'commonServices', 'ngMessag
                         if ($scope.proposedAssured.dateOfBirth) {
                             $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         }
+                         $scope.proposedAssured.opportunityId=response.opportunityId;
 
                         if ($scope.rcvProposal.agentCommissionDetails != null) {
                             $scope.agentDetails = $scope.rcvProposal.agentCommissionDetails;

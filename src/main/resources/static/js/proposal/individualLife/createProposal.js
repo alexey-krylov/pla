@@ -1132,6 +1132,7 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         if ($scope.proposedAssured.dateOfBirth) {
                             $scope.proposedAssured.nextDob = moment().diff(new moment(new Date($scope.proposedAssured.dateOfBirth)), 'years') + 1;
                         }
+                        $scope.proposedAssured.opportunityId=response.opportunityId;
 
                         /**
                          * If riderDetails are not Coming Then retrive riderDetails
@@ -2798,7 +2799,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 prorequest =
                 {
                     "proposedAssured": prorequest,
-                    "proposalId": $scope.proposal.proposalId
+                    "proposalId": $scope.proposal.proposalId,
+                    "opportunityId":$scope.proposedAssured.opportunityId
                 };
                 //console.log('ProRequest' + JSON.stringify(prorequest));
 
