@@ -5,13 +5,18 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.notification.NotificationBuilder;
+import com.pla.core.dto.CoverageClaimTypeDto;
 import com.pla.core.dto.MandatoryDocumentDto;
+import com.pla.core.dto.ProductClaimTypeDto;
+import com.pla.core.query.ProductClaimMapperFinder;
 import com.pla.grouplife.claim.domain.model.AssuredDetail;
 import com.pla.grouplife.claim.domain.model.ClaimStatus;
+import com.pla.grouplife.claim.domain.model.ClaimantDetail;
 import com.pla.grouplife.claim.domain.model.GLClaimDocument;
 import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.grouplife.claim.query.GLClaimFinder;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
+import com.pla.grouplife.sharedresource.dto.ContactPersonDetailDto;
 import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
 import com.pla.grouplife.sharedresource.dto.SearchGLPolicyDto;
 import com.pla.grouplife.sharedresource.model.vo.*;
@@ -22,6 +27,7 @@ import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
@@ -58,6 +64,9 @@ public class GLClaimService {
 
     @Autowired
     private GLClaimFinder glClaimFinder;
+
+    @Autowired
+    private ProductClaimMapperFinder productClaimMapperFinder;
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
@@ -107,6 +116,57 @@ public class GLClaimService {
         return transformedPolicies;
     }
 
+    public ClaimantDetailDto claimantDetailSearch(String policyId){
+        ClaimantDetailDto claimantDetailDto=new ClaimantDetailDto();
+        Map policyMap= glFinder.findPolicyById(policyId);
+        String schemeName=(String)policyMap.get("schemeName");
+        PolicyNumber policyNumberObj=(PolicyNumber)policyMap.get("policyNumber");
+        String policyNumber=policyNumberObj.getPolicyNumber();
+        List<InsuredDependent> insuredDependentList = Lists.newArrayList();
+        List<Insured> insuredList = (List<Insured>)policyMap.get("insureds");
+        boolean isAssuredSharedAvailable=false;
+        for (Insured insured : insuredList) {
+            if(insured.getNoOfAssured()==null) {
+                isAssuredSharedAvailable=true;
+            }
+            if(insured.getNoOfAssured()!=null) {
+                Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                for (InsuredDependent insuredDependent : insuredDependents) {
+                    if(insuredDependent.getNoOfAssured()!=null){
+                        isAssuredSharedAvailable=true;
+                    }
+                    else{
+                        isAssuredSharedAvailable=false;
+                    }
+                }
+                }
+            }
+        claimantDetailDto.setIsAssuredDetailsShared(isAssuredSharedAvailable);
+
+        Proposer proposer=(Proposer)policyMap.get("proposer");
+        ProposerContactDetail proposerContactDetail=proposer.getContactDetail();
+        claimantDetailDto.setSchemeName(schemeName);
+        ClaimantDetail claimantDetail=new ClaimantDetail(proposer.getProposerName(),proposerContactDetail.getAddressLine1(),proposerContactDetail.getAddressLine2()
+        ,proposerContactDetail.getPostalCode(),proposerContactDetail.getProvince(),proposerContactDetail.getTown(),proposerContactDetail.getEmailAddress(),proposerContactDetail.getEmailAddress());
+        //claimantDetail.setProposerName(proposer.getProposerName());
+
+        List<ProposerContactDetail.ContactPersonDetail> contactPersonDetailList=proposerContactDetail.getContactPersonDetail();
+        List<ContactPersonDetailDto> contactPersonDetailDtoList=new ArrayList<ContactPersonDetailDto>();
+        for(ProposerContactDetail.ContactPersonDetail contactPersonDetails:contactPersonDetailList){
+            ContactPersonDetailDto contactPersonDetailDto=new ContactPersonDetailDto();
+            contactPersonDetailDto.setContactPersonName(contactPersonDetails.getContactPersonName());
+            contactPersonDetailDto.setContactPersonEmail(contactPersonDetails.getContactPersonEmail());
+            contactPersonDetailDto.setContactPersonMobileNumber(contactPersonDetails.getMobileNumber());
+            contactPersonDetailDto.setContactPersonWorkPhoneNumber(contactPersonDetails.getWorkPhoneNumber());
+            contactPersonDetailDtoList.add(contactPersonDetailDto);
+        }
+        claimantDetail.withContactPersonDetails(contactPersonDetailDtoList);
+        claimantDetailDto.setClaimantDetail(claimantDetail);
+       Set<String> categorySet=getCategory(policyId);
+        claimantDetailDto.setCategorySet(categorySet);
+        claimantDetailDto.setPolicyNumber(policyNumber);
+        return claimantDetailDto;
+    }
 
 
     public List<ClaimIntimationDetailDto> getClaimIntimationRecord(SearchClaimIntimationDto searchClaimIntimationDto) {
@@ -299,7 +359,6 @@ public class GLClaimService {
         }
         return searchList;
     }
-
     public Map<String, Object> getConfiguredRelationShipAndCategory(String policyId) {
         Set<String> categoryList = Sets.newLinkedHashSet();
         Set<String> relationShipList = Sets.newLinkedHashSet();
@@ -324,6 +383,180 @@ public class GLClaimService {
         relationCategoryMap.put("policyNumber", policyNumber);
         return relationCategoryMap;
     }
+
+    public Set<String> getCategory(String policyId) {
+        Set<String> categoryList = Sets.newLinkedHashSet();
+        Map policy = glFinder.findPolicyById(policyId);
+        if (isEmpty(policy)) {
+            return Collections.EMPTY_SET;
+        }
+        List<Insured> insuredList = (List<Insured>) policy.get("insureds");
+        for (Insured insured : insuredList) {
+            categoryList.add(insured.getCategory() != null ? insured.getCategory() : "");
+            Set<InsuredDependent> insuredDependentList = insured.getInsuredDependents();
+            for (InsuredDependent insuredDependentMap : insuredDependentList) {
+                categoryList.add(insuredDependentMap.getCategory() != null ? insuredDependentMap.getCategory() : "");
+            }
+        }
+
+        return categoryList;
+    }
+
+
+    public Map<String, Object> getConfiguredCategory(String policyId) {
+        Set<String> categoryList = Sets.newLinkedHashSet();
+        Map policy = glFinder.findPolicyById(policyId);
+        if (isEmpty(policy)) {
+            return Collections.EMPTY_MAP;
+        }
+        List<Insured> insuredList = (List<Insured>) policy.get("insureds");
+        for (Insured insured : insuredList) {
+            categoryList.add(insured.getCategory() != null ? insured.getCategory() : "");
+            Set<InsuredDependent> insuredDependentList = insured.getInsuredDependents();
+            for (InsuredDependent insuredDependentMap : insuredDependentList) {
+                categoryList.add(insuredDependentMap.getCategory() != null ? insuredDependentMap.getCategory() : "");
+            }
+        }
+        Map<String, Object> categoryMap = Maps.newLinkedHashMap();
+        categoryMap.put("category", categoryList);
+        PolicyNumber policyNumber = policy.get("policyNumber") != null ? (PolicyNumber) policy.get("policyNumber") : null;
+        categoryMap.put("policyNumber", policyNumber);
+        return categoryMap;
+    }
+
+
+    public Map<String, Object> getConfiguredRelationShip(String policyId,String categorySearch) {
+        Set<String> categoryList = Sets.newLinkedHashSet();
+        Set<String> relationShipList = Sets.newLinkedHashSet();
+        Map policy = glFinder.findPolicyById(policyId);
+        if (isEmpty(policy)) {
+            return Collections.EMPTY_MAP;
+        }
+        List<Insured> insuredList = (List<Insured>) policy.get("insureds");
+
+        for (Insured insured : insuredList) {
+           if(insured.getCategory() != null && insured.getCategory().equals(categorySearch)){
+               String relationship = insured.getRelationship() != null ? insured.getRelationship().description : Relationship.SELF.description;
+               relationShipList.add(relationship);
+
+           }
+            Set<InsuredDependent> insuredDependentList = insured.getInsuredDependents();
+            for (InsuredDependent insuredDependents : insuredDependentList) {
+                String category=insuredDependents.getCategory();
+                if(category != null &&category.equals(categorySearch) ){
+                    relationShipList.add(insuredDependents.getRelationship() != null ? insuredDependents.getRelationship().name() : "");
+                }
+            }
+        }
+        Map<String, Object> relationMap = Maps.newLinkedHashMap();
+        relationMap.put("relationship", relationShipList);
+
+        PolicyNumber policyNumber = policy.get("policyNumber") != null ? (PolicyNumber) policy.get("policyNumber") : null;
+        relationMap.put("policyNumber", policyNumber);
+        return relationMap;
+    }
+
+    public PlanCoverageDetailDto getPlanDetailForCategoryAndRelationship(String policyId, String searchCategory,String searchRelationship){
+        Map policy = glFinder.findPolicyById(policyId);
+        if (isEmpty(policy)) {
+            return new PlanCoverageDetailDto();
+        }
+        PlanCoverageDetailDto planCoverageDetailDto=new PlanCoverageDetailDto();
+        List<Insured> insuredList = (List<Insured>) policy.get("insureds");
+
+        List<InsuredDependent> insuredDependentList = Lists.newArrayList();
+        Set<Insured> insuredLists = Sets.newLinkedHashSet();
+        Set<InsuredDependent> relationShipList = Sets.newLinkedHashSet();
+            for (Insured insured : insuredList) {
+                Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                for (InsuredDependent insuredDependent : insuredDependents) {
+                    String category = insuredDependent.getCategory() != null ? insuredDependent.getCategory() : "";
+                    String relationship = insuredDependent.getRelationship() != null ? insuredDependent.getRelationship().name() : "";
+                    if (category.equals(searchCategory) && relationship.equals(searchRelationship)) {
+                        insuredDependentList.add(insuredDependent);
+
+                    }
+                }
+                List<Insured> insureds = Lists.newArrayList();
+                List<Insured> insuredsList = (List<Insured>) policy.get("insureds");
+                PolicyNumber policyNumberObj = policy.get("policyNumber") != null ? (PolicyNumber) policy.get("policyNumber") : null;
+                String policyNumber=policyNumberObj.getPolicyNumber();
+                for (Insured insure : insuredsList) {
+                    String category = insure.getCategory() != null ? insure.getCategory() : "";
+                    String relationship = insured.getRelationship() != null ? insured.getRelationship().description : Relationship.SELF.description;
+                   // String relationship = insure.getRelationship() != null ? insure.getRelationship().name() : "";
+
+                    if (category.equals(searchCategory) && relationship.equals(searchRelationship)) {
+                        insureds.add(insure);
+
+                    }
+                }
+
+
+                if (insureds!=null){
+                    Insured insuredResult=insureds.get(0);
+                    PlanPremiumDetail planPremiumDetail=insuredResult.getPlanPremiumDetail();
+                    String planName=null;
+                    Set<String>claimTypes=null;
+                    List<Map<String, Object>> planMap=productClaimMapperFinder.getPlanDetailBy(LineOfBusinessEnum.GROUP_LIFE);
+                    for(Map<String,Object>plan:planMap){
+
+                        if(((String)plan.get("planCode")).equals(planPremiumDetail.getPlanCode())){
+                          planName=(String)plan.get("planName");
+                        }
+                        planName="";
+                    }
+
+                    List<ProductClaimTypeDto> productClaimList=productClaimMapperFinder.searchProductClaimMap(LineOfBusinessEnum.GROUP_LIFE,planName);
+                  //  List<ProductClaimTypeDto> productClaimList=productClaimMapperFinder.searchProductClaimMap(LineOfBusinessEnum.GROUP_LIFE,"Life Cover");
+
+                    for(ProductClaimTypeDto productClaimTypeDto:productClaimList){
+                        List<CoverageClaimTypeDto> coverageClaimType= productClaimTypeDto.getCoverageClaimType();
+                        for(CoverageClaimTypeDto coverageClaimTypeDto:coverageClaimType){
+                            claimTypes=  coverageClaimTypeDto.getClaimTypes();
+                        }
+
+                    }
+
+                    planCoverageDetailDto.setPlanPremiumDetail(insured.getPlanPremiumDetail());
+                    planCoverageDetailDto.setCoveragePremiumDetails(insured.getCoveragePremiumDetails());
+                    planCoverageDetailDto.setPolicyNumber(policyNumber);
+                    planCoverageDetailDto.setClaimTypes(claimTypes);
+
+            }
+                else{
+
+                    InsuredDependent  insuredDependent=insuredDependentList.get(0) ;
+                    PlanPremiumDetail planPremiumDetail=insuredDependent.getPlanPremiumDetail();
+                    String planName=null;
+                    Set<String>claimTypes=null;
+                    List<Map<String, Object>> planMap=productClaimMapperFinder.getPlanDetailBy(LineOfBusinessEnum.GROUP_LIFE);
+                    for(Map<String,Object>plan:planMap){
+                        if(((String)plan.get("planCode")).equals(planPremiumDetail.getPlanCode())){
+                            planName=(String)plan.get("planName");
+                        }
+                    }
+
+                    List<ProductClaimTypeDto> productClaimList=productClaimMapperFinder.searchProductClaimMap(LineOfBusinessEnum.GROUP_LIFE,planName);
+                    for(ProductClaimTypeDto productClaimTypeDto:productClaimList){
+                        List<CoverageClaimTypeDto> coverageClaimType= productClaimTypeDto.getCoverageClaimType();
+                        for(CoverageClaimTypeDto coverageClaimTypeDto:coverageClaimType){
+                            claimTypes=  coverageClaimTypeDto.getClaimTypes();
+                        }
+                    }
+                    planCoverageDetailDto.setPlanPremiumDetail(insuredDependent.getPlanPremiumDetail());
+                    planCoverageDetailDto.setCoveragePremiumDetails(insuredDependent.getCoveragePremiumDetails());
+                    planCoverageDetailDto.setPolicyNumber(policyNumber);
+                    planCoverageDetailDto.setClaimTypes(claimTypes);
+                }
+        }
+        return planCoverageDetailDto;
+    }
+
+
+
+
+
 
     private GLPolicyDetailDto transformToDto(Map policyMap) {
         DateTime inceptionDate = policyMap.get("inceptionOn") != null ? new DateTime((Date) policyMap.get("inceptionOn")) : null;

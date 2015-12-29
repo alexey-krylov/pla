@@ -54,7 +54,9 @@ public class GLClaimSettlement  extends AbstractAggregateRoot<ClaimSettlementId>
         checkArgument(claimSettlementId!= null, "Claim Type cannot be empty");
         checkArgument(claimId != null, "Claim ID cannot be empty");
         checkArgument(claimNumber != null, "Claim Number cannot be empty");
-        checkArgument(claimSettlementId!= null, "Claim Type cannot be empty");
+        this.claimSettlementId=claimSettlementId;
+        this.claimId=claimId;
+        this.claimNumber=claimNumber;
     }
     public GLClaimSettlement  withApprovedDate(DateTime approvedDate){
         this.claimApprovedOn=approvedDate;

@@ -1,4 +1,4 @@
-package com.pla.grouplife.claim.domain.event;
+    package com.pla.grouplife.claim.domain.event;
 
 import com.google.common.collect.Lists;
 import com.pla.sharedkernel.application.CreateClaimNotificationCommand;

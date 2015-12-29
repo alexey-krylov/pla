@@ -4,7 +4,6 @@ import com.pla.grouplife.claim.domain.model.ClaimStatus;
 import com.pla.sharedkernel.domain.model.ClaimId;
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 
 /**
@@ -14,7 +13,7 @@ import org.joda.time.DateTime;
 @Setter
 public class ClaimApproverCommentsDto {
 
-    private ObjectId id;
+   // private ObjectId id;
 
     private ClaimId claimId;
 

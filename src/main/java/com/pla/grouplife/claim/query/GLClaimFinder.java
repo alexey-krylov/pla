@@ -284,6 +284,10 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         return mongoTemplate.findOne(new Query(Criteria.where("_id").is(claimId)), Map.class,"group_life_claim");
     }
 
+    public Map findProposerByPolicyNumber(String policyNumber) {
+        checkArgument(policyNumber != null);
+        return mongoTemplate.findOne(new Query(Criteria.where("policyNumber.policyNumber").is(policyNumber)), Map.class,GL_POLICY_COLLECTION_NAME);
+    }
     public List<ClaimMandatoryDocumentDto> getMandatoryDocuments(SearchDocumentDetailDto searchDocumentDetailDto, ProcessType processType){
         SqlParameterSource sqlParameterSource =  new MapSqlParameterSource("planId",searchDocumentDetailDto.getPlanId()).addValue("processType", processType.toString());
         List<ClaimMandatoryDocumentDto> listOfMandatoryDocuments =  namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS, sqlParameterSource, new BeanPropertyRowMapper<ClaimMandatoryDocumentDto>(ClaimMandatoryDocumentDto.class));

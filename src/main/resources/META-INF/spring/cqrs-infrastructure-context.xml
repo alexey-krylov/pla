@@ -124,4 +124,8 @@
                                 aggregate-type="com.pla.grouplife.claim.domain.model.GroupLifeClaim"
                                 mongo-template="mongoTemplate"/>
 
+    <extension:mongo-repository id="glClaimSettlementMongoRepository"
+                                aggregate-type="com.pla.grouplife.claim.domain.model.GLClaimSettlement"
+                                mongo-template="mongoTemplate"/>
+
 </beans>

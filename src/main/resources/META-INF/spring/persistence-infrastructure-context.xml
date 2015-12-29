@@ -46,6 +46,13 @@
                 <bean class="com.pla.grouplife.claim.repository.ClaimIdToObjectIdConverter"/>
             </mongo:converter>
 
+            <mongo:converter>
+                <bean class="com.pla.grouplife.claim.repository.ObjectIdToClaimSettlementIdConverter"/>
+            </mongo:converter>
+            <mongo:converter>
+                <bean class="com.pla.grouplife.claim.repository.ClaimSettlementIdToObjectIdConverter"/>
+            </mongo:converter>
+
         </mongo:custom-converters>
     </mongo:mapping-converter>
 

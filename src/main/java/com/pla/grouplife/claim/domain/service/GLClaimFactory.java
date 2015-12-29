@@ -84,9 +84,11 @@ public class GLClaimFactory {
 
 
      List<ContactPersonDetailDto> contactDetailList=new ArrayList<>();
-       ContactPersonDetailDto contactPersonDetailDto=new ContactPersonDetailDto(createCommand.getClaimantDetail().getContactPersonName(),createCommand.getClaimantDetail().getContactPersonEmail()
+     /*  ContactPersonDetailDto contactPersonDetailDto=new ContactPersonDetailDto(createCommand.getClaimantDetail().getContactPersonName(),createCommand.getClaimantDetail().getContactPersonEmail()
                 ,createCommand.getClaimantDetail().getMobileNumber(),createCommand.getClaimantDetail().getContactPersonPhone());
        contactDetailList.add(contactPersonDetailDto);
+       */
+       contactDetailList=createCommand.getClaimantDetail().getContactPersonDetail();
        proposerBuilder.withContactPersonDetail(contactDetailList);
 
       // proposerBuilder.withContactPersonDetail(createCommand.getClaimantDetail().getContactPersonName(),createCommand.getClaimantDetail().getContactPersonEmail()

@@ -39,7 +39,8 @@ public class GLClaimIntimationCommandHandler {
 
     private Repository<GroupLifeClaim> glClaimMongoRepository;
 
-   // private Repository<GLClaimSettlement> glClaimSettlementMongoRepository;
+    @Autowired
+   private Repository<GLClaimSettlement> glClaimSettlementMongoRepository;
 
     private GLClaimFactory glClaimFactory;
     @Autowired
@@ -229,10 +230,10 @@ public class GLClaimIntimationCommandHandler {
         return groupLifeClaim.getIdentifier().getClaimId();
     }
 
- /*   @CommandHandler
+   @CommandHandler
     public String settleClaim(GLClaimSettlementCommand glClaimSettlementCommand) {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimSettlementCommand.getClaimId()));
-        GLClaimSettlementProcessor glClaimProcessor=groupLifeClaimRoleAdapter.userToGLClaimSettlementProcessor(glClaimSettlementCommand.getUserDetails());
+        //GLClaimSettlementProcessor glClaimProcessor=groupLifeClaimRoleAdapter.userToGLClaimSettlementProcessor(glClaimSettlementCommand.getUserDetails());
        // groupLifeClaim = glClaimProcessor.submitClaimSettlement(DateTime.now(), glClaimSettlementCommand.getComment(), groupLifeClaim, glClaimSettlementCommand.getStatus());
         //claim settlement to be created
       //
@@ -257,7 +258,7 @@ public class GLClaimIntimationCommandHandler {
         return groupLifeClaim.getIdentifier().getClaimId();
     }
 
-    */
+
     @CommandHandler
     public String waiveDocumentCommandHandler(GLClaimWaiveMandatoryDocumentCommand cmd) {
         GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(cmd.getUserDetails());

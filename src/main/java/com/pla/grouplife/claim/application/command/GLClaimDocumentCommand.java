@@ -23,6 +23,8 @@ public class GLClaimDocumentCommand {
 
     private File file;
 
+    //private MultipartFile file;
+
     private boolean additional;
 
     private boolean mandatory;

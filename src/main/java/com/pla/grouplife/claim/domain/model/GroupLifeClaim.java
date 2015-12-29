@@ -72,7 +72,7 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
 
     private BigDecimal reserveAmount;
 
-    //private GLClaimSettlementData claimSettlementData;
+    private GLClaimSettlementData claimSettlementData;
 
     @Override
     public ClaimId getIdentifier() {
@@ -154,12 +154,12 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
         this.reserveAmount=reserveSum;
 
     }
-    /*
+
     public GroupLifeClaim withClaimSettlementData(GLClaimSettlementData claimSettlementData){
         this.claimSettlementData=claimSettlementData;
         return this;
     }
-*/
+
 
     public GroupLifeClaim submitForApproval(DateTime now, String submittedBy, String comment) {
         this.submittedOn = now;

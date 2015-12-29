@@ -83,6 +83,23 @@ public class GroupLifeClaimController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getclaimant/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ClaimantDetailDto claimantSearch(@PathVariable("policyId") String policyNumber) {
+        return glClaimService.claimantDetailSearch(policyNumber);
+    }
+
+
+     @RequestMapping(value = "/getrelationship/{policyId}/{category}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getConfiguredRelationshipForCategoryAndPolicy(@PathVariable("policyId") String policyId,@PathVariable("category") String category) {
+        return glClaimService.getConfiguredRelationShip(policyId,category);
+    }
+    @RequestMapping(value = "/getplandetail/{policyId}/{category}/{relationship}", method = RequestMethod.GET)
+    @ResponseBody
+    public PlanCoverageDetailDto getPlanDetails(@PathVariable("policyId") String policyId,@PathVariable("category") String category,@PathVariable("relationship") String relationship) {
+        return glClaimService.getPlanDetailForCategoryAndRelationship(policyId, category, relationship);
+    }
 
     @RequestMapping(value = "/assuredsearch", method = RequestMethod.POST)
     @ResponseBody
@@ -341,11 +358,7 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
 
     }
 
-    @RequestMapping(value = "/getrelationshipandcategory/{policyId}", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> getConfiguredRelationshipAndCategory(@PathVariable("policyId") String policyId) {
-        return glClaimService.getConfiguredRelationShipAndCategory(policyId);
-    }
+
     @RequestMapping(value = "/getclaimtypes", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> getClaimType() {
@@ -438,7 +451,7 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
 
     @RequestMapping(value = "/createclaimisettlement", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Result> createClaimIntimation(@RequestBody GLClaimSettlementCommand glClaimSettlementCommand, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<Result> createClaimSettlement(@RequestBody GLClaimSettlementCommand glClaimSettlementCommand, BindingResult bindingResult, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(Result.failure("Error in creating  Claim Settlement Record", bindingResult.getAllErrors()), HttpStatus.OK);
@@ -454,7 +467,11 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
         return new ResponseEntity(Result.success(" Claim Settlement created successfully"), HttpStatus.OK);
 
     }
-
+    @RequestMapping(value = "/getcategory/{policyId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getConfiguredCategoryForPolicy(@PathVariable("policyId") String policyId) {
+        return glClaimService.getConfiguredCategory(policyId);
+    }
 
 }
 

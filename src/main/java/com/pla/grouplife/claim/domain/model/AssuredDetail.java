@@ -39,7 +39,7 @@ public class AssuredDetail {
 
     private BigDecimal annualIncome;
 
-   // private BigDecimal sumAssured;
+    // private BigDecimal sumAssured;
 
     //private BigDecimal reserveAmount;
 
@@ -53,7 +53,7 @@ public class AssuredDetail {
 
     private Relationship relationship;
 
-   // private MainAssuredDetails mainAssuredDetails;
+    // private MainAssuredDetails mainAssuredDetails;
 
 
 }

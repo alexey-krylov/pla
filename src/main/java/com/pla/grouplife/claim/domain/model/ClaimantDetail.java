@@ -1,10 +1,13 @@
 package com.pla.grouplife.claim.domain.model;
 
+import com.pla.grouplife.sharedresource.dto.ContactPersonDetailDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import java.util.List;
 
 /**
  * Created by Mirror on 8/19/2015.
@@ -31,20 +34,13 @@ public class ClaimantDetail {
 
     private String mobileNumber;
 
-    private String workPhone;
-
-    private String contactPersonName;
-
-    private  String contactPersonEmail;
-
-    private String  contactPersonMobile;
-
-    private String  contactPersonPhone;
+   // private String workPhone;
 
 
+    List<ContactPersonDetailDto> contactPersonDetail;
 
    public ClaimantDetail(String proposerName, String addressLine1, String addressLine2, String postalCode, String province,
-                         String town, String emailId, String mobileNumber, String workPhone){
+                         String town, String emailId, String mobileNumber){
 
        this.proposerName=proposerName;
        this.addressLine1=addressLine1;
@@ -54,15 +50,12 @@ public class ClaimantDetail {
        this.town=town;
        this.emailId=emailId;
        this.mobileNumber=mobileNumber;
-       this.workPhone=workPhone;
+       //this.workPhone=workPhone;
 
 
    }
-  public ClaimantDetail withContactPersonDetails(String contactPersonName,String contactPersonEmail,String contactPersonMobile,String  contactPersonPhone){
-      this.contactPersonName=contactPersonName;
-      this.contactPersonEmail=contactPersonEmail;
-      this.contactPersonMobile=contactPersonMobile;
-      this.contactPersonName=contactPersonPhone;
+  public ClaimantDetail withContactPersonDetails( List<ContactPersonDetailDto> contactPersonDetail){
+      this.contactPersonDetail=contactPersonDetail;
       return this;
   }
 
