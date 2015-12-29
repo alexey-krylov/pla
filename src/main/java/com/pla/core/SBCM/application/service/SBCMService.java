@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.SBCM.application.command.CreateSBCMCommand;
+import com.pla.core.SBCM.application.command.UpdateSBCMCommand;
 import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
 import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMappingId;
 import com.pla.core.SBCM.query.SBCMFinder;
@@ -22,10 +23,8 @@ import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import javax.transaction.Transactional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -130,6 +129,7 @@ public class SBCMService {
         }).collect(Collectors.toSet());
     }
 
+    @Transactional
     public ServiceBenefitCoverageMapping createServiceBenefitCoverageMapping(CreateSBCMCommand createSBCMCommand) {
         ServiceBenefitCoverageMapping serviceBenefitCoverageMapping;
         if(isEmpty(createSBCMCommand.getServiceBenefitCoverageMappingId())){
@@ -154,14 +154,42 @@ public class SBCMService {
         return sbcmRepository.save(serviceBenefitCoverageMapping);
     }
 
-    public List<CreateSBCMCommand> getAllSBCM(){
+    public List<UpdateSBCMCommand> getAllSBCM(){
         List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAll();
-        return isNotEmpty(sbcms) ? sbcms.parallelStream().map(new Function<ServiceBenefitCoverageMapping, CreateSBCMCommand>() {
+        return isNotEmpty(sbcms) ? sbcms.parallelStream().map(new Function<ServiceBenefitCoverageMapping, UpdateSBCMCommand>() {
             @Override
-            public CreateSBCMCommand apply(ServiceBenefitCoverageMapping serviceBenefitCoverageMapping) {
-               return new CreateSBCMCommand(serviceBenefitCoverageMapping.getPlanName(), serviceBenefitCoverageMapping.getBenefitName(), serviceBenefitCoverageMapping.getCoverageName(), serviceBenefitCoverageMapping.getService(),serviceBenefitCoverageMapping.getPlanCode());
+            public UpdateSBCMCommand apply(ServiceBenefitCoverageMapping serviceBenefitCoverageMapping) {
+                if (serviceBenefitCoverageMapping.getStatus().equals(ServiceBenefitCoverageMapping.Status.ACTIVE)) {
+                    return new UpdateSBCMCommand(serviceBenefitCoverageMapping.getServiceBenefitCoverageMappingId().getServiceBenefitCoverageMappingId(), serviceBenefitCoverageMapping.getPlanName(), serviceBenefitCoverageMapping.getPlanCode(), serviceBenefitCoverageMapping.getBenefitName(), serviceBenefitCoverageMapping.getCoverageName(), serviceBenefitCoverageMapping.getService());
+                }
+                return null;
             }
-        }).collect(Collectors.toList()) : Lists.newArrayList();
+        }).filter(Objects::nonNull).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
+    @Transactional
+    public Boolean updateStatus(UpdateSBCMCommand updateStatusCommand){
+        ServiceBenefitCoverageMapping serviceBenefitCoverageMapping = sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(updateStatusCommand.getServiceBenefitCoverageMappingId()));
+        if(isEmpty(serviceBenefitCoverageMapping))
+            return Boolean.FALSE;
+        serviceBenefitCoverageMapping.updateWithStatus(ServiceBenefitCoverageMapping.Status.valueOf(updateStatusCommand.getStatus().toUpperCase()));
+        sbcmRepository.save(serviceBenefitCoverageMapping);
+        return Boolean.TRUE;
+    }
+
+    public CreateSBCMCommand getSBCMBySBCMId(ServiceBenefitCoverageMappingId serviceBenefitCoverageMappingId) {
+        ServiceBenefitCoverageMapping serviceBenefitCoverageMapping = sbcmRepository.findOne(serviceBenefitCoverageMappingId);
+        if(isEmpty(serviceBenefitCoverageMapping))
+            return null;
+        CreateSBCMCommand createSBCMCommand = new CreateSBCMCommand();
+        createSBCMCommand.updateWithPlanCode(serviceBenefitCoverageMapping.getPlanCode())
+                .updateWithPlanName(serviceBenefitCoverageMapping.getPlanName())
+                .updateWithBenefitName(serviceBenefitCoverageMapping.getBenefitName())
+                .updateWithCoverageName(serviceBenefitCoverageMapping.getCoverageName())
+                .updateWithBenefitId(serviceBenefitCoverageMapping.getBenefitId().getBenefitId())
+                .updateWithCoverageId(serviceBenefitCoverageMapping.getCoverageId().getCoverageId())
+                .updateWithService(serviceBenefitCoverageMapping.getService())
+                .updateWithStatus(serviceBenefitCoverageMapping.getStatus().toString());
+        return createSBCMCommand;
+    }
 }

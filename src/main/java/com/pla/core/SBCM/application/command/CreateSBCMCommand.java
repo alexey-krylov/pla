@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Setter
 public class CreateSBCMCommand {
-    private String ServiceBenefitCoverageMappingId;
+    private String serviceBenefitCoverageMappingId;
     @NotNull(message = "planId must not be null")
     @NotEmpty(message = "{planId cannot be null}")
     private String planCode;
@@ -32,11 +32,43 @@ public class CreateSBCMCommand {
     private String service;
     private String status;
 
-    public CreateSBCMCommand(String planName, String benefitName, String coverageName, String service,String planCode) {
-        this.planName = planName;
-        this.benefitName = benefitName;
-        this.coverageName = coverageName;
-        this.service = service;
+    public CreateSBCMCommand updateWithPlanCode(String planCode) {
         this.planCode = planCode;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithPlanName(String planName) {
+        this.planName = planName;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithBenefitName(String benefitName) {
+        this.benefitName = benefitName;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithCoverageName(String coverageName) {
+        this.coverageName = coverageName;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithBenefitId(String benefitId) {
+        this.benefitId = benefitId;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithCoverageId(String coverageId) {
+        this.coverageId = coverageId;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithService(String service) {
+        this.service = service;
+        return this;
+    }
+
+    public CreateSBCMCommand updateWithStatus(String status) {
+        this.status = status;
+        return this;
     }
 }

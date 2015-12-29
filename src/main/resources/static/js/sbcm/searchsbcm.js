@@ -1,40 +1,49 @@
+(function (angular){
+    "use strict";
+    var app=angular.module('searchSbcm', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
+        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages']);
 
-var searchsbcmModule = (function(){
-    var sbcmServices = {};
-    sbcmServices.sbcmSelected = undefined;
-    this.planName = null;
-    sbcmServices.getTheItemSelected = function(ele){
-        this.sbcmSelected=$(ele).val();
-//        $("#sbcm-update").prop("disabled","");
-        $("#sbcm-view").prop("disabled","");
+    app.config(["$routeProvider", function ($routeProvider) {
+        $routeProvider.when('/', {
+                templateUrl: 'searchsbcm.html',
+                controller: 'searchSbcmController',
+                resolve: {
+                         allSBCM : ['$q', '$http', function ($q, $http) {
+                                            var deferred = $q.defer();
+                                            $http.get('/pla/core/sbcm/getAllSBCM').success(function (response, status, headers, config) {
+                                                deferred.resolve(response)
+                                            }).error(function (response, status, headers, config) {
+                                                deferred.reject();
+                                            });
+                                            return deferred.promise;
+                                        }]
 
-        this.sbcmName = $(ele).parent().find('input[type=hidden]').val();
-       // alert(this.sbcmName);
-    };
-    sbcmServices.createsbcm = function(){
-        window.location.href = "getsbcmview";
-    };
 
-    sbcmServices.createsbcm = function () {
-        window.location.href = "pla/core/sbcm/getsbcmview";
-    };
-
-    sbcmServices.viewsbcm =  function(){//activate deactive when click radio button
-        if (this.sbcmSelected) {
-            if ('sbcm' === this.planName) {
-               window.location.href = "/pla/core/sbcm/getsbcmview?planCode=" + this.sbcmSelected +"&mode=view";
-           } else {
-                window.location.href = "/pla/core/sbcm/getsbcmview?planCode=" + this.sbcmSelected + "&mode=view";
-
+                                    }
             }
-        }
-    };
-    sbcmServices.inactivesbcm=function(){
-     window.location.href = "/pla/core/sbcm/getsbcmview?planCode=" + this.sbcmSelected + "&mode=view";
-    }
-    sbcmServices.reload = function(){
-        window.location.reload();
-    };
+        )}]);
+    app.controller('searchSbcmController',['$scope','$http','allSBCM', function ( $scope, $http, allSBCM){
+        $scope.updateStatusCommand = {};
+        $scope.allSBCM = allSBCM;
+        $scope.viewsbcm = function (sbcm) {
+          window.location.href = "/pla/core/sbcm/getsbcmview?serviceBenefitCoverageMappingId="+ sbcm.serviceBenefitCoverageMappingId + "&mode=view";
+        };
+        $scope.updatesbcm = function (sbcm) {
+        sbcm.status = 'INACTIVE';
+        $http({
+        url: '/pla/core/sbcm/updateSBCMStatus',
+                       method: 'POST',
+                       data: JSON.stringify(sbcm)
+                   }).success(function(response) {
+                   if (response.status === "200" && response.message==='Status Updated Successfully') {
+                   console.log(sbcm);
+                   console.log($scope.allSBCM);
+                        $scope.allSBCM.splice($scope.allSBCM.indexOf(sbcm), 1);
+                    }
+                   }).error(function(response) {});};
 
-    return sbcmServices;
-})();
+                   $scope.$watchCollection("viewsbcm", function(newValue, oldValue) {});
+                   }
+
+    ]);
+})(angular);

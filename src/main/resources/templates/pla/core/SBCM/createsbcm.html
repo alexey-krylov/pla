@@ -52,7 +52,7 @@
                             <div class="form-group required">
                                 <label class="control-label">Plan</label>
                                 <select  class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.planId"  maxlength="100" minlength="1"
+                                       ng-model="createsbcmcommand.planCode"  maxlength="100" minlength="1"
                                        ng-options="plan.planCode as plan.planName for plan in plans"
                                        placeholder="Enter Product" ng-disabled="mode =='view'"
                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
@@ -67,7 +67,7 @@
                             <div class="form-group required">
                                 <label class="control-label">Coverage</label>
                                 <select  class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.coverage"  maxlength="100" minlength="1"
+                                       ng-model="createsbcmcommand.coverageId"  maxlength="100" minlength="1"
                                        ng-options="coverage.coverageId as coverage.coverageName for coverage  in coverages"
                                        placeholder="Enter Coverage" ng-disabled="mode =='view'"
                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
@@ -84,7 +84,7 @@
                             <div class="form-group required">
                                 <label class="control-label">Benefit</label>
                                <select class="form-control input-sm" name="product"
-                                       ng-model="createsbcmcommand.benefit"  maxlength="100" minlength="1"
+                                       ng-model="createsbcmcommand.benefitId"  maxlength="100" minlength="1"
                                        ng-options="benefit.benefitId as benefit.benefitName for benefit in benefits"
                                        placeholder="Enter Benifit" ng-disabled="mode =='view'"
                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
@@ -99,9 +99,10 @@
                         <div class="col-lg-6">
                             <div class="form-group required">
                                 <label class="control-label">Services</label>
-                                <input type="text" class="form-control input-sm" name="product"
+                                <select class="form-control input-sm" name="product"
                                        ng-model="createsbcmcommand.service"  maxlength="100" minlength="1"
                                        placeholder="Enter Services" ng-disabled="mode =='view'"
+                                       ng-options="service as service for service in services"
                                        ng-required="true" ng-pattern="/^[a-zA-Z ]*$/"/>
 
                                 <div class="error" ng-messages="hcpForm.hcpName.$error"
@@ -113,14 +114,14 @@
                         </div>
                   </div>
 
-            <!--<div class="row bs-callout-info bs-callout-info">-->
-                <!--<div class="form-group col-md-6">-->
-                    <!--<button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" data-animation="am-flip-x" ng-disabled="hcpForm.$invalid"  ng-click="uploadHCPRates()">Upload</button>-->
-                <!--</div>-->
-                <!--<div class="form-group col-md-1">-->
-                    <!--<button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" data-animation="am-flip-x">cancel</button>-->
-                <!--</div>-->
-            <!--</div>-->
+            <div class="row bs-callout-info bs-callout-info">
+                <div class="form-group col-md-6">
+                    <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" ng-if="mode!='view'" data-animation="am-flip-x" ng-disabled="hcpForm.$invalid"  ng-click="saveHCPRates()">save</button>
+                </div>
+                <div class="form-group col-md-1">
+                    <button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" ng-if="mode !='view'" data-animation="am-flip-x">cancel</button>
+                </div>
+            </div>
             </ng-form>
         </div>
     </div>

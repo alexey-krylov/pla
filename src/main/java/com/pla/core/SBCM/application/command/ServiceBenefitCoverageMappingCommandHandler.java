@@ -18,4 +18,9 @@ public class ServiceBenefitCoverageMappingCommandHandler {
     public ServiceBenefitCoverageMapping createServiceBenefitCoverageMapping(CreateSBCMCommand createSBCMCommand){
         return sbcmService.createServiceBenefitCoverageMapping(createSBCMCommand);
     }
+
+    @CommandHandler
+    public Boolean updateStatus(UpdateSBCMCommand updateStatusCommand){
+        return sbcmService.updateStatus(updateStatusCommand);
+    }
 }
