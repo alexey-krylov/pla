@@ -487,7 +487,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
                 InsuredDto insuredDto = null;
                 if (rowListEntry.getKey() != null) {
                     Row insuredRow = rowListEntry.getKey();
-                    insuredDto = createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow, agentPlans));
+                    insuredDto = createInsuredDto(insuredRow, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, insuredRow, agentPlans),planAdapter);
                     insuredDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
                 }
                 if (insuredDto == null) {
@@ -497,7 +497,7 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
                 Set<InsuredDto.InsuredDependentDto> insuredDependentDtoSet = dependentRows.stream().map(new Function<Row, InsuredDto.InsuredDependentDto>() {
                     @Override
                     public InsuredDto.InsuredDependentDto apply(Row row) {
-                        InsuredDto.InsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row, agentPlans));
+                        InsuredDto.InsuredDependentDto insuredDependentDto = createInsuredDependentDto(row, excelHeaders, headers, findNonEmptyOptionalCoverageCell(excelHeaders, row, agentPlans),planAdapter);
                         insuredDependentDto.getPlanPremiumDetail().setPlanId(planAdapter.getPlanId(insuredDependentDto.getPlanPremiumDetail().getPlanCode()).getPlanId());
                         return insuredDependentDto;
                     }
@@ -511,11 +511,11 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
     }
 
 
-    private InsuredDto.InsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCells) {
+    private InsuredDto.InsuredDependentDto createInsuredDependentDto(Row dependentRow, List<String> excelHeaders, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCells,IPlanAdapter iPlanAdapter) {
         InsuredDto.InsuredDependentDto insuredDependentDto = new InsuredDto.InsuredDependentDto();
         for (String header : headers) {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                insuredDependentDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDependentDetail(insuredDependentDto, dependentRow, excelHeaders);
+                insuredDependentDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDependentDetail(insuredDependentDto, dependentRow, excelHeaders,planAdapter );
             }
         }
         final InsuredDto.InsuredDependentDto finalInsuredDependentDto = insuredDependentDto;
@@ -548,11 +548,11 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
         return insuredDependentDto;
     }
 
-    private InsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCells) {
+    private InsuredDto createInsuredDto(Row row, List<String> excelHeaders, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCells,IPlanAdapter iPlanAdapter) {
         InsuredDto insuredDto = new InsuredDto();
         for (String header : headers) {
             if (!header.contains(AppConstants.OPTIONAL_COVERAGE_HEADER)) {
-                insuredDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDetail(insuredDto, row, excelHeaders);
+                insuredDto = GLInsuredExcelHeader.valueOf(header).populateInsuredDetail(insuredDto, row, excelHeaders,iPlanAdapter);
             }
         }
         final InsuredDto finalInsuredDto = insuredDto;

@@ -36,7 +36,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -45,7 +45,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -70,7 +70,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -79,7 +79,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -103,7 +103,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -112,7 +112,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -136,7 +136,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -145,7 +145,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -173,7 +173,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -182,7 +182,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             return insuredDependentDto;
         }
 
@@ -221,7 +221,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -230,7 +230,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -254,7 +254,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -263,7 +263,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -287,7 +287,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -296,7 +296,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -320,7 +320,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -329,7 +329,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -369,7 +369,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -378,7 +378,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -414,7 +414,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -423,7 +423,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -456,7 +456,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -465,7 +465,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -493,12 +493,12 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -529,7 +529,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -538,7 +538,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -565,7 +565,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -582,7 +582,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -639,23 +639,38 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            BigDecimal incomeMultiplier = isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : BigDecimal.ZERO;
+            if (isEmpty(cellValue)){
+                Cell planCell = row.getCell(headers.indexOf(PLAN.getDescription()));
+                String planCode = getCellValue(planCell);
+                planCode = String.valueOf(Double.valueOf(planCode).intValue());
+                incomeMultiplier = iPlanAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode)? iPlanAdapter.getIncomeMultiplier(planCode): BigDecimal.ZERO;
+            }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDto.getPlanPremiumDetail() != null ? insuredDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
-            planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setIncomeMultiplier(incomeMultiplier);
             insuredDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDto;
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            BigDecimal incomeMultiplier = isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : BigDecimal.ZERO;
+            if (isEmpty(cellValue)){
+                Cell planCell = row.getCell(headers.indexOf(PLAN.getDescription()));
+                String planCode = getCellValue(planCell);
+                planCode = String.valueOf(Double.valueOf(planCode).intValue());
+                incomeMultiplier = iPlanAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode)? iPlanAdapter.getIncomeMultiplier(planCode): BigDecimal.ZERO;
+            }
             InsuredDto.PlanPremiumDetailDto planPremiumDetailDto = insuredDependentDto.getPlanPremiumDetail() != null ? insuredDependentDto.getPlanPremiumDetail() : new InsuredDto.PlanPremiumDetailDto();
-            planPremiumDetailDto.setIncomeMultiplier(isNotEmpty(cellValue) ? BigDecimal.valueOf(Double.valueOf(cellValue)) : null);
+            planPremiumDetailDto.setIncomeMultiplier(incomeMultiplier);
+            insuredDependentDto.setPlanPremiumDetail(planPremiumDetailDto);
             return insuredDependentDto;
         }
 
@@ -684,9 +699,13 @@ public enum GLInsuredExcelHeader {
                 errorMessage = errorMessage + "Plan code does not exist.";
                 return errorMessage;
             }
+            /*
+            * The income multiplier can be empty and system should fetch the income multiplier value from plan setup..
+            * If processor entered the value then it should override the configured income multiplier value
+            * */
             boolean hasPlanIncomeMultiplierSumAssuredType = planAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode);
-            if (hasPlanIncomeMultiplierSumAssuredType && isEmpty(value) && Relationship.SELF.description.equals(relationship.trim())) {
-                errorMessage = errorMessage + "Income multiplier cannot be empty as selected plan  has sum assured type as Income multiplier.";
+            if (hasPlanIncomeMultiplierSumAssuredType && !Relationship.SELF.description.equals(relationship.trim())) {
+                errorMessage = errorMessage + "Then Relation should Self for an income multiplier plan.";
                 return errorMessage;
             }
             return errorMessage;
@@ -698,22 +717,20 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             BigDecimal sumAssured = null;
-            Cell incomeMultiplierCell = row.getCell(headers.indexOf(INCOME_MULTIPLIER.getDescription()));
-            String incomeMultiplierCellValue = getCellValue(incomeMultiplierCell);
             Cell annualIncomeCell = row.getCell(headers.indexOf(ANNUAL_INCOME.getDescription()));
             String annualIncomeCellValue = getCellValue(annualIncomeCell);
+            BigDecimal incomeMultiplier = insuredDto.getPlanPremiumDetail().getIncomeMultiplier();
             if (isNotEmpty(cellValue)) {
                 sumAssured = BigDecimal.valueOf(Double.valueOf(cellValue).intValue());
-            } else if (isNotEmpty(incomeMultiplierCellValue) && isNotEmpty(annualIncomeCellValue)) {
+            } else if (isNotEmpty(insuredDto.getPlanPremiumDetail().getIncomeMultiplier()) && isNotEmpty(annualIncomeCellValue)) {
                 try {
-                    Double incomeMultiplierValue = Double.parseDouble(incomeMultiplierCellValue);
                     Double annualIncomeValue = Double.parseDouble(annualIncomeCellValue);
-                    sumAssured = BigDecimal.valueOf(incomeMultiplierValue.intValue()).multiply(BigDecimal.valueOf(annualIncomeValue.intValue()));
+                    sumAssured = incomeMultiplier!=null?incomeMultiplier.multiply(BigDecimal.valueOf(annualIncomeValue.intValue())):null;
                 } catch (Exception e) {
                     raiseNotValidValueException("Income multiplier and Annual Income should be numeric");
                 }
@@ -726,7 +743,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -786,7 +803,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -795,7 +812,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -868,7 +885,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers) {
+        public InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -901,7 +918,7 @@ public enum GLInsuredExcelHeader {
         }
 
         @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers) {
+        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -1056,9 +1073,9 @@ public enum GLInsuredExcelHeader {
 
     public abstract String getAllowedValue(InsuredDto insuredDto);
 
-    public abstract InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers);
+    public abstract InsuredDto populateInsuredDetail(InsuredDto insuredDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter);
 
-    public abstract InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers);
+    public abstract InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter);
 
     public abstract String getAllowedValue(InsuredDto.InsuredDependentDto insuredDependentDto);
 

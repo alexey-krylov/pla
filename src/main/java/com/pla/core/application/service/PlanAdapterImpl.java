@@ -214,6 +214,18 @@ public class PlanAdapterImpl implements IPlanAdapter {
     }
 
     @Override
+    public BigDecimal getIncomeMultiplier(String planCode) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        if (isNotEmpty(plans)) {
+            Plan plan = plans.get(0);
+            if (plan.hasPlanContainsSumAssuredTypeAsIncomeMultiplier()) {
+                return plan.getSumAssured().getIncomeMultiplier();
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    @Override
     public boolean isValidPlanCode(String planCode) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         if (isEmpty(plans)) {
