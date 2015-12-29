@@ -135,5 +135,8 @@
         <constructor-arg name="dbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="converter" ref="mappingConverter"/>
     </bean>
+    <extension:mongo-repository id="glClaimSettlementMongoRepository"
+                                aggregate-type="com.pla.grouplife.claim.domain.model.GLClaimSettlement"
+                                mongo-template="mongoTemplate"/>
 
 </beans>
