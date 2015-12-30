@@ -197,9 +197,38 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 $http.get('/pla/grouplife/claim/getplandetail/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category+'/'+$scope.claimDetails.relationship).success(function (response, status, headers, config) {
                     console.log(JSON.stringify(response));
                     $scope.claimTypes=response.claimTypes;
+                    $scope.planDetail=response.planPremiumDetail;
                 }).error(function (response, status, headers, config) {
                 });
             }
+            /**
+             * Adding Contact Details..
+             * @type {{contact: boolean}}
+             */
+            $scope.addContactDetail = function (contactDetails) {
+                console.log(contactDetails);
+                $scope.claimantDetail.contactPersonDetail.push(contactDetails);
+                $scope.contactDetails = {};
+
+            }
+            /**
+             * Edit ContactDetails..
+             * @type {{contact: boolean}}
+             */
+            $scope.editCurrentRow = function (contactDetails, index) {
+                $scope.contactDetails = contactDetails;
+                $scope.claimantDetail.contactPersonDetail.splice(index, 1);
+            }
+            /**
+             * Delete Contact Details..
+             * @type {{contact: boolean}}
+             */
+            $scope.deleteCurrentRow = function (index) {
+                $scope.claimantDetail.contactPersonDetail.splice(index, 1);
+            }
+            $scope.accordionStatus = {
+                contact: false
+            };
 
             /**
              * Claim Detail HarCoded Value
