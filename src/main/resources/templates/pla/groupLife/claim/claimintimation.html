@@ -100,11 +100,10 @@
                                                    ng-model="policyNumber"
                                                    type="text" ng-disabled="true"/>
                                         </div>
-
                                         <div class="form-group required">
                                             <label class="control-label">Category</label>
                                             <select  class="form-control input-sm" ng-model="claimDetails.category" name="category"
-                                                    ng-required="true" ng-options="category for category in claimDetailsResponse.category">
+                                                    ng-required="true" ng-options="category for category in categorySet" ng-change="getRelationShipList()">
                                             </select>
                                         </div>
                                     </div>
@@ -119,7 +118,7 @@
                                         <div class="form-group required">
                                             <label class="control-label">Relationship</label>
                                             <select  class="form-control input-sm" ng-model="claimDetails.relationship" name="relationship"
-                                                     ng-required="true" ng-options="relationships for relationships in claimDetailsResponse.relationship">
+                                                     ng-required="true" ng-options="relationship for relationship in reltaionShipList" ng-change="getPlanDetailWithClaimTypeList()">
                                             </select>
                                         </div>
                                     </div>
@@ -196,8 +195,8 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Claim Type</label>
-                                                <select  class="form-control input-sm" ng-model="claimType" name="claimType"
-                                                        ng-options="claimTypeDetail.claimType as claimTypeDetail.claimType for claimTypeDetail in claimTypeDetailsResponse">
+                                                <select  class="form-control input-sm" ng-model="claimDetails.claimType" name="claimType"
+                                                        ng-options="claimType for claimType in claimTypes">
 
                                                 </select>
                                             </div>
@@ -514,7 +513,7 @@
 
                                         <div class="form-group required">
                                             <label class="control-label">Bank Account Type</label>
-                                            <select class="form-control input-sm" name="accountType" ng-model="bankDetails.bankAccountType">
+                                            <select class="form-control input-sm" name="accountType" ng-model="bankDetails.bankAccountType" ng-required="true">
                                                 <option  value="">Select Account Type</option>
                                                 <option  value="SAVING">Saving</option>
                                                 <option  value="CURRENT">Current</option>
@@ -552,13 +551,6 @@
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveClaimDetails()"
-                                    >Save
-                            </button>
-                        </div>
-
                     </div>
                 </div>
                 <div class="step-pane" data-step="2">
@@ -566,7 +558,7 @@
                         <accordion close-others="true">
                             <accordion-group>
                                 <accordion-heading>
-                                    Claimant Details <i class="pull-right glyphicon"
+                                    Assured Details <i class="pull-right glyphicon"
                                                         ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
                                 </accordion-heading>
                                 <div class="col-md-6">
@@ -689,7 +681,54 @@
                                     Main Assured Detail <i class="pull-right glyphicon"
                                                            ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Main Assured Full Name</label>
+                                        <input type="text" class="form-control input-sm" name="mainAssuredFullName" ng-pattern="/^[a-zA-Z ]*$/" maxlength="50" ng-maxlength="50" ng-model="assuredDetails.mainAssured.fullName" ng-required="true"/>
+                                        <div class="error" ng-messages="mainAssuredDetailForm.mainAssuredFullName.$error" ng-if="mainAssuredDetailForm.mainAssuredFullName.$dirty">
+                                            <small class="error" ng-message="required">
+                                                Please enter Main Assured Full Name
+                                            </small>
+                                            <small ng-message="maxlength">Only 50 characters are allowed.</small>
+                                            <small ng-message="pattern">Only alphabets are allowed.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Main Assured NRC</label>
+                                        <input type="text" class="form-control input-sm" name="assuredNrc" ng-model="assuredDetails.mainAssured.nrc" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" ng-required="true"/>
+                                        <div class="error" ng-messages="mainAssuredDetailForm.assuredNrc.$error" ng-if="mainAssuredDetailForm.assuredNrc.$dirty">
+                                            <small class="error" ng-message="required">Main Assured NRC.</small>
+                                            <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                            <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Last Salary</label>
+                                        <input type="number" class="form-control input-sm" name="assuredLastSalary" ng-model="assuredDetails.mainAssured.salary" min="{{0}}" max="{{9999999999}}" ng-required="true"/>
+                                        <div class="error" ng-messages="mainAssuredDetailForm.assuredLastSalary.$error" ng-if="mainAssuredDetailForm.assuredLastSalary.$dirty">
+                                            <small class="error" ng-message="required">Last Salary.</small>
+                                            <small class="error" ng-message="max">Upto 10 Number Allowed.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group required">
+                                        <label class="control-label">Relationship With Main Assured</label>
+                                        <input type="text" class="form-control input-sm" name="assuredRelationShip" ng-model="assuredDetails.mainAssured.assuredRelation" ng-disabled="true" ng-required="true"/>
+                                        <div class="error" ng-messages="mainAssuredDetailForm.assuredRelationShip.$error" ng-if="mainAssuredDetailForm.assuredRelationShip.$dirty">
+                                            <small class="error" ng-message="required">Relationship With Main Assured.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="control-label">Main Assured MAN Number</label>
+                                        <input type="text" class="form-control input-sm" name="assuredManNumber" ng-model="assuredDetails.mainAssured.assuredManNuber" ng-required="true"/>
+                                        <div class="error" ng-messages="mainAssuredDetailForm.assuredManNumber.$error" ng-if="mainAssuredDetailForm.assuredManNumber.$dirty">
+                                            <small class="error" ng-message="required">Main Assured MAN Number.</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--<div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -702,13 +741,13 @@
                                                        ng-disabled="true"
                                                        ng-model="assured.assuredFullName"
                                                        class="form-control input-md"/>
-                                                <!--<div class="error"-->
-                                                <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
-                                                <!--<small class="error"-->
-                                                <!--ng-show="step2.assuredFullName.$error.required">-->
-                                                <!--Please Select the Main Assured Full Name.-->
-                                                <!--</small>-->
-                                                <!--</div>-->
+                                                &lt;!&ndash;<div class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">&ndash;&gt;
+                                                &lt;!&ndash;<small class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.assuredFullName.$error.required">&ndash;&gt;
+                                                &lt;!&ndash;Please Select the Main Assured Full Name.&ndash;&gt;
+                                                &lt;!&ndash;</small>&ndash;&gt;
+                                                &lt;!&ndash;</div>&ndash;&gt;
                                             </div>
                                         </div>
 
@@ -722,13 +761,13 @@
                                                        ng-model="assured.reletionship"
                                                        name="reletionship">
                                                 </input>
-                                                <!--<div class="error"-->
-                                                <!--ng-show="step2.reletionship.$dirty &amp;&amp; step2.reletionship.$invalid">-->
-                                                <!--<small class="error"-->
-                                                <!--ng-show="step2.reletionship.$error.required">-->
-                                                <!--Please Select the Reletionship With Main Assured.-->
-                                                <!--</small>-->
-                                                <!--</div>-->
+                                                &lt;!&ndash;<div class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.reletionship.$dirty &amp;&amp; step2.reletionship.$invalid">&ndash;&gt;
+                                                &lt;!&ndash;<small class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.reletionship.$error.required">&ndash;&gt;
+                                                &lt;!&ndash;Please Select the Reletionship With Main Assured.&ndash;&gt;
+                                                &lt;!&ndash;</small>&ndash;&gt;
+                                                &lt;!&ndash;</div>&ndash;&gt;
                                             </div>
                                         </div>
 
@@ -742,13 +781,13 @@
 
                                                        ng-disabled="true"
                                                        class="form-control input-md"/>
-                                                <!--<div class="error"-->
-                                                <!--ng-show="step2.assuredNrc.$dirty &amp;&amp; step2.assuredNrc.$invalid">-->
-                                                <!--<small class="error"-->
-                                                <!--ng-show="step2.assuredNrc.$error.required">-->
-                                                <!--Please Select the Main Assured NRC.-->
-                                                <!--</small>-->
-                                                <!--</div>-->
+                                                &lt;!&ndash;<div class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.assuredNrc.$dirty &amp;&amp; step2.assuredNrc.$invalid">&ndash;&gt;
+                                                &lt;!&ndash;<small class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.assuredNrc.$error.required">&ndash;&gt;
+                                                &lt;!&ndash;Please Select the Main Assured NRC.&ndash;&gt;
+                                                &lt;!&ndash;</small>&ndash;&gt;
+                                                &lt;!&ndash;</div>&ndash;&gt;
                                             </div>
                                         </div>
                                     </div>
@@ -767,13 +806,13 @@
                                                        ng-model="assured.assuredMan"
                                                        name="assuredMan">
                                                 </input>
-                                                <!--<div class="error"-->
-                                                <!--ng-show="step2.assuredMan.$dirty &amp;&amp; step2.assuredMan.$invalid">-->
-                                                <!--<small class="error"-->
-                                                <!--ng-show="step2.assuredMan.$error.required">-->
-                                                <!--Please Select the Main Assured MAN Number.-->
-                                                <!--</small>-->
-                                                <!--</div>-->
+                                                &lt;!&ndash;<div class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.assuredMan.$dirty &amp;&amp; step2.assuredMan.$invalid">&ndash;&gt;
+                                                &lt;!&ndash;<small class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.assuredMan.$error.required">&ndash;&gt;
+                                                &lt;!&ndash;Please Select the Main Assured MAN Number.&ndash;&gt;
+                                                &lt;!&ndash;</small>&ndash;&gt;
+                                                &lt;!&ndash;</div>&ndash;&gt;
                                             </div>
                                         </div>
 
@@ -791,31 +830,25 @@
                                                        pattern="[0-9]{5}"
                                                        maxlength="5"
                                                        class="form-control input-md"/>
-                                                <!--<div class="error"-->
-                                                <!--ng-show="step2.salary.$dirty &amp;&amp; step2.salary.$invalid">-->
-                                                <!--<small class="error"-->
-                                                <!--ng-show="step2.salary.$error.required">-->
-                                                <!--Please Enter Last Salary(5 Digit).-->
-                                                <!--</small>-->
-                                                <!--</div>-->
+                                                &lt;!&ndash;<div class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.salary.$dirty &amp;&amp; step2.salary.$invalid">&ndash;&gt;
+                                                &lt;!&ndash;<small class="error"&ndash;&gt;
+                                                &lt;!&ndash;ng-show="step2.salary.$error.required">&ndash;&gt;
+                                                &lt;!&ndash;Please Enter Last Salary(5 Digit).&ndash;&gt;
+                                                &lt;!&ndash;</small>&ndash;&gt;
+                                                &lt;!&ndash;</div>&ndash;&gt;
                                             </div>
                                         </div>
                                     </div>
 
-                                </div>
+                                </div>-->
                             </accordion-group>
                         </accordion>
 
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="saveProposerDetails()" ng-disabled="isSaveDisabled(step2)"
-                                    ng-if="!isViewMode">Save
-                            </button>
+                            <button type="button" class="btn btn-default btn-sm">Cancel</button>
                         </div>
                     </div>
 

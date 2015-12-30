@@ -34,6 +34,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.occupations = [];
         $scope.occupations=occupations;
         $scope.assuredDetails={};
+        $scope.claimDetails={};
+        $scope.claimType=[];
 
             /***
              *
@@ -117,8 +119,15 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                         $scope.towns=provinceDetails1.cities;
                     }
                 }
-
             }
+            $scope.$watch('claimantDetail.province',function(newVal,oldVal){
+                if(newVal){
+                    var provinceDetails1 = _.findWhere($scope.provinces, {provinceId: newVal});
+                    if(provinceDetails1){
+                        $scope.towns=provinceDetails1.cities;
+                    }
+                }
+            });
             /***
              * Getting List of Related Branch
              */
@@ -140,6 +149,16 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             if($scope.rcvPolicyId){
                 // Logic to Populate All The date to ClaimIntimation Class
                 //$scope.policyNumber=$scope.rcvPolicyNumber;
+
+               $http.get('/pla/grouplife/claim/getclaimant/' + $scope.rcvPolicyId).success(function (response, status, headers, config) {
+                    //console.log(JSON.stringify(response));
+                   $scope.schemeName=response.schemeName;
+                   $scope.policyNumber=response.policyNumber;
+                   $scope.claimantDetail=response.claimantDetail;
+                   $scope.categorySet=response.categorySet;
+                }).error(function (response, status, headers, config) {
+                });
+
                 $scope.claimIntimationDate=moment(new Date()).format('YYYY-MM-DD');
 
             }
@@ -160,18 +179,33 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     //alert('dateof Birth');
                 }
             }
-            /***
-             * category HardCoded List
-             *
+
+            /**
+             * Retrieving the RelationShip List
              */
-            $scope.claimDetailsResponse={"category":["manger","self"],
-                "relationship":["manger","self"]
-            };
+            $scope.getRelationShipList=function(){
+                $http.get('/pla/grouplife/claim/getrelationship/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category).success(function (response, status, headers, config) {
+                    //console.log(JSON.stringify(response));
+                    $scope.reltaionShipList=response.relationship;
+                }).error(function (response, status, headers, config) {
+                });
+            }
+            /**
+             * Retrieving PlanDetailWithClaimTYpeList
+             */
+            $scope.getPlanDetailWithClaimTypeList=function(){
+                $http.get('/pla/grouplife/claim/getplandetail/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category+'/'+$scope.claimDetails.relationship).success(function (response, status, headers, config) {
+                    console.log(JSON.stringify(response));
+                    $scope.claimTypes=response.claimTypes;
+                }).error(function (response, status, headers, config) {
+                });
+            }
 
             /**
              * Claim Detail HarCoded Value
              */
-            $scope.claimantDetail={
+
+            /*$scope.claimantDetail={
                 "proposerName":"sca",
                 "addressLine1":"dsa",
                 "addressLine2":"asa",
@@ -184,7 +218,26 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 "contactPersonName":"ascas",
                 "mobileNumber":"2222222222",
                 "contactPersonPhone":"2222222222"
-            }
+            }*/
+            /*$scope.claimantDetail={
+                "proposerName":"AXIZ",
+                "addressLine1":"aaaaaa",
+                "addressLine2":"aaa",
+                "postalCode":"aaa",
+                "province":"PR-EAS",
+                "town":"CI-KAT",
+                "emailId":"mail@mail.com",
+                "workPhone":"2222222222",
+                "mobileNumber":"2222222222",
+                "contactPersonDetail":[
+                    {
+                        "contactPersonName":"e",
+                        "contactPersonEmail":null,
+                        "contactPersonMobileNumber":"4444444444",
+                        "contactPersonWorkPhoneNumber":"4444444444444"
+                    }
+                ]
+            }*/
 
 /*
             $http.get("/pla/grouplife/claim/getclaimtype")
