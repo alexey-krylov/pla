@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 @Setter(value = AccessLevel.PACKAGE)
 public class AssuredDetail {
 
+
     private String companyName;
 
     private String manNumber;

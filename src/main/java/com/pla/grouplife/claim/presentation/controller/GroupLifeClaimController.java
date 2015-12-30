@@ -106,7 +106,11 @@ public class GroupLifeClaimController {
     public List<GLInsuredDetailDto> assuredSearch(@RequestBody AssuredSearchDto assuredSearchDto) {
         return glClaimService.assuredSearch(assuredSearchDto);
     }
-
+    @RequestMapping(value = "/assureddetail/{policyId}/{clientId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ClaimAssuredDetailDto assuredSearch(@PathVariable("policyId") String policyId,@PathVariable("clientId") String clientId) {
+        return glClaimService. getAssuredDetails(policyId,clientId);
+    }
 
     @RequestMapping(value = "/createclaimintimation", method = RequestMethod.POST)
     @ResponseBody

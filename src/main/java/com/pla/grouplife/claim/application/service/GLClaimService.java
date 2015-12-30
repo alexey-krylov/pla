@@ -36,6 +36,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -45,6 +47,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -357,8 +360,125 @@ public class GLClaimService {
                     insured.getManNumber(), insured.getFamilyId() != null ? insured.getFamilyId().getFamilyId() : "");
             searchList.add(glInsuredDetailDto);
         }
-        return searchList;
+
+        List<GLInsuredDetailDto> advancedSearchList = Lists.newArrayList();
+        for (GLInsuredDetailDto glInsuredDetailDto : searchList) {
+            String clientId = assuredSearchDto.getClientId() != null ? assuredSearchDto.getClientId() : "";
+            String firstName = assuredSearchDto.getFirstName() != null ? assuredSearchDto.getFirstName() : "";
+            String lastName = assuredSearchDto.getSurName() != null ? assuredSearchDto.getSurName() : "";
+            String nrcNumber = assuredSearchDto.getNrcNumber() != null ? assuredSearchDto.getNrcNumber() : "";
+            String manNumber = assuredSearchDto.getManNumber() != null ? assuredSearchDto.getManNumber() : "";
+            Gender gender =assuredSearchDto.getGender() != null ? assuredSearchDto.getGender() : null;
+            LocalDate dateOfBirth = assuredSearchDto.getDateOfBirth() != null ? assuredSearchDto.getDateOfBirth() : null;
+
+            /*
+            if(glInsuredDetailDto.getFirstName().equals(firstName)&&glInsuredDetailDto.getSurName().equals(lastName)&&
+                    glInsuredDetailDto.getNrcNumber().equals(nrcNumber) &&glInsuredDetailDto.getManNumber().equals(manNumber)&&
+                    glInsuredDetailDto.getGender().equals(gender)&&glInsuredDetailDto.getDateOfBirth().equals(dateOfBirth)&&
+            glInsuredDetailDto.getClientId().equals(clientId))
+            */
+                if(glInsuredDetailDto.getFirstName().equals(firstName)||glInsuredDetailDto.getSurName().equals(lastName)||
+                    glInsuredDetailDto.getNrcNumber().equals(nrcNumber) ||glInsuredDetailDto.getManNumber().equals(manNumber)||
+                    glInsuredDetailDto.getGender().equals(gender)||glInsuredDetailDto.getDateOfBirth().equals(dateOfBirth)||
+            glInsuredDetailDto.getClientId().equals(clientId))
+            {
+                advancedSearchList.add(glInsuredDetailDto);
+            }
+        }
+        return advancedSearchList;
     }
+
+    public ClaimAssuredDetailDto getAssuredDetails(String policyId,String searchClientId){
+        ClaimAssuredDetailDto claimAssuredDetailDto=null ;
+
+        Map policy = glFinder.findPolicyById(policyId);
+        if (isEmpty(policy)) {
+            //return Collections.EMPTY_MAP;
+            return new ClaimAssuredDetailDto();
+        }
+
+        List<Insured> insuredsList = (List<Insured>) policy.get("insureds");
+        for (Insured insured : insuredsList) {
+            String clientId = insured.getFamilyId().getFamilyId() != null ? insured.getFamilyId().getFamilyId() : "";
+
+            if (clientId.equals(searchClientId) ) {
+                ClaimAssuredDetailDto searchClaimAssuredDetailDto  =new ClaimAssuredDetailDto() ;
+                searchClaimAssuredDetailDto.setTitle(insured.getSalutation());
+                searchClaimAssuredDetailDto.setFirstName(insured.getFirstName());
+                searchClaimAssuredDetailDto.setSurName(insured.getLastName());
+                searchClaimAssuredDetailDto.setDateOfBirth(insured.getDateOfBirth());
+                LocalDate birthday=insured.getDateOfBirth();
+                LocalDate today = LocalDate.now();
+                Period period = new Period(birthday, today, PeriodType.yearMonthDay());
+                int assuredAge=period.getYears()+1;
+                searchClaimAssuredDetailDto.setAgeOnNextBirthDate(assuredAge);
+                searchClaimAssuredDetailDto.setNrcNumber(insured.getNrcNumber());
+                searchClaimAssuredDetailDto.setGender(insured.getGender());
+                BigDecimal assuredSumAssured=insured.getPlanPremiumDetail().getSumAssured();
+                Set<CoveragePremiumDetail> coveragePremiumDetails=insured.getCoveragePremiumDetails();
+                if(coveragePremiumDetails!=null){
+                    for(CoveragePremiumDetail coveragePremiumDetail:coveragePremiumDetails){
+                        assuredSumAssured= coveragePremiumDetail.getSumAssured();
+                    }
+                }
+                searchClaimAssuredDetailDto.setSumAssured(assuredSumAssured);
+                searchClaimAssuredDetailDto.setReserveAmount(assuredSumAssured);
+                searchClaimAssuredDetailDto.setCategory(insured.getCategory());
+                searchClaimAssuredDetailDto.setManNumber(insured.getManNumber());
+                searchClaimAssuredDetailDto.setOccupation(insured.getOccupationClass());
+                claimAssuredDetailDto =searchClaimAssuredDetailDto;
+            }
+        }
+
+        if(claimAssuredDetailDto==null){
+
+                List<Insured> insuredList = (List<Insured>) policy.get("insureds");;
+                for (Insured insured :insuredList) {
+                    Set<InsuredDependent> insuredDependents = insured.getInsuredDependents();
+                    for (InsuredDependent insuredDependent : insuredDependents) {
+                        String clientId = insuredDependent.getFamilyId().getFamilyId() != null ? insuredDependent.getFamilyId().getFamilyId() : "";
+                         if (clientId.equals(searchClientId) )  {
+                             ClaimAssuredDetailDto searchClaimAssuredDetailDto  =new ClaimAssuredDetailDto() ;
+                             searchClaimAssuredDetailDto.setTitle(insuredDependent.getSalutation());
+                             searchClaimAssuredDetailDto.setFirstName(insuredDependent.getFirstName());
+                             searchClaimAssuredDetailDto.setSurName(insuredDependent.getLastName());
+                             searchClaimAssuredDetailDto.setDateOfBirth(insuredDependent.getDateOfBirth());
+                             LocalDate birthday=insuredDependent.getDateOfBirth();
+                             LocalDate today = LocalDate.now();
+                             Period period = new Period(birthday, today, PeriodType.yearMonthDay());
+                             int assuredAge=period.getYears();
+                             searchClaimAssuredDetailDto.setAgeOnNextBirthDate(assuredAge);
+                             searchClaimAssuredDetailDto.setNrcNumber(insuredDependent.getNrcNumber());
+                             searchClaimAssuredDetailDto.setGender(insuredDependent.getGender());
+                             BigDecimal assuredSumAssured=insuredDependent.getPlanPremiumDetail().getSumAssured();
+                             Set<CoveragePremiumDetail> coveragePremiumDetails=insuredDependent.getCoveragePremiumDetails();
+                             if(coveragePremiumDetails!=null){
+                                 for(CoveragePremiumDetail coveragePremiumDetail:coveragePremiumDetails){
+                                     assuredSumAssured= coveragePremiumDetail.getSumAssured();
+                                 }
+                             }
+                             searchClaimAssuredDetailDto.setSumAssured(assuredSumAssured);
+                             searchClaimAssuredDetailDto.setReserveAmount(assuredSumAssured);
+                             searchClaimAssuredDetailDto.setCategory(insuredDependent.getCategory());
+                             searchClaimAssuredDetailDto.setManNumber(insuredDependent.getManNumber());
+                             // searchClaimAssuredDetailDto.set(insured.);
+                             searchClaimAssuredDetailDto.setOccupation(insuredDependent.getOccupationClass());
+                             ClaimMainAssuredDetailDto mainAssuredDetailDto=new ClaimMainAssuredDetailDto();
+                             mainAssuredDetailDto.setFullName(insured.getFirstName());
+                             mainAssuredDetailDto .setRelationship(insured.getRelationship().description);
+                             mainAssuredDetailDto.setManNumber(insured.getManNumber());
+                             mainAssuredDetailDto.setNrcNumber(insured.getNrcNumber());
+                             claimAssuredDetailDto.updateWithMainAssured(mainAssuredDetailDto);
+                             claimAssuredDetailDto =searchClaimAssuredDetailDto;
+                        }
+                    }
+            }
+        }
+        return claimAssuredDetailDto;
+    }
+
+
+
     public Map<String, Object> getConfiguredRelationShipAndCategory(String policyId) {
         Set<String> categoryList = Sets.newLinkedHashSet();
         Set<String> relationShipList = Sets.newLinkedHashSet();

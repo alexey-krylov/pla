@@ -1,8 +1,10 @@
 package com.pla.grouplife.claim.presentation.dto;
 
+import com.pla.sharedkernel.domain.model.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.LocalDate;
 
 /**
  * Created by Admin on 9/21/2015.
@@ -17,13 +19,13 @@ public class AssuredSearchDto {
     private String policyNumber;
     private String policyHolderName;
 
-    /*
+
     private String firstName;
     private String surName;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String clientId;
     private String nrcNumber;
     private String manNumber;
     private Gender gender;
-     */
+
 }
