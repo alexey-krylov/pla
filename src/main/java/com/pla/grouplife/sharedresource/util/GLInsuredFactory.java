@@ -276,6 +276,10 @@ public class GLInsuredFactory {
             if (premiumDetailDto.getPolicyTermValue() == 365 && isNotEmpty(computedPremiumDtos)){
                 planPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtos),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtos),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtos));
             }
+            if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
+                insuredPlanProratePremium =  insuredPlanProratePremium.divide(new BigDecimal(365)).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
+            }
+
             insured.updatePlanPremiumAmount(insuredPlanProratePremium);
             if (isNotEmpty(insured.getCoveragePremiumDetails())) {
                 Set<CoveragePremiumDetail> coveragePremiumDetails = insured.getCoveragePremiumDetails();
@@ -313,6 +317,9 @@ public class GLInsuredFactory {
                     computedPremiumDtosDep.add(semiAnnualPremium);
                     computedPremiumDtosDep.add(quarterlyPremium);
                     computedPremiumDtosDep.add(monthlyPremium);
+                }
+                if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
+                    insuredDependentPlanProratePremium =  insuredDependentPlanProratePremium.divide(new BigDecimal(365)).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
                 }
                 insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                 if (premiumDetailDto.getPolicyTermValue() == 365 && isNotEmpty(computedPremiumDtosDep)){
