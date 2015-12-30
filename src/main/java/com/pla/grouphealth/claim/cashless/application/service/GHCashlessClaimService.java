@@ -1,28 +1,23 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
-import com.google.common.collect.Sets;
-import com.pla.core.hcp.application.service.HCPRateExcelGenerator;
-import com.pla.core.hcp.domain.model.HCP;
-import com.pla.core.hcp.domain.model.HCPCode;
+import com.google.common.collect.Lists;
 import com.pla.core.hcp.domain.model.HCPRate;
-import com.pla.core.hcp.domain.model.HCPServiceDetail;
-import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
 import com.pla.core.hcp.presentation.utility.ExcelUtilityProvider;
-import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
 import com.pla.grouphealth.claim.cashless.repository.GHCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.nthdimenzion.common.service.JpaRepositoryFactory;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Mohan Sharma on 12/30/2015.
@@ -65,4 +60,20 @@ public class GHCashlessClaimService {
         return hssfWorkbook;*/
         return null;
     }
+
+    public List<Map<String,Object>> getAllHcpNameAndCode(){
+        List<HCPRate>hcpRates =hcpRateRepository.findAll();
+        return isNotEmpty(hcpRates) ? hcpRates.stream().map(new Function<HCPRate, Map<String,Object>>() {
+
+            @Override
+            public Map<String,Object> apply(HCPRate hcpRate) {
+                Map<String,Object> map=new HashMap<String,Object>();
+                map.put("hcpName",hcpRate.getHcpName());
+                map.put("hcpCode",hcpRate.getHcpCode());
+                return map;
+            }
+        }).collect(Collectors.toList()): Lists.newArrayList();
+    }
+
+
 }

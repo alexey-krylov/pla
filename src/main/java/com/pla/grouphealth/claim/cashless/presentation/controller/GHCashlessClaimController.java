@@ -1,6 +1,5 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
-import com.pla.core.hcp.presentation.controller.HCPRateService;
 import com.pla.grouphealth.claim.cashless.application.service.GHCashlessClaimService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -9,10 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mohan Sharma on 12/30/2015.
@@ -37,5 +39,18 @@ public class GHCashlessClaimController {
         outputStream.flush();
         outputStream.close();
     }
+
+    @RequestMapping(value = "/preAuthUpload" ,method = RequestMethod.GET)
+    public ModelAndView preAuthUpload(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/preauthorizationupload");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getAllHcpNameAndCode",method = RequestMethod.GET)
+    public List<Map<String,Object>> getAllHcpNameAndCode(){
+        return  ghCashlessClaimService.getAllHcpNameAndCode();
+    }
+
 
 }

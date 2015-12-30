@@ -17,8 +17,8 @@ import javax.validation.constraints.NotNull;
     @NotEmpty(message = "serviceBenefitCoverageMappingId should not be empty")
     @NotNull(message = "serviceBenefitCoverageMappingId should not be not null")
      private String serviceBenefitCoverageMappingId;
-//    @NotEmpty(message = "Status should not be empty")
-//    @NotNull(message = "Status should not be not null")
+    @NotEmpty(message = "Status should not be empty")
+    @NotNull(message = "Status should not be not null")
     private String status;
     private String planName;
     private String benefitName;
