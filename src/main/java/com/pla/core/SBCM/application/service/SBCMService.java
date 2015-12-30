@@ -133,7 +133,10 @@ public class SBCMService {
     public ServiceBenefitCoverageMapping createServiceBenefitCoverageMapping(CreateSBCMCommand createSBCMCommand) {
         ServiceBenefitCoverageMapping serviceBenefitCoverageMapping;
         if(isEmpty(createSBCMCommand.getServiceBenefitCoverageMappingId())){
-            serviceBenefitCoverageMapping = new ServiceBenefitCoverageMapping().updateWithId(new ServiceBenefitCoverageMappingId(new ObjectId().toString()));
+            serviceBenefitCoverageMapping = sbcmRepository.findDistinctByPlanCodeAndCoverageIdAndBenefitIdAndService(createSBCMCommand.getPlanCode(), new CoverageId(createSBCMCommand.getCoverageId()), new BenefitId(createSBCMCommand.getBenefitId()), createSBCMCommand.getService(), ServiceBenefitCoverageMapping.Status.ACTIVE);
+            if(isEmpty(serviceBenefitCoverageMapping)){
+                serviceBenefitCoverageMapping = new ServiceBenefitCoverageMapping().updateWithId(new ServiceBenefitCoverageMappingId(new ObjectId().toString()));
+            }
         } else{
             serviceBenefitCoverageMapping = sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId())) == null
                     ? new ServiceBenefitCoverageMapping().updateWithId(new ServiceBenefitCoverageMappingId(new ObjectId().toString())) : sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId()));
