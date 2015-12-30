@@ -314,11 +314,10 @@ public class GLInsuredFactory {
                     computedPremiumDtosDep.add(quarterlyPremium);
                     computedPremiumDtosDep.add(monthlyPremium);
                 }
+                insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                 if (premiumDetailDto.getPolicyTermValue() == 365 && isNotEmpty(computedPremiumDtosDep)){
                     insuredDependentPlanPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtosDep),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtosDep),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtosDep));
                 }
-                insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
-
                 Set<CoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getCoveragePremiumDetails();
                 if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {
                     for (CoveragePremiumDetail insuredDependentCoveragePremiumDetail : insuredDependentCoveragePremiumDetails) {

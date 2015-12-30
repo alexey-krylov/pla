@@ -137,7 +137,12 @@ public class GHInsuredFactory {
             }
             if (insured.getNoOfAssured() != null && isEmpty(computedPremiumDtos)){
                 Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
-                planPremiumDetail.updatePremiumAmount(insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)),insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)),insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+                ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
+                ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
+                ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY,insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+                computedPremiumDtos.add(semiAnnualPremium);
+                computedPremiumDtos.add(quarterlyPremium);
+                computedPremiumDtos.add(monthlyPremium);
             }
             if (premiumDetailDto.getPolicyTermValue() == 365 && isNotEmpty(computedPremiumDtos)){
                 planPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtos),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtos),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtos));
@@ -170,11 +175,16 @@ public class GHInsuredFactory {
                     insuredDependentPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()), insuredDependentPlanProratePremium);
                 }
                 insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
-                if (insured.getNoOfAssured() != null){
+                if (insured.getNoOfAssured() != null && isEmpty(computedPremiumDtosDep)){
                     Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
-                    insuredDependentPlanPremiumDetail.updatePremiumAmount(insuredDependentPlanProratePremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)),insuredDependentPlanProratePremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)),insuredDependentPlanProratePremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+                    ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,insuredDependentPlanProratePremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
+                    ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,insuredDependentPlanProratePremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
+                    ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY,insuredDependentPlanProratePremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+                    computedPremiumDtosDep.add(semiAnnualPremium);
+                    computedPremiumDtosDep.add(quarterlyPremium);
+                    computedPremiumDtosDep.add(monthlyPremium);
                 }
-                if (premiumDetailDto.getPolicyTermValue() == 365){
+                if (premiumDetailDto.getPolicyTermValue() == 365 && isNotEmpty(computedPremiumDtosDep)){
                     insuredDependentPlanPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtosDep),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtosDep),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtosDep));
                 }
                 List<GHCoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getPlanPremiumDetail().getCoveragePremiumDetails();
@@ -274,9 +284,10 @@ public class GHInsuredFactory {
                     Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
                     ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
                     ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
+                    ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY,basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
                     computedPremiumDtos.add(semiAnnualPremium);
                     computedPremiumDtos.add(quarterlyPremium);
-                    computedPremiumDtos.add(quarterlyPremium);
+                    computedPremiumDtos.add(monthlyPremium);
                 }
                 final GHInsuredDependentBuilder[] insuredDependentBuilder = {GHInsuredDependent.getInsuredDependentBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium,computedPremiumDtos,premiumDetail.getSumAssured())};
                 insuredDependentBuilder[0].withCategory(insuredDependentDto.getOccupationCategory()).withInsuredName(insuredDependentDto.getSalutation(), insuredDependentDto.getFirstName(), insuredDependentDto.getLastName())
