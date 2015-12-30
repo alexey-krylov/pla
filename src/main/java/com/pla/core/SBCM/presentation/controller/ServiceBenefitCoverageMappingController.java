@@ -71,6 +71,16 @@ public class ServiceBenefitCoverageMappingController {
         return modelAndView;
     }
 
+    @RequestMapping(value="/getSBCMForGivenPage",method = RequestMethod.GET)
+    public List<UpdateSBCMCommand> getSBCMForGivenPage(@RequestParam int pageNo){
+        return sbcmService.getSBCMForGivenPage(pageNo);
+    }
+
+    @RequestMapping(value="/numberOfSBCMAvailable",method = RequestMethod.GET)
+    public @ResponseBody int getSBCMForGivenPage(){
+        return sbcmService.numberOfSBCMAvailable();
+    }
+
     @RequestMapping(value="/getAllSBCM",method = RequestMethod.GET)
     public List<UpdateSBCMCommand> getAllSBCM(){
         return sbcmService.getAllSBCM();

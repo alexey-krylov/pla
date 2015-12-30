@@ -42,7 +42,7 @@
                         <th>Action</th>
                     </tr>
                     </thead>
-                    <tbody ng-repeat="sbcm in allSBCM | startFrom:currentPage*pageSize | limitTo:pageSize">
+                    <tbody ng-repeat="sbcm in allSBCM">
                     <tr>
                         <td ng-bind="sbcm.planName"/>
                         <td ng-bind="sbcm.coverageName"/>
@@ -57,9 +57,9 @@
                 </table>
             </div>
             <div class="table-responsive" style="float:right">
-                <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Previous</button>
-                {{currentPage+1}}/{{numberOfPages()}}
-                <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">Next</button>
+                <button ng-disabled="currentPage == 0" ng-click="decrementCurrentPage()">Previous</button>
+                |
+                <button ng-disabled="currentPage >= numberOfSBCM/pageSize - 1" ng-click="incrementCurrentPage()">Next</button>
             </div>
         </div>
     </div>

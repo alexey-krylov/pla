@@ -10,7 +10,16 @@
                 resolve: {
                     allSBCM : ['$q', '$http', function ($q, $http) {
                         var deferred = $q.defer();
-                        $http.get('/pla/core/sbcm/getAllSBCM').success(function (response, status, headers, config) {
+                        $http.get('/pla/core/sbcm/getSBCMForGivenPage?pageNo=0').success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    }],
+                    numberOfSBCM : ['$q', '$http', function ($q, $http) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/core/sbcm/numberOfSBCMAvailable').success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
@@ -28,19 +37,12 @@
         }
     });
 
-    app.controller('searchSbcmController',['$scope','$http','allSBCM', function ($scope, $http, allSBCM){
+    app.controller('searchSbcmController',['$scope','$http','allSBCM', 'numberOfSBCM', function ($scope, $http, allSBCM, numberOfSBCM){
         $scope.updateStatusCommand = {};
         $scope.allSBCM = allSBCM;
         $scope.currentPage = 0;
         $scope.pageSize = 10;
-
-        function filterEmptyElement(element) {
-            if (element == null || element == '')
-                return false;
-            return true;
-        }
-
-        $scope.allSBCM = $scope.allSBCM.filter(filterEmptyElement);
+        $scope.numberOfSBCM = numberOfSBCM;
 
         $scope.numberOfPages=function(){
             console.log($scope.allSBCM.length);
@@ -67,6 +69,26 @@
         };
 
         $scope.$watchCollection("viewsbcm", function(newValue, oldValue) {});
+
+        $scope.incrementCurrentPage = function(){
+            $scope.allSBCM = [];
+            $scope.currentPage = $scope.currentPage+1;
+            $http.get('/pla/core/sbcm/getSBCMForGivenPage?pageNo='+$scope.currentPage).success(function (data) {
+                $scope.allSBCM = data;
+            }).error(function (response, status, headers, config) {
+            });
+        }
+
+        $scope.decrementCurrentPage = function(){
+            $scope.allSBCM = [];
+            $scope.currentPage = $scope.currentPage-1;
+            $http.get('/pla/core/sbcm/getSBCMForGivenPage?pageNo='+$scope.currentPage).success(function (data) {
+                $scope.allSBCM = data;
+            }).error(function (response, status, headers, config) {
+            });
+        }
+
+        $scope.$watchCollection("allSBCM", function(newValue, oldValue) {});
     }
 
     ]);

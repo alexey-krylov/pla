@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -194,5 +196,24 @@ public class SBCMService {
                 .updateWithService(serviceBenefitCoverageMapping.getService())
                 .updateWithStatus(serviceBenefitCoverageMapping.getStatus().toString());
         return createSBCMCommand;
+    }
+
+    public List<UpdateSBCMCommand> getSBCMForGivenPage(int pageNo) {
+        PageRequest pageRequest = new PageRequest(pageNo, 10);
+        Page<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAll(pageRequest);
+        return isNotEmpty(sbcms) ? sbcms.getContent().parallelStream().map(new Function<ServiceBenefitCoverageMapping, UpdateSBCMCommand>() {
+            @Override
+            public UpdateSBCMCommand apply(ServiceBenefitCoverageMapping serviceBenefitCoverageMapping) {
+                if (serviceBenefitCoverageMapping.getStatus().equals(ServiceBenefitCoverageMapping.Status.ACTIVE)) {
+                    return new UpdateSBCMCommand(serviceBenefitCoverageMapping.getServiceBenefitCoverageMappingId().getServiceBenefitCoverageMappingId(), serviceBenefitCoverageMapping.getPlanName(), serviceBenefitCoverageMapping.getPlanCode(), serviceBenefitCoverageMapping.getBenefitName(), serviceBenefitCoverageMapping.getCoverageName(), serviceBenefitCoverageMapping.getService(), serviceBenefitCoverageMapping.getStatus().name());
+                }
+                return null;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
+    public int numberOfSBCMAvailable() {
+        List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAll();
+        return isNotEmpty(sbcms) ? sbcms.size() : 0;
     }
 }
