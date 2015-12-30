@@ -26,12 +26,13 @@ import javax.validation.constraints.NotNull;
     private String planCode;
     private String serviceName;
 
-    public UpdateSBCMCommand(String serviceBenefitCoverageMappingId, String planName, String planCode, String benefitName, String coverageName, String serviceName) {
+    public UpdateSBCMCommand(String serviceBenefitCoverageMappingId, String planName, String planCode, String benefitName, String coverageName, String serviceName, String status) {
         this.serviceBenefitCoverageMappingId = serviceBenefitCoverageMappingId;
         this.planName = planName;
         this.planCode = planCode;
         this.benefitName = benefitName;
         this.coverageName = coverageName;
         this.serviceName = serviceName;
+        this.status = status;
     }
 }

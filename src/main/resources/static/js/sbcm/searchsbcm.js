@@ -20,10 +20,33 @@
                 }
             }
         )}]);
-    app.controller('searchSbcmController',['$scope','$http','allSBCM', function ( $scope, $http, allSBCM){
+
+    app.filter('startFrom', function() {
+        return function(input, start) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+    });
+
+    app.controller('searchSbcmController',['$scope','$http','allSBCM', function ($scope, $http, allSBCM){
         $scope.updateStatusCommand = {};
         $scope.allSBCM = allSBCM;
+        $scope.currentPage = 0;
+        $scope.pageSize = 10;
 
+        function filterEmptyElement(element) {
+            if (element == null || element == '')
+                return false;
+            return true;
+        }
+
+        $scope.allSBCM = $scope.allSBCM.filter(filterEmptyElement);
+
+        $scope.numberOfPages=function(){
+            console.log($scope.allSBCM.length);
+            //alert($scope.allSBCM.length);
+            return Math.ceil($scope.allSBCM.length/$scope.pageSize);
+        }
         $scope.viewsbcm = function(sbcm) {
             window.location.href = "/pla/core/sbcm/getsbcmview?serviceBenefitCoverageMappingId="+ sbcm.serviceBenefitCoverageMappingId + "&mode=view";
         };
@@ -44,7 +67,6 @@
         };
 
         $scope.$watchCollection("viewsbcm", function(newValue, oldValue) {});
-
     }
 
     ]);

@@ -160,7 +160,7 @@ public class SBCMService {
             @Override
             public UpdateSBCMCommand apply(ServiceBenefitCoverageMapping serviceBenefitCoverageMapping) {
                 if (serviceBenefitCoverageMapping.getStatus().equals(ServiceBenefitCoverageMapping.Status.ACTIVE)) {
-                    return new UpdateSBCMCommand(serviceBenefitCoverageMapping.getServiceBenefitCoverageMappingId().getServiceBenefitCoverageMappingId(), serviceBenefitCoverageMapping.getPlanName(), serviceBenefitCoverageMapping.getPlanCode(), serviceBenefitCoverageMapping.getBenefitName(), serviceBenefitCoverageMapping.getCoverageName(), serviceBenefitCoverageMapping.getService());
+                    return new UpdateSBCMCommand(serviceBenefitCoverageMapping.getServiceBenefitCoverageMappingId().getServiceBenefitCoverageMappingId(), serviceBenefitCoverageMapping.getPlanName(), serviceBenefitCoverageMapping.getPlanCode(), serviceBenefitCoverageMapping.getBenefitName(), serviceBenefitCoverageMapping.getCoverageName(), serviceBenefitCoverageMapping.getService(), serviceBenefitCoverageMapping.getStatus().name());
                 }
                 return null;
             }
