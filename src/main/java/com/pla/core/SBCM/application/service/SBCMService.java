@@ -213,7 +213,7 @@ public class SBCMService {
     }
 
     public int numberOfSBCMAvailable() {
-        List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAll();
+        List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAllByStatus(ServiceBenefitCoverageMapping.Status.ACTIVE);
         return isNotEmpty(sbcms) ? sbcms.size() : 0;
     }
 }

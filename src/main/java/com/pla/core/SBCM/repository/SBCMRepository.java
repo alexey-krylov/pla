@@ -1,5 +1,6 @@
 package com.pla.core.SBCM.repository;
 
+import ch.qos.logback.core.status.Status;
 import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
 import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMappingId;
 import com.pla.sharedkernel.identifier.BenefitId;
@@ -19,4 +20,7 @@ import java.util.List;
 public interface SBCMRepository extends MongoRepository<ServiceBenefitCoverageMapping, ServiceBenefitCoverageMappingId> {
     @Query("{'planCode' : ?0,'coverageId':?1, 'benefitId' :?2 ,'service' : ?3, 'status' : ?4}")
     ServiceBenefitCoverageMapping findDistinctByPlanCodeAndCoverageIdAndBenefitIdAndService(String planCode, CoverageId coverageId, BenefitId benefitId, String service, ServiceBenefitCoverageMapping.Status status);
+
+    @Query("{'status' : ?0}")
+    List<ServiceBenefitCoverageMapping> findAllByStatus(ServiceBenefitCoverageMapping.Status status);
 }
