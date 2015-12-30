@@ -406,6 +406,7 @@ public class GHQuotationService {
         if (premiumDetail == null) {
             return new GHPremiumDetailDto();
         }
+
         GHPremiumDetailDto premiumDetailDto = new GHPremiumDetailDto(premiumDetail.getAddOnBenefit(), premiumDetail.getProfitAndSolvency(), premiumDetail.getDiscount(), premiumDetail.getWaiverOfExcessLoading(), premiumDetail.getVat(), premiumDetail.getPolicyTermValue());
         GHPremiumDetail.PremiumInstallment premiumInstallment = premiumDetail.getPremiumInstallment();
         if (premiumInstallment != null) {

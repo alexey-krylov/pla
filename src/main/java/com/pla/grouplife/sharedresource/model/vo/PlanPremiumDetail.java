@@ -46,7 +46,7 @@ public class PlanPremiumDetail {
     }
 
     public PlanPremiumDetail updatePremiumAmount(BigDecimal premiumAmount){
-        this.premiumAmount=premiumAmount;
+        this.premiumAmount = premiumAmount;
         return this;
     }
 
