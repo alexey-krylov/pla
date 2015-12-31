@@ -163,10 +163,10 @@ public class PremiumCalculatorUnitTest {
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
         List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal("55000").setScale(1,BigDecimal.ROUND_HALF_UP),LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
-        assertEquals(new BigDecimal("1237.50"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
-        assertEquals(new BigDecimal("620.235000"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
-        assertEquals(new BigDecimal("315.810000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
-        assertEquals(new BigDecimal("108.281250"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("1237.5000"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("620.23500000"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("315.81000000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("108.28125000"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
     }
 
     /**
@@ -217,7 +217,7 @@ public class PremiumCalculatorUnitTest {
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
         List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto, BigDecimal.ONE,LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
-        assertEquals(new BigDecimal("45837.94"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList).setScale(2,BigDecimal.ROUND_CEILING));
+        assertEquals(new BigDecimal("45837.91"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList).setScale(2,BigDecimal.ROUND_CEILING));
     }
 
 
@@ -249,10 +249,10 @@ public class PremiumCalculatorUnitTest {
         when(premiumFinder.findPremium(premiumCalculationDto)).thenReturn(premium);
         when(organizationGeneralInformationRepository.findAll()).thenReturn(Lists.newArrayList(organizationGeneralInformation));
         List<ComputedPremiumDto> computedPremiumDtoList = premiumCalculator.calculateBasicPremium(premiumCalculationDto,new BigDecimal("55000").setScale(1,BigDecimal.ROUND_HALF_UP), LineOfBusinessEnum.INDIVIDUAL_LIFE, Boolean.FALSE, StringUtils.EMPTY);
-        assertEquals(new BigDecimal("1139.118750"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
-        assertEquals(new BigDecimal("1185.030000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
-        assertEquals(new BigDecimal("1166.591250"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
-        assertEquals(new BigDecimal("1237.50"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("1139.11875000"), ComputedPremiumDto.getAnnualPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("1185.03000000"), ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("1166.59125000"), ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtoList));
+        assertEquals(new BigDecimal("1237.5000"), ComputedPremiumDto.getMonthlyPremium(computedPremiumDtoList));
 
     }
 
