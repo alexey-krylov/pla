@@ -43,8 +43,8 @@ public class HCPRateController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/downloadhcpratetemplate/{hcpCode}", method = RequestMethod.GET)
-    public void downloadInsuredTemplate(@PathVariable("hcpCode") String hcpCode, HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "/downloadhcpratetemplate", method = RequestMethod.GET)
+    public void downloadInsuredTemplate(@RequestParam(required = false) String hcpCode, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
         response.setHeader("content-disposition", "attachment; filename=" + "HCPRateTemplate.xls" + "");

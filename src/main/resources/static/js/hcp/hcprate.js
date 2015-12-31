@@ -33,13 +33,13 @@
             if (n[1]) {
                 $scope.dropdown = [{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                    "href": "/pla/core/hcprate/downloadhcpratetemplate/" + $scope.qId
+                    "href": "/pla/core/hcprate/downloadhcpratetemplate?hcpCode=" + $scope.qId
                 }
                 ];
             } else {
                 $scope.dropdown = [{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                    "href": "/pla/core/hcprate/downloadhcpratetemplate/" + $scope.hcpCode
+                    "href": "/pla/core/hcprate/downloadhcpratetemplate?hcpCode=" + $scope.hcpCode
                 },{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
                     "href": "/pla/core/hcprate/downloaderrorhcpratetemplate/" + $scope.qId

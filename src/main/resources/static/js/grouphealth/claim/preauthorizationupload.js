@@ -12,29 +12,50 @@
 
         .config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when('/', {
-                    templateUrl: 'preauthorizationupload.html',
-                    controller: 'PreAuthorizationUploadController',
-                    resolve: {
-                                           hcps: ['$q', '$http', function ($q, $http) {
-                                               var deferred = $q.defer();
-                                               $http.get('/pla/grouphealth/claim/cashless/getAllHcpNameAndCode').success(function (response, status, headers, config) {
-                                                   deferred.resolve(response)
+                templateUrl: 'preauthorizationupload.html',
+                controller: 'PreAuthorizationUploadController',
+                resolve: {
+                    hcps: ['$q', '$http', function ($q, $http) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouphealth/claim/cashless/getAllHcpNameAndCode').success(function (response, status, headers, config) {
+                            deferred.resolve(response)
 
-                                               }).error(function (response, status, headers, config) {
-                                                   deferred.reject();
-                                               });
-                                               return deferred.promise;
-                                           }]
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
+                    }]
 
 
                 }
             });
-            }]);
+        }]);
 
     app.controller('PreAuthorizationUploadController', ['$scope', '$http','$upload','hcps' , function ($scope, $http, $upload,hcps) {
 
-     $scope.hcps=hcps;
-     $scope.hcpCode='';
+        $scope.hcps = hcps;
+        $scope.uploadPreAuthorizationDto = {};
+        $scope.showDownload = true;
+        $scope.$watchCollection('[uploadPreAuthorizationDto.hcpCode, showDownload]', function (n) {
+            alert($scope.uploadPreAuthorizationDto.hcpCode.hcpCode);
+            $scope.qId = n[0];
+            if (n[1]) {
+                $scope.dropdown = [{
+                    "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
+                    "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.qId
+                }
+                ];
+            } else {
+                $scope.dropdown = [{
+                    "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
+                    "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.hcpCode
+                },{
+                    "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
+                    "href": "/pla/core/hcprate/downloaderrorhcpratetemplate/" + $scope.qId
+                }
+                ];
+            }
+        });
 
 
     }])

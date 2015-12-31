@@ -37,7 +37,7 @@
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6">
-                            <button type="button" class="btn btn-success  pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="hcpCode == ''">Downloads
+                            <button type="button" class="btn btn-success  pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="uploadPreAuthorizationDto.hcpCode == '' || uploadPreAuthorizationDto.hcpCode == null">Downloads
                             </button>
                         </div>
                     </div>
@@ -49,8 +49,8 @@
                                 <div class="form-group required">
 
                                     <select class="form-control input-sm" name="payPointStatus"
-                                            ng-model="hcpCode" ng-disabled="mode =='view'"
-                                            ng-options="hcp.hcpCode as hcp.hcpName  for  hcp in hcps"
+                                            ng-model="uploadPreAuthorizationDto.hcpCode" ng-disabled="mode =='view'"
+                                            ng-options="hcp.hcpCode as hcp.hcpName for hcp in hcps"
                                             ng-required="true"></select>
 
                                 </div>
