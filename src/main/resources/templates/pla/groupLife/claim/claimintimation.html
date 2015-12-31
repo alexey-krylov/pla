@@ -160,7 +160,7 @@
                                             <label class="control-label">Scheme Name</label>
                                             <input class="form-control input-md" id="scheme_Name"
                                                    name="schemeName"
-                                                   ng-model="schemeName"
+                                                   ng-model="claimDetails.schemeName"
                                                    type="text" ng-disabled="true"/>
                                         </div>
                                         <div class="form-group required">
@@ -1035,6 +1035,16 @@
                         </accordion>
                     </ng-form>
                 </div><!--ending point of one panel-->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm" ng-click="createClimIntimation()">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>

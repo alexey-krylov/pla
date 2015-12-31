@@ -207,36 +207,59 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                                         console.log(JSON.stringify(response));
 //                                        $scope.documentList=response;
 
-$scope.documentList=[
-  {
-    "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
-    "documentName": "Active At Work Declaration Form",
-    "file": null,
-    "content": null,
-    "submitted": false,
-    "fileName": null,
-    "contentType": null,
-    "gridFsDocId": null,
-    "requireForSubmission": false
-  },
-  {
-    "documentId": "ADDRESS_PROOF",
-    "documentName": "Address Proof",
-    "file": null,
-    "content": null,
-    "submitted": false,
-    "fileName": null,
-    "contentType": null,
-    "gridFsDocId": null,
-    "requireForSubmission": false
-  }
-]
+                                        $scope.documentList=[
+                                          {
+                                            "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
+                                            "documentName": "Active At Work Declaration Form",
+                                            "file": null,
+                                            "content": null,
+                                            "submitted": false,
+                                            "fileName": null,
+                                            "contentType": null,
+                                            "gridFsDocId": null,
+                                            "requireForSubmission": false
+                                          },
+                                          {
+                                            "documentId": "ADDRESS_PROOF",
+                                            "documentName": "Address Proof",
+                                            "file": null,
+                                            "content": null,
+                                            "submitted": false,
+                                            "fileName": null,
+                                            "contentType": null,
+                                            "gridFsDocId": null,
+                                            "requireForSubmission": false
+                                          }
+                                        ]
                                     }).error(function (response, status, headers, config) {
                                     });
 
 
                 }).error(function (response, status, headers, config) {
                 });
+            }
+              /**
+                         * claimSubmit Logic
+                         */
+
+            $scope.createClimIntimation=function(){
+            // Submiting Claim
+            var claimSubmitObj={
+            "policyNumber":$scope.claimDetails.policyNumber,
+            "schemeName":$scope.claimDetails.schemeName,
+            "relationship":$scope.claimDetails.relationship,
+            "category":$scope.claimDetails.category,
+            "claimantDetail":$scope.claimantDetail,
+            "planDetailDto":$scope.planDetail,
+            "bankDetails":$scope.bankDetails,
+            "claimAssuredDetailDto":$scope.assuredDetails};
+
+           /*  $http.post('/pla/grouplife/claim/createclaimintimation',claimSubmitObj).success(function (response, status, headers, config) {
+                                console.log('generate Claim Intimation Response..');
+                                console.log(JSON.stringify(response));
+                            }).error(function (response, status, headers, config) {
+                            });*/
+
             }
             /**
              * Adding Contact Details..
