@@ -38,6 +38,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.claimType=[];
         $scope.assuredCriteria={};
         $scope.assuredSearchResult=[];
+        $scope.documentList = [];
             /***
              *
              * @param $event for Claim intimation Date
@@ -176,7 +177,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
              */
             $scope.calculateAssuredDOB=function(){
                 if ($scope.assuredDetails.dateOfBirth) {
-                    $scope.assuredDetails.nextDob = moment().diff(new moment(new Date($scope.assuredDetails.dob)), 'years') + 1;
+                    $scope.assuredDetails.nextDob = moment().diff(new moment(new Date($scope.assuredDetails.dateOfBirth)), 'years') + 1;
                     //alert('dateof Birth');
                 }
             }
@@ -198,7 +199,42 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 $http.get('/pla/grouplife/claim/getplandetail/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category+'/'+$scope.claimDetails.relationship).success(function (response, status, headers, config) {
                     console.log(JSON.stringify(response));
                     $scope.claimTypes=response.claimTypes;
-                    $scope.planDetail=response.planPremiumDetail;  //planDetailDto
+                    $scope.planDetail=response.planDetailDto;  //planDetailDto
+
+                    //Retriving the DocumentList
+                     $http.get('/pla/grouplife/claim/getclaimdmandatorydocuments/'+$scope.planDetail.planId).success(function (response, status, headers, config) {
+                                        console.log('Document List...******');
+                                        console.log(JSON.stringify(response));
+//                                        $scope.documentList=response;
+
+$scope.documentList=[
+  {
+    "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
+    "documentName": "Active At Work Declaration Form",
+    "file": null,
+    "content": null,
+    "submitted": false,
+    "fileName": null,
+    "contentType": null,
+    "gridFsDocId": null,
+    "requireForSubmission": false
+  },
+  {
+    "documentId": "ADDRESS_PROOF",
+    "documentName": "Address Proof",
+    "file": null,
+    "content": null,
+    "submitted": false,
+    "fileName": null,
+    "contentType": null,
+    "gridFsDocId": null,
+    "requireForSubmission": false
+  }
+]
+                                    }).error(function (response, status, headers, config) {
+                                    });
+
+
                 }).error(function (response, status, headers, config) {
                 });
             }
@@ -300,8 +336,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             $scope.selectCurrentAssured=function(index,clientId){
                 // Call server to Retrival of the Assured Details.
                 $http.get('/pla/grouplife/claim/assureddetail/'+ $scope.rcvPolicyId +'/'+clientId).success(function (response, status, headers, config) {
-                    //console.log(JSON.stringify(response));
-                    $scope.assuredDetails=response.relationship;
+                    console.log(JSON.stringify(response));
+                    $scope.assuredDetails=response;
                 }).error(function (response, status, headers, config) {
                 });
 

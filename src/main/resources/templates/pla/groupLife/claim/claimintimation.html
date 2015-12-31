@@ -857,7 +857,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group required">
                                         <label class="control-label">Relationship With Main Assured</label>
-                                        <input type="text" class="form-control input-sm" name="assuredRelationShip" ng-model="assuredDetails.mainAssured.assuredRelation" ng-disabled="true" ng-required="true"/>
+                                        <input type="text" class="form-control input-sm" name="assuredRelationShip" ng-model="assuredDetails.mainAssured.assuredRelation" ng-required="true"/>
                                         <div class="error" ng-messages="mainAssuredDetailForm.assuredRelationShip.$error" ng-if="mainAssuredDetailForm.assuredRelationShip.$dirty">
                                             <small class="error" ng-message="required">Relationship With Main Assured.</small>
                                         </div>
@@ -1006,6 +1006,30 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
+
+                                    <div class="form-group " ng-repeat="document in documentList">
+                                        <label class="col-sm-3 control-label">{{document.documentName}}</label>
+
+                                        <div class="input-group">
+                                            <a href="/pla/grouplife/proposal/downloadmandatorydocument/{{document.gridFsDocId}}"
+                                               style="display:inline;float:right;" hg-show="!document.submitted">{{document.fileName
+                                                | limitTo: 30}}</a>
+
+                                            <button class="btn btn-default"
+                                                    style="display:inline;float:right;margin-right:5px;"
+                                                    ng-file-select=""
+                                                    ng-model="document.documentAttached" ng-disabled="isViewMode">Browse
+                                            </button>
+                                            <input class="form-control input-sm" style="width:300px;"
+                                                   value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"
+                                         ng-disabled="!documentNameLengthTest()" ng-click="uploadDocumentFiles()"
+                                         ng-hide="isViewMode">Upload All
+                                    </div>
+
                               </div>
                             </accordion-group>
                         </accordion>
