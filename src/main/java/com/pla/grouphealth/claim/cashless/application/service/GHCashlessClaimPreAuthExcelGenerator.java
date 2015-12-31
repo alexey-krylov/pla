@@ -62,13 +62,4 @@ public class GHCashlessClaimPreAuthExcelGenerator {
         services.sort(String::compareTo);
         return services;
     }
-
-    private List<Map<Integer, String>> transformInsuredDtoToExcelData(HCPServiceDetailDto hcpServiceDetailDto, List<String> headers) {
-        List<Map<Integer, String>> excelRowData = Lists.newArrayList();
-        Map<Integer, String> excelDataMap = Maps.newHashMap();
-        headers.forEach(header -> excelDataMap.put(headers.indexOf(header), GHCashlessClaimPreAuthExcelHeader.valueOf(header).getAllowedValue(hcpServiceDetailDto)));
-        excelRowData.add(excelDataMap);
-        return excelRowData;
-    }
-
 }
