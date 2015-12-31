@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
@@ -12,6 +13,7 @@
 </head>
 <body class="fuelux">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
 <script>
     requirejs(['main', 'angular-file-upload'], function () {
         require(['/pla/js/grouphealth/claim/preauthorizationupload.js?t=19'], function () {
@@ -45,18 +47,12 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Hcp Name</label>
-
                                 <div class="form-group required">
-
                                     <select class="form-control input-sm" name="payPointStatus"
                                             ng-model="uploadPreAuthorizationDto.hcpCode" ng-disabled="mode =='view'"
                                             ng-options="hcp.hcpCode as hcp.hcpName for hcp in hcps"
                                             ng-required="true"></select>
-
                                 </div>
-
-
-
                             </div>
                         </div>
                     </div>
@@ -64,9 +60,8 @@
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Batch Number</label>
-                                <input    type="text"  class="form-control input-md" id="batchNumber"
+                                <input  type="text" class="form-control input-md" id="batchNumber"
                                        name="batchNumber"
-
                                        placeholder="Enter Batch Number" ng-disabled="mode =='view'"/>
                                 <div class="error" ng-messages="hcpRateForm.hcpName.$error"
                                      ng-if="hcpRateForm.contactPersonDetail.$dirty">
@@ -76,20 +71,24 @@
                         </div>
 
 
+
+
                         <div class="col-md-6">
                             <div class="form-group required">
                                 <label class="control-label">Batch  Date</label>
-
                                 <div class='input-group date'>
-                                    <input    type="text"  class="form-control input-md" id="batchDate"
-                                              name="batchDate"
-
-                                              placeholder="Enter Batch  Date" ng-disabled="mode =='view'"/>
-                                     <span class="input-group-btn">
+                                    <input type="text" class="form-control input-md" id="batchDate"
+                                           name="batchDate"
+                                           ng-model="batchDate"
+                                           is-open="submissionbatchDate"
+                                           datepicker-popup=""
+                                           placeholder="Enter Batch  Date"
+                                           ng-disabled="mode =='view'"/>
+                                      <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" view-enabled=""
-                                              ng-click="launchFromDate($event)">
+                                              ng-click="launchbatchDate($event)">
                                           <i class="glyphicon glyphicon-calendar"></i></button>
-                                     </span>
+                                      </span>
                                 </div>
                                 <div class="error" ng-messages="hcpForm.fromdate.$error"
                                      ng-if="hcpForm.fromdate.$dirty">

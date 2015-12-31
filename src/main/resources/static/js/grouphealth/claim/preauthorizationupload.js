@@ -32,8 +32,10 @@
         }]);
 
     app.controller('PreAuthorizationUploadController', ['$scope', '$http','$upload','hcps' , function ($scope, $http, $upload,hcps) {
-
+  $scope.batchDate = formatDate(new Date());
+    console.log($scope.batchDate);
         $scope.hcps = hcps;
+
         $scope.uploadPreAuthorizationDto = {};
         $scope.showDownload = true;
         $scope.$watchCollection('[uploadPreAuthorizationDto.hcpCode, showDownload]', function (n) {
@@ -47,7 +49,7 @@
             } else {
                 $scope.dropdown = [{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                    "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.hcpCode
+                    "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.uploadPreAuthorizationDto.hcpCode
                 },{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
                     "href": "/pla/core/hcprate/downloaderrorhcpratetemplate/" + $scope.qId
@@ -55,6 +57,12 @@
                 ];
             }
         });
+
+           $scope.launchbatchDate = function ($event) {
+                     $event.preventDefault();
+                     $event.stopPropagation();
+                     $scope.submissionbatchDate= true;
+                 };
 
 
     }])
