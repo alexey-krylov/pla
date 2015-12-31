@@ -153,7 +153,7 @@ public class GroupLifeQuotationService {
                 noOfInstallment = noOfInstallment - 1;
             }
             for (int count = 1; count <= noOfInstallment; count++) {
-                BigDecimal installmentAmount = premiumDetail.getNetTotalPremium().divide(new BigDecimal(count), 2, BigDecimal.ROUND_CEILING);
+                BigDecimal installmentAmount = premiumDetail.getNetTotalPremium().divide(new BigDecimal(count), 2, AppConstants.roundingMode);
                 premiumDetail = premiumDetail.addInstallments(count, installmentAmount);
             }
             if (premiumDetailDto.getPremiumInstallment() != null) {
