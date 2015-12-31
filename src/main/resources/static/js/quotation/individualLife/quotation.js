@@ -644,6 +644,7 @@
                             $scope.quotation = response;
                             console.log('QuotationResponse..'+JSON.stringify(response));
                             $scope.proposedAssured = $scope.quotation.proposedAssured || {};
+                            $scope.proposedAssured.opportunityId=response.opportunityId;
                             $scope.proposer = $scope.quotation.proposer || {};
                             $scope.originalProposer = $scope.quotation.proposer || {};
                             $scope.opportunityId=$scope.quotation.opportunityId;
@@ -779,7 +780,7 @@
                         angular.extend($scope.proposedAssured, {
                             agentId: $scope.quotation.agentId,
                             planId: $scope.plan.planId,
-                            opportunityId: $scope.opportunityId
+                            opportunityId: $scope.proposedAssured.opportunityId
                         }))
                         .success(function (data) {
                             if (data.id)

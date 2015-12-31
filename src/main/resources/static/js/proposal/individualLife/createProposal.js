@@ -1464,6 +1464,8 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                         "proposalId": $scope.proposal.proposalId,
                         "comment": $scope.returnComment
                     })).success(function (data) {
+                    //$scope.cancelAll();
+                    window.location.href = "/pla/individuallife/proposal"
                 });
 
             }

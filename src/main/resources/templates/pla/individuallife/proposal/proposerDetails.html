@@ -146,7 +146,7 @@
                                datepicker-popup="" view-enabled=""
                                ng-required="true"
                                is-open="launchdob2"
-                               max-date="todayDate" ng-disabled="mode=='new'||mode=='view'||isClientValid"
+                               max-date="todayDate" ng-disabled="mode=='new'||mode=='view'||isClientValid||isPlanTextField"
                                ng-change="clearPlanId()" ng-model="proposer.dateOfBirth" name="dob"/>
                                     <span class="input-group-btn">
                                     <button ng-disabled="mode=='new'||mode=='view'||isClientValid" type="button" class="btn btn-default btn-sm"

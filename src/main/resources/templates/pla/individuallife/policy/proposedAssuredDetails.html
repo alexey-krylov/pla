@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Surname</label>
-                    <input type="text" class="form-control input-sm" name="surname"  ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-required="true" ng-model="proposedAssured.surname" ng-maxlength="20"/>
+                    <input type="text" class="form-control input-sm" name="surname"  ng-disabled="mode=='new'||mode=='view'||isPlanTextField" ng-pattern="/[a-zA-Z]/" ng-required="true" ng-model="proposedAssured.surname" ng-maxlength="20"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.surname.$error" ng-if="proposedAssuredDetails.surname.$dirty">
                         <small class="error" ng-message="required">Please enter Surname.</small>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">NRC</label>
-                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+                    <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'||isPlanTextField" ng-model="proposedAssured.nrc" ng-required="true" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.nrc.$error" ng-if="proposedAssuredDetails.nrc.$dirty">
                         <small class="error" ng-message="required">Please enter NRC.</small>
@@ -82,8 +82,8 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group required">
-                    <label class="control-label">First Name</label>
-                    <input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/"  ng-disabled="mode=='new'||mode=='view'" name="firstName"  ng-model="proposedAssured.firstName" ng-maxlength="20" ng-required="true"/>
+                    <label class="control-label">First Name</label>{{isPlanTextField}}
+                    <input type="text" class="form-control input-sm" ng-pattern="/[a-zA-Z]/"  ng-disabled="mode=='new'||mode=='view'||isPlanTextField" name="firstName"  ng-model="proposedAssured.firstName" ng-maxlength="20" ng-required="true"/>
 
                     <div class="error" ng-messages="proposedAssuredDetails.firstName.$error" ng-if="proposedAssuredDetails.firstName.$dirty">
                         <small class="error" ng-message="required">
@@ -111,7 +111,7 @@
                                ng-required="true"
                                is-open="launchdob"
                                max-date="todayDate"
-                               ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'" ng-init="showDob(proposedAssured.dateOfBirth)" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
+                               ng-model="proposedAssured.dateOfBirth" name="dob" ng-disabled="mode=='new'||mode=='view'||isPlanTextField" ng-init="showDob(proposedAssured.dateOfBirth)" ng-blur="showDob(proposedAssured.dateOfBirth)"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm"
                                             ng-disabled="mode=='new'||mode=='view'" ng-click="launchProposedAssuredeDob($event)">
@@ -126,7 +126,7 @@
 
                 <div class="form-group required">
                     <label class="control-label">Sex</label>
-                    <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'" ng-model="proposedAssured.gender" ng-required="true">
+                    <select class="form-control input-sm" name="gender" ng-disabled="mode=='new'||mode=='view'||isPlanTextField" ng-model="proposedAssured.gender" ng-required="true">
                         <option value="MALE" >Male</option>
                         <option value="FEMALE">Female</option>
                     </select>

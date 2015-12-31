@@ -36,7 +36,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.assuredDetails={};
         $scope.claimDetails={};
         $scope.claimType=[];
-
+        $scope.assuredCriteria={};
+        $scope.assuredSearchResult=[];
             /***
              *
              * @param $event for Claim intimation Date
@@ -151,9 +152,9 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 //$scope.policyNumber=$scope.rcvPolicyNumber;
 
                $http.get('/pla/grouplife/claim/getclaimant/' + $scope.rcvPolicyId).success(function (response, status, headers, config) {
-                    //console.log(JSON.stringify(response));
+                    console.log(JSON.stringify(response));
                    $scope.schemeName=response.schemeName;
-                   $scope.policyNumber=response.policyNumber;
+                   $scope.claimDetails.policyNumber=response.policyNumber;
                    $scope.claimantDetail=response.claimantDetail;
                    $scope.categorySet=response.categorySet;
                 }).error(function (response, status, headers, config) {
@@ -174,7 +175,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
              * Calculating Nex DOB
              */
             $scope.calculateAssuredDOB=function(){
-                if ($scope.assuredDetails.dob) {
+                if ($scope.assuredDetails.dateOfBirth) {
                     $scope.assuredDetails.nextDob = moment().diff(new moment(new Date($scope.assuredDetails.dob)), 'years') + 1;
                     //alert('dateof Birth');
                 }
@@ -197,7 +198,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 $http.get('/pla/grouplife/claim/getplandetail/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category+'/'+$scope.claimDetails.relationship).success(function (response, status, headers, config) {
                     console.log(JSON.stringify(response));
                     $scope.claimTypes=response.claimTypes;
-                    $scope.planDetail=response.planPremiumDetail;
+                    $scope.planDetail=response.planPremiumDetail;  //planDetailDto
                 }).error(function (response, status, headers, config) {
                 });
             }
@@ -230,6 +231,82 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 contact: false
             };
 
+            /***
+             * Assured Search Criteria
+             */
+            $scope.assuredSearch=function(){
+                var searchRequestObj={
+                    "category":$scope.claimDetails.category,
+                    "relationShip":$scope.claimDetails.relationship,
+                    "policyNumber":$scope.claimDetails.policyNumber,
+                    "firstName":$scope.assuredCriteria.firstName,
+                    "surName":$scope.assuredCriteria.surname,
+                    "dateOfBirth":$scope.assuredCriteria.assuredDOB,
+                    "clientId":$scope.assuredCriteria.clientId,
+                    "nrcNumber":$scope.assuredCriteria.nrc,
+                    "manNumber":$scope.assuredCriteria.manNumber,
+                    "gender":$scope.assuredCriteria.gender
+                };
+                console.log('AssuredSearchObject '+JSON.stringify(searchRequestObj));
+
+                // Calling Service to get AssuredSearch Related data
+                $http.post('/pla/grouplife/claim/assuredsearch',searchRequestObj).success(function (response, status, headers, config) {
+                    console.log('Assured Search Response..');
+                    console.log(JSON.stringify(response));
+                     $scope.assuredSearchResult=response;
+                    if($scope.assuredSearchResult.length > 0){
+                        $('#assuredSearchModal').modal('show');
+                    }
+                 //$('#assuredSearchModal').modal('show');
+
+                }).error(function (response, status, headers, config) {
+                });
+
+                /*$scope.assuredSearchResult=[
+                    {
+                        "firstName": "ravi",
+                        "surName": "kumar",
+                        "dateOfBirth": "09/06/1990",
+                        "gender": "MALE",
+                        "nrcNumber": "",
+                        "manNumber": "",
+                        "clientId": "10012301"
+                    },
+                    {
+                        "firstName": "ravi",
+                        "surName": "kumar",
+                        "dateOfBirth": "09/06/1990",
+                        "gender": "MALE",
+                        "nrcNumber": "",
+                        "manNumber": "",
+                        "clientId": "10012301"
+                    }
+                ];*/
+
+                //$('#assuredSearchModal').modal('show');
+                //console.log('JSON**'+JSON.stringify($scope.assuredSearchResult));
+            }
+            /**
+             * closeAssuredSearchModal
+             */
+            $scope.closeAssuredSearchModal=function(){
+                $('#assuredSearchModal').modal('toggle');
+            }
+
+
+            /**
+             * Retriving the Selected Assured Details..
+             */
+            $scope.selectCurrentAssured=function(index,clientId){
+                // Call server to Retrival of the Assured Details.
+                $http.get('/pla/grouplife/claim/assureddetail/'+ $scope.rcvPolicyId +'/'+clientId).success(function (response, status, headers, config) {
+                    //console.log(JSON.stringify(response));
+                    $scope.assuredDetails=response.relationship;
+                }).error(function (response, status, headers, config) {
+                });
+
+                $scope.closeAssuredSearchModal();
+            }
             /**
              * Claim Detail HarCoded Value
              */
