@@ -37,7 +37,6 @@
         $scope.uploadPreAuthorizationDto = {};
         $scope.showDownload = true;
         $scope.$watchCollection('[uploadPreAuthorizationDto.hcpCode, showDownload]', function (n) {
-            alert($scope.uploadPreAuthorizationDto.hcpCode.hcpCode);
             $scope.qId = n[0];
             if (n[1]) {
                 $scope.dropdown = [{

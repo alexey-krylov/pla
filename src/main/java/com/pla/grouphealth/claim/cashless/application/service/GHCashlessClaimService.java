@@ -79,7 +79,7 @@ public class GHCashlessClaimService {
             public Map<String,Object> apply(HCPRate hcpRate) {
                 Map<String,Object> map=new HashMap<String,Object>();
                 map.put("hcpName",hcpRate.getHcpName());
-                map.put("hcpCode",hcpRate.getHcpCode());
+                map.put("hcpCode",hcpRate.getHcpCode().getHcpCode());
                 return map;
             }
         }).collect(Collectors.toList()): Lists.newArrayList();

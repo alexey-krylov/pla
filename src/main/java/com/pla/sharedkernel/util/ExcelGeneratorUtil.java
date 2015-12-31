@@ -92,7 +92,7 @@ public class ExcelGeneratorUtil {
         HSSFRow hssfRow = createRow(hssfSheet, rowNumber);
         for (int cellNumber = 0; cellNumber < noOfCell; cellNumber++) {
             if (isNotEmpty(constraintCellData.get(cellNumber))) {
-                String columnIndex = String.valueOf((char) (65 + cellNumber));
+                String columnIndex = cellNumber > 25 ? getRefurbishedColumnIndex(cellNumber) : String.valueOf((char) (65 + cellNumber));
                 String hiddenSheetName = "hidden" + columnIndex;
                 if(workbook.getSheet(hiddenSheetName) == null) {
                     HSSFSheet hiddenSheetForNamedCell = workbook.getSheet(hiddenSheetName) == null ? workbook.createSheet(hiddenSheetName) : workbook.getSheet(hiddenSheetName);
@@ -116,6 +116,10 @@ public class ExcelGeneratorUtil {
             }
         }
         return hssfRow;
+    }
+
+    private static String getRefurbishedColumnIndex(int cellNumber) {
+        return String.valueOf((char)65)+String.valueOf((char)((65 + cellNumber) - 26));
     }
 
     private static HSSFRow createRowWithDvConstraintCellData(HSSFWorkbook workbook, HSSFSheet hssfSheet, int rowNumber, int lastRowNumber, int noOfCell, Map<Integer, String> cellData) {
