@@ -358,7 +358,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
             }
             return errorMessage;
         }
-    },PLEASE_PROVIDE_DETAILS("Please provide details"){
+    },PLEASE_PROVIDE_DETAILS_OF_IHD_CAD("Past history of any chronic illness - Please provide details"){
         @Override
         public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
             return hcpServiceDetailDto.getServiceDepartment();
@@ -404,7 +404,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
             }
             return errorMessage;
         }
-    },SERVICE("Service"){
+    },PLEASE_PROVIDE_DETAILS_OF_DIABETES("Past history of any chronic illness - Please provide details"){
         @Override
         public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
             return hcpServiceDetailDto.getServiceDepartment();
@@ -427,7 +427,352 @@ public enum GHCashlessClaimPreAuthExcelHeader {
             }
             return errorMessage;
         }
-    },TYPE("Type"){
+    }, SUFFERING_FROM_ASTHMA_COPD_TB("Suffering From Paralysis/CVA/Epilepsy"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAILS_OF_ASTHMA_COPD_TB("Past history of any chronic illness - Please provide details"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    }, SUFFERING_FROM_PARALYSIS_CVA_EPILEPSY("Suffering From Paralysis/CVA/Epilepsy"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAILS_OF_PARALYSIS_CVA("Past history of any chronic illness - Please provide details"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    }, SUFFERING_FROM_ARTHIRITIS("Suffering From Arthiritis"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAILS_OF_SUFFERING_FROM_ARTHIRITIS("Past history of any chronic illness - Please provide details"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },SUFFERING_FROM_CANCER_TUMOR_CYST("suffering_from_cancer_tumor_cyst") {
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if (isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAILS_OF_CANCER_TUMOR_CYST("Past history of any chronic illness - Please provide details"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },SUFFERING_FROM_STD_HIV_AIDS("Suffering From STD/HIV/AIDS"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAIL_OF_STD_HIV_AIDS("Past history of any chronic illness - Please provide details"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    }, SUFFERING_FROM_ALCOHOL_DRUG_ABUSE("Suffering From Alcohol/Drug Abuse"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAIL_OF_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Please provide detail"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },SUFFERING_FRO__PSYCHIATRIC_CONDITION("Suffering From Psychiatric Condition"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },PLEASE_PROVIDE_DETAILS_PSYCHIATRIC_CONDITION("Past history of any chronic illness - Please provide details"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },TYPE("tYPE"){
+        @Override
+        public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
+            return hcpServiceDetailDto.getServiceDepartment();
+        }
+
+        @Override
+        public void populateInsuredDetail(Map insuredDto, Row row, List<String> headers) {
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Service Department cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },SERVICE("Service"){
         @Override
         public String getAllowedValue(HCPServiceDetailDto hcpServiceDetailDto) {
             return hcpServiceDetailDto.getServiceDepartment();
@@ -452,6 +797,8 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     };
 
+
+
     private String description;
 
     GHCashlessClaimPreAuthExcelHeader(String description){
@@ -465,7 +812,6 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
         return headers;
     }
-
     public String getDescription() {
         return description;
     }
