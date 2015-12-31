@@ -32,7 +32,7 @@ public class GHCashlessClaimController {
     public void downloadInsuredTemplate(@PathVariable("ghCashlessClaimCode") String ghCashlessClaimCode, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "HCPRateTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "PreAuthorizationTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         HSSFWorkbook hcpRateExcel = ghCashlessClaimService.getGHCashlessClaimPreAuthtemplate(ghCashlessClaimCode);
         hcpRateExcel.write(outputStream);

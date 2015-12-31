@@ -51,7 +51,7 @@ public class GHCashlessClaimPreAuthExcelDetailDto {
     private String pastHistorySufferingFromCancertumorcyst;
     private String detailsOfCancertumorcyst;
     private String pastHistorySufferingFromStdhivaids;
-    private String detailofStdHivAids;
+    private String detailOfStdHivAids;
     private String pastHistorySufferingFromAlcoholDrugAbuse;
     private String detailOfAlcoholDrugAbuse;
     private String pastHistorySufferingFromPychiatricCondition;
