@@ -192,13 +192,13 @@ public class Premium {
         BigDecimal premiumAmount = premiumItem.getPremium();
         if (PremiumFactor.PER_THOUSAND.equals(premiumFactor)) {
             premiumAmount = sumAssured.multiply(premiumItem.getPremium());
-            premiumAmount = premiumAmount.divide(new BigDecimal(1000));
+            premiumAmount = premiumAmount.divide(new BigDecimal(1000), 4, BigDecimal.ROUND_HALF_EVEN);
         }
         if (noOfDays != 365) {
             if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
-                premiumAmount = premiumAmount.divide(new BigDecimal(30), 4, BigDecimal.ROUND_CEILING);
+                premiumAmount = premiumAmount.divide(new BigDecimal(30), 4, BigDecimal.ROUND_HALF_EVEN);
             } else if (PremiumRateFrequency.YEARLY.equals(premiumRateFrequency)) {
-                premiumAmount = premiumAmount.divide(new BigDecimal(365), 4, BigDecimal.ROUND_CEILING);
+                premiumAmount = premiumAmount.divide(new BigDecimal(365), 4, BigDecimal.ROUND_HALF_EVEN);
             }
             premiumAmount = premiumAmount.multiply(new BigDecimal(noOfDays));
         }
