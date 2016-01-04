@@ -308,7 +308,7 @@ public enum PreAuthorizationExcelHeader {
     },PREGNANCY_DATE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Date of Delivery"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getPregnancyDateOfDelivery();
+            return preAuthorizationDetailDto.getPregnancyDateOfDelivery().toString();
         }
 
         @Override
@@ -316,7 +316,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setPregnancyDateOfDelivery(cellValue);
+            preAuthorizationDetailDto.setPregnancyDateOfDelivery(new DateTime(cellValue));
             return preAuthorizationDetailDto;
         }
 
@@ -448,7 +448,7 @@ public enum PreAuthorizationExcelHeader {
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_FIRST_CONSULTATION_DATE("Diagnosis/Treatment in case Of Illness Or Trauma - Date of first consultation"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getDiagnosisTreatmentIllnessTraumaFirstConsultationDate();
+            return preAuthorizationDetailDto.getDiagnosisTreatmentIllnessTraumaFirstConsultationDate().toString();
         }
 
         @Override
@@ -456,7 +456,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentIllnessTraumaFirstConsultationDate(cellValue);
+            preAuthorizationDetailDto.setDiagnosisTreatmentIllnessTraumaFirstConsultationDate(new DateTime(cellValue));
             return preAuthorizationDetailDto;
         }
 
@@ -700,7 +700,7 @@ public enum PreAuthorizationExcelHeader {
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_ADMISSION("Diagnosis/Treatment - If Surgery Please provide  Date of Admission"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission();
+            return preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission().toString();
         }
 
         @Override
@@ -708,7 +708,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfAdmission(cellValue);
+            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfAdmission(new DateTime(cellValue));
             return preAuthorizationDetailDto;
         }
 
@@ -728,7 +728,7 @@ public enum PreAuthorizationExcelHeader {
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_DISCHARGE("Diagnosis/Treatment - If Surgery Please provide Date of Discharge"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge();
+            return preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge().toString();
         }
 
         @Override
@@ -736,7 +736,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfDischarge(cellValue);
+            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfDischarge(new DateTime(cellValue));
             return preAuthorizationDetailDto;
         }
 

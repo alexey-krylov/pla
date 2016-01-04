@@ -24,12 +24,12 @@ public class PreAuthorizationDetail {
     private String pregnancyP;
     private String pregnancyL;
     private String pregnancyA;
-    private String pregnancyDateOfDelivery;
+    private DateTime pregnancyDateOfDelivery;
     private String pregnancyModeOfDelivery;
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    private String diagnosisTreatmentIllnessTraumaFirstConsultationDate;
+    private DateTime diagnosisTreatmentIllnessTraumaFirstConsultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;
@@ -38,8 +38,8 @@ public class PreAuthorizationDetail {
     private String diagnosisTreatmentMedicalDuration;
     private String diagnosisTreatmentSurgeryName;
     private String diagnosisTreatmentSurgeryAccommodationType;
-    private String diagnosisTreatmentSurgeryDateOfAdmission;
-    private String diagnosisTreatmentSurgeryDateOfDischarge;
+    private DateTime diagnosisTreatmentSurgeryDateOfAdmission;
+    private DateTime diagnosisTreatmentSurgeryDateOfDischarge;
     private String pastHistorySufferingFromHTN;
     private String detailsOfHTN;
     private String pastHistorySufferingFromIHCCAD;

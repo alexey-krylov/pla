@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.presentation.dto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 
 /**
  * Created by Mohan Sharma on 1/4/2016.
@@ -21,12 +22,12 @@ public class PreAuthorizationDetailDto {
     private String pregnancyP;
     private String pregnancyL;
     private String pregnancyA;
-    private String pregnancyDateOfDelivery;
+    private DateTime pregnancyDateOfDelivery;
     private String pregnancyModeOfDelivery;
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    public String diagnosisTreatmentIllnessTraumaFirstConsultationDate;
+    public DateTime diagnosisTreatmentIllnessTraumaFirstConsultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;
@@ -35,8 +36,8 @@ public class PreAuthorizationDetailDto {
     private String diagnosisTreatmentMedicalDuration;
     private String diagnosisTreatmentSurgeryName;
     private String diagnosisTreatmentSurgeryAccommodationType;
-    private String diagnosisTreatmentSurgeryDateOfAdmission;
-    private String diagnosisTreatmentSurgeryDateOfDischarge;
+    private DateTime diagnosisTreatmentSurgeryDateOfAdmission;
+    private DateTime diagnosisTreatmentSurgeryDateOfDischarge;
     private String pastHistorySufferingFromHTN;
     private String detailsOfHTN;
     private String pastHistorySufferingFromIHCCAD;
