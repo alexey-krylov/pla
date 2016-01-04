@@ -30,8 +30,8 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="policyHolderName" class="java.lang.String">
-		<fieldDescription><![CDATA[policyHolderName]]></fieldDescription>
+	<field name="proposerName" class="java.lang.String">
+		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
 	</field>
 	<field name="issuanceDate" class="java.lang.String">
 		<fieldDescription><![CDATA[issuanceDate]]></fieldDescription>
@@ -524,7 +524,7 @@
 					</staticText>
 					<textField>
 						<reportElement x="670" y="11" width="170" height="30" uuid="fb2753cd-6535-483a-937e-9564fad58d99"/>
-						<textFieldExpression><![CDATA[$F{policyHolderName}]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$F{proposerName}]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="250" y="514" width="140" height="30" uuid="542524d6-dd2b-4582-9ecb-e25c999c4022"/>
