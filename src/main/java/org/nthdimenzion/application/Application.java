@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
 
@@ -23,12 +24,13 @@ import javax.sql.DataSource;
  * @since 1.0 23/01/2015
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.pla", "org.nthdimenzion"})
+@ComponentScan(basePackages = {"com.pla", "org.nthdimenzion","com.pla.batch"})
 @EntityScan(basePackages = {"com.pla",
         "org.axonframework.saga", "org.axonframework.eventstore.jpa"})
 @ImportResource(value = {"classpath*:META-INF/spring/cqrs-infrastructure-context.xml"})
 @EnableMongoRepositories(basePackages = {"com.pla"})
 @EnableJpaRepositories(basePackages = {"com.pla.individuallife.quotation.query"})
+@EnableScheduling
 public class Application {
 
     @Autowired

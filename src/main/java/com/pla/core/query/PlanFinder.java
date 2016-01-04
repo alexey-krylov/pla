@@ -21,13 +21,16 @@ import com.pla.sharedkernel.domain.model.EndorsementType;
 import com.pla.sharedkernel.domain.model.PlanStatus;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
+import org.joda.time.DateTime;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -35,6 +38,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -73,10 +78,12 @@ public class PlanFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public static final String findActivePlanByPlanCode  = "SELECT COUNT(plan_id) FROM plan_coverage_benefit_assoc WHERE plan_code = :planCode AND plan_status = 'LAUNCHED'";
+    public static final String findActivePlanByPlanCode = "SELECT COUNT(plan_id) FROM plan_coverage_benefit_assoc WHERE plan_code = :planCode AND plan_status = 'LAUNCHED'";
 
     public static final String findOptionalCoverageByPlanId = "SELECT DISTINCT c.coverage_id coverageId,c.coverage_name coverageName FROM plan_coverage_benefit_assoc p INNER JOIN coverage c ON c.coverage_id = p.coverage_id\n" +
             "WHERE p.plan_id=:planId AND p.optional='1'";
+
+    public static final String findAllPlanByLaunchDate = "SELECT plan_id planId FROM plan_coverage_benefit_assoc WHERE plan_status = 'DRAFT' AND launch_date = :currentDate";
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -89,9 +96,9 @@ public class PlanFinder {
     }
 
 
-    public List<Map<String,Object>> findAllOptionalCoverage(String planId){
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId",planId);
-        return namedParameterJdbcTemplate.query(findOptionalCoverageByPlanId,sqlParameterSource,new ColumnMapRowMapper());
+    public List<Map<String, Object>> findAllOptionalCoverage(String planId) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId);
+        return namedParameterJdbcTemplate.query(findOptionalCoverageByPlanId, sqlParameterSource, new ColumnMapRowMapper());
     }
 
     public List<Plan> findPlanBy(List<PlanId> planIds) {
@@ -259,8 +266,30 @@ public class PlanFinder {
         }
     }
 
-    public int findActivePlanByPlanCode(String planCode){
+    public int findActivePlanByPlanCode(String planCode) {
         Number activePlanCount = namedParameterJdbcTemplate.queryForObject(findActivePlanByPlanCode, new MapSqlParameterSource("planCode", planCode), Number.class);
         return activePlanCount.intValue();
+    }
+
+    public Set<PlanId> getPlanByLaunchDate(){
+        java.sql.Date now = new java.sql.Date(DateTime.now().toDate().getTime());
+        List<Map<String,Object>> planByLaunchDate = namedParameterJdbcTemplate.query(findAllPlanByLaunchDate,new MapSqlParameterSource("currentDate",now),new ColumnMapRowMapper());
+        if (isNotEmpty(planByLaunchDate)) {
+            return planByLaunchDate.parallelStream().map(plan -> plan.get("planId") != null ? new PlanId((String) plan.get("planId")) : null).filter(planIds -> planIds != null).collect(Collectors.toSet());
+        }
+        return Collections.EMPTY_SET;
+    }
+
+    public void markPlanLaunched(){
+        java.sql.Date now = new java.sql.Date(DateTime.now().toDate().getTime());
+        namedParameterJdbcTemplate.execute("update plan_coverage_benefit_assoc set plan_status='" + PlanStatus.LAUNCHED + "' " +
+                        "where launch_date='" + now + "'",
+                new EmptySqlParameterSource(), new PreparedStatementCallback<Object>() {
+                    @Override
+                    public Object doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException, DataAccessException {
+                        return preparedStatement.execute();
+                    }
+                });
+
     }
 }

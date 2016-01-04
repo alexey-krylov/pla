@@ -8,6 +8,7 @@ import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.DateTime;
 import org.nthdimenzion.utils.UtilValidator;
@@ -29,6 +30,8 @@ public class PlanDetail {
     private static final String errorMessage = "Error in creating Plan: %s";
     String planName;
     String planCode;
+
+    @Setter
     DateTime launchDate;
     DateTime withdrawalDate;
     int freeLookPeriod = 15;

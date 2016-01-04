@@ -10,6 +10,7 @@ import com.pla.sharedkernel.domain.model.PolicyTermType;
 import com.pla.sharedkernel.domain.model.PremiumTermType;
 import com.pla.sharedkernel.domain.model.SumAssuredType;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.function.Predicate;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: pradyumna
@@ -177,5 +180,16 @@ public class PlanCommandHandler {
     public void updatePlanWithdrawalDate(UpdatePlanWithdrawalDateCommand updatePlanWithdrawalDateCommand){
         Plan plan = planMongoRepository.load(updatePlanWithdrawalDateCommand.getPlanId());
         plan.updateWithdrawalDate(updatePlanWithdrawalDateCommand.getWithdrawalDate());
+    }
+
+    @CommandHandler
+    public void updatePlanWithLaunchStatus(MarkPlanLaunchCommand markPlanLaunchCommand){
+        Set<PlanId> plansToMakeAaLaunched =  markPlanLaunchCommand.getPlanId();
+        if (isNotEmpty(plansToMakeAaLaunched)) {
+            plansToMakeAaLaunched.forEach(planId -> {
+                Plan plan = planMongoRepository.load(planId);
+                plan.markLaunched();
+            });
+        }
     }
 }
