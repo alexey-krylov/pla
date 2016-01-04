@@ -11,6 +11,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.quotation.domain.model.ILQuotationStatus;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationDetailDto;
 import com.pla.individuallife.quotation.presentation.dto.ILQuotationMailDto;
@@ -42,6 +43,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
@@ -66,6 +68,9 @@ public class ILQuotationAppService {
 
     @Autowired
     private PlanRepository planRepository;
+
+    @Autowired
+    private ILProposalFinder ilProposalFinder;
 
     @Autowired
     public ILQuotationAppService(ILQuotationFinder ilQuotationFinder, IPremiumCalculator premiumCalculator, PremiumFinder premiumFinder) {
@@ -195,9 +200,10 @@ public class ILQuotationAppService {
         List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.searchQuotation(searchIlQuotationDto.getQuotationNumber(),
                 searchIlQuotationDto.getProposerName(), searchIlQuotationDto.getProposerNrcNumber(), searchIlQuotationDto.getAgentCode(),
                 searchIlQuotationDto.getQuotationStatus());
-        return searchQuotations;
+        Set<String> quotationNumber = searchQuotations.parallelStream().map(quotations->quotations.getQuotationNumber()).collect(Collectors.toSet());
+        Set<String> activeQuotations = ilProposalFinder.findProposalApprovedWithQuotation(quotationNumber);
+        return searchQuotations.parallelStream().filter(searchQuotation->activeQuotations.contains(searchQuotation.getQuotationNumber())).collect(Collectors.toList());
     }
-
 
     public List<ILSearchQuotationResultDto> getSharedQuotationByQuotationNumber(String quotationNumber) {
         List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.findSharedQuotationByQuotationNumber(quotationNumber);

@@ -13,6 +13,7 @@ import com.pla.core.domain.model.plan.premium.Premium;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.PremiumFinder;
+import com.pla.individuallife.proposal.domain.model.ILProposalAggregate;
 import com.pla.individuallife.proposal.domain.model.ILProposalStatus;
 import com.pla.individuallife.proposal.presentation.dto.*;
 import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
@@ -562,4 +563,15 @@ public class ILProposalFinder {
         Set<String> sheets = premiumTermType.getSheetNamesByPremiumTermType();
         return sheets.size() > 1;
     }
+
+    public Set<String> findProposalApprovedWithQuotation(Set<String> quotationNumbers) {
+        Criteria proposalCriteria = Criteria.where("proposalStatus").is(ILProposalStatus.IN_FORCE);
+        Query query = new Query(proposalCriteria);
+        List<ILProposalAggregate> approvedProposal = mongoTemplate.find(query, ILProposalAggregate.class);
+        Set<String> convertedQuotation = approvedProposal.parallelStream().filter(proposal->proposal.getQuotation()!=null)
+                .map(quotationNumber->quotationNumber.getQuotation().getQuotationNumber()).collect(Collectors.toSet());
+        Set<String> activeQuotations = quotationNumbers.parallelStream().filter(quotationNumber -> !convertedQuotation.contains(quotationNumber)).collect(Collectors.toSet());
+        return activeQuotations;
+    }
+
 }
