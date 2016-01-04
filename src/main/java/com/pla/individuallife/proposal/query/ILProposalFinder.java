@@ -324,10 +324,18 @@ public class ILProposalFinder {
         BigDecimal quarterlyFee;
         BigDecimal monthlyFee;
         if (ILProposalStatus.DRAFT.equals(ILProposalStatus.valueOf((String)proposal.get("proposalStatus")))) {
-            annualFee = ComputedPremiumDto.getAnnualPolicyFee(computedPremiums);
-            quarterlyFee = ComputedPremiumDto.getQuarterlyFee(computedPremiums);
-            semiAnnualFee = ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums);
-            monthlyFee = ComputedPremiumDto.getMonthlyFee(computedPremiums);
+            if (proposal.get("quotation")!=null){
+                annualFee = planDetail!=null?planDetail.getAnnualPolicyFee():BigDecimal.ZERO;
+                quarterlyFee = planDetail!=null?planDetail.getQuarterlyFee(): BigDecimal.ZERO;
+                monthlyFee = planDetail!=null?planDetail.getMonthlyFee(): BigDecimal.ZERO;
+                semiAnnualFee = planDetail!=null?planDetail.getSemiAnnualFee(): BigDecimal.ZERO;
+            }
+            else {
+                annualFee = ComputedPremiumDto.getAnnualPolicyFee(computedPremiums);
+                quarterlyFee = ComputedPremiumDto.getQuarterlyFee(computedPremiums);
+                semiAnnualFee = ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums);
+                monthlyFee = ComputedPremiumDto.getMonthlyFee(computedPremiums);
+            }
         }
         else {
             annualFee = planDetail!=null?planDetail.getAnnualPolicyFee():BigDecimal.ZERO;
@@ -569,7 +577,7 @@ public class ILProposalFinder {
         Query query = new Query(proposalCriteria);
         List<ILProposalAggregate> approvedProposal = mongoTemplate.find(query, ILProposalAggregate.class);
         Set<String> convertedQuotation = approvedProposal.parallelStream().filter(proposal->proposal.getQuotation()!=null)
-                .map(quotationNumber->quotationNumber.getQuotation().getQuotationNumber()).collect(Collectors.toSet());
+                .map(quotationNumber -> quotationNumber.getQuotation().getQuotationNumber()).collect(Collectors.toSet());
         Set<String> activeQuotations = quotationNumbers.parallelStream().filter(quotationNumber -> !convertedQuotation.contains(quotationNumber)).collect(Collectors.toSet());
         return activeQuotations;
     }

@@ -174,9 +174,11 @@ public class ILProposalCommandHandler {
         ProposalId proposalId = new ProposalId(cmd.getProposalId());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(proposalId);
         Map plan = planFinder.findPlanByPlanId(new PlanId(cmd.getProposalPlanDetail().getPlanId()));
-        PolicyFeeDto policyFeeDto = generalInformationService.getPolicyFee();
-        ProposalPlanDetail proposalPlanDetail =  cmd.getProposalPlanDetail();
-        proposalPlanDetail =  proposalPlanDetail.updateWithPolicyFee(policyFeeDto.getAnnualPolicyFee(),policyFeeDto.getSemiAnnualPolicyFee(),policyFeeDto.getQuarterlyPolicyFee(),policyFeeDto.getMonthlyPolicyFee());
+        ProposalPlanDetail proposalPlanDetail = cmd.getProposalPlanDetail();
+        if (aggregate.getQuotation()==null) {
+            PolicyFeeDto policyFeeDto = generalInformationService.getPolicyFee();
+            proposalPlanDetail = proposalPlanDetail.updateWithPolicyFee(policyFeeDto.getAnnualPolicyFee(), policyFeeDto.getSemiAnnualPolicyFee(), policyFeeDto.getQuarterlyPolicyFee(), policyFeeDto.getMonthlyPolicyFee());
+        }
         Map planDetail = (HashMap) plan.get("planDetail");
         int minAge = (int) planDetail.get("minEntryAge");
         int maxAge = (int) planDetail.get("maxEntryAge");
@@ -225,8 +227,10 @@ public class ILProposalCommandHandler {
     public String submitProposal(SubmitILProposalCommand cmd) {
         ILProposalProcessor ilProposalProcessor = ilProposalRoleAdapter.userToProposalProcessorRole(cmd.getUserDetails());
         ILProposalAggregate aggregate = ilProposalMongoRepository.load(new ProposalId(cmd.getProposalId()));
-        PolicyFeeDto policyFeeDto = generalInformationService.getPolicyFee();
-        aggregate = aggregate.updatePlanWithPolicyFee(policyFeeDto.getAnnualPolicyFee(),policyFeeDto.getSemiAnnualPolicyFee(),policyFeeDto.getQuarterlyPolicyFee(),policyFeeDto.getMonthlyPolicyFee());
+        if (aggregate.getQuotation()==null) {
+            PolicyFeeDto policyFeeDto = generalInformationService.getPolicyFee();
+            aggregate = aggregate.updatePlanWithPolicyFee(policyFeeDto.getAnnualPolicyFee(), policyFeeDto.getSemiAnnualPolicyFee(), policyFeeDto.getQuarterlyPolicyFee(), policyFeeDto.getMonthlyPolicyFee());
+        }
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(aggregate.getProposalPlanDetail().getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
         RoutingLevel routinglevel = ilProposalService.findRoutingLevel(routingLevelDetailDto, aggregate.getProposalId().toString(), aggregate.getProposedAssured().getAgeNextBirthday());
         aggregate = ilProposalProcessor.submitProposal(aggregate,cmd.getUserDetails().getUsername(),cmd.getComment(), routinglevel);
