@@ -6,7 +6,6 @@ import com.pla.core.hcp.domain.model.HCP;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

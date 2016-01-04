@@ -1,13 +1,9 @@
-package com.pla.core.hcp.presentation.utility;
+package com.pla.sharedkernel.util;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.pla.core.hcp.application.service.ExcelParserException;
-import com.pla.core.hcp.application.service.HCPRateExcelHeader;
-import com.pla.grouphealth.sharedresource.service.GHInsuredExcelHeader;
-import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.publishedlanguage.contract.IExcelPropagator;
 import lombok.NoArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -16,20 +12,19 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.nthdimenzion.common.AppConstants;
-import org.nthdimenzion.utils.UtilValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.pla.core.hcp.application.service.ExcelParserException.*;
+import static com.pla.core.hcp.application.service.ExcelParserException.raiseDataNotSharedException;
+import static com.pla.core.hcp.application.service.ExcelParserException.raiseNotValidHeaderException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Mohan Sharma on 12/22/2015.
@@ -38,7 +33,10 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 @Component
 public class ExcelUtilityProvider {
 
-    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook) {
+    @Autowired
+    private IExcelPropagator iExcelPropagator;
+
+    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, List<String> excelHeaders, Class dynamicClass) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
@@ -47,8 +45,8 @@ public class ExcelUtilityProvider {
         if(isEmpty(dataRows)){
             raiseDataNotSharedException();
         }
-        final List<String> headers = getHeaders(headerRow);
-        boolean isValidHeader = isValidHeader(headers);
+        final List<String> headersFromUploadedSheet = getHeaders(headerRow);
+        boolean isValidHeader = isValidHeader(excelHeaders, headersFromUploadedSheet);
         if (!isValidHeader) {
             raiseNotValidHeaderException();
         }
@@ -56,9 +54,9 @@ public class ExcelUtilityProvider {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            List<String> excelHeaders = HCPRateExcelHeader.getAllowedHeaders();
-            String errorMessage = validateRow(currentRow, excelHeaders);
-            List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders);
+            //List<String> excelHeaders = HCPRateExcelHeader.getAllowedHeaders();
+            String errorMessage = validateRow(currentRow, excelHeaders, dynamicClass);
+            List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders, dynamicClass);
             String duplicateRowErrorMessage = "";
             if (isNotEmpty(duplicateRows)) {
                 duplicateRowErrorMessage = "This row is duplicate with row no(s) ";
@@ -77,19 +75,19 @@ public class ExcelUtilityProvider {
                 HSSFFont hssfFont = hssfSheet.getWorkbook().createFont();
                 hssfFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
                 cellStyle.setFont(hssfFont);
-                errorMessageHeaderCell = headerRow.createCell(headers.size());
+                errorMessageHeaderCell = headerRow.createCell(headersFromUploadedSheet.size());
                 errorMessageHeaderCell.setCellValue(AppConstants.ERROR_CELL_HEADER_NAME);
                 errorMessageHeaderCell.setCellStyle(cellStyle);
             }
             errorMessage = errorMessage + " \n " + duplicateRowErrorMessage;
-            Cell errorMessageCell = currentRow.createCell(headers.size());
+            Cell errorMessageCell = currentRow.createCell(headersFromUploadedSheet.size());
             errorMessageCell.setCellValue(errorMessage);
         }
         return isValidTemplate;
     }
 
-    private boolean isValidHeader(List<String> excelHeaders) {
-        List<String> allowedHeaders = Stream.of(HCPRateExcelHeader.values()).map(HCPRateExcelHeader :: getDescription).collect(Collectors.toList());
+    private boolean isValidHeader(List<String> allowedHeaders, List<String> excelHeaders) {
+        //List<String> allowedHeaders = Stream.of(HCPRateExcelHeader.values()).map(HCPRateExcelHeader :: getDescription).collect(Collectors.toList());
         return isTemplateContainsSameExcelHeader(allowedHeaders, excelHeaders);
     }
 
@@ -135,14 +133,26 @@ public class ExcelUtilityProvider {
         return cellOptional.isPresent();
     }
 
-    private String validateRow(Row insureDataRow, List<String> headers) {
+    private String validateRow(Row insureDataRow, List<String> headers, Class dynamicClass) {
         String errorMessage = "";
         Set<String> errorMessages = Sets.newHashSet();
         headers.forEach(header -> {
             Cell cell = insureDataRow.getCell(headers.indexOf(header));
             String cellValue = getCellValue(cell);
-            HCPRateExcelHeader hcpRateExcelHeader = HCPRateExcelHeader.getHCPCategory(header);
-            errorMessages.add(hcpRateExcelHeader.validateAndIfNotBuildErrorMessage(Maps.newHashMap(), insureDataRow, cellValue, headers));
+            try {
+                Method getEnumMethod = dynamicClass.getMethod("getEnum", String.class);
+                Object dynamicEnum = getEnumMethod.invoke(null, header);
+                Method validateAndIfNotBuildErrorMessageMethod = dynamicClass.getMethod("validateAndIfNotBuildErrorMessage", Map.class, Row.class, String.class, List.class);
+                errorMessages.add((String) validateAndIfNotBuildErrorMessageMethod.invoke(dynamicEnum, iExcelPropagator, insureDataRow, cellValue, headers));
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            /*HCPRateExcelHeader hcpRateExcelHeader = HCPRateExcelHeader.getEnum(header);
+            errorMessages.add(hcpRateExcelHeader.validateAndIfNotBuildErrorMessage(Maps.newHashMap(), insureDataRow, cellValue, headers));*/
         });
         errorMessage = buildErrorMessage(errorMessages);
         return errorMessage;
@@ -158,8 +168,17 @@ public class ExcelUtilityProvider {
         return errorMessageBuilder.toString();
     }
 
-    private List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
-        List<Row> duplicateRows = Lists.newArrayList();
-        return duplicateRows;
+    private List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers, Class dynamicClass) {
+        try {
+            Method findDuplicateRow = dynamicClass.getMethod("findDuplicateRow", List.class, Row.class, List.class);
+            return (List<Row>) findDuplicateRow.invoke(null, dataRowsForDuplicateCheck, currentRow, headers);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return Lists.newArrayList();
     }
 }

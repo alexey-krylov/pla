@@ -1,13 +1,18 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
-import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.presentation.dto.GHCashlessClaimPreAuthExcelDetailDto;
+import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
+import com.pla.publishedlanguage.contract.IExcelPropagator;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * Created by Mohan Sharma on 12/30/2015.
@@ -24,7 +29,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -47,12 +52,16 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Policy Number cannot be empty.";
                 }
+                Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.name()));
+                String policyNumberValue = getCellValue(policyNumberCell);
+                GroupHealthPolicy groupHealthPolicy = iExcelPropagator.findPolicyByPolicyNumber(policyNumberValue);
+                //groupHealthPolicy.getExpiredOn()
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
                 return errorMessage;
@@ -70,7 +79,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -93,7 +102,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -116,7 +125,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -139,7 +148,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -162,7 +171,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -185,7 +194,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -207,7 +216,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -230,7 +239,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -253,7 +262,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -276,7 +285,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -299,7 +308,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -322,7 +331,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -345,7 +354,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -368,7 +377,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -391,7 +400,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -414,7 +423,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -437,7 +446,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -460,7 +469,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -483,7 +492,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -506,7 +515,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -529,7 +538,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -552,7 +561,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -575,7 +584,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -598,7 +607,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -621,7 +630,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -644,7 +653,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -667,7 +676,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -690,7 +699,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -713,7 +722,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -736,7 +745,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -759,7 +768,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -782,7 +791,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -805,7 +814,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -828,7 +837,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -851,7 +860,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -874,7 +883,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -897,7 +906,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if (isEmpty(value)) {
@@ -920,7 +929,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -943,7 +952,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -966,7 +975,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -989,7 +998,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1012,7 +1021,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1035,7 +1044,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1058,7 +1067,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1081,7 +1090,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1104,7 +1113,7 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(Map detailsMap, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1127,19 +1136,26 @@ public enum GHCashlessClaimPreAuthExcelHeader {
     }
 
     public static List<String> getAllowedHeaders(){
-        List<String> headers = Lists.newArrayList();
-        for (GHCashlessClaimPreAuthExcelHeader hcpRateExcelHeader : GHCashlessClaimPreAuthExcelHeader.values()) {
-            headers.add(hcpRateExcelHeader.getDescription());
-        }
-        return null; //  headers;
+       return Stream.of(GHCashlessClaimPreAuthExcelHeader.values()).map(GHCashlessClaimPreAuthExcelHeader::getDescription).collect(Collectors.toList());
     }
+
     public String getDescription() {
-        return null; //  description;
+        return description;
+    }
+
+    public static GHCashlessClaimPreAuthExcelHeader getEnum(String description) {
+        notNull(description, "description cannot be empty for HCPRateExcelHeader");
+        for (GHCashlessClaimPreAuthExcelHeader ghCashlessClaimPreAuthExcelHeader : values()) {
+            if (ghCashlessClaimPreAuthExcelHeader.description.equalsIgnoreCase(description.trim())) {
+                return ghCashlessClaimPreAuthExcelHeader;
+            }
+        }
+        throw new IllegalArgumentException(description);
     }
 
     public abstract String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto);
 
     public abstract void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers);
 
-    public abstract String validateAndIfNotBuildErrorMessage(Map details, Row row, String value, List<String> excelHeaders);
+    public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders);
 }

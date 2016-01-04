@@ -1,30 +1,22 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.pla.core.hcp.application.service.HCPRateExcelGenerator;
-import com.pla.core.hcp.domain.model.HCP;
-import com.pla.core.hcp.domain.model.HCPCode;
-import com.google.common.collect.Lists;
 import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
-import com.pla.core.hcp.presentation.utility.ExcelUtilityProvider;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
 import com.pla.grouphealth.claim.cashless.repository.GHCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
+import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -86,4 +78,7 @@ public class GHCashlessClaimService {
     }
 
 
+    public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook) {
+        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, GHCashlessClaimPreAuthExcelHeader.getAllowedHeaders(), GHCashlessClaimPreAuthExcelHeader.class);
+    }
 }

@@ -1,6 +1,5 @@
 package com.pla.core.hcp.presentation.controller;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.hcp.application.command.UploadHCPServiceRatesCommand;
@@ -8,12 +7,11 @@ import com.pla.core.hcp.application.service.HCPRateExcelGenerator;
 import com.pla.core.hcp.application.service.HCPRateExcelHeader;
 import com.pla.core.hcp.domain.model.*;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
-import com.pla.core.hcp.presentation.utility.ExcelUtilityProvider;
+import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.bson.types.ObjectId;
 import org.nthdimenzion.common.service.JpaRepositoryFactory;
@@ -28,7 +26,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.pla.core.hcp.presentation.utility.ExcelUtilityProvider.*;
+import static com.pla.sharedkernel.util.ExcelUtilityProvider.*;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -72,7 +70,7 @@ public class HCPRateService {
     }
 
     public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook) {
-        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook);
+        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, HCPRateExcelHeader.getAllowedHeaders(), HCPRateExcelHeader.class);
     }
 
     public Set<HCPServiceDetailDto> transformToHCPServiceDetailDto(HSSFWorkbook insuredTemplateWorkbook) {

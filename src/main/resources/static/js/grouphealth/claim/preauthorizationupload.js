@@ -32,10 +32,11 @@
         }]);
 
     app.controller('PreAuthorizationUploadController', ['$scope', '$http','$upload','hcps' , function ($scope, $http, $upload,hcps) {
-  $scope.batchDate = formatDate(new Date());
-    console.log($scope.batchDate);
+        $scope.batchDate = formatDate(new Date());
+        console.log($scope.batchDate);
         $scope.hcps = hcps;
-
+        $scope.fileSaved = null;
+        $scope.fileName = null;
         $scope.uploadPreAuthorizationDto = {};
         $scope.showDownload = true;
         $scope.$watchCollection('[uploadPreAuthorizationDto.hcpCode, showDownload]', function (n) {
@@ -58,12 +59,38 @@
             }
         });
 
-           $scope.launchbatchDate = function ($event) {
-                     $event.preventDefault();
-                     $event.stopPropagation();
-                     $scope.submissionbatchDate= true;
-                 };
+        $scope.launchbatchDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.submissionbatchDate= true;
+        };
 
+        $scope.$watch('fileSaved', function (n, o) {
+            if (n && n.length) {
+                $scope.fileName = n[0].name
+            }
+        });
+
+        $scope.uploadPreAuthorizationTemplate = function () {
+            console.log($scope.uploadPreAuthorizationDto);
+            $scope.uploadPreAuthorizationDto.batchDate = formatDate($scope.uploadPreAuthorizationDto.batchDate);
+            $upload.upload({
+                url: '/pla/grouphealth/claim/cashless/uploadPreAuthorizationTemplate',
+                headers: {'Authorization': 'xxx'},
+                fields: $scope.uploadPreAuthorizationDto,
+                file: $scope.fileSaved
+            }).success(function (data, status, headers, config) {
+                if (data.status == "200") {
+                } else{
+                    if(data.data){
+                        $scope.showDownload = false;
+
+                    }else{
+                        $scope.showDownload = true;
+                    }
+                }
+            });
+        };
 
     }])
 })(angular);

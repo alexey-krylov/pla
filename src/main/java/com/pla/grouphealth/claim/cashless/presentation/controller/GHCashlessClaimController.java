@@ -1,16 +1,20 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
 import com.pla.grouphealth.claim.cashless.application.service.GHCashlessClaimService;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -47,6 +51,34 @@ public class GHCashlessClaimController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/uploadPreAuthorizationTemplate", method = RequestMethod.POST)
+    @ResponseBody
+    public Result uploadPreAuthorizationTemplate(PreAuthorizationUploadDto preAuthorizationUploadDto, HttpServletRequest request) throws IOException {
+        MultipartFile file = preAuthorizationUploadDto.getFile();
+        if (!("application/x-ms-excel".equals(file.getContentType())|| "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
+            return Result.failure("Uploaded file is not valid excel",Boolean.FALSE);
+        }
+        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
+        HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
+        try {
+            boolean isValidInsuredTemplate = ghCashlessClaimService.isValidInsuredTemplate(insuredTemplateWorkbook);
+            if (!isValidInsuredTemplate) {
+                File insuredTemplateWithError = new File(preAuthorizationUploadDto.getHcpCode());
+                FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
+                insuredTemplateWorkbook.write(fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                return Result.failure("Uploaded Pre-Auth template is not valid.Please download to check the errors", Boolean.TRUE);
+            }
+            /*
+            List<GHInsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
+            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isConsiderMoratoriumPeriod(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory(),uploadInsuredDetailDto.getSchemeName()));*/
+            return Result.success("Insured detail uploaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), Boolean.FALSE);
+        }
+    }
     @RequestMapping(value = "/getAllHcpNameAndCode",method = RequestMethod.GET)
     public List<Map<String,Object>> getAllHcpNameAndCode(){
         return  ghCashlessClaimService.getAllHcpNameAndCode();
