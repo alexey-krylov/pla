@@ -5,7 +5,7 @@ import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
 import com.pla.core.hcp.repository.HCPRateRepository;
-import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
+import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
 import com.pla.grouphealth.claim.cashless.repository.GHCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
@@ -26,21 +26,21 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Mohan Sharma on 12/30/2015.
  */
 @DomainService
-public class GHCashlessClaimService {
+public class PreAuthorizationService {
 
     private GHCashlessClaimRepository ghCashlessClaimRepository;
     private PreAuthorizationRepository preAuthorizationRepository;
-    private GHCashlessClaimFinder ghCashlessClaimFinder;
-    private GHCashlessClaimPreAuthExcelGenerator ghCashlessClaimPreAuthExcelGenerator;
+    private PreAuthorizationFinder preAuthorizationFinder;
+    private PreAuthorizationExcelGenerator preAuthorizationExcelGenerator;
     private ExcelUtilityProvider excelUtilityProvider;
     private HCPRateRepository hcpRateRepository;
 
     @Autowired
-    public GHCashlessClaimService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, GHCashlessClaimFinder ghCashlessClaimFinder, GHCashlessClaimPreAuthExcelGenerator ghCashlessClaimPreAuthExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository) {
+    public PreAuthorizationService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository) {
         this.ghCashlessClaimRepository = ghCashlessClaimRepository;
         this.preAuthorizationRepository = preAuthorizationRepository;
-        this.ghCashlessClaimFinder = ghCashlessClaimFinder;
-        this.ghCashlessClaimPreAuthExcelGenerator = ghCashlessClaimPreAuthExcelGenerator;
+        this.preAuthorizationFinder = preAuthorizationFinder;
+        this.preAuthorizationExcelGenerator = preAuthorizationExcelGenerator;
         this.excelUtilityProvider = excelUtilityProvider;
         this.hcpRateRepository = hcpRateRepository;
     }
@@ -59,7 +59,7 @@ public class GHCashlessClaimService {
                 return hcpServiceDetailDto;
             }
         }).collect(Collectors.toList()) : Lists.newArrayList();
-        HSSFWorkbook hssfWorkbook = ghCashlessClaimPreAuthExcelGenerator.generateInsuredExcel(hcpServiceDetailDtos);
+        HSSFWorkbook hssfWorkbook = preAuthorizationExcelGenerator.generateInsuredExcel(hcpServiceDetailDtos);
         return hssfWorkbook;
     }
 
@@ -79,6 +79,6 @@ public class GHCashlessClaimService {
 
 
     public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook) {
-        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, GHCashlessClaimPreAuthExcelHeader.getAllowedHeaders(), GHCashlessClaimPreAuthExcelHeader.class);
+        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, PreAuthorizationExcelHeader.getAllowedHeaders(), PreAuthorizationExcelHeader.class);
     }
 }

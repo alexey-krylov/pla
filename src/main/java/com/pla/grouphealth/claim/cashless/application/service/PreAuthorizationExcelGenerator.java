@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
  * Created by Mohan Sharma on 12/30/2015.
  */
 @Service
-public class GHCashlessClaimPreAuthExcelGenerator {
+public class PreAuthorizationExcelGenerator {
 
     public HSSFWorkbook generateInsuredExcel(List<HCPServiceDetailDto> hcpServiceDetailDtos) {
-        final List<String> headers = GHCashlessClaimPreAuthExcelHeader.getAllowedHeaders();
+        final List<String> headers = PreAuthorizationExcelHeader.getAllowedHeaders();
         List<Map<Integer, String>> excelData = Lists.newArrayList();
         Map<Integer, List<String>> constraintCellDataMap = getMapContainingTheDropdownValues(hcpServiceDetailDtos, headers);
         HSSFWorkbook workbook = ExcelGeneratorUtil.generateExcelWithDvConstraintCell(headers, excelData, constraintCellDataMap);

@@ -1,6 +1,6 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
-import com.pla.grouphealth.claim.presentation.dto.GHCashlessClaimPreAuthExcelDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationExcelDetailDto;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,15 +17,15 @@ import static org.springframework.util.Assert.notNull;
 /**
  * Created by Mohan Sharma on 12/30/2015.
  */
-public enum GHCashlessClaimPreAuthExcelHeader {
+public enum PreAuthorizationExcelHeader {
     HOSPITALIZATION_EVENT("Hospitalization Event"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getHospitalizationEvent(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getHospitalizationEvent();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -43,12 +43,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },POLICY_NUMBER("Policy Number"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPolicyNumber();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPolicyNumber();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -70,12 +70,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },CLIENT_ID("Client ID"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPolicyNumber();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPolicyNumber();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -93,12 +93,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },TREATING_DOCTOR_NAME("Name of the Treating Doctor"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getTreatingDoctorName();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getTreatingDoctorName();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -116,12 +116,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DOCTOR_CONTACT_NUMBER("Doctor's Contact Number"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDoctorContactNumber();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDoctorContactNumber();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -139,12 +139,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },REASONS("Please indicate whether it is a"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getReasons();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getReasons();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -162,12 +162,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PREGNANCY_G("Diagnosis/Treatment in case Of Pregnancy -G"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPregnancyG();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPregnancyG();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -185,12 +185,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PREGNANCY_P("Diagnosis/Treatment in case Of Pregnancy"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPregnancyP(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPregnancyP();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -208,11 +208,11 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PREGNANCY_L("Diagnosis/Treatment in case Of Pregnancy -L"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPregnancyL();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPregnancyL();
         }
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -230,12 +230,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PREGNANCY_A("Diagnosis/Treatment in case Of Pregnancy -A"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPregnancyA(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPregnancyA();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -253,12 +253,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PREGNANCY_DATE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Date of Delivery"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPregnancyDateOfDelivery();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPregnancyDateOfDelivery();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -276,12 +276,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PREGNANCY_MODE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Mode Of Delivery"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPregnancyModeOfDelivery(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPregnancyModeOfDelivery();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -299,12 +299,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_ILLNESS_DISEASE_NAME_AND_PRESENTING_COMPLAINTS("Diagnosis/Treatment in case Of Illness Or Trauma - Name of illness / disease with presenting complaints"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentIllnessTraumaIllnessDiseaseNameandPresentingComplaints();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentIllnessTraumaIllnessDiseaseNameandPresentingComplaints();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -322,12 +322,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_RELEVANT_CLINICAL_FINDINGS("Diagnosis/Treatment in case Of Illness Or Trauma - Relevant clinical findings"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentIllnessTraumaRelevantClinicalFindings();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentIllnessTraumaRelevantClinicalFindings();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -345,12 +345,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_DURATION("Diagnosis/Treatment in case Of Illness Or Trauma -Duration of the present ailment in days"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentIllnessTraumapresentailmentDuration(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentIllnessTraumapresentailmentDuration();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -368,12 +368,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_FIRST_CONSULTATION_DATE("Diagnosis/Treatment in case Of Illness Or Trauma - Date of first consultation"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentIllnesstraumaFirstConsultationDate(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentIllnesstraumaFirstConsultationDate();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -391,12 +391,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_PAST_HISTORY("Diagnosis/Treatment in case Of Illness Or Trauma - Past history of present ailment if any"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentIllnessTraumapresentailmentPastHistory(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentIllnessTraumapresentailmentPastHistory();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -414,12 +414,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_DIAGNOSIS("Diagnosis/Treatment in case Of Illness Or Trauma - Diagnosis"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentIllnessTraumaDiagnosis(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentIllnessTraumaDiagnosis();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -437,12 +437,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_LINE_OF_TREATMENT("Diagnosis/Treatment - Line of treatment"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentLineofTreatment();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentLineofTreatment();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -460,12 +460,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_TEST("Diagnosis/Treatment - If Investigations, indicate tests"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentTest();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentTest();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -483,12 +483,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_DRUG_NAME("Diagnosis/Treatment - If Medical Please Provide Drug Name"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentDrugName(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentDrugName();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -506,12 +506,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_MEDICAL_DURATION("Diagnosis/Treatment - If Medical Please Provide Duration"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentMedicalDuration(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentMedicalDuration();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -529,12 +529,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_SURGERY_NAME("Diagnosis/Treatment - If Surgery Please provide name of surgery"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentSurgeryName(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentSurgeryName();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -552,12 +552,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, DIAGNOSIS_TREATMENT_SURGERY_ACCOMMODATION_TYPE("Diagnosis/Treatment - If Surgery Please provide Type Of Accommodation"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentSurgeryAccommodationType(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentSurgeryAccommodationType();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -575,12 +575,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_ADMISSION("Diagnosis/Treatment - If Surgery Please provide  Date of Admission"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -598,12 +598,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_DISCHARGE("Diagnosis/Treatment - If Surgery Please provide Date of Discharge"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -621,12 +621,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PAST_HISTORY_SUFFERING_FROM_HTN("Past history of any chronic illness - Suffering From HTN"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromHTN();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromHTN();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -644,12 +644,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DETAILS_OF_HTN("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfHTN(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfHTN();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -667,12 +667,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PAST_HISTORY_SUFFERING_FROM_IHD_CAD("Past history of any chronic illness - Suffering From IHD/CAD"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromihdcad();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromihdcad();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -690,12 +690,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DETAILS_OF_IHD_CAD("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfihdcad();
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfihdcad();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -713,12 +713,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PAST_HISTORY_SUFFERING_FROM_DIABETES("Past history of any chronic illness - Suffering From Diabetes"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromDiabetes(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromDiabetes();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -736,12 +736,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DETAILS_OF_DIABETES("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfDiabetes(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfDiabetes();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -759,12 +759,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, PAST_HISTORY_SUFFERING_FROM_ASTHMA_COPD_TB("Past history of any chronic illness - Suffering From Asthma/COPD/TB"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromAsthmacopdtb(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromAsthmacopdtb();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -782,12 +782,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DETAILS_OF_ASTHMA_COPD_TB("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfAsthmacopdtb(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfAsthmacopdtb();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -805,12 +805,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, PAST_HISTORY_SUFFERING_FROM_PARALYSIS_CVA_EPILEPSY("Past history of any chronic illness - Suffering From Paralysis/CVA/Epilepsy"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingfromParalysiscvaepilepsy(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingfromParalysiscvaepilepsy();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -828,12 +828,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },DETAILS_OF_PARALYSIS_CVA("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfParalysiscva(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfParalysiscva();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -851,12 +851,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, PAST_HISTORY_SUFFERING_FROM_ARTHIRITIS("Past history of any chronic illness - Suffering From Arthritis"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingfromArthiritis(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingfromArthiritis();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -874,12 +874,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, DETAILS_OF_SUFFERING_FROM_ARTHIRITIS("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfSufferingFromArthiritis(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfSufferingFromArthiritis();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -897,12 +897,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, PAST_HISTORY_SUFFERING_FROM_CANCER_TUMOR_CYST("Past history of any chronic illness - Suffering From Cancer/Tumor/Cyst") {
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromCancertumorcyst(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromCancertumorcyst();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -920,12 +920,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, DETAILS_OF_CANCER_TUMOR_CYST("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsOfCancertumorcyst(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsOfCancertumorcyst();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -943,12 +943,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },PAST_HISTORY_SUFFERING_FROM_STD_HIV_AIDS("Past history of any chronic illness - Suffering From STD/HIV/AIDS"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromStdhivaids(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromStdhivaids();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -966,12 +966,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, DETAIL_OF_STD_HIV_AIDS("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailOfStdHivAids(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailOfStdHivAids();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -989,12 +989,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, PAST_HISTORY_SUFFERING_FROM_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Suffering From Alcohol/Drug Abuse"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromAlcoholDrugAbuse(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromAlcoholDrugAbuse();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -1012,12 +1012,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, DETAIL_OF_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Please provide detail"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailOfAlcoholDrugAbuse(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailOfAlcoholDrugAbuse();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -1035,12 +1035,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, PAST_HISTORY_SUFFERING_FRO__PSYCHIATRIC_CONDITION("Past history of any chronic illness - Suffering From Psychiatric Condition"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getPastHistorySufferingFromPychiatricCondition(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getPastHistorySufferingFromPychiatricCondition();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -1058,12 +1058,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     }, DETAILS_PSYCHIATRIC_CONDITION("Past history of any chronic illness - Please provide details"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getDetailsPsychiatricCondition(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getDetailsPsychiatricCondition();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -1081,12 +1081,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },SERVICE("Service to be Availed - Service"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getService(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getService();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -1104,12 +1104,12 @@ public enum GHCashlessClaimPreAuthExcelHeader {
         }
     },TYPE("Service to be Availed - Type"){
         @Override
-        public String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto) {
-            return ghCashlessClaimPreAuthExcelDetailDto.getType(); 
+        public String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto) {
+            return preAuthorizationExcelDetailDto.getType();
         }
 
         @Override
-        public void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers) {
+        public void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers) {
         }
 
         @Override
@@ -1131,31 +1131,31 @@ public enum GHCashlessClaimPreAuthExcelHeader {
 
     private String description;
 
-    GHCashlessClaimPreAuthExcelHeader(String description){
+    PreAuthorizationExcelHeader(String description){
         this.description = description;
     }
 
     public static List<String> getAllowedHeaders(){
-       return Stream.of(GHCashlessClaimPreAuthExcelHeader.values()).map(GHCashlessClaimPreAuthExcelHeader::getDescription).collect(Collectors.toList());
+       return Stream.of(PreAuthorizationExcelHeader.values()).map(PreAuthorizationExcelHeader::getDescription).collect(Collectors.toList());
     }
 
     public String getDescription() {
         return description;
     }
 
-    public static GHCashlessClaimPreAuthExcelHeader getEnum(String description) {
+    public static PreAuthorizationExcelHeader getEnum(String description) {
         notNull(description, "description cannot be empty for HCPRateExcelHeader");
-        for (GHCashlessClaimPreAuthExcelHeader ghCashlessClaimPreAuthExcelHeader : values()) {
-            if (ghCashlessClaimPreAuthExcelHeader.description.equalsIgnoreCase(description.trim())) {
-                return ghCashlessClaimPreAuthExcelHeader;
+        for (PreAuthorizationExcelHeader preAuthorizationExcelHeader : values()) {
+            if (preAuthorizationExcelHeader.description.equalsIgnoreCase(description.trim())) {
+                return preAuthorizationExcelHeader;
             }
         }
         throw new IllegalArgumentException(description);
     }
 
-    public abstract String getAllowedValue(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto);
+    public abstract String getAllowedValue(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto);
 
-    public abstract void populateInsuredDetail(GHCashlessClaimPreAuthExcelDetailDto ghCashlessClaimPreAuthExcelDetailDto, Row row, List<String> headers);
+    public abstract void populateInsuredDetail(PreAuthorizationExcelDetailDto preAuthorizationExcelDetailDto, Row row, List<String> headers);
 
     public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders);
 }

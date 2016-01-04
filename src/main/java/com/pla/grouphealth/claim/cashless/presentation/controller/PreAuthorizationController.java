@@ -1,6 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
-import com.pla.grouphealth.claim.cashless.application.service.GHCashlessClaimService;
+import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -25,12 +25,12 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/grouphealth/claim/cashless")
-public class GHCashlessClaimController {
+public class PreAuthorizationController {
 
     @Autowired
     CommandGateway commandGateway;
     @Autowired
-    GHCashlessClaimService ghCashlessClaimService;
+    PreAuthorizationService preAuthorizationService;
 
     @RequestMapping(value = "/downloadGHCashlessClaimPreAuthtemplate/{ghCashlessClaimCode}", method = RequestMethod.GET)
     public void downloadInsuredTemplate(@PathVariable("ghCashlessClaimCode") String ghCashlessClaimCode, HttpServletResponse response) throws IOException {
@@ -38,7 +38,7 @@ public class GHCashlessClaimController {
         response.setContentType("application/msexcel");
         response.setHeader("content-disposition", "attachment; filename=" + "PreAuthorizationTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook hcpRateExcel = ghCashlessClaimService.getGHCashlessClaimPreAuthtemplate(ghCashlessClaimCode);
+        HSSFWorkbook hcpRateExcel = preAuthorizationService.getGHCashlessClaimPreAuthtemplate(ghCashlessClaimCode);
         hcpRateExcel.write(outputStream);
         outputStream.flush();
         outputStream.close();
@@ -61,7 +61,7 @@ public class GHCashlessClaimController {
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            boolean isValidInsuredTemplate = ghCashlessClaimService.isValidInsuredTemplate(insuredTemplateWorkbook);
+            boolean isValidInsuredTemplate = preAuthorizationService.isValidInsuredTemplate(insuredTemplateWorkbook);
             if (!isValidInsuredTemplate) {
                 File insuredTemplateWithError = new File(preAuthorizationUploadDto.getHcpCode());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
@@ -81,7 +81,7 @@ public class GHCashlessClaimController {
     }
     @RequestMapping(value = "/getAllHcpNameAndCode",method = RequestMethod.GET)
     public List<Map<String,Object>> getAllHcpNameAndCode(){
-        return  ghCashlessClaimService.getAllHcpNameAndCode();
+        return  preAuthorizationService.getAllHcpNameAndCode();
     }
 
 

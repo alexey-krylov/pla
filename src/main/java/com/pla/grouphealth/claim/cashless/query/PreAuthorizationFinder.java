@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component;
  */
 @Finder
 @Component
-public class GHCashlessClaimFinder {
+public class PreAuthorizationFinder {
 }
