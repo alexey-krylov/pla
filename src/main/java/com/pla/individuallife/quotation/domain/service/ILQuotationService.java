@@ -104,7 +104,7 @@ public class ILQuotationService {
         }
         String parentQuotationId = currentQuotation.getQuotationARId() == null ? currentQuotation.getQuotationId().getQuotationId() : currentQuotation.getQuotationARId();
         List<Map<String, Object>> childQuotations = ilQuotationFinder.getChildQuotations(parentQuotationId);
-        int versionNumber = 1;
+        int versionNumber = 0;
         if (isNotEmpty(childQuotations)) {
             versionNumber = versionNumber + childQuotations.size();
         }

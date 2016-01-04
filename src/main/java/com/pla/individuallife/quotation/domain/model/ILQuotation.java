@@ -198,6 +198,7 @@ public class ILQuotation extends AbstractAggregateRoot<QuotationId> implements I
         newQuotation.agentId = this.agentId;
         newQuotation.proposedAssured = this.proposedAssured;
         newQuotation.planDetail = this.planDetail;
+        newQuotation.opportunityId = this.opportunityId;
         registerEvent(new ILQuotationVersionEvent(quotationARId, newQuotation.quotationId));
         return newQuotation;
     }
