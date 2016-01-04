@@ -14,10 +14,10 @@ import java.io.Serializable;
  */
 @Getter
 @ValueObject
-@EqualsAndHashCode(of = "preAuthorizationDetailId")
+@EqualsAndHashCode(of = "preAuthorizationId")
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class PreAuthorizationDetailId implements Serializable{
-    private String preAuthorizationDetailId;
+public class PreAuthorizationId implements Serializable{
+    private String preAuthorizationId;
 }

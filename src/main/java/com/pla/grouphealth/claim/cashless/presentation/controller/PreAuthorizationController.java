@@ -1,6 +1,8 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
+import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Mohan Sharma on 12/30/2015.
@@ -59,21 +62,20 @@ public class PreAuthorizationController {
             return Result.failure("Uploaded file is not valid excel",Boolean.FALSE);
         }
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
-        HSSFWorkbook insuredTemplateWorkbook = new HSSFWorkbook(fs);
+        HSSFWorkbook preAuthTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            boolean isValidInsuredTemplate = preAuthorizationService.isValidInsuredTemplate(insuredTemplateWorkbook);
+            boolean isValidInsuredTemplate = preAuthorizationService.isValidInsuredTemplate(preAuthTemplateWorkbook);
             if (!isValidInsuredTemplate) {
                 File insuredTemplateWithError = new File(preAuthorizationUploadDto.getHcpCode());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
-                insuredTemplateWorkbook.write(fileOutputStream);
+                preAuthTemplateWorkbook.write(fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 return Result.failure("Uploaded Pre-Auth template is not valid.Please download to check the errors", Boolean.TRUE);
             }
-            /*
-            List<GHInsuredDto> insuredDtos = ghQuotationService.transformToInsuredDto(insuredTemplateWorkbook, uploadInsuredDetailDto.getQuotationId(), uploadInsuredDetailDto.isSamePlanForAllCategory(), uploadInsuredDetailDto.isSamePlanForAllRelation());
-            String quotationId = commandGateway.sendAndWait(new UpdateGLQuotationWithInsuredCommand(uploadInsuredDetailDto.getQuotationId(), insuredDtos, getLoggedInUserDetail(request), uploadInsuredDetailDto.isConsiderMoratoriumPeriod(), uploadInsuredDetailDto.isSamePlanForAllRelation(), uploadInsuredDetailDto.isSamePlanForAllCategory(),uploadInsuredDetailDto.getSchemeName()));*/
-            return Result.success("Insured detail uploaded successfully");
+            Set<PreAuthorizationDetailDto> preAuthorizationDetailDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook);
+            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(preAuthorizationUploadDto.getHcpCode(), preAuthorizationDetailDtoList, preAuthorizationUploadDto.getBatchDate()));
+            return Result.success("Insured detail uploaded successfully - "+batchNumber);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);

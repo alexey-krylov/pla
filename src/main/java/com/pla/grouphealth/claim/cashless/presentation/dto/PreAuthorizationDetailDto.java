@@ -1,18 +1,19 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-/**
- * Created by Rudra on 12/31/2015.
- */
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
+/**
+ * Created by Mohan Sharma on 1/4/2016.
+ */
 @Getter
-public class PreAuthorizationExcelDetailDto {
+@Setter
+@EqualsAndHashCode(of={"policyNumber","clientId","diagnosisTreatmentIllnessTraumaFirstConsultationDate"})
+public class PreAuthorizationDetailDto {
     private String hospitalizationEvent;
-    private String policyNumber;
-    private String clientId;
+    public String policyNumber;
+    public String clientId;
     private String treatingDoctorName;
     private String doctorContactNumber;
     private String reasons;
@@ -25,7 +26,7 @@ public class PreAuthorizationExcelDetailDto {
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    private String diagnosisTreatmentIllnessTraumaFirstConsultationDate;
+    public String diagnosisTreatmentIllnessTraumaFirstConsultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;
