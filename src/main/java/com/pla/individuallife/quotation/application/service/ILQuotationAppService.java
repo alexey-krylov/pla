@@ -205,9 +205,11 @@ public class ILQuotationAppService {
         return searchQuotations.parallelStream().filter(searchQuotation->activeQuotations.contains(searchQuotation.getQuotationNumber())).collect(Collectors.toList());
     }
 
-    public List<ILSearchQuotationResultDto> getSharedQuotationByQuotationNumber(String quotationNumber) {
-        List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.findSharedQuotationByQuotationNumber(quotationNumber);
-        return searchQuotations;
+    public List<ILSearchQuotationResultDto> getSharedQuotationByQuotationNumber(String quotation) {
+        List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.findSharedQuotationByQuotationNumber(quotation);
+        Set<String> quotationNumber = searchQuotations.parallelStream().map(quotations->quotations.getQuotationNumber()).collect(Collectors.toSet());
+        Set<String> activeQuotations = ilProposalFinder.findProposalApprovedWithQuotation(quotationNumber);
+        return searchQuotations.parallelStream().filter(searchQuotation->activeQuotations.contains(searchQuotation.getQuotationNumber())).collect(Collectors.toList());
     }
 
 
