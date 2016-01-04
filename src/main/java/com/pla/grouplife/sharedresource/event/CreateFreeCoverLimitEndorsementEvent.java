@@ -1,6 +1,7 @@
 package com.pla.grouplife.sharedresource.event;
 
 import com.pla.grouplife.sharedresource.model.vo.Insured;
+import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.sharedkernel.identifier.PolicyId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class CreateFreeCoverLimitEndorsementEvent {
 
   private PolicyId policyId;
   private Set<Insured> insureds;
+  private Set<InsuredDependent> insuredDependents;
   private BigDecimal freeCoverLimit;
 
 }

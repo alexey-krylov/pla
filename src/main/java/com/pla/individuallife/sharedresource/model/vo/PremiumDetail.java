@@ -34,4 +34,7 @@ public class PremiumDetail {
     private BigDecimal totalPremium;
 
     private Set<RiderPremium> riderPremiums;
+
+
+
 }

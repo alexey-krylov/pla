@@ -107,7 +107,8 @@ public class ILProposalFactory {
                 return new ILRiderDetail(riderDetailDto.getCoverageId(),riderDetailDto.getSumAssured(),riderDetailDto.getCoverTerm(),riderDetailDto.getWaiverOfPremium(),"");
             }
         }).collect(Collectors.toSet());
-        ProposalPlanDetail planDetail = new ProposalPlanDetail(proposalPlanDetail.getPlanId(),"",proposalPlanDetail.getPolicyTerm(), proposalPlanDetail.getPremiumPaymentType(), proposalPlanDetail.getPremiumPaymentTerm(),proposalPlanDetail.getSumAssured(),riderDetails);
+        ProposalPlanDetail planDetail = new ProposalPlanDetail(proposalPlanDetail.getPlanId(),"",proposalPlanDetail.getPolicyTerm(), proposalPlanDetail.getPremiumPaymentType(), proposalPlanDetail.getPremiumPaymentTerm(),proposalPlanDetail.getSumAssured(),riderDetails,
+                proposalPlanDetail.getAnnualFee(),proposalPlanDetail.getSemiAnnualFee(),proposalPlanDetail.getQuarterlyFee(),proposalPlanDetail.getMonthlyFee());
         return planDetail;
     }
 

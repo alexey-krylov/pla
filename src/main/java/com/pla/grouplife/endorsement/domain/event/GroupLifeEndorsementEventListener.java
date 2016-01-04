@@ -27,8 +27,18 @@ public class GroupLifeEndorsementEventListener {
         if (LOGGER.isDebugEnabled()){
             LOGGER.debug("Handling GL Endorsement createFreeCoverLimitEndorsementEvent .....", createFreeCoverLimitEndorsementEvent);
         }
+        /*
+        * Creating the Free Cover Limit For Insureds(Main Assured)
+        * */
         createFreeCoverLimitEndorsementEvent.getInsureds().forEach(insured->{
-            commandGateway.sendAndWait(new GLCreateFLCEndorsementCommand(GLEndorsementType.FREE_COVER_LIMIT,createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId(),insured,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit()));
+            commandGateway.sendAndWait(new GLCreateFLCEndorsementCommand(GLEndorsementType.FREE_COVER_LIMIT,createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId(),insured,null,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit(),Boolean.TRUE));
+        });
+
+        /*
+        * Creating the Free Cover Limit For Insureds dependents
+        * */
+        createFreeCoverLimitEndorsementEvent.getInsuredDependents().forEach(insuredDependent->{
+            commandGateway.sendAndWait(new GLCreateFLCEndorsementCommand(GLEndorsementType.FREE_COVER_LIMIT,createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId(),null,insuredDependent,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit(),Boolean.FALSE));
         });
     }
 }

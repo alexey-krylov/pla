@@ -26,4 +26,12 @@ public class PlanDetailDto {
     private BigDecimal sumAssured;
 
     private Set<RiderDetailDto> riderDetails;
+
+    private BigDecimal annualFee = BigDecimal.ZERO;
+
+    private BigDecimal semiAnnualFee = BigDecimal.ZERO;
+
+    private BigDecimal monthlyFee = BigDecimal.ZERO;
+
+    private BigDecimal quarterlyFee = BigDecimal.ZERO;
 }

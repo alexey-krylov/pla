@@ -1,5 +1,6 @@
 package com.pla.grouplife.policy.domain.model;
 
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.agent.AgentId;
 import com.pla.grouplife.sharedresource.event.CreateFreeCoverLimitEndorsementEvent;
 import com.pla.grouplife.sharedresource.model.vo.*;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -248,8 +250,16 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
     }
 
     public void raiseEndorsementEventWhichAreExceedingFreeCoverLimit() {
-        Set<Insured> insuredExceedingFreeCoverLimit =  this.insureds.parallelStream().filter(insured->this.freeCoverLimit.compareTo(insured.getPlanPremiumDetail().getSumAssured())<=0).collect(Collectors.toSet());
+        Set<Insured> insuredExceedingFreeCoverLimit = this.insureds.parallelStream().filter(insured->this.freeCoverLimit.compareTo(insured.getPlanPremiumDetail().getSumAssured())<=0).collect(Collectors.toSet());
+        Set<InsuredDependent> insuredDependentExceedingFreeCoverLimit = Sets.newLinkedHashSet();
+        this.getInsureds().forEach(insureds->{
+            Stream<InsuredDependent> insuredDependentStream =  isNotEmpty(insureds.getInsuredDependents())?insureds.getInsuredDependents().parallelStream().filter(dependent->this.freeCoverLimit.compareTo(dependent.getPlanPremiumDetail().getSumAssured())<=0):null;
+            if (isNotEmpty(insuredDependentStream)){
+                insuredDependentStream.forEach(dependentStream->{
+                    insuredDependentExceedingFreeCoverLimit.add(dependentStream);
+                });
+            }});
         if (isNotEmpty(insuredExceedingFreeCoverLimit))
-            registerEvent(new CreateFreeCoverLimitEndorsementEvent(policyId,insuredExceedingFreeCoverLimit,freeCoverLimit));
+            registerEvent(new CreateFreeCoverLimitEndorsementEvent(policyId,insuredExceedingFreeCoverLimit,insuredDependentExceedingFreeCoverLimit,freeCoverLimit));
     }
 }

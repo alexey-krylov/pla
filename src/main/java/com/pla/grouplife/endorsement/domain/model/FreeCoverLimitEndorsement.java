@@ -1,12 +1,14 @@
 package com.pla.grouplife.endorsement.domain.model;
 
 import com.pla.grouplife.sharedresource.model.vo.Insured;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 /**
  * Created by Admin on 28-Dec-15.
  */
+@Getter
 public class FreeCoverLimitEndorsement {
 
     private Insured insured;

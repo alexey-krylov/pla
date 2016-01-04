@@ -318,11 +318,26 @@ public class ILProposalFinder {
         BigDecimal quarterlyPremium = ComputedPremiumDto.getQuarterlyPremium(computedPremiums);
         BigDecimal monthlyPremium = ComputedPremiumDto.getMonthlyPremium(computedPremiums);
 
-        premiumDetailDto.setAnnualFee(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums));
-        premiumDetailDto.setQuarterlyFee(ComputedPremiumDto.getQuarterlyFee(computedPremiums));
-        premiumDetailDto.setSemiAnnualFee(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums));
-        premiumDetailDto.setMonthlyFee(ComputedPremiumDto.getMonthlyFee(computedPremiums));
-
+        BigDecimal annualFee;
+        BigDecimal semiAnnualFee;
+        BigDecimal quarterlyFee;
+        BigDecimal monthlyFee;
+        if (ILProposalStatus.DRAFT.equals(ILProposalStatus.valueOf((String)proposal.get("proposalStatus")))) {
+            annualFee = ComputedPremiumDto.getAnnualPolicyFee(computedPremiums);
+            quarterlyFee = ComputedPremiumDto.getQuarterlyFee(computedPremiums);
+            semiAnnualFee = ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums);
+            monthlyFee = ComputedPremiumDto.getMonthlyFee(computedPremiums);
+        }
+        else {
+            annualFee = planDetail!=null?planDetail.getAnnualPolicyFee():BigDecimal.ZERO;
+            quarterlyFee = planDetail!=null?planDetail.getQuarterlyFee(): BigDecimal.ZERO;
+            monthlyFee = planDetail!=null?planDetail.getMonthlyFee(): BigDecimal.ZERO;
+            semiAnnualFee = planDetail!=null?planDetail.getSemiAnnualFee(): BigDecimal.ZERO;
+        }
+        premiumDetailDto.setAnnualFee(annualFee);
+        premiumDetailDto.setSemiAnnualFee(semiAnnualFee);
+        premiumDetailDto.setQuarterlyFee(quarterlyFee);
+        premiumDetailDto.setMonthlyFee(monthlyFee);
         Set<ILRiderDetail> riderList = planDetail.getRiderDetails();
 
         if (riderList != null) {
@@ -367,10 +382,10 @@ public class ILProposalFinder {
         premiumDetailDto.setRiderPremiums(riderPremiumDtoSet);
         premiumDetailDto.setTotalPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)));
         premiumDetailDto.setPlanName(planFinder.getPlanName(new PlanId(planDetail.getPlanId())));
-        premiumDetailDto.setAnnualPremium(totalPremium.add(ComputedPremiumDto.getAnnualPolicyFee(computedPremiums)).setScale(2, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(ComputedPremiumDto.getMonthlyFee(computedPremiums)).setScale(2, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(ComputedPremiumDto.getQuarterlyFee(computedPremiums)).setScale(2, BigDecimal.ROUND_HALF_UP));
-        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(ComputedPremiumDto.getSemiAnnualPolicyFee(computedPremiums)).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setAnnualPremium(totalPremium.add(annualFee).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setMonthlyPremium(monthlyPremium.add(monthlyFee).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setQuarterlyPremium(quarterlyPremium.add(quarterlyFee).setScale(2, BigDecimal.ROUND_HALF_UP));
+        premiumDetailDto.setSemiannualPremium(semiAnnualPremium.add(semiAnnualFee).setScale(2, BigDecimal.ROUND_HALF_UP));
         return premiumDetailDto;
     }
 

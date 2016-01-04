@@ -433,4 +433,18 @@ public class GeneralInformationService {
             return map;
         }
     }
+
+
+    public PolicyFeeDto getPolicyFee(){
+        Criteria policyCriteria = Criteria.where("productLine").is("INDIVIDUAL_LIFE");
+        Query query = new Query(policyCriteria);
+        List<ProductLineGeneralInformation> productLineInformation = mongoTemplate.find(query, ProductLineGeneralInformation.class);
+        PolicyFeeProcessInformation policyFeeProcessInformation = productLineInformation.get(0).getPolicyFeeProcessInformation();
+        BigDecimal annual = new BigDecimal(policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("ANNUAL")).collect(Collectors.toList()).get(0).getPolicyFee());
+        BigDecimal semiannual =new BigDecimal(policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("SEMI_ANNUAL")).collect(Collectors.toList()).get(0).getPolicyFee());
+        BigDecimal quarterly = new BigDecimal(policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("QUARTERLY")).collect(Collectors.toList()).get(0).getPolicyFee());
+        BigDecimal monthly = new BigDecimal(policyFeeProcessInformation.getPolicyFeeProcessItems().stream().filter(p -> p.getPolicyFeeProcessType().name().equals("MONTHLY")).collect(Collectors.toList()).get(0).getPolicyFee());
+        PolicyFeeDto policyFeeDto = new PolicyFeeDto(annual,semiannual,quarterly,monthly);
+        return policyFeeDto;
+    }
 }

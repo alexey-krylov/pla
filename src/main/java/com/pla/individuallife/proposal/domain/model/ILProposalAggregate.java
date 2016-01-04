@@ -212,14 +212,14 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
                 ILProposalStatus.PENDING_ACCEPTANCE;
         registerEvent(new ILProposalSubmitEvent(this.proposalId));
         registerEvent(new ILProposalStatusAuditEvent(this.getProposalId(), this.proposalStatus, submittedBy, comment, submittedOn));
-        if (this.quotation != null)
-            registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
         if (this.proposer != null && this.proposer.getResidentialAddress() != null) {
             ResidentialAddress residentialAddress = this.proposer.getResidentialAddress();
             registerEvent(new GLProposerAddedEvent(proposer.getFirstName(), proposer.getTitle(),
                     residentialAddress.getAddress().getAddress1(), residentialAddress.getAddress().getAddress2(), residentialAddress.getAddress().getPostalCode(),
                     residentialAddress.getAddress().getProvince(), residentialAddress.getAddress().getTown(), this.proposer.getEmailAddress()));
         }
+        if (this.quotation != null)
+            registerEvent(new ILQuotationConvertedToProposalEvent(this.quotation.getQuotationNumber(), new QuotationId(this.quotation.getQuotationId())));
         return this;
     }
 
@@ -274,6 +274,11 @@ public class ILProposalAggregate extends AbstractAnnotatedAggregateRoot<Proposal
 
     public ILProposalAggregate updateWithOpportunityId(OpportunityId opportunityId) {
         this.opportunityId  = opportunityId;
+        return this;
+    }
+
+    public ILProposalAggregate updatePlanWithPolicyFee(BigDecimal annualPolicyFee,BigDecimal semiAnnualFee,BigDecimal quarterlyFee,BigDecimal monthlyFee){
+        this.proposalPlanDetail = this.proposalPlanDetail.updateWithPolicyFee(annualPolicyFee,semiAnnualFee,quarterlyFee,monthlyFee);
         return this;
     }
 }

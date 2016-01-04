@@ -163,7 +163,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
             LOGGER.debug("Handling IL Quotation Closure Event .....", event);
         }
         ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
-        if (!GHQuotationStatus.CONVERTED.equals(ilQuotation.getIlQuotationStatus())) {
+        if (!ILQuotationStatus.CONVERTED.equals(ilQuotation.getIlQuotationStatus())) {
             commandGateway.send(new ILQuotationClosureCommand(event.getQuotationId()));
         }
         if (ilQuotation.getOpportunityId() != null) {
@@ -191,7 +191,7 @@ public class ILQuotationARSaga extends AbstractAnnotatedSaga implements Serializ
             LOGGER.debug("Handling IL Quotation Purge Event .....", event);
         }
         ILQuotation ilQuotation = ilQuotationRepository.load(event.getQuotationId());
-        if (!GHQuotationStatus.CONVERTED.equals(ilQuotation.getIlQuotationStatus())) {
+        if (!ILQuotationStatus.CONVERTED.equals(ilQuotation.getIlQuotationStatus())) {
             commandGateway.send(new ILQuotationPurgeCommand(event.getQuotationId()));
         }
     }
