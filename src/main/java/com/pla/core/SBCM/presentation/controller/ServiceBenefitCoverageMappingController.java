@@ -36,7 +36,7 @@ public class ServiceBenefitCoverageMappingController {
     public ModelAndView getsbcmview(){
         ModelAndView modelAndView= new ModelAndView();
         modelAndView.addObject("createsbcmcommand",new CreateSBCMCommand());
-        modelAndView.setViewName("pla/core/sbcm/createsbcm");
+        modelAndView.setViewName("pla/core/SBCM/createsbcm");
         return modelAndView;
     }
 
