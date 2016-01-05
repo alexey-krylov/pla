@@ -34,6 +34,10 @@ public class GHPolicyDetailDto {
     private String showLoading;
     private String specialConditions;
 
+    /*
+    *
+    * For Policy Document Detail
+    * */
     private String planName;
     private String netPremium;
     private String totalSumAssured;
@@ -46,7 +50,14 @@ public class GHPolicyDetailDto {
     private String waiverOfExcessLoadings;
     private String waiverOfExcessLoadingsPercentage;
 
+    /*
+    * For Debit/Credit Detail
+    * */
+    private String commissionAmount;
+    private String endorsementNumber;
     private String endorsementEffectiveDate;
+    private String endorsementDetailHeaderName;
+    private String premiumPaymentEndDate;
 
     @Getter
     @Setter

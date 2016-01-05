@@ -60,9 +60,6 @@
 	<field name="agentBranch" class="java.lang.String">
 		<fieldDescription><![CDATA[agentBranch]]></fieldDescription>
 	</field>
-	<field name="proposerName" class="java.lang.String">
-		<fieldDescription><![CDATA[proposerName]]></fieldDescription>
-	</field>
 	<field name="address" class="java.lang.String">
 		<fieldDescription><![CDATA[address]]></fieldDescription>
 	</field>
