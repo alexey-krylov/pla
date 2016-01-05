@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,10 +43,12 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
+
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Hospitalization Event cannot be empty.";
                 }
+
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
                 return errorMessage;
@@ -170,7 +173,12 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Treating Doctor name cannot be empty.";
+                    return  errorMessage;
                 }
+                if(!Pattern.compile("^[A-Za-z, ]++$").matcher(value).matches())
+                    errorMessage = errorMessage + " only characters allowed."+"\n";
+                if(value.length() > 100)
+                    errorMessage = errorMessage + " Length should not be greater than 100 character."+"\n";
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
                 return errorMessage;
@@ -263,7 +271,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },PREGNANCY_L("Diagnosis/Treatment in case Of Pregnancy -L"){
         @Override
@@ -283,7 +291,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },PREGNANCY_A("Diagnosis/Treatment in case Of Pregnancy -A"){
         @Override
@@ -357,9 +365,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_ILLNESS_DISEASE_NAME_AND_PRESENTING_COMPLAINTS("Diagnosis/Treatment in case Of Illness Or Trauma - Name of illness / disease with presenting complaints"){
         @Override
@@ -379,7 +387,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_RELEVANT_CLINICAL_FINDINGS("Diagnosis/Treatment in case Of Illness Or Trauma - Relevant clinical findings"){
         @Override
@@ -399,7 +407,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_DURATION("Diagnosis/Treatment in case Of Illness Or Trauma -Duration of the present ailment in days"){
         @Override
@@ -439,7 +447,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_DIAGNOSIS("Diagnosis/Treatment in case Of Illness Or Trauma - Diagnosis"){
         @Override
@@ -465,9 +473,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_LINE_OF_TREATMENT("Diagnosis/Treatment - Line of treatment"){
         @Override
@@ -493,9 +501,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_TEST("Diagnosis/Treatment - If Investigations, indicate tests"){
         @Override
@@ -521,9 +529,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_DRUG_NAME("Diagnosis/Treatment - If Medical Please Provide Drug Name"){
         @Override
@@ -549,9 +557,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_DRUG_TYPE("Diagnosis/Treatment - If Medical Please Provide Drug Type"){
         @Override
@@ -661,9 +669,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_SURGERY_NAME("Diagnosis/Treatment - If Surgery Please provide name of surgery"){
         @Override
@@ -689,9 +697,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     }, DIAGNOSIS_TREATMENT_SURGERY_ACCOMMODATION_TYPE("Diagnosis/Treatment - If Surgery Please provide Type Of Accommodation"){
         @Override
@@ -717,9 +725,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_ADMISSION("Diagnosis/Treatment - If Surgery Please provide  Date of Admission"){
         @Override
@@ -745,9 +753,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_DISCHARGE("Diagnosis/Treatment - If Surgery Please provide Date of Discharge"){
         @Override
@@ -773,9 +781,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },PAST_HISTORY_SUFFERING_FROM_HTN("Past history of any chronic illness - Suffering From HTN"){
         @Override
@@ -795,7 +803,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DETAILS_OF_HTN("Past history of any chronic illness - Please provide details"){
         @Override
@@ -815,7 +823,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },PAST_HISTORY_SUFFERING_FROM_IHD_CAD("Past history of any chronic illness - Suffering From IHD/CAD"){
         @Override
@@ -835,7 +843,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DETAILS_OF_IHD_CAD("Past history of any chronic illness - Please provide details"){
         @Override
@@ -855,7 +863,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },PAST_HISTORY_SUFFERING_FROM_DIABETES("Past history of any chronic illness - Suffering From Diabetes"){
         @Override
@@ -875,7 +883,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DETAILS_OF_DIABETES("Past history of any chronic illness - Please provide details"){
         @Override
@@ -895,7 +903,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_ASTHMA_COPD_TB("Past history of any chronic illness - Suffering From Asthma/COPD/TB"){
         @Override
@@ -915,7 +923,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DETAILS_OF_ASTHMA_COPD_TB("Past history of any chronic illness - Please provide details"){
         @Override
@@ -955,7 +963,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },DETAILS_OF_PARALYSIS_CVA("Past history of any chronic illness - Please provide details"){
         @Override
@@ -975,7 +983,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_ARTHRITIS("Past history of any chronic illness - Suffering From Arthritis"){
         @Override
@@ -995,7 +1003,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, DETAILS_OF_SUFFERING_FROM_ARTHRITIS("Past history of any chronic illness - Please provide details"){
         @Override
@@ -1015,7 +1023,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_CANCER_TUMOR_CYST("Past history of any chronic illness - Suffering From Cancer/Tumor/Cyst") {
         @Override
@@ -1055,7 +1063,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },PAST_HISTORY_SUFFERING_FROM_STD_HIV_AIDS("Past history of any chronic illness - Suffering From STD/HIV/AIDS"){
         @Override
@@ -1095,7 +1103,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Suffering From Alcohol/Drug Abuse"){
         @Override
@@ -1121,9 +1129,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     }, DETAIL_OF_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Please provide detail"){
         @Override
@@ -1143,7 +1151,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM__PSYCHIATRIC_CONDITION("Past history of any chronic illness - Suffering From Psychiatric Condition"){
         @Override
@@ -1163,7 +1171,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     }, DETAILS_PSYCHIATRIC_CONDITION("Past history of any chronic illness - Please provide details"){
         @Override
@@ -1183,7 +1191,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage; 
+            return errorMessage;
         }
     },SERVICE("Service to be Availed - Service"){
         @Override
@@ -1209,9 +1217,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     },TYPE("Service to be Availed - Type"){
         @Override
@@ -1237,9 +1245,9 @@ public enum PreAuthorizationExcelHeader {
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
+                return errorMessage;
             }
-            return errorMessage; 
+            return errorMessage;
         }
     };
 
@@ -1250,7 +1258,7 @@ public enum PreAuthorizationExcelHeader {
     }
 
     public static List<String> getAllowedHeaders(){
-       return Stream.of(PreAuthorizationExcelHeader.values()).map(PreAuthorizationExcelHeader::getDescription).collect(Collectors.toList());
+        return Stream.of(PreAuthorizationExcelHeader.values()).map(PreAuthorizationExcelHeader::getDescription).collect(Collectors.toList());
     }
 
     public String getDescription() {

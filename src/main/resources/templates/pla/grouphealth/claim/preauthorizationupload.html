@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
-
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
@@ -15,6 +14,13 @@
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 
 <script>
+var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
     requirejs(['main', 'angular-file-upload'], function () {
         require(['/pla/js/grouphealth/claim/preauthorizationupload.js?t=19'], function () {
             angular.element(document).ready(function () {
@@ -25,8 +31,8 @@
 </script>
 <script type="text/ng-template" id="preauthorizationupload.html">
     <nth-alert></nth-alert>
-    <div class="wizard fuelux-wizard"
-         ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
+    <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
+    ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
         <ul class="steps" style="margin-left: 0">
             <li data-step="1">
                 <span class="badge badge-info"></span>Pre-Auth Upload<span class="chevron"></span>
@@ -39,7 +45,7 @@
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6">
-                            <button type="button" class="btn btn-success  pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="uploadPreAuthorizationDto.hcpCode == '' || uploadPreAuthorizationDto.hcpCode == null">Downloads
+                            <button type="button" class="btn btn-success  pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="uploadPreAuthorizationDto.hcpCode == '' || uploadPreAuthorizationDto.hcpCode == null" >Downloads
                             </button>
                         </div>
                     </div>
@@ -69,9 +75,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
 
                         <div class="col-md-6">
                             <div class="form-group required">

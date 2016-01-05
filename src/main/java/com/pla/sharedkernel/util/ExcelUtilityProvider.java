@@ -3,8 +3,14 @@ package com.pla.sharedkernel.util;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
+import com.pla.core.SBCM.repository.SBCMRepository;
+import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationExcelHeader;
+import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -18,7 +24,9 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.pla.core.hcp.application.service.ExcelParserException.raiseDataNotSharedException;
 import static com.pla.core.hcp.application.service.ExcelParserException.raiseNotValidHeaderException;
@@ -35,7 +43,7 @@ public class ExcelUtilityProvider {
 
     @Autowired
     private IExcelPropagator iExcelPropagator;
-
+    private SBCMRepository sbcmRepository;
     public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, List<String> excelHeaders, Class dynamicClass) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
@@ -55,6 +63,12 @@ public class ExcelUtilityProvider {
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
             String errorMessage = validateRow(currentRow, excelHeaders, dynamicClass);
+            if(dynamicClass.getName().equalsIgnoreCase("PreAuthorizationExcelHeader")){
+                String serviceNotCoveredError = isServiceDrugCoveredUnderThePolicy(currentRow, excelHeaders);
+                if(isNotEmpty(serviceNotCoveredError))
+                    errorMessage = errorMessage + " \n " + serviceNotCoveredError;
+
+            }
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders, dynamicClass);
             String duplicateRowErrorMessage = "";
             if (isNotEmpty(duplicateRows)) {
@@ -180,4 +194,33 @@ public class ExcelUtilityProvider {
         }
         return Lists.newArrayList();
     }
+
+    public String isServiceDrugCoveredUnderThePolicy(Row CurrentRow, List<String> excelHeaders){
+        String planCode;
+        Cell policyNumberCell = CurrentRow.getCell(excelHeaders.indexOf(PreAuthorizationExcelHeader.POLICY_NUMBER.getDescription()));
+        String policyNumberValue = getCellValue(policyNumberCell);
+        GroupHealthPolicy groupHealthPolicy =iExcelPropagator.findPolicyByPolicyNumber(policyNumberValue);
+        Cell serviceNumberCell = CurrentRow.getCell(excelHeaders.indexOf(PreAuthorizationExcelHeader.SERVICE.getDescription()));
+        String serviceNumberValue = getCellValue(serviceNumberCell);
+        Set<GHInsured> ghInsureds = groupHealthPolicy.getInsureds();
+        if(isNotEmpty(ghInsureds)) {
+            GHInsured ghInsured = ghInsureds.iterator().next();
+            planCode = ghInsured.getPlanPremiumDetail().getPlanCode();
+            List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByPlanCode(planCode);
+            Set<String> services = isNotEmpty(serviceBenefitCoverageMappings) ? serviceBenefitCoverageMappings.parallelStream().map(new Function<ServiceBenefitCoverageMapping, String>() {
+                @Override
+                public String apply(ServiceBenefitCoverageMapping serviceBenefitCoverageMapping) {
+                    return serviceBenefitCoverageMapping.getService();
+                }
+            }).collect(Collectors.toSet()): Collections.EMPTY_SET;
+
+            if(!services.contains(serviceNumberValue)){
+                return serviceNumberValue+" service is not covered under  policy number - "+policyNumberValue;
+            }
+            return StringUtils.EMPTY;
+
+        }
+        return  "No related plan found for the policy";
+    }
+
 }

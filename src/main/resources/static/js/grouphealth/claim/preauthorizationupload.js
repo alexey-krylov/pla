@@ -9,6 +9,11 @@
         datepickerPopupConfig.closeText = 'Done';
         datepickerPopupConfig.closeOnDateSelection = true;
     }])
+       .config(['$dropdownProvider', function ($dropdownProvider) {
+                   angular.extend($dropdownProvider.defaults, {
+                       html: true
+                   });
+               }])
 
         .config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when('/', {
@@ -32,12 +37,12 @@
         }]);
 
     app.controller('PreAuthorizationUploadController', ['$scope', '$http','$upload','hcps' , function ($scope, $http, $upload,hcps) {
-        $scope.batchDate = formatDate(new Date());
-        console.log($scope.batchDate);
+          $scope.uploadPreAuthorizationDto = {};
+          $scope.uploadPreAuthorizationDto.batchDate = formatDate(new Date);
+//        console.log($scope.uploadPreAuthorizationDto.batchDate);
         $scope.hcps = hcps;
         $scope.fileSaved = null;
         $scope.fileName = null;
-        $scope.uploadPreAuthorizationDto = {};
         $scope.showDownload = true;
         $scope.$watchCollection('[uploadPreAuthorizationDto.hcpCode, showDownload]', function (n) {
             $scope.qId = n[0];
