@@ -22,6 +22,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
+import org.joda.time.DateTime;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,7 +123,12 @@ public class PreAuthorizationService {
         Set<List<PreAuthorizationDetailDto>> refurbishedSet = createSubListBasedOnSimilarCriteria(uploadPreAuthorizationCommand.getPreAuthorizationDetailDtos());
         for(List<PreAuthorizationDetailDto> preAuthorizationDetailDtos : refurbishedSet){
             Set<PreAuthorizationDetail> preAuthorizationDetails = transformToPreAuthorizationDetails(preAuthorizationDetailDtos);
-            PreAuthorization preAuthorization = new PreAuthorization().updateWithPreAuthorizationId(constructPreAuthorizationId(preAuthorizationDetails)).updateWithPreAuthorizationDetail(preAuthorizationDetails).updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode())).updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate()).updateWithBatchNumber(Integer.parseInt(runningSequence));
+            PreAuthorization preAuthorization = new PreAuthorization()
+                    .updateWithPreAuthorizationId(constructPreAuthorizationId(preAuthorizationDetails))
+                    .updateWithPreAuthorizationDetail(preAuthorizationDetails)
+                    .updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode()))
+                    .updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate())
+                    .updateWithBatchNumber(Integer.parseInt(runningSequence));
             preAuthorizationRepository.save(preAuthorization);
         }
         return Integer.parseInt(runningSequence.trim());
@@ -131,10 +137,10 @@ public class PreAuthorizationService {
     private PreAuthorizationId constructPreAuthorizationId(Set<PreAuthorizationDetail> preAuthorizationDetails) {
         Assert.notEmpty(preAuthorizationDetails, "PreAuthorizationDetail cannot be empty");
         PreAuthorizationDetail preAuthorizationDetail = preAuthorizationDetails.iterator().next();
+        DateTime consultationDate = preAuthorizationDetail.getDiagnosisTreatmentIllnessTraumaFirstConsultationDate();
         String preAuthIdSequence = sequenceGenerator.getSequence(PreAuthorizationId.class);
-        preAuthIdSequence = String.format("%07d", Integer.parseInt(preAuthIdSequence.trim()));
-        preAuthorizationDetail.getDiagnosisTreatmentIllnessTraumaFirstConsultationDate();
-        return null;
+        preAuthIdSequence = String.format("%07d", Integer.parseInt(preAuthIdSequence.trim()))+String.format("%02d", consultationDate.getMonthOfYear())+String.format("%02d", consultationDate.getYear());
+        return new PreAuthorizationId(preAuthIdSequence);
     }
 
     private Set<List<PreAuthorizationDetailDto>> createSubListBasedOnSimilarCriteria(Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {
