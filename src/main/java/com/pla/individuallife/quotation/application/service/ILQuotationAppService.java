@@ -31,6 +31,7 @@ import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.QuotationId;
 import com.pla.sharedkernel.util.PDFGeneratorUtils;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -202,14 +203,14 @@ public class ILQuotationAppService {
                 searchIlQuotationDto.getQuotationStatus());
         Set<String> quotationNumber = searchQuotations.parallelStream().map(quotations->quotations.getQuotationNumber()).collect(Collectors.toSet());
         Set<String> activeQuotations = ilProposalFinder.findProposalApprovedWithQuotation(quotationNumber);
-        return searchQuotations.parallelStream().filter(searchQuotation->activeQuotations.contains(searchQuotation.getQuotationNumber())).collect(Collectors.toList());
+        return searchQuotations.parallelStream().filter(searchQuotation -> activeQuotations.contains(StringUtils.substring(searchQuotation.getQuotationNumber(), 0, 16))).collect(Collectors.toList());
     }
 
     public List<ILSearchQuotationResultDto> getSharedQuotationByQuotationNumber(String quotation) {
         List<ILSearchQuotationResultDto> searchQuotations = ilQuotationFinder.findSharedQuotationByQuotationNumber(quotation);
         Set<String> quotationNumber = searchQuotations.parallelStream().map(quotations->quotations.getQuotationNumber()).collect(Collectors.toSet());
         Set<String> activeQuotations = ilProposalFinder.findProposalApprovedWithQuotation(quotationNumber);
-        return searchQuotations.parallelStream().filter(searchQuotation->activeQuotations.contains(searchQuotation.getQuotationNumber())).collect(Collectors.toList());
+        return searchQuotations.parallelStream().filter(searchQuotation -> activeQuotations.contains(StringUtils.substring(searchQuotation.getQuotationNumber(), 0, 16))).collect(Collectors.toList());
     }
 
 
@@ -236,7 +237,7 @@ public class ILQuotationAppService {
         ilQuotationDetailDto.setProposerEmailAddress(emailAddress);
         ilQuotationDetailDto.setProposerMobileNumber(proposerDto.getMobileNumber());
 
-        ilQuotationDetailDto.setQuotationNumber(quotationMap.getQuotationNumber());
+        ilQuotationDetailDto.setQuotationNumber(quotationMap.quotationWithVersionNumber());
 
         ProposedAssuredDto proposedAssuredDto = quotationMap.getProposedAssured();
         ilQuotationDetailDto.setProposedAssuredName(proposedAssuredDto.getTitle() + " " + proposedAssuredDto.getFirstName() + " " + proposedAssuredDto.getSurname());
@@ -282,7 +283,7 @@ public class ILQuotationAppService {
 
     public ILQuotationMailDto getPreScriptedEmail(String quotationId) {
         ILQuotationDto ilQuotationDto = ilQuotationFinder.getQuotationById(quotationId);
-        String subject = "PLA Insurance - Individual Life - Quotation ID : " + ilQuotationDto.getQuotationNumber();
+        String subject = "PLA Insurance - Individual Life - Quotation ID : " + ilQuotationDto.quotationWithVersionNumber();
         String mailAddress = ilQuotationDto.getProposer().getEmailAddress();
         mailAddress = isEmpty(mailAddress) ? "" : mailAddress;
         Map<String, Object> emailContent = Maps.newHashMap();
@@ -294,7 +295,7 @@ public class ILQuotationAppService {
         String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/individuallife/quotation/individuallifeQuotationTemplate.vm", emailContentMap);
         ILQuotationMailDto dto = new ILQuotationMailDto(subject, emailBody, new String[]{mailAddress});
         dto.setQuotationId(quotationId);
-        dto.setQuotationNumber(ilQuotationDto.getQuotationNumber());
+        dto.setQuotationNumber(ilQuotationDto.quotationWithVersionNumber());
         return dto;
     }
 

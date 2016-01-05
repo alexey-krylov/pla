@@ -18,7 +18,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Created by Karunakar on 5/13/2015.
@@ -112,7 +111,7 @@ public class ILQuotationController {
     @ResponseBody
     public Result getQuotationNumber(@PathVariable("quotationId") String quotationId) {
         ILQuotationDto quotationMap = ilQuotationFinder.getQuotationById(quotationId);
-        return Result.success("Quotation number ", quotationMap.getQuotationNumber());
+        return Result.success("Quotation number ", quotationMap.quotationWithVersionNumber());
     }
 
     @RequestMapping(value = "/getversionnumber/{quotationId}", method = RequestMethod.GET)

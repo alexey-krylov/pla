@@ -43,11 +43,13 @@ public class ILQuotationDto {
     private PlanDetailDto planDetailDto;
     private boolean assuredTheProposer;
 
-    public String getQuotationNumber() {
+    /*
+    * The Quotation Number with version is used only for Email and Quotation documents....
+    * */
+    public String quotationWithVersionNumber() {
         if (versionNumber > 0) {
             return quotationNumber + "/" + versionNumber;
         }
         return quotationNumber;
     }
-
 }
