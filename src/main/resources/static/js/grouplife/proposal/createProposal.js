@@ -604,6 +604,19 @@ angular.module('createProposal', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 
 
             };
 
+            /*
+            *
+            * To Update the FCL and Scheme name
+            *
+            * */
+            $scope.updateFCLAndSchemeName = function () {
+                $http.post('/pla/grouplife/proposal/updatefclandschemename', angular.extend({},
+                    {freeCoverLimit: $scope.proposalDetails.plan.freeCoverLimit},{schemeName: $scope.proposalDetails.plan.schemeName},
+                    {"proposalId": $scope.proposalId})).success(function (data) {
+
+                });
+
+            };
             $scope.submitAdditionalDocument = function () {
                 $http.post('/pla/grouplife/proposal/submit', angular.extend({},
                     {"proposalId": $scope.proposalId})).success(function (data) {

@@ -254,5 +254,11 @@ public class GroupLifeProposalCommandHandler {
         return groupLifeQuotation;
     }
 
-
+    @CommandHandler
+    public void updateFCLAndSchemeNameHandler(UpdateFCLAndSchemeNameCommand updateFCLAndSchemeNameCommand) {
+        GroupLifeProposal groupLifeProposal = groupLifeProposalRepository.load(new ProposalId(updateFCLAndSchemeNameCommand.getProposalId()));
+        if(groupLifeProposal != null){
+            groupLifeProposal.updateWithFCL(updateFCLAndSchemeNameCommand.getFreeCoverLimit()).updateWithSchemeName(updateFCLAndSchemeNameCommand.getSchemeName());
+        }
+    }
 }

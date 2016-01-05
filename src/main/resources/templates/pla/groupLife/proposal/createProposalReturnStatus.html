@@ -498,7 +498,8 @@
                                 <input class="form-control input-sm" onkeypress="return isNumeric(event)"
                                        name="freeCoverLimit"
                                        ng-pattern="/^(^[0-9]{1,7})+(\.[0-9]{1,2})?$/"
-                                       ng-model="proposalDetails.plan.freeCoverLimit"/>
+                                       ng-model="proposalDetails.plan.freeCoverLimit"
+                                       ng-blur="updateFCLAndSchemeName();" value="0"/>
                             </div>
                         </div>
                     </div>
@@ -509,7 +510,8 @@
                                 <input class="form-control input-sm"
                                        name="schemeName"
                                        ng-pattern="/^[a-zA-Z ]*$/"
-                                       ng-model="proposalDetails.plan.schemeName"/>
+                                       ng-model="proposalDetails.plan.schemeName"
+                                       ng-blur="updateFCLAndSchemeName();" value="0"/>
                             </div>
                         </div>
                     </div>

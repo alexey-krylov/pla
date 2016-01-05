@@ -274,6 +274,21 @@ public class GroupLifeProposalController {
         }
     }
 
+    @RequestMapping(value = "/updatefclandschemename", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateFCLAndSchemeName(@RequestBody UpdateFCLAndSchemeNameCommand updateFCLAndSchemeNameCommand, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Update proposal proposer data is not valid", bindingResult.getAllErrors());
+        }
+        try {
+            updateFCLAndSchemeNameCommand.setUserDetails(getLoggedInUserDetail(request));
+            String proposalId = commandGateway.sendAndWait(updateFCLAndSchemeNameCommand);
+            return Result.success("Updated successfully", proposalId);
+        } catch (Exception e) {
+            return Result.failure();
+        }
+    }
+
     @RequestMapping(value = "/downloadplandetail/{proposalId}", method = RequestMethod.GET)
     public void downloadPlanDetail(@PathVariable("proposalId") String proposalId, HttpServletResponse response) throws IOException, JRException {
         response.reset();
