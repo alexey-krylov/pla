@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,10 @@ public class SBCMFinder {
     }
 
     public Map<String, Object> getCoverageDetail(String coverageId) {
-        return namedParameterJdbcTemplate.queryForMap(FIND_COVERAGE_BY_ID_QUERY, new MapSqlParameterSource().addValue("coverageId", coverageId));
+        List<Map<String, Object>> coverages = namedParameterJdbcTemplate.queryForList(FIND_COVERAGE_BY_ID_QUERY, new MapSqlParameterSource().addValue("coverageId", coverageId));
+        if(isNotEmpty(coverages))
+            return coverages.get(0);
+        return Collections.emptyMap();
     }
 
     public List<HCPRate> getAllServicesFromHCPRate() {

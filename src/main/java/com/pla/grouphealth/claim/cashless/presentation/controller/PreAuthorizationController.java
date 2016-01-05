@@ -6,6 +6,7 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetai
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -81,6 +79,21 @@ public class PreAuthorizationController {
             return Result.failure(e.getMessage(), Boolean.FALSE);
         }
     }
+
+    @RequestMapping(value = "/downloaderrorpreauthtemplate/{hcpCode}", method = RequestMethod.GET)
+    public void downloadErrorInsuredTemplate(@PathVariable("hcpCode") String hcpCode, HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/msexcel");
+        response.setHeader("content-disposition", "attachment; filename=" + "PreAuthorizationTemplate.xls" + "");
+        OutputStream outputStream = response.getOutputStream();
+        File errorTemplateFile = new File(hcpCode);
+        InputStream inputStream = new FileInputStream(errorTemplateFile);
+        outputStream.write(IOUtils.toByteArray(inputStream));
+        outputStream.flush();
+        outputStream.close();
+        errorTemplateFile.delete();
+    }
+
     @RequestMapping(value = "/getAllHcpNameAndCode",method = RequestMethod.GET)
     public List<Map<String,Object>> getAllHcpNameAndCode(){
         return  preAuthorizationService.getAllHcpNameAndCode();

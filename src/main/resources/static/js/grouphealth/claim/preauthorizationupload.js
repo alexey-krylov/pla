@@ -53,7 +53,7 @@
                     "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.uploadPreAuthorizationDto.hcpCode
                 },{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
-                    "href": "/pla/core/hcprate/downloaderrorhcpratetemplate/" + $scope.qId
+                    "href": "/pla/grouphealth/claim/cashless/downloaderrorpreauthtemplate/" + $scope.qId
                 }
                 ];
             }

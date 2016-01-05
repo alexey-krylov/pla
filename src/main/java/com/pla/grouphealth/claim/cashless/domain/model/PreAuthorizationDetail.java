@@ -35,6 +35,9 @@ public class PreAuthorizationDetail {
     private String diagnosisTreatmentLineOfTreatment;
     private String diagnosisTreatmentTest;
     private String diagnosisTreatmentDrugName;
+    private String diagnosisTreatmentDrugType;
+    private String diagnosisTreatmentDrugDosage;
+    private String diagnosisTreatmentDrugStrength;
     private String diagnosisTreatmentMedicalDuration;
     private String diagnosisTreatmentSurgeryName;
     private String diagnosisTreatmentSurgeryAccommodationType;

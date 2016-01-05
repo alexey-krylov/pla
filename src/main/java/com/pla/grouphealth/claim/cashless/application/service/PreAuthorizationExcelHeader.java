@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
+import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.DateTime;
@@ -72,12 +73,17 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Policy Number cannot be empty.";
+                    return errorMessage;
                 }
-                Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.name()));
+                Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.description));
                 String policyNumberValue = getCellValue(policyNumberCell);
                 GroupHealthPolicy groupHealthPolicy = iExcelPropagator.findPolicyByPolicyNumber(policyNumberValue);
+                if(isEmpty(groupHealthPolicy)){
+                    errorMessage = errorMessage + "No Group Health Policy found with given Policy Number";
+                    return errorMessage;
+                }
                 DateTime  expiredOn= groupHealthPolicy.getExpiredOn();
-                if(expiredOn.toLocalDate().isAfter(new DateTime().toLocalDate())){
+                if(expiredOn.compareTo(new DateTime()) == -1){
                     errorMessage=errorMessage+  "Policy Is Expired";
                 }
 
@@ -546,6 +552,90 @@ public enum PreAuthorizationExcelHeader {
                 return errorMessage; 
             }
             return errorMessage; 
+        }
+    },DIAGNOSIS_TREATMENT_DRUG_TYPE("Diagnosis/Treatment - If Medical Please Provide Drug Type"){
+        @Override
+        public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
+            return preAuthorizationDetailDto.getDiagnosisTreatmentDrugType();
+        }
+
+        @Override
+        public PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            preAuthorizationDetailDto.setDiagnosisTreatmentDrugType(cellValue);
+            return preAuthorizationDetailDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Drug Type cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },DIAGNOSIS_TREATMENT_DRUG_DOSAGE("Diagnosis/Treatment - If Medical Please Provide Drug Dosage/ Day"){
+        @Override
+        public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
+            return preAuthorizationDetailDto.getDiagnosisTreatmentDrugDosage();
+        }
+
+        @Override
+        public PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            preAuthorizationDetailDto.setDiagnosisTreatmentDrugDosage(cellValue);
+            return preAuthorizationDetailDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Drug Dosage/ Day cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },DIAGNOSIS_TREATMENT_DRUG_STRENGTH("Diagnosis/Treatment - If Medical Please Provide Drug Strength/Strength Type"){
+        @Override
+        public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
+            return preAuthorizationDetailDto.getDiagnosisTreatmentDrugStrength();
+        }
+
+        @Override
+        public PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            preAuthorizationDetailDto.setDiagnosisTreatmentDrugStrength(cellValue);
+            return preAuthorizationDetailDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Drug Strength/Strength Type cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_MEDICAL_DURATION("Diagnosis/Treatment - If Medical Please Provide Duration"){
         @Override

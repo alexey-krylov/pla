@@ -58,15 +58,18 @@ public class SBCMService {
             public Map<String, Object> apply(Plan plan) {
                 return constructOptimizedDetailsMapFromPlan(plan);
             }
-        }).collect(Collectors.toList()) : Collections.EMPTY_LIST;
+        }).filter(map -> isNotEmpty(map)).collect(Collectors.toList()) : Collections.EMPTY_LIST;
     }
 
     private Map<String, Object> constructOptimizedDetailsMapFromPlan(Plan plan) {
+        List<Map<String, Object>> coverages = getCoveragesFromPlan(plan);
+        if(isEmpty(coverages))
+            return Collections.EMPTY_MAP;
         Map<String, Object> planMap = Maps.newLinkedHashMap();
         if(isNotEmpty(plan.getCoverages())){
             planMap.put("planCode", plan.getPlanDetail().getPlanCode());
             planMap.put("planName", plan.getPlanDetail().getPlanName());
-            planMap.put("coverages", getCoveragesFromPlan(plan));
+            planMap.put("coverages", coverages);
         }
         return planMap;
     }
@@ -77,10 +80,13 @@ public class SBCMService {
             public Map<String, Object> apply(PlanCoverage planCoverage) {
                 return constructCoveragesAndRelatedBenefitsFromPlan(planCoverage);
             }
-        }).collect(Collectors.toList()) : Lists.newArrayList();
+        }).filter(map -> isNotEmpty(map)).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
     private Map<String, Object> constructCoveragesAndRelatedBenefitsFromPlan(PlanCoverage planCoverage) {
+        if(isEmpty(getCoverageName(planCoverage))){
+            return Collections.EMPTY_MAP;
+        }
         Map<String, Object> coverageMap = Maps.newLinkedHashMap();
         coverageMap.put("coverageId", planCoverage.getCoverageId());
         coverageMap.put("coverageName", getCoverageName(planCoverage));
@@ -90,6 +96,8 @@ public class SBCMService {
 
     private String getCoverageName(PlanCoverage planCoverage) {
         Map<String, Object> coverage = sbcmFinder.getCoverageDetail(planCoverage.getCoverageId().toString());
+        if(isEmpty(coverage))
+            return StringUtils.EMPTY;
         return coverage.get("coverageName").toString();
     }
 

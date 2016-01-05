@@ -113,7 +113,7 @@
 <div th:fragment="bodyHeader">
     <style>
         .dropdown-menu > li > a:hover {
-        background-color: #C7C7C7 !important;
+            background-color: #C7C7C7 !important;
         }
     </style>
     <!-- Fixed navbar -->
@@ -344,19 +344,16 @@
                                             <!--</li>-->
                                             <!--<li><a th:href="@{/grouphealth/claim/openamendmentclaimpage}"> Claim Amendment  </a>-->
                                             <!--</li>-->
-
-
-
+                                            <li class='dropdown'><a href="#">Cashless Claim</a>
+                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
+                                                    <li><a th:href="@{/grouphealth/claim/cashless/preAuthUpload}"> Pre-authorization Uplaod  </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
                                             <li class='dropdown'><a href="#">Reimbursement Claim</a>
 
                                                 <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
                                                     <li><a th:href="@{/grouphealth/claim/openreimbursementclaimpage}"> Claim Registration  </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class='dropdown'><a href="#">Cashless Claim</a>
-                                                <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
-                                                    <li><a th:href="@{/grouphealth/claim/cashless/preAuthUpload}"> Pre-authorization Uplaod  </a>
                                                     </li>
                                                 </ul>
                                             </li>

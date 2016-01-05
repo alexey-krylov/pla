@@ -54,7 +54,6 @@ public class ExcelUtilityProvider {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            //List<String> excelHeaders = HCPRateExcelHeader.getAllowedHeaders();
             String errorMessage = validateRow(currentRow, excelHeaders, dynamicClass);
             List<Row> duplicateRows = findDuplicateRow(dataRows, currentRow, excelHeaders, dynamicClass);
             String duplicateRowErrorMessage = "";
@@ -142,7 +141,7 @@ public class ExcelUtilityProvider {
             try {
                 Method getEnumMethod = dynamicClass.getMethod("getEnum", String.class);
                 Object dynamicEnum = getEnumMethod.invoke(null, header);
-                Method validateAndIfNotBuildErrorMessageMethod = dynamicClass.getMethod("validateAndIfNotBuildErrorMessage", Map.class, Row.class, String.class, List.class);
+                Method validateAndIfNotBuildErrorMessageMethod = dynamicClass.getMethod("validateAndIfNotBuildErrorMessage", IExcelPropagator.class, Row.class, String.class, List.class);
                 errorMessages.add((String) validateAndIfNotBuildErrorMessageMethod.invoke(dynamicEnum, iExcelPropagator, insureDataRow, cellValue, headers));
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();

@@ -35,7 +35,7 @@ public class PreAuthorizationExcelGenerator {
         constraintCellDataMap.put(headers.indexOf("Diagnosis/Treatment - Line of treatment"), Lists.newArrayList("Medical", "Surgical", "Intensive Care", "Investigation"));
         constraintCellDataMap.put(headers.indexOf("Diagnosis/Treatment - If Investigations, indicate tests"), Lists.newArrayList("Blood Tests","Other Lab Tests", "X-Rays", "MRI's","CT's"));
         constraintCellDataMap.put(headers.indexOf("Diagnosis/Treatment - If Surgery Please provide Type Of Accommodation"), Lists.newArrayList("Normal", "Executive"));
-        //constraintCellDataMap.put(headers.indexOf("Diagnosis/Treatment  - If Medical Please Provide Drug Type"), Lists.newArrayList("Syrup", "Suspension", "Tablet", "Capsule", "Injectable"));
+        constraintCellDataMap.put(headers.indexOf("Diagnosis/Treatment - If Medical Please Provide Drug Type"), Lists.newArrayList("Syrup", "Suspension", "Tablet", "Capsule", "Injectable"));
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From Psychiatric Condition"), Lists.newArrayList("Yes", "No"));
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From Alcohol/Drug Abuse"), Lists.newArrayList("Yes", "No"));
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From STD/HIV/AIDS"), Lists.newArrayList("Yes", "No"));
