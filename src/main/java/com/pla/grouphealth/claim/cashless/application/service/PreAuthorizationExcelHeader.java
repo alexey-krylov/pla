@@ -22,6 +22,7 @@ import static org.springframework.util.Assert.notNull;
  * Created by Mohan Sharma on 12/30/2015.
  */
 public enum PreAuthorizationExcelHeader {
+
     HOSPITALIZATION_EVENT("Hospitalization Event"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
@@ -114,6 +115,34 @@ public enum PreAuthorizationExcelHeader {
             }
             return errorMessage;
         }
+    },CONSULTATION_DATE("Date Of Consultation"){
+        @Override
+        public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
+            return preAuthorizationDetailDto.getTreatingDoctorName();
+        }
+
+        @Override
+        public PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            preAuthorizationDetailDto.setTreatingDoctorName(cellValue);
+            return preAuthorizationDetailDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Date Of Consultation cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
     },TREATING_DOCTOR_NAME("Name of the Treating Doctor"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
@@ -160,14 +189,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Doctor's Contact Number cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage;
-            }
             return errorMessage;
         }
     },REASONS("Please indicate whether it is a"){
@@ -216,14 +237,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy -G cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage;
-            }
             return errorMessage;
         }
     },PREGNANCY_P("Diagnosis/Treatment in case Of Pregnancy"){
@@ -244,14 +257,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },PREGNANCY_L("Diagnosis/Treatment in case Of Pregnancy -L"){
@@ -272,14 +277,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "asd cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },PREGNANCY_A("Diagnosis/Treatment in case Of Pregnancy -A"){
@@ -300,14 +297,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy -A cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage;
-            }
             return errorMessage;
         }
     },PREGNANCY_DATE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Date of Delivery"){
@@ -384,14 +373,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma - Name of illness / disease with presenting complaints cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_RELEVANT_CLINICAL_FINDINGS("Diagnosis/Treatment in case Of Illness Or Trauma - Relevant clinical findings"){
@@ -412,14 +393,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma - Relevant clinical findings cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_DURATION("Diagnosis/Treatment in case Of Illness Or Trauma -Duration of the present ailment in days"){
@@ -440,43 +413,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma -Duration of the present ailment in days cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
-            return errorMessage; 
-        }
-    },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_FIRST_CONSULTATION_DATE("Diagnosis/Treatment in case Of Illness Or Trauma - Date of first consultation"){
-        @Override
-        public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getDiagnosisTreatmentIllnessTraumaFirstConsultationDate().toString();
-        }
-
-        @Override
-        public PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers) {
-            int cellNumber = headers.indexOf(this.getDescription());
-            Cell cell = row.getCell(cellNumber);
-            String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentIllnessTraumaFirstConsultationDate(new DateTime(cellValue));
-            return preAuthorizationDetailDto;
-        }
-
-        @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma - Date of first consultation cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
-            return errorMessage; 
+            return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_PAST_HISTORY("Diagnosis/Treatment in case Of Illness Or Trauma - Past history of present ailment if any"){
         @Override
@@ -496,14 +433,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma - Past history of present ailment if any cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_DIAGNOSIS("Diagnosis/Treatment in case Of Illness Or Trauma - Diagnosis"){
@@ -582,7 +511,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Investigations, indicate tests cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment -Investigations, indicate tests cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -610,7 +539,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Medical Please Provide Drug Name cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Provide Drug Name cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -638,7 +567,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Medical Please Provide Duration cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment -  Provide Duration cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -666,7 +595,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Surgery Please provide name of surgery cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment - name of surgery cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -694,7 +623,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Surgery Please provide Type Of Accommodation cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment - provide Type Of Accommodation cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -722,7 +651,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Surgery Please provide  Date of Admission cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Admission cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -750,7 +679,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - If Surgery Please provide Date of Discharge cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Discharge cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -776,14 +705,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From HTN cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DETAILS_OF_HTN("Past history of any chronic illness - Please provide details"){
@@ -804,14 +725,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },PAST_HISTORY_SUFFERING_FROM_IHD_CAD("Past history of any chronic illness - Suffering From IHD/CAD"){
@@ -832,14 +745,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From IHD/CAD cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DETAILS_OF_IHD_CAD("Past history of any chronic illness - Please provide details"){
@@ -860,14 +765,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },PAST_HISTORY_SUFFERING_FROM_DIABETES("Past history of any chronic illness - Suffering From Diabetes"){
@@ -888,14 +785,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Diabetes cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DETAILS_OF_DIABETES("Past history of any chronic illness - Please provide details"){
@@ -916,14 +805,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, PAST_HISTORY_SUFFERING_FROM_ASTHMA_COPD_TB("Past history of any chronic illness - Suffering From Asthma/COPD/TB"){
@@ -944,14 +825,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Asthma/COPD/TB cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DETAILS_OF_ASTHMA_COPD_TB("Past history of any chronic illness - Please provide details"){
@@ -972,15 +845,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
-            return errorMessage; 
+            return errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_PARALYSIS_CVA_EPILEPSY("Past history of any chronic illness - Suffering From Paralysis/CVA/Epilepsy"){
         @Override
@@ -1000,14 +865,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Paralysis/CVA/Epilepsy cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },DETAILS_OF_PARALYSIS_CVA("Past history of any chronic illness - Please provide details"){
@@ -1028,14 +885,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, PAST_HISTORY_SUFFERING_FROM_ARTHRITIS("Past history of any chronic illness - Suffering From Arthritis"){
@@ -1056,14 +905,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Arthritis cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, DETAILS_OF_SUFFERING_FROM_ARTHRITIS("Past history of any chronic illness - Please provide details"){
@@ -1084,14 +925,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, PAST_HISTORY_SUFFERING_FROM_CANCER_TUMOR_CYST("Past history of any chronic illness - Suffering From Cancer/Tumor/Cyst") {
@@ -1112,15 +945,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if (isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Cancer/Tumor/Cyst cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
-            return errorMessage; 
+            return errorMessage;
         }
     }, DETAILS_OF_CANCER_TUMOR_CYST("Past history of any chronic illness - Please provide details"){
         @Override
@@ -1140,14 +965,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },PAST_HISTORY_SUFFERING_FROM_STD_HIV_AIDS("Past history of any chronic illness - Suffering From STD/HIV/AIDS"){
@@ -1168,15 +985,7 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From STD/HIV/AIDS cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
-            return errorMessage; 
+            return errorMessage;
         }
     }, DETAIL_OF_STD_HIV_AIDS("Past history of any chronic illness - Please provide details"){
         @Override
@@ -1196,14 +1005,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, PAST_HISTORY_SUFFERING_FROM_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Suffering From Alcohol/Drug Abuse"){
@@ -1226,7 +1027,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Alcohol/Drug Abuse cannot be empty.";
+                    errorMessage = errorMessage + "Past history - Suffering From Alcohol/Drug Abuse cannot be empty.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -1252,14 +1053,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide detail cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, PAST_HISTORY_SUFFERING_FROM__PSYCHIATRIC_CONDITION("Past history of any chronic illness - Suffering From Psychiatric Condition"){
@@ -1280,14 +1073,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Suffering From Psychiatric Condition cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     }, DETAILS_PSYCHIATRIC_CONDITION("Past history of any chronic illness - Please provide details"){
@@ -1308,14 +1093,6 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Past history of any chronic illness - Please provide details cannot be empty.";
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
-                return errorMessage; 
-            }
             return errorMessage; 
         }
     },SERVICE("Service to be Availed - Service"){
