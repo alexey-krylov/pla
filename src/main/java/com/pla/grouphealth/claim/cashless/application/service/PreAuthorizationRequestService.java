@@ -13,6 +13,7 @@ import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.sharedkernel.identifier.PolicyId;
+import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -27,6 +28,7 @@ import static org.springframework.util.Assert.*;
  * Created by Mohan Sharma on 1/6/2016.
  */
 @DomainService
+@NoArgsConstructor
 public class PreAuthorizationRequestService {
     @Autowired
     private PreAuthorizationRepository preAuthorizationRepository;
@@ -34,10 +36,6 @@ public class PreAuthorizationRequestService {
     private HCPFinder hcpFinder;
     @Autowired
     GHPolicyRepository ghPolicyRepository;
-
-    public PreAuthorizationRequestService(PreAuthorizationRepository preAuthorizationRepository){
-        this.preAuthorizationRepository = preAuthorizationRepository;
-    }
 
     public PreAuthorizationClaimantDetailDto getPreAuthorizationById(PreAuthorizationId preAuthorizationId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
