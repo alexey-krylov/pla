@@ -42,6 +42,7 @@ public class CommissionDtoTest {
         commissionMap.put("availableFor", "REGIONAL_MANAGER");
         commissionMap.put("commissionType", "OVERRIDE");
         commissionMap.put("premiumFee", "POLICY_FEE");
+        commissionMap.put("premiumPaymentType", "SINGLE_PREMIUM");
         commissions.add(commissionMap);
 
         List<Map<String, Object>> allCommissionTerms = new ArrayList();
@@ -94,6 +95,7 @@ public class CommissionDtoTest {
         commissionMap.put("availableFor", "REGIONAL_MANAGER");
         commissionMap.put("commissionType", "OVERRIDE");
         commissionMap.put("premiumFee", "POLICY_FEE");
+        commissionMap.put("premiumPaymentType", "SINGLE_PREMIUM");
 
         List<Map<String, Object>> allCommissionTerms = new ArrayList();
         Map<String, Object> commissionTermMap = new LinkedHashMap<>();
