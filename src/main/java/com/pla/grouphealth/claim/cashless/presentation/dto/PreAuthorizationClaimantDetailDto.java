@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
@@ -10,6 +11,7 @@ import org.joda.time.DateTime;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class PreAuthorizationClaimantDetailDto {
     private String preAuthorizationId;
     private ClaimantHCPDetailDto claimantHCPDetailDto;

@@ -5,10 +5,7 @@ import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailDto;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -24,7 +21,7 @@ public class PreAuthorizationRequestController {
     private PreAuthorizationRequestService preAuthorizationRequestService;
 
     @RequestMapping(value = "/getPreAuthorizationById", method = RequestMethod.GET)
-    public PreAuthorizationClaimantDetailDto getPreAuthorizationById(@RequestParam String preAuthorizationId){
+    public @ResponseBody PreAuthorizationClaimantDetailDto getPreAuthorizationById(@RequestParam String preAuthorizationId){
         return preAuthorizationRequestService.getPreAuthorizationById(new PreAuthorizationId(preAuthorizationId));
     }
 

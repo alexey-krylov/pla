@@ -60,8 +60,7 @@ public class HCPFinder {
                 HCP hcp = new HCP()
                         .updateWithHCPCode(new HCPCode(rs.getString("hcp_code")))
                         .updateWithHCPName(rs.getString("hcp_name"))
-                        .updateWithHcpAddress(rs.getString("address_line1"),rs.getString("address_line2"), rs.getString("postal_code"), rs.getString("province"), rs.getString("town"))
-                        .updateWithHcpCategory(rs.getString("hcp_category"));
+                        .updateWithHcpAddress(rs.getString("address_line1"),rs.getString("address_line2"), rs.getString("postal_code"), rs.getString("province"), rs.getString("town"));
                 return hcp;
             }
         });

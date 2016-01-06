@@ -37,15 +37,15 @@ public class ClaimantHCPDetailDto {
 
     private void setAddress(String address1, String address2, String town, String province, String postalCode) {
         StringBuffer stringBuffer = new StringBuffer();
-        if(isEmpty(address1))
+        if(isNotEmpty(address1))
             stringBuffer.append(address1+" ");
-        if(isEmpty(address2))
+        if(isNotEmpty(address2))
             stringBuffer.append(address2+" ");
-        if(isEmpty(town))
+        if(isNotEmpty(town))
             stringBuffer.append(town+" ");
-        if(isEmpty(province))
+        if(isNotEmpty(province))
             stringBuffer.append(province+" ");
-        if(isEmpty(postalCode))
+        if(isNotEmpty(postalCode))
             stringBuffer.append(postalCode);
         this.address = stringBuffer.toString();
     }
