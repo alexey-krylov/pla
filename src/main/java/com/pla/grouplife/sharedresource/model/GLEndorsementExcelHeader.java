@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -195,8 +196,8 @@ public enum GLEndorsementExcelHeader {
     }, FIRST_NAME("First Name") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            boolean isValid = glEndorsementExcelValidator.isValidFirstName(row, value, excelHeaders);
-            return isValid ? "" : "First Name cannot be blank.";
+            String errorMessage = glEndorsementExcelValidator.isValidFirstName(row, value, excelHeaders);
+            return isEmpty(errorMessage) ? "" : errorMessage;
         }
 
         @Override
@@ -263,8 +264,8 @@ public enum GLEndorsementExcelHeader {
     }, DATE_OF_BIRTH("Date of Birth") {
         @Override
         public String getErrorMessageIfNotValid(GLEndorsementExcelValidator glEndorsementExcelValidator, Row row, String value, List<String> excelHeaders) {
-            boolean isValid = glEndorsementExcelValidator.isValidDateOfBirth(row, value, excelHeaders);
-            return isValid ? "" : "Date of birth cannot be blank/should be in (DD/MM/YYYY)format";
+            String errorMessage = glEndorsementExcelValidator.isValidDateOfBirth(row, value, excelHeaders);
+            return isEmpty(errorMessage) ? "" : errorMessage;
         }
 
         @Override

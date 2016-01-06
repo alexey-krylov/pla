@@ -356,4 +356,10 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return planRepository.findOne(planId);
     }
 
+    @Override
+    public String getPlanCodeById(PlanId planId) {
+        Plan plan = planRepository.findOne(planId);
+        return plan!=null?plan.getPlanDetail().getPlanCode():"";
+    }
+
 }

@@ -21,6 +21,8 @@ public interface IPlanAdapter {
 
     Plan getPlanByPlanId(PlanId planId);
 
+    String getPlanCodeById(PlanId planId);
+
     boolean isValidPlanForRelationship(String planCode, Relationship relationship);
 
     boolean isValidPlanCoverage(String planCode, String coverageCode);

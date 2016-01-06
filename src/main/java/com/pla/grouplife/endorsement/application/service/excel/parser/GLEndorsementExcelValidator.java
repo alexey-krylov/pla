@@ -8,10 +8,15 @@ import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.nthdimenzion.common.AppConstants;
+import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -117,12 +122,16 @@ public class GLEndorsementExcelValidator {
         if (isEmpty(value)) {
             return true;
         }
-        Cell incomeMultiplierCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.INCOME_MULTIPLIER.getDescription()));
+        Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relation = getCellValue(relationshipCell);
+        Cell categoryCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
+        String category = getCellValue(categoryCell);
+        String planCode = findPlanCodeByRelationAndCategory(this.getPolicyAssureds(), category, relation);
+        boolean isIncomeMultiplierPlan = planAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode);
         Cell annualIncomeCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.ANNUAL_INCOME.getDescription()));
-        String incomeMultiplier = getCellValue(incomeMultiplierCell);
         String annualIncome = getCellValue(annualIncomeCell);
         boolean isValid = true;
-        if (isEmpty(annualIncome) && isNotEmpty(incomeMultiplier)) {
+        if (isEmpty(annualIncome) && isIncomeMultiplierPlan) {
             isValid = false;
             return isValid;
         }
@@ -133,6 +142,8 @@ public class GLEndorsementExcelValidator {
             isValid = false;
         }
         return isValid;
+
+
     }
 
 
@@ -141,8 +152,16 @@ public class GLEndorsementExcelValidator {
     }
 
 
-    public boolean isValidFirstName(Row row, String value, List<String> excelHeaders) {
-        return true;
+    public String isValidFirstName(Row row, String value, List<String> excelHeaders) {
+        Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.NO_OF_ASSURED.getDescription()));
+        String noOfAssured = getCellValue(noOfAssuredCell);
+        if (isEmpty(noOfAssured) && isEmpty(value)){
+            return "First Name cannot be empty";
+        }
+        if (isNotEmpty(noOfAssured)){
+            return "";
+        }
+        return "";
     }
 
 
@@ -151,11 +170,26 @@ public class GLEndorsementExcelValidator {
     }
 
 
-    public boolean isValidDateOfBirth(Row row, String value, List<String> excelHeaders) {
-        if (isEmpty(value)) {
-            return true;
+    public String isValidDateOfBirth(Row row, String value, List<String> excelHeaders) {
+        String errorMessage = "";
+        Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.NO_OF_ASSURED.getDescription()));
+        String noOfAssured = getCellValue(noOfAssuredCell);
+        if (isEmpty(noOfAssured) && isEmpty(value)){
+            return "Date Of birth cannot be empty";
         }
-        return isValidDate(value);
+        if (isNotEmpty(noOfAssured)){
+            return "";
+        }
+        Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
+        String relation = getCellValue(relationshipCell);
+        Cell categoryCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
+        String category = getCellValue(categoryCell);
+        String planCode = findPlanCodeByRelationAndCategory(this.getPolicyAssureds(),category,relation);
+        int age = AppUtils.getAgeOnNextBirthDate(LocalDate.parse(value, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)));
+        if (!planAdapter.isValidPlanAge(planCode, age)) {
+            errorMessage = errorMessage + " Age is not valid for plan " + planCode + ".";
+        }
+        return errorMessage;
     }
 
     public boolean isValidGender(Row row, String value, List<String> excelHeaders) {
@@ -334,5 +368,28 @@ public class GLEndorsementExcelValidator {
             }
         }
         return isValidDependentClientId;
+    }
+
+
+    private String findPlanCodeByRelationAndCategory(List<Insured> insureds,String category,String relation){
+        String planCode = "";
+        if (isNotEmpty(insureds)){
+            Optional<Insured> insuredOptional = insureds.parallelStream().filter(insured -> insured.getCategory().equals(category) && Relationship.SELF.description.equals(relation)).findAny();
+            if (insuredOptional.isPresent()){
+                PlanId planId = insuredOptional.get().getPlanPremiumDetail().getPlanId();
+                planCode = planAdapter.getPlanCodeById(planId);
+            }else {
+                for (Insured insured : insureds) {
+                    if (isNotEmpty(insured.getInsuredDependents())) {
+                        Optional<InsuredDependent> dependentOptional = insured.getInsuredDependents().parallelStream().filter(dependent -> dependent.getCategory().equals(category) && dependent.getRelationship().description.equals(relation)).findAny();
+                        if (dependentOptional.isPresent()) {
+                            PlanId planId=  dependentOptional.get().getPlanPremiumDetail().getPlanId();
+                            planCode = planAdapter.getPlanCodeById(planId);
+                        }
+                    }
+                }
+            }
+        }
+        return planCode;
     }
 }
