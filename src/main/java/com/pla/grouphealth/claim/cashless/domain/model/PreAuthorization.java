@@ -22,6 +22,7 @@ public class PreAuthorization {
     private int batchNumber;
     private DateTime batchDate;
     private Set<PreAuthorizationDetail> preAuthorizationDetails;
+    private Set<String> sameServicesPreviouslyAvailedPreAuth;
 
     public PreAuthorization updateWithPreAuthorizationDetail(Set<PreAuthorizationDetail> preAuthorizationDetails) {
         this.preAuthorizationDetails = preAuthorizationDetails;
@@ -45,6 +46,11 @@ public class PreAuthorization {
 
     public PreAuthorization updateWithPreAuthorizationId(PreAuthorizationId preAuthorizationId) {
         this.preAuthorizationId = preAuthorizationId;
+        return this;
+    }
+
+    public PreAuthorization updateWithSameServicesPreviouslyAvailedPreAuth(Set<String> sameServicesPreviouslyAvailedPreAuth) {
+        this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
         return this;
     }
 }

@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(of={"policyNumber","clientId","diagnosisTreatmentIllnessTraumaFirstConsultationDate"})
+@EqualsAndHashCode
 public class PreAuthorizationDetailDto {
     private String hospitalizationEvent;
     public String policyNumber;
@@ -27,7 +27,7 @@ public class PreAuthorizationDetailDto {
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    public DateTime diagnosisTreatmentIllnessTraumaFirstConsultationDate;
+    public DateTime consultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;
@@ -63,4 +63,42 @@ public class PreAuthorizationDetailDto {
     private String detailsPsychiatricCondition;
     private String service;
     private String type;
+
+    public static class ConsultationDateClientIdPolicyNumber{
+        DateTime consultationDate;
+        String policyNumber;
+        String clientId;
+
+        public ConsultationDateClientIdPolicyNumber(DateTime consultationDate, String policyNumber, String clientId){
+            this.consultationDate = consultationDate;
+            this.policyNumber = policyNumber;
+            this.clientId = clientId;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ConsultationDateClientIdPolicyNumber that = (ConsultationDateClientIdPolicyNumber) o;
+
+            if (!clientId.equals(that.clientId)) return false;
+            if (!consultationDate.equals(that.consultationDate)) return false;
+            if (!policyNumber.equals(that.policyNumber)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = consultationDate.hashCode();
+            result = 31 * result + policyNumber.hashCode();
+            result = 31 * result + clientId.hashCode();
+            return result;
+        }
+    }
+
+    public ConsultationDateClientIdPolicyNumber getConsultationDateClientIdPolicyNumber(){
+        return new ConsultationDateClientIdPolicyNumber(consultationDate, policyNumber, clientId);
+    }
 }

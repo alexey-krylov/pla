@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.domain.model;
 import com.pla.core.hcp.domain.model.HCPCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class PreAuthorizationDetail {
     private String hospitalizationEvent;
     private String policyNumber;
@@ -29,7 +31,7 @@ public class PreAuthorizationDetail {
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    private DateTime diagnosisTreatmentIllnessTraumaFirstConsultationDate;
+    public DateTime consultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;

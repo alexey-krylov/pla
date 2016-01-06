@@ -109,7 +109,7 @@ public class PreAuthorizationService {
             Row currentRow = dataRowIterator.next();
             PreAuthorizationDetailDto preAuthorizationDetailDto = new PreAuthorizationDetailDto();
             for (String header : headers) {
-                preAuthorizationDetailDto = PreAuthorizationExcelHeader.valueOf(header).populatePreAuthorizationDetail(preAuthorizationDetailDto, currentRow, headers);
+                preAuthorizationDetailDto = PreAuthorizationExcelHeader.getEnum(header).populatePreAuthorizationDetail(preAuthorizationDetailDto, currentRow, headers);
             }
             preAuthorizationDetailDtos.add(preAuthorizationDetailDto);
         }
@@ -120,40 +120,49 @@ public class PreAuthorizationService {
     public int uploadPreAuthorizationDetails(UploadPreAuthorizationCommand uploadPreAuthorizationCommand) {
         String runningSequence = sequenceGenerator.getSequence(PreAuthorization.class);
         runningSequence = String.format("%08d", Integer.parseInt(runningSequence.trim()));
-        Set<List<PreAuthorizationDetailDto>> refurbishedSet = createSubListBasedOnSimilarCriteria(uploadPreAuthorizationCommand.getPreAuthorizationDetailDtos());
+        List<List<PreAuthorizationDetailDto>> refurbishedSet = createSubListBasedOnSimilarCriteria(uploadPreAuthorizationCommand.getPreAuthorizationDetailDtos());
         for(List<PreAuthorizationDetailDto> preAuthorizationDetailDtos : refurbishedSet){
             Set<PreAuthorizationDetail> preAuthorizationDetails = transformToPreAuthorizationDetails(preAuthorizationDetailDtos);
+            Set<String> sameServicesPreviouslyAvailedPreAuth = checkAndFindIfServiceAvailedBefore(preAuthorizationDetails);
             PreAuthorization preAuthorization = new PreAuthorization()
                     .updateWithPreAuthorizationId(constructPreAuthorizationId(preAuthorizationDetails))
                     .updateWithPreAuthorizationDetail(preAuthorizationDetails)
                     .updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode()))
                     .updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate())
                     .updateWithBatchNumber(Integer.parseInt(runningSequence));
+            if(isNotEmpty(sameServicesPreviouslyAvailedPreAuth))
+                preAuthorization.updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
             preAuthorizationRepository.save(preAuthorization);
         }
         return Integer.parseInt(runningSequence.trim());
     }
 
+    private Set<String> checkAndFindIfServiceAvailedBefore(Set<PreAuthorizationDetail> preAuthorizationDetails) {
+        Set<String> sameServicesPreviouslyAvailedPreAuth = Sets.newLinkedHashSet();
+        for(PreAuthorizationDetail preAuthorizationDetail : preAuthorizationDetails) {
+            List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAllPreAuthorizationByServiceAndClientId(preAuthorizationDetail.getClientId(), preAuthorizationDetail.getService());
+            sameServicesPreviouslyAvailedPreAuth.addAll(preAuthorizations.stream().map(preAuthorization -> preAuthorization.getPreAuthorizationId().getPreAuthorizationId()).collect(Collectors.toList()));
+        }
+        return sameServicesPreviouslyAvailedPreAuth;
+    }
+
     private PreAuthorizationId constructPreAuthorizationId(Set<PreAuthorizationDetail> preAuthorizationDetails) {
         Assert.notEmpty(preAuthorizationDetails, "PreAuthorizationDetail cannot be empty");
         PreAuthorizationDetail preAuthorizationDetail = preAuthorizationDetails.iterator().next();
-        DateTime consultationDate = preAuthorizationDetail.getDiagnosisTreatmentIllnessTraumaFirstConsultationDate();
+        DateTime consultationDate = preAuthorizationDetail.getConsultationDate();
         String preAuthIdSequence = sequenceGenerator.getSequence(PreAuthorizationId.class);
-        preAuthIdSequence = String.format("%07d", Integer.parseInt(preAuthIdSequence.trim()))+String.format("%02d", consultationDate.getMonthOfYear())+String.format("%02d", consultationDate.getYear());
+        String year = String.format("%02d", consultationDate.getYear());
+        preAuthIdSequence = String.format("%07d", Integer.parseInt(preAuthIdSequence.trim()))+String.format("%02d", consultationDate.getMonthOfYear())+ (year.length() > 2 ? year.substring(year.length() - 2) : year);
         return new PreAuthorizationId(preAuthIdSequence);
     }
 
-    private Set<List<PreAuthorizationDetailDto>> createSubListBasedOnSimilarCriteria(Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {
-        Set<List<PreAuthorizationDetailDto>> refurbishedSet = Sets.newHashSet();
-        Map<String, Collection<Collection<List<PreAuthorizationDetailDto>>>> result = preAuthorizationDetailDtos.parallelStream().collect(
-                Collectors.groupingBy(PreAuthorizationDetailDto::getPolicyNumber,
-                        Collectors.collectingAndThen(Collectors.groupingBy(PreAuthorizationDetailDto::getClientId, Collectors.collectingAndThen(Collectors.groupingBy(PreAuthorizationDetailDto::getDiagnosisTreatmentIllnessTraumaFirstConsultationDate), Map::values)), Map::values)));
-        result.values().stream().filter(collectionValue -> isNotEmpty(collectionValue)).forEach(collectionValue -> {
-            Collection value = Lists.newArrayList(collectionValue).get(0);
-            if (isNotEmpty(value))
-                refurbishedSet.add((List<PreAuthorizationDetailDto>) Lists.newArrayList(value).get(0));
-        });
-        return refurbishedSet;
+    private List<List<PreAuthorizationDetailDto>> createSubListBasedOnSimilarCriteria(Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {
+        List<List<PreAuthorizationDetailDto>> refurbishedList = Lists.newArrayList();
+        Map<PreAuthorizationDetailDto.ConsultationDateClientIdPolicyNumber, List<PreAuthorizationDetailDto>> result = preAuthorizationDetailDtos.parallelStream().collect(Collectors.groupingBy(PreAuthorizationDetailDto::getConsultationDateClientIdPolicyNumber));
+        for(List<PreAuthorizationDetailDto> list : result.values()){
+            refurbishedList.add(list);
+        }
+        return refurbishedList;
     }
 
     private Set<PreAuthorizationDetail> transformToPreAuthorizationDetails(List<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {

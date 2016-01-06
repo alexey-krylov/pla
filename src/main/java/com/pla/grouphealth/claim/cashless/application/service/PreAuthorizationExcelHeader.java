@@ -8,6 +8,9 @@ import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.nthdimenzion.common.AppConstants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.stream.Stream;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -127,7 +131,7 @@ public enum PreAuthorizationExcelHeader {
     },CONSULTATION_DATE("Date Of Consultation"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getTreatingDoctorName();
+            return isNotEmpty(preAuthorizationDetailDto.getConsultationDate()) ? preAuthorizationDetailDto.getConsultationDate().toString() : "";
         }
 
         @Override
@@ -135,7 +139,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setTreatingDoctorName(cellValue);
+            preAuthorizationDetailDto.setConsultationDate(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
             return preAuthorizationDetailDto;
         }
 
@@ -316,7 +320,7 @@ public enum PreAuthorizationExcelHeader {
     },PREGNANCY_DATE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Date of Delivery"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getPregnancyDateOfDelivery().toString();
+            return isNotEmpty(preAuthorizationDetailDto.getPregnancyDateOfDelivery()) ? preAuthorizationDetailDto.getPregnancyDateOfDelivery().toString() : "";
         }
 
         @Override
@@ -324,7 +328,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setPregnancyDateOfDelivery(new DateTime(cellValue));
+            preAuthorizationDetailDto.setPregnancyDateOfDelivery(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
             return preAuthorizationDetailDto;
         }
 
@@ -732,7 +736,7 @@ public enum PreAuthorizationExcelHeader {
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_ADMISSION("Diagnosis/Treatment - If Surgery Please provide  Date of Admission"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission().toString();
+            return isNotEmpty(preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission()) ? preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfAdmission().toString() : "";
         }
 
         @Override
@@ -740,7 +744,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfAdmission(new DateTime(cellValue));
+            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfAdmission(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
             return preAuthorizationDetailDto;
         }
 
@@ -760,7 +764,7 @@ public enum PreAuthorizationExcelHeader {
     },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_DISCHARGE("Diagnosis/Treatment - If Surgery Please provide Date of Discharge"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
-            return preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge().toString();
+            return isNotEmpty(preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge()) ? preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge().toString() : "";
         }
 
         @Override
@@ -768,7 +772,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfDischarge(new DateTime(cellValue));
+            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfDischarge(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
             return preAuthorizationDetailDto;
         }
 

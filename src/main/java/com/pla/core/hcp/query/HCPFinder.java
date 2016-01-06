@@ -1,13 +1,18 @@
 package com.pla.core.hcp.query;
 
+import com.pla.core.hcp.domain.model.HCP;
+import com.pla.core.hcp.domain.model.HCPCode;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +51,21 @@ public class HCPFinder {
 
     public List<Map<String, Object>> getAllHCPByHCPCode(String hcpCode) {
         return namedParameterJdbcTemplate.queryForList("SELECT hcp_code as hcpCode, hcp_name as hcpName from hcp where hcp_code like :hcpCode order by hcp_name",new MapSqlParameterSource("hcpCode","%"+hcpCode+"%"));
+    }
+
+    public HCP getHCPByHCPCode(String hcpCode) {
+        return namedParameterJdbcTemplate.queryForObject("SELECT * from hcp where hcp_code=:hcpCode", new MapSqlParameterSource("hcpCode", hcpCode), new RowMapper<HCP>() {
+            @Override
+            public HCP mapRow(ResultSet rs, int rowNum) throws SQLException {
+                HCP hcp = new HCP()
+                        .updateWithHCPCode(new HCPCode(rs.getString("hcp_code")))
+                        .updateWithHCPName(rs.getString("hcp_name"))
+                        .updateWithHcpAddress(rs.getString("address_line1"),rs.getString("address_line2"), rs.getString("postal_code"), rs.getString("province"), rs.getString("town"))
+                        .updateWithHcpCategory(rs.getString("hcp_category"));
+                return hcp;
+            }
+        });
+
     }
 
     public List<Map<String, Object>> getAllHCPByHCPName(String hcpName) {
