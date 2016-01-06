@@ -4,6 +4,7 @@ import com.pla.core.domain.model.Admin;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
+import com.pla.core.domain.model.plan.commission.PremiumPaymentType;
 import com.pla.core.dto.CommissionTermDto;
 import com.pla.core.repository.PlanRepository;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
@@ -62,11 +63,11 @@ public class CommissionService {
         this.planRepository = planRepository;
     }
 
-    public Commission createCommission(String planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate, Set<CommissionTermDto> commissionTermsDto, UserDetails userDetails) {
+    public Commission createCommission(String planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate, Set<CommissionTermDto> commissionTermsDto,PremiumPaymentType premiumPaymentType, UserDetails userDetails) {
         Admin admin = adminRoleAdapter.userToAdmin(userDetails);
         PlanId planid = new PlanId(planId);
         TypedQuery typedQuery = entityManager.createNamedQuery("findAllCommissionByPlanIdAndDesignationId", Commission.class).setParameter("planId", planid).
-                setParameter("availableFor", availableFor).setParameter("commissionType", commissionType);
+                setParameter("availableFor", availableFor).setParameter("commissionType", commissionType).setParameter("premiumPaymentType", premiumPaymentType);
         List<Commission> resultSet = typedQuery.getResultList();
 
         if (isNotEmpty(resultSet)) {
@@ -83,7 +84,7 @@ public class CommissionService {
         List<Integer> policyTerms = new ArrayList<>();
         policyTerms.addAll(plan.getAllowedPolicyTerm());
         CommissionId commissionId = new CommissionId(iIdGenerator.nextId());
-        Commission commission = admin.createCommission(commissionId, planid, availableFor, commissionType, premiumFee, fromDate);
+        Commission commission = admin.createCommission(commissionId, planid, availableFor, commissionType, premiumFee, fromDate,premiumPaymentType);
         Set<CommissionTerm> commissionTerms = commissionTermsDto.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet());
         return commission.addCommissionTerm(commissionTerms, policyTerms);
     }

@@ -7,6 +7,7 @@
 package com.pla.core.application;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.pla.core.domain.model.plan.commission.PremiumPaymentType;
 import com.pla.core.dto.CommissionTermDto;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.sharedkernel.domain.model.CommissionType;
@@ -35,7 +36,7 @@ public class CreateCommissionCommand {
     CommissionDesignation availableFor;
     PremiumFee premiumFee;
     CommissionType commissionType;
-
+    PremiumPaymentType premiumPaymentType;
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     LocalDate fromDate;
     Set<CommissionTermDto> commissionTermSet;

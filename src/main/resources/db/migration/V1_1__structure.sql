@@ -543,9 +543,11 @@ CREATE TABLE `commission` (
   `premium_fee`     VARCHAR(255) DEFAULT NULL,
   `thru_date`       DATE         DEFAULT NULL,
   PRIMARY KEY (`commission_id`)
-)
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;
+
+ALTER TABLE `commission`
+ADD COLUMN `premium_payment_type` VARCHAR(255) NULL;
 
 DROP TABLE IF EXISTS `commission_commission_term`;
 CREATE TABLE `commission_commission_term` (
@@ -712,7 +714,8 @@ CREATE VIEW `commission_view` AS
      cm.plan_id              AS planId,
      cm.available_for        AS availableFor,
      cm.commission_type AS commissionType,
-     cm.premium_fee     AS premiumFee
+     cm.premium_fee     AS premiumFee,
+     cm.premium_payment_type     AS premiumPaymentType
    FROM commission cm);
 
 DROP VIEW IF EXISTS `commission_commission_term_view`;

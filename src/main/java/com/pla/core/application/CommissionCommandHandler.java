@@ -41,7 +41,7 @@ public class CommissionCommandHandler {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("*****Create Commission Command Received*****" + createCommissionCommand);
         }
-        Commission commission = commissionService.createCommission(createCommissionCommand.getPlanId(), createCommissionCommand.getAvailableFor(), createCommissionCommand.getCommissionType(), createCommissionCommand.getPremiumFee(), createCommissionCommand.getFromDate(), createCommissionCommand.getCommissionTermSet(), createCommissionCommand.getUserDetails());
+        Commission commission = commissionService.createCommission(createCommissionCommand.getPlanId(), createCommissionCommand.getAvailableFor(), createCommissionCommand.getCommissionType(), createCommissionCommand.getPremiumFee(), createCommissionCommand.getFromDate(), createCommissionCommand.getCommissionTermSet(), createCommissionCommand.getPremiumPaymentType(),createCommissionCommand.getUserDetails());
         JpaRepository<Commission, CommissionId> commissionRepository = jpaRepositoryFactory.getCrudRepository(Commission.class);
         try {
             commissionRepository.save(commission);

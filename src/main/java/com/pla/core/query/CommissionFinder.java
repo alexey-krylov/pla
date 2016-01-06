@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 public class CommissionFinder {
 
-    public static final String FIND_COMMISSION_BY_ID_QUERY = "select * from commission_view  where commissionId=:commissionId";
+    public static final String FIND_COMMISSION_BY_ID_QUERY = "select * from commission_view where commissionId=:commissionId";
 
     public static final String FIND_COMMISSION_TERM_BY_COMMISSION_ID_QUERY = "select * from commission_commission_term_view  where commissionId=:commissionId";
 

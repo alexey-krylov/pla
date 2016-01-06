@@ -1,9 +1,11 @@
 package com.pla.core.domain.model.plan.commission;
 
 import com.pla.core.domain.exception.CommissionDomainException;
+import com.pla.individuallife.sharedresource.model.vo.PremiumPaymentMethod;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
 import com.pla.sharedkernel.domain.model.CommissionType;
 import com.pla.sharedkernel.domain.model.PremiumFee;
+import com.pla.sharedkernel.domain.model.PremiumType;
 import com.pla.sharedkernel.identifier.CommissionId;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
@@ -31,7 +33,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @ToString(of = {"planId", "fromDate"})
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(value = AccessLevel.PACKAGE)
-@NamedQuery(name = "findAllCommissionByPlanIdAndDesignationId", query = " FROM Commission WHERE planId=:planId AND availableFor =:availableFor AND commissionType=:commissionType AND thruDate IS NULL")
+@NamedQuery(name = "findAllCommissionByPlanIdAndDesignationId", query = " FROM Commission WHERE planId=:planId AND availableFor =:availableFor AND commissionType=:commissionType AND thruDate IS NULL AND premiumPaymentType=:premiumPaymentType ")
 public class Commission implements ICrudEntity {
 
     @EmbeddedId
@@ -60,7 +62,10 @@ public class Commission implements ICrudEntity {
     @JoinTable(name = "COMMISSION_COMMISSION_TERM", joinColumns = @JoinColumn(name = "COMMISSION_ID"))
     private Set<CommissionTerm> commissionTerms;
 
-    Commission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate) {
+    @Enumerated(EnumType.STRING)
+    private PremiumPaymentType premiumPaymentType;
+
+    Commission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate,PremiumPaymentType premiumPaymentType) {
         checkNotNull(commissionId);
         checkNotNull(planId);
         checkArgument(availableFor != null);
@@ -75,11 +80,11 @@ public class Commission implements ICrudEntity {
         this.premiumFee = premiumFee;
         this.fromDate = fromDate;
         this.premiumFee = premiumFee;
-
+        this.premiumPaymentType  = premiumPaymentType;
     }
 
-    public static Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate) {
-        return new Commission(commissionId, planId, availableFor, commissionType, premiumFee, fromDate);
+    public static Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate,PremiumPaymentType premiumPaymentType) {
+        return new Commission(commissionId, planId, availableFor, commissionType, premiumFee, fromDate,premiumPaymentType);
     }
 
     public boolean validateOverLappingYears(Set<CommissionTerm> commissionTerms) {

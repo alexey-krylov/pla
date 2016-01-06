@@ -2,6 +2,7 @@ package com.pla.core.presentation.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pla.core.domain.model.plan.commission.PremiumPaymentType;
 import com.pla.core.dto.CommissionTermDto;
 import com.pla.core.query.PlanFinder;
 import com.pla.sharedkernel.domain.model.CommissionDesignation;
@@ -42,7 +43,7 @@ public class CommissionDto implements Comparable<CommissionDto> {
     @JsonDeserialize(using = LocalJodaDateDeserializer.class)
     @JsonSerialize(using = LocalJodaDateSerializer.class)
     LocalDate fromDate;
-
+    PremiumPaymentType premiumPaymentType;
     Set<CommissionTermDto> commissionTermSet;
 
 
@@ -61,6 +62,7 @@ public class CommissionDto implements Comparable<CommissionDto> {
         commissionDto.setAvailableFor(CommissionDesignation.valueOf((String) commission.get("availableFor")));
         commissionDto.setCommissionType(CommissionType.valueOf((String) commission.get("commissionType")));
         commissionDto.setPremiumFee(PremiumFee.valueOf((String) commission.get("premiumFee")));
+        commissionDto.setPremiumPaymentType(PremiumPaymentType.valueOf((String) commission.get("premiumPaymentType")));
         commissionDto.setFromDate(new LocalDate(commission.get("fromDate")));
         List<Map<String, Object>> commissionTermsByCommissionId = allCommissionTerms.stream().filter(new FilterCommissionTermByCommissionId((String) commission.get("commissionId"))).collect(Collectors.toList());
         commissionDto.setCommissionTermSet(commissionTermsByCommissionId.stream().map(new CommissionTermTransformer()).collect(Collectors.toSet()));

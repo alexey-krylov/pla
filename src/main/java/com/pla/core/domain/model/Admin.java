@@ -16,6 +16,7 @@ import com.pla.core.domain.model.generalinformation.ReinstatementInterest;
 import com.pla.core.domain.model.generalinformation.SurrenderCharges;
 import com.pla.core.domain.model.plan.commission.Commission;
 import com.pla.core.domain.model.plan.commission.CommissionTerm;
+import com.pla.core.domain.model.plan.commission.PremiumPaymentType;
 import com.pla.publishedlanguage.domain.model.PremiumFrequency;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.*;
@@ -177,9 +178,9 @@ public class Admin {
         return productLineGeneralInformation;
     }
 
-    public Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate) {
+    public Commission createCommission(CommissionId commissionId, PlanId planId, CommissionDesignation availableFor, CommissionType commissionType, PremiumFee premiumFee, LocalDate fromDate,PremiumPaymentType premiumPaymentType) {
 
-        return Commission.createCommission(commissionId, planId, availableFor, commissionType, premiumFee, fromDate);
+        return Commission.createCommission(commissionId, planId, availableFor, commissionType, premiumFee, fromDate,premiumPaymentType);
     }
 
     public Commission updateCommissionTerm(Commission commission, Set<CommissionTerm> commissionSet, List<Integer> policyTerms) {
