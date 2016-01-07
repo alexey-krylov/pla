@@ -1,5 +1,6 @@
 package com.pla.grouplife.endorsement.domain.model;
 
+import com.pla.grouplife.sharedresource.model.vo.GLEndorsementInsured;
 import lombok.Getter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
@@ -34,7 +35,7 @@ public class GLEndorsement {
 
     private GLMemberEndorsement newCategoryRelationEndorsement;
 
-    private FreeCoverLimitEndorsement freeCoverLimitEndorsement;
+    private GLEndorsementInsured freeCoverLimitEndorsement;
 
     public GLEndorsement addMemberEndorsement(GLMemberEndorsement memberEndorsement) {
         this.memberEndorsement = memberEndorsement;
@@ -92,7 +93,7 @@ public class GLEndorsement {
     }
 
 
-    public GLEndorsement createFCLEndorsement(FreeCoverLimitEndorsement freeCoverLimitEndorsement) {
+    public GLEndorsement createFCLEndorsement(GLEndorsementInsured freeCoverLimitEndorsement) {
         this.freeCoverLimitEndorsement = freeCoverLimitEndorsement;
         return this;
     }

@@ -250,10 +250,10 @@ public class GroupLifePolicy extends AbstractAggregateRoot<PolicyId> {
     }
 
     public void raiseEndorsementEventWhichAreExceedingFreeCoverLimit() {
-        Set<Insured> insuredExceedingFreeCoverLimit = this.insureds.parallelStream().filter(insured->this.freeCoverLimit.compareTo(insured.getPlanPremiumDetail().getSumAssured())<=0).collect(Collectors.toSet());
+        Set<Insured> insuredExceedingFreeCoverLimit = this.insureds.parallelStream().filter(insured->(insured.getNoOfAssured()==null &&this.freeCoverLimit.compareTo(insured.getPlanPremiumDetail().getSumAssured())<=0)).collect(Collectors.toSet());
         Set<InsuredDependent> insuredDependentExceedingFreeCoverLimit = Sets.newLinkedHashSet();
         this.getInsureds().forEach(insureds->{
-            Stream<InsuredDependent> insuredDependentStream =  isNotEmpty(insureds.getInsuredDependents())?insureds.getInsuredDependents().parallelStream().filter(dependent->this.freeCoverLimit.compareTo(dependent.getPlanPremiumDetail().getSumAssured())<=0):null;
+            Stream<InsuredDependent> insuredDependentStream =  isNotEmpty(insureds.getInsuredDependents())?insureds.getInsuredDependents().parallelStream().filter(dependent->(dependent.getNoOfAssured()==null &&this.freeCoverLimit.compareTo(dependent.getPlanPremiumDetail().getSumAssured())<=0)):null;
             if (isNotEmpty(insuredDependentStream)){
                 insuredDependentStream.forEach(dependentStream->{
                     insuredDependentExceedingFreeCoverLimit.add(dependentStream);

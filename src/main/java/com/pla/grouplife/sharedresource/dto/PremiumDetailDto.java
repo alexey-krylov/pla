@@ -51,6 +51,8 @@ public class PremiumDetailDto {
 
     private PremiumFrequency optedPremiumFrequency;
 
+    private Boolean isTentativePremiumApplicable = Boolean.TRUE;
+
     private Boolean isPremiumApplicable = Boolean.TRUE;
 
     private QuotationStatus quotationStatus;

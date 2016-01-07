@@ -3,6 +3,7 @@ package com.pla.grouplife.endorsement.domain.event;
 import com.pla.grouplife.endorsement.application.command.GLCreateFLCEndorsementCommand;
 import com.pla.grouplife.sharedresource.event.CreateFreeCoverLimitEndorsementEvent;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.grouplife.sharedresource.model.vo.GLEndorsementInsured;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.slf4j.Logger;
@@ -31,14 +32,21 @@ public class GroupLifeEndorsementEventListener {
         * Creating the Free Cover Limit For Insureds(Main Assured)
         * */
         createFreeCoverLimitEndorsementEvent.getInsureds().forEach(insured->{
-            commandGateway.sendAndWait(new GLCreateFLCEndorsementCommand(GLEndorsementType.FREE_COVER_LIMIT,createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId(),insured,null,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit(),Boolean.TRUE));
+            GLEndorsementInsured glEndorsementInsured  = GLEndorsementInsured.create().buildGLEndorsementInsured(insured,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit());
+            sendFCLCreateCommand(glEndorsementInsured,createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId());
         });
 
         /*
         * Creating the Free Cover Limit For Insureds dependents
         * */
         createFreeCoverLimitEndorsementEvent.getInsuredDependents().forEach(insuredDependent->{
-            commandGateway.sendAndWait(new GLCreateFLCEndorsementCommand(GLEndorsementType.FREE_COVER_LIMIT,createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId(),null,insuredDependent,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit(),Boolean.FALSE));
+            GLEndorsementInsured glEndorsementInsured  = GLEndorsementInsured.create().buildGLEndorsementInsuredDependent(insuredDependent,createFreeCoverLimitEndorsementEvent.getFreeCoverLimit());
+            sendFCLCreateCommand(glEndorsementInsured, createFreeCoverLimitEndorsementEvent.getPolicyId().getPolicyId());
         });
     }
+
+    private void sendFCLCreateCommand(GLEndorsementInsured glEndorsementInsured,String policyId){
+        commandGateway.sendAndWait(new GLCreateFLCEndorsementCommand(GLEndorsementType.FREE_COVER_LIMIT,policyId,glEndorsementInsured));
+    }
 }
+
