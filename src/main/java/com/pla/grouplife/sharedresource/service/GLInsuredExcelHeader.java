@@ -245,6 +245,14 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssured = getCellValue(noOfAssuredCell);
+            if (isEmpty(noOfAssured) && isEmpty(value)){
+                return "Salutation cannot be empty";
+            }
+            if (isNotEmpty(noOfAssured)){
+                return "";
+            }
             return "";
         }
     }, FIRST_NAME("First Name") {
@@ -278,6 +286,14 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
+            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssured = getCellValue(noOfAssuredCell);
+            if (isEmpty(noOfAssured) && isEmpty(value)){
+                return "First Name cannot be empty";
+            }
+            if (isNotEmpty(noOfAssured)){
+                return "";
+            }
             return "";
         }
     }, LAST_NAME("Last Name") {
@@ -344,7 +360,12 @@ public enum GLInsuredExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
-            if (isEmpty(value)) {
+            Cell noOfAssuredCell = row.getCell(excelHeaders.indexOf(NO_OF_ASSURED.getDescription()));
+            String noOfAssured = getCellValue(noOfAssuredCell);
+            if (isEmpty(noOfAssured) && isEmpty(value)){
+                return "Date of birth cannot be empty";
+            }
+            if (isNotEmpty(noOfAssured)){
                 return "";
             }
             String errorMessage = "";
