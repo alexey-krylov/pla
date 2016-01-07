@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 /**
  * Created by Mohan Sharma on 1/6/2016.
  */
@@ -18,6 +20,9 @@ public class PreAuthorizationClaimantDetailDto {
     private int batchNumber;
     private ClaimantPolicyDetailDto claimantPolicyDetailDto;
     private DateTime preAuthorizationDate;
+    private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
+    private IllnessDetailDto illnessDetailDto;
+    private List<DrugServiceDto> drugServicesDtos;
     public static PreAuthorizationClaimantDetailDto getInstance() {
         return new PreAuthorizationClaimantDetailDto();
     }
@@ -44,6 +49,21 @@ public class PreAuthorizationClaimantDetailDto {
 
     public PreAuthorizationClaimantDetailDto updateWithClaimantPolicyDetailDto(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
         this.claimantPolicyDetailDto = claimantPolicyDetailDto;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailDto updateWithDiagnosisTreatment(List<DiagnosisTreatmentDto> diagnosisTreatmentDtos) {
+        this.diagnosisTreatmentDtos = diagnosisTreatmentDtos;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailDto updateWithIllnessDetails(IllnessDetailDto illnessDetailDto) {
+        this.illnessDetailDto = illnessDetailDto;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailDto updateWithDrugServices(List<DrugServiceDto> drugServiceDtos) {
+        this.drugServicesDtos = drugServiceDtos;
         return this;
     }
 }

@@ -20,9 +20,9 @@ public class PreAuthorizationRequestController {
     @Autowired
     private PreAuthorizationRequestService preAuthorizationRequestService;
 
-    @RequestMapping(value = "/getPreAuthorizationById", method = RequestMethod.GET)
-    public @ResponseBody PreAuthorizationClaimantDetailDto getPreAuthorizationById(@RequestParam String preAuthorizationId){
-        return preAuthorizationRequestService.getPreAuthorizationById(new PreAuthorizationId(preAuthorizationId));
+    @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId", method = RequestMethod.GET)
+    public @ResponseBody PreAuthorizationClaimantDetailDto getPreAuthorizationByPreAuthorizationIdAndClientId(@RequestParam String preAuthorizationId, @RequestParam String clientId){
+        return preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(new PreAuthorizationId(preAuthorizationId), clientId);
     }
 
     @RequestMapping(value = "/getPolicyByPreAuthorizationId", method = RequestMethod.GET)
