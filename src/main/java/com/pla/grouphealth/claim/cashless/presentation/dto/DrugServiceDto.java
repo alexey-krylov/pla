@@ -26,7 +26,7 @@ public class DrugServiceDto {
         this.drugType = preAuthorizationDetail.getDiagnosisTreatmentDrugType();
         this.accommodationType = preAuthorizationDetail.getDiagnosisTreatmentSurgeryAccommodationType();
         this.duration = preAuthorizationDetail.getDiagnosisTreatmentMedicalDuration();
-        //this.lengthOfStay = preAuthorizationDetail.sty
+        this.lengthOfStay = preAuthorizationDetail.getDiagnosisTreatmentSurgeryLengthOStay();
         this.strength = preAuthorizationDetail.getDiagnosisTreatmentDrugStrength();
         return this;
     }

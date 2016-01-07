@@ -12,6 +12,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.nthdimenzion.common.AppConstants;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -453,7 +454,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_DIAGNOSIS("Diagnosis/Treatment in case Of Illness Or Trauma - Diagnosis"){
+    },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_DIAGNOSIS("Diagnosis/Treatment in case Of Illness Or Trauma - Provisional Diagnosis"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDiagnosisTreatmentIllnessTraumaDiagnosis();
@@ -761,7 +762,8 @@ public enum PreAuthorizationExcelHeader {
             }
             return errorMessage;
         }
-    },DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_DISCHARGE("Diagnosis/Treatment - If Surgery Please provide Date of Discharge"){
+    }
+    /*DIAGNOSIS_TREATMENT_SURGERY_DATE_OF_DISCHARGE("Diagnosis/Treatment - If Surgery Please provide Date of Discharge"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return isNotEmpty(preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge()) ? preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryDateOfDischarge().toString() : "";
@@ -773,6 +775,34 @@ public enum PreAuthorizationExcelHeader {
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfDischarge(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
+            return preAuthorizationDetailDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Discharge cannot be empty.";
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    }*/,DIAGNOSIS_TREATMENT_SURGERY_LENGTH_OF_STAY("Diagnosis/Treatment - If Surgery Please provide  Length of Stay"){
+        @Override
+        public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
+            return isNotEmpty(preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryLengthOStay()) ? String.valueOf(preAuthorizationDetailDto.getDiagnosisTreatmentSurgeryLengthOStay()) : "";
+        }
+
+        @Override
+        public PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryLengthOStay(isNotEmpty(cellValue) ? new BigDecimal(cellValue).intValue() : null);
             return preAuthorizationDetailDto;
         }
 
@@ -809,7 +839,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    },DETAILS_OF_HTN("Past history of any chronic illness - Please provide details"){
+    },DETAILS_OF_HTN("Past history of chronic illness(HTN) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfHTN();
@@ -849,7 +879,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    },DETAILS_OF_IHD_CAD("Past history of any chronic illness - Please provide details"){
+    },DETAILS_OF_IHD_CAD("Past history of chronic illness(IHD/CAD) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfIHDCAD();
@@ -889,7 +919,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    },DETAILS_OF_DIABETES("Past history of any chronic illness - Please provide details"){
+    },DETAILS_OF_DIABETES("Past history of chronic illness(DIABETES) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfDiabetes();
@@ -929,7 +959,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    },DETAILS_OF_ASTHMA_COPD_TB("Past history of any chronic illness - Please provide details"){
+    },DETAILS_OF_ASTHMA_COPD_TB("Past history of chronic illness(ASTHMA/COPD/TB) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfAsthmaCOPDTB();
@@ -969,7 +999,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    },DETAILS_OF_PARALYSIS_CVA("Past history of any chronic illness - Please provide details"){
+    },DETAILS_OF_PARALYSIS_CVA("Past history of chronic illness(PARALYSIS/CVA) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfParalysisCVA();
@@ -1009,7 +1039,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    }, DETAILS_OF_SUFFERING_FROM_ARTHRITIS("Past history of any chronic illness - Please provide details"){
+    }, DETAILS_OF_SUFFERING_FROM_ARTHRITIS("Past history of chronic illness(ARTHRITIS) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfSufferingFromArthritis();
@@ -1049,7 +1079,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    }, DETAILS_OF_CANCER_TUMOR_CYST("Past history of any chronic illness - Please provide details"){
+    }, DETAILS_OF_CANCER_TUMOR_CYST("Past history of chronic illness(CANCER/TUMOR/CYST) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsOfCancerTumorCyst();
@@ -1089,7 +1119,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    }, DETAIL_OF_STD_HIV_AIDS("Past history of any chronic illness - Please provide details"){
+    }, DETAIL_OF_STD_HIV_AIDS("Past history of chronic illness(STD/HIV/AIDS) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailOfStdHivAids();
@@ -1137,7 +1167,7 @@ public enum PreAuthorizationExcelHeader {
             }
             return errorMessage;
         }
-    }, DETAIL_OF_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Please provide detail"){
+    }, DETAIL_OF_ALCOHOL_DRUG_ABUSE("Past history of chronic illness(ALCOHOL/DRUG/ABUSE) - Please provide detail"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailOfAlcoholDrugAbuse();
@@ -1177,7 +1207,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             return errorMessage;
         }
-    }, DETAILS_PSYCHIATRIC_CONDITION("Past history of any chronic illness - Please provide details"){
+    }, DETAILS_PSYCHIATRIC_CONDITION("Past history of chronic illness(PSYCHIATRIC/CONDITION) - Please provide details"){
         @Override
         public String getAllowedValue(PreAuthorizationDetailDto preAuthorizationDetailDto) {
             return preAuthorizationDetailDto.getDetailsPsychiatricCondition();

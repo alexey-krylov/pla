@@ -44,7 +44,8 @@ public class PreAuthorizationDetail {
     private String diagnosisTreatmentSurgeryName;
     private String diagnosisTreatmentSurgeryAccommodationType;
     private DateTime diagnosisTreatmentSurgeryDateOfAdmission;
-    private DateTime diagnosisTreatmentSurgeryDateOfDischarge;
+    //private DateTime diagnosisTreatmentSurgeryDateOfDischarge;
+    private int diagnosisTreatmentSurgeryLengthOStay;
     private String pastHistorySufferingFromHTN;
     private String detailsOfHTN;
     private String pastHistorySufferingFromIHCCAD;

@@ -158,6 +158,7 @@ public class PreAuthorizationRequestService {
             if(isNotEmpty(plans)){
                 Plan plan = plans.get(0);
                 claimantPolicyDetailDto
+                        .updateWithSumAssured(planDetail.getSumAssured())
                         .updateWithCoverages(planDetail.getCoveragePremiumDetails())
                         .updateWithPlanCode(plan.getPlanDetail())
                         .updateWithPlanName(plan.getPlanDetail());

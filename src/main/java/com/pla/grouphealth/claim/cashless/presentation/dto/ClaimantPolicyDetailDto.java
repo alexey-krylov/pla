@@ -162,6 +162,11 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
+    public ClaimantPolicyDetailDto updateWithSumAssured(BigDecimal sumAssured) {
+        this.sumAssured = sumAssured;
+        return this;
+    }
+
     private class CoverageDetailDto {
         String coverageName;
         BigDecimal sumAssured;
