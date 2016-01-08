@@ -22,7 +22,7 @@
                 resolve: {
                     hcps: ['$q', '$http', function ($q, $http) {
                         var deferred = $q.defer();
-                        $http.get('/pla/grouphealth/claim/cashless/getAllHcpNameAndCode').success(function (response, status, headers, config) {
+                        $http.get('/pla/grouphealth/claim/cashless/preauthorization/getAllHcpNameAndCode').success(function (response, status, headers, config) {
                             deferred.resolve(response)
 
                         }).error(function (response, status, headers, config) {
@@ -49,16 +49,16 @@
             if (n[1]) {
                 $scope.dropdown = [{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                    "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.qId
+                    "href": "/pla/grouphealth/claim/cashless/preauthorization/downloadGHCashlessClaimPreAuthtemplate/" + $scope.qId
                 }
                 ];
             } else {
                 $scope.dropdown = [{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">download</a>",
-                    "href": "/pla/grouphealth/claim/cashless/downloadGHCashlessClaimPreAuthtemplate/" + $scope.uploadPreAuthorizationDto.hcpCode
+                    "href": "/pla/grouphealth/claim/cashless/preauthorization/downloadGHCashlessClaimPreAuthtemplate/" + $scope.uploadPreAuthorizationDto.hcpCode
                 },{
                     "text": "<a><img src=\"/pla/images/xls-icon.png\">Error File</a>",
-                    "href": "/pla/grouphealth/claim/cashless/downloaderrorpreauthtemplate/" + $scope.qId
+                    "href": "/pla/grouphealth/claim/cashless/preauthorization/downloaderrorpreauthtemplate/" + $scope.qId
                 }
                 ];
             }
@@ -80,7 +80,7 @@
             console.log($scope.uploadPreAuthorizationDto);
             $scope.uploadPreAuthorizationDto.batchDate = formatDate($scope.uploadPreAuthorizationDto.batchDate);
             $upload.upload({
-                url: '/pla/grouphealth/claim/cashless/uploadPreAuthorizationTemplate',
+                url: '/pla/grouphealth/claim/cashless/preauthorization/uploadPreAuthorizationTemplate',
                 headers: {'Authorization': 'xxx'},
                 fields: $scope.uploadPreAuthorizationDto,
                 file: $scope.fileSaved
