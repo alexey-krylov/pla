@@ -548,6 +548,8 @@ insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (16,'com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement',1000000,' ');
 INSERT  INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) VALUES (17,'com.pla.core.hcp.domain.model.HCP', 0,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (18,'com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement',1000000,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(19,'com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization',0,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(20,'com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId',0,' ');
 
 
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
