@@ -19,6 +19,7 @@ import com.pla.grouphealth.sharedresource.model.vo.GHPlanPremiumDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -106,9 +107,10 @@ public class PreAuthorizationRequestService {
         if(isNotEmpty(groupHealthPolicy)){
             GHProposer ghProposer = groupHealthPolicy.getProposer();
             if(isNotEmpty(ghProposer)) {
-                ClaimantPolicyDetailDto claimantPolicyDetailDto = new ClaimantPolicyDetailDto();
-                claimantPolicyDetailDto.updateWithProposerName(ghProposer.getProposerName())
-                        .updateWithDetails(ghProposer.getContactDetail());
+                ClaimantPolicyDetailDto claimantPolicyDetailDto = new ClaimantPolicyDetailDto()
+                        .updateWithPreAuthorizationClaimantProposerDetail(ghProposer.getContactDetail(), ghProposer.getProposerName())
+                        .updateWithPolicyName(groupHealthPolicy.getSchemeName())
+                        .updateWithPolicyNumber(isNotEmpty(groupHealthPolicy.getPolicyNumber()) ? groupHealthPolicy.getPolicyNumber().getPolicyNumber() : StringUtils.EMPTY);
                 return updateWithPlanDetailsToClaimantDto(groupHealthPolicy, claimantPolicyDetailDto, clientId);
             }
 

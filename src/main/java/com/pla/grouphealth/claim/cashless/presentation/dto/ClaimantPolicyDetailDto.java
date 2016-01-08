@@ -1,19 +1,13 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.nthdimenzion.common.AppConstants;
 import org.nthdimenzion.presentation.AppUtils;
-import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,18 +21,9 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 @Getter
 @Setter
 public class ClaimantPolicyDetailDto {
-    private String proposerName;
-    private String address1;
-    private String address2;
-    private String postalCode;
-    private String province;
-    private String town;
-    private String emailId;
-    private String workPhone;
-    private String contactPersonName;
-    private String contactPersonWorkPhone;
-    private String contactPersonMobileNumber;
-    private String contactPersonEmailId;
+    private PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail;
+    private String policyNumber;
+    private String policyName;
     private String planCode;
     private String planName;
     private String category;
@@ -52,26 +37,34 @@ public class ClaimantPolicyDetailDto {
         return new ClaimantPolicyDetailDto();
     }
 
-    public ClaimantPolicyDetailDto updateWithProposerName(String proposerName) {
-        this.proposerName = proposerName;
+    public ClaimantPolicyDetailDto updateWithPolicyNumber(String policyNumber) {
+        this.policyNumber = policyNumber;
         return this;
     }
 
-    public ClaimantPolicyDetailDto updateWithDetails(GHProposerContactDetail ghProposerContactDetail) {
+    public ClaimantPolicyDetailDto updateWithPolicyName(String policyName) {
+        this.policyName = policyName;
+        return this;
+    }
+
+    public ClaimantPolicyDetailDto updateWithPreAuthorizationClaimantProposerDetail(GHProposerContactDetail ghProposerContactDetail, String proposerName) {
+        PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail = new PreAuthorizationClaimantProposerDetail();
         if(isNotEmpty(ghProposerContactDetail)) {
-            this.address1 = ghProposerContactDetail.getAddressLine1();
-            this.address2 = ghProposerContactDetail.getAddressLine2();
-            this.postalCode = ghProposerContactDetail.getPostalCode();
-            this.province = ghProposerContactDetail.getProvince();
-            this.town = ghProposerContactDetail.getTown();
-            this.emailId = ghProposerContactDetail.getEmailAddress();
+            preAuthorizationClaimantProposerDetail.proposerName = proposerName;
+            preAuthorizationClaimantProposerDetail.address1 = ghProposerContactDetail.getAddressLine1();
+            preAuthorizationClaimantProposerDetail.address2 = ghProposerContactDetail.getAddressLine2();
+            preAuthorizationClaimantProposerDetail.postalCode = ghProposerContactDetail.getPostalCode();
+            preAuthorizationClaimantProposerDetail.province = ghProposerContactDetail.getProvince();
+            preAuthorizationClaimantProposerDetail.town = ghProposerContactDetail.getTown();
+            preAuthorizationClaimantProposerDetail.emailId = ghProposerContactDetail.getEmailAddress();
             if(isNotEmpty(ghProposerContactDetail.getContactPersonDetail())) {
                 GHProposerContactDetail.ContactPersonDetail contactPersonDetail = ghProposerContactDetail.getContactPersonDetail().get(0);
-                this.contactPersonName = contactPersonDetail.getContactPersonName();
-                this.contactPersonMobileNumber = contactPersonDetail.getMobileNumber();
-                this.contactPersonWorkPhone = contactPersonDetail.getWorkPhoneNumber();
-                this.contactPersonEmailId = contactPersonDetail.getContactPersonEmail();
+                preAuthorizationClaimantProposerDetail.contactPersonName = contactPersonDetail.getContactPersonName();
+                preAuthorizationClaimantProposerDetail.contactPersonMobileNumber = contactPersonDetail.getMobileNumber();
+                preAuthorizationClaimantProposerDetail.contactPersonWorkPhone = contactPersonDetail.getWorkPhoneNumber();
+                preAuthorizationClaimantProposerDetail.contactPersonEmailId = contactPersonDetail.getContactPersonEmail();
             }
+            this.preAuthorizationClaimantProposerDetail = preAuthorizationClaimantProposerDetail;
         }
         return this;
     }
@@ -173,6 +166,22 @@ public class ClaimantPolicyDetailDto {
 
         public CoverageDetailDto(String coverageName, BigDecimal sumAssured) {
             this.coverageName = coverageName;
+            this.sumAssured = sumAssured;
+        }
+
+        public String getCoverageName() {
+            return coverageName;
+        }
+
+        public void setCoverageName(String coverageName) {
+            this.coverageName = coverageName;
+        }
+
+        public BigDecimal getSumAssured() {
+            return sumAssured;
+        }
+
+        public void setSumAssured(BigDecimal sumAssured) {
             this.sumAssured = sumAssured;
         }
 

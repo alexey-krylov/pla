@@ -16,8 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 public class PreAuthorizationClaimantDetailDto {
     private String preAuthorizationId;
-    private ClaimantHCPDetailDto claimantHCPDetailDto;
     private String batchNumber;
+    private String claimType;
+    private DateTime claimIntimationDate;
+    private ClaimantHCPDetailDto claimantHCPDetailDto;
     private ClaimantPolicyDetailDto claimantPolicyDetailDto;
     private DateTime preAuthorizationDate;
     private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
