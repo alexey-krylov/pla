@@ -143,7 +143,7 @@ public class PreAuthorizationService {
                     .updateWithPreAuthorizationDetail(preAuthorizationDetails)
                     .updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode()))
                     .updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate())
-                    .updateWithBatchNumber(Integer.parseInt(runningSequence));
+                    .updateWithBatchNumber(runningSequence);
             if(isNotEmpty(sameServicesPreviouslyAvailedPreAuth))
                 preAuthorization.updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
             preAuthorizationRepository.save(preAuthorization);

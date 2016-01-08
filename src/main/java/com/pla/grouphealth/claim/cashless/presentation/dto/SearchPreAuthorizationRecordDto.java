@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SearchPreAuthorizationRecordDto {
-    private int batchNumber;
+    private String batchNumber;
     private String policyNumber;
     private String policyHolderName;
     private String clientId;

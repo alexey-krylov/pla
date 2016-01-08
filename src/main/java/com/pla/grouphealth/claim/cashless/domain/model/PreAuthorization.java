@@ -19,7 +19,7 @@ public class PreAuthorization {
     @Id
     private PreAuthorizationId preAuthorizationId;
     private HCPCode hcpCode;
-    private int batchNumber;
+    private String batchNumber;
     private DateTime batchDate;
     private Set<PreAuthorizationDetail> preAuthorizationDetails;
     private Set<String> sameServicesPreviouslyAvailedPreAuth;
@@ -39,7 +39,7 @@ public class PreAuthorization {
         return this;
     }
 
-    public PreAuthorization updateWithBatchNumber(int batchNumber) {
+    public PreAuthorization updateWithBatchNumber(String batchNumber) {
         this.batchNumber = batchNumber;
         return this;
     }

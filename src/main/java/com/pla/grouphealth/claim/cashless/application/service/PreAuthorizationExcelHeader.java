@@ -628,7 +628,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentDrugDosage(cellValue);
+            preAuthorizationDetailDto.setDiagnosisTreatmentDrugDosage(String.valueOf(new BigDecimal(cellValue).intValue()));
             return preAuthorizationDetailDto;
         }
 
@@ -640,7 +640,7 @@ public enum PreAuthorizationExcelHeader {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Dosage/ Day cannot be empty.";
                     return errorMessage;
                 }
-                if(isNotEmpty(value) && !value.matches("\\d{1,3}")){
+                if(isNotEmpty(value) && !value.matches("(?<![\\d.])(\\d{1,3}|\\d{0,3}\\.\\d{1,2})?(?![\\d.])")){
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Dosage/ Day 3 digit number allowed.";
                 }
             } catch (Exception e) {
@@ -660,7 +660,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentDrugStrength(cellValue);
+            preAuthorizationDetailDto.setDiagnosisTreatmentDrugStrength(String.valueOf(new BigDecimal(cellValue).intValue()));
             return preAuthorizationDetailDto;
         }
 
@@ -672,7 +672,7 @@ public enum PreAuthorizationExcelHeader {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Strength/Strength Type cannot be empty.";
                     return errorMessage;
                 }
-                if(isNotEmpty(value) && !value.matches("\\d{1,3}")){
+                if(isNotEmpty(value) && !value.matches("(?<![\\d.])(\\d{1,3}|\\d{0,3}\\.\\d{1,2})?(?![\\d.])")){
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Strength/Strength Type 3 digit number allowed.";
                 }
             } catch (Exception e) {
@@ -692,7 +692,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentMedicalDuration(cellValue);
+            preAuthorizationDetailDto.setDiagnosisTreatmentMedicalDuration(String.valueOf(new BigDecimal(cellValue).intValue()));
             return preAuthorizationDetailDto;
         }
 
@@ -704,7 +704,7 @@ public enum PreAuthorizationExcelHeader {
                     errorMessage = errorMessage + "Diagnosis/Treatment -  Provide Duration cannot be empty.";
                     return errorMessage;
                 }
-                if(isNotEmpty(value) && !value.matches("\\d+")){
+                if(isNotEmpty(value) && !value.matches("(?<![\\d.])(\\d{1,20}|\\d{0,20}\\.\\d{1,2})?(?![\\d.])")){
                     errorMessage = errorMessage + "Diagnosis/Treatment - Duration only numbers allowed.";
                 }
             } catch (Exception e) {

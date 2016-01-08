@@ -17,7 +17,7 @@ import java.util.List;
 public class PreAuthorizationClaimantDetailDto {
     private String preAuthorizationId;
     private ClaimantHCPDetailDto claimantHCPDetailDto;
-    private int batchNumber;
+    private String batchNumber;
     private ClaimantPolicyDetailDto claimantPolicyDetailDto;
     private DateTime preAuthorizationDate;
     private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
@@ -27,7 +27,7 @@ public class PreAuthorizationClaimantDetailDto {
         return new PreAuthorizationClaimantDetailDto();
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithBatchNumber(int batchNumber) {
+    public PreAuthorizationClaimantDetailDto updateWithBatchNumber(String batchNumber) {
         this.batchNumber = batchNumber;
         return this;
     }
