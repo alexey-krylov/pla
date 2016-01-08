@@ -41,8 +41,9 @@
           $scope.uploadPreAuthorizationDto.batchDate = formatDate(new Date);
 //        console.log($scope.uploadPreAuthorizationDto.batchDate);
         $scope.hcps = hcps;
-        $scope.fileSaved = null;
+       $scope.fileSaved = null;
         $scope.fileName = null;
+
         $scope.showDownload = true;
         $scope.$watchCollection('[uploadPreAuthorizationDto.hcpCode, showDownload]', function (n) {
             $scope.qId = n[0];

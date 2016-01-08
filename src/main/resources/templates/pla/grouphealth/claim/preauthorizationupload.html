@@ -109,7 +109,8 @@ var isEnterKey = function (event) {
                             <div class="form-group required">
                                 <label class="control-label ">Upload File</label>
                                 <div class="form-group" style="margin-left:1px;margin-top:px; ">
-                                    <input type="text" class="form-control input-sm"  name="file"  ng-required="true" placeholder="Browse File"
+                                    <input type="text" class="form-control input-sm"  name="file"
+                                           ng-required="true" placeholder="Browse File" ng-model="fileName"
                                            style="width: 62%;display: inline-block" ng-readonly="true"/>
                                     <button type="file" class="btn btn-default btn-sm" ng-file-select=""
                                             ng-model="fileSaved">
