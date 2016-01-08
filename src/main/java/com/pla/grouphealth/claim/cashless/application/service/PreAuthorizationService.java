@@ -1,21 +1,28 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPCode;
 import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
+import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
 import com.pla.grouphealth.claim.cashless.repository.GHCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
+import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
+import com.pla.grouphealth.policy.repository.GHPolicyRepository;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.apache.commons.beanutils.BeanUtils;
@@ -32,7 +39,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -48,9 +57,11 @@ public class PreAuthorizationService {
     private ExcelUtilityProvider excelUtilityProvider;
     private HCPRateRepository hcpRateRepository;
     private SequenceGenerator sequenceGenerator;
+    private HCPFinder hcpFinder;
+    private GHPolicyRepository ghPolicyRepository;
 
     @Autowired
-    public PreAuthorizationService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator) {
+    public PreAuthorizationService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator,HCPFinder hcpFinder, GHPolicyRepository ghPolicyRepository) {
         this.ghCashlessClaimRepository = ghCashlessClaimRepository;
         this.preAuthorizationRepository = preAuthorizationRepository;
         this.preAuthorizationFinder = preAuthorizationFinder;
@@ -58,6 +69,8 @@ public class PreAuthorizationService {
         this.excelUtilityProvider = excelUtilityProvider;
         this.hcpRateRepository = hcpRateRepository;
         this.sequenceGenerator = sequenceGenerator;
+        this.hcpFinder = hcpFinder;
+        this.ghPolicyRepository = ghPolicyRepository;
     }
 
     public HSSFWorkbook getGHCashlessClaimPreAuthtemplate(String hcpCode) {
@@ -180,5 +193,56 @@ public class PreAuthorizationService {
                 return preAuthorizationDetail;
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
+
+    public List<PreAuthorizationDto> searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+        List<PreAuthorization> preAuthorizations = preAuthorizationFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto);
+        List<PreAuthorizationDto> furbishedList = Lists.newLinkedList();
+        for(PreAuthorization preAuthorization : preAuthorizations){
+            for(PreAuthorizationDetail preAuthorizationDetail : preAuthorization.getPreAuthorizationDetails()){
+                HCP hcp = hcpFinder.getHCPByHCPCode(preAuthorization.getHcpCode().getHcpCode());
+                PreAuthorizationDto preAuthorizationDto = new PreAuthorizationDto();
+                String policyNumber = preAuthorizationDetail.getPolicyNumber();
+                String clientId = preAuthorizationDetail.getClientId();
+                String policyHolderName = getPolicyHolderName(policyNumber, clientId);
+                preAuthorizationDto.setPolicyNumber(policyNumber);
+                preAuthorizationDto.setClientId(clientId);
+                preAuthorizationDto.setPreAuthorizationId(preAuthorization.getPreAuthorizationId().getPreAuthorizationId());
+                preAuthorizationDto.setConsultationDate(preAuthorizationDetail.getConsultationDate());
+                preAuthorizationDto.setHcpName(hcp.getHcpName());
+                preAuthorizationDto.setPolicyHolderName(policyHolderName);
+                furbishedList.add(preAuthorizationDto);
+            }
+        }
+        return furbishedList;
+    }
+
+    private String getPolicyHolderName(String policyNumber, String clientId) {
+        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
+        if(isNotEmpty(groupHealthPolicy)){
+            Set<GHInsured> insureds = groupHealthPolicy.getInsureds();
+            GHInsured groupHealthInsured = null;
+            GHInsuredDependent ghInsuredDependent = null;
+            if(isNotEmpty(insureds)){
+                Optional<GHInsured> groupHealthInsuredOptional = insureds.stream().filter(ghInsured -> ghInsured.getFamilyId().getFamilyId().equalsIgnoreCase(clientId)).findFirst();
+                if(groupHealthInsuredOptional.isPresent()) {
+                    groupHealthInsured = groupHealthInsuredOptional.get();
+                    return groupHealthInsured.getFirstName()+" "+groupHealthInsured.getLastName();
+                }
+                if(isEmpty(groupHealthInsured)) {
+                    Optional<GHInsuredDependent> ghInsuredDependentOptional = insureds.stream().flatMap(new Function<GHInsured, Stream<GHInsuredDependent>>() {
+                        @Override
+                        public Stream<GHInsuredDependent> apply(GHInsured ghInsured) {
+                            return ghInsured.getInsuredDependents().stream();
+                        }
+                    }).filter(gHInsuredDependent -> gHInsuredDependent.getFamilyId().getFamilyId().equalsIgnoreCase(clientId)).findFirst();
+                    if(ghInsuredDependentOptional.isPresent()) {
+                        ghInsuredDependent = ghInsuredDependentOptional.get();
+                        return ghInsuredDependent.getFirstName()+" "+ghInsuredDependent.getLastName();
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

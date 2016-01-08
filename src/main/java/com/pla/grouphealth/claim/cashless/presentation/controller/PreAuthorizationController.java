@@ -3,7 +3,9 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
@@ -25,7 +27,7 @@ import java.util.Set;
  * Created by Mohan Sharma on 12/30/2015.
  */
 @RestController
-@RequestMapping(value = "/grouphealth/claim/cashless")
+@RequestMapping(value = "/grouphealth/claim/cashless/preauthorization")
 public class PreAuthorizationController {
 
     @Autowired
@@ -99,5 +101,36 @@ public class PreAuthorizationController {
         return  preAuthorizationService.getAllHcpNameAndCode();
     }
 
+    @RequestMapping(value="/loadsearchPreAuthorizationRecordPage",method = RequestMethod.GET)
+    public ModelAndView loadsearchPreAuthorizationRecordPage(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/searchPreAuthorizationRecord");
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
+        return  modelAndView;
+    }
 
+    @RequestMapping(value="/searchpreAuthorizationrecord",method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView searchPreAuthorizationRecord(@ModelAttribute(value = "searchCriteria")SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("searchCriteria", searchPreAuthorizationRecordDto);
+        modelAndView.setViewName("pla/grouphealth/claim/searchPreAuthorizationRecord");
+        List<PreAuthorizationDto> preAuthorizationResult =  preAuthorizationService.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto);
+        modelAndView.addObject("preAuthorizationResult",preAuthorizationResult);
+        return  modelAndView;
+    }
+
+    @RequestMapping(value="/searchPreAuthorizationclaimAmendment",method = RequestMethod.GET)
+    public ModelAndView searchPreAuthorizationRecor(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/claimAmendment");
+
+        return  modelAndView;
+    }
+    @RequestMapping(value="/searchPreAuthorizationcashlessClaim",method = RequestMethod.GET)
+    public ModelAndView searchPreAuthorizationReco(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/cashlessClaim");
+        return  modelAndView;
+    }
 }
