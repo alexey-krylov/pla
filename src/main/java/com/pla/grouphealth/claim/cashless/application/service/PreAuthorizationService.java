@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -219,12 +220,13 @@ public class PreAuthorizationService {
 
     private String getPolicyHolderName(String policyNumber, String clientId) {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
-        if(isNotEmpty(groupHealthPolicy)){
+        if(isNotEmpty(groupHealthPolicy) && isNotEmpty(clientId)){
+            int familyIdInt = new BigDecimal(clientId).intValue();
             Set<GHInsured> insureds = groupHealthPolicy.getInsureds();
             GHInsured groupHealthInsured = null;
             GHInsuredDependent ghInsuredDependent = null;
             if(isNotEmpty(insureds)){
-                Optional<GHInsured> groupHealthInsuredOptional = insureds.stream().filter(ghInsured -> ghInsured.getFamilyId().getFamilyId().equalsIgnoreCase(clientId)).findFirst();
+                Optional<GHInsured> groupHealthInsuredOptional = insureds.stream().filter(ghInsured -> ghInsured.getFamilyId().getFamilyId().equalsIgnoreCase(String.valueOf(familyIdInt))).findFirst();
                 if(groupHealthInsuredOptional.isPresent()) {
                     groupHealthInsured = groupHealthInsuredOptional.get();
                     return groupHealthInsured.getFirstName()+" "+groupHealthInsured.getLastName();
@@ -235,7 +237,7 @@ public class PreAuthorizationService {
                         public Stream<GHInsuredDependent> apply(GHInsured ghInsured) {
                             return ghInsured.getInsuredDependents().stream();
                         }
-                    }).filter(gHInsuredDependent -> gHInsuredDependent.getFamilyId().getFamilyId().equalsIgnoreCase(clientId)).findFirst();
+                    }).filter(gHInsuredDependent -> gHInsuredDependent.getFamilyId().getFamilyId().equalsIgnoreCase(String.valueOf(familyIdInt))).findFirst();
                     if(ghInsuredDependentOptional.isPresent()) {
                         ghInsuredDependent = ghInsuredDependentOptional.get();
                         return ghInsuredDependent.getFirstName()+" "+ghInsuredDependent.getLastName();

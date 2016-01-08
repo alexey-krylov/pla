@@ -111,7 +111,7 @@ public class PreAuthorizationController {
 
     @RequestMapping(value="/searchpreAuthorizationrecord",method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView searchPreAuthorizationRecord(@ModelAttribute(value = "searchCriteria")SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto){
+    public ModelAndView searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto){
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("searchCriteria", searchPreAuthorizationRecordDto);
         modelAndView.setViewName("pla/grouphealth/claim/searchPreAuthorizationRecord");
