@@ -52,6 +52,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Hospitalization Event cannot be empty.";
+                    return errorMessage;
                 }
 
             } catch (Exception e) {
@@ -112,6 +113,12 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            try {
+                cellValue = new BigDecimal(cellValue).toString();
+            } catch(NumberFormatException e){
+                preAuthorizationDetailDto.setClientId(cellValue);
+                return preAuthorizationDetailDto;
+            }
             preAuthorizationDetailDto.setClientId(cellValue);
             return preAuthorizationDetailDto;
         }
@@ -122,6 +129,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Client ID cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -150,6 +158,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Date Of Consultation cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -201,6 +210,12 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
+            try {
+                cellValue = new BigDecimal(cellValue).toString();
+            } catch(NumberFormatException e){
+                preAuthorizationDetailDto.setClientId(cellValue);
+                return preAuthorizationDetailDto;
+            }
             preAuthorizationDetailDto.setDoctorContactNumber(cellValue);
             return preAuthorizationDetailDto;
         }
@@ -231,6 +246,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Please indicate whether it is a cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -339,6 +355,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy- Date of Delivery cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -367,6 +384,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy- Mode Of Delivery cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -475,6 +493,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma - Diagnosis cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -503,6 +522,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Line of treatment cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -531,6 +551,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment -Investigations, indicate tests cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -559,6 +580,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Provide Drug Name cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -587,6 +609,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Type cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -615,6 +638,10 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Dosage/ Day cannot be empty.";
+                    return errorMessage;
+                }
+                if(isNotEmpty(value) && !value.matches("\\d{1,3}")){
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Drug Dosage/ Day 3 digit number allowed.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -643,6 +670,10 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - Drug Strength/Strength Type cannot be empty.";
+                    return errorMessage;
+                }
+                if(isNotEmpty(value) && !value.matches("\\d{1,3}")){
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Drug Strength/Strength Type 3 digit number allowed.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -671,6 +702,10 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment -  Provide Duration cannot be empty.";
+                    return errorMessage;
+                }
+                if(isNotEmpty(value) && !value.matches("\\d+")){
+                    errorMessage = errorMessage + "Diagnosis/Treatment - Duration only numbers allowed.";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -699,6 +734,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - name of surgery cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -727,6 +763,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment - provide Type Of Accommodation cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -755,6 +792,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Admission cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -784,6 +822,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Discharge cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -812,6 +851,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Discharge cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -1160,6 +1200,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Past history - Suffering From Alcohol/Drug Abuse cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -1248,6 +1289,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Service to be Availed - Service cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -1276,6 +1318,7 @@ public enum PreAuthorizationExcelHeader {
             try {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Service to be Availed - Type cannot be empty.";
+                    return errorMessage;
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
