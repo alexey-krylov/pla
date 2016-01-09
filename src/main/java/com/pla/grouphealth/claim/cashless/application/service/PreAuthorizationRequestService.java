@@ -55,19 +55,19 @@ public class PreAuthorizationRequestService {
     @Autowired
     GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
 
-    public PreAuthorizationClaimantDetailDto getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
         if(isNotEmpty(preAuthorization)){
             return constructPreAuthorizationClaimantDetailDtoFromPreAuthorization(preAuthorization, clientId);
         }
-        return PreAuthorizationClaimantDetailDto.getInstance();
+        return PreAuthorizationClaimantDetailCommand.getInstance();
     }
 
-    private PreAuthorizationClaimantDetailDto constructPreAuthorizationClaimantDetailDtoFromPreAuthorization(PreAuthorization preAuthorization, String clientId) {
+    private PreAuthorizationClaimantDetailCommand constructPreAuthorizationClaimantDetailDtoFromPreAuthorization(PreAuthorization preAuthorization, String clientId) {
         PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
         notNull(preAuthorizationDetail, "PreAuthorizationDetail cannot be null");
-        PreAuthorizationClaimantDetailDto preAuthorizationClaimantDetailDto = new PreAuthorizationClaimantDetailDto();
-        preAuthorizationClaimantDetailDto.updateWithBatchNumber(preAuthorization.getBatchNumber())
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand();
+        preAuthorizationClaimantDetailCommand.updateWithBatchNumber(preAuthorization.getBatchNumber())
                 .updateWithPreAuthorizationId(preAuthorization.getPreAuthorizationId().getPreAuthorizationId())
                 .updateWithPreAuthorizationDate(preAuthorization.getBatchDate())
                 .updateWithClaimantHCPDetailDto(constructClaimantHCPDetailDto(preAuthorization.getHcpCode(), preAuthorizationDetail.getHospitalizationEvent()))
@@ -75,7 +75,7 @@ public class PreAuthorizationRequestService {
                 .updateWithDiagnosisTreatment(constructDiagnosisTreatmentDto(preAuthorization))
                 .updateWithIllnessDetails(constructIllnessDetailDto(preAuthorization))
                 .updateWithDrugServices(constructDrugServiceDtos(preAuthorization));
-        return preAuthorizationClaimantDetailDto;
+        return preAuthorizationClaimantDetailCommand;
     }
 
     private List<DrugServiceDto> constructDrugServiceDtos(PreAuthorization preAuthorization) {

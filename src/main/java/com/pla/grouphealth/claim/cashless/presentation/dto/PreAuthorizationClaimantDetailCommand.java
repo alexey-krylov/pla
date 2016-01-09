@@ -1,10 +1,10 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PreAuthorizationClaimantDetailDto {
+public class PreAuthorizationClaimantDetailCommand {
     private String preAuthorizationId;
     private String batchNumber;
     private String claimType;
@@ -25,46 +25,47 @@ public class PreAuthorizationClaimantDetailDto {
     private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
     private IllnessDetailDto illnessDetailDto;
     private List<DrugServiceDto> drugServicesDtos;
-    public static PreAuthorizationClaimantDetailDto getInstance() {
-        return new PreAuthorizationClaimantDetailDto();
+    private List<MultipartFile> documents;
+    public static PreAuthorizationClaimantDetailCommand getInstance() {
+        return new PreAuthorizationClaimantDetailCommand();
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithBatchNumber(String batchNumber) {
+    public PreAuthorizationClaimantDetailCommand updateWithBatchNumber(String batchNumber) {
         this.batchNumber = batchNumber;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithPreAuthorizationId(String preAuthorizationId) {
+    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationId(String preAuthorizationId) {
         this.preAuthorizationId = preAuthorizationId;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithPreAuthorizationDate(DateTime batchDate) {
+    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationDate(DateTime batchDate) {
         this.preAuthorizationDate = batchDate;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithClaimantHCPDetailDto(ClaimantHCPDetailDto claimantHCPDetailDto) {
+    public PreAuthorizationClaimantDetailCommand updateWithClaimantHCPDetailDto(ClaimantHCPDetailDto claimantHCPDetailDto) {
         this.claimantHCPDetailDto = claimantHCPDetailDto;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithClaimantPolicyDetailDto(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
+    public PreAuthorizationClaimantDetailCommand updateWithClaimantPolicyDetailDto(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
         this.claimantPolicyDetailDto = claimantPolicyDetailDto;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithDiagnosisTreatment(List<DiagnosisTreatmentDto> diagnosisTreatmentDtos) {
+    public PreAuthorizationClaimantDetailCommand updateWithDiagnosisTreatment(List<DiagnosisTreatmentDto> diagnosisTreatmentDtos) {
         this.diagnosisTreatmentDtos = diagnosisTreatmentDtos;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithIllnessDetails(IllnessDetailDto illnessDetailDto) {
+    public PreAuthorizationClaimantDetailCommand updateWithIllnessDetails(IllnessDetailDto illnessDetailDto) {
         this.illnessDetailDto = illnessDetailDto;
         return this;
     }
 
-    public PreAuthorizationClaimantDetailDto updateWithDrugServices(List<DrugServiceDto> drugServiceDtos) {
+    public PreAuthorizationClaimantDetailCommand updateWithDrugServices(List<DrugServiceDto> drugServiceDtos) {
         this.drugServicesDtos = drugServiceDtos;
         return this;
     }

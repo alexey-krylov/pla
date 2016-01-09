@@ -2,11 +2,12 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -21,12 +22,13 @@ public class PreAuthorizationRequestController {
     private PreAuthorizationRequestService preAuthorizationRequestService;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId", method = RequestMethod.GET)
-    public @ResponseBody PreAuthorizationClaimantDetailDto getPreAuthorizationByPreAuthorizationIdAndClientId(@RequestParam String preAuthorizationId, @RequestParam String clientId){
+    public @ResponseBody
+    PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(@RequestParam String preAuthorizationId, @RequestParam String clientId){
         return preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(new PreAuthorizationId(preAuthorizationId), clientId);
     }
 
-    @RequestMapping(value = "/getPolicyByPreAuthorizationId", method = RequestMethod.GET)
-    public Map<String, Object> getPolicyByPreAuthorizationId(@RequestParam String preAuthorizationId){
-        return preAuthorizationRequestService.getPolicyByPreAuthorizationId(new PreAuthorizationId(preAuthorizationId));
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public Map<String, Object> create(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, HttpServletResponse response){
+        return commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
     }
 }
