@@ -127,5 +127,8 @@
     <extension:mongo-repository id="glClaimSettlementMongoRepository"
                                 aggregate-type="com.pla.grouplife.claim.domain.model.GLClaimSettlement"
                                 mongo-template="mongoTemplate"/>
+    <extension:mongo-repository id="preAuthorizationRequestMongoRepository"
+                                aggregate-type="com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest"
+                                mongo-template="mongoTemplate"/>
 
 </beans>

@@ -9,6 +9,7 @@ import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
@@ -20,6 +21,7 @@ import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang.StringUtils;
+import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -50,6 +52,8 @@ public class PreAuthorizationRequestService {
     GHPolicyRepository ghPolicyRepository;
     @Autowired
     PlanRepository planRepository;
+    @Autowired
+    GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestGenericMongoRepository;
 
     public PreAuthorizationClaimantDetailDto getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
