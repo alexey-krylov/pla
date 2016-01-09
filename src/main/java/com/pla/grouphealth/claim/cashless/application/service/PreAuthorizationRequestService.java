@@ -53,7 +53,7 @@ public class PreAuthorizationRequestService {
     @Autowired
     PlanRepository planRepository;
     @Autowired
-    GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestGenericMongoRepository;
+    GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
 
     public PreAuthorizationClaimantDetailDto getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
