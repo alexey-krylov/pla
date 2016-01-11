@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
+import com.pla.grouphealth.policy.application.command.GHPolicyDocumentCommand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,17 +16,17 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PreAuthorizationClaimantDetailCommand {
+    private String preAuthorizationRequestId;
     private String preAuthorizationId;
     private String batchNumber;
     private String claimType;
     private DateTime claimIntimationDate;
+    private DateTime preAuthorizationDate;
     private ClaimantHCPDetailDto claimantHCPDetailDto;
     private ClaimantPolicyDetailDto claimantPolicyDetailDto;
-    private DateTime preAuthorizationDate;
     private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
     private IllnessDetailDto illnessDetailDto;
     private List<DrugServiceDto> drugServicesDtos;
-    private List<MultipartFile> documents;
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
     }

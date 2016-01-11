@@ -1,12 +1,15 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantProposerDetail;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+import org.nthdimenzion.utils.UtilValidator;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Created by Samir on 4/7/2015.
@@ -36,5 +39,19 @@ public class GHProposer {
 
     public static GHProposerBuilder getProposerBuilder(String proposerName, String proposerCode) {
         return new GHProposerBuilder(proposerName, proposerCode);
+    }
+
+    public GHProposer updateWithProposerDetails(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
+        if(isNotEmpty(preAuthorizationClaimantProposerDetail)) {
+            this.proposerName = preAuthorizationClaimantProposerDetail.getProposerName();
+            this.proposerCode = preAuthorizationClaimantProposerDetail.getPostalCode();
+            this.contactDetail = updateWithContactDetail(preAuthorizationClaimantProposerDetail);
+        }
+        return this;
+    }
+
+    private GHProposerContactDetail updateWithContactDetail(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
+        GHProposerContactDetail contactDetail = isNotEmpty(this.contactDetail) ? this.contactDetail : new GHProposerContactDetail();
+        return contactDetail.updateWithContactDetails(preAuthorizationClaimantProposerDetail);
     }
 }

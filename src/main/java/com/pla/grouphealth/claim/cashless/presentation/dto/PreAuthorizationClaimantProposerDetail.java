@@ -1,12 +1,15 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PreAuthorizationClaimantProposerDetail {
     String proposerName;
+    String proposerCode;
     String address1;
     String address2;
     String postalCode;
@@ -18,7 +21,4 @@ public class PreAuthorizationClaimantProposerDetail {
     String contactPersonWorkPhone;
     String contactPersonMobileNumber;
     String contactPersonEmailId;
-
-    public PreAuthorizationClaimantProposerDetail() {
-    }
 }

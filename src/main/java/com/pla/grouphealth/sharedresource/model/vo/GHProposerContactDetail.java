@@ -1,5 +1,7 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.google.common.collect.Lists;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantProposerDetail;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,8 @@ import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -48,6 +52,26 @@ public class GHProposerContactDetail {
         return this;
     }
 
+    public GHProposerContactDetail updateWithContactDetails(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
+        this.addressLine1 = preAuthorizationClaimantProposerDetail.getAddress1();
+        this.addressLine2 = preAuthorizationClaimantProposerDetail.getAddress2();
+        this.postalCode = preAuthorizationClaimantProposerDetail.getPostalCode();
+        this.province = preAuthorizationClaimantProposerDetail.getProvince();
+        this.town = preAuthorizationClaimantProposerDetail.getTown();
+        this.emailAddress = preAuthorizationClaimantProposerDetail.getEmailId();
+        this.contactPersonDetail = constructContactPersonDetail(preAuthorizationClaimantProposerDetail);
+        return this;
+    }
+
+    private List<ContactPersonDetail> constructContactPersonDetail(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
+        List<ContactPersonDetail> personDetails = isNotEmpty(this.contactPersonDetail) ? this.contactPersonDetail : Lists.newArrayList();
+        if(isNotEmpty(personDetails)){
+            return personDetails.parallelStream().map(contactPersonDetail -> contactPersonDetail.updateWithContactPersonDetail(preAuthorizationClaimantProposerDetail)).collect(Collectors.toList());
+        }
+        ContactPersonDetail contactPersonDetail = new ContactPersonDetail(preAuthorizationClaimantProposerDetail.getContactPersonEmailId(), preAuthorizationClaimantProposerDetail.getContactPersonName(), preAuthorizationClaimantProposerDetail.getContactPersonMobileNumber(), preAuthorizationClaimantProposerDetail.getContactPersonWorkPhone());
+        return Lists.newArrayList(contactPersonDetail);
+    }
+
     @Getter
     public class ContactPersonDetail {
 
@@ -64,6 +88,10 @@ public class GHProposerContactDetail {
             this.contactPersonName = contactPersonName;
             this.mobileNumber = mobileNumber;
             this.workPhoneNumber = workPhoneNumber;
+        }
+
+        public ContactPersonDetail updateWithContactPersonDetail(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
+            return new ContactPersonDetail(preAuthorizationClaimantProposerDetail.getContactPersonEmailId(), preAuthorizationClaimantProposerDetail.getContactPersonName(), preAuthorizationClaimantProposerDetail.getContactPersonMobileNumber(), preAuthorizationClaimantProposerDetail.getContactPersonWorkPhone());
         }
     }
 

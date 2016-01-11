@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -21,7 +23,6 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 @Getter
 @Setter
 public class ClaimantPolicyDetailDto {
-    private PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail;
     private String policyNumber;
     private String policyName;
     private String planCode;
@@ -29,9 +30,10 @@ public class ClaimantPolicyDetailDto {
     private String category;
     private String relationship;
     private BigDecimal sumAssured;
-    private Set<CoverageDetailDto> coverageDetailDtoList = Sets.newHashSet();
+    private PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail;
     private AssuredDetail assuredDetail;
     private DependentAssuredDetail dependentAssuredDetail;
+    private Set<CoverageDetailDto> coverageDetailDtoList = Sets.newHashSet();
 
     public static ClaimantPolicyDetailDto getInstance() {
         return new ClaimantPolicyDetailDto();
@@ -47,10 +49,11 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
-    public ClaimantPolicyDetailDto updateWithPreAuthorizationClaimantProposerDetail(GHProposerContactDetail ghProposerContactDetail, String proposerName) {
+    public ClaimantPolicyDetailDto updateWithPreAuthorizationClaimantProposerDetail(GHProposerContactDetail ghProposerContactDetail, String proposerName, String proposerCode) {
         PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail = new PreAuthorizationClaimantProposerDetail();
         if(isNotEmpty(ghProposerContactDetail)) {
             preAuthorizationClaimantProposerDetail.proposerName = proposerName;
+            preAuthorizationClaimantProposerDetail.proposerCode = proposerCode;
             preAuthorizationClaimantProposerDetail.address1 = ghProposerContactDetail.getAddressLine1();
             preAuthorizationClaimantProposerDetail.address2 = ghProposerContactDetail.getAddressLine2();
             preAuthorizationClaimantProposerDetail.postalCode = ghProposerContactDetail.getPostalCode();
@@ -97,7 +100,7 @@ public class ClaimantPolicyDetailDto {
         Set<CoverageDetailDto> coverageDetailDtos = Sets.newHashSet();
         if(isNotEmpty(coverages)){
             for(GHCoveragePremiumDetail ghCoveragePremiumDetail : coverages){
-                CoverageDetailDto coverageDetailDto = new CoverageDetailDto(ghCoveragePremiumDetail.getCoverageName(), ghCoveragePremiumDetail.getSumAssured());
+                CoverageDetailDto coverageDetailDto = new CoverageDetailDto(ghCoveragePremiumDetail.getCoverageCode(), ghCoveragePremiumDetail.getCoverageName(), ghCoveragePremiumDetail.getSumAssured());
                 coverageDetailDtos.add(coverageDetailDto);
             }
         }
@@ -160,50 +163,13 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
-    private class CoverageDetailDto {
+    @Getter
+    @Setter
+    @EqualsAndHashCode
+    @AllArgsConstructor
+    public class CoverageDetailDto {
+        String coverageCode;
         String coverageName;
         BigDecimal sumAssured;
-
-        public CoverageDetailDto(String coverageName, BigDecimal sumAssured) {
-            this.coverageName = coverageName;
-            this.sumAssured = sumAssured;
-        }
-
-        public String getCoverageName() {
-            return coverageName;
-        }
-
-        public void setCoverageName(String coverageName) {
-            this.coverageName = coverageName;
-        }
-
-        public BigDecimal getSumAssured() {
-            return sumAssured;
-        }
-
-        public void setSumAssured(BigDecimal sumAssured) {
-            this.sumAssured = sumAssured;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            CoverageDetailDto that = (CoverageDetailDto) o;
-
-            if (coverageName != null ? !coverageName.equals(that.coverageName) : that.coverageName != null)
-                return false;
-            if (sumAssured != null ? !sumAssured.equals(that.sumAssured) : that.sumAssured != null) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = coverageName != null ? coverageName.hashCode() : 0;
-            result = 31 * result + (sumAssured != null ? sumAssured.hashCode() : 0);
-            return result;
-        }
     }
 }

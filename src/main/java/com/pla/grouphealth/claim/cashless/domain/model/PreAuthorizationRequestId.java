@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 /**
  * Created by Mohan Sharma on 1/9/2016.
@@ -15,6 +16,6 @@ import javax.persistence.Embeddable;
 @Getter
 @ToString
 @JsonSerialize(using = com.fasterxml.jackson.databind.ser.std.ToStringSerializer.class)
-public class PreAuthorizationRequestId {
+public class PreAuthorizationRequestId implements Serializable {
     private String preAuthorizationRequestId;
 }

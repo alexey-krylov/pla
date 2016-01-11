@@ -6,12 +6,10 @@ import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPCode;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.repository.PlanRepository;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
+import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
@@ -49,11 +47,13 @@ public class PreAuthorizationRequestService {
     @Autowired
     private HCPFinder hcpFinder;
     @Autowired
-    GHPolicyRepository ghPolicyRepository;
+    private GHPolicyRepository ghPolicyRepository;
     @Autowired
-    PlanRepository planRepository;
+    private PlanRepository planRepository;
     @Autowired
-    GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    private GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    @Autowired
+    private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
 
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
@@ -112,7 +112,7 @@ public class PreAuthorizationRequestService {
             GHProposer ghProposer = groupHealthPolicy.getProposer();
             if(isNotEmpty(ghProposer)) {
                 ClaimantPolicyDetailDto claimantPolicyDetailDto = new ClaimantPolicyDetailDto()
-                        .updateWithPreAuthorizationClaimantProposerDetail(ghProposer.getContactDetail(), ghProposer.getProposerName())
+                        .updateWithPreAuthorizationClaimantProposerDetail(ghProposer.getContactDetail(), ghProposer.getProposerName(), ghProposer.getProposerCode())
                         .updateWithPolicyName(groupHealthPolicy.getSchemeName())
                         .updateWithPolicyNumber(isNotEmpty(groupHealthPolicy.getPolicyNumber()) ? groupHealthPolicy.getPolicyNumber().getPolicyNumber() : StringUtils.EMPTY);
                 return updateWithPlanDetailsToClaimantDto(groupHealthPolicy, claimantPolicyDetailDto, clientId);
@@ -188,6 +188,27 @@ public class PreAuthorizationRequestService {
 
     public Map<String, Object> getPolicyByPreAuthorizationId(PreAuthorizationId preAuthorizationId) {
 
+        return null;
+    }
+
+    public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?
+                isNotEmpty(preAuthorizationRequestRepository.findOne(new PreAuthorizationRequestId(preAuthorizationRequestId)))
+                        ? preAuthorizationRequestRepository.findOne(new PreAuthorizationRequestId(preAuthorizationRequestId))
+                        : new PreAuthorizationRequest() : new PreAuthorizationRequest();
+        preAuthorizationRequest.updateWithPreAuthorizationId()
+                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
+                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
+                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
+                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
+                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
+                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
+                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
         return null;
     }
 }

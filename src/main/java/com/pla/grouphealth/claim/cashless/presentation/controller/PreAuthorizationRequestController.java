@@ -27,8 +27,8 @@ public class PreAuthorizationRequestController {
         return preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(new PreAuthorizationId(preAuthorizationId), clientId);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public Map<String, Object> create(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, HttpServletResponse response){
+    @RequestMapping(value = "/createorupdate", method = RequestMethod.GET)
+    public Map<String, Object> createUpdate(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, HttpServletResponse response){
         return commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
     }
 }
