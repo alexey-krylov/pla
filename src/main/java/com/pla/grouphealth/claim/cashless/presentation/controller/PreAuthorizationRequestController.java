@@ -4,6 +4,9 @@ import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRe
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
+import com.pla.sharedkernel.domain.model.FamilyId;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,5 +48,13 @@ public class PreAuthorizationRequestController {
         } catch (Exception e){
             return Result.failure(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/getmandatorydocuments/{clientId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId) {
+        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findMandatoryDocuments(new FamilyId(clientId));
+        return ghProposalMandatoryDocumentDtos;
     }
 }

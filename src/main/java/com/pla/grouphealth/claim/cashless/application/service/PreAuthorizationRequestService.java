@@ -1,6 +1,8 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPCode;
@@ -12,17 +14,26 @@ import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
-import com.pla.grouphealth.sharedresource.model.vo.GHPlanPremiumDetail;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
+import com.pla.grouphealth.sharedresource.model.vo.*;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
+import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
+import com.pla.sharedkernel.domain.model.FamilyId;
+import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,6 +65,10 @@ public class PreAuthorizationRequestService {
     private GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
     @Autowired
     private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
+    @Autowired
+    private IUnderWriterAdapter underWriterAdapter;
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
@@ -216,5 +231,81 @@ public class PreAuthorizationRequestService {
 
     private PreAuthorizationRequest getPreAuthorizationRequestById(PreAuthorizationRequestId preAuthorizationRequestId) {
         return preAuthorizationRequestRepository.findOne(preAuthorizationRequestId);
+    }
+
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId) {
+        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByFamilyId(familyId);
+        if(isEmpty(groupHealthPolicy)){
+            groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByDependentFamilyId(familyId);
+        }
+        List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
+        GHPlanPremiumDetail planPremiumDetail = getGHPlanPremiumDetailByFamilyId(familyId, groupHealthPolicy);
+        SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planPremiumDetail.getPlanId());
+        documentDetailDtos.add(searchDocumentDetailDto);
+        if (isNotEmpty(planPremiumDetail.getCoveragePremiumDetails())) {
+            List<CoverageId> coverageIds = planPremiumDetail.getCoveragePremiumDetails().stream().map(new Function<GHCoveragePremiumDetail, CoverageId>() {
+                @Override
+                public CoverageId apply(GHCoveragePremiumDetail ghCoveragePremiumDetail) {
+                    return ghCoveragePremiumDetail.getCoverageId();
+                }
+            }).collect(Collectors.toList());
+            documentDetailDtos.add(new SearchDocumentDetailDto(planPremiumDetail.getPlanId(), coverageIds));
+        }
+        Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.CLAIM);
+        List<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
+        List<GHProposerDocument> uploadedDocuments = Lists.newArrayList();
+        if (isNotEmpty(mandatoryDocuments)) {
+            mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GHProposalMandatoryDocumentDto>() {
+                @Override
+                public GHProposalMandatoryDocumentDto apply(ClientDocumentDto clientDocumentDto) {
+                    GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(clientDocumentDto.getDocumentCode(), clientDocumentDto.getDocumentName());
+                    Optional<GHProposerDocument> proposerDocumentOptional = uploadedDocuments.stream().filter(new Predicate<GHProposerDocument>() {
+                        @Override
+                        public boolean test(GHProposerDocument ghProposerDocument) {
+                            return clientDocumentDto.getDocumentCode().equals(ghProposerDocument.getDocumentId());
+                        }
+                    }).findAny();
+                    if (proposerDocumentOptional.isPresent()) {
+                        try {
+                            if (isNotEmpty(proposerDocumentOptional.get().getGridFsDocId())) {
+                                GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(proposerDocumentOptional.get().getGridFsDocId())));
+                                mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                                mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                                mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                                mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        return mandatoryDocumentDtos;
+    }
+
+    private GHPlanPremiumDetail getGHPlanPremiumDetailByFamilyId(FamilyId familyId, GroupHealthPolicy groupHealthPolicy) {
+        Set<GHInsured> insureds = groupHealthPolicy.getInsureds();
+        GHInsured groupHealthInsured = null;
+        GHInsuredDependent ghInsuredDependent = null;
+        if(isNotEmpty(insureds)){
+            Optional<GHInsured> groupHealthInsuredOptional = insureds.stream().filter(ghInsured -> ghInsured.getFamilyId().equals(familyId)).findFirst();
+            if(groupHealthInsuredOptional.isPresent()) {
+                groupHealthInsured = groupHealthInsuredOptional.get();
+            }
+            if(isEmpty(groupHealthInsured)) {
+                Optional<GHInsuredDependent> ghInsuredDependentOptional = insureds.stream().flatMap(new Function<GHInsured, Stream<GHInsuredDependent>>() {
+                    @Override
+                    public Stream<GHInsuredDependent> apply(GHInsured ghInsured) {
+                        return ghInsured.getInsuredDependents().stream();
+                    }
+                }).filter(gHInsuredDependent -> gHInsuredDependent.getFamilyId().equals(familyId)).findFirst();
+                if(ghInsuredDependentOptional.isPresent()) {
+                    ghInsuredDependent = ghInsuredDependentOptional.get();
+                }
+            }
+        }
+        return isNotEmpty(groupHealthInsured) ? groupHealthInsured.getPlanPremiumDetail() : ghInsuredDependent.getPlanPremiumDetail();
     }
 }
