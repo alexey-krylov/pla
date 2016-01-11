@@ -1,6 +1,7 @@
 package com.pla.grouplife.endorsement.domain.model;
 
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.grouplife.sharedresource.model.vo.GLEndorsementInsured;
 import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.PremiumDetail;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
@@ -30,8 +31,12 @@ public class GLEndorsementProcessor {
         return groupLifeEndorsement;
     }
 
-    public GroupLifeEndorsement updateWithInsured(GroupLifeEndorsement groupLifeProposal, Set<Insured> insureds) {
-        return groupLifeProposal.updateWithInsureds(insureds);
+    public GroupLifeEndorsement updateWithInsured(GroupLifeEndorsement groupLifeEndorsement, Set<Insured> insureds) {
+        return groupLifeEndorsement.updateWithInsureds(insureds);
+    }
+
+    public GroupLifeEndorsement updateWithGLEndorsementInsured(GroupLifeEndorsement groupLifeEndorsement, GLEndorsementInsured glEndorsementInsured) {
+        return groupLifeEndorsement.updateWithGLEndorsementInsured(glEndorsementInsured);
     }
 
     public GroupLifeEndorsement updateWithPremiumDetail(GroupLifeEndorsement groupLifeEndorsement, PremiumDetail premiumDetail) {

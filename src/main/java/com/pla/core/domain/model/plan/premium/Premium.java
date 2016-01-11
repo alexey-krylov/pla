@@ -146,11 +146,11 @@ public class Premium {
     }
 
     public BigDecimal getProratePremium(PremiumItem premiumItem, int noOfDays, BigDecimal sumAssured) {
-        return getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured,BigDecimal.ZERO);
+        return getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured);
     }
 
     public BigDecimal getAnnualPremium(PremiumItem premiumItem, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays, BigDecimal sumAssured) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured ,BigDecimal.ZERO);
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured);
         if (PremiumRateFrequency.YEARLY.equals(this.premiumRateFrequency)) {
             return premiumAmount;
         }
@@ -159,7 +159,7 @@ public class Premium {
     }
 
     public BigDecimal getMonthlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, int noOfDays, BigDecimal sumAssured) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured,BigDecimal.ZERO );
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured);
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             return premiumAmount;
         }
@@ -168,7 +168,7 @@ public class Premium {
     }
 
     public BigDecimal getQuarterlyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays, BigDecimal sumAssured) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured,BigDecimal.ZERO );
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured);
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getQuarterlyDiscountFactor(discountFactorItems));
             return premiumAmount;
@@ -178,7 +178,7 @@ public class Premium {
     }
 
     public BigDecimal getSemiAnnuallyPremium(PremiumItem premiumItem, Set<ModelFactorOrganizationInformation> modelFactorItems, Set<DiscountFactorOrganizationInformation> discountFactorItems, int noOfDays, BigDecimal sumAssured) {
-        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured,BigDecimal.ZERO );
+        BigDecimal premiumAmount = getAllowedPremiumAmount(premiumItem, noOfDays,sumAssured);
         if (PremiumRateFrequency.MONTHLY.equals(premiumRateFrequency)) {
             premiumAmount = premiumAmount.multiply(DiscountFactorOrganizationInformation.getSemiAnnualDiscountFactor(discountFactorItems));
             return premiumAmount;
@@ -190,10 +190,9 @@ public class Premium {
     /*
     * @TODO For FCL endorsement,what should be the prorata calc for Rate/month
     * */
-    private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem, int noOfDays, BigDecimal sumAssured,BigDecimal freeCoverLimit) {
+    private BigDecimal getAllowedPremiumAmount(PremiumItem premiumItem, int noOfDays, BigDecimal sumAssured) {
         BigDecimal premiumAmount = premiumItem.getPremium();
         if (PremiumFactor.PER_THOUSAND.equals(premiumFactor)) {
-            sumAssured = sumAssured.subtract(freeCoverLimit);
             premiumAmount = sumAssured.multiply(premiumItem.getPremium());
             premiumAmount = premiumAmount.divide(new BigDecimal(1000), 4, BigDecimal.ROUND_HALF_EVEN);
         }

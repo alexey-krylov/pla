@@ -592,4 +592,34 @@ public class GLInsuredExcelParser {
         }
 
     }
+
+    private boolean isSamePlanForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
+        boolean isSamePlanForAllCategory = false;
+        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
+            Row row = rowEntry.getKey();
+            Cell planCell = getCellByName(row, headers, GLInsuredExcelHeader.PLAN.getDescription());
+            String planCode = getCellValue(planCell);
+            if (isSamePlanForAllCategory) {
+                break;
+            }
+            for (Map.Entry<Row, List<Row>> otherRowEntry : relationshipGroupRowMap.entrySet()) {
+                Row otherRow = otherRowEntry.getKey();
+                Cell otherPlanCell = getCellByName(otherRow, headers, GLInsuredExcelHeader.PLAN.getDescription());
+                String otherPlanCode = getCellValue(otherPlanCell);
+                if (isNotEmpty(planCode) && isNotEmpty(otherPlanCode) && planCode.equals(otherPlanCode)) {
+                    isSamePlanForAllCategory = true;
+                    break;
+                }
+            }
+        }
+        return isSamePlanForAllCategory;
+    }
+
+    private boolean isSamePlanForAllRelation(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
+        List<Row> allRows = Lists.newArrayList();
+        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
+            allRows.addAll(rowEntry.getValue());
+        }
+        return isRowsContainSamePlan(allRows, headers);
+    }
 }

@@ -119,9 +119,6 @@ public class GLEndorsementExcelValidator {
 
 
     public boolean isValidAnnualIncome(Row row, String value, List<String> excelHeaders) {
-        if (isEmpty(value)) {
-            return true;
-        }
         Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
         String relation = getCellValue(relationshipCell);
         Cell categoryCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
@@ -135,6 +132,8 @@ public class GLEndorsementExcelValidator {
             isValid = false;
             return isValid;
         }
+        if (isEmpty(value))
+            return isValid;
         try {
             Double valueInDouble = Double.parseDouble(annualIncome);
             isValid = valueInDouble > 0d;
@@ -142,8 +141,6 @@ public class GLEndorsementExcelValidator {
             isValid = false;
         }
         return isValid;
-
-
     }
 
 
@@ -374,7 +371,7 @@ public class GLEndorsementExcelValidator {
     private String findPlanCodeByRelationAndCategory(List<Insured> insureds,String category,String relation){
         String planCode = "";
         if (isNotEmpty(insureds)){
-            Optional<Insured> insuredOptional = insureds.parallelStream().filter(insured -> insured.getCategory().equals(category) && Relationship.SELF.description.equals(relation)).findAny();
+            Optional<Insured> insuredOptional = insureds.parallelStream().filter(insured -> insured.getCategory().equals(category) && Relationship.SELF.description.equals(relation != null ? relation : Relationship.SELF)).findAny();
             if (insuredOptional.isPresent()){
                 PlanId planId = insuredOptional.get().getPlanPremiumDetail().getPlanId();
                 planCode = planAdapter.getPlanCodeById(planId);

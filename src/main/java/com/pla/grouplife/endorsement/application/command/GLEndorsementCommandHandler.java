@@ -251,7 +251,8 @@ public class GLEndorsementCommandHandler {
         Industry industry = (Industry) policyMap.get("industry");
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
                 premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
-        groupLifeEndorsement = groupLifeEndorsementService.populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, approveGLEndorsementCommand.getUserDetails(), premiumDetailDto, industry);
+        UnderWriterFactor underWriterFactor = groupLifeEndorsement.getUnderWriterFactor();
+        groupLifeEndorsement = groupLifeEndorsementService.populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, approveGLEndorsementCommand.getUserDetails(), premiumDetailDto, industry, underWriterFactor);
         groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment(), endorseNumber);
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }

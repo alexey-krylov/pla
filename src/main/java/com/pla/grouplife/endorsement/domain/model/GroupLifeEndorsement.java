@@ -70,6 +70,8 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
 
     private PremiumDetail premiumDetail;
 
+    private UnderWriterFactor underWriterFactor;
+
     public GroupLifeEndorsement(EndorsementId endorsementId, EndorsementNumber endorsementNumber, Policy policy, GLEndorsementType endorsementType) {
         checkArgument(endorsementId != null, "Endorsement ID cannot be empty");
         checkArgument(endorsementNumber != null, "Endorsement Number cannot be empty");
@@ -211,6 +213,10 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         return this;
     }
 
+    public GroupLifeEndorsement updateWithGLEndorsementInsured(GLEndorsementInsured glEndorsementInsured){
+        this.endorsement.updateWithFCLEndorsement(glEndorsementInsured);
+        return this;
+    }
     @Override
     public EndorsementId getIdentifier() {
         return endorsementId;
@@ -236,6 +242,28 @@ public class GroupLifeEndorsement extends AbstractAggregateRoot<EndorsementId> {
         totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
         return totalInsuredPremiumAmount;
     }
+
+
+    public BigDecimal getNetFCLPremiumPaymentAmount(PremiumDetail premiumDetail,Industry industry,UnderWriterFactor underWriterFactor) {
+        BigDecimal totalBasicPremium = this.getTotalBasicPremiumForInsured();
+        BigDecimal underWritingFactor = underWriterFactor.getUnderWritingFactor()!=null?underWriterFactor.getUnderWritingFactor():BigDecimal.ZERO;
+        BigDecimal underWritingAmount = totalBasicPremium!=null?totalBasicPremium.multiply(underWritingFactor):BigDecimal.ZERO;
+        BigDecimal hivDiscountAmount = premiumDetail.getHivDiscount() == null ? BigDecimal.ZERO : underWritingAmount.multiply((premiumDetail.getHivDiscount().divide(new BigDecimal(100))));
+        BigDecimal valuedClientDiscountAmount = premiumDetail.getValuedClientDiscount() == null ? BigDecimal.ZERO : underWritingAmount.multiply((premiumDetail.getValuedClientDiscount().divide(new BigDecimal(100))));
+        BigDecimal longTermDiscountAmount = premiumDetail.getLongTermDiscount() == null ? BigDecimal.ZERO : underWritingAmount.multiply((premiumDetail.getLongTermDiscount().divide(new BigDecimal(100))));
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : underWritingAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvency() == null ? BigDecimal.ZERO : underWritingAmount.multiply((premiumDetail.getProfitAndSolvency().divide(new BigDecimal(100))));
+        BigDecimal industryLoadingFactor = BigDecimal.ONE;
+        if (industry!=null) {
+            industryLoadingFactor = industry.getLoadingFactor();
+        }
+        BigDecimal totalLoadingAmount = (addOnBenefitAmount.add(profitAndSolvencyAmount)).subtract((hivDiscountAmount.add(valuedClientDiscountAmount).add(longTermDiscountAmount)));
+        BigDecimal totalInsuredPremiumAmount = underWritingAmount.add(totalLoadingAmount);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.multiply(industryLoadingFactor);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
 
     /*
     * @TODO change according to type

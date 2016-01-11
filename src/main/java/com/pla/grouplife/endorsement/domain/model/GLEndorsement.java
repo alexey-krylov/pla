@@ -97,4 +97,9 @@ public class GLEndorsement {
         this.freeCoverLimitEndorsement = freeCoverLimitEndorsement;
         return this;
     }
+
+    public GLEndorsement updateWithFCLEndorsement(GLEndorsementInsured glEndorsementInsured) {
+        this.freeCoverLimitEndorsement = freeCoverLimitEndorsement;
+        return this;
+    }
 }

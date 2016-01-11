@@ -140,7 +140,7 @@ public class GroupLifeEndorsementService {
         Industry industry = (Industry) policyMap.get("industry");
         PremiumDetailDto premiumDetailDto = new PremiumDetailDto(premiumDetail.getAddOnBenefit(),premiumDetail.getProfitAndSolvency(),premiumDetail.getHivDiscount(),
                 premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
-        groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto,industry);
+        groupLifeEndorsement = populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, userDetails, premiumDetailDto,industry, null);
         premiumDetailDto = getPremiumDetail(groupLifeEndorsement);
         premiumDetailDto.setIsPremiumApplicable(!groupLifeEndorsement.getEndorsementType().equals(GLEndorsementType.ASSURED_MEMBER_DELETION));
         premiumDetailDto.setIsTentativePremiumApplicable(isTentativePremiumsRequired(groupLifeEndorsement.getStatus(), groupLifeEndorsement.getEndorsementType()));
@@ -148,7 +148,10 @@ public class GroupLifeEndorsementService {
     }
 
 
-    public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeEndorsement, UserDetails userDetails, PremiumDetailDto premiumDetailDto,Industry industry) throws ParseException {
+    /*
+    * @TODO need to calculate the premiums for FCL with the given underwriting loading/discount factors.
+    * */
+    public GroupLifeEndorsement populateAnnualBasicPremiumOfInsured(GroupLifeEndorsement groupLifeEndorsement, UserDetails userDetails, PremiumDetailDto premiumDetailDto, Industry industry, UnderWriterFactor underWriterFactor) throws ParseException {
         Set<Insured> insureds = getInsuredByEndorsementType(groupLifeEndorsement);
         boolean isMemberPromotion = isMemberPromotionEndorsement(groupLifeEndorsement.getEndorsementType());
         Map<String, Object> policyDetail = glEndorsementFinder.getPolicyDetail(groupLifeEndorsement.getEndorsementId().getEndorsementId());
@@ -159,9 +162,16 @@ public class GroupLifeEndorsementService {
         int policyTerm = Days.daysBetween(inceptionOn,expiredOn).getDays();
         int endorsementDuration = Days.daysBetween(LocalDate.now(),expiredOn).getDays();
         premiumDetailDto.setPolicyTermValue(endorsementDuration);
+        if (GLEndorsementType.FREE_COVER_LIMIT.equals(groupLifeEndorsement.getEndorsementType())){
+            GLEndorsementInsured glEndorsementInsured = groupLifeEndorsement.getEndorsement().getFreeCoverLimitEndorsement();
+            GLEndorsementInsured updatedGLEInsured = glInsuredFactory.calculateFCLProratePremium(premiumDetailDto, glEndorsementInsured);
+            groupLifeEndorsement = updateGLEndorsementInsured(groupLifeEndorsement, updatedGLEInsured, userDetails);
+            groupLifeEndorsement = updateWithPremiumDetailAndUnderWriterFactor(groupLifeEndorsement, premiumDetailDto, userDetails, industry);
+            return groupLifeEndorsement;
+        }
         insureds = glInsuredFactory.calculateProratePremiumForInsureds(premiumDetailDto, insureds, policyTerm, endorsementDuration, isMemberPromotion);
         groupLifeEndorsement = updateInsured(groupLifeEndorsement, insureds, userDetails);
-        groupLifeEndorsement = updateWithPremiumDetail(groupLifeEndorsement, premiumDetailDto, userDetails,industry);
+        groupLifeEndorsement = updateWithPremiumDetailAndUnderWriterFactor(groupLifeEndorsement, premiumDetailDto, userDetails, industry);
         return groupLifeEndorsement;
     }
 
@@ -171,7 +181,12 @@ public class GroupLifeEndorsementService {
         return glEndorsementProcessor.updateWithInsured(groupLifeEndorsement, insureds);
     }
 
-    public GroupLifeEndorsement updateWithPremiumDetail(GroupLifeEndorsement groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails,Industry industry) {
+    public GroupLifeEndorsement updateGLEndorsementInsured(GroupLifeEndorsement groupLifeEndorsement, GLEndorsementInsured glEndorsementInsured, UserDetails userDetails) {
+        GLEndorsementProcessor glEndorsementProcessor = groupLifeEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
+        return glEndorsementProcessor.updateWithGLEndorsementInsured(groupLifeEndorsement, glEndorsementInsured);
+    }
+
+    public GroupLifeEndorsement updateWithPremiumDetailAndUnderWriterFactor(GroupLifeEndorsement groupLifeProposal, PremiumDetailDto premiumDetailDto, UserDetails userDetails, Industry industry) {
         GLEndorsementProcessor glEndorsementProcessor = groupLifeEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
         PremiumDetail premiumDetail = new PremiumDetail(premiumDetailDto.getAddOnBenefit(), premiumDetailDto.getProfitAndSolvencyLoading(), premiumDetailDto.getHivDiscount(), premiumDetailDto.getValuedClientDiscount(), premiumDetailDto.getLongTermDiscount(), premiumDetailDto.getPolicyTermValue());
         BigDecimal totalPremium = groupLifeProposal.getNetAnnualPremiumPaymentAmount(premiumDetail, industry);
