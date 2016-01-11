@@ -1,0 +1,28 @@
+package com.pla.grouphealth.claim.cashless.domain.model;
+
+import lombok.*;
+import org.hibernate.annotations.Immutable;
+import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+
+import javax.persistence.Embeddable;
+
+/**
+ * Created by Mohan Sharma on 1/9/2016.
+ */
+@ValueObject
+@Immutable
+@Embeddable
+@EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
+@Getter
+public class PreAuthorizationRequestDrugService {
+    private String type;
+    private String serviceName;
+    private String drugName;
+    private String drugType;
+    private String accommodationType;
+    private String duration;
+    private int lengthOfStay;
+    private String strength;
+}
