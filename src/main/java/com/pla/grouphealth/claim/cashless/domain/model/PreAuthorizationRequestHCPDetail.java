@@ -23,11 +23,12 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @Getter
+@Setter
 public class PreAuthorizationRequestHCPDetail {
     private String hospitalizationEvent;
     private String hcpCode;
     private String hcpName;
-    private HCPAddress address;
+    private HCPAddress hcpAddress;
 
     public PreAuthorizationRequestHCPDetail updateWithDetails(ClaimantHCPDetailDto claimantHCPDetailDto) {
         if(isNotEmpty(claimantHCPDetailDto)){

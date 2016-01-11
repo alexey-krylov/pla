@@ -7,12 +7,15 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.beanutils.BeanUtils;
+import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -31,18 +34,16 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Document(collection = "PRE_AUTHORIZATION_REQUEST")
 @Getter
-@ToString
-@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
-public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreAuthorizationRequestId> {
+@NoArgsConstructor
+public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizationRequestId> {
 
     @Id
     @AggregateIdentifier
-    @JsonSerialize(using = ToStringSerializer.class)
     private PreAuthorizationRequestId preAuthorizationRequestId;
     private String category;
     private String relationship;
     private String claimType;
-    private DateTime claimIntimationDate;
+    private LocalDate claimIntimationDate;
     private String batchNumber;
     private GHProposer ghProposer;
     private PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail;
@@ -50,10 +51,15 @@ public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreA
     private Set<PreAuthorizationRequestDiagnosisTreatmentDetail> preAuthorizationRequestDiagnosisTreatmentDetails;
     private PreAuthorizationRequestIllnessDetail preAuthorizationRequestIllnessDetail;
     private Set<PreAuthorizationRequestDrugService> preAuthorizationRequestDrugServices;
+    private Status status;
 
     @Override
     public PreAuthorizationRequestId getIdentifier() {
         return preAuthorizationRequestId;
+    }
+
+    public PreAuthorizationRequest(Status status){
+        this.status = status;
     }
 
     public PreAuthorizationRequest updateWithProposerDetail(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
@@ -73,7 +79,8 @@ public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreA
 
     private <T> T getInstance(Class<T> tClass) {
         try {
-            Constructor<T> constructor = tClass.getConstructor();
+            Constructor<T> constructor = tClass.getDeclaredConstructor();
+            constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -107,7 +114,7 @@ public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreA
         return this;
     }
 
-    public PreAuthorizationRequest updateWithClaimIntimationDate(DateTime claimIntimationDate) {
+    public PreAuthorizationRequest updateWithClaimIntimationDate(LocalDate claimIntimationDate) {
         if(isNotEmpty(claimIntimationDate))
             this.claimIntimationDate = claimIntimationDate;
         return this;
@@ -180,5 +187,16 @@ public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreA
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
         return null;
+    }
+
+    public enum Status {
+        DRAFT("Draft"), PRE_AUTH_PROCESSOR_EVALUATION("Pre-Auth Processor Evaluation"), PRE_AUTH_PROCESSOR_REJECTED("Pre-Auth Processor Rejected"),
+        UNDERWRITER_EVALUATION("Underwriter Evaluation"), UNDERWRITER_ON_HOLD("Underwriter On Hold"), APPROVED("Approve"), REJECTED("Rejected");
+
+        private String description;
+
+        private Status(String description){
+            this.description = description;
+        }
     }
 }

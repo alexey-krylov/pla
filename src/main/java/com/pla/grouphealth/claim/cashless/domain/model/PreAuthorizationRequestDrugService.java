@@ -13,9 +13,10 @@ import javax.persistence.Embeddable;
 @Immutable
 @Embeddable
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class PreAuthorizationRequestDrugService {
     private String type;
     private String serviceName;

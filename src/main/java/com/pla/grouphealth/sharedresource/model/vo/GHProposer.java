@@ -44,7 +44,7 @@ public class GHProposer {
     public GHProposer updateWithProposerDetails(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
         if(isNotEmpty(preAuthorizationClaimantProposerDetail)) {
             this.proposerName = preAuthorizationClaimantProposerDetail.getProposerName();
-            this.proposerCode = preAuthorizationClaimantProposerDetail.getPostalCode();
+            this.proposerCode = preAuthorizationClaimantProposerDetail.getProposerCode();
             this.contactDetail = updateWithContactDetail(preAuthorizationClaimantProposerDetail);
         }
         return this;

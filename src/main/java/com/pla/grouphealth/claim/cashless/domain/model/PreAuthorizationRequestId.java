@@ -14,8 +14,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@ToString
-@JsonSerialize(using = com.fasterxml.jackson.databind.ser.std.ToStringSerializer.class)
 public class PreAuthorizationRequestId implements Serializable {
     private String preAuthorizationRequestId;
 }

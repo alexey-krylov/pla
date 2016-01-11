@@ -69,7 +69,7 @@ public class PreAuthorizationRequestService {
         PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand();
         preAuthorizationClaimantDetailCommand.updateWithBatchNumber(preAuthorization.getBatchNumber())
                 .updateWithPreAuthorizationId(preAuthorization.getPreAuthorizationId().getPreAuthorizationId())
-                .updateWithPreAuthorizationDate(preAuthorization.getBatchDate())
+                .updateWithPreAuthorizationDate(preAuthorization.getBatchDate().toLocalDate())
                 .updateWithClaimantHCPDetailDto(constructClaimantHCPDetailDto(preAuthorization.getHcpCode(), preAuthorizationDetail.getHospitalizationEvent()))
                 .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDto(preAuthorizationDetail.getPolicyNumber(), clientId))
                 .updateWithDiagnosisTreatment(constructDiagnosisTreatmentDto(preAuthorization))
@@ -169,6 +169,7 @@ public class PreAuthorizationRequestService {
                         .updateWithPlanCode(plan.getPlanDetail())
                         .updateWithPlanName(plan.getPlanDetail());
             }
+            claimantPolicyDetailDto.updateWithCoverageBenefitDetails(planDetail);
         }
         return claimantPolicyDetailDto;
     }
@@ -194,9 +195,9 @@ public class PreAuthorizationRequestService {
     public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?
-                isNotEmpty(preAuthorizationRequestRepository.findOne(new PreAuthorizationRequestId(preAuthorizationRequestId)))
-                        ? preAuthorizationRequestRepository.findOne(new PreAuthorizationRequestId(preAuthorizationRequestId))
-                        : new PreAuthorizationRequest() : new PreAuthorizationRequest();
+                isNotEmpty(getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId)))
+                        ? getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId))
+                        : new PreAuthorizationRequest(PreAuthorizationRequest.Status.DRAFT) : new PreAuthorizationRequest(PreAuthorizationRequest.Status.DRAFT);
         preAuthorizationRequest.updateWithPreAuthorizationId()
                 .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
@@ -209,6 +210,11 @@ public class PreAuthorizationRequestService {
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
-        return null;
+        preAuthorizationRequestRepository.save(preAuthorizationRequest);
+        return preAuthorizationRequest.getPreAuthorizationRequestId();
+    }
+
+    private PreAuthorizationRequest getPreAuthorizationRequestById(PreAuthorizationRequestId preAuthorizationRequestId) {
+        return preAuthorizationRequestRepository.findOne(preAuthorizationRequestId);
     }
 }

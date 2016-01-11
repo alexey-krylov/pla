@@ -16,6 +16,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @Getter
+@Setter
 public class PreAuthorizationRequestIllnessDetail {
     private String HTN;
     private String HTNDetails;

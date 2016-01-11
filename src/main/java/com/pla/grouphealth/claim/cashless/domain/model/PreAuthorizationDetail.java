@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -26,12 +27,12 @@ public class PreAuthorizationDetail {
     private String pregnancyP;
     private String pregnancyL;
     private String pregnancyA;
-    private DateTime pregnancyDateOfDelivery;
+    private LocalDate pregnancyDateOfDelivery;
     private String pregnancyModeOfDelivery;
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    public DateTime consultationDate;
+    public LocalDate consultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;
@@ -43,7 +44,7 @@ public class PreAuthorizationDetail {
     private String diagnosisTreatmentMedicalDuration;
     private String diagnosisTreatmentSurgeryName;
     private String diagnosisTreatmentSurgeryAccommodationType;
-    private DateTime diagnosisTreatmentSurgeryDateOfAdmission;
+    private LocalDate diagnosisTreatmentSurgeryDateOfAdmission;
     //private DateTime diagnosisTreatmentSurgeryDateOfDischarge;
     private int diagnosisTreatmentSurgeryLengthOStay;
     private String pastHistorySufferingFromHTN;

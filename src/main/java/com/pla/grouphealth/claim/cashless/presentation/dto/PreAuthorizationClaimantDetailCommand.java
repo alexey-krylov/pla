@@ -1,11 +1,10 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.pla.grouphealth.policy.application.command.GHPolicyDocumentCommand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
-import org.springframework.web.multipart.MultipartFile;
+import org.joda.time.LocalDate;
 
 import java.util.List;
 
@@ -20,13 +19,14 @@ public class PreAuthorizationClaimantDetailCommand {
     private String preAuthorizationId;
     private String batchNumber;
     private String claimType;
-    private DateTime claimIntimationDate;
-    private DateTime preAuthorizationDate;
+    private LocalDate claimIntimationDate;
+    private LocalDate preAuthorizationDate;
     private ClaimantHCPDetailDto claimantHCPDetailDto;
     private ClaimantPolicyDetailDto claimantPolicyDetailDto;
     private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
     private IllnessDetailDto illnessDetailDto;
     private List<DrugServiceDto> drugServicesDtos;
+
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
     }
@@ -41,7 +41,7 @@ public class PreAuthorizationClaimantDetailCommand {
         return this;
     }
 
-    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationDate(DateTime batchDate) {
+    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationDate(LocalDate batchDate) {
         this.preAuthorizationDate = batchDate;
         return this;
     }

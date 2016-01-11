@@ -30,6 +30,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,7 +164,7 @@ public class PreAuthorizationService {
     private PreAuthorizationId constructPreAuthorizationId(Set<PreAuthorizationDetail> preAuthorizationDetails) {
         Assert.notEmpty(preAuthorizationDetails, "PreAuthorizationDetail cannot be empty");
         PreAuthorizationDetail preAuthorizationDetail = preAuthorizationDetails.iterator().next();
-        DateTime consultationDate = preAuthorizationDetail.getConsultationDate();
+        LocalDate consultationDate = preAuthorizationDetail.getConsultationDate();
         String preAuthIdSequence = sequenceGenerator.getSequence(PreAuthorizationId.class);
         String year = String.format("%02d", consultationDate.getYear());
         preAuthIdSequence = String.format("%07d", Integer.parseInt(preAuthIdSequence.trim()))+String.format("%02d", consultationDate.getMonthOfYear())+ (year.length() > 2 ? year.substring(year.length() - 2) : year);
@@ -209,7 +210,7 @@ public class PreAuthorizationService {
                 preAuthorizationDto.setPolicyNumber(policyNumber);
                 preAuthorizationDto.setClientId(clientId);
                 preAuthorizationDto.setPreAuthorizationId(preAuthorization.getPreAuthorizationId().getPreAuthorizationId());
-                preAuthorizationDto.setConsultationDate(preAuthorizationDetail.getConsultationDate());
+                preAuthorizationDto.setConsultationDate(preAuthorizationDetail.getConsultationDate().toDateTimeAtStartOfDay());
                 preAuthorizationDto.setHcpName(hcp.getHcpName());
                 preAuthorizationDto.setPolicyHolderName(policyHolderName);
                 furbishedList.add(preAuthorizationDto);

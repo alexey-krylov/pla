@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class IllnessDetailDto {
     private String HTN;
     private String HTNDetails;

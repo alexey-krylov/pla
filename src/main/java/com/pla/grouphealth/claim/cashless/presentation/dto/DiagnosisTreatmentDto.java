@@ -1,33 +1,41 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.nthdimenzion.utils.UtilValidator;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Created by Mohan Sharma on 1/7/2016.
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class DiagnosisTreatmentDto {
     private String indicateWhether;
     private String pregnancyG;
     private String pregnancyP;
     private String pregnancyL;
     private String pregnancyA;
-    private DateTime pregnancyDateOfDelivery;
+    private LocalDate pregnancyDateOfDelivery;
     private String modeOdDelivery;
     private String nameOfIllnessDisease;
     private String relevantClinicalFinding;
     private String durationOfPresentAilment;
-    private DateTime dateOfConsultation;
+    private LocalDate dateOfConsultation;
     private String pastHistoryOfPresentAilment;
     private String provisionalDiagnosis;
     private String lineOfTreatment;
     private String indicateTest;
     private String nameOfSurgery;
-    private DateTime dateOfAdmission;
+    private LocalDate dateOfAdmission;
     private int lengthOfStay;
     private String typeOfAccommodation;
 
@@ -49,7 +57,7 @@ public class DiagnosisTreatmentDto {
         this.indicateTest = preAuthorizationDetail.getDiagnosisTreatmentTest();
         this.nameOfSurgery = preAuthorizationDetail.getDiagnosisTreatmentSurgeryName();
         this.dateOfAdmission = preAuthorizationDetail.getDiagnosisTreatmentSurgeryDateOfAdmission();
-        //this.lengthOfStay = preAuthorizationDetail.
+        this.lengthOfStay = preAuthorizationDetail.getDiagnosisTreatmentSurgeryLengthOStay();
         this.typeOfAccommodation = preAuthorizationDetail.getDiagnosisTreatmentSurgeryAccommodationType();
         return this;
     }

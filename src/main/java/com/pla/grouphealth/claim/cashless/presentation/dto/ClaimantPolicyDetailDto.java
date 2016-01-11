@@ -4,10 +4,7 @@ import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.presentation.AppUtils;
 
@@ -22,6 +19,7 @@ import static org.nthdimenzion.utils.UtilValidator.*;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class ClaimantPolicyDetailDto {
     private String policyNumber;
     private String policyName;
@@ -33,7 +31,8 @@ public class ClaimantPolicyDetailDto {
     private PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail;
     private AssuredDetail assuredDetail;
     private DependentAssuredDetail dependentAssuredDetail;
-    private Set<CoverageDetailDto> coverageDetailDtoList = Sets.newHashSet();
+    private Set<CoverageDetailDto> coverageDetailDtoList;
+    private Set<CoverageBenefitDetailDto> coverageBenefitDetails;
 
     public static ClaimantPolicyDetailDto getInstance() {
         return new ClaimantPolicyDetailDto();
@@ -163,13 +162,36 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
+    public ClaimantPolicyDetailDto updateWithCoverageBenefitDetails(GHPlanPremiumDetail planDetail) {
+        if(isNotEmpty(planDetail)){
+
+        }
+        return this;
+    }
+
     @Getter
     @Setter
     @EqualsAndHashCode
     @AllArgsConstructor
+    @NoArgsConstructor
     public class CoverageDetailDto {
         String coverageCode;
         String coverageName;
         BigDecimal sumAssured;
     }
+
+    @Getter
+    @Setter
+    @EqualsAndHashCode
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class CoverageBenefitDetailDto {
+        private String coverageName;
+        private String coverageCode;
+        private String benefitName;
+        private String benefitCode;
+        private BigDecimal balanceAmount;
+        private BigDecimal probableClaimAmount;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPAddress;
 import com.pla.core.hcp.domain.model.HCPCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.nthdimenzion.utils.UtilValidator;
 
@@ -14,6 +15,7 @@ import static org.nthdimenzion.utils.UtilValidator.*;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class ClaimantHCPDetailDto {
     private String hospitalizationEvent;
     private String hcpCode;
