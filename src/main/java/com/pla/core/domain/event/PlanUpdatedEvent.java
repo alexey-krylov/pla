@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.joda.time.DateTime;
 
 /**
- * Created by Mohan Sharma on 11-04-2015.
+ * Author - Mohan Sharma Created on 11-04-2015.
  */
 @Getter
 public class PlanUpdatedEvent {

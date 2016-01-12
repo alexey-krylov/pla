@@ -1,7 +1,6 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.hcp.domain.model.HCP;
@@ -48,7 +47,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notNull;
 
 /**
- * Created by Mohan Sharma on 1/6/2016.
+ * Author - Mohan Sharma Created on 1/6/2016.
  */
 @DomainService
 @NoArgsConstructor
@@ -213,7 +212,8 @@ public class PreAuthorizationRequestService {
                 isNotEmpty(getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId)))
                         ? getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId))
                         : new PreAuthorizationRequest(PreAuthorizationRequest.Status.DRAFT) : new PreAuthorizationRequest(PreAuthorizationRequest.Status.DRAFT);
-        preAuthorizationRequest.updateWithPreAuthorizationId()
+        preAuthorizationRequest.updateWithPreAuthorizationRequestId()
+                .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())

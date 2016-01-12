@@ -5,7 +5,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 /**
- * Created by Mohan Sharma on 1/11/2016.
+ * Author - Mohan Sharma Created on 1/11/2016.
  */
 @Getter
 @Setter

@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * Created by Mohan Sharma on 12/17/2015.
+ * Author - Mohan Sharma Created on 12/17/2015.
  */
 @ValueObject
 @Immutable

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by Mohan Sharma on 1/4/2016.
+ * Author - Mohan Sharma Created on 1/4/2016.
  */
 @Component
 public class PreAuthorizationRequestCommandHandler {

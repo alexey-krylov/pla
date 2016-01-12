@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.joda.time.DateTime;
 
 /**
- * Created by Mohan Sharma on 1/4/2016.
+ * Author - Mohan Sharma Created on 1/4/2016.
  */
 @Getter
 @Setter

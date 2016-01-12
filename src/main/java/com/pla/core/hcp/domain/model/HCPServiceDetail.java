@@ -6,7 +6,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import java.math.BigDecimal;
 
 /**
- * Created by Mohan Sharma on 12/21/2015.
+ * Author - Mohan Sharma Created on 12/21/2015.
  */
 @ValueObject
 @NoArgsConstructor

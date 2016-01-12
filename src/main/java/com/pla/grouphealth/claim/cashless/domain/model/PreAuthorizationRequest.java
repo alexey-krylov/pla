@@ -31,7 +31,7 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
- * Created by Mohan Sharma on 1/9/2016.
+ * Author - Mohan Sharma Created on 1/9/2016.
  */
 @Document(collection = "PRE_AUTHORIZATION_REQUEST")
 @Getter
@@ -41,6 +41,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     @Id
     @AggregateIdentifier
     private PreAuthorizationRequestId preAuthorizationRequestId;
+    private PreAuthorizationId preAuthorizationId;
     private String category;
     private String relationship;
     private String claimType;
@@ -73,7 +74,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
         return this;
     }
 
-    public PreAuthorizationRequest updateWithPreAuthorizationId() {
+    public PreAuthorizationRequest updateWithPreAuthorizationRequestId() {
         if(isEmpty(this.preAuthorizationRequestId))
             this.preAuthorizationRequestId = new PreAuthorizationRequestId(new ObjectId().toString());
         return this;
@@ -193,6 +194,14 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
 
     public PreAuthorizationRequest updateWithDocuments(Set<GHProposerDocument> proposerDocuments) {
         this.proposerDocuments = proposerDocuments;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithPreAuthorizationId(String preAuthorizationIdString) {
+        if(isEmpty(preAuthorizationId)) {
+            PreAuthorizationId preAuthorizationId = new PreAuthorizationId(preAuthorizationIdString);
+            this.preAuthorizationId = preAuthorizationId;
+        }
         return this;
     }
 

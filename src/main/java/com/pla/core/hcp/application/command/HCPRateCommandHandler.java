@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by Mohan Sharma on 12/17/2015.
+ * Author - Mohan Sharma Created on 12/17/2015.
  */
 @Component
 public class HCPRateCommandHandler {

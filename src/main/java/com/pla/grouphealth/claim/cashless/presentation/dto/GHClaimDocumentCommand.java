@@ -7,14 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Created by Mohan Sharma on 1/12/2016.
+ * Author - Mohan Sharma Created on 1/12/2016.
  */
 @Getter
 @Setter
 @NoArgsConstructor
 public class GHClaimDocumentCommand {
 
-    private String policyId;
+    private String preAuthorizationRequestId;
     private UserDetails userDetails;
     private String documentId;
     private String filename;

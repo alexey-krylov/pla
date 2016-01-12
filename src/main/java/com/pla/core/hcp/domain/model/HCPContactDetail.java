@@ -7,7 +7,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import javax.persistence.Embeddable;
 
 /**
- * Created by Mohan Sharma on 12/17/2015.
+ * Author - Mohan Sharma Created on 12/17/2015.
  */
 @ValueObject
 @Immutable

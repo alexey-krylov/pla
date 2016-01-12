@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by Mohan Sharma on 12/31/2015.
+ * Author - Mohan Sharma Created on 12/31/2015.
  */
 @Getter
 @Setter

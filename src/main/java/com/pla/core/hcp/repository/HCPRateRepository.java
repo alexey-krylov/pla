@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 /**
- * Created by Mohan Sharma on 12/21/2015.
+ * Author - Mohan Sharma Created on 12/21/2015.
  */
 public interface HCPRateRepository extends MongoRepository<HCPRate, HCPRateId> {
 

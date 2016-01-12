@@ -12,7 +12,7 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 
 /**
- * Created by Mohan Sharma on 1/7/2016.
+ * Author - Mohan Sharma Created on 1/7/2016.
  */
 @Getter
 @Setter

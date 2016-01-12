@@ -3,11 +3,9 @@ package com.pla.grouphealth.claim.cashless.application.command;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
-import com.pla.grouphealth.policy.application.command.GHPolicyDocumentCommand;
-import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
-import com.pla.sharedkernel.identifier.PolicyId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ import java.util.function.Predicate;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
- * Created by Mohan Sharma on 1/4/2016.
+ * Author - Mohan Sharma Created on 1/4/2016.
  */
 @Component
 public class PreAuthorizationCommandHandler {
@@ -42,7 +40,7 @@ public class PreAuthorizationCommandHandler {
     @CommandHandler
     public void uploadMandatoryDocument(GHClaimDocumentCommand ghClaimDocumentCommand) throws IOException {
         String fileName = ghClaimDocumentCommand.getFile() != null ? ghClaimDocumentCommand.getFile().getOriginalFilename() : "";
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(new PolicyId(ghClaimDocumentCommand.getPolicyId()));
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(new PreAuthorizationRequestId(ghClaimDocumentCommand.getPreAuthorizationRequestId()));
         Set<GHProposerDocument> documents = preAuthorizationRequest.getProposerDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();

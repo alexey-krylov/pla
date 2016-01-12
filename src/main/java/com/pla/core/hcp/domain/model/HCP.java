@@ -10,7 +10,7 @@ import org.nthdimenzion.common.crud.ICrudEntity;
 import javax.persistence.*;
 
 /**
- * Created by Mohan Sharma on 12/17/2015.
+ * Author - Mohan Sharma Created on 12/17/2015.
  */
 @Entity
 @NoArgsConstructor

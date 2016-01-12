@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
- * Created by Mohan Sharma on 1/9/2016.
+ * Author - Mohan Sharma Created on 1/9/2016.
  */
 @ValueObject
 @org.hibernate.annotations.Immutable

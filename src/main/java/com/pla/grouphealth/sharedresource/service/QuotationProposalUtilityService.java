@@ -28,7 +28,7 @@ import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
- * Created by Mohan Sharma on 11/20/2015.
+ * Author  Mohan Sharma Created on 11/20/2015.
  */
 public class QuotationProposalUtilityService {
 
@@ -129,6 +129,8 @@ public class QuotationProposalUtilityService {
         for (GHInsured ghInsured : insuredDtos) {
             totalPremiumInExcel = totalPremiumInExcel.add(ghInsured.getPlanPremiumDetail().getPremiumAmount());
         }*/
+        if(isEmpty(groupHealthQuotation.getPremiumDetail()))
+            return Boolean.FALSE;
         BigDecimal totalPayablePremium = groupHealthQuotation.getPremiumDetail() != null ? groupHealthQuotation.getPremiumDetail().getNetTotalPremium() : new BigDecimal(0);
         if(totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 0)
             return Boolean.FALSE;
@@ -150,6 +152,8 @@ public class QuotationProposalUtilityService {
         if(totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPremiumInExcel.compareTo(new BigDecimal(minimumPremium)) == 0)
             return Boolean.TRUE;
         return Boolean.FALSE;*/
+        if(isEmpty(groupLifeQuotation.getPremiumDetail()))
+            return Boolean.FALSE;
         BigDecimal totalPayablePremium = groupLifeQuotation.getPremiumDetail() != null ? groupLifeQuotation.getPremiumDetail().getNetTotalPremium() : new BigDecimal(0);
         if(totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 1 || totalPayablePremium.compareTo(new BigDecimal(minimumPremium)) == 0)
             return Boolean.FALSE;
@@ -174,6 +178,8 @@ public class QuotationProposalUtilityService {
 
     public static boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGH(Set<GHInsured> insuredDtos, int minimumConfiguredPersons) {
         int totalNumberOfPersonInExcel = 0;
+        if(isEmpty(insuredDtos))
+            return Boolean.FALSE;
         for (GHInsured ghInsured : insuredDtos) {
             if(ghInsured.getNoOfAssured() != null){
                 totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();
@@ -188,6 +194,8 @@ public class QuotationProposalUtilityService {
 
     public static boolean isNoOfPersonsLessThenMinimumConfiguredPersonsGL(Set<Insured> insuredDtos, int minimumConfiguredPersons) {
         int totalNumberOfPersonInExcel = 0;
+        if(isEmpty(insuredDtos))
+            return Boolean.FALSE;
         for (Insured ghInsured : insuredDtos) {
             if(ghInsured.getNoOfAssured() != null){
                 totalNumberOfPersonInExcel += new BigDecimal(ghInsured.getNoOfAssured()).intValue();

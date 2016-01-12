@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import java.util.Set;
 
 /**
- * Created by Mohan Sharma on 12/30/2015.
+ * Author - Mohan Sharma Created on 12/30/2015.
  */
 @Getter
 public class UploadPreAuthorizationCommand {

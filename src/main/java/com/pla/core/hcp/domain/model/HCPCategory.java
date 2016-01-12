@@ -3,7 +3,7 @@ package com.pla.core.hcp.domain.model;
 import static org.springframework.util.Assert.notNull;
 
 /**
- * Created by Mohan Sharma on 12/17/2015.
+ * Author - Mohan Sharma Created on 12/17/2015.
  */
 public enum HCPCategory {
     L1("Level1"), L2("Level2"), L3("Level3"), HP("Health Post"), RC("Rural Health Centre"), UC("Urban Health Centre");

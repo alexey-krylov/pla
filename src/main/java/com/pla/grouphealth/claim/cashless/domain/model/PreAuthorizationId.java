@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * Created by Mohan Sharma on 12/30/2015.
+ * Author - Mohan Sharma Created on 12/30/2015.
  */
 @Getter
 @ValueObject

@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.Set;
 
 /**
- * Created by Mohan Sharma on 12/17/2015.
+ * Author - Mohan Sharma Created on 12/17/2015.
  */
 @RequestMapping(value = "/core/hcprate")
 @RestController

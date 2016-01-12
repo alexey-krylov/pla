@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 /**
- * Created by Mohan Sharma on 12/24/2015.
+ * Author - Mohan Sharma Created on 12/24/2015.
  */
 public interface SBCMRepository extends MongoRepository<ServiceBenefitCoverageMapping, ServiceBenefitCoverageMappingId> {
     @Query("{'planCode' : ?0,'coverageId':?1, 'benefitId' :?2 ,'service' : ?3, 'status' : ?4}")

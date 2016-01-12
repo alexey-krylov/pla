@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 /**
- * Created by Mohan Sharma on 12/21/2015.
+ * Author - Mohan Sharma Created on 12/21/2015.
  */
 @Document(collection = "hcp_rate")
 @NoArgsConstructor

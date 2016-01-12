@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by Mohan Sharma on 12/24/2015.
+ * Author - Mohan Sharma Created on 12/24/2015.
  */
 @Getter
 @NoArgsConstructor

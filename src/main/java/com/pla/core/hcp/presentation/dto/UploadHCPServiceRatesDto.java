@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
- * Created by Mohan Sharma on 4/14/2015.
+ * Author - Mohan Sharma Created on 4/14/2015.
  */
 @Getter
 @Setter

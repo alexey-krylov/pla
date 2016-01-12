@@ -13,12 +13,14 @@ import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthoriza
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
 import com.pla.grouphealth.claim.cashless.repository.GHCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
+import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
@@ -40,6 +42,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,7 +50,7 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
- * Created by Mohan Sharma on 12/30/2015.
+ * Author - Mohan Sharma Created on 12/30/2015.
  */
 @DomainService
 public class PreAuthorizationService {
@@ -61,9 +64,10 @@ public class PreAuthorizationService {
     private SequenceGenerator sequenceGenerator;
     private HCPFinder hcpFinder;
     private GHPolicyRepository ghPolicyRepository;
+    private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
 
     @Autowired
-    public PreAuthorizationService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator,HCPFinder hcpFinder, GHPolicyRepository ghPolicyRepository) {
+    public PreAuthorizationService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator,HCPFinder hcpFinder, GHPolicyRepository ghPolicyRepository, PreAuthorizationRequestRepository preAuthorizationRequestRepository) {
         this.ghCashlessClaimRepository = ghCashlessClaimRepository;
         this.preAuthorizationRepository = preAuthorizationRepository;
         this.preAuthorizationFinder = preAuthorizationFinder;
@@ -73,6 +77,7 @@ public class PreAuthorizationService {
         this.sequenceGenerator = sequenceGenerator;
         this.hcpFinder = hcpFinder;
         this.ghPolicyRepository = ghPolicyRepository;
+        this.preAuthorizationRequestRepository = preAuthorizationRequestRepository;
     }
 
     public HSSFWorkbook getGHCashlessClaimPreAuthtemplate(String hcpCode) {
@@ -199,6 +204,7 @@ public class PreAuthorizationService {
 
     public List<PreAuthorizationDto> searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
         List<PreAuthorization> preAuthorizations = preAuthorizationFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto);
+        preAuthorizations = checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(preAuthorizations);
         List<PreAuthorizationDto> furbishedList = Lists.newLinkedList();
         for(PreAuthorization preAuthorization : preAuthorizations){
             for(PreAuthorizationDetail preAuthorizationDetail : preAuthorization.getPreAuthorizationDetails()){
@@ -217,6 +223,16 @@ public class PreAuthorizationService {
             }
         }
         return furbishedList;
+    }
+
+    private List<PreAuthorization> checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(List<PreAuthorization> preAuthorizations) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAll();
+        return isNotEmpty(preAuthorizationRequests) ? preAuthorizations.parallelStream().filter(new Predicate<PreAuthorization>() {
+            @Override
+            public boolean test(PreAuthorization preAuthorization) {
+                return (preAuthorizationRequests.parallelStream().filter(preAuthorizationRequest -> preAuthorizationRequest.getPreAuthorizationId().equals(preAuthorization.getPreAuthorizationId())).findFirst().isPresent());
+            }
+        }).collect(Collectors.toList()) : preAuthorizations;
     }
 
     private String getPolicyHolderName(String policyNumber, String clientId) {

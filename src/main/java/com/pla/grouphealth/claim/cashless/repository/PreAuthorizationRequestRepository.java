@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 /**
- * Created by Mohan Sharma on 12/30/2015.
+ * Author - Mohan Sharma Created on 12/30/2015.
  */
 public interface PreAuthorizationRequestRepository extends MongoRepository<PreAuthorizationRequest, PreAuthorizationRequestId>{
 }

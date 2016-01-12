@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * Created by Mohan Sharma on 1/9/2016.
+ * Author - Mohan Sharma Created on 1/9/2016.
  */
 @EqualsAndHashCode(of = "preAuthorizationRequestId")
 @Embeddable
