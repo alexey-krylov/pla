@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     private PreAuthorizationRequestIllnessDetail preAuthorizationRequestIllnessDetail;
     private Set<PreAuthorizationRequestDrugService> preAuthorizationRequestDrugServices;
     private Status status;
+    private Set<GHProposerDocument> proposerDocuments;
 
     @Override
     public PreAuthorizationRequestId getIdentifier() {
@@ -187,6 +189,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
         return null;
+    }
+
+    public PreAuthorizationRequest updateWithDocuments(Set<GHProposerDocument> proposerDocuments) {
+        this.proposerDocuments = proposerDocuments;
+        return this;
     }
 
     public enum Status {
