@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.query;
 
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import org.joda.time.DateTime;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -61,4 +62,30 @@ public class PreAuthorizationFinder {
 
     }
 
+    public List<PreAuthorizationRequest> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+        if(isEmpty(searchPreAuthorizationRecordDto.getBatchNumber())&& isEmpty(searchPreAuthorizationRecordDto.getClientId()) &&
+                isEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())&&isEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())&&
+                isEmpty(searchPreAuthorizationRecordDto.getHcpCode())) {
+
+            return Lists.newArrayList();
+        }
+        Query query=new Query();
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
+            query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
+        }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getHcpCode())){
+            query.addCriteria(new Criteria().and("preAuthorizationRequestHCPDetail.hcpCode").is(searchPreAuthorizationRecordDto.getHcpCode()));
+        }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())){
+            query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.policyNumber").is(searchPreAuthorizationRecordDto.getPolicyNumber()));
+        }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getClientId())){
+            query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.assuredDetail.clientId").is(searchPreAuthorizationRecordDto.getClientId()));
+        }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())){
+            query.addCriteria(new Criteria().and("preAuthorizationRequestId.preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
+        }
+        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationRequestId.preAuthorizationRequestId"));
+        return mongoTemplate.find(query, PreAuthorizationRequest.class, "PRE_AUTHORIZATION_REQUEST");
+    }
 }

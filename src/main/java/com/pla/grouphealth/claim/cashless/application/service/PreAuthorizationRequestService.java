@@ -9,6 +9,7 @@ import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.domain.model.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
+import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
@@ -69,6 +70,8 @@ public class PreAuthorizationRequestService {
     private IUnderWriterAdapter underWriterAdapter;
     @Autowired
     private GridFsTemplate gridFsTemplate;
+    @Autowired
+    private PreAuthorizationFinder preAuthorizationFinder;
 
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
@@ -83,7 +86,7 @@ public class PreAuthorizationRequestService {
         notNull(preAuthorizationDetail, "PreAuthorizationDetail cannot be null");
         PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand();
         preAuthorizationClaimantDetailCommand.updateWithBatchNumber(preAuthorization.getBatchNumber())
-                .updateWithPreAuthorizationId(preAuthorization.getPreAuthorizationId().getPreAuthorizationId())
+                .updateWithPreAuthorizationId(preAuthorization.getPreAuthorizationId())
                 .updateWithPreAuthorizationDate(preAuthorization.getBatchDate().toLocalDate())
                 .updateWithClaimantHCPDetailDto(constructClaimantHCPDetailDto(preAuthorization.getHcpCode(), preAuthorizationDetail.getHospitalizationEvent()))
                 .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDto(preAuthorizationDetail.getPolicyNumber(), clientId))
@@ -308,5 +311,22 @@ public class PreAuthorizationRequestService {
             }
         }
         return isNotEmpty(groupHealthInsured) ? groupHealthInsured.getPlanPremiumDetail() : ghInsuredDependent.getPlanPremiumDetail();
+    }
+
+    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
+        return isNotEmpty(preAuthorizationRequests) ? preAuthorizationRequests.parallelStream().map(new Function<PreAuthorizationRequest, PreAuthorizationClaimantDetailCommand>() {
+            @Override
+            public PreAuthorizationClaimantDetailCommand apply(PreAuthorizationRequest preAuthorizationRequest) {
+                PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand()
+                        .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
+                        .updateWithPreAuthorizationRequestId(preAuthorizationRequest.getPreAuthorizationRequestId())
+                        .updateWithClaimType(preAuthorizationRequest.getClaimType())
+                        .updateWithClaimIntimationDate(preAuthorizationRequest.getClaimIntimationDate())
+                        .updateWithPolicy(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail())
+                        .updateWithHcp(preAuthorizationRequest.getPreAuthorizationRequestHCPDetail());
+                return preAuthorizationClaimantDetailCommand;
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
     }
 }

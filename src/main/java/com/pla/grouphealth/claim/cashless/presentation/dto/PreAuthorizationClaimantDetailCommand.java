@@ -1,12 +1,19 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestHCPDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestPolicyDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.utils.UtilValidator;
 
 import java.util.List;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Author - Mohan Sharma Created on 1/6/2016.
@@ -36,8 +43,9 @@ public class PreAuthorizationClaimantDetailCommand {
         return this;
     }
 
-    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationId(String preAuthorizationId) {
-        this.preAuthorizationId = preAuthorizationId;
+    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationId(PreAuthorizationId preAuthorizationId) {
+        if(isNotEmpty(preAuthorizationId))
+            this.preAuthorizationId = preAuthorizationId.getPreAuthorizationId();
         return this;
     }
 
@@ -68,6 +76,47 @@ public class PreAuthorizationClaimantDetailCommand {
 
     public PreAuthorizationClaimantDetailCommand updateWithDrugServices(List<DrugServiceDto> drugServiceDtos) {
         this.drugServicesDtos = drugServiceDtos;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
+        if(isNotEmpty(preAuthorizationRequestId))
+            this.preAuthorizationRequestId = preAuthorizationRequestId.getPreAuthorizationRequestId();
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithClaimType(String claimType) {
+        this.claimType = claimType;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithClaimIntimationDate(LocalDate claimIntimationDate) {
+        this.claimIntimationDate = claimIntimationDate;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithPolicy(PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail) {
+        if(isNotEmpty(preAuthorizationRequestPolicyDetail)){
+            ClaimantPolicyDetailDto claimantPolicyDetailDto = new ClaimantPolicyDetailDto();
+            claimantPolicyDetailDto.setPolicyNumber(preAuthorizationRequestPolicyDetail.getPolicyNumber());
+            claimantPolicyDetailDto.setPolicyName(preAuthorizationRequestPolicyDetail.getPolicyName());
+            if(isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail())){
+                AssuredDetail assuredDetail = new AssuredDetail();
+                assuredDetail.setClientId(preAuthorizationRequestPolicyDetail.getAssuredDetail().getClientId());
+                claimantPolicyDetailDto.setAssuredDetail(assuredDetail);
+            }
+            this.claimantPolicyDetailDto = claimantPolicyDetailDto;
+        }
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithHcp(PreAuthorizationRequestHCPDetail preAuthorizationRequestHCPDetail) {
+        if(isNotEmpty(preAuthorizationRequestHCPDetail)){
+            ClaimantHCPDetailDto claimantHCPDetailDto = new ClaimantHCPDetailDto();
+            claimantHCPDetailDto.setHcpName(preAuthorizationRequestHCPDetail.getHcpName());
+            claimantHCPDetailDto.setHcpCode(preAuthorizationRequestHCPDetail.getHcpCode());
+            this.claimantHCPDetailDto = claimantHCPDetailDto;
+        }
         return this;
     }
 }
