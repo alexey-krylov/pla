@@ -38,14 +38,15 @@ public class PreAuthorizationRequestController {
     @Autowired
     private PreAuthorizationRequestService preAuthorizationRequestService;
 
-    @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId", method = RequestMethod.GET)
+    @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
     public @ResponseBody
-    PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(@RequestParam String preAuthorizationId, @RequestParam String clientId){
+    PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(@PathVariable("preAuthorizationId") String preAuthorizationId, @PathVariable("clientId") String clientId){
         return preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(new PreAuthorizationId(preAuthorizationId), clientId);
     }
 
     @RequestMapping(value = "/createorupdate", method = RequestMethod.POST)
     public Result createUpdate(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response){
+
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
@@ -56,6 +57,15 @@ public class PreAuthorizationRequestController {
         } catch (Exception e){
             return Result.failure(e.getMessage());
         }
+    }
+
+
+    @RequestMapping(value="/loadpreauthorizationrequest",method = RequestMethod.GET)
+    public ModelAndView searchPreAuthorizationRecor() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "/getmandatorydocuments/{clientId}", method = RequestMethod.GET)

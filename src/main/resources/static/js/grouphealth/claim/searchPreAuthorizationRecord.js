@@ -4,30 +4,30 @@ var searchPreAuthorizationModule = (function(){
     PreAuthorizationServices.PreAuthorizationSelected = undefined;
     this.PreAuthorizationName = null;
     PreAuthorizationServices.getTheItemSelected = function(ele){
-        this.PreAuthorizationSelected=$(ele).val();
+        this.preAuthorizationId=$(ele).val();
+        this.clientId=$(ele).attr("clientId");
         $("#PreAuthorization-view").prop("disabled","");
-
+        $("#PreAuthorization-create").prop("disabled","");
         this.PreAuthorizationName = $(ele).parent().find('input[type=hidden]').val();
-       // alert(this.PreAuthorizationName);
     };
-//    PreAuthorizationServices.createPreAuthorization = function(){
-//        window.location.href = "openPreAuthorizationpage";
-//    };
 
-//    PreAuthorizationServices.createPreAuthorization = function () {
-//        window.location.href = "pla/core/PreAuthorization/create";
-//    };
+    PreAuthorizationServices.createPreAuthorization = function () {
+        var  clientId =this.clientId;
+        var  preAuthorizationId =this.preAuthorizationId;
+        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadpreauthorizationrequest?clientId=" + clientId +"&preAuthorizationId="+preAuthorizationId+"&mode=new";
+    };
 
-//    PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button
-//        if (this.PreAuthorizationSelected) {
-//            if ('PreAuthorization' === this.PreAuthorizationName) {
-//               window.location.href = "/pla/core/PreAuthorization/openPreAuthorizationpage?PreAuthorizationId=" + this.PreAuthorizationSelected +"&mode=view";
-//           } else {
-//                window.location.href = "/pla/core/PreAuthorization/openPreAuthorizationpage?PreAuthorizationId=" + this.PreAuthorizationSelected + "&mode=view";
-//
-//            }
-//        }
-//    };
+    PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button
+        if (this.PreAuthorizationSelected) {
+            if ('PreAuthorization' === this.PreAuthorizationName) {
+               var  preAuthorizationId =this.PreAuthorizationSelected;
+               window.location.href = "/pla/grouphealth/claim/cashless/preauthorization/loadpreauthorizationrequest?PreAuthorizationId=" + preAuthorizationId +"&mode=view";
+           } else {var  preAuthorizationId =this.PreAuthorizationSelected;
+                window.location.href = "/pla/grouphealth/claim/cashless/preauthorization/loadpreauthorizationrequest?PreAuthorizationId=" + preAuthorizationId + "&mode=view";
+
+            }
+        }
+    };
 
 //    PreAuthorizationServices.updatePreAuthorization = function(){
 //        if(this.PreAuthorizationSelected){

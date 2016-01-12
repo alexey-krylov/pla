@@ -120,17 +120,11 @@ public class PreAuthorizationController {
         return  modelAndView;
     }
 
-    @RequestMapping(value="/searchPreAuthorizationclaimAmendment",method = RequestMethod.GET)
-    public ModelAndView searchPreAuthorizationRecor(){
-        ModelAndView modelAndView=new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/claimAmendment");
 
-        return  modelAndView;
-    }
-    @RequestMapping(value="/searchPreAuthorizationcashlessClaim",method = RequestMethod.GET)
-    public ModelAndView searchPreAuthorizationReco(){
-        ModelAndView modelAndView=new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/cashlessClaim");
-        return  modelAndView;
-    }
+//    @RequestMapping(value="/loadpreauthorizationrequest",method = RequestMethod.GET)
+//    public ModelAndView searchPreAuthorizationReco(){
+//        ModelAndView modelAndView=new ModelAndView();
+//        modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
+//        return  modelAndView;
+//    }
 }
