@@ -200,6 +200,7 @@ public class GroupLifeQuotation extends AbstractAggregateRoot<QuotationId> imple
         newQuotation.samePlanForAllCategory = this.samePlanForAllCategory;
         newQuotation.samePlanForAllRelation = this.samePlanForAllRelation;
         newQuotation.schemeName = this.schemeName;
+        newQuotation.opportunityId = opportunityId;
         return newQuotation;
     }
 
