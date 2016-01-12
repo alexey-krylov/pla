@@ -19,6 +19,7 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -136,7 +137,7 @@ public class GHInsuredFactory {
                 insuredPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredPlanProratePremium);
             }
             if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
-                insuredPlanProratePremium =  insuredPlanProratePremium.divide(new BigDecimal(365)).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
+                insuredPlanProratePremium = insuredPlanProratePremium.divide(new BigDecimal(365),2, AppConstants.roundingMode).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
             }
             if (insured.getNoOfAssured() != null && isEmpty(computedPremiumDtos)){
                 Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
@@ -193,7 +194,7 @@ public class GHInsuredFactory {
                 }
 
                 if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
-                    insuredDependentPlanProratePremium =  insuredDependentPlanProratePremium.divide(new BigDecimal(365)).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
+                    insuredDependentPlanProratePremium =  insuredDependentPlanProratePremium.divide(new BigDecimal(365),2,AppConstants.roundingMode).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
                 }
                 insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                 List<GHCoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getPlanPremiumDetail().getCoveragePremiumDetails();

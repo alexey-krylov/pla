@@ -20,6 +20,7 @@ import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -277,7 +278,7 @@ public class GLInsuredFactory {
                 planPremiumDetail.updatePremiumAmount(ComputedPremiumDto.getSemiAnnualPremium(computedPremiumDtos),ComputedPremiumDto.getQuarterlyPremium(computedPremiumDtos),ComputedPremiumDto.getMonthlyPremium(computedPremiumDtos));
             }
             if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
-                insuredPlanProratePremium =  insuredPlanProratePremium.divide(new BigDecimal(365)).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
+                insuredPlanProratePremium =  insuredPlanProratePremium.divide(new BigDecimal(365),2, AppConstants.roundingMode).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
             }
 
             insured.updatePlanPremiumAmount(insuredPlanProratePremium);
@@ -319,7 +320,7 @@ public class GLInsuredFactory {
                     computedPremiumDtosDep.add(monthlyPremium);
                 }
                 if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
-                    insuredDependentPlanProratePremium =  insuredDependentPlanProratePremium.divide(new BigDecimal(365)).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
+                    insuredDependentPlanProratePremium =  insuredDependentPlanProratePremium.divide(new BigDecimal(365),2,AppConstants.roundingMode).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
                 }
                 insuredDependent.updatePlanPremiumAmount(insuredDependentPlanProratePremium);
                 if (premiumDetailDto.getPolicyTermValue() == 365 && isNotEmpty(computedPremiumDtosDep)){
