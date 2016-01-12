@@ -19,6 +19,8 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 @Setter
 @NoArgsConstructor
 public class DiagnosisTreatmentDto {
+    private String doctorName;
+    private String doctorContactNumber;
     private String indicateWhether;
     private String pregnancyG;
     private String pregnancyP;
@@ -40,6 +42,8 @@ public class DiagnosisTreatmentDto {
     private String typeOfAccommodation;
 
     public DiagnosisTreatmentDto updateWithDetails(PreAuthorizationDetail preAuthorizationDetail) {
+        this.doctorName = preAuthorizationDetail.getTreatingDoctorName();
+        this.doctorContactNumber = preAuthorizationDetail.getDoctorContactNumber();
         this.indicateWhether = preAuthorizationDetail.getReasons();
         this.pregnancyG = preAuthorizationDetail.getPregnancyG();
         this.pregnancyP = preAuthorizationDetail.getPregnancyP();
