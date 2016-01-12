@@ -31,7 +31,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,12 +224,12 @@ public class PreAuthorizationService {
         return furbishedList;
     }
 
-    private List<PreAuthorization> checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(List<PreAuthorization> preAuthorizations) {
+    private List<PreAuthorization>  checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(List<PreAuthorization> preAuthorizations) {
         List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAll();
         return isNotEmpty(preAuthorizationRequests) ? preAuthorizations.parallelStream().filter(new Predicate<PreAuthorization>() {
             @Override
             public boolean test(PreAuthorization preAuthorization) {
-                return (preAuthorizationRequests.parallelStream().filter(preAuthorizationRequest -> preAuthorizationRequest.getPreAuthorizationId().equals(preAuthorization.getPreAuthorizationId())).findFirst().isPresent());
+                return !(preAuthorizationRequests.parallelStream().filter(preAuthorizationRequest -> preAuthorizationRequest.getPreAuthorizationId().equals(preAuthorization.getPreAuthorizationId())).findFirst().isPresent());
             }
         }).collect(Collectors.toList()) : preAuthorizations;
     }

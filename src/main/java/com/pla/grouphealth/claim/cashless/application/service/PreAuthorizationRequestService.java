@@ -12,6 +12,7 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
+import com.pla.grouphealth.policy.domain.model.PolicyStatus;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
@@ -234,9 +235,9 @@ public class PreAuthorizationRequestService {
     }
 
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId) {
-        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByFamilyId(familyId);
+        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByFamilyId(familyId, PolicyStatus.IN_FORCE);
         if(isEmpty(groupHealthPolicy)){
-            groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByDependentFamilyId(familyId);
+            groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByDependentFamilyId(familyId, PolicyStatus.IN_FORCE);
         }
         List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
         GHPlanPremiumDetail planPremiumDetail = getGHPlanPremiumDetailByFamilyId(familyId, groupHealthPolicy);
