@@ -6,8 +6,6 @@ import com.pla.core.domain.model.generalinformation.PolicyProcessMinimumLimitIte
 import com.pla.core.domain.model.generalinformation.ProductLineGeneralInformation;
 import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.quotation.domain.model.GroupHealthQuotation;
-import com.pla.grouphealth.sharedresource.dto.CategoryPlanDataHolder;
-import com.pla.grouphealth.sharedresource.dto.RelationshipPlanDataHolder;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouplife.proposal.domain.model.GroupLifeProposal;
 import com.pla.grouplife.quotation.domain.model.GroupLifeQuotation;
@@ -16,7 +14,6 @@ import com.pla.sharedkernel.domain.model.PolicyProcessMinimumLimitType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -25,63 +22,20 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author  Mohan Sharma Created on 11/20/2015.
  */
 public class QuotationProposalUtilityService {
 
-    public static boolean isSamePlanForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
-        RelationshipPlanDataHolder relationshipPlanDataHolder = null;
-        Set<RelationshipPlanDataHolder> relationshipPlanDataHolderSet = Sets.newLinkedHashSet();
-        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            Cell relationshipCell = getCellByName(row, headers, GHInsuredExcelHeader.RELATIONSHIP.getDescription());
-            String relationship = getCellValue(relationshipCell);
-            Cell planCell = getCellByName(row, headers, GHInsuredExcelHeader.PLAN.getDescription());
-            String planCode = getCellValue(planCell);
-            relationshipPlanDataHolder = new RelationshipPlanDataHolder(relationship, planCode);
-            relationshipPlanDataHolderSet.add(relationshipPlanDataHolder);
-        }
-        return checkIfSameRelationshipHasDifferentPlan(relationshipPlanDataHolderSet);
-    }
 
-    private static boolean checkIfSameRelationshipHasDifferentPlan(Set<RelationshipPlanDataHolder> relationshipPlanDataHolderSet) {
-        for(RelationshipPlanDataHolder firstEntry : relationshipPlanDataHolderSet){
-            for(RelationshipPlanDataHolder secondEntry : relationshipPlanDataHolderSet){
-                if(firstEntry.getRelationship().equals(secondEntry.getRelationship()) && !firstEntry.getPlanCode().equals(secondEntry.getPlanCode()))
-                    return Boolean.FALSE;
-            }
-        }
-        return Boolean.TRUE;
-    }
 
-    public static boolean isSamePlanForAllRelation(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
-        CategoryPlanDataHolder categoryPlanDataHolder = null;
-        Set<CategoryPlanDataHolder> categoryPlanDataHolderSet = Sets.newLinkedHashSet();
-        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            Cell categoryCell = getCellByName(row, headers, GHInsuredExcelHeader.CATEGORY.getDescription());
-            String category = getCellValue(categoryCell);
-            Cell planCell = getCellByName(row, headers, GHInsuredExcelHeader.PLAN.getDescription());
-            String planCode = getCellValue(planCell);
-            categoryPlanDataHolder = new CategoryPlanDataHolder(category, planCode);
-            categoryPlanDataHolderSet.add(categoryPlanDataHolder);
-        }
-        return checkIfSameCategoryHasDifferentPlan(categoryPlanDataHolderSet);
-    }
-
-    private static boolean checkIfSameCategoryHasDifferentPlan(Set<CategoryPlanDataHolder> categoryPlanDataHolderSet) {
-        for(CategoryPlanDataHolder firstEntry : categoryPlanDataHolderSet){
-            for(CategoryPlanDataHolder secondEntry : categoryPlanDataHolderSet){
-                if(firstEntry.getCategory().equals(secondEntry.getCategory()) && !firstEntry.getPlanCode().equals(secondEntry.getPlanCode()))
-                    return Boolean.FALSE;
-            }
-        }
-        return Boolean.TRUE;
-    }
-
+    /*
+    * If its same plan for all category and relation then both are the differentiator
+    *
+    * */
     public static boolean isSamePlanForAllRelationshipCategory(Map<Row, List<Row>> insuredDependentMap, List<String> headers) {
         Set<String> dataSet = Sets.newLinkedHashSet();
         for (Map.Entry<Row, List<Row>> rowEntry : insuredDependentMap.entrySet()) {

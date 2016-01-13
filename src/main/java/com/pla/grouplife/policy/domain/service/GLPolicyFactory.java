@@ -82,8 +82,10 @@ public class GLPolicyFactory {
     private Set<Insured> populateFamilyId(Set<Insured> insureds) {
         Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(Insured.class);
         final Integer[] sequenceNumber = {((Integer) entitySequenceMap.get("sequenceNumber")) + 1};
-        insureds.forEach(insured -> {
+        Integer dependentSequenceNumber = 0 ;
+        for(Insured insured : insureds){
             if (insured.getNoOfAssured() == null) {
+                dependentSequenceNumber = sequenceNumber[0];
                 String selfFamilySequence = sequenceNumber[0] + "01";
                 sequenceNumber[0] = sequenceNumber[0] + 1;
                 FamilyId familyId = new FamilyId(selfFamilySequence);
@@ -91,19 +93,18 @@ public class GLPolicyFactory {
             }
             if (isNotEmpty(insured.getInsuredDependents())) {
                 Map<Relationship, List<Integer>> relationshipSequenceMap = groupDependentSequenceByRelation(insured.getInsuredDependents());
-                insured.getInsuredDependents().forEach(insuredDependent -> {
+                for (InsuredDependent insuredDependent : insured.getInsuredDependents()){
                     if (insuredDependent.getNoOfAssured() == null) {
                         List<Integer> sequenceList = relationshipSequenceMap.get(insuredDependent.getRelationship());
-                        String selfFamilySequence = sequenceNumber[0].toString() + sequenceList.get(0);
-                        sequenceList.remove(0);
-                        sequenceNumber[0] = sequenceNumber[0] + 1;
+                        String selfFamilySequence = dependentSequenceNumber.toString() + sequenceList.get(0);
                         relationshipSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
                         FamilyId familyId = new FamilyId(selfFamilySequence);
                         insuredDependent = insuredDependent.updateWithFamilyId(familyId);
                     }
-                });
+                }
             }
-        });
+
+        };
         sequenceGenerator.updateSequence(sequenceNumber[0], (Integer) entitySequenceMap.get("sequenceId"));
         return insureds;
     }

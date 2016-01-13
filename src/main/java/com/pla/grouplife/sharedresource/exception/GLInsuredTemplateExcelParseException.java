@@ -25,12 +25,21 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
         throw new GLInsuredTemplateExcelParseException("For all Self relationship plan code should be same");
     }
 
+    public static void raiseNotSamePlanForAllCategoryException(String relation) {
+        throw new GLInsuredTemplateExcelParseException("For all "+relation +" relationship the cover details should be same");
+    }
+
     public static void raiseNotSamePlanForAllRelationshipException() {
         throw new GLInsuredTemplateExcelParseException("For all relationship other then Self; plan code should be same");
     }
 
+
+    public static void raiseNotSamePlanForAllRelationshipException(String category) {
+        throw new GLInsuredTemplateExcelParseException("For all "+category +" category the cover details should be same");
+    }
+
     public static void raiseNotSamePlanForAllCategoryAndRelationshipException() {
-        throw new GLInsuredTemplateExcelParseException("For all relationship plan code should be same");
+        throw new GLInsuredTemplateExcelParseException("For all relationship and Category cover should be same");
     }
 
     public static void raiseNotValidValueException(String message) {

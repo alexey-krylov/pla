@@ -3,9 +3,13 @@ package com.pla.grouplife.endorsement.query;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
+import com.pla.grouplife.endorsement.application.service.GroupLifeEndorsementChecker;
 import com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement;
+import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.sharedresource.model.GLEndorsementType;
+import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,13 @@ public class GLEndorsementFinder {
     @Autowired
     private MongoTemplate mongoTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    private GLPolicyFinder glPolicyFinder;
+
+    @Autowired
+    private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
+
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -153,5 +164,12 @@ public class GLEndorsementFinder {
                 return null;
             }
         }).collect(Collectors.toList());
+    }
+
+    public List<Insured> getActiveInsured(PolicyId policyId){
+        Map<String,Object> policyMap = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
+        List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
+        PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
+        return groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
     }
 }

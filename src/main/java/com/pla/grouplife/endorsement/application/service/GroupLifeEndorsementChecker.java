@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -118,10 +119,19 @@ public class GroupLifeEndorsementChecker {
     public List<Insured> getNewCategoryAndRelationInsuredDetail(List<Insured> insureds,String  policyNumber){
         List<GroupLifeEndorsement> groupLifeEndorsements = glEndorsementFinder.findEndorsementByPolicyNumber(policyNumber);
         for (GroupLifeEndorsement groupLifeEndorsement : groupLifeEndorsements) {
-            if (groupLifeEndorsement.getEndorsementType().equals(GLEndorsementType.NEW_CATEGORY_RELATION)) {
-                Set<Insured> newCategoryInsureds = groupLifeEndorsement.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
-                for (Insured insured : newCategoryInsureds){
-                    insureds.add(insured);
+            if (Arrays.asList(GLEndorsementType.NEW_CATEGORY_RELATION, GLEndorsementType.ASSURED_MEMBER_ADDITION).contains(groupLifeEndorsement.getEndorsementType())) {
+                Set<Insured> endorsedInsured = null;
+                if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(groupLifeEndorsement.getEndorsementType())) {
+                    endorsedInsured = groupLifeEndorsement.getEndorsement().getNewCategoryRelationEndorsement().getInsureds();
+                    for (Insured insured : endorsedInsured) {
+                        insureds.add(insured);
+                    }
+                }
+                if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(groupLifeEndorsement.getEndorsementType())) {
+                    endorsedInsured = groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds();
+                    for (Insured insured : endorsedInsured) {
+                        insureds.add(insured);
+                    }
                 }
             }
         }
@@ -150,8 +160,8 @@ public class GroupLifeEndorsementChecker {
                 public boolean test(Insured insured) {
                     return insured.getNoOfAssured()==null?insured.getCategory()!=null?insured.getCategory().equals(category):false && Relationship.SELF.description.equals(relationship):
                             insured.getCategory()!=null? insured.getCategory().equals(category):false && Relationship.SELF.description.equals(relationship) && firstName.equals(insured.getFirstName()!=null?insured.getFirstName():false)
-                            && nrc.equals(insured.getNrcNumber()!=null?insured.getNrcNumber():false) && dob.equals(insured.getDateOfBirth()!=null?insured.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):false) &&
-                            gender.equals(insured.getGender()!=null?insured.getGender().name():false);
+                                    && nrc.equals(insured.getNrcNumber()!=null?insured.getNrcNumber():false) && dob.equals(insured.getDateOfBirth()!=null?insured.getDateOfBirth().toString(AppConstants.DD_MM_YYY_FORMAT):false) &&
+                                    gender.equals(insured.getGender()!=null?insured.getGender().name():false);
                 }
             }).mapToInt(new ToIntFunction<Insured>() {
                 @Override

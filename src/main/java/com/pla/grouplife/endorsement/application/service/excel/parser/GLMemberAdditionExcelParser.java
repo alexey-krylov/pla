@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouplife.endorsement.application.service.GroupLifeEndorsementChecker;
 import com.pla.grouplife.endorsement.dto.GLEndorsementInsuredDto;
+import com.pla.grouplife.endorsement.query.GLEndorsementFinder;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
 import com.pla.grouplife.sharedresource.model.GLEndorsementExcelHeader;
@@ -47,6 +48,9 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
 
     @Autowired
     private GLPolicyFinder glPolicyFinder;
+
+    @Autowired
+    private GLEndorsementFinder glEndorsementFinder;
 
     @Autowired
     private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
@@ -194,13 +198,17 @@ public class GLMemberAdditionExcelParser extends AbstractGLEndorsementExcelParse
         return new InsuredDto.PlanPremiumDetailDto();
     }
 
-    //TODO populate plan and sum assured detail
-    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipOfDependentsFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
-        noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
+    public List<Insured> getActiveInsured(PolicyId policyId){
         Map<String,Object> policyMap  = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
-        insureds = groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
+        return groupLifeEndorsementChecker.getNewCategoryAndRelationInsuredDetail(insureds,policyNumber.getPolicyNumber());
+    }
+
+    //TODO populate plan and sum assured detail
+    private InsuredDto.PlanPremiumDetailDto findPlanIdByRelationshipOfDependentsFromPolicy(PolicyId policyId, Relationship relationship,Integer noOfAssuredInEndorsement,String category) {
+        noOfAssuredInEndorsement = noOfAssuredInEndorsement!=null?noOfAssuredInEndorsement:1;
+        List<Insured> insureds = glEndorsementFinder.getActiveInsured(policyId);
         for (Insured insured : insureds){
             Optional<InsuredDependent> dependentOptional =  insured.getInsuredDependents().parallelStream().filter(new Predicate<InsuredDependent>() {
                 @Override

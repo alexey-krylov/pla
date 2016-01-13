@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.pla.grouphealth.sharedresource.service.GHInsuredExcelHeader;
 import com.pla.grouplife.quotation.query.GLQuotationFinder;
 import com.pla.grouplife.sharedresource.dto.InsuredDto;
+import com.pla.grouplife.sharedresource.model.vo.GLRelationCategoryCoverDetail;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -32,7 +33,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.*;
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.checkIfSameOptionalCoverage;
+import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.getAllOptionalCoverageHeaders;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.*;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -184,22 +186,6 @@ public class GLInsuredExcelParser {
             raiseNotValidFirstHeaderException();
         }
         Map<Row, List<Row>> insuredDependentMap = groupByRelationship(dataRows, headers);
-        boolean isSamePlanForAllCategory = Boolean.TRUE;
-        boolean isSamePlanForAllRelationship = Boolean.TRUE;
-        boolean isSamePlanForAllRelationshipCategory = Boolean.TRUE;
-        if(samePlanForAllCategory && !samePlanForAllRelation)
-            isSamePlanForAllCategory = isSamePlanForAllCategory(insuredDependentMap, headers);
-        if(samePlanForAllRelation && !samePlanForAllCategory)
-            isSamePlanForAllRelationship = isSamePlanForAllRelation(insuredDependentMap, headers);
-        if(samePlanForAllCategory && samePlanForAllRelation)
-            isSamePlanForAllRelationshipCategory = isSamePlanForAllRelationshipCategory(insuredDependentMap, headers);
-        if (!isSamePlanForAllCategory) {
-            raiseNotSamePlanForAllCategoryException();
-        } else if (!isSamePlanForAllRelationship) {
-            raiseNotSamePlanForAllRelationshipException();
-        } else if (!isSamePlanForAllRelationshipCategory) {
-            raiseNotSamePlanForAllCategoryAndRelationshipException();
-        }
         Cell errorMessageHeaderCell = null;
         Iterator<Row> dataRowIterator = dataRows.iterator();
         List<Row> rowList = Lists.newArrayList(dataRows.iterator());
@@ -246,6 +232,14 @@ public class GLInsuredExcelParser {
             errorMessage = errorMessage +" \n "+ categoryDoesNotHaveSelfRelationErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
+        }
+        if (isValidTemplate) {
+            if (samePlanForAllCategory && !samePlanForAllRelation)
+                checkAndValidateIsSameForAllCategory(insuredDependentMap, headers, agentPlans);
+            if (samePlanForAllRelation && !samePlanForAllCategory)
+                checkAndValidateIsSameCoverForAllRelation(dataRows, headers, agentPlans);
+            if (samePlanForAllCategory && samePlanForAllRelation)
+                checkAndValidateIsSameCoverForAllRelationAndCategory(dataRows, headers, agentPlans);
         }
         return isValidTemplate;
     }
@@ -540,26 +534,6 @@ public class GLInsuredExcelParser {
         return categoryRowMap;
     }
 
-    private boolean isRowsContainSamePlan(List<Row> rows, List<String> headers) {
-        boolean isRowContainsSamePlan = false;
-        for (Row row : rows) {
-            if (isRowContainsSamePlan) {
-                break;
-            }
-            Cell planCell = getCellByName(row, headers, GLInsuredExcelHeader.PLAN.getDescription());
-            String planCode = getCellValue(planCell);
-            for (Row otherRow : rows) {
-                Cell otherPlanCell = getCellByName(otherRow, headers, GLInsuredExcelHeader.PLAN.getDescription());
-                String otherPlanCode = getCellValue(otherPlanCell);
-                if (isNotEmpty(planCode) && isNotEmpty(otherPlanCode) && planCode.equals(otherPlanCode)) {
-                    isRowContainsSamePlan = true;
-                    break;
-                }
-            }
-        }
-        return isRowContainsSamePlan;
-    }
-
     private Cell getCellByName(Row row, List<String> headers, String cellName) {
         int cellNumber = headers.indexOf(cellName);
         return row.getCell(cellNumber);
@@ -576,7 +550,7 @@ public class GLInsuredExcelParser {
     }
 
     @Getter
-    private class OptionalCoverageCellHolder {
+    public class OptionalCoverageCellHolder {
 
         private Cell optionalCoverageCell;
 
@@ -593,33 +567,87 @@ public class GLInsuredExcelParser {
 
     }
 
-    private boolean isSamePlanForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
-        boolean isSamePlanForAllCategory = false;
+    private void checkAndValidateIsSameForAllCategory(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers,List<PlanId> agentPlans) {
         for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
-            Row row = rowEntry.getKey();
-            Cell planCell = getCellByName(row, headers, GLInsuredExcelHeader.PLAN.getDescription());
-            String planCode = getCellValue(planCell);
-            if (isSamePlanForAllCategory) {
-                break;
-            }
+            Row selfRow = rowEntry.getKey();
+            List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, selfRow, agentPlans);
+            List<Row> dependentRows = rowEntry.getValue();
+            GLRelationCategoryCoverDetail relationshipCoverDetail = populateRelationCategoryCover(selfRow, headers, optionalCoverageCellHolders,true);
             for (Map.Entry<Row, List<Row>> otherRowEntry : relationshipGroupRowMap.entrySet()) {
                 Row otherRow = otherRowEntry.getKey();
-                Cell otherPlanCell = getCellByName(otherRow, headers, GLInsuredExcelHeader.PLAN.getDescription());
-                String otherPlanCode = getCellValue(otherPlanCell);
-                if (isNotEmpty(planCode) && isNotEmpty(otherPlanCode) && planCode.equals(otherPlanCode)) {
-                    isSamePlanForAllCategory = true;
-                    break;
+                List<Row> otherDependentRows = otherRowEntry.getValue();
+                for (Row dependentRow : dependentRows){
+                    List<OptionalCoverageCellHolder> dependentOptionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, dependentRow, agentPlans);
+                    GLRelationCategoryCoverDetail dependentRelationshipCoverDetail = populateRelationCategoryCover(dependentRow, headers, dependentOptionalCoverageCellHolders,true);
+                    for (Row otherDependentRow : otherDependentRows) {
+                        List<OptionalCoverageCellHolder> otherDependentOptionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, otherDependentRow, agentPlans);
+                        GLRelationCategoryCoverDetail otherDependentRelationshipCoverDetail = populateRelationCategoryCover(otherDependentRow, headers, otherDependentOptionalCoverageCellHolders, true);
+                        if (dependentRelationshipCoverDetail.getRelationship().equals(otherDependentRelationshipCoverDetail.getRelationship())) {
+                            if (!dependentRelationshipCoverDetail.equals(otherDependentRelationshipCoverDetail)) {
+                                raiseNotSamePlanForAllCategoryException(otherDependentRelationshipCoverDetail.getRelationship());
+                            }
+                        }
+                    }
+                }
+                List<OptionalCoverageCellHolder> otherOptionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, otherRow, agentPlans);
+                GLRelationCategoryCoverDetail otherRelationshipCoverDetail = populateRelationCategoryCover(otherRow, headers, otherOptionalCoverageCellHolders,true);
+               if (relationshipCoverDetail.getRelationship().equals(otherRelationshipCoverDetail.getRelationship())) {
+                   if (!relationshipCoverDetail.equals(otherRelationshipCoverDetail)) {
+                       raiseNotSamePlanForAllCategoryException(otherRelationshipCoverDetail.getRelationship());
+                   }
+               }
+            }
+        }
+    }
+
+
+    private void checkAndValidateIsSameCoverForAllRelation(List<Row> relationshipGroupRowMap, List<String> headers,List<PlanId> agentPlans) {
+        for (Row current : relationshipGroupRowMap){
+            List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, current, agentPlans);
+            GLRelationCategoryCoverDetail categoryCoverDetail = populateRelationCategoryCover(current, headers, optionalCoverageCellHolders, false);
+            for (Row otherRow : relationshipGroupRowMap){
+                List<OptionalCoverageCellHolder> otherOptionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, otherRow, agentPlans);
+                GLRelationCategoryCoverDetail otherCategoryCoverDetail = populateRelationCategoryCover(otherRow, headers, otherOptionalCoverageCellHolders, false);
+                if (categoryCoverDetail.getRelationship().equals(otherCategoryCoverDetail.getRelationship())) {
+                    if (!categoryCoverDetail.equals(otherCategoryCoverDetail)) {
+                        raiseNotSamePlanForAllRelationshipException(otherCategoryCoverDetail.getRelationship());
+                    }
                 }
             }
         }
-        return isSamePlanForAllCategory;
     }
 
-    private boolean isSamePlanForAllRelation(Map<Row, List<Row>> relationshipGroupRowMap, List<String> headers) {
-        List<Row> allRows = Lists.newArrayList();
-        for (Map.Entry<Row, List<Row>> rowEntry : relationshipGroupRowMap.entrySet()) {
-            allRows.addAll(rowEntry.getValue());
+    private void checkAndValidateIsSameCoverForAllRelationAndCategory(List<Row> relationshipGroupRowMap, List<String> headers,List<PlanId> agentPlans) {
+        for (Row current : relationshipGroupRowMap){
+            List<OptionalCoverageCellHolder> optionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, current, agentPlans);
+            GLRelationCategoryCoverDetail categoryCoverDetail = populateRelationCategoryCover(current, headers, optionalCoverageCellHolders, false);
+            for (Row otherRow : relationshipGroupRowMap){
+                List<OptionalCoverageCellHolder> otherOptionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, otherRow, agentPlans);
+                GLRelationCategoryCoverDetail otherCategoryCoverDetail = populateRelationCategoryCover(otherRow, headers, otherOptionalCoverageCellHolders, false);
+                if (!categoryCoverDetail.compare(otherCategoryCoverDetail)) {
+                    raiseNotSamePlanForAllCategoryAndRelationshipException();
+                }
+            }
+            break;
         }
-        return isRowsContainSamePlan(allRows, headers);
     }
+
+    private GLRelationCategoryCoverDetail populateRelationCategoryCover(Row row, List<String> headers, List<OptionalCoverageCellHolder> optionalCoverageCellHolders, Boolean isRelationIsTheDiff){
+        String planCode = getCellValueByType(GLInsuredExcelHeader.PLAN.getDescription(), row, headers);
+        String planSA = getCellValueByType(GLInsuredExcelHeader.SUM_ASSURED.getDescription(), row, headers);
+        BigDecimal sumAssured = isNotEmpty(planSA)?new BigDecimal(planSA):BigDecimal.ZERO;
+        String relation = isRelationIsTheDiff?getCellValueByType(GLInsuredExcelHeader.RELATIONSHIP.getDescription(), row, headers): getCellValueByType(GLInsuredExcelHeader.CATEGORY.getDescription(), row, headers);
+        String premiumType = getCellValueByType(GLInsuredExcelHeader.PREMIUM_TYPE.getDescription(), row, headers);
+        String multiplier = getCellValueByType(GLInsuredExcelHeader.INCOME_MULTIPLIER.getDescription(), row, headers);
+        BigDecimal incomeMultiplier = isNotEmpty(multiplier)?new BigDecimal(multiplier):BigDecimal.ZERO;
+        GLRelationCategoryCoverDetail glRelationCategoryCoverDetail =  new GLRelationCategoryCoverDetail().withRelationDetail(relation,planCode,sumAssured,premiumType,incomeMultiplier);
+        glRelationCategoryCoverDetail = glRelationCategoryCoverDetail.withCoverageDetail(optionalCoverageCellHolders);
+        return glRelationCategoryCoverDetail;
+    }
+
+    private String getCellValueByType(String header,Row otherRow ,List<String> headers){
+        Cell otherPlanCell = getCellByName(otherRow, headers, header);
+        return getCellValue(otherPlanCell);
+    }
+
 }
