@@ -108,23 +108,4 @@ public class PreAuthorizationController {
         modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
         return  modelAndView;
     }
-
-    @RequestMapping(value="/searchpreAuthorizationrecord",method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto){
-        ModelAndView modelAndView=new ModelAndView();
-        modelAndView.addObject("searchCriteria", searchPreAuthorizationRecordDto);
-        modelAndView.setViewName("pla/grouphealth/claim/searchPreAuthorizationRecord");
-        List<PreAuthorizationDto> preAuthorizationResult =  preAuthorizationService.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto);
-        modelAndView.addObject("preAuthorizationResult",preAuthorizationResult);
-        return  modelAndView;
-    }
-
-
-//    @RequestMapping(value="/loadpreauthorizationrequest",method = RequestMethod.GET)
-//    public ModelAndView searchPreAuthorizationReco(){
-//        ModelAndView modelAndView=new ModelAndView();
-//        modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
-//        return  modelAndView;
-//    }
 }

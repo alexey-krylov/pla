@@ -32,9 +32,13 @@ import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -47,6 +51,7 @@ import java.util.stream.Stream;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import static org.springframework.data.domain.Sort.*;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -74,6 +79,7 @@ public class PreAuthorizationRequestService {
     @Autowired
     private PreAuthorizationFinder preAuthorizationFinder;
 
+    @Transactional
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
         PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
         if(isNotEmpty(preAuthorization)){
@@ -206,13 +212,14 @@ public class PreAuthorizationRequestService {
         return ClaimantHCPDetailDto.getInstance();
     }
 
+    @Transactional
     public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?
                 isNotEmpty(getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId)))
                         ? getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId))
                         : new PreAuthorizationRequest(PreAuthorizationRequest.Status.DRAFT) : new PreAuthorizationRequest(PreAuthorizationRequest.Status.DRAFT);
-        preAuthorizationRequest.updateWithPreAuthorizationRequestId()
+        preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
@@ -311,6 +318,10 @@ public class PreAuthorizationRequestService {
 
     public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
         List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
+        return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
+    }
+
+    private List<PreAuthorizationClaimantDetailCommand> convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(List<PreAuthorizationRequest> preAuthorizationRequests) {
         return isNotEmpty(preAuthorizationRequests) ? preAuthorizationRequests.parallelStream().map(new Function<PreAuthorizationRequest, PreAuthorizationClaimantDetailCommand>() {
             @Override
             public PreAuthorizationClaimantDetailCommand apply(PreAuthorizationRequest preAuthorizationRequest) {
@@ -475,5 +486,14 @@ public class PreAuthorizationRequestService {
             }
         }
         return claimantHCPDetailDto;
+    }
+
+    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationForDefaultList() {
+        List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
+        PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Order(Direction.DESC, "createdOn")));
+        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAll(pageRequest);
+        if(isNotEmpty(pages) && isNotEmpty(pages.getContent()))
+            result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(pages.getContent());
+        return result;
     }
 }

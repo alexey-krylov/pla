@@ -4,13 +4,10 @@ import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
-import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.nthdimenzion.common.AppConstants;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -114,7 +111,7 @@ public enum PreAuthorizationExcelHeader {
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             try {
-                cellValue = new BigDecimal(cellValue).toString();
+                cellValue = isNotEmpty(cellValue) ? String.valueOf( new BigDecimal(cellValue).intValue()) : cellValue;
             } catch(NumberFormatException e){
                 preAuthorizationDetailDto.setClientId(cellValue);
                 return preAuthorizationDetailDto;
@@ -148,7 +145,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setConsultationDate(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
+            preAuthorizationDetailDto.setConsultationDate(isNotEmpty(cellValue) ? DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(cellValue) : null);
             return preAuthorizationDetailDto;
         }
 
@@ -211,9 +208,9 @@ public enum PreAuthorizationExcelHeader {
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
             try {
-                cellValue = new BigDecimal(cellValue).toString();
+                cellValue = isNotEmpty(cellValue) ? String.valueOf( new BigDecimal(cellValue).intValue()) : cellValue;
             } catch(NumberFormatException e){
-                preAuthorizationDetailDto.setClientId(cellValue);
+                preAuthorizationDetailDto.setDoctorContactNumber(cellValue);
                 return preAuthorizationDetailDto;
             }
             preAuthorizationDetailDto.setDoctorContactNumber(cellValue);
@@ -345,7 +342,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setPregnancyDateOfDelivery(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
+            preAuthorizationDetailDto.setPregnancyDateOfDelivery(isNotEmpty(cellValue) ? DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(cellValue) : null);
             return preAuthorizationDetailDto;
         }
 
@@ -782,7 +779,7 @@ public enum PreAuthorizationExcelHeader {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
-            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfAdmission(isNotEmpty(cellValue) ? DateTime.parse(cellValue, DateTimeFormat.forPattern(AppConstants.DD_MM_YYY_FORMAT)) : null);
+            preAuthorizationDetailDto.setDiagnosisTreatmentSurgeryDateOfAdmission(isNotEmpty(cellValue) ? DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(cellValue) : null);
             return preAuthorizationDetailDto;
         }
 

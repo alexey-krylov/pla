@@ -14,6 +14,7 @@ import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
@@ -47,6 +48,7 @@ import java.util.stream.Stream;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import static org.springframework.util.Assert.*;
 
 /**
  * Author - Mohan Sharma Created on 12/30/2015.
@@ -64,6 +66,8 @@ public class PreAuthorizationService {
     private HCPFinder hcpFinder;
     private GHPolicyRepository ghPolicyRepository;
     private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
+    @Autowired
+    private PreAuthorizationRequestService preAuthorizationRequestService;
 
     @Autowired
     public PreAuthorizationService(GHCashlessClaimRepository ghCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator,HCPFinder hcpFinder, GHPolicyRepository ghPolicyRepository, PreAuthorizationRequestRepository preAuthorizationRequestRepository) {
@@ -103,7 +107,7 @@ public class PreAuthorizationService {
 
             @Override
             public Map<String,Object> apply(HCPRate hcpRate) {
-                Map<String,Object> map=new HashMap<String,Object>();
+                Map<String,Object> map=new HashMap<>();
                 map.put("hcpName",hcpRate.getHcpName());
                 map.put("hcpCode",hcpRate.getHcpCode().getHcpCode());
                 return map;
@@ -123,9 +127,7 @@ public class PreAuthorizationService {
         Row headerRow = rowIterator.next();
         final List<String> headers = PreAuthorizationExcelHeader.getAllowedHeaders();
         List<Row> dataRows = Lists.newArrayList(rowIterator);
-        Iterator<Row> dataRowIterator = dataRows.iterator();
-        while (dataRowIterator.hasNext()) {
-            Row currentRow = dataRowIterator.next();
+        for (Row currentRow : dataRows) {
             PreAuthorizationDetailDto preAuthorizationDetailDto = new PreAuthorizationDetailDto();
             for (String header : headers) {
                 preAuthorizationDetailDto = PreAuthorizationExcelHeader.getEnum(header).populatePreAuthorizationDetail(preAuthorizationDetailDto, currentRow, headers);
@@ -153,6 +155,14 @@ public class PreAuthorizationService {
                 preAuthorization.updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
             preAuthorizationRepository.save(preAuthorization);
         }
+        List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAll();
+        notEmpty(preAuthorizations, "Not uploaded successfully");
+        preAuthorizations.stream().forEach(preAuthorization -> {
+            PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
+            notNull(preAuthorizationDetail, "Not uploaded successfully");
+            PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(preAuthorization.getPreAuthorizationId(), preAuthorizationDetail.getClientId());
+            preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
+        });
         return Integer.parseInt(runningSequence.trim());
     }
 
@@ -166,7 +176,7 @@ public class PreAuthorizationService {
     }
 
     private PreAuthorizationId constructPreAuthorizationId(Set<PreAuthorizationDetail> preAuthorizationDetails) {
-        Assert.notEmpty(preAuthorizationDetails, "PreAuthorizationDetail cannot be empty");
+        notEmpty(preAuthorizationDetails, "PreAuthorizationDetail cannot be empty");
         PreAuthorizationDetail preAuthorizationDetail = preAuthorizationDetails.iterator().next();
         LocalDate consultationDate = preAuthorizationDetail.getConsultationDate();
         String preAuthIdSequence = sequenceGenerator.getSequence(PreAuthorizationId.class);
@@ -178,9 +188,7 @@ public class PreAuthorizationService {
     private List<List<PreAuthorizationDetailDto>> createSubListBasedOnSimilarCriteria(Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {
         List<List<PreAuthorizationDetailDto>> refurbishedList = Lists.newArrayList();
         Map<PreAuthorizationDetailDto.ConsultationDateClientIdPolicyNumber, List<PreAuthorizationDetailDto>> result = preAuthorizationDetailDtos.parallelStream().collect(Collectors.groupingBy(PreAuthorizationDetailDto::getConsultationDateClientIdPolicyNumber));
-        for(List<PreAuthorizationDetailDto> list : result.values()){
-            refurbishedList.add(list);
-        }
+        refurbishedList.addAll(result.values().stream().collect(Collectors.toList()));
         return refurbishedList;
     }
 
@@ -191,16 +199,14 @@ public class PreAuthorizationService {
                 PreAuthorizationDetail preAuthorizationDetail = new PreAuthorizationDetail();
                 try {
                     BeanUtils.copyProperties(preAuthorizationDetail, preAuthorizationDetailDto);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
                 return preAuthorizationDetail;
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
     }
-
+/*
     public List<PreAuthorizationDto> searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
         List<PreAuthorization> preAuthorizations = preAuthorizationFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto);
         preAuthorizations = checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(preAuthorizations);
@@ -262,5 +268,5 @@ public class PreAuthorizationService {
             }
         }
         return null;
-    }
+    }*/
 }

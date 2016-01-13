@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 /**
  * Author - Mohan Sharma Created on 1/4/2016.
@@ -22,12 +23,12 @@ public class PreAuthorizationDetailDto {
     private String pregnancyP;
     private String pregnancyL;
     private String pregnancyA;
-    private DateTime pregnancyDateOfDelivery;
+    private LocalDate pregnancyDateOfDelivery;
     private String pregnancyModeOfDelivery;
     private String diagnosisTreatmentIllnessTraumaIllnessDiseaseNameAndPresentingComplaints;
     private String diagnosisTreatmentIllnessTraumaRelevantClinicalFindings;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentDuration;
-    public DateTime consultationDate;
+    public LocalDate consultationDate;
     private String diagnosisTreatmentIllnessTraumaPresentAilmentPastHistory;
     private String diagnosisTreatmentIllnessTraumaDiagnosis;
     private String diagnosisTreatmentLineOfTreatment;
@@ -39,7 +40,7 @@ public class PreAuthorizationDetailDto {
     private String diagnosisTreatmentMedicalDuration;
     private String diagnosisTreatmentSurgeryName;
     private String diagnosisTreatmentSurgeryAccommodationType;
-    private DateTime diagnosisTreatmentSurgeryDateOfAdmission;
+    private LocalDate diagnosisTreatmentSurgeryDateOfAdmission;
     //private DateTime diagnosisTreatmentSurgeryDateOfDischarge;
     private int diagnosisTreatmentSurgeryLengthOStay;
     private String pastHistorySufferingFromHTN;
@@ -66,11 +67,11 @@ public class PreAuthorizationDetailDto {
     private String type;
 
     public static class ConsultationDateClientIdPolicyNumber{
-        DateTime consultationDate;
+        LocalDate consultationDate;
         String policyNumber;
         String clientId;
 
-        public ConsultationDateClientIdPolicyNumber(DateTime consultationDate, String policyNumber, String clientId){
+        public ConsultationDateClientIdPolicyNumber(LocalDate consultationDate, String policyNumber, String clientId){
             this.consultationDate = consultationDate;
             this.policyNumber = policyNumber;
             this.clientId = clientId;

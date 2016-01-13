@@ -55,6 +55,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     private Set<PreAuthorizationRequestDrugService> preAuthorizationRequestDrugServices;
     private Status status;
     private Set<GHProposerDocument> proposerDocuments;
+    private DateTime createdOn;
 
     @Override
     public PreAuthorizationRequestId getIdentifier() {
@@ -63,6 +64,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
+        this.createdOn = new DateTime();
     }
 
     public PreAuthorizationRequest updateWithProposerDetail(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
@@ -74,9 +76,9 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
         return this;
     }
 
-    public PreAuthorizationRequest updateWithPreAuthorizationRequestId() {
+    public PreAuthorizationRequest updateWithPreAuthorizationRequestId(String preAuthorizationId) {
         if(isEmpty(this.preAuthorizationRequestId))
-            this.preAuthorizationRequestId = new PreAuthorizationRequestId(new ObjectId().toString());
+            this.preAuthorizationRequestId = new PreAuthorizationRequestId(preAuthorizationId);
         return this;
     }
 
