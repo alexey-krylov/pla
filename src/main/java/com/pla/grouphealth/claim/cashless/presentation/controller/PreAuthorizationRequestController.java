@@ -86,13 +86,13 @@ public class PreAuthorizationRequestController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getpreauthorizationfordefaultlist", method = RequestMethod.POST)
+    @RequestMapping(value = "/getpreauthorizationfordefaultlist", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getPreAuthorizationForDefaultList() {
-        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRecord");
         List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList();
-        modelAndView.addObject("searchResult", searchResult);
-        modelAndView.addObject("searchResult", new SearchPreAuthorizationRecordDto());
+        modelAndView.addObject("preAuthorizationResult", searchResult);
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
         return modelAndView;
     }
 

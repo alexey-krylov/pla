@@ -127,11 +127,12 @@
                         <thead>
                         <tr>
                             <th style="width: 1%"></th>
-                            <th th:text="#{policyNumber}">Policy Number</th>
-                            <th th:text="#{hcpCode}">Hcp Code</th>
-                            <th th:text="#{batchNumber}">Batch Number</th>
-                            <th th:text="#{clientId}">Client ID</th>
                             <th th:text="#{preAuthorizationId}">PreAuthorization ID</th>
+                            <th th:text="#{clientId}">Client ID</th>
+                            <th th:text="#{policyNumber}">Policy Number</th>
+                            <th th:text="#{policyName}">Policy Name</th>
+                            <th th:text="#{hcpCode}">Hcp</th>
+                            <th th:text="#{batchNumber}">Batch Number</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -139,13 +140,14 @@
                             <th:block>
                                 <tr th:each="preauthorizationsSearchResult : ${preAuthorizationResult}">
                                     <td>
-                                        <input type="radio" name="PreAuthorizatioID" th:value="${preauthorizationsSearchResult.preAuthorizationId}" th:attr="clientId=${preauthorizationsSearchResult.clientId}"/>
+                                        <input type="radio" name="policyNumber" th:value="${preauthorizationsSearchResult.preAuthorizationRequestId}"/>
                                     </td>
-                                    <td th:text="${preauthorizationsSearchResult.policyNumber}"></td>
-                                    <td th:text="${preauthorizationsSearchResult.hcpName}"></td>
-                                    <td th:text="${preauthorizationsSearchResult.policyNumber}"></td>
-                                    <td th:text="${preauthorizationsSearchResult.clientId}"></td>
-                                    <td th:text="${preauthorizationsSearchResult.preAuthorizationId}"></td>
+                                    <td th:text="${preauthorizationsSearchResult.preAuthorizationRequestId}"></td>
+                                    <td th:text="${preauthorizationsSearchResult.claimantPolicyDetailDto.assuredDetail.clientId}"></td>
+                                    <td th:text="${preauthorizationsSearchResult.claimantPolicyDetailDto.policyNumber}"></td>
+                                    <td th:text="${preauthorizationsSearchResult.claimantPolicyDetailDto.policyName}"></td>
+                                    <td th:text="${preauthorizationsSearchResult.claimantHCPDetailDto.hcpName}"></td>
+                                    <td th:text="${preauthorizationsSearchResult.batchNumber}"></td>
                                 </tr>
                             </th:block>
 
