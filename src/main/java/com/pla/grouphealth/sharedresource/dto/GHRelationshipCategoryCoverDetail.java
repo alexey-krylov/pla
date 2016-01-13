@@ -25,6 +25,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor
 public class GHRelationshipCategoryCoverDetail {
     private String relationship;
+    private String category ="";
     private String planCode;
     private BigDecimal planSumAssured;
     private String premiumType;
@@ -87,7 +88,7 @@ public class GHRelationshipCategoryCoverDetail {
         GHRelationshipCategoryCoverDetail that = (GHRelationshipCategoryCoverDetail) o;
         if (Objects.equal(relationship, that.relationship)) {
             return (
-                    Objects.equal(relationship, that.relationship) &&
+                    Objects.equal(relationship, that.relationship) && Objects.equal(category, that.category) &&
                             Objects.equal(planCode, that.planCode) &&
                             Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType)
                             && isCoverageDetailEqual(cover, that.cover)

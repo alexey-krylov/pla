@@ -25,6 +25,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @NoArgsConstructor
 public class GLRelationCategoryCoverDetail {
     private String relationship;
+    private String category="";
     private String planCode;
     private BigDecimal planSumAssured;
     private BigDecimal incomeMultiplier;
@@ -87,15 +88,12 @@ public class GLRelationCategoryCoverDetail {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GLRelationCategoryCoverDetail that = (GLRelationCategoryCoverDetail) o;
-        if (Objects.equal(relationship, that.relationship)) {
-            return (
-                    Objects.equal(relationship, that.relationship) &&
-                            Objects.equal(planCode, that.planCode) &&
-                            Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType) && Objects.equal(incomeMultiplier, that.incomeMultiplier)
-                            && isCoverageDetailEqual(cover, that.cover)
-            );
-        }
-        return false;
+        return (
+                Objects.equal(relationship, that.relationship) && Objects.equal(category, that.category) &&
+                        Objects.equal(planCode, that.planCode) &&
+                        Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType) && Objects.equal(incomeMultiplier, that.incomeMultiplier)
+                        && isCoverageDetailEqual(cover, that.cover)
+        );
     }
 
     public boolean compare(GLRelationCategoryCoverDetail GLCategoryCoverDetail){

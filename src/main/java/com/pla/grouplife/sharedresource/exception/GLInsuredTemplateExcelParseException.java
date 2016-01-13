@@ -42,6 +42,10 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
         throw new GLInsuredTemplateExcelParseException("For all relationship and Category cover should be same");
     }
 
+    public static void raiseNotSameCoverForAllCategoryAndRelationshipCombinationException() {
+        throw new GLInsuredTemplateExcelParseException("For all relationship and Category combination cover should be same");
+    }
+
     public static void raiseNotValidValueException(String message) {
         throw new GLInsuredTemplateExcelParseException(message);
     }
