@@ -1,6 +1,7 @@
 package com.pla.grouphealth.claim.cashless.application.service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.hcp.domain.model.HCP;
@@ -25,6 +26,7 @@ import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.NoArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
@@ -33,12 +35,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -205,11 +206,6 @@ public class PreAuthorizationRequestService {
         return ClaimantHCPDetailDto.getInstance();
     }
 
-    public Map<String, Object> getPolicyByPreAuthorizationId(PreAuthorizationId preAuthorizationId) {
-
-        return null;
-    }
-
     public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?
@@ -318,15 +314,166 @@ public class PreAuthorizationRequestService {
         return isNotEmpty(preAuthorizationRequests) ? preAuthorizationRequests.parallelStream().map(new Function<PreAuthorizationRequest, PreAuthorizationClaimantDetailCommand>() {
             @Override
             public PreAuthorizationClaimantDetailCommand apply(PreAuthorizationRequest preAuthorizationRequest) {
-                PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand()
+                return new PreAuthorizationClaimantDetailCommand()
                         .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
                         .updateWithPreAuthorizationRequestId(preAuthorizationRequest.getPreAuthorizationRequestId())
                         .updateWithClaimType(preAuthorizationRequest.getClaimType())
                         .updateWithClaimIntimationDate(preAuthorizationRequest.getClaimIntimationDate())
                         .updateWithPolicy(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail())
                         .updateWithHcp(preAuthorizationRequest.getPreAuthorizationRequestHCPDetail());
-                return preAuthorizationClaimantDetailCommand;
             }
         }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId){
+        PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
+        Assert.notNull(preAuthorizationRequest, "No PreAuthorizationRequest found with given Id");
+        if(isNotEmpty(preAuthorizationRequest))
+            return constructPreAuthorizationClaimantDetailCommand(preAuthorizationRequest);
+        return null;
+    }
+
+    private PreAuthorizationClaimantDetailCommand constructPreAuthorizationClaimantDetailCommand(PreAuthorizationRequest preAuthorizationRequest) {
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand();
+        if(isNotEmpty(preAuthorizationRequest)) {
+            preAuthorizationClaimantDetailCommand
+                    .updateWithPreAuthorizationRequestId(preAuthorizationRequest.getPreAuthorizationRequestId())
+                    .updateWithPreAuthorizationId(preAuthorizationRequest.getPreAuthorizationId())
+                    .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
+                    .updateWithClaimType(preAuthorizationRequest.getClaimType())
+                    .updateWithClaimIntimationDate(preAuthorizationRequest.getClaimIntimationDate())
+                    .updateWithPreAuthorizationDate(preAuthorizationRequest.getClaimIntimationDate())
+                    .updateWithClaimantHCPDetailDto(constructClaimantHCPDetailDtoFromPreAuthorizationRequestHCPDetail(preAuthorizationRequest.getPreAuthorizationRequestHCPDetail()))
+                    .updateWithDiagnosisTreatment(constructDiagnosisTreatmentDtoListFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestDiagnosisTreatmentDetails()))
+                    .updateWithIllnessDetails(constructIllnessDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestIllnessDetail()))
+                    .updateWithDrugServices(constructDrugServiceDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestDrugServices()))
+                    .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail(), preAuthorizationRequest.getRelationship(), preAuthorizationRequest.getCategory(), preAuthorizationRequest.getGhProposer()));
+        }
+        return preAuthorizationClaimantDetailCommand;
+    }
+
+    private ClaimantPolicyDetailDto constructClaimantPolicyDetailDtoFromPreAuthorizationRequest(PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail, String relationship, String category, GHProposer ghProposer) {
+        ClaimantPolicyDetailDto claimantPolicyDetailDto = null;
+        if(isNotEmpty(preAuthorizationRequestPolicyDetail)){
+            claimantPolicyDetailDto = new ClaimantPolicyDetailDto()
+                    .updateWithPolicyNumber(preAuthorizationRequestPolicyDetail.getPolicyNumber())
+                    .updateWithPolicyName(preAuthorizationRequestPolicyDetail.getPolicyName())
+                    .updateWithPlanCode(preAuthorizationRequestPolicyDetail.getPlanCode())
+                    .updateWithPlanName(preAuthorizationRequestPolicyDetail.getPlanName())
+                    .updateWithSumAssured(preAuthorizationRequestPolicyDetail.getSumAssured())
+                    .updateWithRelationship(Relationship.valueOf(relationship))
+                    .updateWithCategory(category)
+                    .updateWithAssuredDetail(constructAssuredDetailFromPreAuthorizationRequestAssuredDetail(preAuthorizationRequestPolicyDetail.getAssuredDetail()))
+                    .updateWithDependentAssuredDetail(constructDependentAssuredDetailFromPreAuthorizationRequestAssuredDetail(preAuthorizationRequestPolicyDetail.getAssuredDetail()))
+                    .updateWithCoverageDetails(constructCoverageListFromPreAuthorizationRequestAssuredDetail(claimantPolicyDetailDto, preAuthorizationRequestPolicyDetail.getCoverageDetailDtoList()))
+                    .updateWithProposerDetail(constructProposerDetailsFromPreAuthorizationRequestAssuredDetail(ghProposer));
+        }
+        return claimantPolicyDetailDto;
+    }
+
+    private PreAuthorizationClaimantProposerDetail constructProposerDetailsFromPreAuthorizationRequestAssuredDetail(GHProposer proposer) {
+        PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail = null;
+        if(isNotEmpty(proposer)){
+            preAuthorizationClaimantProposerDetail = new PreAuthorizationClaimantProposerDetail();
+            preAuthorizationClaimantProposerDetail.updateWithProposerDetails(proposer);
+        }
+        return preAuthorizationClaimantProposerDetail;
+    }
+
+    private Set<ClaimantPolicyDetailDto.CoverageDetailDto> constructCoverageListFromPreAuthorizationRequestAssuredDetail(ClaimantPolicyDetailDto claimantPolicyDetailDto, Set<PreAuthorizationRequestCoverageDetail> coverageDetailDtoList) {
+        return isNotEmpty(coverageDetailDtoList) ? coverageDetailDtoList.parallelStream().map(new Function<PreAuthorizationRequestCoverageDetail, ClaimantPolicyDetailDto.CoverageDetailDto>() {
+            @Override
+            public ClaimantPolicyDetailDto.CoverageDetailDto apply(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail) {
+                ClaimantPolicyDetailDto.CoverageDetailDto coverageDetailDto = claimantPolicyDetailDto.new CoverageDetailDto();
+                try {
+                    BeanUtils.copyProperties(coverageDetailDto, preAuthorizationRequestCoverageDetail);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return coverageDetailDto;
+            }
+        }).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
+
+    private DependentAssuredDetail constructDependentAssuredDetailFromPreAuthorizationRequestAssuredDetail(PreAuthorizationRequestAssuredDetail assuredDetail) {
+        DependentAssuredDetail dependentAssuredDetail = null;
+        if(assuredDetail.isDependentAssuredDetailPresent()){
+            try {
+                dependentAssuredDetail = new DependentAssuredDetail();
+                BeanUtils.copyProperties(dependentAssuredDetail, assuredDetail);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return dependentAssuredDetail;
+    }
+
+    private AssuredDetail constructAssuredDetailFromPreAuthorizationRequestAssuredDetail(PreAuthorizationRequestAssuredDetail preAuthorizationRequestAssuredDetail) {
+        AssuredDetail assuredDetail = null;
+        if(!preAuthorizationRequestAssuredDetail.isDependentAssuredDetailPresent()){
+            try {
+                assuredDetail = new AssuredDetail();
+                BeanUtils.copyProperties(assuredDetail, preAuthorizationRequestAssuredDetail);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return assuredDetail;
+    }
+
+    private List<DrugServiceDto> constructDrugServiceDtoFromPreAuthorizationRequest(Set<PreAuthorizationRequestDrugService> preAuthorizationRequestDrugServices) {
+        return isNotEmpty(preAuthorizationRequestDrugServices) ? preAuthorizationRequestDrugServices.parallelStream().map(new Function<PreAuthorizationRequestDrugService, DrugServiceDto>() {
+            @Override
+            public DrugServiceDto apply(PreAuthorizationRequestDrugService preAuthorizationRequestDrugService) {
+                DrugServiceDto drugServiceDto = new DrugServiceDto();
+                try {
+                    BeanUtils.copyProperties(drugServiceDto, preAuthorizationRequestDrugService);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return drugServiceDto;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList()) :  Lists.newArrayList();
+    }
+
+    private IllnessDetailDto constructIllnessDetailDtoFromPreAuthorizationRequest(PreAuthorizationRequestIllnessDetail preAuthorizationRequestIllnessDetail) {
+        IllnessDetailDto illnessDetailDto = null;
+        if(isNotEmpty(preAuthorizationRequestIllnessDetail)){
+            illnessDetailDto = new IllnessDetailDto();
+            try {
+                BeanUtils.copyProperties(illnessDetailDto, preAuthorizationRequestIllnessDetail);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return illnessDetailDto;
+    }
+
+    private List<DiagnosisTreatmentDto>  constructDiagnosisTreatmentDtoListFromPreAuthorizationRequest(Set<PreAuthorizationRequestDiagnosisTreatmentDetail> preAuthorizationRequestDiagnosisTreatmentDetails) {
+        return isNotEmpty(preAuthorizationRequestDiagnosisTreatmentDetails) ? preAuthorizationRequestDiagnosisTreatmentDetails.stream().map(new Function<PreAuthorizationRequestDiagnosisTreatmentDetail, DiagnosisTreatmentDto>() {
+            @Override
+            public DiagnosisTreatmentDto apply(PreAuthorizationRequestDiagnosisTreatmentDetail preAuthorizationRequestDiagnosisTreatmentDetail) {
+                DiagnosisTreatmentDto diagnosisTreatmentDto = new DiagnosisTreatmentDto();
+                try {
+                    BeanUtils.copyProperties(diagnosisTreatmentDto, preAuthorizationRequestDiagnosisTreatmentDetail);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return diagnosisTreatmentDto;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
+    private ClaimantHCPDetailDto constructClaimantHCPDetailDtoFromPreAuthorizationRequestHCPDetail(PreAuthorizationRequestHCPDetail preAuthorizationRequestHCPDetail) {
+        ClaimantHCPDetailDto claimantHCPDetailDto = null;
+        if(isNotEmpty(preAuthorizationRequestHCPDetail)){
+            claimantHCPDetailDto = new ClaimantHCPDetailDto();
+            try {
+                BeanUtils.copyProperties(claimantHCPDetailDto, preAuthorizationRequestHCPDetail);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return claimantHCPDetailDto;
     }
 }

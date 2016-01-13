@@ -20,6 +20,8 @@ import javax.persistence.Embeddable;
 @Getter
 @Setter
 public class PreAuthorizationRequestDiagnosisTreatmentDetail {
+    private String doctorName;
+    private String doctorContactNumber;
     private String indicateWhether;
     private String pregnancyG;
     private String pregnancyP;

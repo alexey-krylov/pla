@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.PlanDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestAssuredDetail;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.*;
@@ -78,6 +79,11 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
+    public ClaimantPolicyDetailDto updateWithPlanName(String planName) {
+        this.planName = planName;
+        return this;
+    }
+
     public ClaimantPolicyDetailDto updateWithPlanCode(PlanDetail planDetail) {
         if(isNotEmpty(planDetail))
             this.planCode = planDetail.getPlanCode();
@@ -115,11 +121,11 @@ public class ClaimantPolicyDetailDto {
             assuredDetail.setFirstName(groupHealthInsured.getFirstName());
             assuredDetail.setSurname(groupHealthInsured.getLastName());
             assuredDetail.setDateOfBirth(groupHealthInsured.getDateOfBirth());
-            assuredDetail.setAgeNextBirthday(age);
+            if(age != null) assuredDetail.setAgeNextBirthday(age);
             assuredDetail.setNrcNumber(groupHealthInsured.getNrcNumber());
             assuredDetail.setGender(isNotEmpty(groupHealthInsured.getGender()) ? groupHealthInsured.getGender().name() : StringUtils.EMPTY);
             assuredDetail.setSumAssured(isNotEmpty(groupHealthInsured.getPlanPremiumDetail()) ? groupHealthInsured.getPlanPremiumDetail().getSumAssured() :BigDecimal.ZERO);
-           // assuredDetail.setReserveAmount(groupHealthInsured);
+            // assuredDetail.setReserveAmount(groupHealthInsured);
             assuredDetail.setCategory(groupHealthInsured.getCategory());
             assuredDetail.setManNumber(groupHealthInsured.getManNumber());
             assuredDetail.setClientId(groupHealthInsured.getFamilyId().getFamilyId());
@@ -136,7 +142,7 @@ public class ClaimantPolicyDetailDto {
             dependentAssuredDetail.setFirstName(ghInsuredDependent.getFirstName());
             dependentAssuredDetail.setSurname(ghInsuredDependent.getLastName());
             dependentAssuredDetail.setDateOfBirth(ghInsuredDependent.getDateOfBirth());
-            dependentAssuredDetail.setAgeNextBirthday(age);
+            if(age != null) dependentAssuredDetail.setAgeNextBirthday(age);
             dependentAssuredDetail.setNrcNumber(ghInsuredDependent.getNrcNumber());
             dependentAssuredDetail.setGender(isNotEmpty(ghInsuredDependent.getGender()) ? ghInsuredDependent.getGender().name() : StringUtils.EMPTY);
             dependentAssuredDetail.setSumAssured(isNotEmpty(ghInsuredDependent.getPlanPremiumDetail()) ? ghInsuredDependent.getPlanPremiumDetail().getSumAssured() :BigDecimal.ZERO);
@@ -157,6 +163,7 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
+
     public ClaimantPolicyDetailDto updateWithSumAssured(BigDecimal sumAssured) {
         this.sumAssured = sumAssured;
         return this;
@@ -166,6 +173,31 @@ public class ClaimantPolicyDetailDto {
         if(isNotEmpty(planDetail)){
 
         }
+        return this;
+    }
+
+    public ClaimantPolicyDetailDto updateWithPlanCode(String planCode) {
+        this.planCode = planCode;
+        return this;
+    }
+
+    public ClaimantPolicyDetailDto updateWithAssuredDetail(AssuredDetail assuredDetail) {
+        this.assuredDetail = assuredDetail;
+        return this;
+    }
+
+    public ClaimantPolicyDetailDto updateWithDependentAssuredDetail(DependentAssuredDetail dependentAssuredDetail) {
+        this.dependentAssuredDetail = dependentAssuredDetail;
+        return this;
+    }
+
+    public ClaimantPolicyDetailDto updateWithCoverageDetails(Set<CoverageDetailDto> coverageDetailDtos) {
+        this.coverageDetailDtoList = coverageDetailDtos;
+        return this;
+    }
+
+    public ClaimantPolicyDetailDto updateWithProposerDetail(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
+        this.preAuthorizationClaimantProposerDetail = preAuthorizationClaimantProposerDetail;
         return this;
     }
 

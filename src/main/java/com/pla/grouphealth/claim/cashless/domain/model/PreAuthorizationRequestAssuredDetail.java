@@ -37,6 +37,7 @@ public class PreAuthorizationRequestAssuredDetail {
     private String mainAssuredMANNumber;
     private BigDecimal mainAssuredLastSalary;
     private String mainAssuredClientId;
+    private boolean dependentAssuredDetailPresent;
 
     public PreAuthorizationRequestAssuredDetail updateWithAssuredDetails(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
         AssuredDetail assuredDetail = claimantPolicyDetailDto.getAssuredDetail();
@@ -54,6 +55,7 @@ public class PreAuthorizationRequestAssuredDetail {
             this.category = assuredDetail.getCategory();
             this.manNumber = assuredDetail.getManNumber();
             this.clientId = assuredDetail.getClientId();
+            this.dependentAssuredDetailPresent = Boolean.FALSE;
         } else{
             this.salutation = dependentAssuredDetail.getSalutation();
             this.firstName = dependentAssuredDetail.getFirstName();
@@ -73,6 +75,7 @@ public class PreAuthorizationRequestAssuredDetail {
             this.mainAssuredNRC = dependentAssuredDetail.getMainAssuredNRC();
             this.mainAssuredMANNumber = dependentAssuredDetail.getMainAssuredMANNumber();
             this.mainAssuredLastSalary = dependentAssuredDetail.getMainAssuredLastSalary();
+            this.dependentAssuredDetailPresent = Boolean.TRUE;
         }
         return this;
     }
