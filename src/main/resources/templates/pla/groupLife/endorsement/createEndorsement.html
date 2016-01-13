@@ -137,14 +137,27 @@
                                                ng-disabled="true"/>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Endorsement Effective Date</label>
-                                        <input type="text" class="form-control input-sm" name="effectiveDate"
-                                                 ng-model="policyDetails.basicDetails.effectiveDate"
-                                               ng-disabled="true"/>
+
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   datepicker-popup=""
+                                                   view-enabled=""
+                                                   max-date="dtmax"
+                                                   is-open="submissionEffectiveDate"
+                                                   ng-model="policyDetails.basicDetails.effectiveDate" name="effectiveDate"/>
+                                     <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                              ng-click="launchEffectivedDate($event)">
+                                          <i class="glyphicon glyphicon-calendar"></i></button>
+                                     </span>
+                                        </div>
                                     </div>
                                 </div>
+
+
                                 <div class="col-lg-6">
                                     <div class="form-group required">
                                         <label class="control-label">Endorsement Type</label>

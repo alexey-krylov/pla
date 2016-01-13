@@ -569,12 +569,32 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
                 $window.location.href = 'opensearchendorsement';
             }
 
+             $scope.launchEffectivedDate = function ($event) {
+                                            $event.preventDefault();
+                                            $event.stopPropagation();
+                                            $scope.submissionEffectiveDate= true;
+                                            $scope.dtmax = new Date();
+                                        };
+
+
         }])
+
+
     .config(['$dropdownProvider', function ($dropdownProvider) {
         angular.extend($dropdownProvider.defaults, {
             html: true
         });
     }])
+
+ .config(['datepickerPopupConfig', function (datepickerPopupConfig) {
+                      datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
+                      datepickerPopupConfig.currentText = 'Today';
+                      datepickerPopupConfig.clearText = 'Clear';
+                      datepickerPopupConfig.closeText = 'Done';
+                      datepickerPopupConfig.closeOnDateSelection = true;
+                  }])
+
+
     .config(["$routeProvider", function ($routeProvider) {
         var stepsSaved = {};
         var queryParam = null;
