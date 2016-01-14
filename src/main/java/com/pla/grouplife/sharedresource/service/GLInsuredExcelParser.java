@@ -14,6 +14,8 @@ import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -213,7 +215,8 @@ public class GLInsuredExcelParser {
                 duplicateRowErrorMessage = duplicateRowErrorMessage + rowNumbers[0] + ".\n";
             }
             String sameOptionalCoverageErrorMessage = checkIfSameOptionalCoverage(currentRow, headers, optionalCoverageHeaders);
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(categoryDoesNotHaveSelfRelationErrorMessage)) {
+            String detailedAnsNoOfAssuredErrorMessage = validateIfDetailsAndNumberAreProvided(currentRow, dataRows, headers);
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(categoryDoesNotHaveSelfRelationErrorMessage) && isEmpty(detailedAnsNoOfAssuredErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -230,6 +233,7 @@ public class GLInsuredExcelParser {
             errorMessage = errorMessage + duplicateRowErrorMessage;
             errorMessage = errorMessage +" \n "+ sameOptionalCoverageErrorMessage;
             errorMessage = errorMessage +" \n "+ categoryDoesNotHaveSelfRelationErrorMessage;
+            errorMessage = errorMessage +" \n "+ detailedAnsNoOfAssuredErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
@@ -670,6 +674,45 @@ public class GLInsuredExcelParser {
     private String getCellValueByType(String header,Row otherRow ,List<String> headers){
         Cell otherPlanCell = getCellByName(otherRow, headers, header);
         return getCellValue(otherPlanCell);
+    }
+
+
+    private String validateIfDetailsAndNumberAreProvided(Row current, List<Row> dataRows, List<String> headers){
+        String detailedAnsNoOfAssuredErrorMessage = "";
+        boolean isDetailsAndNoOfAssuredProvided = false;
+        DetailAssured currentRowDetail  = new DetailAssured().withDetail(current, headers);
+        for (Row row : dataRows){
+            DetailAssured otherRowDetail  = new DetailAssured().withDetail(row, headers);
+            if (Objects.equals(currentRowDetail.getRelationship(),otherRowDetail.getRelationship()) && Objects.equals(currentRowDetail.getCategory(),otherRowDetail.getCategory())){
+                if (!Objects.equals(currentRowDetail.getNoOfAssured(),otherRowDetail.getNoOfAssured())) {
+                    isDetailsAndNoOfAssuredProvided = true;
+                    break;
+                }
+            }
+            if (isDetailsAndNoOfAssuredProvided)
+                break;
+        }
+        detailedAnsNoOfAssuredErrorMessage = isDetailsAndNoOfAssuredProvided?"The Same Relation And category should not include both Detailed and number of Assured":"";
+        return detailedAnsNoOfAssuredErrorMessage;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public class DetailAssured{
+        private String relationship;
+        private String category;
+        private String noOfAssured;
+
+        public DetailAssured withDetail(Row detailRow,List<String> headers){
+            String relationship = getCellValueByType(GLInsuredExcelHeader.RELATIONSHIP.getDescription(), detailRow, headers);
+            String category = getCellValueByType(GLInsuredExcelHeader.CATEGORY.getDescription(), detailRow, headers);
+            String noOfAssured = getCellValueByType(GLInsuredExcelHeader.NO_OF_ASSURED.getDescription(), detailRow, headers);
+            this.relationship = relationship;
+            this.category = category;
+            this.noOfAssured = noOfAssured;
+            return this;
+        }
     }
 
 }

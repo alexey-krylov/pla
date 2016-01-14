@@ -103,7 +103,6 @@ public class GLPolicyFactory {
                     }
                 }
             }
-
         };
         sequenceGenerator.updateSequence(sequenceNumber[0], (Integer) entitySequenceMap.get("sequenceId"));
         return insureds;
@@ -114,7 +113,7 @@ public class GLPolicyFactory {
         final int[] currentSequence = {3};
         insuredDependents.forEach(insuredDependent -> {if (dependentSequenceMap.get(insuredDependent.getRelationship()) == null) {
             List<Integer> sequenceList = new ArrayList<Integer>();
-            sequenceList.add((Relationship.SPOUSE.equals(insuredDependent.getRelationship()) ? 2 : currentSequence[0]));
+            sequenceList.add((Relationship.SPOUSE.equals(insuredDependent.getRelationship()) ? 02 : currentSequence[0]));
             currentSequence[0] = currentSequence[0] + 1;
             dependentSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
         } else {

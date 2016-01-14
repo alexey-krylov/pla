@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.quotation.query.GHQuotationFinder;
 import com.pla.grouphealth.sharedresource.dto.GHInsuredDto;
-import com.pla.grouphealth.sharedresource.dto.GHRelationshipCategoryCoverDetail;
+import com.pla.grouphealth.sharedresource.model.vo.GHRelationshipCategoryCoverDetail;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelHeader;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
@@ -14,6 +14,8 @@ import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -34,8 +36,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
+import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseFileIsBlank;
+import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotSamePlanForAllCategoryAndRelationshipException;
+import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidFirstHeaderException;
+import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.*;
-import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotSameCoverForAllCategoryAndRelationshipCombinationException;
+import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.*;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotSamePlanForAllCategoryException;
 import static com.pla.grouplife.sharedresource.exception.GLInsuredTemplateExcelParseException.raiseNotSamePlanForAllRelationshipException;
 import static com.pla.sharedkernel.util.ExcelGeneratorUtil.getCellValue;
@@ -245,7 +251,8 @@ public class GHInsuredExcelParser {
             }
             String sameOptionalCoverageErrorMessage = checkIfSameOptionalCoverage(currentRow, headers, optionalCoverageHeaders);
             String sameOptionalCoverageBenefitsErrorMessage = checkIfSameOptionalCoverageBenefits(currentRow, headers, optionalCoverageBenefitHeaders);
-            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(sameOptionalCoverageBenefitsErrorMessage) && isEmpty(categoryDoesNotHaveSelfRelationErrorMessage)) {
+            String detailedAnsNoOfAssuredErrorMessage  = validateIfDetailsAndNumberAreProvided(currentRow,dataRows,headers);
+            if (isEmpty(errorMessage) && isEmpty(coverageErrorMessage) && isEmpty(duplicateRowErrorMessage) && isEmpty(sameOptionalCoverageErrorMessage) && isEmpty(sameOptionalCoverageBenefitsErrorMessage) && isEmpty(categoryDoesNotHaveSelfRelationErrorMessage) && isEmpty(detailedAnsNoOfAssuredErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
@@ -263,6 +270,7 @@ public class GHInsuredExcelParser {
             errorMessage = errorMessage +" \n "+ sameOptionalCoverageErrorMessage;
             errorMessage = errorMessage +" \n "+ sameOptionalCoverageBenefitsErrorMessage;
             errorMessage = errorMessage +" \n "+ categoryDoesNotHaveSelfRelationErrorMessage;
+            errorMessage = errorMessage +" \n "+ detailedAnsNoOfAssuredErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
@@ -786,4 +794,41 @@ public class GHInsuredExcelParser {
         return getCellValue(otherPlanCell);
     }
 
+    private String validateIfDetailsAndNumberAreProvided(Row current, List<Row> dataRows, List<String> headers){
+        String detailedAnsNoOfAssuredErrorMessage = "";
+        boolean isDetailsAndNoOfAssuredProvided = false;
+        DetailAssured currentRowDetail  = new DetailAssured().withDetail(current, headers);
+        for (Row row : dataRows){
+            DetailAssured otherRowDetail  = new DetailAssured().withDetail(row, headers);
+            if (Objects.equals(currentRowDetail.getRelationship(),otherRowDetail.getRelationship()) && Objects.equals(currentRowDetail.getCategory(),otherRowDetail.getCategory())){
+                if (!Objects.equals(currentRowDetail.getNoOfAssured(),otherRowDetail.getNoOfAssured())) {
+                    isDetailsAndNoOfAssuredProvided = true;
+                    break;
+                }
+            }
+            if (isDetailsAndNoOfAssuredProvided)
+                break;
+        }
+        detailedAnsNoOfAssuredErrorMessage = isDetailsAndNoOfAssuredProvided?"The Same Relation And category should not include both Detailed and number of Assured":"";
+        return detailedAnsNoOfAssuredErrorMessage;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public class DetailAssured{
+        private String relationship;
+        private String category;
+        private String noOfAssured;
+
+        public DetailAssured withDetail(Row detailRow,List<String> headers){
+            String relationship = getCellValueByType(GHInsuredExcelHeader.RELATIONSHIP.getDescription(), detailRow, headers);
+            String category = getCellValueByType(GHInsuredExcelHeader.CATEGORY.getDescription(), detailRow, headers);
+            String noOfAssured = getCellValueByType(GHInsuredExcelHeader.NO_OF_ASSURED.getDescription(), detailRow, headers);
+            this.relationship = relationship;
+            this.category = category;
+            this.noOfAssured = noOfAssured;
+            return this;
+        }
+    }
 }

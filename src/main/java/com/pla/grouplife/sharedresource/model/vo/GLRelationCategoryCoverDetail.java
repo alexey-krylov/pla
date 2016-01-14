@@ -32,6 +32,63 @@ public class GLRelationCategoryCoverDetail {
     private String premiumType;
     private Set<Cover> cover;
 
+    public GLRelationCategoryCoverDetail withRelationDetail(String relationship,String planCode,BigDecimal planSumAssured,String premiumType,BigDecimal incomeMultiplier){
+        this.relationship = relationship;
+        this.planCode = planCode;
+        this.planSumAssured = planSumAssured;
+        this.premiumType = premiumType;
+        this.incomeMultiplier = incomeMultiplier;
+        return this;
+    }
+
+    public GLRelationCategoryCoverDetail withCoverageDetail(List<GLInsuredExcelParser.OptionalCoverageCellHolder> optionalCoverageCellHolders){
+        Set<Cover> covers = Sets.newLinkedHashSet();
+        optionalCoverageCellHolders.forEach(optionalCover->{
+            Cover cover = new Cover();
+            String coverageSA = getCellValue(optionalCover.getOptionalCoverageSACell());
+            BigDecimal coverageSumAssured = isNotEmpty(coverageSA)?new BigDecimal(coverageSA):BigDecimal.ZERO;
+            cover.withDetail(getCellValue(optionalCover.getOptionalCoverageCell()), coverageSumAssured, "");
+            covers.add(cover);
+        });
+        this.cover = covers;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GLRelationCategoryCoverDetail that = (GLRelationCategoryCoverDetail) o;
+        return (
+                Objects.equal(relationship, that.relationship) && Objects.equal(category, that.category) &&
+                        Objects.equal(planCode, that.planCode) &&
+                        Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType) && Objects.equal(incomeMultiplier, that.incomeMultiplier)
+                        && isCoverageDetailEqual(cover, that.cover)
+        );
+    }
+
+
+    public boolean compare(GLRelationCategoryCoverDetail that){
+        return (
+                Objects.equal(planCode, that.planCode) &&
+                        Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType) && Objects.equal(incomeMultiplier, that.incomeMultiplier)
+                        && isCoverageDetailEqual(cover, that.cover)
+        );
+    }
+
+    private boolean isCoverageDetailEqual(Set<Cover> left,Set<Cover> right){
+        if (isEmpty(left) && isEmpty(right))
+            return true;
+        if (left.size()==right.size()){
+            for (Cover cover : left){
+                for (Cover rightCoverDetail:right){
+                    return cover.equals(rightCoverDetail);
+                }
+            }
+        }
+        return false;
+    }
+
     @EqualsAndHashCode(of = {"coverageCode","coverageSumAssured","premiumType"})
     @Getter
     private class Cover {
@@ -58,62 +115,6 @@ public class GLRelationCategoryCoverDetail {
                             Objects.equal(premiumType, that.premiumType)
             );
         }
-    }
-
-    public GLRelationCategoryCoverDetail withRelationDetail(String relationship,String planCode,BigDecimal planSumAssured,String premiumType,BigDecimal incomeMultiplier){
-        this.relationship = relationship;
-        this.planCode = planCode;
-        this.planSumAssured = planSumAssured;
-        this.premiumType = premiumType;
-        this.incomeMultiplier = incomeMultiplier;
-        return this;
-    }
-
-    public GLRelationCategoryCoverDetail withCoverageDetail(List<GLInsuredExcelParser.OptionalCoverageCellHolder> optionalCoverageCellHolders){
-        Set<Cover> covers = Sets.newLinkedHashSet();
-        optionalCoverageCellHolders.forEach(optionalCover->{
-            Cover cover = new Cover();
-            String coverageSA = getCellValue(optionalCover.getOptionalCoverageSACell());
-            BigDecimal coverageSumAssured = isNotEmpty(coverageSA)?new BigDecimal(coverageSA):BigDecimal.ZERO;
-            cover.withDetail(getCellValue(optionalCover.getOptionalCoverageCell()), coverageSumAssured, "");
-            covers.add(cover);
-        });
-        this.cover = covers;
-        return this;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GLRelationCategoryCoverDetail that = (GLRelationCategoryCoverDetail) o;
-        return (
-                Objects.equal(relationship, that.relationship) && Objects.equal(category, that.category) &&
-                        Objects.equal(planCode, that.planCode) &&
-                        Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType) && Objects.equal(incomeMultiplier, that.incomeMultiplier)
-                        && isCoverageDetailEqual(cover, that.cover)
-        );
-    }
-
-    public boolean compare(GLRelationCategoryCoverDetail GLCategoryCoverDetail){
-        return (
-                Objects.equal(planCode, GLCategoryCoverDetail.planCode) &&
-                        Objects.equal(planSumAssured, GLCategoryCoverDetail.planSumAssured)
-        );
-    }
-
-    private boolean isCoverageDetailEqual(Set<Cover> left,Set<Cover> right){
-        if (isEmpty(left) && isEmpty(right))
-            return true;
-        if (left.size()==right.size()){
-            for (Cover cover : left){
-                for (Cover rightCoverDetail:right){
-                    return cover.equals(rightCoverDetail);
-                }
-            }
-        }
-        return false;
     }
 
 

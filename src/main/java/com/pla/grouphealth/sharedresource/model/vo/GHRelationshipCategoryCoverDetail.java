@@ -1,4 +1,4 @@
-package com.pla.grouphealth.sharedresource.dto;
+package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
@@ -17,7 +17,7 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
- * Created by Mohan Sharma on 11/20/2015.
+ * Created by Admin on 14-Jan-16.
  */
 @Getter
 @Setter
@@ -97,10 +97,11 @@ public class GHRelationshipCategoryCoverDetail {
         return false;
     }
 
-    public boolean compare(GHRelationshipCategoryCoverDetail GLCategoryCoverDetail){
+    public boolean compare(GHRelationshipCategoryCoverDetail that){
         return (
-                Objects.equal(planCode, GLCategoryCoverDetail.planCode) &&
-                        Objects.equal(planSumAssured, GLCategoryCoverDetail.planSumAssured)
+                Objects.equal(planCode, that.planCode) &&
+                        Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType)
+                        && isCoverageDetailEqual(cover, that.cover)
         );
     }
 
@@ -116,5 +117,4 @@ public class GHRelationshipCategoryCoverDetail {
         }
         return false;
     }
-
 }

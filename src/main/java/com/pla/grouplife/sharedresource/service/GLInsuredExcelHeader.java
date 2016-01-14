@@ -181,9 +181,9 @@ public enum GLInsuredExcelHeader {
             return insuredDto;
         }
 
-        @Override
-        public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
-            return insuredDependentDto;
+         @Override
+            public InsuredDto.InsuredDependentDto populateInsuredDependentDetail(InsuredDto.InsuredDependentDto insuredDependentDto, Row row, List<String> headers, IPlanAdapter iPlanAdapter) {
+                return insuredDependentDto;
         }
 
         @Override
@@ -195,9 +195,25 @@ public enum GLInsuredExcelHeader {
         public String validateAndIfNotBuildErrorMessage(IPlanAdapter planAdapter, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
             Cell incomeMultiplierCell = row.getCell(excelHeaders.indexOf(INCOME_MULTIPLIER.name()));
+            Cell planCell = row.getCell(excelHeaders.indexOf(PLAN.name()));
             Cell annualIncomeCell = row.getCell(excelHeaders.indexOf(ANNUAL_INCOME.name()));
             String incomeMultiplier = getCellValue(incomeMultiplierCell);
             String annualIncome = getCellValue(annualIncomeCell);
+            String planCode = getCellValue(planCell);
+            try {
+                planCode = String.valueOf(Double.valueOf(planCode).intValue());
+            } catch (Exception e) {
+                planCode = value;
+            }
+            boolean isValidPlan = planAdapter.isValidPlanCode(planCode);
+            if (!isValidPlan) {
+                errorMessage = errorMessage + "Plan code does not exist.";
+            }
+            boolean isIncomeMultiplierPlan = planAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode);
+            if (isIncomeMultiplierPlan && isEmpty(value)){
+                errorMessage = errorMessage + "Annual income cannot be blank.";
+                return errorMessage;
+            }
             if (isEmpty(annualIncome) && isNotEmpty(incomeMultiplier)) {
                 errorMessage = errorMessage + "Annual income cannot be blank.";
                 return errorMessage;
