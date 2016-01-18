@@ -10,7 +10,17 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Client Id</label>
-                    <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured" ng-model="proposedAssured.clientId"/>
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId"
+                               ng-blur="searchProposedAssuredByClientId()" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured||isProposedAssuredClientValid" ng-model="proposedAssured.clientId"/>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="searchProposedAssuredByClientId()"
+                                    ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured||isProposedAssuredClientValid">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <!--<input type="text" class="form-control input-sm" ng-minlength="12" ng-maxlength="12" ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])(\d{8})$/" name="clientId" ng-disabled="mode=='new'||mode=='view' || readOnlyStatusProposedAssured" ng-model="proposedAssured.clientId"/>-->
 
                     <div class="error" ng-messages="proposedAssuredDetails.clientId.$error"  ng-if="proposedAssuredDetails.clientId.$dirty">
                         <!--<small class="error" ng-message="required">Please enter  Client Id. </small>-->
@@ -428,6 +438,10 @@
         </div>
         <div class="col-sm-6">
             <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="(step3.$invalid || statusCount)"   ng-hide=" mode=='new'||mode=='view'||readOnlyStatusProposedAssured" ng-click="saveProposedAssuredDetails()">Save</button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                    ng-click="resetProposedAssuredClientInfo()" ng-hide="!isProposedAssuredClientValid">Reset
+            </button>
         </div>
     </div>
 </ng-form>

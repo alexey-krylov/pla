@@ -504,6 +504,33 @@ angular.module('createProposal', ['pla.individual.proposal', 'common', 'ngRoute'
                 $scope.proposer={};
             }
 
+            //ProposedAssured ClientId Search
+            $scope.isProposedAssuredClientValid=false;
+            $scope.searchProposedAssuredByClientId=function(){
+                if($scope.proposedAssured.clientId){
+                    var clientId=$scope.proposedAssured.clientId;
+                    $http.get('/pla/individuallife/proposal/getclientid/' + $scope.proposedAssured.clientId)
+                        .success(function (response) {
+                            $scope.serverError = false;
+                            $scope.proposedAssured=response.data;
+                            $scope.proposedAssured.clientId=clientId;
+                            $scope.isProposedAssuredClientValid=true;
+                        }).error(function (response, status, headers, config) {
+                            $scope.serverError = true;
+                            $scope.serverErrMsg = response.message;
+                            $scope.proposedAssured={};
+                            //$scope.proposedAssured={};
+                            $scope.proposedAssured.clientId='';
+                            $scope.isProposedAssuredClientValid=false;
+                        });
+
+                }
+            }
+            $scope.resetProposedAssuredClientInfo=function(){
+                $scope.isProposedAssuredClientValid=false;
+                $scope.proposedAssured={};
+            }
+
             $scope.isBrowseDisable=function(document)
             {
                 if(document.fileName == null && document.submitted)
