@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -73,7 +74,7 @@ public class IndividualLifeEndorsement extends AbstractAggregateRoot<String> {
 
     private ILPolicyDto ilPolicyDto;
 
-    public IndividualLifeEndorsement(String endorsementId, String endorsementRequestNumber, ILPolicyDto ilPolicyDto, ILEndorsementType endorsementType) {
+    public IndividualLifeEndorsement(String endorsementId, String endorsementRequestNumber, ILPolicyDto ilPolicyDto, ILEndorsementType endorsementType, DateTime effectiveDate) {
         checkArgument(endorsementId != null, "Endorsement Id cannot be empty");
         checkArgument(endorsementRequestNumber != null, "Endorsement Request Number cannot be empty");
         checkArgument(ilPolicyDto != null, "Policy cannot be empty");
@@ -84,6 +85,7 @@ public class IndividualLifeEndorsement extends AbstractAggregateRoot<String> {
         //this.policy = policy;
         this.ilPolicyDto = ilPolicyDto;
         this.endorsementType = endorsementType;
+        this.effectiveDate = effectiveDate;
     }
 
     public IndividualLifeEndorsement updateWithEndorsementDetail(ILEndorsement endorsement) {

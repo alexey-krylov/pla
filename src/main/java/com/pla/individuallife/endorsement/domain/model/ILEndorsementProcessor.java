@@ -28,7 +28,7 @@ public class ILEndorsementProcessor {
         //Policy policy = new Policy(new PolicyId(policyId), new PolicyNumber(policyNumber), policyHolderName);
         //ILEndorsementType endorsementType = ilPolicyDto.getIlEndorsementType();
         //endorsementType.populateInfoByType(ilPolicyDto);
-        IndividualLifeEndorsement individualLifeEndorsement = new IndividualLifeEndorsement(endorsementId, endorsementRequestNumber, ilPolicyDto, ilPolicyDto.getIlEndorsementType());
+        IndividualLifeEndorsement individualLifeEndorsement = new IndividualLifeEndorsement(endorsementId, endorsementRequestNumber, ilPolicyDto, ilPolicyDto.getIlEndorsementType(),ilPolicyDto.getEffectiveDate());
         return individualLifeEndorsement;
     }
 
