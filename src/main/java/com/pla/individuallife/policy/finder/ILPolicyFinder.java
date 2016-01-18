@@ -147,4 +147,9 @@ public class ILPolicyFinder {
             return map.get("firstName").toString();
     }
 
+    public Map findProposalIdByPolicyNumber(String policyNumber) {
+        Query query = new Query(Criteria.where("policyNumber.policyNumber").is(policyNumber));
+        return mongoTemplate.findOne(query, Map.class, IL_POLICY_COLLECTION_NAME);
+    }
+
 }

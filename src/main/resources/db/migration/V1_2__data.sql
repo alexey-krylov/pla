@@ -688,7 +688,7 @@ INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change/Add Ben
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change method of payment','INDIVIDUAL');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Agent','INDIVIDUAL');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Payer','INDIVIDUAL');
-INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Sum Assured ','INDIVIDUAL');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Sum Assured','INDIVIDUAL');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Life Assured Date of Birth','INDIVIDUAL');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Policyholder Date of Birth','INDIVIDUAL');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of NRC - Life Assured','INDIVIDUAL');
@@ -698,7 +698,7 @@ INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Premium Adjust
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction of Name-Policyholder','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Of Name - Life Assured','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change of Address','GROUP');
-INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Sum Assured ','GROUP');
+INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Sum Assured','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Change Life Assured Date of Birth','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured - NRC','GROUP');
 INSERT INTO `endorsement_type`(`description`,`category`) VALUES ('Correction Life Assured-MAN Number','GROUP');

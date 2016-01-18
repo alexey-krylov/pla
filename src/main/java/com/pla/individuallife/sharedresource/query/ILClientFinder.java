@@ -1,5 +1,7 @@
 package com.pla.individuallife.sharedresource.query;
 
+import com.google.common.collect.Lists;
+import com.pla.individuallife.policy.domain.model.IndividualLifePolicy;
 import com.pla.individuallife.sharedresource.dto.ILClientDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.EmploymentDetail;
 import com.pla.individuallife.sharedresource.model.vo.ProposedAssured;
@@ -9,14 +11,19 @@ import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -85,6 +92,44 @@ public class ILClientFinder {
                                                    String emailAddress,MaritalStatus maritalStatus,String spouseFirstName,String spouseLastName,String spouseEmailAddress,String spouseMobileNumber, EmploymentDetail employmentDetail,ResidentialAddress residentialAddress){
 
         return new ILClientDetailDto(title,firstName,surName,otherName,nrc,dateOfBirth,gender,mobileNumber,emailAddress,maritalStatus,spouseFirstName,spouseLastName,spouseEmailAddress,spouseMobileNumber,employmentDetail,residentialAddress);
+    }
+
+    public Map findPolicyById(String policyId) {
+        return mongoTemplate.findOne(new Query(Criteria.where("_id").is(policyId)), Map.class, IL_POLICY_COLLECTION_NAME);
+    }
+
+    public List<Map> searchPolicy(String policyNumber, String policyHolderName,String clientId, String[] statuses,String proposalNumber) {
+        if (isEmpty(policyHolderName) && isEmpty(policyNumber) && isEmpty(clientId) && isEmpty(proposalNumber)) {
+            return Lists.newArrayList();
+        }
+        Criteria criteria = Criteria.where("policyStatus").in(statuses);
+        if (isNotEmpty(policyHolderName)) {
+            String proposerPattern = "^" + policyHolderName;
+            criteria = criteria.and("proposer.proposerName").regex(Pattern.compile(proposerPattern, Pattern.CASE_INSENSITIVE));
+        }
+        if (isNotEmpty(policyNumber)) {
+            criteria = criteria.and("policyNumber.policyNumber").is(policyNumber);
+        }
+        if(isNotEmpty(proposalNumber)){
+            criteria = criteria.and("proposal.proposalNumber.proposalNumber").is(proposalNumber);
+
+        }
+        Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
+        return mongoTemplate.find(query, Map.class, IL_POLICY_COLLECTION_NAME);
+    }
+
+    public List<IndividualLifePolicy> searchPolicy(String policyNumber, String[] statuses) {
+        if (isEmpty(policyNumber)) {
+            return Lists.newArrayList();
+        }
+        Criteria criteria = Criteria.where("policyStatus").in(statuses);
+        if (isNotEmpty(policyNumber)) {
+            criteria = criteria.and("policyNumber.policyNumber").is(policyNumber);
+        }
+        Query query = new Query(criteria);
+        query.with(new Sort(Sort.Direction.ASC, "policyNumber.policyNumber"));
+        return mongoTemplate.find(query,IndividualLifePolicy.class);
     }
 
 }
