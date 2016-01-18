@@ -399,10 +399,10 @@ public class ILEndorsementController {
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To submit endorsement for approval")
-    public ResponseEntity submitProposal(@RequestBody SubmitILEndorsementCommand submitGLEndorsementCommand, HttpServletRequest request) {
+    public ResponseEntity submitProposal(@RequestBody SubmitILEndorsementCommand submitILEndorsementCommand, HttpServletRequest request) {
         try {
-            submitGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
-            commandGateway.sendAndWait(submitGLEndorsementCommand);
+            submitILEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(submitILEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement submitted successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -428,11 +428,11 @@ public class ILEndorsementController {
     @RequestMapping(value = "/return", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To return endorsement to processor")
-    public ResponseEntity returnEndorsement(@RequestBody ReturnILEndorsementCommand returnGLEndorsementCommand, HttpServletRequest request) {
+    public ResponseEntity returnEndorsement(@RequestBody ReturnILEndorsementCommand returnILEndorsementCommand, HttpServletRequest request) {
         try {
-            returnGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
-            returnGLEndorsementCommand.setStatus(EndorsementStatus.RETURN);
-            commandGateway.sendAndWait(returnGLEndorsementCommand);
+            returnILEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            returnILEndorsementCommand.setStatus(EndorsementStatus.RETURN);
+            commandGateway.sendAndWait(returnILEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement returned successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -443,14 +443,14 @@ public class ILEndorsementController {
     @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To approve endorsement by approval")
-    public ResponseEntity approveEndorsement(@RequestBody ApproveILEndorsementCommand approveGLEndorsementCommand, HttpServletRequest request) {
+    public ResponseEntity approveEndorsement(@RequestBody ApproveILEndorsementCommand approveILEndorsementCommand, HttpServletRequest request) {
         try {
-            approveGLEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
+            approveILEndorsementCommand.setUserDetails(getLoggedInUserDetail(request));
             /*
             * service method which will check for the uploaded documents and waived documents..
             * */
-            approveGLEndorsementCommand.setStatus(EndorsementStatus.APPROVED);
-             commandGateway.sendAndWait(approveGLEndorsementCommand);
+            approveILEndorsementCommand.setStatus(EndorsementStatus.APPROVED);
+             commandGateway.sendAndWait(approveILEndorsementCommand);
             return new ResponseEntity(Result.success("Endorsement approved successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
