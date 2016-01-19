@@ -35,9 +35,9 @@ public class ILPolicyDto {
 
     private PolicyNumber policyNumber;
 
-    private String inceptionOn;
+    private DateTime inceptionOn;
 
-    private String expiryDate;
+    private DateTime expiryDate;
 
     private ProposedAssuredDto proposedAssured;
 
