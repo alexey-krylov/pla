@@ -29,7 +29,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class ILPolicyDto {
 
-    private  String policyId;
+    private String policyId;
 
     private Proposal proposal;
 
