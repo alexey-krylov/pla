@@ -200,6 +200,18 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         return isCoverageExist;
     }
 
+    public int getPercentageDefined(CoverageId coverageId) {
+        Optional<PlanCoverage> planCoverageOptional = this.getCoverages().stream().filter(new CoveragePredicate(coverageId)).findAny();
+        return planCoverageOptional.isPresent()?planCoverageOptional.get().getCoverageSumAssured().getPercentage():0;
+    }
+
+    public boolean isPercentageOfSumAssuredCoverage(CoverageId coverageId) {
+        boolean isPercentageOfCoverageSA = this.getCoverages().stream().filter(new CoveragePredicate(coverageId)).findAny().isPresent();
+        return isPercentageOfCoverageSA;
+    }
+
+
+
     public Set<Integer> getAllowedPremiumTerms() {
         if (Arrays.asList(PremiumTermType.SPECIFIED_VALUES,PremiumTermType.SINGLE_SPECIFIED_VALUES).contains(this.premiumTermType)) {
             return this.premiumTerm.getValidTerms();
@@ -210,7 +222,6 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
         }
         return Sets.newHashSet(1);
     }
-
 
     public boolean isValidPremiumTerm(Integer premiumTerm) {
         Set<Integer> premiumTerms = getAllowedPremiumTerms();
@@ -416,5 +427,19 @@ public class Plan extends AbstractAnnotatedAggregateRoot<PlanId> {
 
     public void setScheduleToken(ScheduleToken scheduleToken) {
         this.scheduleToken = scheduleToken;
+    }
+
+    private class CoveragePredicate implements Predicate<PlanCoverage> {
+
+        private CoverageId coverageId;
+
+        public CoveragePredicate(CoverageId coverageId) {
+            this.coverageId = coverageId;
+        }
+
+        @Override
+        public boolean test(PlanCoverage planCoverage) {
+            return coverageId.equals(planCoverage.getCoverageId()) && planCoverage.getCoverageSumAssured().getPercentage()!=0;
+        }
     }
 }

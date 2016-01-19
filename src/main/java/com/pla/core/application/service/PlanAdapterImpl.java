@@ -262,13 +262,35 @@ public class PlanAdapterImpl implements IPlanAdapter {
         return activePlanCount != 0;
     }
 
-    /*
-    * @TODO please review @Samir
-    * */
+
      @Override
     public Set<String> getConfiguredEndorsementType(Set<PlanId> planIds) {
         Set<String> endorsementType =  planFinder.findConfiguredEndorsementType(planIds);
         return endorsementType;
+    }
+
+    @Override
+    public boolean isPercentageOfSumAssured(String planCode, String coverageCode) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        Map<String, Object> coverageMap = coverageFinder.getCoverageDetailByCode(coverageCode);
+        String coverageId = (String) coverageMap.get("coverageId");
+        if (isEmpty(plans)) {
+            return false;
+        }
+        Plan plan = plans.get(0);
+        return plan.isPercentageOfSumAssuredCoverage(new CoverageId(coverageId));
+    }
+
+    @Override
+    public int getDefinedPercentageOfSumAssured(String planCode, String coverageCode) {
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        Map<String, Object> coverageMap = coverageFinder.getCoverageDetailByCode(coverageCode);
+        String coverageId = (String) coverageMap.get("coverageId");
+        if (isEmpty(plans)) {
+            return 0;
+        }
+        Plan plan = plans.get(0);
+        return plan.getPercentageDefined(new CoverageId(coverageId));
     }
 
     @Override

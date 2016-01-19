@@ -238,16 +238,20 @@ public class GLInsuredExcelParser {
             errorMessageCell.setCellValue(errorMessage);
         }
         if (isValidTemplate) {
-            if (samePlanForAllCategory && !samePlanForAllRelation)
-                checkAndValidateIsSameForAllCategory(insuredDependentMap, headers, agentPlans);
-            if (samePlanForAllRelation && !samePlanForAllCategory)
-                checkAndValidateIsSameCoverForAllRelation(dataRows, headers, agentPlans);
-            if (samePlanForAllCategory && samePlanForAllRelation)
-                checkAndValidateIsSameCoverForAllRelationAndCategory(dataRows, headers, agentPlans);
-            if (!samePlanForAllCategory && !samePlanForAllRelation)
-                checkAndValidateIsSameCoverForAllRelationAndCategoryCombination(dataRows, headers, agentPlans);
+            checkForSameCategoryAndRelation(insuredDependentMap,dataRows,headers,agentPlans,samePlanForAllCategory,samePlanForAllRelation);
         }
         return isValidTemplate;
+    }
+
+    public void checkForSameCategoryAndRelation(Map<Row, List<Row>> insuredDependentMap,List<Row> dataRows,List<String> headers,List<PlanId> agentPlans,boolean samePlanForAllCategory,boolean samePlanForAllRelation){
+        if (samePlanForAllCategory && !samePlanForAllRelation)
+            checkAndValidateIsSameForAllCategory(insuredDependentMap, headers, agentPlans);
+        if (samePlanForAllRelation && !samePlanForAllCategory)
+            checkAndValidateIsSameCoverForAllRelation(dataRows, headers, agentPlans);
+        if (samePlanForAllCategory && samePlanForAllRelation)
+            checkAndValidateIsSameCoverForAllRelationAndCategory(dataRows, headers, agentPlans);
+        if (!samePlanForAllCategory && !samePlanForAllRelation)
+            checkAndValidateIsSameCoverForAllRelationAndCategoryCombination(dataRows, headers, agentPlans);
     }
 
     private Set<String> getCategoryWhichDoesNotSelfRelation(List<Row> rowList,List<String> headers) {
@@ -390,8 +394,19 @@ public class GLInsuredExcelParser {
             if (isNotEmpty(optionalCoverageCode) && !isValidCoverage(finalPlanCode, optionalCoverageCode)) {
                 errorMessages.add("Coverage code: " + optionalCoverageCode + "  is not valid for plan " + finalPlanCode + ".");
             }
+            boolean isPercentageOfSACoverage = planAdapter.isPercentageOfSumAssured(finalPlanCode,optionalCoverageCode);
             String coverageSA = getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell());
-            if (isEmpty(coverageSA)) {
+            if (isPercentageOfSACoverage && isNotEmpty(coverageSA)) {
+                BigDecimal coverageSumAssured = BigDecimal.valueOf(Double.valueOf(coverageSA).intValue());
+                boolean isValidCoverageSA = planAdapter.isValidCoverageSumAssured(finalPlanCode,optionalCoverageCode,coverageSumAssured);
+                if (!isValidCoverageSA){
+                      /*
+                * check for % of Plan Sum Assured
+                * */
+                    errorMessages.add(coverageSA + "  is not valid Sum Assured for coverage " + optionalCoverageCode + ".");
+                }
+            }
+            if (!isPercentageOfSACoverage && isEmpty(coverageSA)) {
                 errorMessages.add("Sum Assured is empty for" + optionalCoverageCode + ".");
             }
             if (isNotEmpty(coverageSA) && Double.valueOf(coverageSA) < 0) {

@@ -33,6 +33,10 @@ public class GLInsuredTemplateExcelParseException extends RuntimeException {
         throw new  GLInsuredTemplateExcelParseException("All plan code should be same");
     }
 
+    public static void raiseNotSamePlanCoverForAllCategoryAndRelationshipException() {
+        throw new GLInsuredTemplateExcelParseException("For all relationship and Category cover should be same");
+    }
+
     public static void raiseAssuredDataNotSharedException() {
         throw new  GLInsuredTemplateExcelParseException("Assured data not shared.");
     }

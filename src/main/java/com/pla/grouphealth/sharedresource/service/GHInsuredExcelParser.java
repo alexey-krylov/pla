@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.*;
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseFileIsBlank;
-import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotSamePlanForAllCategoryAndRelationshipException;
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidFirstHeaderException;
 import static com.pla.grouphealth.quotation.application.service.exception.GLInsuredTemplateExcelParseException.raiseNotValidHeaderException;
 import static com.pla.grouphealth.sharedresource.service.QuotationProposalUtilityService.*;
@@ -274,6 +273,7 @@ public class GHInsuredExcelParser {
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
         }
+
         if (isValidTemplate) {
             if (samePlanForAllCategory && !samePlanForAllRelation)
                 checkAndValidateIsSameForAllCategory(insuredDependentMap, headers, agentPlans);
@@ -751,7 +751,7 @@ public class GHInsuredExcelParser {
                 List<OptionalCoverageCellHolder> otherOptionalCoverageCellHolders = findNonEmptyOptionalCoverageCell(headers, otherRow, agentPlans);
                 GHRelationshipCategoryCoverDetail otherCategoryCoverDetail = populateRelationCover(otherRow, headers, otherOptionalCoverageCellHolders, false);
                 if (!categoryCoverDetail.compare(otherCategoryCoverDetail)) {
-                    raiseNotSamePlanForAllCategoryAndRelationshipException();
+                    raiseNotSamePlanCoverForAllCategoryAndRelationshipException();
                 }
             }
             break;

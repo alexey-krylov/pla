@@ -61,6 +61,10 @@ public interface IPlanAdapter {
 
     Set<String> getConfiguredEndorsementType(Set<PlanId> planIds);
 
+    boolean isPercentageOfSumAssured(String planCode,String coverageCode);
+
+    int getDefinedPercentageOfSumAssured(String planCode,String coverageCode);
+
 
 
 }

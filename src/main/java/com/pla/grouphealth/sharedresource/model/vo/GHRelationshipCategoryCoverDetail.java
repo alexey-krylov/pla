@@ -29,6 +29,8 @@ public class GHRelationshipCategoryCoverDetail {
     private String planCode;
     private BigDecimal planSumAssured;
     private String premiumType;
+    private Integer minAgeEntry = 0;
+    private Integer maxAgeEntry = 0;
     private Set<Cover> cover;
 
     @EqualsAndHashCode(of = {"coverageCode","coverageSumAssured","premiumType"})
@@ -37,6 +39,8 @@ public class GHRelationshipCategoryCoverDetail {
         private String coverageCode;
         private BigDecimal coverageSumAssured;
         private String premiumType;
+        private Set<BenefitCover> benefitCovers;
+
 
         public Cover withDetail(String coverageCode,BigDecimal coverageSumAssured,String premiumType){
             this.coverageCode = coverageCode;
@@ -46,6 +50,22 @@ public class GHRelationshipCategoryCoverDetail {
         }
 
 
+        public Cover withBenefitCover(Set<GHInsuredExcelParser.OptionalCoverageBenefitCellHolder> benefitCellHolders){
+            Set<Cover.BenefitCover> benefitCovers = Sets.newLinkedHashSet();
+            if (isEmpty(benefitCellHolders)) {
+                this.benefitCovers = benefitCovers;
+                return this;
+            }
+            benefitCellHolders.forEach(benefits->{
+                String benefitCode = getCellValue(benefits.getBenefitCell());
+                String benefitLimit = getCellValue(benefits.getBenefitLimitCell());
+                Cover.BenefitCover benefitCover = new BenefitCover().withBenefitCover(benefitCode, new BigDecimal(benefitLimit));
+                benefitCovers.add(benefitCover);
+            });
+            this.benefitCovers = benefitCovers;
+            return this;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -54,8 +74,47 @@ public class GHRelationshipCategoryCoverDetail {
             return (
                     Objects.equal(coverageCode, that.coverageCode) &&
                             Objects.equal(coverageSumAssured, that.coverageSumAssured) &&
-                            Objects.equal(premiumType, that.premiumType)
+                            Objects.equal(premiumType, that.premiumType) && isBenefitCoverEqual(benefitCovers,that.benefitCovers)
             );
+        }
+
+        public boolean isBenefitCoverEqual(Set<BenefitCover> left,Set<BenefitCover> right){
+            if (isEmpty(left) && isEmpty(right))
+                return true;
+            if (left.size()==right.size()){
+                for (BenefitCover benefitCover : left){
+                    for (BenefitCover rightCoverDetail:right){
+                        return benefitCover.equals(rightCoverDetail);
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        @Getter
+        @Setter
+        private class BenefitCover {
+            private String benefitCode;
+            private BigDecimal benefitLimit;
+
+            public BenefitCover withBenefitCover(String benefitCode,BigDecimal benefitLimit){
+                this.benefitCode = benefitCode;
+                this.benefitLimit = benefitLimit;
+                return this;
+            }
+
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                BenefitCover that = (BenefitCover) o;
+                return (
+                        Objects.equal(benefitCode, that.benefitCode) &&
+                                Objects.equal(benefitLimit, that.benefitLimit)
+                );
+            }
         }
     }
 
@@ -73,7 +132,8 @@ public class GHRelationshipCategoryCoverDetail {
             Cover cover = new Cover();
             String coverageSA = getCellValue(optionalCover.getOptionalCoverageSACell());
             BigDecimal coverageSumAssured = isNotEmpty(coverageSA)?new BigDecimal(coverageSA):BigDecimal.ZERO;
-            cover.withDetail(getCellValue(optionalCover.getOptionalCoverageCell()), coverageSumAssured, "");
+            cover = cover.withDetail(getCellValue(optionalCover.getOptionalCoverageCell()), coverageSumAssured, "");
+            cover = cover.withBenefitCover(optionalCover.getBenefitCellHolders());
             covers.add(cover);
         });
         this.cover = covers;
@@ -91,7 +151,8 @@ public class GHRelationshipCategoryCoverDetail {
                     Objects.equal(relationship, that.relationship) && Objects.equal(category, that.category) &&
                             Objects.equal(planCode, that.planCode) &&
                             Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType)
-                            && isCoverageDetailEqual(cover, that.cover)
+                            && isCoverageDetailEqual(cover, that.cover) && this.getMaxAgeEntry().compareTo(that.getMaxAgeEntry())==0 &&
+                            this.getMinAgeEntry().compareTo(that.getMinAgeEntry())==0
             );
         }
         return false;
@@ -101,7 +162,8 @@ public class GHRelationshipCategoryCoverDetail {
         return (
                 Objects.equal(planCode, that.planCode) &&
                         Objects.equal(planSumAssured, that.planSumAssured) &&  Objects.equal(premiumType, that.premiumType)
-                        && isCoverageDetailEqual(cover, that.cover)
+                        && isCoverageDetailEqual(cover, that.cover) && this.getMaxAgeEntry().compareTo(that.getMaxAgeEntry())==0 &&
+                        this.getMinAgeEntry().compareTo(that.getMinAgeEntry())==0
         );
     }
 

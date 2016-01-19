@@ -16,6 +16,7 @@ import com.pla.grouplife.sharedresource.model.vo.Insured;
 import com.pla.grouplife.sharedresource.model.vo.InsuredDependent;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.grouplife.sharedresource.service.GLInsuredExcelHeader;
+import com.pla.grouplife.sharedresource.service.GLInsuredExcelParser;
 import com.pla.publishedlanguage.contract.IPlanAdapter;
 import com.pla.publishedlanguage.dto.PlanCoverageDetailDto;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
@@ -66,6 +67,10 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
     @Autowired
     private GroupLifeEndorsementChecker groupLifeEndorsementChecker;
 
+    @Autowired
+    private GLInsuredExcelParser glInsuredExcelParser;
+
+
     @Override
     protected String validateRow(Row row, List<String> headers, GLEndorsementExcelValidator endorsementExcelValidator) {
         return null;
@@ -74,9 +79,11 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
     @Override
     public boolean isValidExcel(HSSFWorkbook workbook, PolicyId policyId) {
         Map policyMap = glFinder.findPolicyById(policyId.getPolicyId());
+        boolean samePlanForAllRelation = policyMap.get("samePlanForAllRelation") != null ? (boolean) policyMap.get("samePlanForAllRelation") : false;
+        boolean samePlanForAllCategory = policyMap.get("samePlanForAllCategory") != null ? (boolean) policyMap.get("samePlanForAllCategory") : false;
         AgentId agentId = (AgentId) policyMap.get("agentId");
         List<PlanId> authorizedPlans = getAgentAuthorizedPlans(agentId.getAgentId());
-        return isValidInsuredExcel(workbook, false, false, authorizedPlans,policyId);
+        return isValidInsuredExcel(workbook, samePlanForAllCategory, samePlanForAllRelation, authorizedPlans,policyId);
     }
 
     @Override
@@ -115,19 +122,10 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
             raiseNotValidHeaderException();
         }
         boolean isFirstRowContainsSelfRelationship = isFirstRowContainsSelfRelationship(dataRows, headers);
+        if (!isFirstRowContainsSelfRelationship) {
+            raiseNotValidFirstHeaderException();
+        }
         Map<Row, List<Row>> insuredDependentMap = groupByRelationship(dataRows, headers);
-        boolean isSamePlanForAllCategory = true;
-        if (isFirstRowContainsSelfRelationship) {
-            isSamePlanForAllCategory = isSamePlanForAllCategory(insuredDependentMap, headers);
-        }
-        boolean isSamePlanForAllRelationship = isSamePlanForAllRelation(insuredDependentMap, headers);
-        if (samePlanForAllCategory && !isSamePlanForAllCategory) {
-            raiseNotSamePlanForAllCategoryException();
-        } else if (samePlanForAllRelation && !isSamePlanForAllRelationship) {
-            raiseNotSamePlanForAllRelationshipException();
-        } else if (samePlanForAllCategory && samePlanForAllRelation && (!isSamePlanForAllCategory && !isSamePlanForAllCategory)) {
-            raiseNotSamePlanForAllCategoryAndRelationshipException();
-        }
         Map policyMap = glPolicyFinder.findActiveMemberFromPolicyByPolicyId(policyId.getPolicyId());
         List<Insured> insureds = (List<Insured>) policyMap.get("insureds");
         PolicyNumber policyNumber = (PolicyNumber) policyMap.get("policyNumber");
@@ -168,6 +166,9 @@ public class GLNewCategoryEndorsementExcelParser extends AbstractGLEndorsementEx
             errorMessage = errorMessage + duplicateRowErrorMessage;
             Cell errorMessageCell = currentRow.createCell(headers.size());
             errorMessageCell.setCellValue(errorMessage);
+        }
+        if (isValidTemplate){
+            glInsuredExcelParser.checkForSameCategoryAndRelation(insuredDependentMap,dataRows,headers,agentPlans,samePlanForAllCategory,samePlanForAllRelation);
         }
         return isValidTemplate;
     }
