@@ -231,7 +231,7 @@ public class PreAuthorizationRequestService {
                 @Override
                 public List<ServiceBenefitCoverageMapping> apply(String service) {
                     List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByPlanCodeAndService(plan.getPlanDetail().getPlanCode(), service);
-                    notEmpty(serviceBenefitCoverageMappings, "No Service Benefit Mapping Found For Plan - "+plan.getPlanDetail().getPlanName()+" and Service - "+service);
+                    //notEmpty(serviceBenefitCoverageMappings, "No Service Benefit Mapping Found For Plan - "+plan.getPlanDetail().getPlanName()+" and Service - "+service);
                     return serviceBenefitCoverageMappings;
                 }
             }).flatMap(sbcmList -> sbcmList.stream()).collect(Collectors.toSet());
