@@ -1,6 +1,8 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
+import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
+import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
@@ -11,6 +13,7 @@ import com.pla.sharedkernel.domain.model.FamilyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +26,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -108,5 +113,22 @@ public class PreAuthorizationRequestController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/updatewithcomments", method = RequestMethod.POST)
+    public @ResponseBody Result updateWithComment(@Valid @RequestBody UpdateCommentCommand updateCommentCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request){
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while updating comments", bindingResult.getAllErrors());
+        }
+        try{
+            updateCommentCommand.setUserDetails(getLoggedInUserDetail(request));
+            updateCommentCommand.setCommentDateTime(DateTime.now());
+            Set<CommentDetail> comments = commandGateway.sendAndWait(updateCommentCommand);
+            return Result.success("Proposal submitted successfully", comments);
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
     }
 }

@@ -12,6 +12,8 @@ import org.nthdimenzion.presentation.AppUtils;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -101,15 +103,8 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
-    public ClaimantPolicyDetailDto updateWithCoverages(List<GHCoveragePremiumDetail> coverages) {
-        Set<CoverageDetailDto> coverageDetailDtos = Sets.newHashSet();
-        if(isNotEmpty(coverages)){
-            for(GHCoveragePremiumDetail ghCoveragePremiumDetail : coverages){
-                CoverageDetailDto coverageDetailDto = new CoverageDetailDto(ghCoveragePremiumDetail.getCoverageCode(), ghCoveragePremiumDetail.getCoverageName(), ghCoveragePremiumDetail.getSumAssured());
-                coverageDetailDtos.add(coverageDetailDto);
-            }
-        }
-        this.coverageDetailDtoList = coverageDetailDtos;
+    public ClaimantPolicyDetailDto updateWithCoverages(Set<CoverageBenefitDetailDto> coverageBenefitDetails) {
+        this.coverageBenefitDetails = coverageBenefitDetails;
         return this;
     }
 
@@ -191,8 +186,8 @@ public class ClaimantPolicyDetailDto {
         return this;
     }
 
-    public ClaimantPolicyDetailDto updateWithCoverageDetails(Set<CoverageDetailDto> coverageDetailDtos) {
-        this.coverageDetailDtoList = coverageDetailDtos;
+    public ClaimantPolicyDetailDto updateWithCoverageDetails(Set<CoverageBenefitDetailDto> coverageBenefitDetails) {
+        this.coverageBenefitDetails = coverageBenefitDetails;
         return this;
     }
 
@@ -211,19 +206,4 @@ public class ClaimantPolicyDetailDto {
         String coverageName;
         BigDecimal sumAssured;
     }
-
-    @Getter
-    @Setter
-    @EqualsAndHashCode
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class CoverageBenefitDetailDto {
-        private String coverageName;
-        private String coverageCode;
-        private String benefitName;
-        private String benefitCode;
-        private BigDecimal balanceAmount;
-        private BigDecimal probableClaimAmount;
-    }
-
 }

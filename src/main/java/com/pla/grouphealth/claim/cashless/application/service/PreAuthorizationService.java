@@ -10,6 +10,7 @@ import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
+import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
@@ -138,7 +139,7 @@ public class PreAuthorizationService {
     }
 
     @Transactional
-    public int uploadPreAuthorizationDetails(UploadPreAuthorizationCommand uploadPreAuthorizationCommand) {
+    public int uploadPreAuthorizationDetails(UploadPreAuthorizationCommand uploadPreAuthorizationCommand) throws GenerateReminderFollowupException{
         String runningSequence = sequenceGenerator.getSequence(PreAuthorization.class);
         runningSequence = String.format("%08d", Integer.parseInt(runningSequence.trim()));
         List<List<PreAuthorizationDetailDto>> refurbishedSet = createSubListBasedOnSimilarCriteria(uploadPreAuthorizationCommand.getPreAuthorizationDetailDtos());
@@ -157,12 +158,12 @@ public class PreAuthorizationService {
         }
         List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAll();
         notEmpty(preAuthorizations, "Not uploaded successfully");
-        preAuthorizations.stream().forEach(preAuthorization -> {
+        for(PreAuthorization preAuthorization : preAuthorizations) {
             PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
             notNull(preAuthorizationDetail, "Not uploaded successfully");
             PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(preAuthorization.getPreAuthorizationId(), preAuthorizationDetail.getClientId());
             preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
-        });
+        }
         return Integer.parseInt(runningSequence.trim());
     }
 
@@ -206,67 +207,4 @@ public class PreAuthorizationService {
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
     }
-/*
-    public List<PreAuthorizationDto> searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
-        List<PreAuthorization> preAuthorizations = preAuthorizationFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto);
-        preAuthorizations = checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(preAuthorizations);
-        List<PreAuthorizationDto> furbishedList = Lists.newLinkedList();
-        for(PreAuthorization preAuthorization : preAuthorizations){
-            for(PreAuthorizationDetail preAuthorizationDetail : preAuthorization.getPreAuthorizationDetails()){
-                HCP hcp = hcpFinder.getHCPByHCPCode(preAuthorization.getHcpCode().getHcpCode());
-                PreAuthorizationDto preAuthorizationDto = new PreAuthorizationDto();
-                String policyNumber = preAuthorizationDetail.getPolicyNumber();
-                String clientId = preAuthorizationDetail.getClientId();
-                String policyHolderName = getPolicyHolderName(policyNumber, clientId);
-                preAuthorizationDto.setPolicyNumber(policyNumber);
-                preAuthorizationDto.setClientId(clientId);
-                preAuthorizationDto.setPreAuthorizationId(preAuthorization.getPreAuthorizationId().getPreAuthorizationId());
-                preAuthorizationDto.setConsultationDate(preAuthorizationDetail.getConsultationDate().toDateTimeAtStartOfDay());
-                preAuthorizationDto.setHcpName(hcp.getHcpName());
-                preAuthorizationDto.setPolicyHolderName(policyHolderName);
-                furbishedList.add(preAuthorizationDto);
-            }
-        }
-        return furbishedList;
-    }
-
-    private List<PreAuthorization>  checkAndRemoveIfPreAuthRequestCreatedFromPreAuth(List<PreAuthorization> preAuthorizations) {
-        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAll();
-        return isNotEmpty(preAuthorizationRequests) ? preAuthorizations.parallelStream().filter(new Predicate<PreAuthorization>() {
-            @Override
-            public boolean test(PreAuthorization preAuthorization) {
-                return !(preAuthorizationRequests.parallelStream().filter(preAuthorizationRequest -> preAuthorizationRequest.getPreAuthorizationId().equals(preAuthorization.getPreAuthorizationId())).findFirst().isPresent());
-            }
-        }).collect(Collectors.toList()) : preAuthorizations;
-    }
-
-    private String getPolicyHolderName(String policyNumber, String clientId) {
-        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
-        if(isNotEmpty(groupHealthPolicy) && isNotEmpty(clientId)){
-            int familyIdInt = new BigDecimal(clientId).intValue();
-            Set<GHInsured> insureds = groupHealthPolicy.getInsureds();
-            GHInsured groupHealthInsured = null;
-            GHInsuredDependent ghInsuredDependent = null;
-            if(isNotEmpty(insureds)){
-                Optional<GHInsured> groupHealthInsuredOptional = insureds.stream().filter(ghInsured -> ghInsured.getFamilyId().getFamilyId().equalsIgnoreCase(String.valueOf(familyIdInt))).findFirst();
-                if(groupHealthInsuredOptional.isPresent()) {
-                    groupHealthInsured = groupHealthInsuredOptional.get();
-                    return groupHealthInsured.getFirstName()+" "+groupHealthInsured.getLastName();
-                }
-                if(isEmpty(groupHealthInsured)) {
-                    Optional<GHInsuredDependent> ghInsuredDependentOptional = insureds.stream().flatMap(new Function<GHInsured, Stream<GHInsuredDependent>>() {
-                        @Override
-                        public Stream<GHInsuredDependent> apply(GHInsured ghInsured) {
-                            return ghInsured.getInsuredDependents().stream();
-                        }
-                    }).filter(gHInsuredDependent -> gHInsuredDependent.getFamilyId().getFamilyId().equalsIgnoreCase(String.valueOf(familyIdInt))).findFirst();
-                    if(ghInsuredDependentOptional.isPresent()) {
-                        ghInsuredDependent = ghInsuredDependentOptional.get();
-                        return ghInsuredDependent.getFirstName()+" "+ghInsuredDependent.getLastName();
-                    }
-                }
-            }
-        }
-        return null;
-    }*/
 }

@@ -1,11 +1,9 @@
 package com.pla.grouphealth.claim.cashless.domain.model;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.claim.cashless.presentation.dto.AssuredDetail;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimantPolicyDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.DependentAssuredDetail;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
+import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import lombok.*;
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.annotations.Immutable;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -13,6 +11,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.Embeddable;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.function.Function;
@@ -50,16 +49,24 @@ public class PreAuthorizationRequestPolicyDetail {
             this.sumAssured = claimantPolicyDetailDto.getSumAssured();
             PreAuthorizationRequestAssuredDetail assuredDetail = isNotEmpty(this.assuredDetail) ? this.assuredDetail : new PreAuthorizationRequestAssuredDetail();
             this.assuredDetail = assuredDetail.updateWithAssuredDetails(claimantPolicyDetailDto);
-            this.coverageDetailDtoList = constructPreAuthorizationRequestCoverageDetail(claimantPolicyDetailDto.getCoverageDetailDtoList());
+            this.coverageDetailDtoList = constructPreAuthorizationRequestCoverageDetail(claimantPolicyDetailDto.getCoverageBenefitDetails());
         }
         return this;
     }
 
-    private Set<PreAuthorizationRequestCoverageDetail> constructPreAuthorizationRequestCoverageDetail(Set<ClaimantPolicyDetailDto.CoverageDetailDto> coverageDetailDtoList) {
-        return isNotEmpty(coverageDetailDtoList) ? coverageDetailDtoList.parallelStream().map(new Function<ClaimantPolicyDetailDto.CoverageDetailDto, PreAuthorizationRequestCoverageDetail>() {
+    private Set<PreAuthorizationRequestCoverageDetail> constructPreAuthorizationRequestCoverageDetail(Set<CoverageBenefitDetailDto> benefitDetails) {
+        return isNotEmpty(benefitDetails) ? benefitDetails.parallelStream().map(new Function<CoverageBenefitDetailDto, PreAuthorizationRequestCoverageDetail>() {
             @Override
-            public PreAuthorizationRequestCoverageDetail apply(ClaimantPolicyDetailDto.CoverageDetailDto coverageDetailDto) {
-                return new PreAuthorizationRequestCoverageDetail(coverageDetailDto.getCoverageCode(), coverageDetailDto.getCoverageName(), coverageDetailDto.getSumAssured());
+            public PreAuthorizationRequestCoverageDetail apply(CoverageBenefitDetailDto coverageBenefitDetailDto) {
+                PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail = new PreAuthorizationRequestCoverageDetail();
+                try {
+                    BeanUtils.copyProperties(preAuthorizationRequestCoverageDetail, coverageBenefitDetailDto);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return preAuthorizationRequestCoverageDetail;
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
     }

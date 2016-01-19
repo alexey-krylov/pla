@@ -28,7 +28,7 @@ public class SBCMFinder {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
 
-    public static final String FIND_COVERAGE_BY_ID_QUERY = "SELECT coverage_name AS coverageName FROM coverage WHERE coverage_id=:coverageId";
+    public static final String FIND_COVERAGE_BY_ID_QUERY = "SELECT coverage_name AS coverageName, coverage_code as coverageCode FROM coverage WHERE coverage_id=:coverageId";
     public static final String FIND_BENEFIT_BY_ID_QUERY = "SELECT benefit_name AS benefitName FROM benefit WHERE benefit_id=:benefitId";
 
     @Autowired
@@ -59,12 +59,11 @@ public class SBCMFinder {
         return StringUtils.EMPTY;
     }
 
-    public String getCoverageNameByCoverageId(String coverageId) {
+    public Map<String, Object> getCoverageNameByCoverageId(String coverageId) {
         List<Map<String, Object>> coverages = namedParameterJdbcTemplate.queryForList(FIND_COVERAGE_BY_ID_QUERY, new MapSqlParameterSource().addValue("coverageId", coverageId));
         if(isNotEmpty(coverages)){
-            Map<String, Object> coverage = coverages.get(0);
-            return coverage.get("coverageName").toString();
+           return coverages.get(0);
         }
-        return StringUtils.EMPTY;
+        return Collections.EMPTY_MAP;
     }
 }

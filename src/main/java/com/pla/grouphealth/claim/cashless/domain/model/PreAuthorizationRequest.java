@@ -1,28 +1,28 @@
 package com.pla.grouphealth.claim.cashless.domain.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.domain.event.PreAuthorizationFollowUpReminderEvent;
+import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.domain.AbstractAggregateRoot;
+import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
-import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,7 +36,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Document(collection = "PRE_AUTHORIZATION_REQUEST")
 @Getter
 @NoArgsConstructor
-public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizationRequestId> {
+public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreAuthorizationRequestId> {
 
     @Id
     @AggregateIdentifier
@@ -56,6 +56,12 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     private Status status;
     private Set<GHProposerDocument> proposerDocuments;
     private DateTime createdOn;
+    private Map<String, ScheduleToken> scheduledTokens;
+    private boolean firstReminderSent;
+    private boolean secondReminderSent;
+    private String preAuthorizationProcessorUserId;
+    private String preAuthorizationUnderWriterUserId;
+    private Set<CommentDetail> commentDetails;
 
     @Override
     public PreAuthorizationRequestId getIdentifier() {
@@ -207,9 +213,45 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
         return this;
     }
 
+    public void savedRegisterFollowUpReminders() throws GenerateReminderFollowupException {
+        try {
+            registerEvent(new PreAuthorizationFollowUpReminderEvent(this.preAuthorizationRequestId));
+        } catch (Exception e){
+            throw new GenerateReminderFollowupException(e.getMessage());
+        }
+    }
+
+    public PreAuthorizationRequest updateWithScheduledTokens(Map<String, ScheduleToken> scheduledTokens) {
+        this.scheduledTokens = scheduledTokens;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateFlagForFirstReminderSent(Boolean isSent) {
+        this.firstReminderSent = isSent;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateFlagForSecondReminderSent(Boolean isSent) {
+        this.secondReminderSent = isSent;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateStatus(Status status) {
+        this.status = status;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithComments(CommentDetail commentDetail) {
+        Set<CommentDetail> commentDetails = this.getCommentDetails();
+        if(isEmpty(commentDetails))
+            commentDetails = Sets.newHashSet();
+        commentDetails.add(commentDetail);
+        this.commentDetails = commentDetails;
+        return this;
+    }
+
     public enum Status {
-        DRAFT("Draft"), PRE_AUTH_PROCESSOR_EVALUATION("Pre-Auth Processor Evaluation"), PRE_AUTH_PROCESSOR_REJECTED("Pre-Auth Processor Rejected"),
-        UNDERWRITER_EVALUATION("Underwriter Evaluation"), UNDERWRITER_ON_HOLD("Underwriter On Hold"), APPROVED("Approve"), REJECTED("Rejected");
+        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING("Underwriting"), APPROVED("Approved"), REJECTED("Rejected");
 
         private String description;
 

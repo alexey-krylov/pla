@@ -1,12 +1,18 @@
 package com.pla.core.application.service.notification;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.pla.core.domain.model.notification.Notification;
 import com.pla.core.domain.model.notification.NotificationBuilder;
 import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.query.NotificationFinder;
 import com.pla.core.repository.NotificationHistoryRepository;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestHCPDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestPolicyDetail;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.domain.model.ProcessType;
@@ -18,6 +24,7 @@ import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
 import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
 import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.xwpf.converter.core.FileURIResolver;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
@@ -33,6 +40,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,6 +54,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import static org.springframework.util.Assert.*;
 
 /**
  * Created by Admin on 6/30/2015.
@@ -255,6 +264,48 @@ public class NotificationTemplateService {
                 documentNameBuilder.append(documentName+"\n\t");
             }
         }
+        return documentNameBuilder;
+    }
+
+    public HashMap<String, String> getPreAuthorizationNotificationTemplateData(PreAuthorizationRequestId preAuthorizationRequestId, List<String> pendingDocumentList) throws ProcessInfoException {
+        Criteria proposalCriteria = Criteria.where("_id").is(preAuthorizationRequestId);
+        Query query = new Query(proposalCriteria);
+        PreAuthorizationRequest preAuthorizationRequest = mongoTemplate.findOne(query, PreAuthorizationRequest.class, "PRE_AUTHORIZATION_REQUEST");
+        int noOfDaysToClosure = iProcessInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
+        int firstReminderDay = iProcessInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
+        int secondReminderDay = iProcessInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
+        DateTime preAuthCreatedDate = preAuthorizationRequest.getCreatedOn();
+        DateTime closureScheduleDateTime = preAuthCreatedDate.plusDays(firstReminderDay + secondReminderDay + noOfDaysToClosure);
+        PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail = preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail();
+        PreAuthorizationRequestHCPDetail preAuthorizationRequestHCPDetail = preAuthorizationRequest.getPreAuthorizationRequestHCPDetail();
+        GHProposer ghProposer = preAuthorizationRequest.getGhProposer();
+        notNull(preAuthorizationRequest, "Error sending reminder no PreAuthorizationRequest found with given Id.");
+        HashMap<String, String> dataMap = Maps.newLinkedHashMap();
+        dataMap.put("firstName", isNotEmpty(preAuthorizationRequestPolicyDetail) ? isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail()) ?preAuthorizationRequestPolicyDetail.getAssuredDetail().getFirstName() : StringUtils.EMPTY :StringUtils.EMPTY);
+        dataMap.put("surname", isNotEmpty(preAuthorizationRequestPolicyDetail) ? isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail()) ?preAuthorizationRequestPolicyDetail.getAssuredDetail().getSurname() : StringUtils.EMPTY :StringUtils.EMPTY);
+        dataMap.put("salutation", isNotEmpty(preAuthorizationRequestPolicyDetail) ? isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail()) ?preAuthorizationRequestPolicyDetail.getAssuredDetail().getSalutation() : StringUtils.EMPTY :StringUtils.EMPTY);
+        dataMap.put("category", preAuthorizationRequest.getCategory());
+        dataMap.put("relationship", preAuthorizationRequest.getRelationship());
+        dataMap.put("policyNumber", isNotEmpty(preAuthorizationRequestPolicyDetail) ? preAuthorizationRequestPolicyDetail.getPolicyNumber() : StringUtils.EMPTY);
+        dataMap.put("policyHolderName", isNotEmpty(ghProposer) ? ghProposer.getProposerName() : StringUtils.EMPTY);
+        dataMap.put("policyHolderAddressLine1", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getAddressLine1() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderAddressLine2",isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getAddressLine2() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderProvince", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getProvince() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderTown", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getTown() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("contactPersonName", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? isNotEmpty(ghProposer.getContactDetail().getContactPersonDetail()) ? ghProposer.getContactDetail().getContactPersonDetail().iterator().next().getContactPersonName() : StringUtils.EMPTY : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("submittedDate", isNotEmpty(preAuthorizationRequest.getCreatedOn()) ? preAuthorizationRequest.getCreatedOn().toString() : StringUtils.EMPTY);
+        dataMap.put("closureDate", closureScheduleDateTime.toString());
+        dataMap.put("hcpName", isNotEmpty(preAuthorizationRequestHCPDetail) ? preAuthorizationRequestHCPDetail.getHcpName() : StringUtils.EMPTY);
+        StringBuilder documentNameBuilder = genericMethodToGetDocumentsRequiredSubmission(pendingDocumentList);
+        dataMap.put("documentName",documentNameBuilder.toString());
+        return dataMap;
+    }
+
+    private StringBuilder genericMethodToGetDocumentsRequiredSubmission(List<String> pendingDocumentList){
+        StringBuilder documentNameBuilder = new StringBuilder();
+            for (String documentName : pendingDocumentList){
+                documentNameBuilder.append(documentName+"\n\t");
+            }
         return documentNameBuilder;
     }
 }

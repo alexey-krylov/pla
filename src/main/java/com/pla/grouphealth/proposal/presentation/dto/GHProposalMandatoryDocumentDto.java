@@ -38,7 +38,7 @@ public class GHProposalMandatoryDocumentDto {
         this.documentName = documentName;
     }
 
-    public GHProposalMandatoryDocumentDto   updateWithContent(byte[] content) {
+    public GHProposalMandatoryDocumentDto updateWithContent(byte[] content) {
         this.content = content;
         this.submitted = true;
         return this;

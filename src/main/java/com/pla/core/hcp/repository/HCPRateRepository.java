@@ -1,5 +1,6 @@
 package com.pla.core.hcp.repository;
 
+import com.pla.core.hcp.domain.model.HCPCode;
 import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPRateId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -12,4 +13,7 @@ public interface HCPRateRepository extends MongoRepository<HCPRate, HCPRateId> {
 
     @Query("{'hcpCode.hcpCode' : ?0 }")
     HCPRate findHCPRateByHCPCode(String hcpCode);
+
+    @Query("{'hcpCode' : ?0, 'hcpServiceDetails.serviceAvailed' : ?1 }")
+    HCPRate findHCPRateByHCPCodeAndService(HCPCode hcpCode, String serviceAvailed);
 }

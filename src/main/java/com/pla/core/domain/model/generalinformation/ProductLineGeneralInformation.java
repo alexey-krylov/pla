@@ -204,6 +204,9 @@ public class ProductLineGeneralInformation {
             case PROPOSAL:
                 EnrollmentProcessInformation enrollmentProcessInformation = (EnrollmentProcessInformation) processTypeMap.get(processType);
                 return enrollmentProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
+            case CLAIM:
+                ClaimProcessInformation claimProcessInformation = (ClaimProcessInformation) processTypeMap.get(processType);
+                return claimProcessInformation.getTheProductLineProcessTypeValue(productLineProcessType);
             default:
                 raiseProcessTypeNotFoundException(processType.name());
         }

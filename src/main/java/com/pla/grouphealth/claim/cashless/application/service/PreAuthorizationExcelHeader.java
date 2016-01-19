@@ -288,6 +288,10 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+            //first find reason
+            //check if reason is pregnancy
+            //if pregnancy make mandatory
+            //if(reason==pregnancy){isempty(value)} // return errorMessage;
             String errorMessage = "";
             return errorMessage;
         }

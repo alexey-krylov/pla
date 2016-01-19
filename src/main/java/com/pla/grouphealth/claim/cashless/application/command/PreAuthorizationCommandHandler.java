@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.application.command;
 
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
+import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
@@ -33,7 +34,7 @@ public class PreAuthorizationCommandHandler {
     private GridFsTemplate gridFsTemplate;
 
     @CommandHandler
-    public int uploadPreAuthorizationDetails(UploadPreAuthorizationCommand uploadPreAuthorizationCommand){
+    public int uploadPreAuthorizationDetails(UploadPreAuthorizationCommand uploadPreAuthorizationCommand) throws GenerateReminderFollowupException {
         return preAuthorizationService.uploadPreAuthorizationDetails(uploadPreAuthorizationCommand);
     }
 

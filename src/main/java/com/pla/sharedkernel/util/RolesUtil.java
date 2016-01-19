@@ -34,6 +34,8 @@ public class RolesUtil {
     public static final String GROUP_LIFE_ENDORSEMENT_APPROVER_ROLE = "ROLE_GROUP_LIFE_ENDORSEMENT_APPROVER";
     public static final String GROUP_LIFE_CLAIM_APPROVER_ROLE = "ROLE_GROUP_LIFE_CLAIM_APPROVER";
     public static final String INDIVIDUAL_LIFE_PROPOSAL_APPROVER_ROLE = "ROLE_INDIVIDUAL_LIFE_PROPOSAL_APPROVER";
+    public static final String GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR";
+    public static final String GROUP_HEALTH_PRE_AUTHORIZATION_UNDERWRITER_ROLE = "ROLE_GROUP_HEALTH_PRE_AUTHORIZATION_UNDERWRITER";
 
     private RolesUtil() {
     }
@@ -116,6 +118,17 @@ public class RolesUtil {
         long count = hasRole(GROUP_LIFE_CLAIM_APPROVER_ROLE, authorities);
         return count == 1;
     }
+
+    public static boolean hasGroupHealthPreAuthorizationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, authorities);
+        return count == 1;
+    }
+
+    public static boolean hasGroupHealthPreAuthorizationUnderWriterRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_HEALTH_PRE_AUTHORIZATION_UNDERWRITER_ROLE, authorities);
+        return count == 1;
+    }
+
     private static long hasRole(final String role, final Collection<? extends GrantedAuthority> authorities) {
         long count = authorities.stream().filter(new Predicate<GrantedAuthority>() {
             @Override

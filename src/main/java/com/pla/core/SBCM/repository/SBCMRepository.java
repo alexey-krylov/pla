@@ -20,5 +20,8 @@ public interface SBCMRepository extends MongoRepository<ServiceBenefitCoverageMa
     List<ServiceBenefitCoverageMapping> findAllByStatus(ServiceBenefitCoverageMapping.Status status);
 
     @Query("{'planCode':?0}")
-    List<ServiceBenefitCoverageMapping>findAllByPlanCode(String planCode);
+    List<ServiceBenefitCoverageMapping> findAllByPlanCode(String planCode);
+
+    @Query("{'planCode':?0, 'service' :?1}")
+    List<ServiceBenefitCoverageMapping> findAllByPlanCodeAndService(String planCode, String service);
 }

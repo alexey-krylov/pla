@@ -152,14 +152,14 @@ public class SBCMService {
                     ? new ServiceBenefitCoverageMapping().updateWithId(new ServiceBenefitCoverageMappingId(new ObjectId().toString())) : sbcmRepository.findOne(new ServiceBenefitCoverageMappingId(createSBCMCommand.getServiceBenefitCoverageMappingId()));
         }
         String benefitName = sbcmFinder.getBenefitNameByBenefitId(createSBCMCommand.getBenefitId());
-        String coverageName = sbcmFinder.getCoverageNameByCoverageId(createSBCMCommand.getCoverageId());
+        Map<String, Object> coverage = sbcmFinder.getCoverageNameByCoverageId(createSBCMCommand.getCoverageId());
         List<Plan> plans = planRepository.findPlanByCodeAndName(createSBCMCommand.getPlanCode());
         Plan plan = isNotEmpty(plans) ? plans.get(0) : null;
         String planName = isNotEmpty(plan) ? plan.getPlanDetail().getPlanName() : StringUtils.EMPTY;
+        serviceBenefitCoverageMapping.updateWithCoverageName(coverage);
         serviceBenefitCoverageMapping.updateWithPlanCode(createSBCMCommand.getPlanCode());
         serviceBenefitCoverageMapping.updateWithPlanName(planName);
         serviceBenefitCoverageMapping.updateWithBenefitName(benefitName);
-        serviceBenefitCoverageMapping.updateWithCoverageName(coverageName);
         serviceBenefitCoverageMapping.updateWithBenefitId(new BenefitId(createSBCMCommand.getBenefitId()));
         serviceBenefitCoverageMapping.updateWithCoverageId(new CoverageId(createSBCMCommand.getCoverageId()));
         serviceBenefitCoverageMapping.updateWithService(createSBCMCommand.getService());

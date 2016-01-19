@@ -48,7 +48,7 @@ public class CoverageFinder {
     public static final String FIND_ALL_COVERAGE_QUERY = "SELECT c.coverage_id coverageId,c.coverage_code coverageCode,c.coverage_name coverageName,c.description description ,c.status AS coverageStatus " +
             "FROM coverage c WHERE c.status='ACTIVE'";
 
-    public static final String FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY = "select b.benefit_id benefitId,b.benefit_name benefitName from  benefit b  " +
+    public static final String FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY = "select b.benefit_id benefitId,b.benefit_name benefitName, b.benefit_code benefitCode from  benefit b  " +
             "inner join coverage_benefit cb on b.benefit_id=cb.benefit_id inner join coverage c on cb.coverage_id=c.coverage_id " +
             "where c.status='ACTIVE' and b.status='ACTIVE' and c.coverage_id=:coverageId ORDER BY b.benefit_name ASC ";
 
@@ -96,8 +96,10 @@ public class CoverageFinder {
         }
         List<Map<String, Object>> listOfBenefits = namedParameterJdbcTemplate.query(FIND_ALL_BENEFITS_ASSOCIATED_WITH_THE_COVERAGE_QUERY, sqlParameterSource, new ColumnMapRowMapper());
         List<String> benefitIds = listOfBenefits.stream().map(new BenefitIdTransformer()).collect(Collectors.toList());
-        coverageList.get(0).setBenefitIds(benefitIds);
-        return coverageList.get(0);
+        CoverageDto coverageDto = coverageList.get(0);
+        coverageDto.setBenefitIds(benefitIds);
+        coverageDto.setBenefitDtos(listOfBenefits);
+        return coverageDto;
     }
 
     private class BenefitIdTransformer implements Function<Map<String, Object>, String> {
