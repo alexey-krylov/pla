@@ -117,8 +117,12 @@ public class ILPolicyFinder {
         dto.setPolicyStatus(policy.get("policyStatus").toString());
         dto.setProposal((Proposal) policy.get("proposal"));
         dto.setPolicyNumber((PolicyNumber) policy.get("policyNumber"));
-        dto.setInceptionOn(policy.get("inceptionOn") != null ? AppUtils.toString(new DateTime(policy.get("inceptionOn"))): null);
-        dto.setExpiryDate(policy.get("expiredOn") != null ? AppUtils.toString(new DateTime(policy.get("expiredOn"))) : null);
+        dto.setInceptionOn(policy.get("inceptionOn") != null ? new DateTime(policy.get("inceptionOn")) : null);
+        dto.setExpiryDate(policy.get("expiredOn") != null ? new DateTime(policy.get("expiredOn")) : null);
+
+        //dto.setInceptionOn(policy.get("inceptionOn") != null ? AppUtils.toString(new DateTime(policy.get("inceptionOn"))): null);
+        //dto.setExpiryDate(policy.get("expiredOn") != null ? AppUtils.toString(new DateTime(policy.get("expiredOn"))) : null);
+
         dto.setOpportunityId(policy.get("opportunityId")!=null?((OpportunityId)policy.get("opportunityId")).getOpportunityId():"");
         dto.setProposerDocuments(policy.get("proposalDocuments") != null ? (List) policy.get("proposalDocuments") : Collections.EMPTY_LIST);
         return dto;
