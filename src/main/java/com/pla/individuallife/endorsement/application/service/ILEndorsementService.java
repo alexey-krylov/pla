@@ -26,7 +26,6 @@ import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.apache.commons.io.IOUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -96,7 +95,8 @@ public class ILEndorsementService {
             policyDetailDto.setPolicyId(individualLifePolicy.getPolicyId().getPolicyId());*/
             return ilPolicyDto;
         }
-        return ILPolicyDto.createEmptyDetail();
+//        return ILPolicyDto.createEmptyDetail();
+        return null;
     }
 
     private List<Map<String,String>> getAllEndorsementTypes(Set<String> endorsementTypes){

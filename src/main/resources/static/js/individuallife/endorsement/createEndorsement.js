@@ -19,6 +19,31 @@ app.config(["$routeProvider", function ($routeProvider) {
         datepickerPopupConfig.closeText = 'Done';
         datepickerPopupConfig.closeOnDateSelection = true;
     }]);
+    app.directive('validateDate', function () {
+        return {
+            // restrict to an attribute type.
+            restrict: 'A',
+            // element must have ng-model attribute.
+            require: 'ngModel',
+            link: function (scope, ele, attrs, ctrl) {
+                scope.$watch('ilEndrosementDetils.lifeAssuredNew.dateOfBirth', function (newval, oldval) {
+                    if (newval == oldval)return;
+                    if (newval) {
+                        console.log('Date Validation...***');
+                        if(((moment(scope.ilEndrosementDetils.lifeAssuredNew.dateOfBirth).diff(moment(scope.ilEndrosementDetils.lifeAssured.dateOfBirth), 'days')) == 0)){
+                            var valid = false;
+                            ctrl.$setValidity('dateDuplicate', valid);
+                        }
+                        else{
+                            var valid = true;
+                            ctrl.$setValidity('dateDuplicate', valid);
+                        }
+                    }
+                    return valid ? newval : undefined;
+                });
+            }
+        }
+    });
     app.controller('EndorsementCtrl', ['$scope', '$http', '$location','getQueryParameter','globalConstants', function ($scope, $http, $location, getQueryParameter,globalConstants) {
 
             $scope.selectedItem = 1;
@@ -33,6 +58,8 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.additionalDocumentList = [];
             $scope.documentList = [];
             $scope.todayDate = new Date();
+            $scope.policy={};
+            $scope.ilEndrosementDetils={"policyHolderNew":{}};
 
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
@@ -50,13 +77,42 @@ app.config(["$routeProvider", function ($routeProvider) {
                 $event.stopPropagation();
                 $scope.launchdob= true;
             };
-
+        /**
+         *
+         * @param $event
+         * Updated Life Assured DoB
+         */
             $scope.updateLADOB = function ($event) {
+                if($scope.ilEndrosementDetils.lifeAssuredNew == null){
+                    $scope.ilEndrosementDetils.lifeAssuredNew={};
+                }
                     $event.preventDefault();
                     $event.stopPropagation();
-                    $scope.launchdob2 = true;
+                    $scope.datePickerSettingsForUpdateLifeAssuredDOB.isOpened = true;
                 };
 
+        $scope.datePickerSettingsForUpdateLifeAssuredDOB = {
+            isOpened:false,
+            dateOptions:{
+                formatYear:'yyyy' ,
+                startingDay:1
+
+            }
+        }
+        $scope.$watch('ilEndrosementDetils.lifeAssured.dateOfBirth',function(newVal,oldVal){
+            if(newVal){
+                var earlieAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment($scope.ilEndrosementDetils.lifeAssured.dateOfBirth), 'years'));
+                $scope.ilEndrosementDetils.lifeAssured.earlierAge=earlieAge;
+            }
+        });
+        $scope.$watch('ilEndrosementDetils.lifeAssuredNew.dateOfBirth',function(newVal,oldVal){
+            if (newVal == oldVal)return;
+            //Corrected Age Calculation
+            if(newVal){
+                var correcteAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment(newVal), 'years'));
+                $scope.ilEndrosementDetils.lifeAssured.correctedAge=correcteAge;
+            }
+        });
             $scope.launchBeneficiaryDob = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -194,6 +250,51 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         };
 
+        $scope.searchPolicyNumber=function(){
+            if($scope.policy.policyNumber){
+                $http.get('/pla/individuallife/endorsement/searchpolicy/' + $scope.policy.policyNumber)
+                    .success(function (response) {
+                        $scope.serverError = false;
+                        var policyData=response.data;
+                        $scope.ilEndrosementDetils=response.data;
+                        console.log('************');
+                        console.log(JSON.stringify($scope.ilEndrosementDetils));
+                        $scope.policy.policyHolderName=$scope.ilEndrosementDetils.policyHolder.firstName;
+                        $scope.policy.endrosmentDate=$scope.ilEndrosementDetils.policyHolder.dateOfBirth;
+                    }).error(function (response, status, headers, config) {
+                        $scope.serverError = true;
+                        $scope.serverErrMsg = response.message;
+                    });
+            }
+        }
+        $scope.clearData=function(){
+            $scope.searchPolicyNumber();
+        }
+
+        $scope.changePolicyHolderGender=function(){
+            if($scope.policy.endrosementType == 'correctinGenderPH'){
+                if($scope.ilEndrosementDetils.policyHolderNew == null){
+                    $scope.ilEndrosementDetils.policyHolderNew={};
+                }
+                if($scope.ilEndrosementDetils.policyHolder.gender == 'MALE'){
+                    $scope.ilEndrosementDetils.policyHolderNew.gender ='FEMALE';
+                }else if($scope.ilEndrosementDetils.policyHolder.gender == 'FEMALE'){
+                    $scope.ilEndrosementDetils.policyHolderNew.gender ='MALE';
+                }
+            }
+        }
+        $scope.changeLifeAssuredGender=function(){
+            if($scope.policy.endrosementType == 'correctinGenderLA'){
+                if($scope.ilEndrosementDetils.lifeAssuredNew == null){
+                    $scope.ilEndrosementDetils.lifeAssuredNew={};
+                }
+                if($scope.ilEndrosementDetils.lifeAssured.gender == 'MALE'){
+                    $scope.ilEndrosementDetils.lifeAssuredNew.gender ='FEMALE';
+                }else if($scope.ilEndrosementDetils.lifeAssured.gender == 'FEMALE'){
+                    $scope.ilEndrosementDetils.lifeAssuredNew.gender ='MALE';
+                }
+            }
+        }
         $scope.addAdditionalDocument = function () {
             $scope.additionalDocumentList.unshift({});
             $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();

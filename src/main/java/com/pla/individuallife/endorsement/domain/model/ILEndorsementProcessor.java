@@ -1,15 +1,9 @@
 package com.pla.individuallife.endorsement.domain.model;
 
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
-import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 import com.pla.individuallife.sharedresource.model.vo.PremiumDetail;
-import com.pla.sharedkernel.domain.model.EndorsementNumber;
-import com.pla.sharedkernel.domain.model.Policy;
-import com.pla.sharedkernel.domain.model.PolicyNumber;
-import com.pla.sharedkernel.identifier.EndorsementId;
-import com.pla.sharedkernel.identifier.PolicyId;
 
-import java.util.Set;
+//import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 
 /**
  * Created by Samir on 8/27/2015.

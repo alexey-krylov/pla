@@ -16,18 +16,12 @@ import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.policy.service.ILPolicyService;
 import com.pla.individuallife.proposal.application.command.ILProposalUpdateWithProposerCommand;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
-import com.pla.individuallife.proposal.presentation.dto.PremiumDetailDto;
-import com.pla.individuallife.sharedresource.dto.ILPolicyDetailDto;
 import com.pla.individuallife.sharedresource.dto.SearchILPolicyDto;
 import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
-import com.pla.sharedkernel.identifier.EndorsementId;
-import com.pla.sharedkernel.identifier.PolicyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
@@ -41,7 +35,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -121,10 +114,8 @@ public class ILEndorsementController {
         if (ilPolicyDto != null) {
             return new ResponseEntity(Result.success("Policy details found", ilPolicyDto), HttpStatus.OK);
 
-        } else {
-            return new ResponseEntity(Result.success("Policy details Not Found for "+policyNumber), HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
+        return new ResponseEntity(Result.success("Policy details Not Found for "+policyNumber), HttpStatus.INTERNAL_SERVER_ERROR);
         //modelAndView.addObject("searchResult", ilPolicyDto);
         //return modelAndView;
     }
