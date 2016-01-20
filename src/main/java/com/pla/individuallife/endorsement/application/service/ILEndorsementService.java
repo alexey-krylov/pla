@@ -89,6 +89,7 @@ public class ILEndorsementService {
             ilPolicyDto.setPolicyId(individualLifePolicy.getPolicyId().getPolicyId());
             ilPolicyDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
             ilPolicyDto.setInceptionOn(individualLifePolicy.getInceptionOn());
+            ilPolicyDto.setProposalPlanDetail(individualLifePolicy.getProposalPlanDetail());
             //ilPolicyDto.getPolicyNumber().setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
             /*policyDetailDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
             policyDetailDto.setPolicyHolderName(individualLifePolicy.getProposer().getFirstName());
