@@ -8,13 +8,13 @@ var searchPreAuthorizationModule = (function(){
         this.clientId=$(ele).attr("clientId");
         $("#PreAuthorization-view").prop("disabled","");
         $("#PreAuthorization-create").prop("disabled","");
+           $(".btn-disabled").attr("disabled", false);
         this.PreAuthorizationName = $(ele).parent().find('input[type=hidden]').val();
     };
-
-    PreAuthorizationServices.createPreAuthorization = function () {
+    PreAuthorizationServices.updatePreAuthorization = function () {
         var  clientId =this.clientId;
         var  preAuthorizationId =this.preAuthorizationId;
-        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadpreauthorizationrequest?clientId=" + clientId +"&preAuthorizationId="+preAuthorizationId+"&mode=new";
+        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadpreauthorizationviewforupdate?preAuthorizationId=" + preAuthorizationId;
     };
 
     PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button

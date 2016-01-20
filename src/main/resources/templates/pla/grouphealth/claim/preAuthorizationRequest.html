@@ -324,8 +324,6 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"
                                      disable-all-fields="isViewMode">
-
-
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group ">
@@ -1762,15 +1760,14 @@
                                         <label class="col-sm-5 control-label">{{document.documentName}}</label>
 
                                         <div class="input-group">
-                                            <a href="/pla/grouphealth/policy/downloadmandatorydocument/{{document.gridFsDocId}}"
+                                            <a href="/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/{{document.createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.clientId}}"
                                                style="display:inline;float:right;font-weight:bold;"
-                                               hg-show="!document.submitted">{{document.fileName | limitTo: 40}}</a>
+                                               hg-show="!document.submitted">{{document.documentName | limitTo: 400}}</a>
 
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
                                                     ng-file-select=""
-                                                    ng-model="document.documentAttached"
-                                                    ng-disabled="isBrowseDisable(document)">Browse
+                                                    ng-model="document.documentAttached">Browse
                                             </button>
                                             <input class="form-control input-sm" style="width:300px;"
                                                    value="{{document.documentAttached[0].name}}"
@@ -1785,70 +1782,7 @@
                                     </div>
                                 </div>
                             </accordion-group>
-                            <accordion-group is-open="accordionStatusDocuments.additionalDocuments">
-                                <accordion-heading>
-                                    Additional Documents <i class="pull-right glyphicon"
-                                                            ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
-                                </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                     disable-all-fields="isViewMode">
 
-                                    <div class="row">
-                                        <button class="btn btn-default"
-                                                style="display:inline;float:left;margin-right:5px;"
-                                                ng-click="addAdditionalDocument()">Add Document
-                                        </button>
-                                    </div>
-                                    <br/><br/>
-
-                                    <div class="row">
-                                        <div ng-repeat="additionalDocument in additionalDocumentList">
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Document Title</label>
-                                                        <input type="text" class="form-control input-sm"
-                                                               name="documentTitle"
-                                                               onkeypress="return isEnterKey(event)"
-                                                               ng-model="additionalDocument.documentId"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4" ng-hide="">
-                                                    <div class="form-group">
-
-                                                        <label class="control-label">Browse File</label>
-                                                        <button class="btn btn-default"
-                                                                style="display:inline;float:right;margin-top:20px;"
-                                                                ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)"
-                                                                ng-model="additionalDocument.documentAttached"
-                                                                ng-disabled="!additionalDocument.documentId">Browse
-                                                        </button>
-                                                        <input class="form-control input-sm" style="width:262px;"
-                                                               value="{{additionalDocument.documentAttached[0].name}}"
-                                                               readonly="true"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-5">
-                                                    <button class="btn btn-default" style="margin-top:20px;"
-                                                            ng-click="removeAdditionalDocument($index)">Remove
-                                                    </button>
-                                                    <a href="/pla/grouphealth/policy/downloadmandatorydocument/{{additionalDocument.gridFsDocId}}"
-                                                       style="display:inline;font-weight:bold;"
-                                                       title="{{additionalDocument.fileName}}"
-                                                       hg-show="!additionalDocument.submitted">{{additionalDocument.fileName|
-                                                        limitTo: 50}}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <button class="btn btn-default"
-                                            style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached">
-                                        Upload
-                                    </button>
-                                </div>
-                            </accordion-group>
                         </accordion>
                     </ng-form>
 
