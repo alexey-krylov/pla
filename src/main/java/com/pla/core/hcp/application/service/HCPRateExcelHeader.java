@@ -153,7 +153,6 @@ public enum HCPRateExcelHeader {
     public abstract void populateInsuredDetail(Map insuredDto, Row row, List<String> headers);
 
     public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap);
-    public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders);
 
     public static List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
         List<Row> duplicateRows = Lists.newArrayList();
