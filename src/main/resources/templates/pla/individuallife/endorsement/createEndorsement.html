@@ -315,7 +315,8 @@
                                                    datepicker-popup="" view-enabled=""
                                                    is-open="launchdob"
                                                    readonly="true" max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                                                   ng-model="ilEndrosementDetils.lifeAssured.dateOfBirth" name="lifeAssuredDob"/>
+                                                   ng-model="ilEndrosementDetils.lifeAssured.dateOfBirth" name="lifeAssuredDob"
+                                                    ng-change="earlierAgeCalculation()"/>
                                                     <span class="input-group-btn">
                                                             <button ng-disabled="true" type="button" class="btn btn-default btn-sm"
                                                                     ng-click="LADOB($event)">
@@ -352,7 +353,7 @@
                                                    show-button-bar="false"
                                                    name="lifeAssuredDob" ng-required="true"
                                                    onkeypress="return isNumeric(event)"
-                                                   validate-date="" />
+                                                   validate-date="" validate-update-dob="" />
 
                                                 <span class="input-group-btn">
                                                     <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
@@ -364,6 +365,14 @@
                                            <small ng-message="required">Please enter Date of Birth.</small>
                                            <small ng-message="date">Invalid Date.</small>
                                             <small ng-message="dateDuplicate">Both Life Assured DoB And Updated Life Assured DoB Should Not Same</small>
+                                            <small ng-message="invalidMinAge">Minimum Entry Age For Updated Life Assured DoB
+                                                is
+                                                {{plan.planDetail.minEntryAge}} years.
+                                            </small>
+                                            <small ng-message="invalidMaxAge">Maximum Entry Age For Updated Life Assured DoB
+                                                is
+                                                {{plan.planDetail.maxEntryAge}} Years.
+                                            </small>
                                        </div>
                                     </div>
                                     <div class="form-group">
@@ -380,7 +389,7 @@
                         </accordion>
 
                         <accordion ng-if="policy.endrosementType== 'correctinDOBPH'">
-                            <accordion-group ng-form="correctinDOBPHForm" is-open="true">
+                            <accordion-group is-open="true">
                                 <accordion-heading>
                                     Policy Holder DOB Details <i class="pull-right glyphicon"
                                                                  ng-class="{'glyphicon-chevron-down': accordionStatus.proposerDetails.employment, 'glyphicon-chevron-right': !accordionStatus.proposerDetails.employment}"></i>
@@ -395,7 +404,8 @@
                                                    is-open="launchdob"
                                                    readonly="true"
                                                    max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                                                   ng-model="policy.dateOfBirth" name="dob"/>
+                                                   ng-model="ilEndrosementDetils.policyHolder.dateOfBirth" name="dob"
+                                                   ng-change="earlierAgeCalculationForPolicyHolder()" />
                                                     <span class="input-group-btn">
                                                             <button ng-disabled="true" type="button" class="btn btn-default btn-sm"
                                                                     ng-click="LADOB($event)">
@@ -407,7 +417,7 @@
 
                                     <div class="form-group">
                                         <label class="control-label">Earlier Age</label>
-                                        <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="earlierAge" ng-model="policy.oldAge"/>
+                                        <input type="text" class="form-control input-sm" readonly="true" ng-disabled="mode=='new'||mode=='view'" name="earlierAge" ng-model="ilEndrosementDetils.policyHolder.earlierAge"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -416,25 +426,43 @@
                                         <!--<input type="text" class="form-control input-sm" name="dob" ng-model="proposer.dateOfBirth" ng-required="true"/>-->
                                         <div class='input-group date'>
                                             <input type="text" class="form-control input-sm"
-                                                   datepicker-popup="" view-enabled=""
-                                                   is-open="launchdob2"
-                                                   max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                                                   ng-required="true" ng-model="policy.updateDateOfBirth" name="lifeAssuredDobUpdate"/>
+                                                   ng-click="updatePHDOB($event)" max-date="todayDate" datepicker-popup="dd/MM/yyyy"
+                                                   ng-model="ilEndrosementDetils.policyHolderNew.dateOfBirth"
+                                                   datepicker-options="datePickerSettingsForUpdatePolicyHolderDOB.dateOptions"
+                                                   is-open="datePickerSettingsForUpdatePolicyHolderDOB.isOpened" close-text="Close"
+                                                   show-button-bar="false"
+                                                   name="policyHolderDobUpdate" ng-required="true"
+                                                   onkeypress="return isNumeric(event)"
+                                                   validate-update-dob="" validate-date="" />
                                             <span class="input-group-btn">
                                                 <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
-                                                        ng-click="updateLADOB($event)">
+                                                        ng-click="updatePHDOB($event)">
                                                     <i class="glyphicon glyphicon-calendar"></i></button>
                                             </span>
                                         </div>
 
-                                        <div class="error" ng-messages="correctinDOBPHForm.lifeAssuredDobUpdate.$error" ng-if="correctinDOBPHForm.lifeAssuredDobUpdate.$dirty">
+                                        <div class="error" ng-messages="step1.policyHolderDobUpdate.$error" ng-if="step1.policyHolderDobUpdate.$dirty">
                                             <small ng-message="required">Please enter Date of Birth.</small>
                                             <small ng-message="date">Invalid Date.</small>
+                                            <small ng-message="dateDuplicate">Both Policy Holder DoB And Updated Policy Holder DoB Should Not Same</small>
+                                            <small ng-message="invalidMinAge">Minimum Entry Age For Updated Policy Holder DoB
+                                                is
+                                                {{plan.planDetail.minEntryAge}} years.
+                                            </small>
+                                            <small ng-message="invalidMaxAge">Maximum Entry Age For Updated Policy Holder DoB
+                                                is
+                                                {{plan.planDetail.maxEntryAge}} Years.
+                                            </small>
+                                            <small ng-message="invalidUpdateMinAge">Minimum Entry Age For Proposer is 18 years.
+                                            </small>
+                                            <small ng-message="invalidUpdateMaxAge">Maximum Entry Age For Proposer is 60 Years.
+                                            </small>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label">Corrected Age</label>
-                                        <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="correctedAge" ng-model="policy.newAge"/>
+                                        <label class="control-label">Corrected Age</label>{{plan.planDetail.maxEntryAge}}
+                                        <input type="text" class="form-control input-sm" readonly="true" ng-disabled="mode=='new'||mode=='view'" name="correctedAge"
+                                               ng-model="ilEndrosementDetils.policyHolderNew.correctedAge"/>
                                     </div>
                                 </div>
                             </accordion-group>

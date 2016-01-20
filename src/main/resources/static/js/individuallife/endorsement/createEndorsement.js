@@ -19,7 +19,40 @@ app.config(["$routeProvider", function ($routeProvider) {
         datepickerPopupConfig.closeText = 'Done';
         datepickerPopupConfig.closeOnDateSelection = true;
     }]);
-    app.directive('validateDate', function () {
+    app.directive('validateUpdateDob', function () {
+        return {
+            // restrict to an attribute type.
+            restrict: 'A',
+            // element must have ng-model attribute.
+            require: 'ngModel',
+            link: function (scope, ele, attrs, ctrl) {
+                scope.$watch('ilEndrosementDetils.policyHolderNew.dateOfBirth', function (newval) {
+                    var planDetail = scope.$eval('plan.planDetail');
+                    var policyHolder = scope.$eval('ilEndrosementDetils.policyHolder');
+                    if(policyHolder && ! policyHolder.isProposedAssured){
+                        var ageNextBirthday = moment().diff(new moment(new Date(newval)), 'years') + 1;
+                        ctrl.$setValidity('invalidUpdateMinAge', ageNextBirthday >= 18);
+                        ctrl.$setValidity('invalidUpdateMaxAge', ageNextBirthday <= 60);
+                    }
+                    else if (policyHolder && policyHolder.isProposedAssured && planDetail) {
+                        var ageNextBirthday = moment().diff(new moment(new Date(newval)), 'years') + 1;
+                        ctrl.$setValidity('invalidMinAge', ageNextBirthday >= planDetail.minEntryAge);
+                        ctrl.$setValidity('invalidMaxAge', ageNextBirthday <= planDetail.maxEntryAge);
+                    }
+                });
+                scope.$watch('ilEndrosementDetils.lifeAssuredNew.dateOfBirth',function(newVal,oldVal){
+                    var planDetail = scope.$eval('plan.planDetail');
+                    if(planDetail){
+                        var ageNextBirthday = moment().diff(new moment(new Date(newVal)), 'years') + 1;
+                        ctrl.$setValidity('invalidMinAge', ageNextBirthday >= planDetail.minEntryAge);
+                        ctrl.$setValidity('invalidMaxAge', ageNextBirthday <= planDetail.maxEntryAge);
+                    }
+                });
+
+            }
+        }
+    })
+        .directive('validateDate', function () {
         return {
             // restrict to an attribute type.
             restrict: 'A',
@@ -41,6 +74,22 @@ app.config(["$routeProvider", function ($routeProvider) {
                     }
                     return valid ? newval : undefined;
                 });
+
+                scope.$watch('ilEndrosementDetils.policyHolderNew.dateOfBirth',function(newVal,oldVal){
+                    if(newVal == oldVal) return;
+                    if(newVal){
+                        console.log('Policy Update Date Validation..');
+                        if(((moment(scope.ilEndrosementDetils.policyHolderNew.dateOfBirth).diff(moment(scope.ilEndrosementDetils.policyHolder.dateOfBirth), 'days')) == 0)){
+                            var valid = false;
+                            ctrl.$setValidity('dateDuplicate', valid);
+                        }
+                        else{
+                            var valid = true;
+                            ctrl.$setValidity('dateDuplicate', valid);
+                        }
+                    }
+                    return valid ? newVal : undefined;
+                });
             }
         }
     });
@@ -60,6 +109,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.todayDate = new Date();
             $scope.policy={};
             $scope.ilEndrosementDetils={"policyHolderNew":{}};
+            $scope.plan={};
 
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
@@ -99,18 +149,68 @@ app.config(["$routeProvider", function ($routeProvider) {
 
             }
         }
+        /**
+         * @param $event
+         * Update Policy Holder DOB
+         */
+
+        $scope.updatePHDOB = function ($event) {
+            if($scope.ilEndrosementDetils.policyHolderNew == null){
+                $scope.ilEndrosementDetils.policyHolderNew={};
+            }
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePickerSettingsForUpdatePolicyHolderDOB.isOpened = true;
+        };
+        $scope.datePickerSettingsForUpdatePolicyHolderDOB = {
+            isOpened:false,
+            dateOptions:{
+                formatYear:'yyyy' ,
+                startingDay:1
+
+            }
+        }
+
         $scope.$watch('ilEndrosementDetils.lifeAssured.dateOfBirth',function(newVal,oldVal){
             if(newVal){
-                var earlieAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment($scope.ilEndrosementDetils.lifeAssured.dateOfBirth), 'years'));
+                var earlieAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment($scope.ilEndrosementDetils.lifeAssured.dateOfBirth), 'years'))+1;
                 $scope.ilEndrosementDetils.lifeAssured.earlierAge=earlieAge;
             }
         });
+        $scope.earlierAgeCalculation=function(){
+            if($scope.ilEndrosementDetils.lifeAssured.dateOfBirth){
+                var earlieAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment($scope.ilEndrosementDetils.lifeAssured.dateOfBirth), 'years'))+1;
+                $scope.ilEndrosementDetils.lifeAssured.earlierAge=earlieAge;
+            }
+        }
         $scope.$watch('ilEndrosementDetils.lifeAssuredNew.dateOfBirth',function(newVal,oldVal){
             if (newVal == oldVal)return;
             //Corrected Age Calculation
             if(newVal){
-                var correcteAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment(newVal), 'years'));
+                var correcteAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment(newVal), 'years'))+1;
                 $scope.ilEndrosementDetils.lifeAssured.correctedAge=correcteAge;
+            }
+        });
+
+        $scope.$watch('ilEndrosementDetils.policyHolder.dateOfBirth',function(newVal,oldVal){
+            if(newVal){
+                var earlieAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment($scope.ilEndrosementDetils.policyHolder.dateOfBirth), 'years'))+1;
+                $scope.ilEndrosementDetils.policyHolder.earlierAge=earlieAge;
+            }
+        });
+
+        $scope.earlierAgeCalculationForPolicyHolder=function(){
+            if($scope.ilEndrosementDetils.policyHolder.dateOfBirth){
+                var earlieAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment($scope.ilEndrosementDetils.policyHolder.dateOfBirth), 'years'))+1;
+                $scope.ilEndrosementDetils.policyHolder.earlierAge=earlieAge;
+            }
+        }
+
+        $scope.$watch('ilEndrosementDetils.policyHolderNew.dateOfBirth',function(newVal,oldVal){
+            if(newVal == oldVal) return;
+            if(newVal){
+                var correcteAge=(moment($scope.ilEndrosementDetils.inceptionOn).diff(moment(newVal), 'years'))+1;
+                $scope.ilEndrosementDetils.policyHolderNew.correctedAge=correcteAge;
             }
         });
             $scope.launchBeneficiaryDob = function ($event) {
@@ -249,7 +349,7 @@ app.config(["$routeProvider", function ($routeProvider) {
                 $scope.agentMessage = true;
             }
         };
-
+        $scope.ilEndrosementDetilsCopy={};
         $scope.searchPolicyNumber=function(){
             if($scope.policy.policyNumber){
                 $http.get('/pla/individuallife/endorsement/searchpolicy/' + $scope.policy.policyNumber)
@@ -257,6 +357,7 @@ app.config(["$routeProvider", function ($routeProvider) {
                         $scope.serverError = false;
                         var policyData=response.data;
                         $scope.ilEndrosementDetils=response.data;
+                        angular.copy($scope.ilEndrosementDetils,$scope.ilEndrosementDetilsCopy); // Keeping One Copy Of Original Object
                         console.log('************');
                         console.log(JSON.stringify($scope.ilEndrosementDetils));
                         $scope.policy.policyHolderName=$scope.ilEndrosementDetils.policyHolder.firstName;
@@ -268,9 +369,21 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         }
         $scope.clearData=function(){
-            $scope.searchPolicyNumber();
+            angular.copy($scope.ilEndrosementDetilsCopy,$scope.ilEndrosementDetils);
+            if($scope.policy.endrosementType == 'correctinDOBLA'){
+                $scope.earlierAgeCalculation();
+                $scope.planSetUp();
+            }else if($scope.policy.endrosementType == 'correctinDOBPH'){
+                $scope.earlierAgeCalculationForPolicyHolder();
+                $scope.planSetUp();
+            }
         }
-
+        $scope.planSetUp=function(){
+            $http.get('/pla/core/plan/getPlanById/'+$scope.ilEndrosementDetils.proposalPlanDetail.planId).success(function (response, status, headers, config) {
+                $scope.plan = response;
+            }).error(function (response, status, headers, config) {
+            });
+        }
         $scope.changePolicyHolderGender=function(){
             if($scope.policy.endrosementType == 'correctinGenderPH'){
                 if($scope.ilEndrosementDetils.policyHolderNew == null){
