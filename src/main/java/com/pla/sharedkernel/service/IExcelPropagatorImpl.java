@@ -1,5 +1,7 @@
 package com.pla.sharedkernel.service;
 
+import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestDrugService;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
@@ -16,9 +18,20 @@ public class IExcelPropagatorImpl implements IExcelPropagator{
 
     @Autowired
     GHPolicyRepository ghPolicyRepository;
+    @Autowired
+    PreAuthorizationRequestService preAuthorizationRequestService;
 
     @Override
     public GroupHealthPolicy findPolicyByPolicyNumber(String policyNumber) {
         return ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
+    }
+
+    @Override
+    public boolean checkIfClientBelongsToTheGivenPolicy(String clientId, String policyNumber) {
+        return preAuthorizationRequestService.doesClientBelongToTheGivenPolicy(clientId, policyNumber);
+    }
+
+    public String checkServiceAndDrugCoverdUnderThePolicy(String clientId, String policyNumber, String service) {
+        return preAuthorizationRequestService.checkServiceAndDrugCoveredUnderThePolicy(clientId, policyNumber, service);
     }
 }

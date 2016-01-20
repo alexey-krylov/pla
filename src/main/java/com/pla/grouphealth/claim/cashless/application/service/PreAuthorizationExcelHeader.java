@@ -81,9 +81,7 @@ public enum PreAuthorizationExcelHeader {
                     errorMessage = errorMessage + "Policy Number cannot be empty.";
                     return errorMessage;
                 }
-                Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.description));
-                String policyNumberValue = getCellValue(policyNumberCell);
-                GroupHealthPolicy groupHealthPolicy = iExcelPropagator.findPolicyByPolicyNumber(policyNumberValue);
+                GroupHealthPolicy groupHealthPolicy = iExcelPropagator.findPolicyByPolicyNumber(value);
                 if(isEmpty(groupHealthPolicy)){
                     errorMessage = errorMessage + "No Group Health Policy found with given Policy Number";
                     return errorMessage;
@@ -127,6 +125,11 @@ public enum PreAuthorizationExcelHeader {
                 if(isEmpty(value)) {
                     errorMessage = errorMessage + "Client ID cannot be empty.";
                     return errorMessage;
+                }
+                Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.description));
+                String policyNumberValue = getCellValue(policyNumberCell);
+                if(!iExcelPropagator.checkIfClientBelongsToTheGivenPolicy(value, policyNumberValue)){
+                    errorMessage = errorMessage + "Client not covered under the mentioned Policy";
                 }
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
@@ -269,6 +272,14 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
+            Cell reasonCell = row.getCell(excelHeaders.indexOf(REASONS.description));
+            String reason = getCellValue(reasonCell);
+            if(reason.equalsIgnoreCase("Pregnancy")){
+                if(isEmpty(value)) {
+                    errorMessage  = "As you selected pregnancy Diagnosis/Treatment in case Of Pregnancy -G cannot be empty";
+                    return errorMessage;
+                }
+            }
             return errorMessage;
         }
     },PREGNANCY_P("Diagnosis/Treatment in case Of Pregnancy"){
@@ -293,7 +304,13 @@ public enum PreAuthorizationExcelHeader {
             //if pregnancy make mandatory
             //if(reason==pregnancy){isempty(value)} // return errorMessage;
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if (reasonValue.equalsIgnoreCase("Pregnancy") && isEmpty(value)){
+                errorMessage  = "As you selected pregnancy Diagnosis/Treatment in case Of Pregnancy -p cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },PREGNANCY_L("Diagnosis/Treatment in case Of Pregnancy -L"){
         @Override
@@ -313,7 +330,14 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if (reasonValue.equalsIgnoreCase("Pregnancy") && isEmpty(value)){
+                errorMessage  = "As you selected pregnancy Diagnosis/Treatment in case Of Pregnancy -L cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
+
         }
     },PREGNANCY_A("Diagnosis/Treatment in case Of Pregnancy -A"){
         @Override
@@ -333,7 +357,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if (reasonValue.equalsIgnoreCase("Pregnancy") && isEmpty(value)){
+                errorMessage  = "As you selected pregnancy Diagnosis/Treatment in case Of Pregnancy -A cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },PREGNANCY_DATE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Date of Delivery"){
         @Override
@@ -353,16 +383,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy- Date of Delivery cannot be empty.";
-                    return errorMessage;
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if (reasonValue.equalsIgnoreCase("Pregnancy") && isEmpty(value)){
+                errorMessage  = "As you selected pregnancy Diagnosis/Treatment in case Of Pregnancy Date of Delivery cannot be empty";
                 return errorMessage;
             }
-            return errorMessage;
+            return  errorMessage;
         }
     },PREGNANCY_MODE_OF_DELIVERY("Diagnosis/Treatment in case Of Pregnancy- Mode Of Delivery"){
         @Override
@@ -382,16 +409,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Pregnancy- Mode Of Delivery cannot be empty.";
-                    return errorMessage;
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if (reasonValue.equalsIgnoreCase("Pregnancy") && isEmpty(value)){
+                errorMessage  = "As you selected pregnancy Diagnosis/Treatment in case Of Pregnancy Mode Of Delivery cannot be empty";
                 return errorMessage;
             }
-            return errorMessage;
+            return  errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_ILLNESS_DISEASE_NAME_AND_PRESENTING_COMPLAINTS("Diagnosis/Treatment in case Of Illness Or Trauma - Name of illness / disease with presenting complaints"){
         @Override
@@ -411,7 +435,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if( (reasonValue.equalsIgnoreCase("Trauma")|| reasonValue.equalsIgnoreCase("Illness") ) && isEmpty(value)){
+                errorMessage  = "As you selected Diagnosis/Treatment in case Of Illness Or Trauma   Name of illness  cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_RELEVANT_CLINICAL_FINDINGS("Diagnosis/Treatment in case Of Illness Or Trauma - Relevant clinical findings"){
         @Override
@@ -431,7 +461,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if( (reasonValue.equalsIgnoreCase("Trauma")|| reasonValue.equalsIgnoreCase("Illness") ) && isEmpty(value)){
+                errorMessage  = "As you selected Diagnosis/Treatment in case Of Illness Or Trauma   Relevant clinical  cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_DURATION("Diagnosis/Treatment in case Of Illness Or Trauma -Duration of the present ailment in days"){
         @Override
@@ -451,7 +487,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if( (reasonValue.equalsIgnoreCase("Trauma")|| reasonValue.equalsIgnoreCase("Illness") ) && isEmpty(value)){
+                errorMessage  = "As you selected Diagnosis/Treatment in case Of Illness Or Trauma   Duration of the present ailment in days cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_PRESENT_AILMENT_PAST_HISTORY("Diagnosis/Treatment in case Of Illness Or Trauma - Past history of present ailment if any"){
         @Override
@@ -471,7 +513,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if( (reasonValue.equalsIgnoreCase("Trauma")|| reasonValue.equalsIgnoreCase("Illness") ) && isEmpty(value)){
+                errorMessage  = "As you selected Diagnosis/Treatment in case Of Illness Or Trauma Past history of present ailment  cannot be empty";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },DIAGNOSIS_TREATMENT_ILLNESS_TRAUMA_DIAGNOSIS("Diagnosis/Treatment in case Of Illness Or Trauma - Provisional Diagnosis"){
         @Override
@@ -491,16 +539,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment in case Of Illness Or Trauma - Diagnosis cannot be empty.";
-                    return errorMessage;
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if( (reasonValue.equalsIgnoreCase("Trauma")|| reasonValue.equalsIgnoreCase("Illness") ) && isEmpty(value)){
+                errorMessage  = "As you selected Diagnosis/Treatment in case Of Illness Or Trauma Provisional Diagnosis  cannot be empty";
                 return errorMessage;
             }
-            return errorMessage;
+            return  errorMessage;
         }
     },DIAGNOSIS_TREATMENT_LINE_OF_TREATMENT("Diagnosis/Treatment - Line of treatment"){
         @Override
@@ -520,15 +565,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            try {
-                if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment - Line of treatment cannot be empty.";
-                    return errorMessage;
-                }
-            } catch (Exception e) {
-                errorMessage = errorMessage + e.getMessage();
+            Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
+            String reasonValue = getCellValue(reasonCell);
+            if( (reasonValue.equalsIgnoreCase("Trauma")|| reasonValue.equalsIgnoreCase("Illness") ) && isEmpty(value)){
+                errorMessage  = "As you selected Diagnosis/Treatment in case Of Illness Or Trauma Line of treatment cannot be empty";
                 return errorMessage;
             }
+
             return errorMessage;
         }
     },DIAGNOSIS_TREATMENT_TEST("Diagnosis/Treatment - If Investigations, indicate tests"){
@@ -898,7 +941,14 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryHTNCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_HTN.getDescription()));
+            String pastHistoryHTNCellValue = getCellValue(pastHistoryHTNCell);
+            if( pastHistoryHTNCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(HTN) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
+
         }
     },PAST_HISTORY_SUFFERING_FROM_IHD_CAD("Past history of any chronic illness - Suffering From IHD/CAD"){
         @Override
@@ -938,7 +988,14 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryIHDCADCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_IHD_CAD.getDescription()));
+            String pastHistoryIHDCADCellValue = getCellValue(pastHistoryIHDCADCell);
+            if( pastHistoryIHDCADCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(IHD/CAD) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
+
         }
     },PAST_HISTORY_SUFFERING_FROM_DIABETES("Past history of any chronic illness - Suffering From Diabetes"){
         @Override
@@ -978,7 +1035,14 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryDiabetesCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_DIABETES.getDescription()));
+            String pastHistoryDiabetesCellValue = getCellValue(pastHistoryDiabetesCell);
+            if( pastHistoryDiabetesCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(DIABETES) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
+
         }
     }, PAST_HISTORY_SUFFERING_FROM_ASTHMA_COPD_TB("Past history of any chronic illness - Suffering From Asthma/COPD/TB"){
         @Override
@@ -1018,7 +1082,14 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryAsthmaCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_ASTHMA_COPD_TB.getDescription()));
+            String pastHistoryAsthmaCellValue = getCellValue(pastHistoryAsthmaCell);
+            if( pastHistoryAsthmaCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(ASTHMA/COPD/TB) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
+
         }
     }, PAST_HISTORY_SUFFERING_FROM_PARALYSIS_CVA_EPILEPSY("Past history of any chronic illness - Suffering From Paralysis/CVA/Epilepsy"){
         @Override
@@ -1058,7 +1129,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryParalysisCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_PARALYSIS_CVA_EPILEPSY.getDescription()));
+            String pastHistoryParalysisCellValue = getCellValue(pastHistoryParalysisCell);
+            if( pastHistoryParalysisCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(PARALYSIS/CVA) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_ARTHRITIS("Past history of any chronic illness - Suffering From Arthritis"){
         @Override
@@ -1098,7 +1175,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryArthritisCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_ARTHRITIS.getDescription()));
+            String pastHistoryArthritisCellValue = getCellValue(pastHistoryArthritisCell);
+            if( pastHistoryArthritisCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(Arthritis) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_CANCER_TUMOR_CYST("Past history of any chronic illness - Suffering From Cancer/Tumor/Cyst") {
         @Override
@@ -1138,7 +1221,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryCancerCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_CANCER_TUMOR_CYST.getDescription()));
+            String pastHistoryCancerCellValue = getCellValue(pastHistoryCancerCell);
+            if( pastHistoryCancerCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(CANCER/TUMOR/CYST) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },PAST_HISTORY_SUFFERING_FROM_STD_HIV_AIDS("Past history of any chronic illness - Suffering From STD/HIV/AIDS"){
         @Override
@@ -1178,7 +1267,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryHIVCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_STD_HIV_AIDS.getDescription()));
+            String pastHistoryHIVCellValue = getCellValue(pastHistoryHIVCell);
+            if( pastHistoryHIVCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(STD/HIV/AIDS) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM_ALCOHOL_DRUG_ABUSE("Past history of any chronic illness - Suffering From Alcohol/Drug Abuse"){
         @Override
@@ -1227,7 +1322,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastHistoryAlcoholCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_ALCOHOL_DRUG_ABUSE.getDescription()));
+            String pastHistoryAlcoholCellValue = getCellValue(pastHistoryAlcoholCell);
+            if( pastHistoryAlcoholCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(ALCOHOL/DRUG/ABUSE) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     }, PAST_HISTORY_SUFFERING_FROM__PSYCHIATRIC_CONDITION("Past history of any chronic illness - Suffering From Psychiatric Condition"){
         @Override
@@ -1267,7 +1368,13 @@ public enum PreAuthorizationExcelHeader {
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
             String errorMessage = "";
-            return errorMessage;
+            Cell pastPsychiatricCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM__PSYCHIATRIC_CONDITION.getDescription()));
+            String pastPsychiatricCellValue = getCellValue(pastPsychiatricCell);
+            if( pastPsychiatricCellValue.equalsIgnoreCase("YES") && isEmpty(value)){
+                errorMessage  = "As you selected Past history of chronic illness(PSYCHIATRIC/CONDITION) YES. So It should be Mandatory";
+                return errorMessage;
+            }
+            return  errorMessage;
         }
     },SERVICE("Service to be Availed - Service"){
         @Override
@@ -1292,6 +1399,17 @@ public enum PreAuthorizationExcelHeader {
                     errorMessage = errorMessage + "Service to be Availed - Service cannot be empty.";
                     return errorMessage;
                 }
+                Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.description));
+                String policyNumberValue = getCellValue(policyNumberCell);
+                Cell clientIdCell = row.getCell(excelHeaders.indexOf(CLIENT_ID.description));
+                String clientid = getCellValue(clientIdCell);
+                try {
+                    clientid = isNotEmpty(clientid) ? String.valueOf( new BigDecimal(clientid).intValue()) : clientid;
+                } catch(NumberFormatException e){
+                    errorMessage =errorMessage + "client id is not present";
+                    return  errorMessage;
+                }
+                errorMessage =  iExcelPropagator.checkServiceAndDrugCoverdUnderThePolicy(clientid, policyNumberValue, value);
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
                 return errorMessage;
@@ -1361,28 +1479,34 @@ public enum PreAuthorizationExcelHeader {
 
     public static List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
         List<Row> duplicateRows = Lists.newArrayList();
-        Cell clientIdCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.CLIENT_ID.name()));
+        Cell clientIdCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.CLIENT_ID.description));
         String clientIdCellValue = getCellValue(clientIdCell);
-        Cell serviceCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.SERVICE.name()));
+        Cell serviceCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.SERVICE.description));
         String serviceCellValue = getCellValue(serviceCell);
+        Cell consultationCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.CONSULTATION_DATE.description));
+        String consultationCellValue = getCellValue(consultationCell);
         Map<String,Object> currentRowNameRelationshipHolder = new HashMap<String,Object>();
         currentRowNameRelationshipHolder.put("ClientID",clientIdCellValue);
         currentRowNameRelationshipHolder.put("Service",serviceCellValue);
+        currentRowNameRelationshipHolder.put("ConsultationDate",consultationCellValue);
 
-        dataRowsForDuplicateCheck.forEach(dataRowForDuplicateCheck -> {
+        for(Row dataRowForDuplicateCheck : dataRowsForDuplicateCheck){
             if (currentRow.getRowNum() != dataRowForDuplicateCheck.getRowNum()) {
-                Cell otherClientIdCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.CLIENT_ID.name()));
+                Cell otherClientIdCell = dataRowForDuplicateCheck.getCell(headers.indexOf(CLIENT_ID.description));
                 String otherClientIdValue = getCellValue(otherClientIdCell);
-                Cell otherServiceCell = currentRow.getCell(headers.indexOf(PreAuthorizationExcelHeader.SERVICE.name()));
+                Cell otherServiceCell = dataRowForDuplicateCheck.getCell(headers.indexOf(SERVICE.description));
                 String otherServiceValue = getCellValue(otherServiceCell);
+                Cell otherConsultationCell = dataRowForDuplicateCheck.getCell(headers.indexOf(CONSULTATION_DATE.description));
+                String otherConsultationValue = getCellValue(otherConsultationCell);
                 Map<String,Object> otherRowNameRelationshipHolder = new HashMap<String,Object>();
-                currentRowNameRelationshipHolder.put("ClientID",otherClientIdValue);
-                currentRowNameRelationshipHolder.put("Service",otherServiceValue);
+                otherRowNameRelationshipHolder.put("ClientID",otherClientIdValue);
+                otherRowNameRelationshipHolder.put("Service",otherServiceValue);
+                otherRowNameRelationshipHolder.put("ConsultationDate",otherConsultationValue);
                 if (currentRowNameRelationshipHolder.equals(otherRowNameRelationshipHolder)) {
                     duplicateRows.add(dataRowForDuplicateCheck);
                 }
             }
-        });
+        }
         return duplicateRows;
     }
 }

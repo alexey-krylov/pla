@@ -13,4 +13,6 @@ import java.util.List;
 public interface PreAuthorizationRepository extends MongoRepository<PreAuthorization, PreAuthorizationId>{
     @Query("{'preAuthorizationDetails.clientId' : ?0, 'preAuthorizationDetails.service' : ?1 }")
     List<PreAuthorization> findAllPreAuthorizationByServiceAndClientId(String clientId, String service);
+    @Query("{'batchNumber' : ?0}")
+    List<PreAuthorization> findAllPreAuthorizationByBatchNumber(String batchNumber);
 }

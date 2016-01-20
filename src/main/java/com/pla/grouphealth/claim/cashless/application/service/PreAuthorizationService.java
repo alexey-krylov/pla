@@ -2,7 +2,6 @@ package com.pla.grouphealth.claim.cashless.application.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPCode;
 import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
@@ -14,19 +13,13 @@ import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollo
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
 import com.pla.grouphealth.claim.cashless.repository.GHCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
-import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
-import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.apache.commons.beanutils.BeanUtils;
@@ -37,19 +30,15 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-import static org.springframework.util.Assert.*;
+import static org.springframework.util.Assert.notEmpty;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * Author - Mohan Sharma Created on 12/30/2015.
@@ -156,7 +145,7 @@ public class PreAuthorizationService {
                 preAuthorization.updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
             preAuthorizationRepository.save(preAuthorization);
         }
-        List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAll();
+        List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAllPreAuthorizationByBatchNumber(runningSequence);
         notEmpty(preAuthorizations, "Not uploaded successfully");
         for(PreAuthorization preAuthorization : preAuthorizations) {
             PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();

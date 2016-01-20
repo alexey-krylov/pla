@@ -8,4 +8,6 @@ import com.pla.sharedkernel.identifier.PolicyId;
  */
 public interface IExcelPropagator {
     GroupHealthPolicy findPolicyByPolicyNumber(String policyNumber);
+    boolean checkIfClientBelongsToTheGivenPolicy(String clientId, String policyNumber);
+     String  checkServiceAndDrugCoverdUnderThePolicy(String clientId, String policyNumber, String service);
 }

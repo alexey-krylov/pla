@@ -79,7 +79,7 @@ public class ExcelUtilityProvider {
                 });
                 duplicateRowErrorMessage = duplicateRowErrorMessage + rowNumbers[0] + ".\n";
             }
-            if (isEmpty(errorMessage)) {
+            if (isEmpty(errorMessage) && isEmpty(duplicateRowErrorMessage)) {
                 continue;
             }
             isValidTemplate = false;
