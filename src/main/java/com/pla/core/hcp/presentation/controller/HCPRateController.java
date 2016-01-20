@@ -57,7 +57,7 @@ public class HCPRateController {
     public void downloadErrorInsuredTemplate(@PathVariable("hcpCode") String hcpCode, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "GHInsuredTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "HCPRateTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         File errorTemplateFile = new File(hcpCode);
         InputStream inputStream = new FileInputStream(errorTemplateFile);
