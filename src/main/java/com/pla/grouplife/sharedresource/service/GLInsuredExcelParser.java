@@ -398,7 +398,8 @@ public class GLInsuredExcelParser {
             String coverageSA = getCellValue(optionalCoverageCellHolder.getOptionalCoverageSACell());
             if (isPercentageOfSACoverage && isNotEmpty(coverageSA)) {
                 BigDecimal coverageSumAssured = BigDecimal.valueOf(Double.valueOf(coverageSA).intValue());
-                boolean isValidCoverageSA = planAdapter.isValidCoverageSumAssured(finalPlanCode,optionalCoverageCode,coverageSumAssured);
+                String coverageId = planAdapter.getCoverageIdByCode(optionalCoverageCode);
+                boolean isValidCoverageSA = planAdapter.isValidCoverageSumAssured(finalPlanCode,coverageId,coverageSumAssured);
                 if (!isValidCoverageSA){
                       /*
                 * check for % of Plan Sum Assured

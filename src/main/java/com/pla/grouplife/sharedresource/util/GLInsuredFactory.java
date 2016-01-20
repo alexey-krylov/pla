@@ -284,6 +284,7 @@ public class GLInsuredFactory {
             insured.updatePlanPremiumAmount(insuredPlanProratePremium);
             if (isNotEmpty(insured.getCoveragePremiumDetails())) {
                 Set<CoveragePremiumDetail> coveragePremiumDetails = insured.getCoveragePremiumDetails();
+                List<ComputedPremiumDto> computedPremiumDtosCov = Lists.newArrayList();
                 for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetails) {
                     BigDecimal insuredCoveragePremiumDetail = insured.getNoOfAssured() != null ? coveragePremiumDetail.getPremium() :
                             premiumDetailDto.getPolicyTermValue() != 365 ? computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(),
@@ -291,7 +292,7 @@ public class GLInsuredFactory {
                                     occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId()) :
                                     computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(),
                                             coveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(),
-                                            occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId(),null);
+                                            occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), coveragePremiumDetail.getCoverageId().getCoverageId(),computedPremiumDtosCov);
                     if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null && insured.getPlanPremiumDetail().getPremiumAmount() == null) {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insured.getDateOfBirth());
                         insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredCoveragePremiumDetail);
@@ -328,11 +329,12 @@ public class GLInsuredFactory {
                 }
                 Set<CoveragePremiumDetail> insuredDependentCoveragePremiumDetails = insuredDependent.getCoveragePremiumDetails();
                 if (isNotEmpty(insuredDependentCoveragePremiumDetails)) {
+                    List<ComputedPremiumDto> computedPremiumDtosDepCov = Lists.newArrayList();
                     for (CoveragePremiumDetail insuredDependentCoveragePremiumDetail : insuredDependentCoveragePremiumDetails) {
                         BigDecimal insuredCoveragePremiumDetail = insuredDependent.getNoOfAssured() != null ? insuredDependentCoveragePremiumDetail.getPremium() :
                                 premiumDetailDto.getPolicyTermValue() != 365 ?
                                         computeBasicProratePremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId()) :
-                                        computePlanBasicAnnualPremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId(),null);
+                                        computePlanBasicAnnualPremium(insuredDependentPlanPremiumDetail.getPlanId().getPlanId(), insuredDependentCoveragePremiumDetail.getSumAssured().toPlainString(), getAgeOnNextBirthDate(insuredDependent.getDateOfBirth()).toString(), dependentOccupationClass, insuredDependent.getGender().name(), premiumDetailDto.getPolicyTermValue(), insuredDependentCoveragePremiumDetail.getCoverageId().getCoverageId(),computedPremiumDtosDepCov);
                         if (insuredDependent.getNoOfAssured() == null && insuredDependent.getDateOfBirth() != null) {
                             int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDependent.getDateOfBirth());
                             insuredCoveragePremiumDetail = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, insuredCoveragePremiumDetail);

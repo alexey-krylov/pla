@@ -65,6 +65,8 @@ public interface IPlanAdapter {
 
     int getDefinedPercentageOfSumAssured(String planCode,String coverageCode);
 
+    String getCoverageIdByCode(String coverageCode);
+
 
 
 }

@@ -263,7 +263,7 @@ public class PlanAdapterImpl implements IPlanAdapter {
     }
 
 
-     @Override
+    @Override
     public Set<String> getConfiguredEndorsementType(Set<PlanId> planIds) {
         Set<String> endorsementType =  planFinder.findConfiguredEndorsementType(planIds);
         return endorsementType;
@@ -291,6 +291,13 @@ public class PlanAdapterImpl implements IPlanAdapter {
         }
         Plan plan = plans.get(0);
         return plan.getPercentageDefined(new CoverageId(coverageId));
+    }
+
+    @Override
+    public String getCoverageIdByCode(String coverageCode) {
+        Map<String, Object> coverageMap = coverageFinder.getCoverageDetailByCode(coverageCode);
+        return coverageMap.get("coverageId")!=null?(String) coverageMap.get("coverageId"):"";
+
     }
 
     @Override
