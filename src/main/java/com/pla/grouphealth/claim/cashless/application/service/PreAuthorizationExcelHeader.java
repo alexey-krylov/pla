@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.DateTime;
@@ -1400,11 +1401,16 @@ public enum PreAuthorizationExcelHeader {
                 String clientid = getCellValue(clientIdCell);
                 try {
                     clientid = isNotEmpty(clientid) ? String.valueOf( new BigDecimal(clientid).intValue()) : clientid;
+
                 } catch(NumberFormatException e){
                     errorMessage =errorMessage + "client id is not present";
                     return  errorMessage;
                 }
-                errorMessage =  iExcelPropagator.checkServiceAndDrugCoverdUnderThePolicy(clientid, policyNumberValue, value);
+                errorMessage = errorMessage + iExcelPropagator.checkServiceAndDrugCoverdUnderThePolicy(clientid, policyNumberValue, value);
+                String hcpCode = isNotEmpty(dataMap.get("hcpCode")) ? dataMap.get("hcpCode").toString() : StringUtils.EMPTY;
+                errorMessage = errorMessage + iExcelPropagator.compareHcpRateByHcpService(hcpCode, value);
+
+
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
                 return errorMessage;

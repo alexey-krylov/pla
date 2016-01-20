@@ -816,4 +816,13 @@ public class PreAuthorizationRequestService {
         }
         return coverageDtos;
     }
+
+    public String compareHcpRateByHcpService(String hcpCode, String service){
+        String errorMessage="";
+        HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCodeAndService(new HCPCode(hcpCode), service);
+        if(isEmpty(hcpRate)) {
+            return "No HCP Rate is defined for the service - " + service+".\n";
+        }
+        return errorMessage;
+    }
 }

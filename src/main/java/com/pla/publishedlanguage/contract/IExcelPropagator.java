@@ -13,4 +13,6 @@ public interface IExcelPropagator {
     boolean checkIfClientBelongsToTheGivenPolicy(String clientId, String policyNumber);
 
     String  checkServiceAndDrugCoverdUnderThePolicy(String clientId, String policyNumber, String service);
+
+    String  compareHcpRateByHcpService(String hcpCode, String value);
 }

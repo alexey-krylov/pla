@@ -34,4 +34,9 @@ public class IExcelPropagatorImpl implements IExcelPropagator{
     public String checkServiceAndDrugCoverdUnderThePolicy(String clientId, String policyNumber, String service) {
         return preAuthorizationRequestService.checkServiceAndDrugCoveredUnderThePolicy(clientId, policyNumber, service);
     }
+
+    @Override
+    public String compareHcpRateByHcpService(String hcpCode, String service) {
+        return preAuthorizationRequestService.compareHcpRateByHcpService(hcpCode, service);
+    }
 }
