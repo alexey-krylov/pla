@@ -33,7 +33,7 @@ public enum HCPRateExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -56,7 +56,7 @@ public enum HCPRateExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -80,7 +80,7 @@ public enum HCPRateExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isNotEmpty(value) && new BigDecimal(value).signum() == -1) {
@@ -104,7 +104,7 @@ public enum HCPRateExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isNotEmpty(value) && new BigDecimal(value).signum() == -1) {
@@ -152,6 +152,7 @@ public enum HCPRateExcelHeader {
 
     public abstract void populateInsuredDetail(Map insuredDto, Row row, List<String> headers);
 
+    public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap);
     public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders);
 
     public static List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {

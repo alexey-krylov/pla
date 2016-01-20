@@ -7,6 +7,7 @@
 package com.pla.core.query;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.utils.UtilValidator;
@@ -20,9 +21,12 @@ import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * @author: Samir
@@ -107,5 +111,10 @@ public class BenefitFinder {
 
     public List<Map<String, Object>> getAllActiveBenefit() {
         return namedParameterJdbcTemplate.query(FIND_ALL_ACTIVE_BENEFITS_Query, new ColumnMapRowMapper());
+    }
+
+    public List<String> getAllBenefitCodesByBenefitIds(List<String> benefitIds) {
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.queryForList("SELECT benefit_code AS benefitCode FROM benefit WHERE benefit_id IN (:benefitIds)", new MapSqlParameterSource("benefitIds", benefitIds));
+        return isNotEmpty(result) ? result.stream().filter(Objects::nonNull).map(map -> map.get("benefitCode").toString()).collect(Collectors.toList()) : Lists.newArrayList();
     }
 }

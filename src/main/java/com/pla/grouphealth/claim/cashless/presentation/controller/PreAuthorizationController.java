@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
+import com.google.common.collect.Maps;
 import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
@@ -64,7 +65,9 @@ public class PreAuthorizationController {
         POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
         HSSFWorkbook preAuthTemplateWorkbook = new HSSFWorkbook(fs);
         try {
-            boolean isValidInsuredTemplate = preAuthorizationService.isValidInsuredTemplate(preAuthTemplateWorkbook);
+            Map dataMap = Maps.newHashMap();
+            dataMap.put("hcpCode", preAuthorizationUploadDto.getHcpCode());
+            boolean isValidInsuredTemplate = preAuthorizationService.isValidInsuredTemplate(preAuthTemplateWorkbook, dataMap);
             if (!isValidInsuredTemplate) {
                 File insuredTemplateWithError = new File(preAuthorizationUploadDto.getHcpCode());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);

@@ -1,6 +1,7 @@
 package com.pla.core.hcp.presentation.controller;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.hcp.application.command.UploadHCPServiceRatesCommand;
 import com.pla.core.hcp.application.service.HCPRateExcelGenerator;
@@ -70,7 +71,7 @@ public class HCPRateService {
     }
 
     public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook) {
-        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, HCPRateExcelHeader.getAllowedHeaders(), HCPRateExcelHeader.class);
+        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, HCPRateExcelHeader.getAllowedHeaders(), HCPRateExcelHeader.class, Maps.newHashMap());
     }
 
     public Set<HCPServiceDetailDto> transformToHCPServiceDetailDto(HSSFWorkbook insuredTemplateWorkbook) {

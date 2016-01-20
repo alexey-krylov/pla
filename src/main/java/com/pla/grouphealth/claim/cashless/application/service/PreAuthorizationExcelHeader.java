@@ -43,7 +43,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
 
             try {
@@ -74,7 +74,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -119,7 +119,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -156,7 +156,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -185,7 +185,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -224,7 +224,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     },REASONS("Please indicate whether it is a"){
@@ -243,7 +243,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -272,7 +272,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell = row.getCell(excelHeaders.indexOf(REASONS.description));
             String reason = getCellValue(reasonCell);
@@ -300,7 +300,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             //first find reason
             //check if reason is pregnancy
             //if pregnancy make mandatory
@@ -330,7 +330,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -357,7 +357,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -383,7 +383,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -409,7 +409,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -435,7 +435,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -461,7 +461,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -487,7 +487,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -513,7 +513,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -539,7 +539,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -565,7 +565,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell reasonCell= row.getCell(excelHeaders.indexOf(REASONS.getDescription()));
             String reasonValue = getCellValue(reasonCell);
@@ -592,7 +592,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -621,7 +621,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -650,7 +650,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -679,7 +679,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -711,7 +711,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -743,7 +743,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -775,7 +775,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -804,7 +804,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -833,7 +833,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -863,7 +863,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -892,7 +892,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -921,7 +921,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             return errorMessage;
         }
@@ -941,7 +941,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryHTNCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_HTN.getDescription()));
             String pastHistoryHTNCellValue = getCellValue(pastHistoryHTNCell);
@@ -968,7 +968,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     },DETAILS_OF_IHD_CAD("Past history of chronic illness(IHD/CAD) - Please provide details"){
@@ -987,7 +987,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryIHDCADCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_IHD_CAD.getDescription()));
             String pastHistoryIHDCADCellValue = getCellValue(pastHistoryIHDCADCell);
@@ -1014,7 +1014,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             return errorMessage;
         }
@@ -1034,7 +1034,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryDiabetesCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_DIABETES.getDescription()));
             String pastHistoryDiabetesCellValue = getCellValue(pastHistoryDiabetesCell);
@@ -1061,7 +1061,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     },DETAILS_OF_ASTHMA_COPD_TB("Past history of chronic illness(ASTHMA/COPD/TB) - Please provide details"){
@@ -1080,7 +1080,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryAsthmaCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_ASTHMA_COPD_TB.getDescription()));
             String pastHistoryAsthmaCellValue = getCellValue(pastHistoryAsthmaCell);
@@ -1107,7 +1107,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     },DETAILS_OF_PARALYSIS_CVA("Past history of chronic illness(PARALYSIS/CVA) - Please provide details"){
@@ -1126,7 +1126,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryParalysisCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_PARALYSIS_CVA_EPILEPSY.getDescription()));
             String pastHistoryParalysisCellValue = getCellValue(pastHistoryParalysisCell);
@@ -1152,7 +1152,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     }, DETAILS_OF_SUFFERING_FROM_ARTHRITIS("Past history of chronic illness(ARTHRITIS) - Please provide details"){
@@ -1171,7 +1171,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryArthritisCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_ARTHRITIS.getDescription()));
             String pastHistoryArthritisCellValue = getCellValue(pastHistoryArthritisCell);
@@ -1197,7 +1197,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     }, DETAILS_OF_CANCER_TUMOR_CYST("Past history of chronic illness(CANCER/TUMOR/CYST) - Please provide details"){
@@ -1216,7 +1216,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryCancerCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_CANCER_TUMOR_CYST.getDescription()));
             String pastHistoryCancerCellValue = getCellValue(pastHistoryCancerCell);
@@ -1242,7 +1242,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     }, DETAIL_OF_STD_HIV_AIDS("Past history of chronic illness(STD/HIV/AIDS) - Please provide details"){
@@ -1261,7 +1261,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryHIVCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_STD_HIV_AIDS.getDescription()));
             String pastHistoryHIVCellValue = getCellValue(pastHistoryHIVCell);
@@ -1287,7 +1287,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1316,7 +1316,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastHistoryAlcoholCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM_ALCOHOL_DRUG_ABUSE.getDescription()));
             String pastHistoryAlcoholCellValue = getCellValue(pastHistoryAlcoholCell);
@@ -1342,7 +1342,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             return "";
         }
     }, DETAILS_PSYCHIATRIC_CONDITION("Past history of chronic illness(PSYCHIATRIC/CONDITION) - Please provide details"){
@@ -1361,7 +1361,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             Cell pastPsychiatricCell= row.getCell(excelHeaders.indexOf(PAST_HISTORY_SUFFERING_FROM__PSYCHIATRIC_CONDITION.getDescription()));
             String pastPsychiatricCellValue = getCellValue(pastPsychiatricCell);
@@ -1387,7 +1387,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1427,7 +1427,7 @@ public enum PreAuthorizationExcelHeader {
         }
 
         @Override
-        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
@@ -1470,7 +1470,7 @@ public enum PreAuthorizationExcelHeader {
 
     public abstract PreAuthorizationDetailDto populatePreAuthorizationDetail(PreAuthorizationDetailDto preAuthorizationDetailDto, Row row, List<String> headers);
 
-    public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders);
+    public abstract String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap);
 
     public static List<Row> findDuplicateRow(List<Row> dataRowsForDuplicateCheck, Row currentRow, List<String> headers) {
         List<Row> duplicateRows = Lists.newArrayList();

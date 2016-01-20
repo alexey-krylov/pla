@@ -16,6 +16,7 @@ import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
+import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
@@ -33,10 +34,7 @@ import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
-import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
-import com.pla.sharedkernel.domain.model.FamilyId;
-import com.pla.sharedkernel.domain.model.ProcessType;
-import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.NoArgsConstructor;
@@ -100,6 +98,16 @@ public class PreAuthorizationRequestService {
     SBCMRepository sbcmRepository;
     @Autowired
     HCPRateRepository hcpRateRepository;
+    @Autowired
+    BenefitFinder benefitFinder;
+
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
+        PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
+        notNull(preAuthorizationRequest, "No PreAuthorizationRequest found with given Id");
+        if (isNotEmpty(preAuthorizationRequest))
+            return constructPreAuthorizationClaimantDetailCommand(preAuthorizationRequest);
+        return null;
+    }
 
     @Transactional
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorization preAuthorization, String clientId) {
@@ -537,14 +545,6 @@ public class PreAuthorizationRequestService {
         }).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
-    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
-        PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
-        notNull(preAuthorizationRequest, "No PreAuthorizationRequest found with given Id");
-        if (isNotEmpty(preAuthorizationRequest))
-            return constructPreAuthorizationClaimantDetailCommand(preAuthorizationRequest);
-        return null;
-    }
-
     private PreAuthorizationClaimantDetailCommand constructPreAuthorizationClaimantDetailCommand(PreAuthorizationRequest preAuthorizationRequest) {
         PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand();
         if (isNotEmpty(preAuthorizationRequest)) {
@@ -744,27 +744,76 @@ public class PreAuthorizationRequestService {
         if (isNotEmpty(groupHealthPolicy)) {
             GHPlanPremiumDetail ghPlanPremiumDetail = getGHPlanPremiumDetailByFamilyId(new FamilyId(clientId), groupHealthPolicy);
             if(isEmpty(ghPlanPremiumDetail)){
-                return  errorMessage;
+                return  "Client is not associated to the Policy - "+groupHealthPolicy.getPolicyNumber()+".\n";
             }
-            if (isNotEmpty(ghPlanPremiumDetail)) {
-                List<GHCoveragePremiumDetail> coveragePremiumDetails = ghPlanPremiumDetail.getCoveragePremiumDetails();
-                if (isEmpty(coveragePremiumDetails))
-                    errorMessage = errorMessage + "No Coverage Found for the given policy - "+groupHealthPolicy.getSchemeName();
-                for (GHCoveragePremiumDetail ghCoveragePremiumDetail : coveragePremiumDetails) {
-                    CoverageId  coverageId = ghCoveragePremiumDetail.getCoverageId();
-                    Set<BenefitPremiumLimit> benefitPremiumLimits = ghCoveragePremiumDetail.getBenefitPremiumLimits();
-                    if (isEmpty(coveragePremiumDetails))
-                        errorMessage = errorMessage + "No Benefits Found for the coverage - "+ ghCoveragePremiumDetail.getCoverageName() + " of Policy - "+groupHealthPolicy.getSchemeName();
-                    for (BenefitPremiumLimit benefitPremiumLimit : benefitPremiumLimits) {
-                        String benefitCode = benefitPremiumLimit.getBenefitCode();
-                        List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByCoverageIdAndBenefitCodeAndService(coverageId, benefitCode, service);
-                        if (isEmpty(serviceBenefitCoverageMappings))
-                            errorMessage = errorMessage + "No Service-Coverage-Benefit Mapping found for service - "+service+" ,Benefit - "+benefitCode+" ,Coverage - "+ghCoveragePremiumDetail.getCoverageName();
-                    }
+            List<CoverageDto> coverages = getListOfCoverageAndBenefitsOfThePolicyAndAssociatedPlan(ghPlanPremiumDetail);
+            if (isEmpty(coverages)) {
+                return "No coverage details found for the policy - "+groupHealthPolicy.getPolicyNumber()+".\n";
+            }
+            for (CoverageDto coverageDto : coverages) {
+                CoverageId  coverageId = coverageDto.getCoverageIdObj();
+                List<String> benefitCodes = coverageDto.getBenefitCodes();
+                if (isEmpty(benefitCodes))
+                    errorMessage = errorMessage + "No Benefit Details found for the coverage - "+ coverageDto.getCoverageName() + " of Policy - "+groupHealthPolicy.getSchemeName()+".\n";
+                for (String benefitCode : benefitCodes) {
+
+                    List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByCoverageIdAndBenefitCodeAndService(coverageId, benefitCode, service);
+                    if (isEmpty(serviceBenefitCoverageMappings))
+                        errorMessage = errorMessage + "No Service-Coverage-Benefit Mapping found for service - "+service+" ,Benefit - "+benefitCode+" ,Coverage - "+coverageDto.getCoverageName()+".\n";
                 }
             }
-
         }
         return errorMessage;
+    }
+
+    private List<CoverageDto> getListOfCoverageAndBenefitsOfThePolicyAndAssociatedPlan(GHPlanPremiumDetail ghPlanPremiumDetail) {
+        String planCode = ghPlanPremiumDetail.getPlanCode();
+        List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
+        List<CoverageDto> coverageDtos = Lists.newArrayList();
+        if(isNotEmpty(plans)) {
+            Plan plan = plans.get(0);
+            coverageDtos = plan.getCoverages().stream().filter(coverage -> coverage.getCoverageType().equals(CoverageType.BASE)).map(new Function<PlanCoverage, CoverageDto>() {
+                @Override
+                public CoverageDto apply(PlanCoverage planCoverage) {
+                    CoverageDto coverageDto = new CoverageDto();
+                    coverageDto.setCoverageIdObj(planCoverage.getCoverageId());
+                    Set<PlanCoverageBenefit> coverageBenefits = planCoverage.getPlanCoverageBenefits();
+                    if (isNotEmpty(coverageBenefits)) {
+                        coverageDto.setCoverageName(coverageBenefits.iterator().next().getCoverageName());
+                        List<String> benefitIds = coverageBenefits.stream().map(benefit -> {
+                            return benefit.getBenefitId().getBenefitId();
+                        }).collect(Collectors.toList());
+                        if (isNotEmpty(benefitIds)) {
+                            List<String> benefitCodes = benefitFinder.getAllBenefitCodesByBenefitIds(benefitIds);
+                            coverageDto.setBenefitCodes(benefitCodes);
+                        }
+                    }
+                    return coverageDto;
+                }
+            }).collect(Collectors.toList());
+        }
+        List<GHCoveragePremiumDetail> coveragePremiumDetails = ghPlanPremiumDetail.getCoveragePremiumDetails();
+        if(isNotEmpty(coveragePremiumDetails)){
+            List<CoverageDto> coverageDtoList = coveragePremiumDetails.stream().map(new Function<GHCoveragePremiumDetail, CoverageDto>() {
+                @Override
+                public CoverageDto apply(GHCoveragePremiumDetail ghCoveragePremiumDetail) {
+                    CoverageDto coverageDto = new CoverageDto();
+                    coverageDto.setCoverageIdObj(ghCoveragePremiumDetail.getCoverageId());
+                    if (isNotEmpty(ghCoveragePremiumDetail.getCoverageId())) {
+                        CoverageDto coverage = coverageFinder.findCoverageById(ghCoveragePremiumDetail.getCoverageId().getCoverageId());
+                        coverageDto.setCoverageName(coverage.getCoverageName());
+                    }
+                    coverageDto.setCoverageName(ghCoveragePremiumDetail.getCoverageName());
+                    Set<BenefitPremiumLimit> benefitPremiumLimits = ghCoveragePremiumDetail.getBenefitPremiumLimits();
+                    if (isNotEmpty(benefitPremiumLimits)) {
+                        List<String> benefitCodes = benefitPremiumLimits.stream().map(BenefitPremiumLimit::getBenefitCode).collect(Collectors.toList());
+                        coverageDto.setBenefitCodes(benefitCodes);
+                    }
+                    return coverageDto;
+                }
+            }).collect(Collectors.toList());
+            coverageDtos.addAll(coverageDtoList);
+        }
+        return coverageDtos;
     }
 }

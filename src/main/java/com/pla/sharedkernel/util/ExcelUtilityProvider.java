@@ -44,7 +44,7 @@ public class ExcelUtilityProvider {
     @Autowired
     private IExcelPropagator iExcelPropagator;
     private SBCMRepository sbcmRepository;
-    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, List<String> excelHeaders, Class dynamicClass) {
+    public boolean isValidInsuredExcel(HSSFWorkbook hssfWorkbook, List<String> excelHeaders, Class dynamicClass, Map dataMap) {
         boolean isValidTemplate = true;
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
@@ -62,7 +62,7 @@ public class ExcelUtilityProvider {
         Iterator<Row> dataRowIterator = dataRows.iterator();
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
-            String errorMessage = validateRow(currentRow, excelHeaders, dynamicClass);
+            String errorMessage = validateRow(currentRow, excelHeaders, dynamicClass, dataMap);
             if(dynamicClass.getName().equalsIgnoreCase("PreAuthorizationExcelHeader")){
                 String serviceNotCoveredError = isServiceDrugCoveredUnderThePolicy(currentRow, excelHeaders);
                 if(isNotEmpty(serviceNotCoveredError))
@@ -146,7 +146,7 @@ public class ExcelUtilityProvider {
         return cellOptional.isPresent();
     }
 
-    private String validateRow(Row insureDataRow, List<String> headers, Class dynamicClass) {
+    private String validateRow(Row insureDataRow, List<String> headers, Class dynamicClass, Map dataMap) {
         String errorMessage = "";
         Set<String> errorMessages = Sets.newHashSet();
         headers.forEach(header -> {
@@ -155,8 +155,8 @@ public class ExcelUtilityProvider {
             try {
                 Method getEnumMethod = dynamicClass.getMethod("getEnum", String.class);
                 Object dynamicEnum = getEnumMethod.invoke(null, header);
-                Method validateAndIfNotBuildErrorMessageMethod = dynamicClass.getMethod("validateAndIfNotBuildErrorMessage", IExcelPropagator.class, Row.class, String.class, List.class);
-                errorMessages.add((String) validateAndIfNotBuildErrorMessageMethod.invoke(dynamicEnum, iExcelPropagator, insureDataRow, cellValue, headers));
+                Method validateAndIfNotBuildErrorMessageMethod = dynamicClass.getMethod("validateAndIfNotBuildErrorMessage", IExcelPropagator.class, Row.class, String.class, List.class, Map.class);
+                errorMessages.add((String) validateAndIfNotBuildErrorMessageMethod.invoke(dynamicEnum, iExcelPropagator, insureDataRow, cellValue, headers, dataMap));
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

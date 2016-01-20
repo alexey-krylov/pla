@@ -106,8 +106,8 @@ public class PreAuthorizationService {
     }
 
 
-    public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook) {
-        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, PreAuthorizationExcelHeader.getAllowedHeaders(), PreAuthorizationExcelHeader.class);
+    public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook, Map dataMap) {
+        return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, PreAuthorizationExcelHeader.getAllowedHeaders(), PreAuthorizationExcelHeader.class, dataMap);
     }
 
     public Set<PreAuthorizationDetailDto> transformToPreAuthorizationDetailDto(HSSFWorkbook preAuthTemplateWorkbook) {

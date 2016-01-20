@@ -1,5 +1,6 @@
 package com.pla.core.dto;
 
+import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,8 @@ public class CoverageDto {
     private String coverageStatus;
     private List<Map<String,Object>> benefitDtos ;
     private List<String> benefitIds;
-
+    private List<String> benefitCodes;
+    private CoverageId coverageIdObj;
     public CoverageDto() {
     }
 
