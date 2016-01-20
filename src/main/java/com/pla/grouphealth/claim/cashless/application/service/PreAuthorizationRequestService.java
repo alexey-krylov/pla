@@ -9,7 +9,6 @@ import com.pla.core.SBCM.repository.SBCMRepository;
 import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanCoverageBenefit;
-import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPCode;
@@ -53,9 +52,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -67,8 +65,9 @@ import java.util.stream.Stream;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-import static org.springframework.data.domain.Sort.*;
-import static org.springframework.util.Assert.*;
+import static org.springframework.data.domain.Sort.Direction;
+import static org.springframework.data.domain.Sort.Order;
+import static org.springframework.util.Assert.notEmpty;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -103,9 +102,8 @@ public class PreAuthorizationRequestService {
     HCPRateRepository hcpRateRepository;
 
     @Transactional
-    public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorizationId preAuthorizationId, String clientId) {
-        PreAuthorization preAuthorization = preAuthorizationRepository.findOne(preAuthorizationId);
-        if (isNotEmpty(preAuthorization)) {
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(PreAuthorization preAuthorization, String clientId) {
+        if(isNotEmpty(preAuthorization)){
             return constructPreAuthorizationClaimantDetailDtoFromPreAuthorization(preAuthorization, clientId);
         }
         return PreAuthorizationClaimantDetailCommand.getInstance();
@@ -216,13 +214,13 @@ public class PreAuthorizationRequestService {
                         .updateWithCoverages(constructCoverageBenefitDetails(planDetail, clientId))
                         .updateWithPlanCode(plan.getPlanDetail())
                         .updateWithPlanName(plan.getPlanDetail())
-                        .updateWithCoverageDetails(constructProbableClaimAmountForServices(claimantPolicyDetailDto.getCoverageBenefitDetails(), preAuthorizationDetails, plan, hcpCode));
+                        .updateWithCoverageDetails(constructProbableClaimAmountForServices(claimantPolicyDetailDto.getCoverageBenefitDetails(), preAuthorizationDetails, plan, hcpCode, planDetail));
             }
         }
         return claimantPolicyDetailDto;
     }
 
-    private Set<CoverageBenefitDetailDto> constructProbableClaimAmountForServices(Set<CoverageBenefitDetailDto> coverageBenefitDetails, Set<PreAuthorizationDetail> preAuthorizationDetails, Plan plan, HCPCode hcpCode) {
+    private Set<CoverageBenefitDetailDto>  constructProbableClaimAmountForServices(Set<CoverageBenefitDetailDto> coverageBenefitDetails, Set<PreAuthorizationDetail> preAuthorizationDetails, Plan plan, HCPCode hcpCode, GHPlanPremiumDetail planDetail) {
         Set<String> services = getServicesFromPreAuthDetails(preAuthorizationDetails);
         Set<ServiceBenefitCoverageMapping> sbcmSet = null;
         List<Map<String, Object>> refurbishedList = Lists.newArrayList();
@@ -230,9 +228,31 @@ public class PreAuthorizationRequestService {
             sbcmSet = services.parallelStream().map(new Function<String, List<ServiceBenefitCoverageMapping>>() {
                 @Override
                 public List<ServiceBenefitCoverageMapping> apply(String service) {
-                    List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByPlanCodeAndService(plan.getPlanDetail().getPlanCode(), service);
-                    //notEmpty(serviceBenefitCoverageMappings, "No Service Benefit Mapping Found For Plan - "+plan.getPlanDetail().getPlanName()+" and Service - "+service);
-                    return serviceBenefitCoverageMappings;
+                    List<GHCoveragePremiumDetail> ghCoveragePremiumDetails = planDetail.getCoveragePremiumDetails();
+                    if(isEmpty(ghCoveragePremiumDetails))
+                        return Collections.EMPTY_LIST;
+                    List<ServiceBenefitCoverageMapping> setOfSBCM = planDetail.getCoveragePremiumDetails().stream().map(new Function<GHCoveragePremiumDetail, List<ServiceBenefitCoverageMapping>>() {
+                        @Override
+                        public List<ServiceBenefitCoverageMapping> apply(GHCoveragePremiumDetail ghCoveragePremiumDetail) {
+                            CoverageId coverageId = ghCoveragePremiumDetail.getCoverageId();
+                            Set<BenefitPremiumLimit> benefitPremiumLimits = ghCoveragePremiumDetail.getBenefitPremiumLimits();
+                            if(isEmpty(benefitPremiumLimits))
+                                return Collections.EMPTY_LIST;
+                            List<ServiceBenefitCoverageMapping> setOfSBCM = ghCoveragePremiumDetail.getBenefitPremiumLimits().stream().map(new Function<BenefitPremiumLimit, List<ServiceBenefitCoverageMapping>>() {
+                                @Override
+                                public List<ServiceBenefitCoverageMapping> apply(BenefitPremiumLimit benefitPremiumLimit) {
+                                    String benefitCode = benefitPremiumLimit.getBenefitCode();
+                                    List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByCoverageIdAndBenefitCodeAndService(coverageId, benefitCode, service);
+                                    return serviceBenefitCoverageMappings;
+                                }
+                            }).flatMap(sbcmList -> sbcmList.stream()).collect(Collectors.toList());
+                            return setOfSBCM;
+                        }
+                    }).flatMap(sbcmList -> sbcmList.stream()).collect(Collectors.toList());
+                    /*List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByPlanCodeAndService(plan.getPlanDetail().getPlanCode(), service);
+                    notEmpty(serviceBenefitCoverageMappings, "No Service Benefit Mapping Found For Plan - "+plan.getPlanDetail().getPlanName()+" and Service - "+service);
+                    return serviceBenefitCoverageMappings;*/
+                    return setOfSBCM;
                 }
             }).flatMap(sbcmList -> sbcmList.stream()).collect(Collectors.toSet());
         }
@@ -393,7 +413,6 @@ public class PreAuthorizationRequestService {
         return ClaimantHCPDetailDto.getInstance();
     }
 
-    @Transactional
     public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?

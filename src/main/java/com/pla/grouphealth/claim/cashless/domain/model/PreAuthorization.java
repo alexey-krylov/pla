@@ -4,10 +4,13 @@ import com.pla.core.hcp.domain.model.HCPCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Author - Mohan Sharma Created on 12/30/2015.
@@ -50,7 +53,9 @@ public class PreAuthorization {
     }
 
     public PreAuthorization updateWithSameServicesPreviouslyAvailedPreAuth(Set<String> sameServicesPreviouslyAvailedPreAuth) {
-        this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
+        if(isNotEmpty(sameServicesPreviouslyAvailedPreAuth)){
+            this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
+        }
         return this;
     }
 }

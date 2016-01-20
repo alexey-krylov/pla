@@ -15,6 +15,7 @@ import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.repository.HCPRateRepository;
+import com.pla.core.query.BenefitFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
@@ -42,13 +43,15 @@ public class SBCMService {
     private SBCMFinder sbcmFinder;
     private SBCMRepository sbcmRepository;
     private HCPRateRepository hcpRateRepository;
+    private BenefitFinder benefitFinder;
 
     @Autowired
-    public SBCMService(PlanRepository planRepository, SBCMFinder sbcmFinder, SBCMRepository sbcmRepository, HCPRateRepository hcpRateRepository){
+    public SBCMService(PlanRepository planRepository, SBCMFinder sbcmFinder, SBCMRepository sbcmRepository, HCPRateRepository hcpRateRepository, BenefitFinder benefitFinder){
         this.planRepository = planRepository;
         this.sbcmRepository = sbcmRepository;
         this.sbcmFinder = sbcmFinder;
         this.hcpRateRepository = hcpRateRepository;
+        this.benefitFinder = benefitFinder;
     }
 
     public List<Map<String, Object>> getAllPlanWithCoverageAndBenefits(){
@@ -164,6 +167,8 @@ public class SBCMService {
         serviceBenefitCoverageMapping.updateWithCoverageId(new CoverageId(createSBCMCommand.getCoverageId()));
         serviceBenefitCoverageMapping.updateWithService(createSBCMCommand.getService());
         serviceBenefitCoverageMapping.updateWithStatus(isNotEmpty(createSBCMCommand.getStatus()) ? ServiceBenefitCoverageMapping.Status.valueOf(createSBCMCommand.getStatus()) : ServiceBenefitCoverageMapping.Status.ACTIVE);
+        Map<String, Object> benefitMap = benefitFinder.findBenefitById(createSBCMCommand.getBenefitId());
+        serviceBenefitCoverageMapping.updateWithBenefitCode(benefitMap.get("benefitCode").toString());
         return sbcmRepository.save(serviceBenefitCoverageMapping);
     }
 

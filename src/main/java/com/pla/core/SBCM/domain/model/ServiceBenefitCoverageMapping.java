@@ -34,9 +34,15 @@ public class ServiceBenefitCoverageMapping {
     private String coverageCode;
     private String service;
     private Status status;
+    private String benefitCode;
 
     public ServiceBenefitCoverageMapping updateWithId(ServiceBenefitCoverageMappingId serviceBenefitCoverageMappingId) {
         this.serviceBenefitCoverageMappingId = serviceBenefitCoverageMappingId;
+        return this;
+    }
+
+    public ServiceBenefitCoverageMapping updateWithBenefitCode(String benefitCode) {
+        this.benefitCode = benefitCode;
         return this;
     }
 

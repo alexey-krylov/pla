@@ -132,25 +132,28 @@ public class PreAuthorizationService {
         String runningSequence = sequenceGenerator.getSequence(PreAuthorization.class);
         runningSequence = String.format("%08d", Integer.parseInt(runningSequence.trim()));
         List<List<PreAuthorizationDetailDto>> refurbishedSet = createSubListBasedOnSimilarCriteria(uploadPreAuthorizationCommand.getPreAuthorizationDetailDtos());
-        for(List<PreAuthorizationDetailDto> preAuthorizationDetailDtos : refurbishedSet){
-            Set<PreAuthorizationDetail> preAuthorizationDetails = transformToPreAuthorizationDetails(preAuthorizationDetailDtos);
-            Set<String> sameServicesPreviouslyAvailedPreAuth = checkAndFindIfServiceAvailedBefore(preAuthorizationDetails);
-            PreAuthorization preAuthorization = new PreAuthorization()
-                    .updateWithPreAuthorizationId(constructPreAuthorizationId(preAuthorizationDetails))
-                    .updateWithPreAuthorizationDetail(preAuthorizationDetails)
-                    .updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode()))
-                    .updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate())
-                    .updateWithBatchNumber(runningSequence);
-            if(isNotEmpty(sameServicesPreviouslyAvailedPreAuth))
-                preAuthorization.updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
-            preAuthorizationRepository.save(preAuthorization);
-        }
-        List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAllPreAuthorizationByBatchNumber(runningSequence);
-        notEmpty(preAuthorizations, "Not uploaded successfully");
+        notEmpty(refurbishedSet, "Error uploading no PreAuthorization data list found to save");
+        final String finalRunningSequence = runningSequence;
+        List<PreAuthorization> preAuthorizations = refurbishedSet.parallelStream().map(new Function<List<PreAuthorizationDetailDto>, PreAuthorization>() {
+            @Override
+            public PreAuthorization apply(List<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {
+                Set<PreAuthorizationDetail> preAuthorizationDetails = transformToPreAuthorizationDetails(preAuthorizationDetailDtos);
+                Set<String> sameServicesPreviouslyAvailedPreAuth = checkAndFindIfServiceAvailedBefore(preAuthorizationDetails);
+                PreAuthorization preAuthorization = new PreAuthorization()
+                        .updateWithPreAuthorizationId(constructPreAuthorizationId(preAuthorizationDetails))
+                        .updateWithPreAuthorizationDetail(preAuthorizationDetails)
+                        .updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode()))
+                        .updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate())
+                        .updateWithBatchNumber(finalRunningSequence)
+                        .updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
+                return preAuthorization;
+            }
+        }).collect(Collectors.toList());
+        notEmpty(preAuthorizations, "Error uploading no PreAuthorizationRequest data list found to save");
         for(PreAuthorization preAuthorization : preAuthorizations) {
             PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
             notNull(preAuthorizationDetail, "Not uploaded successfully");
-            PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(preAuthorization.getPreAuthorizationId(), preAuthorizationDetail.getClientId());
+            PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(preAuthorization, preAuthorizationDetail.getClientId());
             preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
         }
         return Integer.parseInt(runningSequence.trim());

@@ -128,6 +128,9 @@ public enum PreAuthorizationExcelHeader {
                 }
                 Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.description));
                 String policyNumberValue = getCellValue(policyNumberCell);
+                try {
+                    value = String.valueOf( new BigDecimal(value).intValue());
+                } catch(NumberFormatException e){}
                 if(!iExcelPropagator.checkIfClientBelongsToTheGivenPolicy(value, policyNumberValue)){
                     errorMessage = errorMessage + "Client not covered under the mentioned Policy";
                 }
@@ -222,8 +225,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     },REASONS("Please indicate whether it is a"){
         @Override
@@ -967,8 +969,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     },DETAILS_OF_IHD_CAD("Past history of chronic illness(IHD/CAD) - Please provide details"){
         @Override
@@ -1061,8 +1062,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     },DETAILS_OF_ASTHMA_COPD_TB("Past history of chronic illness(ASTHMA/COPD/TB) - Please provide details"){
         @Override
@@ -1108,8 +1108,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     },DETAILS_OF_PARALYSIS_CVA("Past history of chronic illness(PARALYSIS/CVA) - Please provide details"){
         @Override
@@ -1154,8 +1153,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     }, DETAILS_OF_SUFFERING_FROM_ARTHRITIS("Past history of chronic illness(ARTHRITIS) - Please provide details"){
         @Override
@@ -1200,8 +1198,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     }, DETAILS_OF_CANCER_TUMOR_CYST("Past history of chronic illness(CANCER/TUMOR/CYST) - Please provide details"){
         @Override
@@ -1246,8 +1243,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     }, DETAIL_OF_STD_HIV_AIDS("Past history of chronic illness(STD/HIV/AIDS) - Please provide details"){
         @Override
@@ -1347,8 +1343,7 @@ public enum PreAuthorizationExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders) {
-            String errorMessage = "";
-            return errorMessage;
+            return "";
         }
     }, DETAILS_PSYCHIATRIC_CONDITION("Past history of chronic illness(PSYCHIATRIC/CONDITION) - Please provide details"){
         @Override
