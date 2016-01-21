@@ -13,8 +13,9 @@ var searchPreAuthorizationModule = (function(){
     };
     PreAuthorizationServices.updatePreAuthorization = function () {
         var  clientId =this.clientId;
+        alert(clientId);
         var  preAuthorizationId =this.preAuthorizationId;
-        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadpreauthorizationviewforupdateview?preAuthorizationId=" + preAuthorizationId;
+        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadpreauthorizationviewforupdateview?preAuthorizationId=" + preAuthorizationId +"&clientId="+ clientId;
     };
 
     PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button

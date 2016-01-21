@@ -146,7 +146,7 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/loadpreauthorizationviewforupdateview", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadpreauthorizationviewforupdateview( @RequestParam String preAuthorizationId) {
+    public ModelAndView loadpreauthorizationviewforupdateview( @RequestParam String preAuthorizationId, @RequestParam String clientId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
         return modelAndView;
