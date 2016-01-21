@@ -20,10 +20,10 @@
                     createUpdateDto: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
                         var preAuthorizationId = getQueryParameter('preAuthorizationId');
-                        console.log( preAuthorizationId);
-                        $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/createorupdate?preAuthorizationId='+preAuthorizationId).success(function (response, status, headers, config) {
+
+                        $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId='+preAuthorizationId).success(function (response, status, headers, config) {
                             deferred.resolve(response);
-                            console.log(JSON.stringify(response));
+
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
@@ -71,7 +71,7 @@
             $scope.documentList=[];
             $scope.additionalDocumentList = [{}];
             //$scope.documentList = documentList;
-console.log($scope.createUpdateDto);
+
             $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/' + 1000642).success(function (response, status, headers, config) {
                 //deferred.resolve(response)
                 $scope.documentList=response;
@@ -114,15 +114,21 @@ console.log($scope.createUpdateDto);
             }
 
             $scope.savePreAuthorizationRequest= function(){
-                $http({
-                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/createorupdate',
-                    method: 'POST',
-                    data: $scope.createUpdateDto
-                }).then(function(response) {
-                    },
-                    function(response) {
-                    });
-            }
+
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/createorupdate',
+                        method: 'POST',
+                        data: $scope.createUpdateDto
+                    }).then(function (response) {
+                            console.log("first===" + JSON.stringify($scope.createUpdateDto));
+
+                        },
+                        function (response) {
+                            console.log("Second" + JSON.stringify($scope.createUpdateDto));
+                        });
+
+             }
+
 
             $scope.back = function () {
                 window.location.reload();
@@ -143,12 +149,7 @@ console.log($scope.createUpdateDto);
                 }
             }
 
-            //$http.get("/pla/grouphealth/policy/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
-            //    console.log(data);
-            //    $scope.additionalDocumentList=data;
-            //    $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
-            //
-            //});
+
 
             $scope.$watch('fileSaved', function (n, o) {
                 if (n && n.length) {
@@ -160,21 +161,6 @@ console.log($scope.createUpdateDto);
 
 
 
-
-            //$scope.isUploadEnabledForAdditionalDocument = function () {
-            //    var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
-            //    for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
-            //        var document = $scope.additionalDocumentList[i];
-            //        var files = document.documentAttached;
-            //        //alert(i+"--"+files)
-            //        //alert(i+"--"+document.content);
-            //        if (!(files || document.content)) {
-            //            enableAdditionalUploadButton = false;
-            //            break;
-            //        }
-            //    }
-            //    return enableAdditionalUploadButton;
-            //}
 
             $scope.uploadAdditionalDocument = function () {
                 //alert('Upload');
@@ -205,36 +191,6 @@ console.log($scope.createUpdateDto);
                     }
                 }
             };
-            //$scope.uploadDocumentFiles = function () {
-            //    // //console.log($scope.documentList.length);
-            //    for (var i = 0; i < $scope.documentList.length; i++) {
-            //        var document = $scope.documentList[i];
-            //        var files = document.documentAttached;
-            //        //console.dir(files);
-            //        // //alert(files.name);
-            //        if (files) {
-            //            //console.log('File Uploading....');
-            //            $upload.upload({
-            //                url: '/pla/grouphealth/policy/uploadmandatorydocument',
-            //                file: files,
-            //                fields: {
-            //                    documentId: document.documentId,
-            //                    policyId: $scope.policyId,
-            //                    mandatory: true,
-            //                    isApproved: true
-            //                },
-            //                method: 'POST'
-            //            }).progress(function (evt) {
-            //
-            //            }).success(function (data, status, headers, config) {
-            //                ////console.log('file ' + config.file.name + 'uploaded. Response: ' +
-            //                // JSON.stringify(data));
-            //            });
-            //        }
-            //
-            //    }
-            //
-            //};
 
             $scope.isBrowseDisable=function(document)
             {
@@ -280,6 +236,36 @@ console.log($scope.createUpdateDto);
                 }
             }
 */
+            //$scope.uploadDocumentFiles = function () {
+            //    // //console.log($scope.documentList.length);
+            //    for (var i = 0; i < $scope.documentList.length; i++) {
+            //        var document = $scope.documentList[i];
+            //        var files = document.documentAttached;
+            //        //console.dir(files);
+            //        // //alert(files.name);
+            //        if (files) {
+            //            //console.log('File Uploading....');
+            //            $upload.upload({
+            //                url: '/pla/grouphealth/policy/uploadmandatorydocument',
+            //                file: files,
+            //                fields: {
+            //                    documentId: document.documentId,
+            //                    policyId: $scope.policyId,
+            //                    mandatory: true,
+            //                    isApproved: true
+            //                },
+            //                method: 'POST'
+            //            }).progress(function (evt) {
+            //
+            //            }).success(function (data, status, headers, config) {
+            //                ////console.log('file ' + config.file.name + 'uploaded. Response: ' +
+            //                // JSON.stringify(data));
+            //            });
+            //        }
+            //
+            //    }
+            //
+            //};
 
 
 
@@ -301,7 +287,27 @@ console.log($scope.createUpdateDto);
             }*/
 
 
+            //$http.get("/pla/grouphealth/policy/getadditionaldocuments/"+ $scope.policyId).success(function (data, status) {
+            //    console.log(data);
+            //    $scope.additionalDocumentList=data;
+            //    $scope.checkDocumentAttached=$scope.additionalDocumentList!=null;
+            //
+            //});
 
+            //$scope.isUploadEnabledForAdditionalDocument = function () {
+            //    var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
+            //    for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+            //        var document = $scope.additionalDocumentList[i];
+            //        var files = document.documentAttached;
+            //        //alert(i+"--"+files)
+            //        //alert(i+"--"+document.content);
+            //        if (!(files || document.content)) {
+            //            enableAdditionalUploadButton = false;
+            //            break;
+            //        }
+            //    }
+            //    return enableAdditionalUploadButton;
+            //}
 
 
 
