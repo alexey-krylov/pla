@@ -263,7 +263,7 @@ public class GLMemberDeletionExcelParser extends AbstractGLEndorsementExcelParse
                 @Override
                 public boolean test(Insured insured) {
                     if (insured.getNoOfAssured() == null)
-                        return insured.getFamilyId().getFamilyId().equals(clientId);
+                        return insured.getFamilyId()!=null?insured.getFamilyId().getFamilyId().equals(clientId):false;
                     return false;
                 }
             }).findAny();

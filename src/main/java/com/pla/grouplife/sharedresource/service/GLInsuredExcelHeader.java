@@ -307,6 +307,9 @@ public enum GLInsuredExcelHeader {
             if (isEmpty(noOfAssured) && isEmpty(value)){
                 return "First Name cannot be empty";
             }
+            if (isNotEmpty(noOfAssured) && isNotEmpty(value)){
+                return "For the same row should not provide details and Number of assured";
+            }
             if (isNotEmpty(noOfAssured)){
                 return "";
             }

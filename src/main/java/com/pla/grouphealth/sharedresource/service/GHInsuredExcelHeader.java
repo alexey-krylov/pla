@@ -214,6 +214,9 @@ public enum GHInsuredExcelHeader {
             if (isEmpty(noOfAssuredCellValue) && isEmpty(value)) {
                 return "Assured data not shared.";
             }
+            if (isNotEmpty(noOfAssuredCellValue) && isNotEmpty(value)){
+                return "For the same row should not provide details and Number of assured";
+            }
             return "";
         }
     }, LAST_NAME("Last Name") {

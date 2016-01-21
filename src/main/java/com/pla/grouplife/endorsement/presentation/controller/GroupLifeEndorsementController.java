@@ -311,6 +311,7 @@ public class GroupLifeEndorsementController {
         }
         return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
+
     //TODO implement
     @RequestMapping(value = "/uploadinsureddetail", method = RequestMethod.POST)
     @ResponseBody
