@@ -250,6 +250,7 @@ public class PreAuthorizationRequestService {
                                 @Override
                                 public List<ServiceBenefitCoverageMapping> apply(BenefitPremiumLimit benefitPremiumLimit) {
                                     String benefitCode = benefitPremiumLimit.getBenefitCode();
+                                    benefitCode = String.valueOf(new BigDecimal(benefitPremiumLimit.getBenefitCode()).intValue());
                                     List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByCoverageIdAndBenefitCodeAndService(coverageId, benefitCode, service);
                                     return serviceBenefitCoverageMappings;
                                 }
@@ -277,6 +278,7 @@ public class PreAuthorizationRequestService {
                             map.put("coverageCode", sbcm.getCoverageCode());
                             map.put("coverageName", sbcm.getCoverageName());
                             map.put("benefitId", sbcm.getBenefitId());
+                            map.put("benefitCode", sbcm.getBenefitCode());
                             map.put("benefitName", sbcm.getBenefitName());
                             map.put("services", getListOfServices(serviceBenefitCoverageMappings));
                             notNull(getCoverageBenefitDefinition(sbcm.getBenefitId(), plan.getCoverages()), "CoverageBenefitDefinition null for Benefit - " + sbcm.getBenefitId());
@@ -287,43 +289,38 @@ public class PreAuthorizationRequestService {
                 }).collect(Collectors.toList());
             }
         }
-        if (isNotEmpty(refurbishedList)) {
-            refurbishedList = refurbishedList.stream().filter(new Predicate<Map<String, Object>>() {
-                @Override
-                public boolean test(Map<String, Object> map) {
-                    String coverageId = isNotEmpty(map.get("coverageId")) ? map.get("coverageId").toString() : StringUtils.EMPTY;
-                    if (isNotEmpty(coverageId)) {
-                        return coverageBenefitDetails.stream().filter(dto -> dto.getCoverageId().equals(coverageId)).findFirst().isPresent();
-                    }
-                    String coverageCode = isNotEmpty(map.get("coverageCode")) ? map.get("coverageCode").toString() : StringUtils.EMPTY;
-                    return coverageBenefitDetails.stream().filter(dto -> dto.getCoverageCode().equals(coverageCode)).findFirst().isPresent();
-                }
-            }).collect(Collectors.toList());
-        }
         refurbishedList.stream().forEach(map -> {
             Set<String> serviceList = isNotEmpty(map.get("services")) ? (Set<String>) map.get("services") : Sets.newHashSet();
             BigDecimal payableAmount = BigDecimal.ZERO;
-            serviceList.stream().forEach(service -> {
+            for(String service : serviceList) {
                 HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCodeAndService(hcpCode, service);
                 notNull(hcpRate, "No HCP Rate configured for hcp- " + hcpCode + " service - " + service);
-                HCPServiceDetail hcpServiceDetail = isNotEmpty(hcpRate.getHcpServiceDetails()) ? hcpRate.getHcpServiceDetails().iterator().next() : null;
+                HCPServiceDetail hcpServiceDetail = isNotEmpty(hcpRate.getHcpServiceDetails()) ? getHCPDetail(hcpRate.getHcpServiceDetails(), service) : null;
                 notNull(hcpRate, "No HCP Rate configured as no HCPServiceDetail found.");
                 int lengthOfStay = getLengthOfStayByService(service, preAuthorizationDetails);
                 BigDecimal amount = calculateProbableClaimAmount(lengthOfStay, hcpServiceDetail.getNormalAmount(), (CoverageBenefitDefinition) map.get("coverageBenefitDefinition"));
-                payableAmount.add(amount);
+                payableAmount = payableAmount.add(amount);
                 map.put("payableAmount", payableAmount);
-            });
+            }
         });
         final List<Map<String, Object>> finalRefurbishedList = refurbishedList;
         return coverageBenefitDetails.stream().map(new Function<CoverageBenefitDetailDto, CoverageBenefitDetailDto>() {
             @Override
             public CoverageBenefitDetailDto apply(CoverageBenefitDetailDto coverageBenefitDetailDto) {
-                String coverageId = coverageBenefitDetailDto.getCoverageCode();
+                String coverageId = coverageBenefitDetailDto.getCoverageId();
                 Set<CoverageBenefitDetailDto.BenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
                 coverageBenefitDetailDto.updateWithProbableClaimAmount(coverageId, benefitDetails, finalRefurbishedList);
                 return coverageBenefitDetailDto;
             }
         }).collect(Collectors.toSet());
+    }
+
+    private HCPServiceDetail getHCPDetail(Set<HCPServiceDetail> hcpServiceDetails, String service) {
+        Optional<HCPServiceDetail> hcpServiceDetail = hcpServiceDetails.parallelStream().filter(detail -> detail.getServiceAvailed().equalsIgnoreCase(service)).findAny();
+        if(hcpServiceDetail.isPresent()){
+            return hcpServiceDetail.get();
+        }
+        return null;
     }
 
     private BigDecimal calculateProbableClaimAmount(int lengthOfStay, BigDecimal normalAmount, CoverageBenefitDefinition coverageBenefitDefinition) {
@@ -449,7 +446,7 @@ public class PreAuthorizationRequestService {
         return preAuthorizationRequestRepository.findOne(preAuthorizationRequestId);
     }
 
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId) {
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId) throws Exception {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByFamilyId(familyId, PolicyStatus.IN_FORCE);
         if (isEmpty(groupHealthPolicy)) {
             groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByDependentFamilyId(familyId, PolicyStatus.IN_FORCE);
@@ -501,7 +498,7 @@ public class PreAuthorizationRequestService {
         return mandatoryDocumentDtos;
     }
 
-    private GHPlanPremiumDetail getGHPlanPremiumDetailByFamilyId(FamilyId familyId, GroupHealthPolicy groupHealthPolicy) {
+    private GHPlanPremiumDetail getGHPlanPremiumDetailByFamilyId(FamilyId familyId, GroupHealthPolicy groupHealthPolicy) throws Exception{
         Set<GHInsured> insureds = groupHealthPolicy.getInsureds();
         GHInsured groupHealthInsured = null;
         GHInsuredDependent ghInsuredDependent = null;
@@ -742,9 +739,14 @@ public class PreAuthorizationRequestService {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
         String errorMessage = "";
         if (isNotEmpty(groupHealthPolicy)) {
-            GHPlanPremiumDetail ghPlanPremiumDetail = getGHPlanPremiumDetailByFamilyId(new FamilyId(clientId), groupHealthPolicy);
+            GHPlanPremiumDetail ghPlanPremiumDetail = null;
+            try {
+                ghPlanPremiumDetail = getGHPlanPremiumDetailByFamilyId(new FamilyId(clientId), groupHealthPolicy);
+            } catch (Exception e) {
+                return  "Client is not associated to the Policy - "+groupHealthPolicy.getPolicyNumber().getPolicyNumber()+".\n";
+            }
             if(isEmpty(ghPlanPremiumDetail)){
-                return  "Client is not associated to the Policy - "+groupHealthPolicy.getPolicyNumber()+".\n";
+                return  "Client is not associated to the Policy - "+groupHealthPolicy.getPolicyNumber().getPolicyNumber()+".\n";
             }
             List<CoverageDto> coverages = getListOfCoverageAndBenefitsOfThePolicyAndAssociatedPlan(ghPlanPremiumDetail);
             if (isEmpty(coverages)) {
@@ -756,7 +758,9 @@ public class PreAuthorizationRequestService {
                 if (isEmpty(benefitCodes))
                     errorMessage = errorMessage + "No Benefit Details found for the coverage - "+ coverageDto.getCoverageName() + " of Policy - "+groupHealthPolicy.getSchemeName()+".\n";
                 for (String benefitCode : benefitCodes) {
-
+                    try {
+                        benefitCode = isNotEmpty(benefitCode) ? String.valueOf( new BigDecimal(benefitCode).intValue()) : benefitCode;
+                    } catch(NumberFormatException e){}
                     List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByCoverageIdAndBenefitCodeAndService(coverageId, benefitCode, service);
                     if (isEmpty(serviceBenefitCoverageMappings))
                         errorMessage = errorMessage + "No Service-Coverage-Benefit Mapping found for service - "+service+" ,Benefit - "+benefitCode+" ,Coverage - "+coverageDto.getCoverageName()+".\n";
@@ -803,7 +807,6 @@ public class PreAuthorizationRequestService {
                         CoverageDto coverage = coverageFinder.findCoverageById(ghCoveragePremiumDetail.getCoverageId().getCoverageId());
                         coverageDto.setCoverageName(coverage.getCoverageName());
                     }
-                    coverageDto.setCoverageName(ghCoveragePremiumDetail.getCoverageName());
                     Set<BenefitPremiumLimit> benefitPremiumLimits = ghCoveragePremiumDetail.getBenefitPremiumLimits();
                     if (isNotEmpty(benefitPremiumLimits)) {
                         List<String> benefitCodes = benefitPremiumLimits.stream().map(BenefitPremiumLimit::getBenefitCode).collect(Collectors.toList());
