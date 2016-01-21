@@ -96,13 +96,23 @@ public class GLEndorsementExcelValidator {
     public boolean isValidMainAssuredClientId(Row row, String value, List<String> excelHeaders) {
         Cell relationshipCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.RELATIONSHIP.getDescription()));
         String relationShipValue = getCellValue(relationshipCell);
+        Cell categoryCell = row.getCell(excelHeaders.indexOf(GLEndorsementExcelHeader.CATEGORY.getDescription()));
+        String category = getCellValue(categoryCell);
         if ("Self".equals(relationShipValue) && isNotEmpty(value)) {
             return false;
         }
         if ("Self".equals(relationShipValue) && isEmpty(value)) {
             return true;
         }
-        return isValidClientId(policyAssureds, value);
+        return isValidMainAssuredClientId(policyAssureds, value,category);
+    }
+
+    private boolean isValidMainAssuredClientId(List<Insured> policyAssureds,String clientId,String category){
+        final boolean[] isValidClientId = {policyAssureds.stream().filter(insured -> (category.equals(insured.getCategory()!=null?insured.getCategory():"") && insured.getFamilyId() != null && clientId.equals(insured.getFamilyId().getFamilyId()))).findAny().isPresent()};
+        if (isValidClientId[0]) {
+            return isValidClientId[0];
+        }
+        return false;
     }
 
     public boolean isValidMANNumber(Row row, String value, List<String> excelHeaders) {
@@ -371,7 +381,7 @@ public class GLEndorsementExcelValidator {
     private String findPlanCodeByRelationAndCategory(List<Insured> insureds,String category,String relation){
         String planCode = "";
         if (isNotEmpty(insureds)){
-            Optional<Insured> insuredOptional = insureds.parallelStream().filter(insured -> insured.getCategory().equals(category) && Relationship.SELF.description.equals(relation != null ? relation : Relationship.SELF)).findAny();
+            Optional<Insured> insuredOptional = insureds.parallelStream().filter(insured -> insured.getCategory() != null ? insured.getCategory().equals(category):false && Relationship.SELF.description.equals(relation != null ? relation : Relationship.SELF)).findAny();
             if (insuredOptional.isPresent()){
                 PlanId planId = insuredOptional.get().getPlanPremiumDetail().getPlanId();
                 planCode = planAdapter.getPlanCodeById(planId);
