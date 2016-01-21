@@ -57,6 +57,13 @@
     </p>
 
     <nth-alert></nth-alert>
+    <modal title="Alert" visible="showModal" data-backdrop="static" data-keyboard="false">
+        <div class="form-group">Want to Calculate Premium</div>
+        <div class="modal-footer" style="padding-left:0px;padding-right: 0px;">
+            <button type="button" ng-click="proceedToNext()" class="btn btn-primary">Proceed</button>
+            <button type="button" class="btn btn-danger" ng-click="goHomePage()">Cancel</button>
+        </div>
+    </modal>
     <form name="quotationForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
         <div class="wizard fueluxWizard" selected-item="selectedItem">

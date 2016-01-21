@@ -1,5 +1,46 @@
 angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
     'angularFileUpload', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices'])
+    .directive('modal', function () {
+        return {
+            template: '<div class="modal fade">' +
+            '<div class="modal-dialog modal-sm">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<h4 class="modal-title">{{ title }}</h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-transclude></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            link: function postLink(scope, element, attrs) {
+                scope.title = attrs.title;
+
+                scope.$watch(attrs.visible, function (value) {
+                    if (value == true)
+                        $(element).modal('show');
+                    else
+                        $(element).modal('hide');
+                });
+
+                $(element).on('shown.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+            }
+        };
+    })
 
     .controller('EndorsementCtrl', ['$scope', '$http', '$timeout', '$upload', 'provinces', 'getProvinceAndCityDetail', 'globalConstants',
         'agentDetails', 'stepsSaved', 'policyDetails', 'endorsementNumber', 'getQueryParameter', '$window', 'premiumData', 'documentList',
@@ -83,6 +124,28 @@ angular.module('createEndorsement', ['common', 'ngRoute', 'mgcrea.ngStrap.select
 
             }
 
+            $scope.showModal=false;
+            $scope.$on('actionclicked.fu.wizard', function (name, event, data) {
+                if (data && data.step == 3 && method == 'approval' && enableTab == 'ASSURED_MEMBER_DELETION') {
+                    //$('#assuredSearchModal').modal('show');
+                    $scope.stepsSaved["4"] = false;
+                    $scope.policyDetails.premium={};
+                    $scope.showModal=true;
+                }
+            });
+
+            $scope.proceedToNext = function () {
+                $http.get("/pla/grouplife/endorsement/getpremiumdetail/" + $scope.endorsementId)
+                    .success(function (data,status) {
+                        if(status==200){
+                            $scope.policyDetails.premium=data;
+                        }
+                    })
+                $scope.showModal = false;
+            }
+            $scope.goHomePage=function(){
+                $window.location = '/pla/grouplife/endorsement/openapprovalendorsement';
+            }
             /*This scope holds the list of installments from which user can select one */
             $scope.numberOfInstallmentsDropDown = [];
 
