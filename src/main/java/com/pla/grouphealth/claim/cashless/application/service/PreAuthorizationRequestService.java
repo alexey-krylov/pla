@@ -51,6 +51,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -310,7 +311,7 @@ public class PreAuthorizationRequestService {
             @Override
             public CoverageBenefitDetailDto apply(CoverageBenefitDetailDto coverageBenefitDetailDto) {
                 String coverageId = coverageBenefitDetailDto.getCoverageId();
-                Set<CoverageBenefitDetailDto.BenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
+                Set<BenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
                 coverageBenefitDetailDto.updateWithProbableClaimAmount(coverageId, benefitDetails, finalRefurbishedList);
                 return coverageBenefitDetailDto;
             }
@@ -389,15 +390,15 @@ public class PreAuthorizationRequestService {
         return BigDecimal.ZERO;
     }
 
-    private Set<CoverageBenefitDetailDto.BenefitDetailDto> constructBenefitDetails(List<Map<String, Object>> benefitDtos, CoverageBenefitDetailDto coverageBenefitDetailDto, Set<BenefitPremiumLimit> benefitPremiumLimits) {
-        Set<CoverageBenefitDetailDto.BenefitDetailDto> benefits = coverageBenefitDetailDto.getBenefitDetails();
+    private Set<BenefitDetailDto> constructBenefitDetails(List<Map<String, Object>> benefitDtos, CoverageBenefitDetailDto coverageBenefitDetailDto, Set<BenefitPremiumLimit> benefitPremiumLimits) {
+        Set<BenefitDetailDto> benefits = coverageBenefitDetailDto.getBenefitDetails();
         if (isEmpty(benefits))
             benefits = Sets.newHashSet();
         for (BenefitPremiumLimit benefitPremiumLimit : benefitPremiumLimits) {
             for (Map<String, Object> benefit : benefitDtos) {
                 String benefitCode = String.valueOf(new BigDecimal(benefitPremiumLimit.getBenefitCode()).intValue());
                 if (benefitCode.equals(benefit.get("benefitCode"))) {
-                    CoverageBenefitDetailDto.BenefitDetailDto benefitDetailDto = coverageBenefitDetailDto.new BenefitDetailDto();
+                    BenefitDetailDto benefitDetailDto = new BenefitDetailDto();
                     benefitDetailDto.setBenefitName(isNotEmpty(benefit.get("benefitName")) ? benefit.get("benefitName").toString() : StringUtils.EMPTY);
                     benefitDetailDto.setBenefitCode(isNotEmpty(benefit.get("benefitCode")) ? benefit.get("benefitCode").toString() : StringUtils.EMPTY);
                     benefits.add(benefitDetailDto);
@@ -420,7 +421,7 @@ public class PreAuthorizationRequestService {
         return ClaimantHCPDetailDto.getInstance();
     }
 
-    public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+    public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, Boolean isFirstTime) throws GenerateReminderFollowupException {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?
                 isNotEmpty(getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId)))
@@ -440,6 +441,10 @@ public class PreAuthorizationRequestService {
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
+        if(!isFirstTime)
+            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION);
+        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
+            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
         preAuthorizationRequest = preAuthorizationRequestRepository.save(preAuthorizationRequest);
         preAuthorizationRequest.savedRegisterFollowUpReminders();
         return preAuthorizationRequest.getPreAuthorizationRequestId();
@@ -552,6 +557,7 @@ public class PreAuthorizationRequestService {
             preAuthorizationClaimantDetailCommand
                     .updateWithPreAuthorizationRequestId(preAuthorizationRequest.getPreAuthorizationRequestId())
                     .updateWithPreAuthorizationId(preAuthorizationRequest.getPreAuthorizationId())
+                    .updateWithStatus(preAuthorizationRequest.getStatus())
                     .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
                     .updateWithClaimType(preAuthorizationRequest.getClaimType())
                     .updateWithClaimIntimationDate(preAuthorizationRequest.getClaimIntimationDate())

@@ -38,16 +38,6 @@ public class CoverageBenefitDetailDto {
     private BigDecimal eligibleAmount;
     private BigDecimal approvedAmount;
 
-    @Getter
-    @Setter
-    @EqualsAndHashCode
-    @NoArgsConstructor
-    public class BenefitDetailDto {
-        private String benefitName;
-        private String benefitCode;
-        private BigDecimal probableClaimAmount;
-    }
-
     public CoverageBenefitDetailDto updateWithCoverageName(String coverageName){
         this.coverageName = coverageName;
         return this;

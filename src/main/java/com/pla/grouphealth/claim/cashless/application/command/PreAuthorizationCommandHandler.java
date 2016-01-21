@@ -42,6 +42,7 @@ public class PreAuthorizationCommandHandler {
     public void uploadMandatoryDocument(GHClaimDocumentCommand ghClaimDocumentCommand) throws IOException {
         String fileName = ghClaimDocumentCommand.getFile() != null ? ghClaimDocumentCommand.getFile().getOriginalFilename() : "";
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(new PreAuthorizationRequestId(ghClaimDocumentCommand.getPreAuthorizationRequestId()));
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION);
         Set<GHProposerDocument> documents = preAuthorizationRequest.getProposerDocuments();
         if (isEmpty(documents)) {
             documents = Sets.newHashSet();

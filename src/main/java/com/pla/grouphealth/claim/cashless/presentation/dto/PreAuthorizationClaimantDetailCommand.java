@@ -31,6 +31,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private List<DiagnosisTreatmentDto> diagnosisTreatmentDtos;
     private IllnessDetailDto illnessDetailDto;
     private List<DrugServiceDto> drugServicesDtos;
+    private boolean submitEventFired;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();

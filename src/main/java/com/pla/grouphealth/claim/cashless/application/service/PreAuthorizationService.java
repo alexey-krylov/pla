@@ -92,7 +92,7 @@ public class PreAuthorizationService {
     }
 
     public List<Map<String,Object>> getAllHcpNameAndCode(){
-        List<HCPRate>hcpRates =hcpRateRepository.findAll();
+        List<HCPRate> hcpRates = hcpRateRepository.findAll();
         return isNotEmpty(hcpRates) ? hcpRates.stream().map(new Function<HCPRate, Map<String,Object>>() {
 
             @Override
@@ -153,7 +153,7 @@ public class PreAuthorizationService {
             PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
             notNull(preAuthorizationDetail, "Not uploaded successfully");
             PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(preAuthorization, preAuthorizationDetail.getClientId());
-            preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
+            preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand, Boolean.TRUE);
         }
         return Integer.parseInt(runningSequence.trim());
     }

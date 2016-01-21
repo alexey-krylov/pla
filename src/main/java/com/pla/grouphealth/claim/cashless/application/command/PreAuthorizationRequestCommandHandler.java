@@ -9,7 +9,6 @@ import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,7 +21,7 @@ public class PreAuthorizationRequestCommandHandler {
 
     @CommandHandler
     public PreAuthorizationRequestId createUpdate(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
-        return preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
+        return preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand, Boolean.FALSE);
     }
 
     @CommandHandler
