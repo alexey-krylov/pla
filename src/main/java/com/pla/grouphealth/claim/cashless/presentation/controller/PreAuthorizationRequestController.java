@@ -50,6 +50,12 @@ public class PreAuthorizationRequestController {
         return null;
     }
 
+    @RequestMapping(value = "/loadpreauthorizationviewforupdate", method = RequestMethod.GET)
+    public @ResponseBody
+    PreAuthorizationClaimantDetailCommand loadpreauthorizationviewforupdate(@RequestParam String preAuthorizationId){
+        return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
+    }
+
     @RequestMapping(value = "/createorupdate", method = RequestMethod.POST)
     public Result createUpdate(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response){
         if (bindingResult.hasErrors()) {
