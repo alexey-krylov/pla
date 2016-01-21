@@ -742,7 +742,7 @@ public enum GLInsuredExcelHeader {
             * */
             boolean hasPlanIncomeMultiplierSumAssuredType = planAdapter.hasPlanContainsIncomeMultiplierSumAssured(planCode);
             if (hasPlanIncomeMultiplierSumAssuredType && !Relationship.SELF.description.equals(relationship.trim())) {
-                errorMessage = errorMessage + "Then Relation should Self for an income multiplier plan.";
+                errorMessage = errorMessage + "For an income multiplier plan the relationship should be self";
                 return errorMessage;
             }
             return errorMessage;
