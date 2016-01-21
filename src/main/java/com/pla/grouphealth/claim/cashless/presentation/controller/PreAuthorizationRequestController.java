@@ -137,4 +137,20 @@ public class PreAuthorizationRequestController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid", method = RequestMethod.GET)
+    @ResponseBody
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(@RequestParam String preAuthorizationId){
+        return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
+    }
+
+    @RequestMapping(value = "/loadpreauthorizationviewforupdateview", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView loadpreauthorizationviewforupdateview( @RequestParam String preAuthorizationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
+        return modelAndView;
+    }
+
+
 }
