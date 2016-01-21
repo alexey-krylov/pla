@@ -1,5 +1,7 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
@@ -15,6 +17,7 @@ import lombok.Synchronized;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +56,11 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/loadpreauthorizationviewforupdate", method = RequestMethod.GET)
     public @ResponseBody
-    PreAuthorizationClaimantDetailCommand loadpreauthorizationviewforupdate(@RequestParam String preAuthorizationId){
+    PreAuthorizationClaimantDetailCommand loadpreauthorizationviewforupdate(@RequestParam String preAuthorizationId, HttpServletResponse response) throws IOException {
+        if(UtilValidator.isEmpty(preAuthorizationId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return null;
+        }
         return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
     }
 
@@ -82,7 +90,11 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/getmandatorydocuments/{clientId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId) throws Exception {
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId, HttpServletResponse response) throws Exception {
+        if(UtilValidator.isEmpty(clientId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "clientId cannot be empty");
+            return Lists.newArrayList();
+        }
         List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findMandatoryDocuments(new FamilyId(clientId));
         return ghProposalMandatoryDocumentDtos;
     }
@@ -140,17 +152,32 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid", method = RequestMethod.GET)
     @ResponseBody
-    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(@RequestParam String preAuthorizationId){
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(@RequestParam String preAuthorizationId, HttpServletResponse response) throws IOException {
+        if(UtilValidator.isEmpty(preAuthorizationId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return null;
+        }
         return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
     }
 
     @RequestMapping(value = "/loadpreauthorizationviewforupdateview", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadpreauthorizationviewforupdateview( @RequestParam String preAuthorizationId, @RequestParam String clientId) {
+    public ModelAndView loadpreauthorizationviewforupdateview(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getadditionaldocuments/{preAuthorizationId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("proposalId") String preAuthorizationId, HttpServletResponse response) throws IOException {
+        if(UtilValidator.isEmpty(preAuthorizationId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return Sets.newHashSet();
+        }
+        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findAdditionalDocuments(new PreAuthorizationRequestId(preAuthorizationId));
+        return ghProposalMandatoryDocumentDtos;
+    }
 
 }

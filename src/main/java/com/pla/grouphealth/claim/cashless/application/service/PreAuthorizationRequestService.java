@@ -41,6 +41,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,8 @@ public class PreAuthorizationRequestService {
                 .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDto(preAuthorizationDetail.getPolicyNumber(), clientId, preAuthorization.getPreAuthorizationDetails(), preAuthorization.getHcpCode()))
                 .updateWithDiagnosisTreatment(constructDiagnosisTreatmentDto(preAuthorization))
                 .updateWithIllnessDetails(constructIllnessDetailDto(preAuthorization))
-                .updateWithDrugServices(constructDrugServiceDtos(preAuthorization));
+                .updateWithDrugServices(constructDrugServiceDtos(preAuthorization))
+                .updateWithPreAuthorizationDate(isNotEmpty(preAuthorization.getBatchDate()) ? preAuthorization.getBatchDate().toLocalDate() : LocalDate.now());
         return preAuthorizationClaimantDetailCommand;
     }
 
@@ -426,6 +428,7 @@ public class PreAuthorizationRequestService {
                         : new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION) : new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION);
         preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
                 .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
@@ -552,7 +555,7 @@ public class PreAuthorizationRequestService {
                     .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
                     .updateWithClaimType(preAuthorizationRequest.getClaimType())
                     .updateWithClaimIntimationDate(preAuthorizationRequest.getClaimIntimationDate())
-                    .updateWithPreAuthorizationDate(preAuthorizationRequest.getClaimIntimationDate())
+                    .updateWithPreAuthorizationDate(preAuthorizationRequest.getPreAuthorizationDate())
                     .updateWithClaimantHCPDetailDto(constructClaimantHCPDetailDtoFromPreAuthorizationRequestHCPDetail(preAuthorizationRequest.getPreAuthorizationRequestHCPDetail()))
                     .updateWithDiagnosisTreatment(constructDiagnosisTreatmentDtoListFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestDiagnosisTreatmentDetails()))
                     .updateWithIllnessDetails(constructIllnessDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestIllnessDetail()))
@@ -828,5 +831,33 @@ public class PreAuthorizationRequestService {
             return "No HCP Rate is defined for the service - " + service+".\n";
         }
         return errorMessage;
+    }
+
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(PreAuthorizationRequestId preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        if(isEmpty(preAuthorizationRequest)){
+            return Sets.newHashSet();
+        }
+        Set<GHProposerDocument> uploadedDocuments = isNotEmpty(preAuthorizationRequest.getProposerDocuments()) ? preAuthorizationRequest.getProposerDocuments() : Sets.newHashSet();
+        Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
+                @Override
+                public GHProposalMandatoryDocumentDto apply(GHProposerDocument ghProposerDocument) {
+                    GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(ghProposerDocument.getDocumentId(), ghProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(ghProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
     }
 }

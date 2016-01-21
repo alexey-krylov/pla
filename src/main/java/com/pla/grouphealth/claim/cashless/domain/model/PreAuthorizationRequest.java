@@ -62,6 +62,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     private String preAuthorizationProcessorUserId;
     private String preAuthorizationUnderWriterUserId;
     private Set<CommentDetail> commentDetails;
+    private LocalDate preAuthorizationDate;
 
     @Override
     public PreAuthorizationRequestId getIdentifier() {
@@ -247,6 +248,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
             commentDetails = Sets.newHashSet();
         commentDetails.add(commentDetail);
         this.commentDetails = commentDetails;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithPreAuthorizationDate(LocalDate preAuthorizationDate) {
+        this.preAuthorizationDate = preAuthorizationDate;
         return this;
     }
 
