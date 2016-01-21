@@ -532,6 +532,7 @@ public class PreAuthorizationRequestService {
             @Override
             public PreAuthorizationClaimantDetailCommand apply(PreAuthorizationRequest preAuthorizationRequest) {
                 return new PreAuthorizationClaimantDetailCommand()
+                        .updateWithStatus(preAuthorizationRequest.getStatus())
                         .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
                         .updateWithPreAuthorizationRequestId(preAuthorizationRequest.getPreAuthorizationRequestId())
                         .updateWithClaimType(preAuthorizationRequest.getClaimType())

@@ -127,14 +127,13 @@ public class PreAuthorizationService {
         return preAuthorizationDetailDtos;
     }
 
-    @Transactional
     public int uploadPreAuthorizationDetails(UploadPreAuthorizationCommand uploadPreAuthorizationCommand) throws GenerateReminderFollowupException{
         String runningSequence = sequenceGenerator.getSequence(PreAuthorization.class);
         runningSequence = String.format("%08d", Integer.parseInt(runningSequence.trim()));
         List<List<PreAuthorizationDetailDto>> refurbishedSet = createSubListBasedOnSimilarCriteria(uploadPreAuthorizationCommand.getPreAuthorizationDetailDtos());
         notEmpty(refurbishedSet, "Error uploading no PreAuthorization data list found to save");
         final String finalRunningSequence = runningSequence;
-        List<PreAuthorization> preAuthorizations = refurbishedSet.parallelStream().map(new Function<List<PreAuthorizationDetailDto>, PreAuthorization>() {
+        List<PreAuthorization> preAuthorizations = refurbishedSet.stream().map(new Function<List<PreAuthorizationDetailDto>, PreAuthorization>() {
             @Override
             public PreAuthorization apply(List<PreAuthorizationDetailDto> preAuthorizationDetailDtos) {
                 Set<PreAuthorizationDetail> preAuthorizationDetails = transformToPreAuthorizationDetails(preAuthorizationDetailDtos);

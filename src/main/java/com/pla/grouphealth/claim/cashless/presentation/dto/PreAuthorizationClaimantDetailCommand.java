@@ -1,9 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestHCPDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestPolicyDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +19,7 @@ import static org.nthdimenzion.utils.UtilValidator.*;
 @Setter
 @NoArgsConstructor
 public class PreAuthorizationClaimantDetailCommand {
+    private String status;
     private String preAuthorizationRequestId;
     private String preAuthorizationId;
     private String batchNumber;
@@ -117,6 +115,12 @@ public class PreAuthorizationClaimantDetailCommand {
             claimantHCPDetailDto.setHcpCode(preAuthorizationRequestHCPDetail.getHcpCode());
             this.claimantHCPDetailDto = claimantHCPDetailDto;
         }
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithStatus(PreAuthorizationRequest.Status status) {
+        if(isNotEmpty(status))
+            this.status = status.getDescription();
         return this;
     }
 }

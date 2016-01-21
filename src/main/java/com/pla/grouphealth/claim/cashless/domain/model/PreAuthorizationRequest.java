@@ -36,7 +36,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Document(collection = "PRE_AUTHORIZATION_REQUEST")
 @Getter
 @NoArgsConstructor
-public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreAuthorizationRequestId> {
+public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizationRequestId> {
 
     @Id
     @AggregateIdentifier
@@ -257,6 +257,10 @@ public class PreAuthorizationRequest extends AbstractAnnotatedAggregateRoot<PreA
 
         private Status(String description){
             this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 }
