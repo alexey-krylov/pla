@@ -39,6 +39,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.pla.grouplife.endorsement.exception.GLEndorsementException.raiseMandatoryDocumentNotUploaded;
+import static com.pla.grouplife.sharedresource.model.GLEndorsementType.ASSURED_MEMBER_ADDITION;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -110,12 +111,12 @@ public class GLEndorsementCommandHandler {
     * @TODO change according to type
     * */
     private GLEndorsement populateGLEndorsement(GLEndorsement glEndorsement, GLEndorsementInsuredDto glEndorsementInsuredDto, GLEndorsementType glEndorsementType) {
-        if (GLEndorsementType.ASSURED_MEMBER_ADDITION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
+        if (ASSURED_MEMBER_ADDITION.equals(glEndorsementType)) {
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addMemberEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.MEMBER_PROMOTION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addPremiumEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.ASSURED_MEMBER_DELETION.equals(glEndorsementType)) {
@@ -123,7 +124,7 @@ public class GLEndorsementCommandHandler {
             glEndorsement.addMemberDeletionEndorsement(glMemberEndorsement);
         }
         if (GLEndorsementType.NEW_CATEGORY_RELATION.equals(glEndorsementType)) {
-            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(populateFamilyId(createInsuredDetail(glEndorsementInsuredDto.getInsureds())));
+            GLMemberEndorsement glMemberEndorsement = new GLMemberEndorsement(createInsuredDetail(glEndorsementInsuredDto.getInsureds()));
             glEndorsement.addNewCategoryRelationEndorsement(glMemberEndorsement);
         }
         return glEndorsement;
@@ -253,10 +254,24 @@ public class GLEndorsementCommandHandler {
                 premiumDetail.getValuedClientDiscount(),premiumDetail.getLongTermDiscount(),premiumDetail.getPolicyTermValue());
         UnderWriterFactor underWriterFactor = groupLifeEndorsement.getUnderWriterFactor();
         groupLifeEndorsement = groupLifeEndorsementService.populateAnnualBasicPremiumOfInsured(groupLifeEndorsement, approveGLEndorsementCommand.getUserDetails(), premiumDetailDto, industry, underWriterFactor);
+        groupLifeEndorsement  = updateWithFamilyId(groupLifeEndorsement);
         groupLifeEndorsement = groupLifeEndorsement.approve(DateTime.now(), approveGLEndorsementCommand.getUserDetails().getUsername(), approveGLEndorsementCommand.getComment(), endorseNumber);
         return groupLifeEndorsement.getIdentifier().getEndorsementId();
     }
 
+    private GroupLifeEndorsement updateWithFamilyId(GroupLifeEndorsement groupLifeEndorsement){
+        switch (groupLifeEndorsement.getEndorsementType()){
+            case ASSURED_MEMBER_ADDITION:
+                return groupLifeEndorsement.updateWithInsureds(populateFamilyId(groupLifeEndorsement.getEndorsement().getMemberEndorsement().getInsureds()));
+            case ASSURED_MEMBER_DELETION:
+                return groupLifeEndorsement.updateWithInsureds(groupLifeEndorsement.getEndorsement().getMemberDeletionEndorsements().getInsureds());
+            case NEW_CATEGORY_RELATION:
+                return groupLifeEndorsement.updateWithInsureds(populateFamilyId( groupLifeEndorsement.getEndorsement().getNewCategoryRelationEndorsement().getInsureds()));
+            case MEMBER_PROMOTION:
+                return groupLifeEndorsement.updateWithInsureds(groupLifeEndorsement.getEndorsement().getPremiumEndorsement().getInsureds());
+        }
+        return groupLifeEndorsement;
+    }
 
     private Set<Insured> populateFamilyId(Set<Insured> insureds) {
         Map<String, Object> entitySequenceMap = sequenceGenerator.getEntitySequenceMap(Insured.class);
