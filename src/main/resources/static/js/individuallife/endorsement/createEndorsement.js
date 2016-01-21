@@ -52,6 +52,47 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         }
     })
+        .directive('validateNrc', function () {
+            return {
+                // restrict to an attribute type.
+                restrict: 'A',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    scope.$watch('ilEndrosementDetils.policyHolderNew.nrc', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        if (newval) {
+                            console.log('NRC Validation...***');
+                            if(scope.ilEndrosementDetils.policyHolderNew.nrc === scope.ilEndrosementDetils.policyHolder.nrc){
+                                var valid = false;
+                                ctrl.$setValidity('duplicateNRC', valid);
+                            }
+                            else{
+                                var valid = true;
+                                ctrl.$setValidity('duplicateNRC', valid);
+                            }
+                        }
+                        return valid ? newval : undefined;
+                    });
+
+                    scope.$watch('ilEndrosementDetils.lifeAssuredNew.nrc', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        if (newval) {
+                            console.log('NRC Validation...***');
+                            if(scope.ilEndrosementDetils.lifeAssuredNew.nrc === scope.ilEndrosementDetils.lifeAssured.nrc){
+                                var valid = false;
+                                ctrl.$setValidity('duplicateNRC', valid);
+                            }
+                            else{
+                                var valid = true;
+                                ctrl.$setValidity('duplicateNRC', valid);
+                            }
+                        }
+                        return valid ? newval : undefined;
+                    });
+                }
+            }
+        })
         .directive('validateDate', function () {
         return {
             // restrict to an attribute type.
