@@ -78,9 +78,9 @@ public class PreAuthorizationClaimantDetailCommand {
         return this;
     }
 
-    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
+    public PreAuthorizationClaimantDetailCommand updateWithPreAuthorizationRequestId(String preAuthorizationRequestId) {
         if(isNotEmpty(preAuthorizationRequestId))
-            this.preAuthorizationRequestId = preAuthorizationRequestId.getPreAuthorizationRequestId();
+            this.preAuthorizationRequestId = preAuthorizationRequestId;
         return this;
     }
 

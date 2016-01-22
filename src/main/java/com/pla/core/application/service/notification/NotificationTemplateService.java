@@ -279,7 +279,7 @@ public class NotificationTemplateService {
         return documentNameBuilder;
     }
 
-    public HashMap<String, String> getPreAuthorizationNotificationTemplateData(PreAuthorizationRequestId preAuthorizationRequestId, List<String> pendingDocumentList) throws ProcessInfoException {
+    public HashMap<String, String> getPreAuthorizationNotificationTemplateData(String preAuthorizationRequestId, List<String> pendingDocumentList) throws ProcessInfoException {
         Criteria proposalCriteria = Criteria.where("_id").is(preAuthorizationRequestId);
         Query query = new Query(proposalCriteria);
         PreAuthorizationRequest preAuthorizationRequest = mongoTemplate.findOne(query, PreAuthorizationRequest.class, "PRE_AUTHORIZATION_REQUEST");

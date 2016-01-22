@@ -69,8 +69,8 @@ public class PreAuthorizationRequestController {
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
-            PreAuthorizationRequestId preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
-            return Result.success("Pre Authorization Request successfully created with PreAuthorizationRequestId - "+ preAuthorizationRequestId.getPreAuthorizationRequestId());
+            String preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
+            return Result.success("Pre Authorization Request successfully created with PreAuthorizationRequestId - "+ preAuthorizationRequestId);
         } catch (Exception e){
             return Result.failure(e.getMessage());
         }

@@ -39,11 +39,11 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Document(collection = "PRE_AUTHORIZATION_REQUEST")
 @Getter
-public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizationRequestId> {
+public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
 
-    @Id
     @AggregateIdentifier
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+    @Id
+    private String preAuthorizationRequestId;
     private PreAuthorizationId preAuthorizationId;
     private String category;
     private String relationship;
@@ -83,7 +83,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
 
     public PreAuthorizationRequest updateWithPreAuthorizationRequestId(String preAuthorizationId) {
         if(isEmpty(this.preAuthorizationRequestId))
-            this.preAuthorizationRequestId = new PreAuthorizationRequestId(preAuthorizationId);
+            this.preAuthorizationRequestId = preAuthorizationId;
         return this;
     }
 
@@ -196,7 +196,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
                 return preAuthorizationRequestDrugService;
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
-        return null;
+        return this;
     }
 
     public PreAuthorizationRequest updateWithDocuments(Set<GHProposerDocument> proposerDocuments) {
@@ -255,9 +255,10 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     }
 
     @Override
-    public PreAuthorizationRequestId getIdentifier() {
-        return this.preAuthorizationRequestId;
+    public String getIdentifier() {
+        return preAuthorizationRequestId;
     }
+
 
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING("Underwriting"), APPROVED("Approved"), REJECTED("Rejected");

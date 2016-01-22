@@ -17,5 +17,5 @@ import java.io.Serializable;
 @ToString
 public class PreAuthorizationClosureEvent implements Serializable{
     private static final long serialVersionUID = 4401616796204536261L;
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+    private String preAuthorizationRequestId;
 }

@@ -78,7 +78,7 @@ public class NotificationCommandHandler {
     @CommandHandler
     public void createClaimNotification(CreateClaimNotificationCommand createClaimNotificationCommand) throws Exception {
         HashMap<String,String> dataMap = notificationTemplateService.getPreAuthorizationNotificationTemplateData(createClaimNotificationCommand.getPreAuthorizationRequestId(), createClaimNotificationCommand.getPendingDocumentList());
-        buildAndSendNotification(dataMap, createClaimNotificationCommand.getPreAuthorizationRequestId().getPreAuthorizationRequestId(), createClaimNotificationCommand.getRoleType(), createClaimNotificationCommand.getLineOfBusiness(), createClaimNotificationCommand.getProcessType(), createClaimNotificationCommand.getWaitingFor(), createClaimNotificationCommand.getReminderType());
+        buildAndSendNotification(dataMap, createClaimNotificationCommand.getPreAuthorizationRequestId(), createClaimNotificationCommand.getRoleType(), createClaimNotificationCommand.getLineOfBusiness(), createClaimNotificationCommand.getProcessType(), createClaimNotificationCommand.getWaitingFor(), createClaimNotificationCommand.getReminderType());
     }
 
     @Synchronized

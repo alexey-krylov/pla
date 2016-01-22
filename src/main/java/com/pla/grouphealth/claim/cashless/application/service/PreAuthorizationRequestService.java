@@ -117,6 +117,50 @@ public class PreAuthorizationRequestService {
         return PreAuthorizationClaimantDetailCommand.getInstance();
     }
 
+    public PreAuthorizationRequest createPreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+        PreAuthorizationRequest preAuthorizationRequest = new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION);
+        preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
+                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
+                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
+                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
+                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
+                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
+                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
+                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
+        preAuthorizationRequestMongoRepository.add(preAuthorizationRequest);
+        return preAuthorizationRequest;
+    }
+
+    public PreAuthorizationRequest updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationRequestId);
+        preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
+                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
+                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
+                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
+                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
+                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
+                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
+                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
+                .updateStatus(PreAuthorizationRequest.Status.EVALUATION);
+        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
+            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
+        return preAuthorizationRequestRepository.save(preAuthorizationRequest);
+    }
+
     private PreAuthorizationClaimantDetailCommand constructPreAuthorizationClaimantDetailDtoFromPreAuthorization(PreAuthorization preAuthorization, String clientId) {
         PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
         notNull(preAuthorizationDetail, "PreAuthorizationDetail cannot be null");
@@ -417,50 +461,6 @@ public class PreAuthorizationRequestService {
             return claimantHCPDetailDto;
         }
         return ClaimantHCPDetailDto.getInstance();
-    }
-
-    public PreAuthorizationRequest createPreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
-        PreAuthorizationRequest preAuthorizationRequest = new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION);
-        preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
-                .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
-                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
-                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
-                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
-                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
-                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
-                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
-                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
-                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
-                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
-        preAuthorizationRequestMongoRepository.add(preAuthorizationRequest);
-        return preAuthorizationRequest;
-    }
-
-    public PreAuthorizationRequest updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
-        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
-        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(new PreAuthorizationRequestId(preAuthorizationRequestId));
-        preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
-                .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
-                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
-                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
-                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
-                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
-                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
-                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
-                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
-                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
-                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
-                .updateStatus(PreAuthorizationRequest.Status.EVALUATION);
-        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
-            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
-        return preAuthorizationRequest;
     }
 
     private PreAuthorizationRequest getPreAuthorizationRequestById(PreAuthorizationRequestId preAuthorizationRequestId) {

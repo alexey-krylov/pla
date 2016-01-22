@@ -77,7 +77,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
         int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId().getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         DateTime preAuthCreatedDate = preAuthorizationRequest.getCreatedOn();
         DateTime firstReminderDateTime = preAuthCreatedDate.plusDays(firstReminderDay);
         DateTime purgeScheduleDateTime = preAuthCreatedDate.plusDays(noOfDaysToPurge);
@@ -94,11 +94,11 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
 
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationFirstReminderEvent event){
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId().getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         if(!preAuthorizationRequest.isFirstReminderSent() && !preAuthorizationRequest.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreateClaimNotificationCommand(new PreAuthorizationRequestId(event.getPreAuthorizationRequestId().getPreAuthorizationRequestId()), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
+                commandGateway.send(new CreateClaimNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
                 preAuthorizationRequest.updateFlagForFirstReminderSent(Boolean.TRUE);
             }
         }
@@ -120,7 +120,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
 
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationSecondReminderEvent event){
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId().getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         if(preAuthorizationRequest.isFirstReminderSent() && !preAuthorizationRequest.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
             if(pendingDocumentList.size() > 0) {
@@ -132,7 +132,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
 
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationClosureEvent event){
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId().getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
         if(preAuthorizationRequest.isFirstReminderSent() && preAuthorizationRequest.isSecondReminderSent() && pendingDocumentList.size() > 0) {
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.CANCELLED);

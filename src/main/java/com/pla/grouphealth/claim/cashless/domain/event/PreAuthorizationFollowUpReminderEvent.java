@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class PreAuthorizationFollowUpReminderEvent implements Serializable{
 
     private static final long serialVersionUID = 4401616796204536261L;
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+    private String preAuthorizationRequestId;
 
-    public PreAuthorizationFollowUpReminderEvent(PreAuthorizationRequestId preAuthorizationRequestId){
+    public PreAuthorizationFollowUpReminderEvent(String preAuthorizationRequestId){
         this.preAuthorizationRequestId = preAuthorizationRequestId;
     }
 }

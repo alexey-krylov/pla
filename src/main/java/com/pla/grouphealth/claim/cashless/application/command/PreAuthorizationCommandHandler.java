@@ -30,10 +30,10 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 public class PreAuthorizationCommandHandler {
     @Autowired
     PreAuthorizationService preAuthorizationService;
-    /*@Autowired
-    private PreAuthorizationRequestRepository preAuthorizationRequestMongoRepository;*/
     @Autowired
-    private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
+    /*@Autowired
+    private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;*/
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -45,7 +45,7 @@ public class PreAuthorizationCommandHandler {
     @CommandHandler
     public void uploadMandatoryDocument(GHClaimDocumentCommand ghClaimDocumentCommand) throws IOException {
         String fileName = ghClaimDocumentCommand.getFile() != null ? ghClaimDocumentCommand.getFile().getOriginalFilename() : "";
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(new PreAuthorizationRequestId(ghClaimDocumentCommand.getPreAuthorizationRequestId()));
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(ghClaimDocumentCommand.getPreAuthorizationRequestId());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION);
         Set<GHProposerDocument> documents = preAuthorizationRequest.getProposerDocuments();
         if (isEmpty(documents)) {
@@ -64,6 +64,6 @@ public class PreAuthorizationCommandHandler {
             existingDocument.updateWithNameAndContent(fileName, gridFsDocId, ghClaimDocumentCommand.getFile().getContentType());
         }
         preAuthorizationRequest.updateWithDocuments(documents);
-        //preAuthorizationRequestMongoRepository.save(preAuthorizationRequest);
+        preAuthorizationRequestRepository.save(preAuthorizationRequest);
     }
 }

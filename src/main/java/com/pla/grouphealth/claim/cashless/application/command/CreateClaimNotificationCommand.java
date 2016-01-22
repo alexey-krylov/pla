@@ -19,10 +19,10 @@ import java.util.List;
 @Getter
 public class CreateClaimNotificationCommand extends CreateNotificationCommand{
 
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+    private String preAuthorizationRequestId;
     private List<String> pendingDocumentList;
 
-    public CreateClaimNotificationCommand(PreAuthorizationRequestId preAuthorizationRequestId, String roleType, LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, List<String> pendingDocumentList){
+    public CreateClaimNotificationCommand(String preAuthorizationRequestId, String roleType, LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, List<String> pendingDocumentList){
         super(roleType,lineOfBusiness,processType,waitingFor,reminderType);
         this.preAuthorizationRequestId = preAuthorizationRequestId;
         this.pendingDocumentList = pendingDocumentList;
