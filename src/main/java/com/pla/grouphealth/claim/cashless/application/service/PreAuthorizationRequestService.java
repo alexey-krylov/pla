@@ -41,6 +41,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -85,7 +86,7 @@ public class PreAuthorizationRequestService {
     @Autowired
     private PlanRepository planRepository;
     @Autowired
-    private GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
     @Autowired
     private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
     @Autowired
@@ -445,7 +446,7 @@ public class PreAuthorizationRequestService {
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION);
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
-        preAuthorizationRequest = preAuthorizationRequestRepository.save(preAuthorizationRequest);
+        preAuthorizationRequestMongoRepository.add(preAuthorizationRequest);
         preAuthorizationRequest.savedRegisterFollowUpReminders();
         return preAuthorizationRequest.getPreAuthorizationRequestId();
     }

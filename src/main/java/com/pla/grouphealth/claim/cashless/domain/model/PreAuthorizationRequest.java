@@ -35,7 +35,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  */
 @Document(collection = "PRE_AUTHORIZATION_REQUEST")
 @Getter
-@NoArgsConstructor
 public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizationRequestId> {
 
     @Id
@@ -216,7 +215,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
 
     public void savedRegisterFollowUpReminders() throws GenerateReminderFollowupException {
         try {
-            registerEvent(new PreAuthorizationFollowUpReminderEvent(this.preAuthorizationRequestId));
+            registerEvent(new PreAuthorizationFollowUpReminderEvent(this.preAuthorizationRequestId.getPreAuthorizationRequestId()));
         } catch (Exception e){
             throw new GenerateReminderFollowupException(e.getMessage());
         }

@@ -13,4 +13,8 @@ import java.util.List;
  * Author - Mohan Sharma Created on 12/30/2015.
  */
 public interface PreAuthorizationRequestRepository extends MongoRepository<PreAuthorizationRequest, PreAuthorizationRequestId>{
+
+    @Query("{'preAuthorizationRequestId.preAuthorizationRequestId' : ?0}")
+    PreAuthorizationRequest findByPreAuthorizationRequestId(String preAuthorizationRequestId);
+
 }

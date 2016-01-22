@@ -14,5 +14,5 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 public class PreAuthorizationFirstReminderEvent implements Serializable{
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+    private String preAuthorizationRequestId;
 }

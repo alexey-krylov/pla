@@ -1,19 +1,21 @@
 package com.pla.grouphealth.claim.cashless.domain.event;
 
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 /**
  * Created by Mohan Sharma on 1/13/2016.
  */
-@NoArgsConstructor
 @Getter
-@AllArgsConstructor
+@ToString
 public class PreAuthorizationFollowUpReminderEvent implements Serializable{
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+
+    private static final long serialVersionUID = 4401616796204536261L;
+    private String preAuthorizationRequestId;
+
+    public PreAuthorizationFollowUpReminderEvent(String preAuthorizationRequestId){
+        this.preAuthorizationRequestId = preAuthorizationRequestId;
+    }
 }

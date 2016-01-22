@@ -5,6 +5,8 @@ import com.google.common.collect.Maps;
 import com.pla.grouphealth.claim.cashless.application.command.CreateClaimNotificationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.publishedlanguage.contract.IProcessInfoAdapter;
@@ -15,9 +17,11 @@ import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.util.RolesUtil;
+import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
+import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
@@ -26,9 +30,11 @@ import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,33 +48,35 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
  * Created by Mohan Sharma on 1/13/2016.
  */
 @Component
-public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga {
+@NoArgsConstructor
+public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implements Serializable{
     private transient static final Logger LOGGER = LoggerFactory.getLogger(PreAuthorizationRequestSaga.class);
 
+    @Autowired
     private transient EventScheduler eventScheduler;
+    @Autowired
     private transient CommandGateway commandGateway;
-    private GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    @Autowired
+    private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    @Autowired
+    private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
+    @Autowired
     private transient IProcessInfoAdapter processInfoAdapter;
+    @Autowired
     PreAuthorizationRequestService preAuthorizationRequestService;
     private Map<String, ScheduleToken> scheduledTokens = Maps.newLinkedHashMap();
-
-    @Autowired
-    public PreAuthorizationRequestSaga(EventScheduler eventScheduler, CommandGateway commandGateway, GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository, IProcessInfoAdapter processInfoAdapter, PreAuthorizationRequestService preAuthorizationRequestService){
-        this.eventScheduler = eventScheduler;
-        this.commandGateway = commandGateway;
-        this.preAuthorizationRequestMongoRepository = preAuthorizationRequestMongoRepository;
-        this.processInfoAdapter = processInfoAdapter;
-        this.preAuthorizationRequestService = preAuthorizationRequestService;
-    }
 
     @StartSaga
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationFollowUpReminderEvent event) throws ProcessInfoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Handling PreAuthorizationFollowUpReminderEvent .....", event);
+        }
         int noOfDaysToPurge = processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(event.getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         DateTime preAuthCreatedDate = preAuthorizationRequest.getCreatedOn();
         DateTime firstReminderDateTime = preAuthCreatedDate.plusDays(firstReminderDay);
         DateTime purgeScheduleDateTime = preAuthCreatedDate.plusDays(noOfDaysToPurge);
@@ -85,11 +93,11 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga {
 
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationFirstReminderEvent event){
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(event.getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         if(!preAuthorizationRequest.isFirstReminderSent() && !preAuthorizationRequest.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreateClaimNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
+                commandGateway.send(new CreateClaimNotificationCommand(new PreAuthorizationRequestId(event.getPreAuthorizationRequestId()), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
                 preAuthorizationRequest.updateFlagForFirstReminderSent(Boolean.TRUE);
             }
         }
@@ -109,11 +117,11 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga {
 
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationSecondReminderEvent event){
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(event.getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         if(preAuthorizationRequest.isFirstReminderSent() && !preAuthorizationRequest.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreateClaimNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
+                commandGateway.send(new CreateClaimNotificationCommand(new PreAuthorizationRequestId(event.getPreAuthorizationRequestId()), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
                 preAuthorizationRequest.updateFlagForSecondReminderSent(Boolean.TRUE);
             }
         }
@@ -121,7 +129,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga {
 
     @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
     public void handle(PreAuthorizationClosureEvent event){
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(event.getPreAuthorizationRequestId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(event.getPreAuthorizationRequestId());
         List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
         if(preAuthorizationRequest.isFirstReminderSent() && preAuthorizationRequest.isSecondReminderSent() && pendingDocumentList.size() > 0) {
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.CANCELLED);

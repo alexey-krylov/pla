@@ -182,7 +182,7 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/getadditionaldocuments/{preAuthorizationId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
-    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("proposalId") String preAuthorizationId, HttpServletResponse response) throws IOException {
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws IOException {
         if(UtilValidator.isEmpty(preAuthorizationId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return Sets.newHashSet();

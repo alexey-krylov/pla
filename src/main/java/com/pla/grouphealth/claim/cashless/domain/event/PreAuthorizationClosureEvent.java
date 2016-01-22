@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PreAuthorizationClosureEvent {
-    private PreAuthorizationRequestId preAuthorizationRequestId;
+    private String preAuthorizationRequestId;
 }
