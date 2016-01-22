@@ -86,7 +86,7 @@ public class GLPolicyFactory {
         for(Insured insured : insureds){
             if (insured.getNoOfAssured() == null) {
                 dependentSequenceNumber = sequenceNumber[0];
-                String selfFamilySequence = sequenceNumber[0] + "01";
+                String selfFamilySequence = sequenceNumber[0] + "/"+"01";
                 sequenceNumber[0] = sequenceNumber[0] + 1;
                 FamilyId familyId = new FamilyId(selfFamilySequence);
                 insured = insured.updateWithFamilyId(familyId);
@@ -96,7 +96,7 @@ public class GLPolicyFactory {
                 for (InsuredDependent insuredDependent : insured.getInsuredDependents()){
                     if (insuredDependent.getNoOfAssured() == null) {
                         List<Integer> sequenceList = relationshipSequenceMap.get(insuredDependent.getRelationship());
-                        String selfFamilySequence = dependentSequenceNumber.toString() + sequenceList.get(0);
+                        String selfFamilySequence = dependentSequenceNumber.toString() + "/"+sequenceList.get(0);
                         relationshipSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
                         FamilyId familyId = new FamilyId(selfFamilySequence);
                         insuredDependent = insuredDependent.updateWithFamilyId(familyId);

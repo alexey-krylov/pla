@@ -278,7 +278,7 @@ public class GLEndorsementCommandHandler {
         final Integer[] sequenceNumber = {((Integer) entitySequenceMap.get("sequenceNumber")) + 1};
         insureds.forEach(insured -> {
             if (insured.getNoOfAssured() == null && insured.getCategory()!=null) {
-                String selfFamilySequence = sequenceNumber[0] + "01";
+                String selfFamilySequence = sequenceNumber[0] +"/"+ "01";
                 sequenceNumber[0] = sequenceNumber[0] + 1;
                 FamilyId familyId = new FamilyId(selfFamilySequence);
                 insured = insured.updateWithFamilyId(familyId);
@@ -288,7 +288,7 @@ public class GLEndorsementCommandHandler {
                 insured.getInsuredDependents().forEach(insuredDependent -> {
                     if (insuredDependent.getNoOfAssured() == null) {
                         List<Integer> sequenceList = relationshipSequenceMap.get(insuredDependent.getRelationship());
-                        String selfFamilySequence = sequenceNumber[0].toString() + sequenceList.get(0);
+                        String selfFamilySequence = sequenceNumber[0].toString() +"/"+ sequenceList.get(0);
                         sequenceList.remove(0);
                         sequenceNumber[0] = sequenceNumber[0] + 1;
                         relationshipSequenceMap.put(insuredDependent.getRelationship(), sequenceList);

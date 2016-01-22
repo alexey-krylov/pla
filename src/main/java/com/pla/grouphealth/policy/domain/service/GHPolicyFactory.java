@@ -75,7 +75,7 @@ public class GHPolicyFactory {
         for (GHInsured insured : insureds){
             if (insured.getNoOfAssured() == null) {
                 dependentSequenceNumber = sequenceNumber[0];
-                String selfFamilySequence = sequenceNumber[0] + "01";
+                String selfFamilySequence = sequenceNumber[0] + "/"+"01";
                 sequenceNumber[0] = sequenceNumber[0] + 1;
                 FamilyId familyId = new FamilyId(selfFamilySequence);
                 insured = insured.updateWithFamilyId(familyId);
@@ -85,7 +85,7 @@ public class GHPolicyFactory {
                 for (GHInsuredDependent insuredDependent : insured.getInsuredDependents()){
                     if (insuredDependent.getNoOfAssured() == null) {
                         List<Integer> sequenceList = relationshipSequenceMap.get(insuredDependent.getRelationship());
-                        String selfFamilySequence = dependentSequenceNumber.toString() + sequenceList.get(0);
+                        String selfFamilySequence = dependentSequenceNumber.toString() +"/"+ sequenceList.get(0);
                         sequenceList.remove(0);
                         sequenceNumber[0] = sequenceNumber[0] + 1;
                         relationshipSequenceMap.put(insuredDependent.getRelationship(), sequenceList);
