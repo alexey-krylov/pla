@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.claim.cashless.application.command.PreAuthorizationRemoveAdditionalCommand;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
@@ -15,11 +16,15 @@ import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocument
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
+import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -47,6 +53,8 @@ public class PreAuthorizationRequestController {
     private CommandGateway commandGateway;
     @Autowired
     private PreAuthorizationRequestService preAuthorizationRequestService;
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
     public @ResponseBody
@@ -113,6 +121,18 @@ public class PreAuthorizationRequestController {
         }
         List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findMandatoryDocuments(new FamilyId(clientId), preAuthorizationId);
         return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        outputStream.flush();
+        outputStream.close();
     }
 
     @RequestMapping(value = "/getpreauthorizationrequestbycriteria", method = RequestMethod.POST)
@@ -215,7 +235,7 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/searchpreauthorizationforunderwriterbycriteria", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+    public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
         List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto);
         modelAndView.addObject("searchResult", searchResult);
