@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.application.command.PreAuthorizationRemoveAdditionalCommand;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
@@ -9,6 +10,7 @@ import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
+import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -141,6 +143,23 @@ public class PreAuthorizationRequestController {
         try {
             commandGateway.send(ghClaimDocumentCommand);
             return Result.success("Documents uploaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Synchronized
+    @RequestMapping(value = "/removeadditionalDocument", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removePreAuthorizationAdditionalDocument(PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while updating comments", bindingResult.getAllErrors());
+        }
+        try {
+            commandGateway.sendAndWait(preAuthorizationRemoveAdditionalCommand);
+            return Result.success("Document deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());

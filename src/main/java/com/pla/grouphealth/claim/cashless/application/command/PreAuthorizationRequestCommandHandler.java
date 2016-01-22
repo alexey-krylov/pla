@@ -6,13 +6,20 @@ import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
+import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
+import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
+import com.pla.sharedkernel.identifier.ProposalId;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Iterator;
 import java.util.Set;
 
+import static org.nthdimenzion.utils.UtilValidator.*;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -56,4 +63,29 @@ public class PreAuthorizationRequestCommandHandler {
     public Set<CommentDetail> updateComments(UpdateCommentCommand updateCommentCommand){
         return preAuthorizationRequestService.updateComments(updateCommentCommand);
     }
+
+    @CommandHandler
+    public boolean removeAdditionalDocument(PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand) {
+        boolean result = Boolean.FALSE;
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRemoveAdditionalCommand.getPreAuthorizationId());
+        if(isNotEmpty(preAuthorizationRequest)){
+            Set<GHProposerDocument> ghProposerDocuments = preAuthorizationRequest.getProposerDocuments();
+            result =  removeDocumentByGridFsDocId(ghProposerDocuments, preAuthorizationRemoveAdditionalCommand.getGridFsDocId());
+        }
+        return result;
+    }
+
+    private boolean removeDocumentByGridFsDocId(Set<GHProposerDocument> ghProposerDocuments, String gridFsDocId) {
+        if(UtilValidator.isNotEmpty(ghProposerDocuments)) {
+            for (Iterator iterator = ghProposerDocuments.iterator(); iterator.hasNext(); ) {
+                GHProposerDocument ghProposerDocument = (GHProposerDocument) iterator.next();
+                if (ghProposerDocument.getGridFsDocId().equals(gridFsDocId)) {
+                    iterator.remove();
+                    return Boolean.TRUE;
+                }
+            }
+        }
+        return Boolean.FALSE;
+    }
+
 }
