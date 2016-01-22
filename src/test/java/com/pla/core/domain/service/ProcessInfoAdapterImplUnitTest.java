@@ -136,6 +136,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
+        productLineGeneralInformation = productLineGeneralInformation.withClaimProcessInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.PROPOSAL);
         assertThat(closureTimePeriod,is(14));
@@ -146,6 +147,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
+        productLineGeneralInformation = productLineGeneralInformation.withClaimProcessInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
         assertThat(closureTimePeriod,is(10));
@@ -156,6 +158,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
+        productLineGeneralInformation = productLineGeneralInformation.withClaimProcessInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
         assertThat(closureTimePeriod,is(12));
@@ -166,6 +169,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
+        productLineGeneralInformation = productLineGeneralInformation.withClaimProcessInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.QUOTATION);
         assertThat(closureTimePeriod,is(11));
@@ -176,6 +180,7 @@ public class ProcessInfoAdapterImplUnitTest {
         ProductLineGeneralInformation productLineGeneralInformation = ProductLineGeneralInformation.createProductLineGeneralInformation(LineOfBusinessEnum.GROUP_HEALTH);
         productLineGeneralInformation = productLineGeneralInformation.withQuotationProcessInformation(listOfProcessItems);
         productLineGeneralInformation = productLineGeneralInformation.withEnrollmentProcessGeneralInformation(listOfProcessItems);
+        productLineGeneralInformation = productLineGeneralInformation.withClaimProcessInformation(listOfProcessItems);
         when(generalInformationService.findProductLineInformationByLineOfBusinessId(LineOfBusinessEnum.GROUP_HEALTH)).thenReturn(productLineGeneralInformation);
         int closureTimePeriod =  processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.ENDORSEMENT);
         assertThat(closureTimePeriod,is(11));
