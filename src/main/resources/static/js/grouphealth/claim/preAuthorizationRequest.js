@@ -42,21 +42,6 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                             return false;
                         }
                     }],
-                   additionalDocumentList: ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
-                        var deferred = $q.defer();
-                        var preAuthorizationId = getQueryParameter('preAuthorizationId');
-                        if (preAuthorizationId && !_.isEmpty(preAuthorizationId)) {
-                            var deferred = $q.defer();
-                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" +preAuthorizationId).success(function (response, status, headers, config) {
-                                deferred.resolve(response)
-                            }).error(function (response, status, headers, config) {
-                                deferred.reject();
-                            });
-                            return deferred.promise;
-                        } else {
-                            return false;
-                        }
-                    }],
                     preAuthorizationId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
                         var deferred = $q.defer();
@@ -77,8 +62,8 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
             }
         )}])
 
-    .controller('createPreAuthorizationRequestCtrl', ['$scope', '$http','createUpdateDto','additionalDocumentList','$timeout','getQueryParameter','$window','documentList','$upload','preAuthorizationId','clientId',
-        function ($scope, $http, createUpdateDto, $timeout, getQueryParameter, $window, documentList, $upload, preAuthorizationId, clientId,additionalDocumentList){
+    .controller('createPreAuthorizationRequestCtrl', ['$scope', '$http','createUpdateDto','$timeout','getQueryParameter','$window','documentList','$upload','preAuthorizationId','clientId',
+        function ($scope, $http, createUpdateDto, $timeout, getQueryParameter, $window, documentList, $upload, preAuthorizationId, clientId){
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.drugServicesDtos;
             $scope.treatmentDiagnosis={};
@@ -95,7 +80,7 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
             $scope.createUpdateCommand.illnessDetailDto={};
             $scope.createUpdateCommand.drugServicesDtos=[];
             $scope.documentList = documentList;
-            $scope.additionalDocumentList = additionalDocumentList;
+            $scope.additionalDocumentList =[{}];
             $scope.disableSubmit = false;
             /*This scope value is binded to fueluxWizard directive and hence it changes as and when next button is clicked*/
             $scope.selectedItem = 1;
@@ -107,7 +92,6 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                 $scope.isViewMode = true;
             }
             $scope.$watch('documentList', function(newCollection, oldCollection){
-                console.log("watching");
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
             });
 
@@ -121,6 +105,13 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                 }
                 return false;
             };
+
+            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" +preAuthorizationId).success(function (data, status, headers, config) {
+                $scope.additionalDocumentList = data;
+                $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
+            }).error(function (response, status, headers, config) {
+                deferred.reject();
+            });
 
             $scope.viewTreatmentDiagnosis = function(treatmentDiagnosis, treatmentDiagnosisIndex){
                 $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;
@@ -243,8 +234,9 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                         }).progress(function (evt) {
 
                         }).success(function (data, status, headers, config) {
-                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                            // JSON.stringify(data));
+                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" +preAuthorizationId).success(function (response, status, headers, config) {
+                                $scope.additionalDocumentList = response;
+                            });
                         });
                     }
 
@@ -309,7 +301,8 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                         method: 'POST',
                         data: $scope.removeAdditionalDocumentCommand
                     }).success(function(){
-                        window.location.reload();
+                        $scope.additionalDocumentList.splice(index, 1);
+                        $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
                     }).error();
                 } else {
                     $scope.additionalDocumentList.splice(index, 1);

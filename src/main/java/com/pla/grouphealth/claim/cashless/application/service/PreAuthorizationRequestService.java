@@ -303,9 +303,6 @@ public class PreAuthorizationRequestService {
                             return setOfSBCM;
                         }
                     }).flatMap(sbcmList -> sbcmList.stream()).collect(Collectors.toList());
-                    /*List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings = sbcmRepository.findAllByPlanCodeAndService(plan.getPlanDetail().getPlanCode(), service);
-                    notEmpty(serviceBenefitCoverageMappings, "No Service Benefit Mapping Found For Plan - "+plan.getPlanDetail().getPlanName()+" and Service - "+service);
-                    return serviceBenefitCoverageMappings;*/
                     return setOfSBCM;
                 }
             }).flatMap(sbcmList -> sbcmList.stream()).collect(Collectors.toSet());
@@ -862,7 +859,7 @@ public class PreAuthorizationRequestService {
     }
 
     public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(String preAuthorizationId) {
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationId);
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
         if(isEmpty(preAuthorizationRequest)){
             return Sets.newHashSet();
         }

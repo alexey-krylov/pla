@@ -269,7 +269,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
 
 
     public enum Status {
-        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING("Underwriting"), APPROVED("Approved"), REJECTED("Rejected");
+        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
 
         private String description;
 

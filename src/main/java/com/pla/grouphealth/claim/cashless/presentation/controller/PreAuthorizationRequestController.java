@@ -171,7 +171,7 @@ public class PreAuthorizationRequestController {
     @Synchronized
     @RequestMapping(value = "/removeadditionalDocument", method = RequestMethod.POST)
     @ResponseBody
-    public Result removePreAuthorizationAdditionalDocument(PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request) {
+    public Result removePreAuthorizationAdditionalDocument(@Valid @RequestBody PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while updating comments", bindingResult.getAllErrors());
