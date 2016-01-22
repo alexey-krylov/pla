@@ -155,7 +155,7 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
             $scope.submitPreAuthorizationRequest= function(){
                 $scope.createUpdateDto.submitEventFired = true;
                 $http({
-                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/updatepreauthorization',
+                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/submitpreauthorization',
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).then(function (response) {

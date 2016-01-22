@@ -86,8 +86,8 @@ public class PreAuthorizationRequestController {
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userDetails.getUsername());
-            PreAuthorizationRequestId preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
-            return Result.success("Pre Authorization Request successfully created with PreAuthorizationRequestId - "+ preAuthorizationRequestId.getPreAuthorizationRequestId());
+            String preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
+            return Result.success("Pre Authorization Request successfully submitted");
         } catch (Exception e){
             return Result.failure(e.getMessage());
         }
