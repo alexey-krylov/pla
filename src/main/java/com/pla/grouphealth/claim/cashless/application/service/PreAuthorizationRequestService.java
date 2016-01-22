@@ -43,7 +43,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,7 +51,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -68,7 +66,6 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.data.domain.Sort.Direction;
 import static org.springframework.data.domain.Sort.Order;
-import static org.springframework.util.Assert.notEmpty;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -422,12 +419,8 @@ public class PreAuthorizationRequestService {
         return ClaimantHCPDetailDto.getInstance();
     }
 
-    public PreAuthorizationRequestId createUpdatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, Boolean isFirstTime) throws GenerateReminderFollowupException {
-        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
-        PreAuthorizationRequest preAuthorizationRequest = isNotEmpty(preAuthorizationRequestId) ?
-                isNotEmpty(getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId)))
-                        ? getPreAuthorizationRequestById(new PreAuthorizationRequestId(preAuthorizationRequestId))
-                        : new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION) : new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION);
+    public PreAuthorizationRequest createPreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+        PreAuthorizationRequest preAuthorizationRequest = new PreAuthorizationRequest(PreAuthorizationRequest.Status.INTIMATION);
         preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
@@ -442,24 +435,44 @@ public class PreAuthorizationRequestService {
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
-        if(!isFirstTime)
-            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION);
+        preAuthorizationRequestMongoRepository.add(preAuthorizationRequest);
+        return preAuthorizationRequest;
+    }
+
+    public PreAuthorizationRequest updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(new PreAuthorizationRequestId(preAuthorizationRequestId));
+        preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
+                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
+                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
+                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
+                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
+                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
+                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
+                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
+                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
+                .updateStatus(PreAuthorizationRequest.Status.EVALUATION);
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
-        preAuthorizationRequestMongoRepository.add(preAuthorizationRequest);
-        preAuthorizationRequest.savedRegisterFollowUpReminders();
-        return preAuthorizationRequest.getPreAuthorizationRequestId();
+        return preAuthorizationRequest;
     }
 
     private PreAuthorizationRequest getPreAuthorizationRequestById(PreAuthorizationRequestId preAuthorizationRequestId) {
-        return preAuthorizationRequestRepository.findOne(preAuthorizationRequestId);
+        return preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationRequestId.getPreAuthorizationRequestId());
     }
 
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId) throws Exception {
-        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByFamilyId(familyId, PolicyStatus.IN_FORCE);
-        if (isEmpty(groupHealthPolicy)) {
-            groupHealthPolicy = ghPolicyRepository.findDistinctPolicyByDependentFamilyId(familyId, PolicyStatus.IN_FORCE);
-        }
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId, String preAuthorizationId) throws Exception {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationId);
+        notNull(preAuthorizationRequest, "No PreAuthorization found with the given Id");
+        String policyNumber = isNotEmpty(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail()) ? preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber() : StringUtils.EMPTY;
+        GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
+        notNull(groupHealthPolicy, "No Policy found for the PreAuthorization with policy number - "+policyNumber);
         List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
         GHPlanPremiumDetail planPremiumDetail = getGHPlanPremiumDetailByFamilyId(familyId, groupHealthPolicy);
         SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planPremiumDetail.getPlanId());
@@ -475,7 +488,7 @@ public class PreAuthorizationRequestService {
         }
         Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.CLAIM);
         List<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
-        Set<GHProposerDocument> uploadedDocuments = isNotEmpty(groupHealthPolicy.getProposerDocuments()) ? groupHealthPolicy.getProposerDocuments() : Sets.newHashSet();
+        Set<GHProposerDocument> uploadedDocuments = isNotEmpty(preAuthorizationRequest.getProposerDocuments()) ? preAuthorizationRequest.getProposerDocuments() : Sets.newHashSet();
         if (isNotEmpty(mandatoryDocuments)) {
             mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GHProposalMandatoryDocumentDto>() {
                 @Override
@@ -841,7 +854,7 @@ public class PreAuthorizationRequestService {
     }
 
     public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(PreAuthorizationRequestId preAuthorizationId) {
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationId.getPreAuthorizationRequestId());
         if(isEmpty(preAuthorizationRequest)){
             return Sets.newHashSet();
         }

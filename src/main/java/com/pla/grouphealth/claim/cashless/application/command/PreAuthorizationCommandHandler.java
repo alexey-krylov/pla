@@ -6,8 +6,10 @@ import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollo
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
+import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import org.axonframework.commandhandling.annotation.CommandHandler;
+import org.axonframework.repository.Repository;
 import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -28,8 +30,10 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 public class PreAuthorizationCommandHandler {
     @Autowired
     PreAuthorizationService preAuthorizationService;
+    /*@Autowired
+    private PreAuthorizationRequestRepository preAuthorizationRequestMongoRepository;*/
     @Autowired
-    private GenericMongoRepository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
+    private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -59,6 +63,7 @@ public class PreAuthorizationCommandHandler {
             gridFsTemplate.delete(new Query(Criteria.where("_id").is(existingDocument.getGridFsDocId())));
             existingDocument.updateWithNameAndContent(fileName, gridFsDocId, ghClaimDocumentCommand.getFile().getContentType());
         }
-        preAuthorizationRequest = preAuthorizationRequest.updateWithDocuments(documents);
+        preAuthorizationRequest.updateWithDocuments(documents);
+        //preAuthorizationRequestMongoRepository.save(preAuthorizationRequest);
     }
 }

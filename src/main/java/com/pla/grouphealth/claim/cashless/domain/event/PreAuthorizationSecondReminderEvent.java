@@ -4,6 +4,7 @@ import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -13,6 +14,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
+@ToString
 public class PreAuthorizationSecondReminderEvent implements Serializable{
-    private String preAuthorizationRequestId;
+    private static final long serialVersionUID = 4401616796204536261L;
+    private PreAuthorizationRequestId preAuthorizationRequestId;
 }

@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.application.command;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -20,8 +21,9 @@ public class PreAuthorizationRequestCommandHandler {
     PreAuthorizationRequestService preAuthorizationRequestService;
 
     @CommandHandler
-    public PreAuthorizationRequestId createUpdate(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
-        return preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand, Boolean.FALSE);
+    public PreAuthorizationRequestId createPreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestService.updatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
+        return preAuthorizationRequest.getPreAuthorizationRequestId();
     }
 
     @CommandHandler

@@ -62,7 +62,7 @@ public class PreAuthorizationRequestController {
         return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
     }
 
-    @RequestMapping(value = "/createorupdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatepreauthorization", method = RequestMethod.POST)
     public Result createUpdate(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response){
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
@@ -98,15 +98,15 @@ public class PreAuthorizationRequestController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getmandatorydocuments/{clientId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getmandatorydocuments/{clientId}/{preAuthorizationId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
-    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId, HttpServletResponse response) throws Exception {
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId, @PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws Exception {
         if(UtilValidator.isEmpty(clientId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "clientId cannot be empty");
             return Lists.newArrayList();
         }
-        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findMandatoryDocuments(new FamilyId(clientId));
+        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findMandatoryDocuments(new FamilyId(clientId), preAuthorizationId);
         return ghProposalMandatoryDocumentDtos;
     }
 

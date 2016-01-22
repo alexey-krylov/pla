@@ -1,13 +1,17 @@
 package com.pla.grouphealth.claim.cashless.domain.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.PreAuthorizationFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
@@ -62,11 +66,6 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     private String preAuthorizationUnderWriterUserId;
     private Set<CommentDetail> commentDetails;
     private LocalDate preAuthorizationDate;
-
-    @Override
-    public PreAuthorizationRequestId getIdentifier() {
-        return preAuthorizationRequestId;
-    }
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
@@ -215,7 +214,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
 
     public void savedRegisterFollowUpReminders() throws GenerateReminderFollowupException {
         try {
-            registerEvent(new PreAuthorizationFollowUpReminderEvent(this.preAuthorizationRequestId.getPreAuthorizationRequestId()));
+            registerEvent(new PreAuthorizationFollowUpReminderEvent(this.preAuthorizationRequestId));
         } catch (Exception e){
             throw new GenerateReminderFollowupException(e.getMessage());
         }
@@ -253,6 +252,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<PreAuthorizat
     public PreAuthorizationRequest updateWithPreAuthorizationDate(LocalDate preAuthorizationDate) {
         this.preAuthorizationDate = preAuthorizationDate;
         return this;
+    }
+
+    @Override
+    public PreAuthorizationRequestId getIdentifier() {
+        return this.preAuthorizationRequestId;
     }
 
     public enum Status {

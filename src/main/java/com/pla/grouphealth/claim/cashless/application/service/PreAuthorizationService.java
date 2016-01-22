@@ -13,6 +13,7 @@ import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollo
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
@@ -29,7 +30,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -153,7 +153,8 @@ public class PreAuthorizationService {
             PreAuthorizationDetail preAuthorizationDetail = preAuthorization.getPreAuthorizationDetails().iterator().next();
             notNull(preAuthorizationDetail, "Not uploaded successfully");
             PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(preAuthorization, preAuthorizationDetail.getClientId());
-            preAuthorizationRequestService.createUpdatePreAuthorizationRequest(preAuthorizationClaimantDetailCommand, Boolean.TRUE);
+            PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestService.createPreAuthorizationRequest(preAuthorizationClaimantDetailCommand);
+            preAuthorizationRequest.savedRegisterFollowUpReminders();
         }
         return Integer.parseInt(runningSequence.trim());
     }
