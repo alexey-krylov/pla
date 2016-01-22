@@ -1792,7 +1792,6 @@
                                             <input class="form-control input-sm" style="width:300px;"
                                                    value="{{document.documentAttached[0].name}}"
                                                    readonly="true"/>
-
                                         </div>
 
                                     </div>
@@ -1877,7 +1876,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode">Submit
+                                    ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode || disableSubmit">Submit
                             </button>
                         </div>
                     </div>

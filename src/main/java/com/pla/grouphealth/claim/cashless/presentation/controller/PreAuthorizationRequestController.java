@@ -136,15 +136,15 @@ public class PreAuthorizationRequestController {
     @Synchronized
     @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity uploadMandatoryDocument(GHClaimDocumentCommand ghClaimDocumentCommand, HttpServletRequest request) {
+    public Result uploadMandatoryDocument(GHClaimDocumentCommand ghClaimDocumentCommand, HttpServletRequest request) {
         ghClaimDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
             commandGateway.send(ghClaimDocumentCommand);
+            return Result.success("Documents uploaded successfully");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.OK);
+            return Result.failure(e.getMessage());
         }
-        return new ResponseEntity(Result.success("Documents uploaded successfully"), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/updatewithcomments", method = RequestMethod.POST)

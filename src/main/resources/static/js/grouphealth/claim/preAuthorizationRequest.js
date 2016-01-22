@@ -41,14 +41,30 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                         } else {
                             return false;
                         }
+                    }],
+
+                    preAuthorizationId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
+                        var deferred = $q.defer();
+                        var deferred = $q.defer();
+                        var preAuthorizationId = getQueryParameter('preAuthorizationId');
+                        deferred.resolve(preAuthorizationId)
+                        return deferred.promise;
+                    }],
+
+                    clientId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
+                        var deferred = $q.defer();
+                        var deferred = $q.defer();
+                        var clientId = getQueryParameter('clientId');
+                        deferred.resolve(clientId)
+                        return deferred.promise;
                     }]
                 }
 
             }
         )}])
 
-    .controller('createPreAuthorizationRequestCtrl', ['$scope', '$http','createUpdateDto','$timeout','getQueryParameter','$window','documentList','$upload',
-        function ($scope, $http, createUpdateDto, $timeout, getQueryParameter, $window, documentList, $upload){
+    .controller('createPreAuthorizationRequestCtrl', ['$scope', '$http','createUpdateDto','$timeout','getQueryParameter','$window','documentList','$upload','preAuthorizationId','clientId',
+        function ($scope, $http, createUpdateDto, $timeout, getQueryParameter, $window, documentList, $upload, preAuthorizationId, clientId){
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.drugServicesDtos;
             $scope.treatmentDiagnosis={};
@@ -68,16 +84,22 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
             $scope.additionalDocumentList = [{}];
             $scope.disableSubmit = false;
 
-            $scope.watchCollection($scope.documentList, function(newCollection, oldCollection){
-                console.log(newCollection);
-                angular.forEach(newCollection, function(documentDto){
-                    console.log("documentDto - "+documentDto);
-                    if(!documentDto.file) {
-                        $scope.disableSubmit = true;
-                        return;
-                    }
-                });
+            //alert(preAuthorizationId+" "+clientId);
+            $scope.$watch('documentList', function(newCollection, oldCollection){
+                console.log("watching");
+                $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
             });
+
+            $scope.shouldSubmitBeDisabled = function(documentList){
+                for (var i = 0; i < documentList.length; i++) {
+                    var document = documentList[i];
+                    console.log(document);
+                    if(document.fileName == null || document.content == null){
+                        return true;
+                    }
+                }
+                return false;
+            };
 
             $scope.viewTreatmentDiagnosis = function(treatmentDiagnosis, treatmentDiagnosisIndex){
                 $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;
@@ -267,9 +289,9 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                         }).progress(function (evt) {
                             console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                         }).success(function (data, status, headers, config) {
-                            console.log('file ' + config.file.name);
-                            console.log(data);
-
+                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/"+preAuthorizationId).success(function (response, status, headers, config) {
+                                $scope.documentList = response;
+                            });
                         });
 
                     }
