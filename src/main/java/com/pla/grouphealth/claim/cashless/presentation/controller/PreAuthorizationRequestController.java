@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.pla.grouphealth.claim.cashless.application.command.ApprovePreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.command.PreAuthorizationRemoveAdditionalCommand;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
@@ -11,7 +12,6 @@ import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
-import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -20,13 +20,10 @@ import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
-import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -42,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Author - Mohan Sharma Created on 1/6/2016.
@@ -66,7 +64,7 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/loadpreauthorizationviewforupdate", method = RequestMethod.GET)
     public @ResponseBody
     PreAuthorizationClaimantDetailCommand loadpreauthorizationviewforupdate(@RequestParam String preAuthorizationId, HttpServletResponse response) throws IOException {
-        if(UtilValidator.isEmpty(preAuthorizationId)){
+        if(isEmpty(preAuthorizationId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return null;
         }
@@ -115,7 +113,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId, @PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws Exception {
-        if(UtilValidator.isEmpty(clientId)){
+        if(isEmpty(clientId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "clientId cannot be empty");
             return Lists.newArrayList();
         }
@@ -206,7 +204,7 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid", method = RequestMethod.GET)
     @ResponseBody
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(@RequestParam String preAuthorizationId, HttpServletResponse response) throws IOException {
-        if(UtilValidator.isEmpty(preAuthorizationId)){
+        if(isEmpty(preAuthorizationId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return null;
         }
@@ -225,7 +223,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
     public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws IOException {
-        if(UtilValidator.isEmpty(preAuthorizationId)){
+        if(isEmpty(preAuthorizationId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return Sets.newHashSet();
         }
@@ -237,10 +235,27 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
-        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto);
-        modelAndView.addObject("searchResult", searchResult);
+        UserDetails userDetails = getLoggedInUserDetail(request);
+        if(isNotEmpty(userDetails)) {
+            List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto, userDetails.getUsername());
+            modelAndView.addObject("searchResult", searchResult);
+        }
         modelAndView.addObject("searchResult", searchPreAuthorizationRecordDto);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/underwriter/approve", method = RequestMethod.POST)
+    public Result approvedByUnderwriter(@Valid @RequestBody ApprovePreAuthorizationCommand approvePreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+        }
+        try {
+            String preAuthorizationRequestId = commandGateway.sendAndWait(approvePreAuthorizationCommand);
+            return Result.success("Pre Authorization Request successfully submitted");
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
     }
 
 }

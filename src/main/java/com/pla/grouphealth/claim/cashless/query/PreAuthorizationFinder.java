@@ -33,32 +33,32 @@ public class PreAuthorizationFinder {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<PreAuthorization> searchPreAuthorizationRecord (SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto){
-
+    public List<PreAuthorizationRequest> searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, String username){
         if(isEmpty(searchPreAuthorizationRecordDto.getBatchNumber())&& isEmpty(searchPreAuthorizationRecordDto.getClientId()) &&
                 isEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())&&isEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())&&
                 isEmpty(searchPreAuthorizationRecordDto.getHcpCode())) {
 
             return Lists.newArrayList();
         }
-        Query query=new Query();
+        Query query = new Query();
+        query.addCriteria(new Criteria().and("preAuthorizationUnderWriterUserId").is(username));
         if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getHcpCode())){
-            query.addCriteria(new Criteria().and("hcpCode.hcpCode").is(searchPreAuthorizationRecordDto.getHcpCode()));
+            query.addCriteria(new Criteria().and("preAuthorizationRequestHCPDetail.hcpCode").is(searchPreAuthorizationRecordDto.getHcpCode()));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())){
-            query.addCriteria(new Criteria().and("preAuthorizationDetails.policyNumber").is(searchPreAuthorizationRecordDto.getPolicyNumber()));
+            query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.policyNumber").is(searchPreAuthorizationRecordDto.getPolicyNumber()));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getClientId())){
-            query.addCriteria(new Criteria().and("preAuthorizationDetails.clientId").is(searchPreAuthorizationRecordDto.getClientId()));
+            query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.assuredDetail.clientId").is(searchPreAuthorizationRecordDto.getClientId()));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())){
-            query.addCriteria(new Criteria().and("preAuthorizationId.preAuthorizationId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
+            query.addCriteria(new Criteria().and("preAuthorizationRequestId.preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
         }
-        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationDetails.policyNumber"));
-        return mongoTemplate.find(query, PreAuthorization.class, PRE_AUTHORIZATION_DETAIL);
+        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationRequestId.preAuthorizationRequestId"));
+        return mongoTemplate.find(query, PreAuthorizationRequest.class, "PRE_AUTHORIZATION_REQUEST");
 
     }
 

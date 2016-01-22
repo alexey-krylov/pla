@@ -83,8 +83,11 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
             $scope.documentList = documentList;
             $scope.additionalDocumentList = [{}];
             $scope.disableSubmit = false;
-
+            $scope.isViewMode = false;
             //alert(preAuthorizationId+" "+clientId);
+            if($scope.createUpdateDto.submitted){
+                $scope.isViewMode = true;
+            }
             $scope.$watch('documentList', function(newCollection, oldCollection){
                 console.log("watching");
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
@@ -158,13 +161,9 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
                     url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/submitpreauthorization',
                     method: 'POST',
                     data: $scope.createUpdateDto
-                }).then(function (response) {
-                        console.log("first===" + JSON.stringify($scope.createUpdateDto));
-
-                    },
-                    function (response) {
-                        console.log("Second" + JSON.stringify($scope.createUpdateDto));
-                    });
+                }).success(function(){
+                    window.location.reload();
+                }).error();
 
             };
 

@@ -549,8 +549,8 @@ public class PreAuthorizationRequestService {
         return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
     }
 
-    public List<PreAuthorizationClaimantDetailCommand> searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
-        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
+    public List<PreAuthorizationClaimantDetailCommand> searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, String username) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto, username);
         return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
     }
 

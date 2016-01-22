@@ -37,20 +37,8 @@ public class PreAuthorizationRequestCommandHandler {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest
-                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
-                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
-                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
-                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
-                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
-                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
-                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
-                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
-                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
-                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
-                .updateStatus(PreAuthorizationRequest.Status.EVALUATION)
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION)
                 .updateWithProcessorUserId(preAuthorizationClaimantDetailCommand.getPreAuthProcessorUserId());
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING)
@@ -65,6 +53,17 @@ public class PreAuthorizationRequestCommandHandler {
     }
 
     @CommandHandler
+    public boolean approvePreAuthorization(ApprovePreAuthorizationCommand approvePreAuthorizationCommand){
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = approvePreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.APPROVED);
+        return Boolean.TRUE;
+    }
+
+    @CommandHandler
     public boolean removeAdditionalDocument(PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand) {
         boolean result = Boolean.FALSE;
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRemoveAdditionalCommand.getPreAuthorizationId());
@@ -73,6 +72,23 @@ public class PreAuthorizationRequestCommandHandler {
             result =  removeDocumentByGridFsDocId(ghProposerDocuments, preAuthorizationRemoveAdditionalCommand.getGridFsDocId());
         }
         return result;
+    }
+
+    private PreAuthorizationRequest populateDetailsToPreAuthorization(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, PreAuthorizationRequest preAuthorizationRequest) {
+        preAuthorizationRequest
+                .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
+                .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithRelationship(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
+                .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
+                .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
+                .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
+                .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
+                .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
+                .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
+                .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
+        return preAuthorizationRequest;
     }
 
     private boolean removeDocumentByGridFsDocId(Set<GHProposerDocument> ghProposerDocuments, String gridFsDocId) {
