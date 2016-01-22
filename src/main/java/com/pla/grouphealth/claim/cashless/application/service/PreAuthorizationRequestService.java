@@ -549,6 +549,11 @@ public class PreAuthorizationRequestService {
         return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
     }
 
+    public List<PreAuthorizationClaimantDetailCommand> searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
+        return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
+    }
+
     private List<PreAuthorizationClaimantDetailCommand> convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(List<PreAuthorizationRequest> preAuthorizationRequests) {
         return isNotEmpty(preAuthorizationRequests) ? preAuthorizationRequests.parallelStream().map(new Function<PreAuthorizationRequest, PreAuthorizationClaimantDetailCommand>() {
             @Override
@@ -581,7 +586,8 @@ public class PreAuthorizationRequestService {
                     .updateWithIllnessDetails(constructIllnessDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestIllnessDetail()))
                     .updateWithDrugServices(constructDrugServiceDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestDrugServices()))
                     .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail(), preAuthorizationRequest.getRelationship(), preAuthorizationRequest.getCategory(), preAuthorizationRequest.getGhProposer()))
-            .updateWithSubmittedFlag(preAuthorizationRequest.isSubmitted());
+                    .updateWithSubmittedFlag(preAuthorizationRequest.isSubmitted())
+                    .updateWithProcessorUserId(preAuthorizationRequest.getPreAuthorizationProcessorUserId());;
         }
         return preAuthorizationClaimantDetailCommand;
     }

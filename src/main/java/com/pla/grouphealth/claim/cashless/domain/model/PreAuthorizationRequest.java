@@ -265,6 +265,12 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public PreAuthorizationRequest updateWithProcessorUserId(String preAuthProcessorUserId) {
+        if(isNotEmpty(preAuthProcessorUserId))
+            this.preAuthorizationProcessorUserId = preAuthProcessorUserId;
+        return this;
+    }
+
 
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING("Underwriting"), APPROVED("Approved"), REJECTED("Rejected");

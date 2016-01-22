@@ -26,7 +26,7 @@ public class PreAuthorizationRequestCommandHandler {
     private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
 
     @CommandHandler
-    public String createPreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+    public String updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
@@ -43,10 +43,11 @@ public class PreAuthorizationRequestCommandHandler {
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
-                .updateStatus(PreAuthorizationRequest.Status.EVALUATION);
+                .updateStatus(PreAuthorizationRequest.Status.EVALUATION)
+                .updateWithProcessorUserId(preAuthorizationClaimantDetailCommand.getPreAuthProcessorUserId());
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
             preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING)
-            .updatePreAuthorizationSubmitted(Boolean.TRUE);
+                    .updatePreAuthorizationSubmitted(Boolean.TRUE);
         }
         return preAuthorizationRequest.getIdentifier();
     }

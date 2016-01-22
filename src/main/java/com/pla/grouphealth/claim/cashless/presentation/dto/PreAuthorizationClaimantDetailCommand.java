@@ -33,6 +33,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private List<DrugServiceDto> drugServicesDtos;
     private boolean submitEventFired;
     private boolean submitted;
+    private String preAuthProcessorUserId;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
@@ -128,6 +129,12 @@ public class PreAuthorizationClaimantDetailCommand {
 
     public PreAuthorizationClaimantDetailCommand updateWithSubmittedFlag(boolean submitted) {
         this.submitted = submitted;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithProcessorUserId(String preAuthorizationProcessorUserId) {
+        if(isNotEmpty(preAuthorizationProcessorUserId))
+            this.preAuthProcessorUserId = preAuthorizationProcessorUserId;
         return this;
     }
 }

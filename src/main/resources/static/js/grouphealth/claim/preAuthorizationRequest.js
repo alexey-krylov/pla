@@ -64,8 +64,20 @@ angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', 'mgcrea.ng
             $scope.createUpdateCommand.diagnosisTreatmentDtos=[];
             $scope.createUpdateCommand.illnessDetailDto={};
             $scope.createUpdateCommand.drugServicesDtos=[];
-            $scope.documentList=documentList;
+            $scope.documentList = documentList;
             $scope.additionalDocumentList = [{}];
+            $scope.disableSubmit = false;
+
+            $scope.watchCollection($scope.documentList, function(newCollection, oldCollection){
+                console.log(newCollection);
+                angular.forEach(newCollection, function(documentDto){
+                    console.log("documentDto - "+documentDto);
+                    if(!documentDto.file) {
+                        $scope.disableSubmit = true;
+                        return;
+                    }
+                });
+            });
 
             $scope.viewTreatmentDiagnosis = function(treatmentDiagnosis, treatmentDiagnosisIndex){
                 $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;

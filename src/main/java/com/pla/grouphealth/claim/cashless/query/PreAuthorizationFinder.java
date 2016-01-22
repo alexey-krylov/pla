@@ -69,7 +69,7 @@ public class PreAuthorizationFinder {
 
             return Lists.newArrayList();
         }
-        Query query=new Query();
+        Query query = new Query();
         if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
         }

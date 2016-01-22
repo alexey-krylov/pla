@@ -20,6 +20,7 @@ import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -77,12 +78,14 @@ public class PreAuthorizationRequestController {
     }
 
     @RequestMapping(value = "/submitpreauthorization", method = RequestMethod.POST)
-    public Result submitPreAuthorization(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response){
+    public Result submitPreAuthorization(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userDetails.getUsername());
             PreAuthorizationRequestId preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
             return Result.success("Pre Authorization Request successfully created with PreAuthorizationRequestId - "+ preAuthorizationRequestId.getPreAuthorizationRequestId());
         } catch (Exception e){
@@ -189,6 +192,16 @@ public class PreAuthorizationRequestController {
         }
         Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findAdditionalDocuments(new PreAuthorizationRequestId(preAuthorizationId));
         return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/searchpreauthorizationforunderwriterbycriteria", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
+        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto);
+        modelAndView.addObject("searchResult", searchResult);
+        modelAndView.addObject("searchResult", searchPreAuthorizationRecordDto);
+        return modelAndView;
     }
 
 }
