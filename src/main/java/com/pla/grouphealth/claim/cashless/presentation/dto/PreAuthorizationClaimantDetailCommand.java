@@ -32,6 +32,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private IllnessDetailDto illnessDetailDto;
     private List<DrugServiceDto> drugServicesDtos;
     private boolean submitEventFired;
+    private boolean submitted;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
@@ -122,6 +123,11 @@ public class PreAuthorizationClaimantDetailCommand {
     public PreAuthorizationClaimantDetailCommand updateWithStatus(PreAuthorizationRequest.Status status) {
         if(isNotEmpty(status))
             this.status = status.getDescription();
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithSubmittedFlag(boolean submitted) {
+        this.submitted = submitted;
         return this;
     }
 }

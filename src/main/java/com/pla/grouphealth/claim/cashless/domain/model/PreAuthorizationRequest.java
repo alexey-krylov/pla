@@ -66,6 +66,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private String preAuthorizationUnderWriterUserId;
     private Set<CommentDetail> commentDetails;
     private LocalDate preAuthorizationDate;
+    private boolean submitted;
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
@@ -257,6 +258,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     @Override
     public String getIdentifier() {
         return preAuthorizationRequestId;
+    }
+
+    public PreAuthorizationRequest updatePreAuthorizationSubmitted(Boolean submitted) {
+        this.submitted = submitted;
+        return this;
     }
 
 

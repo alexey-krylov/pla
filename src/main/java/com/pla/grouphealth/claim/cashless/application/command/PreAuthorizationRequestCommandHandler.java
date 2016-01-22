@@ -44,8 +44,10 @@ public class PreAuthorizationRequestCommandHandler {
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
                 .updateStatus(PreAuthorizationRequest.Status.EVALUATION);
-        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
-            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
+        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
+            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING)
+            .updatePreAuthorizationSubmitted(Boolean.TRUE);
+        }
         return preAuthorizationRequest.getIdentifier();
     }
 
