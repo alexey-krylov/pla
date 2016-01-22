@@ -241,11 +241,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public PreAuthorizationRequest updateWithComments(CommentDetail commentDetail) {
-        Set<CommentDetail> commentDetails = this.getCommentDetails();
-        if(isEmpty(commentDetails))
-            commentDetails = Sets.newHashSet();
-        commentDetails.add(commentDetail);
+    public PreAuthorizationRequest updateWithComments(Set<CommentDetail> commentDetails) {
         this.commentDetails = commentDetails;
         return this;
     }

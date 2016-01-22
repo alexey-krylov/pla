@@ -587,7 +587,8 @@ public class PreAuthorizationRequestService {
                     .updateWithDrugServices(constructDrugServiceDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestDrugServices()))
                     .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail(), preAuthorizationRequest.getRelationship(), preAuthorizationRequest.getCategory(), preAuthorizationRequest.getGhProposer()))
                     .updateWithSubmittedFlag(preAuthorizationRequest.isSubmitted())
-                    .updateWithProcessorUserId(preAuthorizationRequest.getPreAuthorizationProcessorUserId());;
+                    .updateWithProcessorUserId(preAuthorizationRequest.getPreAuthorizationProcessorUserId())
+                    .updateWithComments(preAuthorizationRequest.getCommentDetails());
         }
         return preAuthorizationClaimantDetailCommand;
     }
@@ -726,7 +727,7 @@ public class PreAuthorizationRequestService {
         return result;
     }
 
-    public Set<CommentDetail> updateComments(UpdateCommentCommand updateCommentCommand) {
+    /*public Set<CommentDetail> updateComments(UpdateCommentCommand updateCommentCommand) {
         PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(new PreAuthorizationRequestId(updateCommentCommand.getPreAuthorizationRequestId()));
         if (isNotEmpty(preAuthorizationRequest)) {
             CommentDetail commentDetail = new CommentDetail()
@@ -737,7 +738,7 @@ public class PreAuthorizationRequestService {
             preAuthorizationRequestRepository.save(preAuthorizationRequest);
         }
         return preAuthorizationRequest.getCommentDetails();
-    }
+    }*/
 
     public boolean doesClientBelongToTheGivenPolicy(String clientId, String policyNumber) {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);

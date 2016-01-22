@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.claim.cashless.application.command.ApprovePreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.command.PreAuthorizationRemoveAdditionalCommand;
+import com.pla.grouphealth.claim.cashless.application.command.RejectPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
@@ -252,6 +253,20 @@ public class PreAuthorizationRequestController {
         }
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(approvePreAuthorizationCommand);
+            return Result.success("Pre Authorization Request successfully submitted");
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/reject", method = RequestMethod.POST)
+    public Result rejectedByUnderwriter(@Valid @RequestBody RejectPreAuthorizationCommand rejectPreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+        }
+        try {
+            String preAuthorizationRequestId = commandGateway.sendAndWait(rejectPreAuthorizationCommand);
             return Result.success("Pre Authorization Request successfully submitted");
         } catch (Exception e){
             return Result.failure(e.getMessage());

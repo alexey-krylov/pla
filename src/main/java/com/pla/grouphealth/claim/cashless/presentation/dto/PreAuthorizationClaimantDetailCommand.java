@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -34,6 +35,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private boolean submitEventFired;
     private boolean submitted;
     private String preAuthProcessorUserId;
+    private Set<CommentDetail> commentDetails;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
@@ -135,6 +137,11 @@ public class PreAuthorizationClaimantDetailCommand {
     public PreAuthorizationClaimantDetailCommand updateWithProcessorUserId(String preAuthorizationProcessorUserId) {
         if(isNotEmpty(preAuthorizationProcessorUserId))
             this.preAuthProcessorUserId = preAuthorizationProcessorUserId;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithComments(Set<CommentDetail> commentDetails) {
+        this.commentDetails = commentDetails;
         return this;
     }
 }

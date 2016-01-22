@@ -49,7 +49,7 @@ public class PreAuthorizationRequestCommandHandler {
 
     @CommandHandler
     public Set<CommentDetail> updateComments(UpdateCommentCommand updateCommentCommand){
-        return preAuthorizationRequestService.updateComments(updateCommentCommand);
+        return null;//preAuthorizationRequestService.updateComments(updateCommentCommand);
     }
 
     @CommandHandler
@@ -60,6 +60,17 @@ public class PreAuthorizationRequestCommandHandler {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
         preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.APPROVED);
+        return Boolean.TRUE;
+    }
+
+    @CommandHandler
+    public boolean rejectPreAuthorization(RejectPreAuthorizationCommand rejectPreAuthorizationCommand){
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = rejectPreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.REJECTED);
         return Boolean.TRUE;
     }
 
@@ -87,7 +98,8 @@ public class PreAuthorizationRequestCommandHandler {
                 .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
-                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
+                .updateWithComments(preAuthorizationClaimantDetailCommand.getCommentDetails());
         return preAuthorizationRequest;
     }
 
