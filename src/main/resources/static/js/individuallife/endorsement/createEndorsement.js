@@ -149,7 +149,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.documentList = [];
             $scope.todayDate = new Date();
             $scope.policy={};
-            $scope.ilEndrosementDetils={"policyHolderNew":{}};
+            $scope.ilEndrosementDetils={};
             $scope.plan={};
 
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
@@ -183,6 +183,24 @@ app.config(["$routeProvider", function ($routeProvider) {
                 };
 
         $scope.datePickerSettingsForUpdateLifeAssuredDOB = {
+            isOpened:false,
+            dateOptions:{
+                formatYear:'yyyy' ,
+                startingDay:1
+
+            }
+        }
+
+        $scope.updateEffectiveDate = function ($event) {
+            if($scope.ilEndrosementDetils.effectiveDate == null){
+                $scope.ilEndrosementDetils.effectiveDate='';
+            }
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePickerSettingsForUpdateEffectiveDate.isOpened = true;
+        };
+
+        $scope.datePickerSettingsForUpdateEffectiveDate = {
             isOpened:false,
             dateOptions:{
                 formatYear:'yyyy' ,
@@ -398,6 +416,10 @@ app.config(["$routeProvider", function ($routeProvider) {
                         $scope.serverError = false;
                         var policyData=response.data;
                         $scope.ilEndrosementDetils=response.data;
+                        if($scope.ilEndrosementDetils.effectiveDate == null){
+                            $scope.ilEndrosementDetils.effectiveDate='';
+                            $scope.ilEndrosementDetils.effectiveDate=moment().add(0,'days').format("YYYY-MM-DD");
+                        }
                         angular.copy($scope.ilEndrosementDetils,$scope.ilEndrosementDetilsCopy); // Keeping One Copy Of Original Object
                         console.log('************');
                         console.log(JSON.stringify($scope.ilEndrosementDetils));
@@ -411,13 +433,58 @@ app.config(["$routeProvider", function ($routeProvider) {
         }
         $scope.clearData=function(){
             angular.copy($scope.ilEndrosementDetilsCopy,$scope.ilEndrosementDetils);
-            if($scope.policy.endrosementType == 'correctinDOBLA'){
+            //Respective Field Populating
+            if($scope.policy.endrosementType == 'ASSURED_NAME_CHANGE' && $scope.ilEndrosementDetils.lifeAssuredNew == null){
+                $scope.ilEndrosementDetils.lifeAssuredNew={};
+                angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
+            }else if($scope.policy.endrosementType == 'POLICYHOLDER_NAME_CHANGE' && $scope.ilEndrosementDetils.policyHolderNew == null){
+                $scope.ilEndrosementDetils.policyHolderNew={};
+                angular.copy($scope.ilEndrosementDetils.policyHolder,$scope.ilEndrosementDetils.policyHolderNew);
+            }else if($scope.policy.endrosementType == 'POLICYHOLDER_GENDER_CHANGE' && $scope.ilEndrosementDetils.policyHolderNew == null){
+                $scope.ilEndrosementDetils.policyHolderNew={};
+                angular.copy($scope.ilEndrosementDetils.policyHolder,$scope.ilEndrosementDetils.policyHolderNew);
+            }else if($scope.policy.endrosementType == 'ASSURED_GENDER_CHANGE' && $scope.ilEndrosementDetils.lifeAssuredNew == null){
+                $scope.ilEndrosementDetils.lifeAssuredNew={};
+                angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
+            }else if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE' && $scope.ilEndrosementDetils.lifeAssuredNew == null){
+                $scope.ilEndrosementDetils.lifeAssuredNew={};
+                angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
+                $scope.ilEndrosementDetils.lifeAssuredNew.dateOfBirth='';
+            }else if($scope.policy.endrosementType == 'POLICYHOLDER_DOB_CHANGE' && $scope.ilEndrosementDetils.policyHolderNew == null){
+                $scope.ilEndrosementDetils.policyHolderNew={};
+                angular.copy($scope.ilEndrosementDetils.policyHolder,$scope.ilEndrosementDetils.policyHolderNew);
+                $scope.ilEndrosementDetils.policyHolderNew.dateOfBirth='';
+            }else if($scope.policy.endrosementType == 'POLICYHOLDER_NRC_CHANGE' && $scope.ilEndrosementDetils.policyHolderNew == null){
+                $scope.ilEndrosementDetils.policyHolderNew={};
+                angular.copy($scope.ilEndrosementDetils.policyHolder,$scope.ilEndrosementDetils.policyHolderNew);
+                $scope.ilEndrosementDetils.policyHolderNew.nrc='';
+            }else if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE' && $scope.ilEndrosementDetils.lifeAssuredNew == null){
+                $scope.ilEndrosementDetils.lifeAssuredNew={};
+                angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
+                $scope.ilEndrosementDetils.lifeAssuredNew.nrc='';
+            }
+
+            if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
                 $scope.earlierAgeCalculation();
                 $scope.planSetUp();
-            }else if($scope.policy.endrosementType == 'correctinDOBPH'){
+            }else if($scope.policy.endrosementType == 'POLICYHOLDER_DOB_CHANGE'){
                 $scope.earlierAgeCalculationForPolicyHolder();
                 $scope.planSetUp();
             }
+        }
+
+        /**
+         * Method to Create Endrosement From Policy
+         */
+        $scope.createEndrosement=function(){
+            angular.extend($scope.ilEndrosementDetils,{"ilEndorsementType":$scope.policy.endrosementType});
+            console.log('** Submit..');
+            console.log(JSON.stringify($scope.ilEndrosementDetils));
+
+            $http.post('/pla/individuallife/endorsement/opencreateendorsementpage',$scope.createEndrosement).success(function (response, status, headers, config) {
+                $scope.endorsementRequestNumber = response;
+            }).error(function (response, status, headers, config) {
+            });
         }
         $scope.planSetUp=function(){
             $http.get('/pla/core/plan/getPlanById/'+$scope.ilEndrosementDetils.proposalPlanDetail.planId).success(function (response, status, headers, config) {
@@ -426,7 +493,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             });
         }
         $scope.changePolicyHolderGender=function(){
-            if($scope.policy.endrosementType == 'correctinGenderPH'){
+            if($scope.policy.endrosementType == 'POLICYHOLDER_GENDER_CHANGE'){
                 if($scope.ilEndrosementDetils.policyHolderNew == null){
                     $scope.ilEndrosementDetils.policyHolderNew={};
                 }
@@ -438,7 +505,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         }
         $scope.changeLifeAssuredGender=function(){
-            if($scope.policy.endrosementType == 'correctinGenderLA'){
+            if($scope.policy.endrosementType == 'ASSURED_GENDER_CHANGE'){
                 if($scope.ilEndrosementDetils.lifeAssuredNew == null){
                     $scope.ilEndrosementDetils.lifeAssuredNew={};
                 }

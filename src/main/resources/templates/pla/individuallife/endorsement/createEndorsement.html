@@ -101,14 +101,14 @@
                                     <label class="control-label">Endrosement Type</label>
                                     <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="endrosementType" ng-model="policy.endrosementType" ng-required="true" ng-change="clearData()">
                                         <option value="">--- Select Endrosement Type -- </option>
-                                        <option value="correctinNameLA">Correction of Name- Life Assured</option>
-                                        <option value="correctinNamePH">Correction of Name- Policyholder</option>
-                                        <option value="correctinGenderPH">Correction of Gender- Policyholder</option>
-                                        <option value="correctinGenderLA">Correction of Gender- Life Assured</option>
-                                        <option value="correctinDOBLA">Correction of DoB- Life Assured</option>
-                                        <option value="correctinDOBPH">Correction of DoB- Policy Holder</option>
-                                        <option value="correctinNRCPH">Correction of NRC- Policy Holder</option>
-                                        <option value="correctinNRCLA">Correction of NRC- Life Assured</option>
+                                        <option value="ASSURED_NAME_CHANGE">Correction of Name- Life Assured</option>
+                                        <option value="POLICYHOLDER_NAME_CHANGE">Correction of Name- Policyholder</option>
+                                        <option value="POLICYHOLDER_GENDER_CHANGE">Correction of Gender- Policyholder</option>
+                                        <option value="ASSURED_GENDER_CHANGE">Correction of Gender- Life Assured</option>
+                                        <option value="ASSURED_DOB_CHANGE">Correction of DoB- Life Assured</option>
+                                        <option value="POLICYHOLDER_DOB_CHANGE">Correction of DoB- Policy Holder</option>
+                                        <option value="POLICYHOLDER_NRC_CHANGE">Correction of NRC- Policy Holder</option>
+                                        <option value="ASSURED_NRC_CHANGE">Correction of NRC- Life Assured</option>
                                         <option value="changecontactinLA">Change of Contact Details- Life Assured</option>
                                         <option value="changecontactinPH">Change of Contact Details- Policyholder</option>
                                         <option value="changeSumAssured">Change in Sum Assured</option>
@@ -133,26 +133,30 @@
                                     <label class="control-label">Endrosement Effective Date</label>
                                     <div class='input-group date'>
                                         <input type="text" class="form-control input-sm"
-                                               datepicker-popup="" view-enabled=""
-                                               is-open="efectiveDate"
-                                               readonly="true" max-date="todayDate" ng-disabled="mode=='new'||mode=='view'"
-                                               ng-model="policy.endrosmentDate" name="dob"/>
-                                    <span class="input-group-btn">
-                                    <button disabled="true" type="button" class="btn btn-default btn-sm"
-                                            ng-click="launchEndrosementDate($event)">
-                                        <i class="glyphicon glyphicon-calendar"></i></button>
-                                  </span>
+                                               ng-click="updateEffectiveDate($event)" max-date="todayDate" datepicker-popup="dd/MM/yyyy"
+                                               ng-model="ilEndrosementDetils.effectiveDate"
+                                               datepicker-options="datePickerSettingsForUpdateEffectiveDate.dateOptions"
+                                               is-open="datePickerSettingsForUpdateEffectiveDate.isOpened" close-text="Close"
+                                               show-button-bar="false"
+                                               name="effectiveUpdateDate" ng-required="true"
+                                               onkeypress="return isNumeric(event)" />
+                                                <span class="input-group-btn">
+                                                    <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
+                                                            ng-click="updateEffectiveDate($event)">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <strong ng-if="policy.endrosementType =='correctinNameLA'">Life Assured Name Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNameLA'">
+                        <strong ng-if="policy.endrosementType =='ASSURED_NAME_CHANGE'">Life Assured Name Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='ASSURED_NAME_CHANGE'">
                             <div class="col-md-6">
                                 <div class="form-group required">
                                     <label class="control-label">Title</label>
-                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ilEndrosementDetils.policyHolder.title" ng-options="title as title for title in titleList">
+                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ilEndrosementDetils.lifeAssuredNew.title" ng-options="title as title for title in titleList">
                                     </select>
 
                                     <div class="error" ng-messages="step1.title.$error" ng-if="step1.title.$dirty">
@@ -162,7 +166,7 @@
 
                                 <div class="form-group">
                                     <label class="control-label">Life Assured Surname</label>
-                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="ilEndrosementDetils.policyHolder.surname"/>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="surName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="ilEndrosementDetils.lifeAssuredNew.surname"/>
 
                                     <div class="error" ng-messages="step1.surName.$error" ng-if="step1.surName.$dirty">
                                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
@@ -175,7 +179,7 @@
                             <div class="col-md-6">
                                 <div class="form-group required">
                                     <label class="control-label">Life Assured First Name</label>
-                                    <input type="text" class="form-control input-sm" ng-required="true" name="firstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.policyHolder.firstName"/>
+                                    <input type="text" class="form-control input-sm" ng-required="true" name="firstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.lifeAssuredNew.firstName"/>
                                     <div class="error" ng-messages="step1.firstName.$error" ng-if="step1.firstName.$dirty">
                                         <small class="error" ng-message="required">
                                             Please enter FirstName
@@ -188,7 +192,7 @@
 
                                 <div class="form-group">
                                     <label class="control-label">Other Name</label>
-                                    <input type="text" class="form-control input-sm" name="otherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.policyHolder.otherName"/>
+                                    <input type="text" class="form-control input-sm" name="otherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.lifeAssuredNew.otherName"/>
 
                                     <div class="error" ng-messages="step1.otherName.$error" ng-if="step1.otherName.$dirty">
                                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
@@ -198,12 +202,12 @@
 
                             </div>
                         </div>
-                        <strong ng-if="policy.endrosementType == 'correctinNamePH'">Policy Holder Name Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNamePH'">
+                        <strong ng-if="policy.endrosementType == 'POLICYHOLDER_NAME_CHANGE'">Policy Holder Name Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='POLICYHOLDER_NAME_CHANGE'">
                             <div class="col-md-6">
                                 <div class="form-group required">
                                     <label class="control-label">Title</label>
-                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ilEndrosementDetils.policyHolder.title" ng-options="title as title for title in titleList">
+                                    <select class="form-control input-sm" name="title" ng-required="true" ng-disabled="mode=='new'||mode=='view'" ng-model="ilEndrosementDetils.policyHolderNew.title" ng-options="title as title for title in titleList">
                                     </select>
                                     <div class="error" ng-messages="step1.title.$error" ng-if="step1.title.$dirty">
                                         <small ng-message="required">Please enter Title</small>
@@ -212,7 +216,7 @@
 
                                 <div class="form-group">
                                     <label class="control-label">Policy Holder Surname</label>
-                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="policyHolderSurName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="ilEndrosementDetils.policyHolder.surname"/>
+                                    <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="policyHolderSurName" ng-maxlength="20" ng-pattern="/^[a-zA-Z ]*$/" ng-model="ilEndrosementDetils.policyHolderNew.surname"/>
 
                                     <div class="error" ng-messages="step1.policyHolderSurName.$error" ng-if="step1.policyHolderSurName.$dirty">
                                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
@@ -223,7 +227,7 @@
                             <div class="col-md-6">
                                 <div class="form-group required">
                                     <label class="control-label">Policy Holder First Name</label>
-                                    <input type="text" class="form-control input-sm" ng-required="true" name="policyHolderFirstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.policyHolder.firstName"/>
+                                    <input type="text" class="form-control input-sm" ng-required="true" name="policyHolderFirstName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.policyHolderNew.firstName"/>
 
                                     <div class="error" ng-messages="step1.policyHolderFirstName.$error" ng-if="step1.policyHolderFirstName.$dirty">
                                         <small class="error" ng-message="required">
@@ -236,7 +240,7 @@
 
                                 <div class="form-group">
                                     <label class="control-label">Other Name</label>
-                                    <input type="text" class="form-control input-sm" name="policyHolderOtherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.policyHolder.otherName"/>
+                                    <input type="text" class="form-control input-sm" name="policyHolderOtherName" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="20" ng-model="ilEndrosementDetils.policyHolderNew.otherName"/>
 
                                     <div class="error" ng-messages="step1.policyHolderOtherName.$error" ng-if="step1.policyHolderOtherName.$dirty">
                                         <small ng-message="maxlength">Only 20 characters are allowed.</small>
@@ -246,8 +250,8 @@
 
                             </div>
                         </div>
-                        <strong ng-if="policy.endrosementType == 'correctinGenderPH'">Policy Holder Gender Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinGenderPH'">
+                        <strong ng-if="policy.endrosementType == 'POLICYHOLDER_GENDER_CHANGE'">Policy Holder Gender Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='POLICYHOLDER_GENDER_CHANGE'">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Policy Holder Gender</label>
@@ -269,8 +273,8 @@
                                 </div>
                             </div>
                         </div>
-                        <strong ng-if="policy.endrosementType == 'correctinGenderLA'">Life Assured Gender Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinGenderLA'">
+                        <strong ng-if="policy.endrosementType == 'ASSURED_GENDER_CHANGE'">Life Assured Gender Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='ASSURED_GENDER_CHANGE'">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Life Assured Gender</label>
@@ -301,7 +305,7 @@
                             </div>
                         </div>
 
-                        <accordion ng-if="policy.endrosementType == 'correctinDOBLA'">
+                        <accordion ng-if="policy.endrosementType == 'ASSURED_DOB_CHANGE'">
                             <accordion-group is-open="true">
                                 <accordion-heading>
                                     Life Assured DOB Details <i class="pull-right glyphicon"
@@ -388,7 +392,7 @@
                             </accordion-group>
                         </accordion>
 
-                        <accordion ng-if="policy.endrosementType== 'correctinDOBPH'">
+                        <accordion ng-if="policy.endrosementType== 'POLICYHOLDER_DOB_CHANGE'">
                             <accordion-group is-open="true">
                                 <accordion-heading>
                                     Policy Holder DOB Details <i class="pull-right glyphicon"
@@ -468,8 +472,8 @@
                             </accordion-group>
                         </accordion>
 
-                        <strong ng-if="policy.endrosementType =='correctinNRCPH'">Policy Holder NRC Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNRCPH'">
+                        <strong ng-if="policy.endrosementType =='POLICYHOLDER_NRC_CHANGE'">Policy Holder NRC Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='POLICYHOLDER_NRC_CHANGE'">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Policyholder NRC</label>
@@ -492,8 +496,8 @@
                             </div>
                         </div>
 
-                        <strong ng-if="policy.endrosementType =='correctinNRCLA'">Life Assured NRC Details</strong>
-                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='correctinNRCLA'">
+                        <strong ng-if="policy.endrosementType =='ASSURED_NRC_CHANGE'">Life Assured NRC Details</strong>
+                        <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px" ng-if="policy.endrosementType =='ASSURED_NRC_CHANGE'">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Life Assured NRC</label>
@@ -570,7 +574,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Province</label>
                                             <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
-                                                    ng-model="policy.residential.province1" ng-init="getTownList(policy.residential.province)" ng-change="getTownList(policy.residential.province)">
+                                                    ng-model="ilEndrosementDetils.lifeAssured.residentialAddress.address.province">
                                             </select>
                                         </div>
 
@@ -1280,6 +1284,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="cancel()">Cancel</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" style="float: right" ng-disabled="step1.$invalid" class="btn btn-default btn-sm" ng-click="createEndrosement()">Save</button>
                         </div>
                     </div>
                 </div>
