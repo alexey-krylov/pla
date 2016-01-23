@@ -2,34 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" >
 <head th:include="fragments/common :: headTag">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
-    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet"/>
-    <script data-main="../../../../static/js/requireConfig"
-            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
 
-    <!--*/-->
 </head>
 <body class="fuelux ng-cloak" style="overflow-x: hidden;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
-<script>
-    var isEnterKey = function (event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-
-        if (charCode == 13) {
-            event.preventDefault();
-        }
-    }
-    requirejs(['main', 'angular-file-upload'], function () {
-        require(['/pla/js/grouphealth/claim/preAuthorizationRequest.js?t=19'], function () {
-            angular.element(document).ready(function () {
-                angular.bootstrap(document, ['CreatePreAuthorizationRequest']);
-            });
-        });
-    });
-</script>
-<!--<script th:inline="javascript">
+<script th:inline="javascript">
     /*<![CDATA[*/
     var isNumeric = function (evt) {
 
@@ -45,11 +28,34 @@
     }
     /*]]>*/
 
-</script>-->
+</script>
+<script>
+    var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
+
+    requirejs(['main','angular-file-upload'],function(){
+        require(['/pla/js/grouphealth/claim/preAuthorizationRequest.js?t=7'], function () {
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['CreatePreAuthorizationRequest']);
+            });
+        });
+
+    });
+
+
+
+
+</script>
 <script type="text/ng-template" id="preAuthorizationRequest.html">
     <nth-alert></nth-alert>
-    <form name="preAuthorizationRequestForm" novalidate="true" class="css-form ng-cloak" method="post" enctype="multipart/form-data">
-        <div class="wizard fueluxWizard" style="overflow: visible" >
+    <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
+          enctype="multipart/form-data">
+        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Claimant Details<span class="chevron"></span></li>
                 <li data-step="2"><span class="badge">2</span>Assured Details<span class="chevron"></span></li>
@@ -58,14 +64,16 @@
                 <li data-step="5"><span class="badge">5</span>Claim Details<span class="chevron"></span></li>
                 <li data-step="6"><span class="badge">6</span>Mandatory Details<span class="chevron"></span></li>
             </ul>
+
+
             <div class="actions">
-                <!--<span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span-->
-                <!--style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span-->
-                <!--ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>-->
+                <span style="font-weight: bolder;margin-right: 15px;color: #999"> <span
+                        style="font-size: 13px;color: #3a87ad;"><span
+                        ng-show="versionNumber &amp;&amp; versionNumber!=0"></span></span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
                 </button>
-                <button type="button" class="btn btn-default btn-next" >Next<span
+                <button type="button" class="btn btn-default btn-next">Next<span
                         class="glyphicon glyphicon-arrow-right"></span></button>
                 <!-- -->
             </div>
@@ -144,40 +152,40 @@
                                                 <input type="text"  class="form-control input-sm" ng-model="createUpdateDto.claimantHCPDetailDto.hcpName" name="hcpName"   />
                                             </div>
                                         </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group  ">
-                                                    <label class="control-label">Claim Type</label>
-                                                    <input type="text"  class="form-control input-sm" ng-model="createUpdateDto.claimType" name="claimType"  />
-                                                </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Claim Type</label>
+                                                <input type="text"  class="form-control input-sm" ng-model="createUpdateDto.claimType" name="claimType"  />
                                             </div>
+                                        </div>
 
-                                            <div class="col-md-4">
-                                                <div class="form-group ">
-                                                    <label class="control-label">Claim Intimation Date</label>
-                                                    <div class='input-group date'>
-                                                        <input type="text" class="form-control input-sm"
-                                                               datepicker-popup=""
-                                                               view-enabled=""
-                                                               is-open="openDob"
-                                                               max-date="todayDate"
-                                                               ng-model="createUpdateDto.claimIntimationDate" name="claimIntimationDate"/>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Claim Intimation Date</label>
+                                                <div class='input-group date'>
+                                                    <input type="text" class="form-control input-sm"
+                                                           datepicker-popup=""
+                                                           view-enabled=""
+                                                           is-open="openDob"
+                                                           max-date="todayDate"
+                                                           ng-model="createUpdateDto.claimIntimationDate" name="claimIntimationDate"/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-sm" view-enabled=""
                                             ng-click="showDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
-                                                    </div>
-                                                    <!--<div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">-->
-                                                    <!--<small ng-message="required">Please enter theAssured DOB</small>-->
-                                                    <!--<small ng-message="date">Invalid Date.</small>-->
-                                                    <!--</div>-->
                                                 </div>
+                                                <!--<div class="error" ng-messages="step2.dob.$error" ng-if="step2.dob.$dirty">-->
+                                                <!--<small ng-message="required">Please enter theAssured DOB</small>-->
+                                                <!--<small ng-message="date">Invalid Date.</small>-->
+                                                <!--</div>-->
                                             </div>
                                         </div>
                                     </div>
-                                    <!--modalwindow-->
+                                </div>
+                                <!--modalwindow-->
 
 
                             </accordion-group>
@@ -343,7 +351,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
+                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="isViewMode"
                                     ng-click="savePreAuthorizationRequest()"
                                     >Save
                             </button>
@@ -407,7 +415,7 @@
                                                            max-date="todayDate"
                                                            ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.dateOfBirth" name="dateOfBirth"/>
                                     <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                    <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
                                             ng-click="showDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
@@ -518,11 +526,11 @@
                             <accordion-group is-open="accordionStatus.mainAssuredDetails"  ng-if="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail">
                                 <accordion-heading>
                                     Assured Detail <i class="pull-right glyphicon"
-                                                           ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
+                                                      ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"
                                      disable-all-fields="isViewMode">
-                                     <div class="row">
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Title</label>
@@ -565,7 +573,7 @@
                                                            max-date="todayDate"
                                                            ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.dateOfBirth" name="dateOfBirth"/>
                                     <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""  ng-disabled="isViewMode"
                                             ng-click="showDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
@@ -783,8 +791,8 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="savePreAuthorizationRequest()" ng-disabled="isSaveDisabled(step3)"
-                                   >Save
+                                    ng-click="savePreAuthorizationRequest()" ng-disabled="isSaveDisabled(step3) || isViewMode"
+                                    >Save
                             </button>
                         </div>
                     </div>
@@ -995,7 +1003,7 @@
                                                            name="dateOfConsultation"
                                                            ng-model="diagnosisTreatmentDto.pregnancyDateOfDelivery"/>
                                                               <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                                    <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
                                                             ng-click="launchActivatedDate($event)">
                                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
@@ -1099,7 +1107,7 @@
                                                            name="dateOfConsultation"
                                                            ng-model="diagnosisTreatmentDto.dateOfConsultation"/>
                                                               <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                                    <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
                                                             ng-click="launchActivatedDate($event)">
                                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
@@ -1243,7 +1251,7 @@
                                                            name="dateOfAdmission"
                                                            ng-model="diagnosisTreatmentDto.dateOfAdmission"/>
                                                               <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                                    <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
                                                             ng-click="launchActivatedDate($event)">
                                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
@@ -1288,7 +1296,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6" style="float:right">
-                                            <button type="button" class="btn btn-default btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)">Update</button>
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)" ng-disabled="isViewMode">Update</button>
                                         </div>
                                     </div>
                                     <!--=====================ending a section(trtmntDtls)==================== -->
@@ -1303,7 +1311,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                        ng-click="savePreAuthorizationRequest()" ng-disabled="isSaveDisabled(step4)"
+                                        ng-click="savePreAuthorizationRequest()" ng-disabled="isSaveDisabled(step4) || isViewMode"
                                         >Save
                                 </button>
                             </div>
@@ -1600,8 +1608,8 @@
                                             <td ng-bind="drugServicesDto.duration"></td>
                                             <td ng-bind="drugServicesDto.lengthOfStay"></td>
                                             <td ng-bind="drugServicesDto.strength"></td>
-                                            <th><button type="button" class="btn btn-primary btn-sm" ng-click="updateDrugServicesDto(drugServicesDto,$index)">Update</button>
-                                                <button type="button" class="btn btn-primary btn-sm" ng-click="deleteTreatmentDiagnosis($index)">Delete</button></th>
+                                            <th><button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode" ng-click="updateDrugServicesDto(drugServicesDto,$index)">Update</button>
+                                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode" ng-click="deleteTreatmentDiagnosis($index)">Delete</button></th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -1712,7 +1720,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                                    ng-click="saveDiagnosisTreatmentDto(diagnosisTreatmentDtoToUpdate)"
+                                                    ng-click="saveDiagnosisTreatmentDto(diagnosisTreatmentDtoToUpdate)" ng-disabled="isViewMode"
                                                     >Save
                                             </button>
                                         </div>
@@ -1786,7 +1794,7 @@
 
                                             <button class="btn btn-default"
                                                     style="display:inline;float:right;margin-right:5px;"
-                                                    ng-file-select=""
+                                                    ng-file-select=""   ng-disabled="isViewMode"
                                                     ng-model="document.documentAttached">Browse
                                             </button>
                                             <input class="form-control input-sm" style="width:300px;"
@@ -1836,7 +1844,7 @@
                                                                 style="display:inline;float:right;margin-top:20px;"
                                                                 ng-file-select="callAdditionalDoc(additionalDocument.documentAttached)"
                                                                 ng-model="additionalDocument.documentAttached"
-                                                                ng-disabled="!additionalDocument.documentId">Browse
+                                                                ng-disabled="!additionalDocument.documentId || isViewMode">Browse
                                                         </button>
                                                         <input class="form-control input-sm" style="width:262px;"
                                                                value="{{additionalDocument.documentAttached[0].name}}"
@@ -1859,7 +1867,7 @@
                                     </div>
                                     <button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;"
-                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached">
+                                            ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached || isViewMode">
                                         Upload
                                     </button>
                                 </div>
@@ -1880,7 +1888,7 @@
                             </button>
                         </div>
                     </div>
-                </div><!--ending point of one panel-->
+                </div>
             </div>
         </div>
     </form>

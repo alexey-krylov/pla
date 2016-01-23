@@ -861,8 +861,8 @@ public class PreAuthorizationRequestService {
         return errorMessage;
     }
 
-    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(PreAuthorizationRequestId preAuthorizationId) {
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationId.getPreAuthorizationRequestId());
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationId);
         if(isEmpty(preAuthorizationRequest)){
             return Sets.newHashSet();
         }

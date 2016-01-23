@@ -228,7 +228,7 @@ public class PreAuthorizationRequestController {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return Sets.newHashSet();
         }
-        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findAdditionalDocuments(new PreAuthorizationRequestId(preAuthorizationId));
+        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findAdditionalDocuments(preAuthorizationId);
         return ghProposalMandatoryDocumentDtos;
     }
 
