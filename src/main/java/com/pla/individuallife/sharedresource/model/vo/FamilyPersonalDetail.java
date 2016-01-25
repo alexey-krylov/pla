@@ -1,4 +1,5 @@
 package com.pla.individuallife.sharedresource.model.vo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class FamilyPersonalDetail {
     private FamilyHistoryDetail familyHistory;
     private HabitDetails habit;

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 /**
@@ -13,6 +15,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = "proposalId")
 @NoArgsConstructor
 @Getter
+@Setter
 @JsonSerialize(using = com.fasterxml.jackson.databind.ser.std.ToStringSerializer.class)
 public class ProposalId implements Serializable {
 

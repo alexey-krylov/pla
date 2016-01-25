@@ -1,12 +1,17 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Created by pradyumna on 22-05-2015.
  */
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class Address {
     private String address1;
     private String address2;

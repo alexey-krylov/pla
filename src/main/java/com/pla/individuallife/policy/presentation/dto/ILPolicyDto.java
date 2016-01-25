@@ -30,73 +30,40 @@ import java.util.Set;
 public class ILPolicyDto {
 
     private String policyId;
-
     private Proposal proposal;
-
     private PolicyNumber policyNumber;
-
     private DateTime inceptionOn;
-
     private DateTime expiryDate;
-
     private ProposedAssuredDto proposedAssured;
-
     private ProposedAssuredDto proposedAssuredNew;
-
     private ProposerDto proposer;
-
     private ProposerDto proposerNew;
-
     private Proposer policyHolder;
     private Proposer policyHolderNew;
-
     private ProposedAssured lifeAssured;
     private ProposedAssured lifeAssuredNew;
-
-
     private Set<RiderDetailDto> riders;
-
     private ProposalPlanDetail proposalPlanDetail;
-
     private ProposalPlanDetail proposalPlanDetailNew;
-
     private List<Beneficiary> beneficiaries;
-
     private List<Beneficiary> beneficiariesNew;
-
     private GeneralDetails generalDetails;
-
     private AdditionalDetails additionaldetails;
-
     private PremiumPaymentDetails premiumPaymentDetails;
-
     private PremiumPaymentDetails premiumPaymentDetailsNew;
-
     private BigDecimal totalBeneficiaryShare;
-
     private List<Question> compulsoryHealthStatement;
-
     private FamilyPersonalDetail familyPersonalDetail;
-
     private Set<AgentDetailDto> agentCommissionDetails;
-
     private Set<AgentDetailDto> agentCommissionDetailsNew;
-
-    private String policyStatus;
-
     private PremiumDetailDto premiumDetailDto;
-
     private PremiumDetailDto premiumDetailDtoNew;
-
+    private String policyStatus;
     private List<ILProposerDocument> proposerDocuments;
-
     private String opportunityId;
-
     private ILEndorsementType ilEndorsementType;
     private List<Map<String, String>> endorsementTypes;
-
     private DateTime effectiveDate;
-
     public static ILPolicyDto createEmptyDetail(){
         return new ILPolicyDto();
     }

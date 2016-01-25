@@ -1,11 +1,16 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Created by Prasant on 27-May-15.
  */
 @Getter
+@Setter
+@NoArgsConstructor
 public class ResidentialAddress {
 
     private Address address;

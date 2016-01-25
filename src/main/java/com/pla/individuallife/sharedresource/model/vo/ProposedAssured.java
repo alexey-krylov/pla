@@ -2,9 +2,7 @@ package com.pla.individuallife.sharedresource.model.vo;
 
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 

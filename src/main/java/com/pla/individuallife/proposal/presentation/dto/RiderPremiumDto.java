@@ -2,6 +2,7 @@ package com.pla.individuallife.proposal.presentation.dto;
 
 import com.pla.core.domain.model.CoverageName;
 import com.pla.sharedkernel.identifier.CoverageId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class RiderPremiumDto {
 
     private CoverageId coverageId;

@@ -3,7 +3,10 @@ package com.pla.individuallife.sharedresource.model.vo;
 import com.google.common.base.Objects;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.TrusteeType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -15,6 +18,9 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
  * Created by pradyumna on 22-05-2015.
  */
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Beneficiary {
 
     private String title;
@@ -27,7 +33,7 @@ public class Beneficiary {
     private String relationshipId;
     private BigDecimal share;
     private TrusteeType trusteeType;
-        private TrusteeDetail trusteeDetail;
+    private TrusteeDetail trusteeDetail;
 
     @Override
     public boolean equals(Object o) {

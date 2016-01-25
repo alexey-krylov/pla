@@ -7,6 +7,7 @@ import com.pla.individuallife.sharedresource.model.vo.EmploymentDetail;
 import com.pla.individuallife.sharedresource.model.vo.ResidentialAddress;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.MaritalStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import org.joda.time.DateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProposedAssuredDto {
 
     private String title;

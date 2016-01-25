@@ -1,6 +1,9 @@
 package com.pla.individuallife.sharedresource.model.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -9,6 +12,8 @@ import org.joda.time.DateTime;
  */
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class EmploymentDetail {
     private String occupationId;
     private String occupationClass;

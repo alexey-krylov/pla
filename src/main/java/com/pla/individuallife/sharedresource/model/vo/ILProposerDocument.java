@@ -6,8 +6,10 @@ import lombok.*;
  * Created by Karunakar on 7/13/2015.
  */
 @Getter
+@Setter
 @EqualsAndHashCode(of = "documentId")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
 public class ILProposerDocument {
 
     private String documentId;
