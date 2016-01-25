@@ -36,6 +36,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private boolean submitted;
     private String preAuthProcessorUserId;
     private Set<CommentDetail> commentDetails;
+    private String batchUploaderUserId;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
@@ -142,6 +143,11 @@ public class PreAuthorizationClaimantDetailCommand {
 
     public PreAuthorizationClaimantDetailCommand updateWithComments(Set<CommentDetail> commentDetails) {
         this.commentDetails = commentDetails;
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithBatchUploaderUserId(String batchUploaderUserId) {
+        this.batchUploaderUserId = batchUploaderUserId;
         return this;
     }
 }

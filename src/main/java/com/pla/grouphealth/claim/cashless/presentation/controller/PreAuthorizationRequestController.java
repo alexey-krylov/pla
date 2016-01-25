@@ -27,6 +27,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,6 +42,7 @@ import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.springframework.util.Assert.*;
 
 /**
  * Author - Mohan Sharma Created on 1/6/2016.
@@ -94,6 +96,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
+            notNull(userDetails, "No user details found please login");
             preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userDetails.getUsername());
             String preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
             return Result.success("Pre Authorization Request successfully submitted");
@@ -146,9 +149,11 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/getpreauthorizationfordefaultlist", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getPreAuthorizationForDefaultList() {
+    public ModelAndView getPreAuthorizationForDefaultList(HttpServletRequest request) {
+        UserDetails userDetails = getLoggedInUserDetail(request);
+        notNull(userDetails, "No user details found please login");
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRecord");
-        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList();
+        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList(userDetails.getUsername());
         modelAndView.addObject("preAuthorizationResult", searchResult);
         modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
         return modelAndView;
@@ -230,6 +235,13 @@ public class PreAuthorizationRequestController {
         }
         Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = preAuthorizationRequestService.findAdditionalDocuments(preAuthorizationId);
         return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
+    public List<PreAuthorizationClaimantDetailCommand> getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
+        UserDetails userDetails = getLoggedInUserDetail(request);
+        notNull(userDetails, "No user login details found please login.");
+        return preAuthorizationRequestService.getDefaultListOfPreAuthorizationAssignedToUnderwriter(userDetails.getUsername());
     }
 
     @RequestMapping(value = "/searchpreauthorizationforunderwriterbycriteria", method = RequestMethod.POST)

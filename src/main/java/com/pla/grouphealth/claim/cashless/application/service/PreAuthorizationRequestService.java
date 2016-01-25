@@ -127,6 +127,7 @@ public class PreAuthorizationRequestService {
                 .updateWithClaimType(preAuthorizationClaimantDetailCommand.getClaimType())
                 .updateWithClaimIntimationDate(preAuthorizationClaimantDetailCommand.getClaimIntimationDate())
                 .updateWithBatchNumber(preAuthorizationClaimantDetailCommand.getBatchNumber())
+                .updateWithBatchUploaderUserId(preAuthorizationClaimantDetailCommand.getBatchUploaderUserId())
                 .updateWithProposerDetail(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
                 .updateWithPreAuthorizationRequestPolicyDetail(preAuthorizationClaimantDetailCommand)
                 .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
@@ -167,6 +168,7 @@ public class PreAuthorizationRequestService {
         PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = new PreAuthorizationClaimantDetailCommand();
         preAuthorizationClaimantDetailCommand.updateWithBatchNumber(preAuthorization.getBatchNumber())
                 .updateWithPreAuthorizationId(preAuthorization.getPreAuthorizationId())
+                .updateWithBatchUploaderUserId(preAuthorization.getBatchUploaderUserId())
                 .updateWithPreAuthorizationDate(preAuthorization.getBatchDate().toLocalDate())
                 .updateWithClaimantHCPDetailDto(constructClaimantHCPDetailDto(preAuthorization.getHcpCode(), preAuthorizationDetail.getHospitalizationEvent()))
                 .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDto(preAuthorizationDetail.getPolicyNumber(), clientId, preAuthorization.getPreAuthorizationDetails(), preAuthorization.getHcpCode()))
@@ -715,27 +717,14 @@ public class PreAuthorizationRequestService {
         return claimantHCPDetailDto;
     }
 
-    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationForDefaultList() {
+    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationForDefaultList(String batchUploaderUserId) {
         List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
         PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Order(Direction.DESC, "createdOn")));
-        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAll(pageRequest);
+        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAllByBatchUploaderUserIdAndStatusIn(batchUploaderUserId, Lists.newArrayList(PreAuthorizationRequest.Status.INTIMATION, PreAuthorizationRequest.Status.EVALUATION, PreAuthorizationRequest.Status.RETURNED), pageRequest);
         if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
             result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(pages.getContent());
         return result;
     }
-
-    /*public Set<CommentDetail> updateComments(UpdateCommentCommand updateCommentCommand) {
-        PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(new PreAuthorizationRequestId(updateCommentCommand.getPreAuthorizationRequestId()));
-        if (isNotEmpty(preAuthorizationRequest)) {
-            CommentDetail commentDetail = new CommentDetail()
-                    .updateWithComments(updateCommentCommand.getComments())
-                    .updateWithCommentDateTime(updateCommentCommand.getCommentDateTime())
-                    .updateWithUserName(updateCommentCommand.getUserDetails());
-            preAuthorizationRequest.updateWithComments(commentDetail);
-            preAuthorizationRequestRepository.save(preAuthorizationRequest);
-        }
-        return preAuthorizationRequest.getCommentDetails();
-    }*/
 
     public boolean doesClientBelongToTheGivenPolicy(String clientId, String policyNumber) {
         GroupHealthPolicy groupHealthPolicy = ghPolicyRepository.findPolicyByPolicyNumber(policyNumber);
@@ -884,5 +873,13 @@ public class PreAuthorizationRequestService {
             }).collect(Collectors.toSet());
         }
         return mandatoryDocumentDtos;
+    }
+
+    public List<PreAuthorizationClaimantDetailCommand> getDefaultListOfPreAuthorizationAssignedToUnderwriter(String username) {
+        List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationUnderWriterUserIdAndStatus(username, PreAuthorizationRequest.Status.UNDERWRITING);
+        if (isNotEmpty(preAuthorizationRequests))
+            result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
+        return result;
     }
 }

@@ -26,6 +26,7 @@ public class PreAuthorization {
     private DateTime batchDate;
     private Set<PreAuthorizationDetail> preAuthorizationDetails;
     private Set<String> sameServicesPreviouslyAvailedPreAuth;
+    private String batchUploaderUserId;
 
     public PreAuthorization updateWithPreAuthorizationDetail(Set<PreAuthorizationDetail> preAuthorizationDetails) {
         this.preAuthorizationDetails = preAuthorizationDetails;
@@ -56,6 +57,11 @@ public class PreAuthorization {
         if(isNotEmpty(sameServicesPreviouslyAvailedPreAuth)){
             this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
         }
+        return this;
+    }
+
+    public PreAuthorization updateWithBatchUploaderUserId(String batchUploaderUserId) {
+        this.batchUploaderUserId = batchUploaderUserId;
         return this;
     }
 }

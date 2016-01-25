@@ -144,6 +144,7 @@ public class PreAuthorizationService {
                         .updateWithHcpCode(new HCPCode(uploadPreAuthorizationCommand.getHcpCode()))
                         .updateWithBatchDate(uploadPreAuthorizationCommand.getBatchDate())
                         .updateWithBatchNumber(finalRunningSequence)
+                        .updateWithBatchUploaderUserId(uploadPreAuthorizationCommand.getBatchUploaderUserId())
                         .updateWithSameServicesPreviouslyAvailedPreAuth(sameServicesPreviouslyAvailedPreAuth);
                 return preAuthorization;
             }

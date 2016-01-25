@@ -161,6 +161,6 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
     }
 
     private List<String> getDocumentNameList(List<GHProposalMandatoryDocumentDto> mandatoryDocuments) {
-        return isNotEmpty(mandatoryDocuments) ? mandatoryDocuments.parallelStream().map(GHProposalMandatoryDocumentDto::getDocumentName).collect(Collectors.toList()) : Lists.newArrayList();
+        return isNotEmpty(mandatoryDocuments) ? mandatoryDocuments.parallelStream().map(GHProposalMandatoryDocumentDto::getDocumentId).collect(Collectors.toList()) : Lists.newArrayList();
     }
 }

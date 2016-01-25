@@ -11,8 +11,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +25,9 @@ import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.nthdimenzion.presentation.AppUtils.*;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * Author - Mohan Sharma Created on 12/30/2015.
@@ -76,8 +81,10 @@ public class PreAuthorizationController {
                 fileOutputStream.close();
                 return Result.failure("Uploaded Pre-Auth template is not valid.Please download to check the errors", Boolean.TRUE);
             }
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            notNull(userDetails, "No user details found please login");
             Set<PreAuthorizationDetailDto> preAuthorizationDetailDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook);
-            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(preAuthorizationUploadDto.getHcpCode(), preAuthorizationDetailDtoList, preAuthorizationUploadDto.getBatchDate()));
+            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(preAuthorizationUploadDto.getHcpCode(), preAuthorizationDetailDtoList, preAuthorizationUploadDto.getBatchDate(), userDetails.getUsername()));
             return Result.success("Insured detail uploaded successfully - "+batchNumber);
         } catch (Exception e) {
             e.printStackTrace();

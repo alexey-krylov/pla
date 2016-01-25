@@ -16,10 +16,12 @@ public class UploadPreAuthorizationCommand {
     private Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos;
     private DateTime batchDate;
     private String batchNumber;
+    private String batchUploaderUserId;
 
-    public UploadPreAuthorizationCommand(String hcpCode, Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos, DateTime batchDate) {
+    public UploadPreAuthorizationCommand(String hcpCode, Set<PreAuthorizationDetailDto> preAuthorizationDetailDtos, DateTime batchDate, String batchUploaderUserId) {
         this.hcpCode = hcpCode;
         this.preAuthorizationDetailDtos = preAuthorizationDetailDtos;
         this.batchDate = batchDate;
+        this.batchUploaderUserId = batchUploaderUserId;
     }
 }

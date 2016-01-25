@@ -50,6 +50,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private String claimType;
     private LocalDate claimIntimationDate;
     private String batchNumber;
+    private String batchUploaderUserId;
     private GHProposer ghProposer;
     private PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail;
     private PreAuthorizationRequestHCPDetail preAuthorizationRequestHCPDetail;
@@ -62,11 +63,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private Map<String, ScheduleToken> scheduledTokens;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
-    private String preAuthorizationProcessorUserId;
-    private String preAuthorizationUnderWriterUserId;
     private Set<CommentDetail> commentDetails;
     private LocalDate preAuthorizationDate;
     private boolean submitted;
+    private String preAuthorizationProcessorUserId;
+    private String preAuthorizationUnderWriterUserId;
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
@@ -264,6 +265,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     public PreAuthorizationRequest updateWithProcessorUserId(String preAuthProcessorUserId) {
         if(isNotEmpty(preAuthProcessorUserId))
             this.preAuthorizationProcessorUserId = preAuthProcessorUserId;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithBatchUploaderUserId(String batchUploaderUserId) {
+        this.batchUploaderUserId = batchUploaderUserId;
         return this;
     }
 
