@@ -70,9 +70,8 @@
                 </li>
             </ul>
             <div class="actions">
-                <!-- <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
-                         style="font-size: 13px;color: #3a87ad;">{{proposalNumber}}<span
-                         ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>-->
+                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Endorsement Request Number: <span
+                         style="font-size: 13px;color: #3a87ad;">{{endorsementRequestNumber}}</span></span>
 
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
@@ -534,21 +533,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Mobile Number</label>
-                                            <input type="text" class="form-control input-sm" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="policy.mobileNumber1"/>
+                                            <input type="text" class="form-control input-sm" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="ilEndrosementDetils.lifeAssured.mobileNumber"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Home Phone</label>
-                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.homePhone1"/>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="ilEndrosementDetils.lifeAssured.homePhone"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Work phone</label>
-                                            <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.workPhone1"/>
+                                            <input type="text" class="form-control input-sm" name="workPhone" ng-disabled="mode=='new'||mode=='view'" ng-minlength="10" maxlength="10" ng-maxlength="10" ng-pattern="/^\d+$/" ng-model="ilEndrosementDetils.lifeAssured.workPhone"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">EmailID</label>
-                                            <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="policy.emailAddress1"/>
+                                            <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="ilEndrosementDetils.lifeAssured.emailAddress"/>
                                         </div>
                                     </div>
                                 </div>
@@ -558,17 +557,17 @@
                                         <br /><br />
                                         <div class="form-group">
                                             <label class="control-label">Address Line 1</label>
-                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="policy.residential.address1"/>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="ilEndrosementDetils.lifeAssured.residentialAddress.address.address1"/>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="control-label">Address Line 2</label>
-                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="policy.residential.address2"/>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="ilEndrosementDetils.lifeAssured.residentialAddress.address.address2"/>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="control-label">Postal Code</label>
-                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="policy.residential.postalCode1"/>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postalCode" ng-pattern="/^\d+$/" ng-maxlength="7" ng-model="ilEndrosementDetils.lifeAssured.residentialAddress.address.postalCode"/>
                                         </div>
 
                                         <div class="form-group">
@@ -580,7 +579,7 @@
 
                                         <div class="form-group">
                                             <label class="control-label">Town</label>
-                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-model="policy.residential.town"
+                                            <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-model="ilEndrosementDetils.lifeAssured.residentialAddress.address.town"
                                                     ng-options="city.geoId as city.geoName for city in townList"/>
                                         </div>
                                     </div>
