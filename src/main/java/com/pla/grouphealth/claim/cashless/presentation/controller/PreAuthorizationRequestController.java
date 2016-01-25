@@ -3,10 +3,7 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
-import com.pla.grouphealth.claim.cashless.application.command.ApprovePreAuthorizationCommand;
-import com.pla.grouphealth.claim.cashless.application.command.PreAuthorizationRemoveAdditionalCommand;
-import com.pla.grouphealth.claim.cashless.application.command.RejectPreAuthorizationCommand;
-import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
+import com.pla.grouphealth.claim.cashless.application.command.*;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
@@ -279,6 +276,34 @@ public class PreAuthorizationRequestController {
         }
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(rejectPreAuthorizationCommand);
+            return Result.success("Pre Authorization Request successfully submitted");
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/return", method = RequestMethod.POST)
+    public Result returnByUnderwriter(@Valid @RequestBody ReturnPreAuthorizationCommand returnPreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+        }
+        try {
+            String preAuthorizationRequestId = commandGateway.sendAndWait(returnPreAuthorizationCommand);
+            return Result.success("Pre Authorization Request successfully submitted");
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/routetoseniorunderwriter", method = RequestMethod.POST)
+    public Result routeToSeniorUnderwriter(@Valid @RequestBody RoutePreAuthorizationCommand routePreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+        }
+        try {
+            String preAuthorizationRequestId = commandGateway.sendAndWait(routePreAuthorizationCommand);
             return Result.success("Pre Authorization Request successfully submitted");
         } catch (Exception e){
             return Result.failure(e.getMessage());

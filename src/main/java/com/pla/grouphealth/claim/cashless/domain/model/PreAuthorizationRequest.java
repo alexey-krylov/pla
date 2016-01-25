@@ -268,6 +268,12 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public PreAuthorizationRequest updateWithPreAuthorizationUnderWriterUserId(String preAuthorizationUnderWriterUserId) {
+        if(isNotEmpty(preAuthorizationUnderWriterUserId))
+            this.preAuthorizationUnderWriterUserId = preAuthorizationUnderWriterUserId;
+        return this;
+    }
+
     public PreAuthorizationRequest updateWithBatchUploaderUserId(String batchUploaderUserId) {
         this.batchUploaderUserId = batchUploaderUserId;
         return this;

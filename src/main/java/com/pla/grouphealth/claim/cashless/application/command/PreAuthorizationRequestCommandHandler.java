@@ -75,6 +75,32 @@ public class PreAuthorizationRequestCommandHandler {
     }
 
     @CommandHandler
+    public boolean returnByUnderwriter(ReturnPreAuthorizationCommand returnPreAuthorizationCommand) {
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = returnPreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
+        return Boolean.TRUE;
+    }
+
+    @CommandHandler
+    public boolean routeToSeniorUnderwriter(RoutePreAuthorizationCommand routePreAuthorizationCommand) {
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = routePreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        /*
+        * logic to get the senior underwriter userId
+        * preAuthorizationRequest.updateWithPreAuthorizationUnderWriterUserId(userId);
+        * */
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
+        return Boolean.TRUE;
+    }
+
+    @CommandHandler
     public boolean removeAdditionalDocument(PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand) {
         boolean result = Boolean.FALSE;
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRemoveAdditionalCommand.getPreAuthorizationId());
