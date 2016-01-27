@@ -153,6 +153,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.plan={};
             $scope.serverError=false;
             $scope.endorsementRequestNumber=null;  // Capturing Endrosement RequestNumber..
+            $scope.townListForLAEmp=[];
 
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
@@ -280,21 +281,33 @@ app.config(["$routeProvider", function ($routeProvider) {
                 $scope.launchdob4 = true;
             };
         /**
-         * Getting TownList of LifeAssured during change of Change of Contact Details- Life Assured
+         * Getting Residential TownList of LifeAssured during change of Change of Contact Details- Life Assured
          */
-        $scope.$watch('ilEndrosementDetils.lifeAssured.residentialAddress.address.province',function(newVal,oldVal){
+        $scope.$watch('ilEndrosementDetils.lifeAssuredNew.residentialAddress.address.province',function(newVal,oldVal){
             if(newVal){
                 var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal});
                 if (provinceDetails)
                     $scope.townList = provinceDetails.cities;
             }
         });
-            $scope.getTownList = function (province) {
-                //alert(province);
-                var provinceDetails = _.findWhere($scope.provinces, {provinceId: $scope.ilEndrosementDetils.lifeAssured.residentialAddress.address.province});
+
+        $scope.getTownList = function (province) {
+            //alert(province);
+            var provinceDetails = _.findWhere($scope.provinces, {provinceId: $scope.ilEndrosementDetils.lifeAssuredNew.residentialAddress.address.province});
+            if (provinceDetails)
+                $scope.townList = provinceDetails.cities;
+        }
+
+        /**
+         * Getting EMPTownList of LifeAssured during change of Change of Contact Details- Life Assured
+         */
+        $scope.$watch('ilEndrosementDetils.lifeAssuredNew.employmentDetail.address.province',function(newVal,oldVal){
+            if(newVal){
+                var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal});
                 if (provinceDetails)
-                    $scope.townList = provinceDetails.cities;
+                    $scope.townListForLAEmp = provinceDetails.cities;
             }
+        });
 
             $scope.getEmpTownList = function (province) {
                 //alert(province);
@@ -478,6 +491,9 @@ app.config(["$routeProvider", function ($routeProvider) {
                 $scope.ilEndrosementDetils.lifeAssuredNew={};
                 angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
                 $scope.ilEndrosementDetils.lifeAssuredNew.nrc='';
+            }else if($scope.policy.endrosementType == 'ASSURED_CONTACT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.lifeAssuredNew == null){
+                $scope.ilEndrosementDetils.lifeAssuredNew={};
+                angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
             }
 
             if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
@@ -512,6 +528,16 @@ app.config(["$routeProvider", function ($routeProvider) {
                 if(angular.equals($scope.ilEndrosementDetils.policyHolderNew, $scope.ilEndrosementDetils.policyHolder)){
                     $scope.serverError = true;
                     $scope.serverErrMsg = 'Both Existing and Updated Policy Holder Name Details Should Not be Same..';
+                    return;
+                }
+                else{
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+            }else if(endrosementTypeCheck == 'ASSURED_CONTACT_DETAILS_CHANGE'){
+                if(angular.equals($scope.ilEndrosementDetils.lifeAssuredNew, $scope.ilEndrosementDetils.lifeAssuredNew)){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Both Existing and Updated Life Assured Contact Details Should Not be Same..';
                     return;
                 }
                 else{
