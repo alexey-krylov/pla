@@ -14,14 +14,18 @@ import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocument
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
+import org.nthdimenzion.security.service.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
@@ -53,6 +57,8 @@ public class PreAuthorizationRequestController {
     private PreAuthorizationRequestService preAuthorizationRequestService;
     @Autowired
     private GridFsTemplate gridFsTemplate;
+    @Autowired
+    IAuthenticationFacade iAuthenticationFacade;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
     public @ResponseBody
@@ -92,9 +98,14 @@ public class PreAuthorizationRequestController {
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
-            UserDetails userDetails = getLoggedInUserDetail(request);
-            notNull(userDetails, "No user details found please login");
-            preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userDetails.getUsername());
+            String userName = StringUtils.EMPTY;
+            Authentication authentication = iAuthenticationFacade.getAuthentication();
+            if(!(authentication instanceof AnonymousAuthenticationToken)){
+                userName = authentication.getName();
+            }
+            //UserDetails userDetails = getLoggedInUserDetail(request);
+            //notNull(userDetails, "No user details found please login");
+            preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userName);
             String preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
             return Result.success("Pre Authorization Request successfully submitted");
         } catch (Exception e){
@@ -147,10 +158,15 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/getpreauthorizationfordefaultlist", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getPreAuthorizationForDefaultList(HttpServletRequest request) {
-        UserDetails userDetails = getLoggedInUserDetail(request);
-        notNull(userDetails, "No user details found please login");
+        String userName = StringUtils.EMPTY;
+        Authentication authentication = iAuthenticationFacade.getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            userName = authentication.getName();
+        }
+        //UserDetails userDetails = getLoggedInUserDetail(request);
+        //notNull(userDetails, "No user details found please login");
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRecord");
-        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList(userDetails.getUsername());
+        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList(userName);
         modelAndView.addObject("preAuthorizationResult", searchResult);
         modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
         return modelAndView;
@@ -236,18 +252,28 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
     public List<PreAuthorizationClaimantDetailCommand> getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
-        UserDetails userDetails = getLoggedInUserDetail(request);
-        notNull(userDetails, "No user login details found please login.");
-        return preAuthorizationRequestService.getDefaultListOfPreAuthorizationAssignedToUnderwriter(userDetails.getUsername());
+        String userName = StringUtils.EMPTY;
+        Authentication authentication = iAuthenticationFacade.getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            userName = authentication.getName();
+        }
+        //UserDetails userDetails = getLoggedInUserDetail(request);
+        //notNull(userDetails, "No user login details found please login.");
+        return preAuthorizationRequestService.getDefaultListOfPreAuthorizationAssignedToUnderwriter(userName);
     }
 
     @RequestMapping(value = "/searchpreauthorizationforunderwriterbycriteria", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
-        UserDetails userDetails = getLoggedInUserDetail(request);
-        if(isNotEmpty(userDetails)) {
-            List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto, userDetails.getUsername());
+        String userName = StringUtils.EMPTY;
+        Authentication authentication = iAuthenticationFacade.getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            userName = authentication.getName();
+        }
+       // UserDetails userDetails = getLoggedInUserDetail(request);
+        if(isNotEmpty(userName)) {
+            List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto, userName);
             modelAndView.addObject("searchResult", searchResult);
         }
         modelAndView.addObject("searchResult", searchPreAuthorizationRecordDto);

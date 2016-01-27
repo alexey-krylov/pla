@@ -161,6 +161,9 @@ public class PreAuthorizationService {
     }
 
     private Set<String> checkAndFindIfServiceAvailedBefore(Set<PreAuthorizationDetail> preAuthorizationDetails) {
+        /*
+        * getList of previously availed claim having same service
+        * */
         Set<String> sameServicesPreviouslyAvailedPreAuth = Sets.newLinkedHashSet();
         for(PreAuthorizationDetail preAuthorizationDetail : preAuthorizationDetails) {
             List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAllPreAuthorizationByServiceAndClientId(preAuthorizationDetail.getClientId(), preAuthorizationDetail.getService());
