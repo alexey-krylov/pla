@@ -259,7 +259,11 @@ public class PreAuthorizationRequestController {
         }
         //UserDetails userDetails = getLoggedInUserDetail(request);
         //notNull(userDetails, "No user login details found please login.");
-        return preAuthorizationRequestService.getDefaultListOfPreAuthorizationAssignedToUnderwriter(userName);
+        List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListOfPreAuthorizationAssignedToUnderwriter(userName);
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthUnderwriter");
+        modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/searchpreauthorizationforunderwriterbycriteria", method = RequestMethod.POST)
