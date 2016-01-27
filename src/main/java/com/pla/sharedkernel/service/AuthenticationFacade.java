@@ -1,15 +1,15 @@
-package org.nthdimenzion.security.configuration;
+package com.pla.sharedkernel.service;
 
-import org.nthdimenzion.security.service.IAuthenticationFacade;
-import org.springframework.context.annotation.Configuration;
+import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 /**
  * Author - Mohan Sharma Created on 1/27/2016.
  */
-@Configuration
-public class AuthenticationFacadeImpl implements IAuthenticationFacade {
+@Component(value = "authenticationFacade")
+public class AuthenticationFacade implements IAuthenticationFacade {
     @Override
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();

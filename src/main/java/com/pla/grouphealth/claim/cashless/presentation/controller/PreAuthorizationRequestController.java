@@ -19,16 +19,15 @@ import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.DateTime;
 import org.nthdimenzion.presentation.Result;
-import org.nthdimenzion.security.service.IAuthenticationFacade;
+import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,7 +42,6 @@ import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.*;
-import static org.springframework.util.Assert.*;
 
 /**
  * Author - Mohan Sharma Created on 1/6/2016.
@@ -58,7 +56,8 @@ public class PreAuthorizationRequestController {
     @Autowired
     private GridFsTemplate gridFsTemplate;
     @Autowired
-    IAuthenticationFacade authenticationFacadeImpl;
+    @Qualifier("authenticationFacade")
+    IAuthenticationFacade authenticationFacade;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
     public @ResponseBody
@@ -99,7 +98,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = StringUtils.EMPTY;
-            Authentication authentication = authenticationFacadeImpl.getAuthentication();
+            Authentication authentication = authenticationFacade.getAuthentication();
             if(!(authentication instanceof AnonymousAuthenticationToken)){
                 userName = authentication.getName();
             }
@@ -159,7 +158,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     public ModelAndView getPreAuthorizationForDefaultList(HttpServletRequest request) {
         String userName = StringUtils.EMPTY;
-        Authentication authentication = authenticationFacadeImpl.getAuthentication();
+        Authentication authentication = authenticationFacade.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             userName = authentication.getName();
         }
@@ -253,7 +252,7 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
     public ModelAndView getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
         String userName = StringUtils.EMPTY;
-        Authentication authentication = authenticationFacadeImpl.getAuthentication();
+        Authentication authentication = authenticationFacade.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             userName = authentication.getName();
         }
@@ -271,11 +270,11 @@ public class PreAuthorizationRequestController {
     public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
         String userName = StringUtils.EMPTY;
-        Authentication authentication = authenticationFacadeImpl.getAuthentication();
+        Authentication authentication = authenticationFacade.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             userName = authentication.getName();
         }
-       // UserDetails userDetails = getLoggedInUserDetail(request);
+        // UserDetails userDetails = getLoggedInUserDetail(request);
         if(isNotEmpty(userName)) {
             List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto, userName);
             modelAndView.addObject("searchResult", searchResult);
