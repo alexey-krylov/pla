@@ -154,6 +154,8 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.serverError=false;
             $scope.endorsementRequestNumber=null;  // Capturing Endrosement RequestNumber..
             $scope.townListForLAEmp=[];
+            $scope.townListForPHRes=[];  //Capturing TownList For PolicyHolder Contact Change (Residential)
+            $scope.townListForPHEmp=[];  //Capturing TownList For PolicyHolder Contact Change (Employement)
 
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
@@ -309,12 +311,28 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         });
 
-            $scope.getEmpTownList = function (province) {
-                //alert(province);
-                var provinceDetails = _.findWhere($scope.provinces, {provinceId: province});
+        $scope.$watch('ilEndrosementDetils.policyHolderNew.residentialAddress.address.province',function(newVal,oldVal){
+            if(newVal){
+                var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal});
                 if (provinceDetails)
-                    $scope.empTownList = provinceDetails.cities;
+                    $scope.townListForPHRes = provinceDetails.cities;
             }
+        });
+
+        $scope.$watch('ilEndrosementDetils.policyHolderNew.employmentDetail.address.province',function(newVal,oldVal){
+            if(newVal){
+                var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal});
+                if (provinceDetails)
+                    $scope.townListForPHEmp = provinceDetails.cities;
+            }
+        });
+
+       /* $scope.getEmpTownList = function (province) {
+            //alert(province);
+            var provinceDetails = _.findWhere($scope.provinces, {provinceId: province});
+            if (provinceDetails)
+                $scope.empTownList = provinceDetails.cities;
+        }*/
 
             $scope.showBeneficiaryDob = function (dob) {
                     if (dob != null) {
@@ -494,6 +512,9 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'ASSURED_CONTACT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.lifeAssuredNew == null){
                 $scope.ilEndrosementDetils.lifeAssuredNew={};
                 angular.copy($scope.ilEndrosementDetils.lifeAssured,$scope.ilEndrosementDetils.lifeAssuredNew);
+            }else if($scope.policy.endrosementType == 'POLICYHOLDER_CONTACT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.policyHolderNew == null){
+                $scope.ilEndrosementDetils.policyHolderNew={};
+                angular.copy($scope.ilEndrosementDetils.policyHolder,$scope.ilEndrosementDetils.policyHolderNew);
             }
 
             if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
@@ -535,9 +556,19 @@ app.config(["$routeProvider", function ($routeProvider) {
                     $scope.serverErrMsg = '';
                 }
             }else if(endrosementTypeCheck == 'ASSURED_CONTACT_DETAILS_CHANGE'){
-                if(angular.equals($scope.ilEndrosementDetils.lifeAssuredNew, $scope.ilEndrosementDetils.lifeAssuredNew)){
+                if(angular.equals($scope.ilEndrosementDetils.lifeAssuredNew, $scope.ilEndrosementDetils.lifeAssured)){
                     $scope.serverError = true;
                     $scope.serverErrMsg = 'Both Existing and Updated Life Assured Contact Details Should Not be Same..';
+                    return;
+                }
+                else{
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+            }else if(endrosementTypeCheck == 'POLICYHOLDER_CONTACT_DETAILS_CHANGE'){
+                if(angular.equals($scope.ilEndrosementDetils.policyHolderNew, $scope.ilEndrosementDetils.policyHolder)){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Both Existing and Updated Policy Holder Contact Details Should Not be Same..';
                     return;
                 }
                 else{
