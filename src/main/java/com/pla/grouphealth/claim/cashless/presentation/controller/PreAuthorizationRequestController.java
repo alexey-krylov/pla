@@ -251,7 +251,7 @@ public class PreAuthorizationRequestController {
     }
 
     @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
-    public List<PreAuthorizationClaimantDetailCommand> getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
+    public ModelAndView getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
         String userName = StringUtils.EMPTY;
         Authentication authentication = iAuthenticationFacade.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){

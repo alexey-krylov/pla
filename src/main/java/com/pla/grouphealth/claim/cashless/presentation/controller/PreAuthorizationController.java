@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
