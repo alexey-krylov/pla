@@ -309,8 +309,6 @@ var  app=angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', '
                     $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
                 }
-
-
             };
 
             $scope.launchClaimDate = function ($event) {
@@ -339,7 +337,6 @@ var  app=angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', '
 
 
             $scope.launchProbableDate = function ($event){
-                alert("sdf");
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.datepickerprobable = {'opened': true};
@@ -356,8 +353,7 @@ var  app=angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', '
             };
             $scope.changelaunchFirstConsultanceDate=function(consultationDate) {
                 $scope.diagnosisTreatmentDto.dateOfConsultation = formatDate(consultationDate);
-                console.log("qwqe############"+$scope.diagnosisTreatmentDto.dateOfConsultation);
-            };
+              };
 
 
             $scope.launchProbAdmissionDate = function ($event){

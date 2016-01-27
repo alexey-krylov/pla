@@ -107,7 +107,7 @@
                                                     <input type="text" class="form-control input-sm"
                                                            datepicker-popup=""
                                                            view-enabled=""
-                                                           ng-change="changeProbableDate(createUpdateDto.preAuthorizationDate)"
+                                                           ng-change="changePreAuthDate(createUpdateDto.preAuthorizationDate)"
                                                            max-date="todayDate"
                                                            is-open="datepickerpreauth.opened"
                                                            ng-disabled="mode =='view' || mode=='edit'"
@@ -459,9 +459,10 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Sex</label>
-                                                <input type="text" class="form-control input-sm"  name="gender" 
-                                                       ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.gender"/>
-
+                                                <select  class="form-control input-md" name="gender"        ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.gender">
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -472,7 +473,6 @@
                                                        class="form-control input-md"
                                                        name="sumAssured"
                                                        ng-disabled="true"
-                                                       
                                                        type="text"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.sumAssured"/>
                                             </div>
@@ -835,9 +835,14 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label"> Hospitalization Event</label>
-                                                <input  class="form-control input-md" type="text"   name="hospitalizationEvent"
-                                                        ng-disabled="true" 
-                                                        ng-model="createUpdateDto.claimantHCPDetailDto.hospitalizationEvent"/>
+
+                                                <select  class="form-control input-md" name="claimantHCPDetailDto" ng-model="createUpdateDto.claimantHCPDetailDto.hospitalizationEvent">
+                                                    <option value="Planned">Planned</option>
+                                                    <option value="Emergency">Emergency</option>
+                                                </select>
+                                                <!--<input  class="form-control input-md" type="text"   name="hospitalizationEvent"-->
+                                                        <!--ng-disabled="true" -->
+                                                        <!--ng-model="createUpdateDto.claimantHCPDetailDto.hospitalizationEvent"/>-->
                                             </div>
                                         </div>
 
@@ -857,7 +862,39 @@
                                                 <label class="control-label">Hospital/Clinic Address</label>
                                                 <input  type="text"
                                                         name="address" 
-                                                        ng-model="createUpdateDto.claimantHCPDetailDto.address"
+                                                        ng-model="createUpdateDto.claimantHCPDetailDto.hcpAddress.addressLine1"
+                                                        ng-disabled="true"
+                                                        class="form-control input-md"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Hospital/Clinic Address2</label>
+                                                <input  type="text"
+                                                        name="address"
+                                                        ng-model="createUpdateDto.claimantHCPDetailDto.hcpAddress.addressLine2"
+                                                        ng-disabled="true"
+                                                        class="form-control input-md"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Hospital/Clinic PostalCode</label>
+                                                <input  type="text"
+                                                        name="address"
+                                                        ng-model="createUpdateDto.claimantHCPDetailDto.hcpAddress.postalCode"
+                                                        ng-disabled="true"
+                                                        class="form-control input-md"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Hospital/Clinic Province</label>
+                                                <input  type="text"
+                                                        name="address"
+                                                        ng-model="createUpdateDto.claimantHCPDetailDto.hcpAddress.province"
                                                         ng-disabled="true"
                                                         class="form-control input-md"/>
                                             </div>
@@ -867,24 +904,31 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group ">
+                                                <label class="control-label">Hospital/Clinic Town</label>
+                                                <input  type="text"
+                                                        name="address"
+                                                        ng-model="createUpdateDto.claimantHCPDetailDto.hcpAddress.town"
+                                                        ng-disabled="true"
+                                                        class="form-control input-md"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
                                                 <label class="control-label"> Name of the Treating Doctor</label>
-
                                                 <input type="text"
                                                        name="assuredFullName"
                                                        ng-disabled="true" 
-                                                       ng-model="createUpdateDto.diagnosisTreatmentDtos.doctorName"
+                                                       ng-model="createUpdateDto.diagnosisTreatmentDtos[0].doctorName"
                                                        class="form-control input-md"/>
                                             </div>
                                         </div>
-
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label"> Doctor Contact Number</label>
-
                                                 <input type="text"
                                                        name="assuredFullName"
-                                                       ng-disabled="true" 
-                                                       ng-model="createUpdateDto.diagnosisTreatmentDtos.doctorContactNumber"
+                                                       ng-disabled="true"
+                                                       ng-model="createUpdateDto.diagnosisTreatmentDtos[0].doctorContactNumber"
                                                        class="form-control input-md"/>
                                             </div>
                                         </div>
@@ -940,7 +984,7 @@
                                                 <label class="control-label"> G</label>
                                                 <input  type="text"
                                                         name="pregnancyG"
-                                                        ng-disabled="true"
+
                                                         ng-model="diagnosisTreatmentDto.pregnancyG"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -957,7 +1001,7 @@
                                                 <label class="control-label"> P</label>
                                                 <input type="text"
                                                        name="pregnancyP"
-                                                       ng-disabled="true"
+
                                                        ng-model="diagnosisTreatmentDto.pregnancyP"
                                                        class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -978,7 +1022,7 @@
 
                                                 <input  type="text"
                                                         name="assuredFullName"
-                                                        ng-disabled="true"
+
                                                         ng-model="diagnosisTreatmentDto.pregnancyL"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -995,7 +1039,7 @@
                                                 <label class="control-label">A</label>
                                                 <input   type="text"
                                                          name="assuredFullName"
-                                                         ng-disabled="true"
+
                                                          ng-model="diagnosisTreatmentDto.pregnancyA"
                                                          class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1018,8 +1062,8 @@
                                                            view-enabled=""
                                                            ng-change="changeProbableDate(diagnosisTreatmentDto.pregnancyDateOfDelivery)"
                                                            is-open="datepickerprobable.opened"
-                                                           max-date="todayDate"
-                                                           ng-disabled="mode =='view' || mode=='edit'"
+
+
                                                            name="pregnancyDateOfDelivery"
                                                            ng-model="diagnosisTreatmentDto.pregnancyDateOfDelivery"/>
                                                       <span class="input-group-btn">
@@ -1045,7 +1089,7 @@
                                                 <label class="control-label">Mode of Delivery</label>
                                                 <input  type="text"
                                                         name="modeOdDelivery"
-                                                        ng-disabled="true" 
+
                                                         ng-model="diagnosisTreatmentDto.modeOdDelivery"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1062,7 +1106,7 @@
                                                 <label class="control-label">Name of Illness</label>
                                                 <input  type="text"
                                                         name="nameOfIllnessDisease"
-                                                        ng-disabled="true" 
+
                                                         ng-model="diagnosisTreatmentDto.nameOfIllnessDisease"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1080,7 +1124,7 @@
                                                 <label class="control-label">Relevant Clinincal Finding</label>
                                                 <input  type="text"
                                                         name="relevantClinicalFinding"
-                                                        ng-disabled="true" 
+
                                                         ng-model="diagnosisTreatmentDto.relevantClinicalFinding"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1100,8 +1144,8 @@
                                                 <label class="control-label">Duration of the Present Ailment in Days</label>
 
                                                 <input  type="text"
-                                                        name="durationOfPresentAilment" ng-number="true"
-                                                        ng-disabled="true"  ng-maxlength="3"
+                                                        name="durationOfPresentAilment"
+                                                        ng-disabled="true"
                                                         ng-model="diagnosisTreatmentDto.durationOfPresentAilment"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1123,8 +1167,7 @@
                                                            view-enabled=""
                                                            ng-change="changelaunchFirstConsultanceDate(diagnosisTreatmentDto.dateOfConsultation)"
                                                            is-open="datepickerconsultance.opened"
-                                                           max-date="todayDate"
-                                                           ng-disabled="mode =='view' || mode=='edit'"
+
                                                            name="dateOfConsultation"  
                                                            ng-model="diagnosisTreatmentDto.dateOfConsultation"/>
                                                       <span class="input-group-btn">
@@ -1141,21 +1184,12 @@
                                             </div>
                                         </div>
 
-
-
-
-
-
-
-
-
-
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Past History Present ailment if any</label>
                                                 <input  type="text"
                                                         name="pastHistoryOfPresentAilment"
-                                                        ng-disabled="true"
+
                                                         ng-model="diagnosisTreatmentDto.pastHistoryOfPresentAilment"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1175,7 +1209,7 @@
 
                                                 <input  type="text"
                                                         name="provisionalDiagnosis"
-                                                        ng-disabled="true" 
+
                                                         ng-model="diagnosisTreatmentDto.provisionalDiagnosis"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1192,7 +1226,7 @@
                                                 <label class="control-label">Name of Illness</label>
                                                 <input  type="text"
                                                         name="nameOfIllnessDisease"
-                                                        ng-disabled="true" 
+
                                                         ng-model="diagnosisTreatmentDto.nameOfIllnessDisease"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1208,11 +1242,12 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Proposed Line of Treatement</label>
-                                                <input  type="text"
-                                                        name="lineOfTreatment"
-                                                        ng-disabled="true" 
-                                                        ng-model="diagnosisTreatmentDto.lineOfTreatment"
-                                                        class="form-control input-md"/>
+                                               <select  class="form-control input-md" name="lineOfTreatment"  ng-model="diagnosisTreatmentDto.lineOfTreatment">
+                                                    <option value="Medical">Medical</option>
+                                                    <option value="Surgical">Surgical</option>
+                                                    <option value="IntensiveCare">Intensive Care</option>
+                                                    <option value="Investigation">Investigation</option>
+                                                </select>
                                                 <!--<div class="error"-->
                                                 <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
                                                 <!--<small class="error"-->
@@ -1228,11 +1263,14 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Indicate Test</label>
-                                                <input  type="text"
-                                                        name="indicateTest"
-                                                        ng-disabled="true" 
-                                                        ng-model="diagnosisTreatmentDto.indicateTest"
-                                                        class="form-control input-md"/>
+                                                <select  class="form-control input-md" name="indicateTest"  ng-model="diagnosisTreatmentDto.indicateTest">
+                                                    <option value="Blood Tests">Blood Tests</option>
+                                                    <option value="Other Lab Tests">Other Lab Tests</option>
+                                                    <option value="X-Rays">X-Rays</option>
+                                                    <option value="MRI's">MRI's</option>
+                                                    <option value="CT's">CT's</option>
+                                                </select>
+
                                                 <!--<div class="error"-->
                                                 <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
                                                 <!--<small class="error"-->
@@ -1247,7 +1285,7 @@
                                                 <label class="control-label">Name of Surgery</label>
                                                 <input  type="text"
                                                         name="nameOfSurgery"
-                                                        ng-disabled="true" 
+
                                                         ng-model="diagnosisTreatmentDto.nameOfSurgery"
                                                         class="form-control input-md"/>
                                                 <!--<div class="error"-->
@@ -1269,7 +1307,7 @@
                                                            view-enabled=""
                                                            ng-change="changeProbAdmissionDate(diagnosisTreatmentDto.dateOfAdmission)"
                                                            is-open="datepickeradmission.opened"
-                                                           max-date="todayDate"
+
                                                            ng-disabled="mode =='view' || mode=='edit'"
                                                            name="dateOfAdmission"
                                                            ng-model="diagnosisTreatmentDto.dateOfAdmission"/>
@@ -1302,11 +1340,10 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Type of Accomodation</label>
-                                                <input type="text"
-                                                       name="typeOfAccommodation"
-                                                       
-                                                       ng-model="diagnosisTreatmentDto.typeOfAccommodation"
-                                                       class="form-control input-md"/>
+                                                 <select  class="form-control input-md" name="typeOfAccommodation"        ng-model="diagnosisTreatmentDto.typeOfAccommodation">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Executive">Executive</option>
+                                                </select>
                                                 <!--<div class="error"-->
                                                 <!--ng-show="step2.assuredFullName.$dirty &amp;&amp; step2.assuredFullName.$invalid">-->
                                                 <!--<small class="error"-->
@@ -1334,7 +1371,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                        ng-click="savePreAuthorizationRequest()" ng-disabled="isSaveDisabled(step4) || isViewMode"
+                                        ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode"
                                         >Save
                                 </button>
                             </div>
@@ -1661,9 +1698,10 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Accomodation Type</label>
-                                                <input type ="text" name="accommodationType" 
-                                                       ng-model="diagnosisTreatmentDtoToUpdate.accommodationType"
-                                                       class="form-control input-md"/>
+                                                <select  class="form-control input-md" name="accommodationType"    ng-model="diagnosisTreatmentDtoToUpdate.accommodationType">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Executive">Executive</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -1694,9 +1732,13 @@
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label">Drug Type</label>
-                                                <input name="drugType" type="text" 
-                                                       ng-model="diagnosisTreatmentDtoToUpdate.drugType"
-                                                       class="form-control input-md"/>
+                                                <select  class="form-control input-md" name="drugType" ng-model="diagnosisTreatmentDtoToUpdate.drugType">
+                                                    <option value="Syrup">Syrup</option>
+                                                    <option value="Suspension">Suspension</option>
+                                                    <option value="Tablet">Tablet</option>
+                                                    <option value="Capsule">Capsule</option>
+                                                    <option value="Injectable">Injectable</option>
+                                                </select>
                                             </div>
                                         </div>
 
