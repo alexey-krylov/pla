@@ -5,6 +5,7 @@ import com.pla.core.domain.model.plan.PlanDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestAssuredDetail;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
 import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.presentation.AppUtils;
@@ -36,6 +37,7 @@ public class ClaimantPolicyDetailDto {
     private DependentAssuredDetail dependentAssuredDetail;
     private Set<CoverageDetailDto> coverageDetailDtoList;
     private Set<CoverageBenefitDetailDto> coverageBenefitDetails;
+    private String planId;
 
     public static ClaimantPolicyDetailDto getInstance() {
         return new ClaimantPolicyDetailDto();
@@ -89,6 +91,13 @@ public class ClaimantPolicyDetailDto {
     public ClaimantPolicyDetailDto updateWithPlanCode(PlanDetail planDetail) {
         if(isNotEmpty(planDetail))
             this.planCode = planDetail.getPlanCode();
+        return this;
+    }
+
+
+    public ClaimantPolicyDetailDto updateWithPlanId(PlanId planId) {
+        if(isNotEmpty(planId))
+            this.planId = planId.getPlanId();
         return this;
     }
 

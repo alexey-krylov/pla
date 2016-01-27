@@ -136,6 +136,13 @@ public class UnderWriterFinder {
         return underWriterRoutingLevel.get(0);
     }
 
+    public UnderWriterRoutingLevel findUnderWriterRoutingLevelWithoutCoverageDetails(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
+        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findAllByPlanIdAndProcessType(underWriterRoutingLevelDetailDto.getPlanId(), underWriterRoutingLevelDetailDto.getProcess());
+        checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Router Level can not be null");
+        checkArgument(underWriterRoutingLevel.size() == 1);
+        return underWriterRoutingLevel.get(0);
+    }
+
     public List<Map<String, Object>> getAllDocumentApprovedByServiceProvider() {
         return namedParameterJdbcTemplate.query(FIND_ALL_DOCUMENT_APPROVED_BY_SERVICE_PROVIDER, new ColumnMapRowMapper());
     }

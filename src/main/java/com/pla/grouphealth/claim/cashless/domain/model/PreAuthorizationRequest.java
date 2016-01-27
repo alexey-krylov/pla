@@ -1,30 +1,24 @@
 package com.pla.grouphealth.claim.cashless.domain.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.PreAuthorizationFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
-import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.security.service.UserLoginDetailDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,13 +88,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
             Constructor<T> constructor = tClass.getDeclaredConstructor();
             constructor.setAccessible(true);
             return constructor.newInstance();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -157,9 +145,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
                     PreAuthorizationRequestDiagnosisTreatmentDetail preAuthorizationRequestDiagnosisTreatmentDetail = new PreAuthorizationRequestDiagnosisTreatmentDetail();
                     try {
                         BeanUtils.copyProperties(preAuthorizationRequestDiagnosisTreatmentDetail, diagnosisTreatmentDto);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
+                    } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
                     return preAuthorizationRequestDiagnosisTreatmentDetail;
@@ -174,9 +160,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
             try {
                 BeanUtils.copyProperties(preAuthorizationRequestIllnessDetail, illnessDetailDto);
                 this.preAuthorizationRequestIllnessDetail = preAuthorizationRequestIllnessDetail;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -190,9 +174,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
                 PreAuthorizationRequestDrugService preAuthorizationRequestDrugService = new PreAuthorizationRequestDrugService();
                 try {
                     BeanUtils.copyProperties(preAuthorizationRequestDrugService, drugServiceDto);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
                 return preAuthorizationRequestDrugService;
@@ -207,9 +189,8 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     }
 
     public PreAuthorizationRequest updateWithPreAuthorizationId(String preAuthorizationIdString) {
-        if(isEmpty(preAuthorizationId)) {
-            PreAuthorizationId preAuthorizationId = new PreAuthorizationId(preAuthorizationIdString);
-            this.preAuthorizationId = preAuthorizationId;
+        if(isEmpty(preAuthorizationIdString)) {
+            this.preAuthorizationId = new PreAuthorizationId(preAuthorizationIdString);
         }
         return this;
     }
@@ -279,9 +260,31 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public BigDecimal getSumOfAllProbableClaimAmount() {
+        BigDecimal sumOfAllProbableClaimAmount = BigDecimal.ZERO;
+        if(isNotEmpty(this.getPreAuthorizationRequestPolicyDetail())) {
+            Set<PreAuthorizationRequestCoverageDetail> coverageDetails = this.getPreAuthorizationRequestPolicyDetail().getCoverageDetailDtoList();
+            if(isNotEmpty(coverageDetails)){
+                for(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail :  coverageDetails){
+                    Set<PreAuthorizationRequestBenefitDetail> benefitDetails = preAuthorizationRequestCoverageDetail.getBenefitDetails();
+                    if(isNotEmpty(benefitDetails)){
+                        for(PreAuthorizationRequestBenefitDetail benefitDetail : benefitDetails){
+                            sumOfAllProbableClaimAmount = sumOfAllProbableClaimAmount.add(benefitDetail.getProbableClaimAmount());
+                        }
+                    }
+                }
+            }
+        }
+        return sumOfAllProbableClaimAmount;
+    }
+
+    public int getAgeOfTheClient() {
+        return isNotEmpty(this.getPreAuthorizationRequestPolicyDetail()) ? isNotEmpty(this.getPreAuthorizationRequestPolicyDetail().getAssuredDetail()) ?  this.getPreAuthorizationRequestPolicyDetail().getAssuredDetail().getAgeNextBirthday() : 0 : 0;
+    }
+
 
     public enum Status {
-        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
+        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
 
         private String description;
 

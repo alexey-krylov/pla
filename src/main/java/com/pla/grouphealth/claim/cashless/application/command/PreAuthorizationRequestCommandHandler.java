@@ -2,24 +2,31 @@ package com.pla.grouphealth.claim.cashless.application.command;
 
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
+import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
-import com.pla.grouphealth.proposal.application.command.GHProposalDocumentRemoveCommand;
-import com.pla.grouphealth.proposal.domain.model.GroupHealthProposal;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
-import com.pla.sharedkernel.identifier.ProposalId;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
+import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
+import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.axonframework.common.Assert.isTrue;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -33,7 +40,7 @@ public class PreAuthorizationRequestCommandHandler {
     private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
 
     @CommandHandler
-    public String updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
+    public String updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException, RoutingLevelNotFoundException {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
@@ -41,10 +48,41 @@ public class PreAuthorizationRequestCommandHandler {
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION)
                 .updateWithProcessorUserId(preAuthorizationClaimantDetailCommand.getPreAuthProcessorUserId());
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
-            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING)
-                    .updatePreAuthorizationSubmitted(Boolean.TRUE);
+            UnderWriterRoutingLevelDetailDto routingLevelDetailDto = getUnderWriterRoutingLevelDetailDto(preAuthorizationRequest);
+            RoutingLevel routingLevel = getRoutingLevel(routingLevelDetailDto);
+            if(isEmpty(routingLevel)) {
+                throw new RoutingLevelNotFoundException(getExceptionMessage(preAuthorizationRequest));
+            }
+            if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_ONE))
+                preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1);
+            if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_TWO))
+                preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1);
+            preAuthorizationRequest.updatePreAuthorizationSubmitted(Boolean.TRUE);
         }
         return preAuthorizationRequest.getIdentifier();
+    }
+
+    private String getExceptionMessage(PreAuthorizationRequest preAuthorizationRequest) {
+        BigDecimal claimAmount = preAuthorizationRequest.getSumOfAllProbableClaimAmount();
+        int age = preAuthorizationRequest.getAgeOfTheClient();
+        return "No routing rule found for PreAuthorization : "+preAuthorizationRequest.getPreAuthorizationId()+" having age : "+age+" and Claim Amount : "+claimAmount;
+    }
+
+    private RoutingLevel getRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto) {
+        return preAuthorizationRequestService.getRoutingLevelForPreAuthorization(routingLevelDetailDto);
+    }
+
+    private UnderWriterRoutingLevelDetailDto getUnderWriterRoutingLevelDetailDto(PreAuthorizationRequest preAuthorizationRequest) {
+        BigDecimal claimAmount = preAuthorizationRequest.getSumOfAllProbableClaimAmount();
+        int age = preAuthorizationRequest.getAgeOfTheClient();
+        isTrue(claimAmount.compareTo(BigDecimal.ZERO) == 0, "unable to calculate age of the client for routing");
+        isTrue(age == 0, "unable to calculate age of the client for routing");
+        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<>();
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPlanId(), LocalDate.now(), ProcessType.CLAIM.name());
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.CLAIM_AMOUNT.name(), claimAmount.toPlainString()));
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), String.valueOf(age)));
+        routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
+        return routingLevelDetailDto;
     }
 
     @CommandHandler
@@ -96,7 +134,7 @@ public class PreAuthorizationRequestCommandHandler {
         * logic to get the senior underwriter userId
         * preAuthorizationRequest.updateWithPreAuthorizationUnderWriterUserId(userId);
         * */
-        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2);
         return Boolean.TRUE;
     }
 

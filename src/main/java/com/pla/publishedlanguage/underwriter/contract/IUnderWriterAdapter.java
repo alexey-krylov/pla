@@ -16,6 +16,8 @@ public interface IUnderWriterAdapter {
 
     public RoutingLevel getRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
+    public RoutingLevel getRoutingLevelWithoutCoverageDetails(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
+
     public List<ClientDocumentDto> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto);
 
     public Set<ClientDocumentDto> getMandatoryDocumentsForApproverApproval(List<SearchDocumentDetailDto> searchDetailList, ProcessType processType);

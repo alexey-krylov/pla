@@ -58,7 +58,7 @@ public class PreAuthorizationRequestController {
     @Autowired
     private GridFsTemplate gridFsTemplate;
     @Autowired
-    IAuthenticationFacade iAuthenticationFacade;
+    IAuthenticationFacade authenticationFacadeImpl;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
     public @ResponseBody
@@ -99,7 +99,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = StringUtils.EMPTY;
-            Authentication authentication = iAuthenticationFacade.getAuthentication();
+            Authentication authentication = authenticationFacadeImpl.getAuthentication();
             if(!(authentication instanceof AnonymousAuthenticationToken)){
                 userName = authentication.getName();
             }
@@ -159,7 +159,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     public ModelAndView getPreAuthorizationForDefaultList(HttpServletRequest request) {
         String userName = StringUtils.EMPTY;
-        Authentication authentication = iAuthenticationFacade.getAuthentication();
+        Authentication authentication = authenticationFacadeImpl.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             userName = authentication.getName();
         }
@@ -253,7 +253,7 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
     public ModelAndView getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
         String userName = StringUtils.EMPTY;
-        Authentication authentication = iAuthenticationFacade.getAuthentication();
+        Authentication authentication = authenticationFacadeImpl.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             userName = authentication.getName();
         }
@@ -271,7 +271,7 @@ public class PreAuthorizationRequestController {
     public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
         String userName = StringUtils.EMPTY;
-        Authentication authentication = iAuthenticationFacade.getAuthentication();
+        Authentication authentication = authenticationFacadeImpl.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             userName = authentication.getName();
         }

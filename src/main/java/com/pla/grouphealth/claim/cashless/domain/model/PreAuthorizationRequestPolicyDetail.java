@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.domain.model;
 
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.annotations.Immutable;
@@ -38,6 +39,7 @@ public class PreAuthorizationRequestPolicyDetail {
     private BigDecimal sumAssured;
     private PreAuthorizationRequestAssuredDetail assuredDetail;
     private Set<PreAuthorizationRequestCoverageDetail> coverageDetailDtoList;
+    private PlanId planId;
 
     public PreAuthorizationRequestPolicyDetail updateWithDetails(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
         ClaimantPolicyDetailDto claimantPolicyDetailDto = preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto();
@@ -45,6 +47,8 @@ public class PreAuthorizationRequestPolicyDetail {
             this.policyName = claimantPolicyDetailDto.getPolicyName();
             this.policyNumber = claimantPolicyDetailDto.getPolicyNumber();
             this.planCode = claimantPolicyDetailDto.getPlanCode();
+            if(isNotEmpty(claimantPolicyDetailDto.getPlanId()))
+                this.planId = new PlanId(claimantPolicyDetailDto.getPlanId());
             this.planName = claimantPolicyDetailDto.getPlanName();
             this.sumAssured = claimantPolicyDetailDto.getSumAssured();
             PreAuthorizationRequestAssuredDetail assuredDetail = isNotEmpty(this.assuredDetail) ? this.assuredDetail : new PreAuthorizationRequestAssuredDetail();

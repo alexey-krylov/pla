@@ -24,4 +24,6 @@ public interface UnderWriterRoutingLevelRepository  extends MongoRepository<Unde
     @Query("{'planId' : ?0,'coverageId' : ?1,'validTill' :?2, 'processType' :?3 }")
     public List<UnderWriterRoutingLevel> findByPlanCodeAndCoverageIdAndValidTillAndProcessType(PlanId planId, CoverageId coverageId, LocalDate validTill, String processType);
 
+    public List<UnderWriterRoutingLevel> findAllByPlanIdAndProcessType(PlanId planId, String processType);
+
 }

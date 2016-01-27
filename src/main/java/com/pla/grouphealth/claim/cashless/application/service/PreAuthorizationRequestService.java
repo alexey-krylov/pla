@@ -33,10 +33,12 @@ import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocument
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
@@ -157,8 +159,11 @@ public class PreAuthorizationRequestService {
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
                 .updateStatus(PreAuthorizationRequest.Status.EVALUATION);
-        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired())
-            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
+        if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
+            //UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPlanId()), LocalDate.now(), ProcessType.ENROLLMENT.name());
+            //getRoutingLevel()
+            //preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING);
+        }
         return preAuthorizationRequestRepository.save(preAuthorizationRequest);
     }
 
@@ -268,6 +273,7 @@ public class PreAuthorizationRequestService {
                         .updateWithSumAssured(planDetail.getSumAssured())
                         .updateWithCoverages(constructCoverageBenefitDetails(planDetail, clientId))
                         .updateWithPlanCode(plan.getPlanDetail())
+                        .updateWithPlanId(plan.getPlanId())
                         .updateWithPlanName(plan.getPlanDetail())
                         .updateWithCoverageDetails(constructProbableClaimAmountForServices(claimantPolicyDetailDto.getCoverageBenefitDetails(), preAuthorizationDetails, plan, hcpCode, planDetail));
             }
@@ -877,9 +883,13 @@ public class PreAuthorizationRequestService {
 
     public List<PreAuthorizationClaimantDetailCommand> getDefaultListOfPreAuthorizationAssignedToUnderwriter(String username) {
         List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
-        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationUnderWriterUserIdAndStatus(username, PreAuthorizationRequest.Status.UNDERWRITING);
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationUnderWriterUserIdAndStatus(username, PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1);
         if (isNotEmpty(preAuthorizationRequests))
             result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
         return result;
+    }
+
+    public RoutingLevel getRoutingLevelForPreAuthorization(UnderWriterRoutingLevelDetailDto routingLevelDetailDto) {
+        return underWriterAdapter.getRoutingLevelWithoutCoverageDetails(routingLevelDetailDto);
     }
 }

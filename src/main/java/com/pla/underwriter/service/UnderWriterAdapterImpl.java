@@ -61,6 +61,11 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
     }
 
     @Override
+    public RoutingLevel getRoutingLevelWithoutCoverageDetails(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
+        return findRoutingLevelWithoutCoverageDetails(underWriterRoutingLevelDetailDto);
+    }
+
+    @Override
     public List<ClientDocumentDto> getDocumentsForUnderWriterApproval(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
         List<String> definedUnderWriterDocument = findDefinedUnderWriterDocument(underWriterRoutingLevelDetailDto);
         List<ClientDocumentDto> clientDocument = definedUnderWriterDocument.stream().map(new Function<String, ClientDocumentDto>() {
@@ -107,6 +112,25 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
         UnderWritingRoutingLevelItem underWritingRoutingLevelItem;
         try {
             UnderWriterRoutingLevel underWriterRoutingLevel = underWriterFinder.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto);
+            boolean hasAllInfluencingFactor = underWriterRoutingLevel.hasAllInfluencingFactor(transformUnderWriterInfluencingFactor(underWriterRoutingLevelDetailDto.getUnderWriterInfluencingFactor()));
+            if (!hasAllInfluencingFactor) {
+                raiseInfluencingFactorMismatchException();
+            }
+            Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems = underWriterRoutingLevel.getUnderWritingRoutingLevelItems();
+            underWritingRoutingLevelItem = findUnderWriterRoutingLevelItem(underWritingRoutingLevelItems, underWriterRoutingLevelDetailDto.getUnderWriterInfluencingFactor());
+        }catch (UnderWriterException  e){
+            return null;
+        }
+        catch (RuntimeException e){
+            return null;
+        }
+        return underWritingRoutingLevelItem.getRoutingLevel();
+    }
+
+    public RoutingLevel findRoutingLevelWithoutCoverageDetails(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
+        UnderWritingRoutingLevelItem underWritingRoutingLevelItem;
+        try {
+            UnderWriterRoutingLevel underWriterRoutingLevel = underWriterFinder.findUnderWriterRoutingLevelWithoutCoverageDetails(underWriterRoutingLevelDetailDto);
             boolean hasAllInfluencingFactor = underWriterRoutingLevel.hasAllInfluencingFactor(transformUnderWriterInfluencingFactor(underWriterRoutingLevelDetailDto.getUnderWriterInfluencingFactor()));
             if (!hasAllInfluencingFactor) {
                 raiseInfluencingFactorMismatchException();
