@@ -17,4 +17,5 @@ import lombok.Setter;
 public class UpdatePreAuthorizationCommand {
     private PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand;
     private RoutingLevel routingLevel;
+    private String userName;
 }

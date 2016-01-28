@@ -1,6 +1,7 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import com.pla.grouphealth.claim.cashless.domain.model.*;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,6 +39,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private String preAuthProcessorUserId;
     private Set<CommentDetail> commentDetails;
     private String batchUploaderUserId;
+    private Set<ClientDocumentDto> additionalRequiredDocuments;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PreAuthorizationRemoveAdditionalCommand {
+public class PreAuthorizationRemoveAdditionalDocumentCommand {
     @NotNull(message = "preAuthorizationId must not be null")
     @NotEmpty(message = "preAuthorizationId must not be null")
     private String preAuthorizationId;

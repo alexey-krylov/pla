@@ -15,4 +15,5 @@ import lombok.Setter;
 @Getter
 public class ApprovePreAuthorizationCommand {
     private PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand;
+    private String userName;
 }

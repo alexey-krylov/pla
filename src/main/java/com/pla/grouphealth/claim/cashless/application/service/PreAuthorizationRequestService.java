@@ -19,7 +19,6 @@ import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
-import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
@@ -29,7 +28,6 @@ import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
-import com.pla.grouphealth.policy.domain.model.PolicyStatus;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
@@ -503,6 +501,10 @@ public class PreAuthorizationRequestService {
             documentDetailDtos.add(new SearchDocumentDetailDto(planPremiumDetail.getPlanId(), coverageIds));
         }
         Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.CLAIM);
+        Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter = preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter();
+        if(isNotEmpty(additionalRequiredDocumentsByUnderwriter)){
+            mandatoryDocuments = populateWithAdditionalRequiredDocumentsByUnderwriter(mandatoryDocuments, additionalRequiredDocumentsByUnderwriter);
+        }
         List<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
         Set<GHProposerDocument> uploadedDocuments = isNotEmpty(preAuthorizationRequest.getProposerDocuments()) ? preAuthorizationRequest.getProposerDocuments() : Sets.newHashSet();
         if (isNotEmpty(mandatoryDocuments)) {
@@ -534,6 +536,13 @@ public class PreAuthorizationRequestService {
             }).collect(Collectors.toList());
         }
         return mandatoryDocumentDtos;
+    }
+
+    private Set<ClientDocumentDto> populateWithAdditionalRequiredDocumentsByUnderwriter(Set<ClientDocumentDto> mandatoryDocuments, Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
+        additionalRequiredDocumentsByUnderwriter.stream().forEach(document -> {
+            mandatoryDocuments.add(new ClientDocumentDto(document.getDocumentCode(), document.getDocumentName(), false));
+        });
+        return mandatoryDocuments;
     }
 
     private GHPlanPremiumDetail getGHPlanPremiumDetailByFamilyId(FamilyId familyId, GroupHealthPolicy groupHealthPolicy) throws Exception{

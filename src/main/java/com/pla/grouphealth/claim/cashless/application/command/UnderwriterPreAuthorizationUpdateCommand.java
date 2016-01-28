@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Created by Mohan Sharma on 1/22/2016.
+ * Author - Mohan Sharma Created on 1/28/2016.
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-public class RejectPreAuthorizationCommand {
+public class UnderwriterPreAuthorizationUpdateCommand {
     private PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand;
     private String userName;
 }

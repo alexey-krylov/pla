@@ -6,6 +6,7 @@ import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollo
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
+import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.domain.AbstractAggregateRoot;
@@ -18,7 +19,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +63,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private String preAuthorizationUnderWriterUserId;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
+    private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
@@ -224,8 +225,14 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public PreAuthorizationRequest updateWithComments(Set<CommentDetail> commentDetails) {
-        this.commentDetails = commentDetails;
+    public PreAuthorizationRequest updateWithComments(Set<CommentDetail> commentDetails, String userName) {
+        this.commentDetails = isNotEmpty(commentDetails) ? commentDetails.stream().map(comment -> {
+            if(isNotEmpty(comment.getComments()) && isEmpty(comment.getCommentDateTime())){
+                comment.updateWithCommentDateTime(DateTime.now());
+                comment.updateWithUserName(userName);
+            }
+            return comment;
+        }).collect(Collectors.toSet()) : Sets.newHashSet();
         return this;
     }
 
@@ -263,7 +270,15 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
 
     public PreAuthorizationRequest updateWithSubmittedDate(LocalDate submissionDate) {
         this.submissionDate = submissionDate;
-        return null;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithAdditionalRequirementAskedFor(Set<ClientDocumentDto> additionalRequiredDocuments) {
+        this.additionalRequiredDocumentsByUnderwriter =  isNotEmpty(additionalRequiredDocuments) ? additionalRequiredDocuments.stream().map(document -> {
+            AdditionalDocument additionalDocument = new AdditionalDocument(document.getDocumentCode(), document.getDocumentName());
+            return additionalDocument;
+        }).collect(Collectors.toSet()) : Sets.newHashSet();
+        return this;
     }
 
     public enum Status {

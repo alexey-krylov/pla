@@ -30,9 +30,8 @@ public class CommentDetail {
         return this;
     }
 
-    public CommentDetail updateWithUserName(UserDetails userDetails) {
-        notNull(userDetails, "UserDetails cannot be empty while updating comment for PreAuthorization by underwriter");
-        this.userName = userDetails.getUsername();
+    public CommentDetail updateWithUserName(String username) {
+        this.userName = username;
         return this;
     }
 }

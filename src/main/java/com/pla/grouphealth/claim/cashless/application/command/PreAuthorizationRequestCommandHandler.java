@@ -3,14 +3,10 @@ package com.pla.grouphealth.claim.cashless.application.command;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
-import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
-import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
-import com.pla.sharedkernel.domain.model.ProcessType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
-import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
@@ -18,14 +14,9 @@ import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import static org.axonframework.common.Assert.isTrue;
-import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notNull;
 
@@ -45,7 +36,7 @@ public class PreAuthorizationRequestCommandHandler {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, updatePreAuthorizationCommand.getUserName());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION)
                 .updateWithProcessorUserId(preAuthorizationClaimantDetailCommand.getPreAuthProcessorUserId());
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
@@ -62,17 +53,12 @@ public class PreAuthorizationRequestCommandHandler {
     }
 
     @CommandHandler
-    public Set<CommentDetail> updateComments(UpdateCommentCommand updateCommentCommand){
-        return null;//preAuthorizationRequestService.updateComments(updateCommentCommand);
-    }
-
-    @CommandHandler
     public boolean approvePreAuthorization(ApprovePreAuthorizationCommand approvePreAuthorizationCommand){
         PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = approvePreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, approvePreAuthorizationCommand.getUserName());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.APPROVED);
         return Boolean.TRUE;
     }
@@ -83,7 +69,7 @@ public class PreAuthorizationRequestCommandHandler {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, rejectPreAuthorizationCommand.getUserName());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.REJECTED);
         return Boolean.TRUE;
     }
@@ -94,7 +80,7 @@ public class PreAuthorizationRequestCommandHandler {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, returnPreAuthorizationCommand.getUserName());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
         return Boolean.TRUE;
     }
@@ -105,27 +91,52 @@ public class PreAuthorizationRequestCommandHandler {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, routePreAuthorizationCommand.getUserName());
         /*
         * logic to get the senior underwriter userId
         * preAuthorizationRequest.updateWithPreAuthorizationUnderWriterUserId(userId);
         * */
-        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2);
+
+        preAuthorizationRequest
+                .updateWithPreAuthorizationUnderWriterUserId(null)
+                .updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2);
         return Boolean.TRUE;
     }
 
     @CommandHandler
-    public boolean removeAdditionalDocument(PreAuthorizationRemoveAdditionalCommand preAuthorizationRemoveAdditionalCommand) {
+    public boolean addRequirementToPreAuthorization(AddRequirementPreAuthorizationCommand addRequirementPreAuthorizationCommand) throws GenerateReminderFollowupException {
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = addRequirementPreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, addRequirementPreAuthorizationCommand.getUserName());
+        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
+        preAuthorizationRequest.savedRegisterFollowUpReminders();
+        return Boolean.TRUE;
+    }
+
+    @CommandHandler
+    public boolean underwriterPreAuthorizationUpdate(UnderwriterPreAuthorizationUpdateCommand underwriterPreAuthorizationUpdateCommand) throws GenerateReminderFollowupException {
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = underwriterPreAuthorizationUpdateCommand.getPreAuthorizationClaimantDetailCommand();
+        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
+        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
+        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, underwriterPreAuthorizationUpdateCommand.getUserName());
+        return Boolean.TRUE;
+    }
+
+    @CommandHandler
+    public boolean removeAdditionalDocument(PreAuthorizationRemoveAdditionalDocumentCommand preAuthorizationRemoveAdditionalDocumentCommand) {
         boolean result = Boolean.FALSE;
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRemoveAdditionalCommand.getPreAuthorizationId());
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRemoveAdditionalDocumentCommand.getPreAuthorizationId());
         if(isNotEmpty(preAuthorizationRequest)){
             Set<GHProposerDocument> ghProposerDocuments = preAuthorizationRequest.getProposerDocuments();
-            result =  removeDocumentByGridFsDocId(ghProposerDocuments, preAuthorizationRemoveAdditionalCommand.getGridFsDocId());
+            result =  removeDocumentByGridFsDocId(ghProposerDocuments, preAuthorizationRemoveAdditionalDocumentCommand.getGridFsDocId());
         }
         return result;
     }
 
-    private PreAuthorizationRequest populateDetailsToPreAuthorization(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, PreAuthorizationRequest preAuthorizationRequest) {
+    private PreAuthorizationRequest populateDetailsToPreAuthorization(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, PreAuthorizationRequest preAuthorizationRequest, String userName) {
         preAuthorizationRequest
                 .updateWithPreAuthorizationDate(preAuthorizationClaimantDetailCommand.getPreAuthorizationDate())
                 .updateWithCategory(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto())
@@ -139,7 +150,8 @@ public class PreAuthorizationRequestCommandHandler {
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
                 .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
-                .updateWithComments(preAuthorizationClaimantDetailCommand.getCommentDetails());
+                .updateWithComments(preAuthorizationClaimantDetailCommand.getCommentDetails(), userName)
+                .updateWithAdditionalRequirementAskedFor(preAuthorizationClaimantDetailCommand.getAdditionalRequiredDocuments());
         return preAuthorizationRequest;
     }
 

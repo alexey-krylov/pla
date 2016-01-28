@@ -97,7 +97,7 @@ public class UnderWriterAdapterImpl implements IUnderWriterAdapter {
                     public ClientDocumentDto apply(Map<String, Object> documentMap) {
                         String documentName = (String) documentMap.get("documentName");
                         String documentCode = (String) documentMap.get("documentCode");
-                        ClientDocumentDto clientDocumentDto = new ClientDocumentDto(documentCode, documentName,false);
+                        ClientDocumentDto clientDocumentDto = new ClientDocumentDto(documentCode, documentName, false);
                         mandatoryDocumentSet.add(clientDocumentDto);
                         return clientDocumentDto;
                     }
