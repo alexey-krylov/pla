@@ -40,7 +40,8 @@ public class PreAuthorizationRequestCommandHandler {
     private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;
 
     @CommandHandler
-    public String updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException, RoutingLevelNotFoundException {
+    public String updatePreAuthorizationRequest(UpdatePreAuthorizationCommand updatePreAuthorizationCommand) throws GenerateReminderFollowupException, RoutingLevelNotFoundException {
+        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = updatePreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
@@ -48,41 +49,16 @@ public class PreAuthorizationRequestCommandHandler {
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION)
                 .updateWithProcessorUserId(preAuthorizationClaimantDetailCommand.getPreAuthProcessorUserId());
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
-            UnderWriterRoutingLevelDetailDto routingLevelDetailDto = getUnderWriterRoutingLevelDetailDto(preAuthorizationRequest);
-            RoutingLevel routingLevel = getRoutingLevel(routingLevelDetailDto);
-            if(isEmpty(routingLevel)) {
-                throw new RoutingLevelNotFoundException(getExceptionMessage(preAuthorizationRequest));
-            }
+            RoutingLevel routingLevel = updatePreAuthorizationCommand.getRoutingLevel();
             if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_ONE))
                 preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1);
             if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_TWO))
                 preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1);
-            preAuthorizationRequest.updatePreAuthorizationSubmitted(Boolean.TRUE);
+            preAuthorizationRequest
+                    .updatePreAuthorizationSubmitted(Boolean.TRUE)
+                    .updateWithSubmittedDate(LocalDate.now());
         }
         return preAuthorizationRequest.getIdentifier();
-    }
-
-    private String getExceptionMessage(PreAuthorizationRequest preAuthorizationRequest) {
-        BigDecimal claimAmount = preAuthorizationRequest.getSumOfAllProbableClaimAmount();
-        int age = preAuthorizationRequest.getAgeOfTheClient();
-        return "No routing rule found for PreAuthorization : "+preAuthorizationRequest.getPreAuthorizationId()+" having age : "+age+" and Claim Amount : "+claimAmount;
-    }
-
-    private RoutingLevel getRoutingLevel(UnderWriterRoutingLevelDetailDto routingLevelDetailDto) {
-        return preAuthorizationRequestService.getRoutingLevelForPreAuthorization(routingLevelDetailDto);
-    }
-
-    private UnderWriterRoutingLevelDetailDto getUnderWriterRoutingLevelDetailDto(PreAuthorizationRequest preAuthorizationRequest) {
-        BigDecimal claimAmount = preAuthorizationRequest.getSumOfAllProbableClaimAmount();
-        int age = preAuthorizationRequest.getAgeOfTheClient();
-        isTrue(claimAmount.compareTo(BigDecimal.ZERO) == 0, "unable to calculate age of the client for routing");
-        isTrue(age == 0, "unable to calculate age of the client for routing");
-        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<>();
-        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPlanId(), LocalDate.now(), ProcessType.CLAIM.name());
-        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.CLAIM_AMOUNT.name(), claimAmount.toPlainString()));
-        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), String.valueOf(age)));
-        routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
-        return routingLevelDetailDto;
     }
 
     @CommandHandler

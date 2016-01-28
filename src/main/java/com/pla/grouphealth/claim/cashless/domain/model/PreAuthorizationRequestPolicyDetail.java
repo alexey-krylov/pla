@@ -63,13 +63,11 @@ public class PreAuthorizationRequestPolicyDetail {
             @Override
             public PreAuthorizationRequestCoverageDetail apply(CoverageBenefitDetailDto coverageBenefitDetailDto) {
                 PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail = new PreAuthorizationRequestCoverageDetail();
-                try {
-                    BeanUtils.copyProperties(preAuthorizationRequestCoverageDetail, coverageBenefitDetailDto);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                preAuthorizationRequestCoverageDetail.updateWithCoverageDetails(coverageBenefitDetailDto);
+                /*
+                * Unable to do deep copying
+                * */
+                //BeanUtils.copyProperties(preAuthorizationRequestCoverageDetail, coverageBenefitDetailDto);
                 return preAuthorizationRequestCoverageDetail;
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();

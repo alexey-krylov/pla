@@ -20,7 +20,7 @@ public interface PreAuthorizationRequestRepository extends MongoRepository<PreAu
     @Query("{'preAuthorizationRequestId' : ?0}")
     PreAuthorizationRequest findByPreAuthorizationRequestId(String preAuthorizationRequestId);
 
-    Page<PreAuthorizationRequest> findAllByBatchUploaderUserIdAndStatusIn(String batchUploaderUserId, ArrayList<PreAuthorizationRequest.Status> statusList, Pageable p);
+    Page<PreAuthorizationRequest> findAllByPreAuthorizationProcessorUserIdInAndStatusIn(List<String> users, ArrayList<PreAuthorizationRequest.Status> statusList, Pageable p);
 
     @Query("{'preAuthorizationUnderWriterUserId' : ?0, 'status' : ?1}")
     List<PreAuthorizationRequest> findAllByPreAuthorizationUnderWriterUserIdAndStatus(String preAuthorizationUnderWriterUserId, PreAuthorizationRequest.Status status);

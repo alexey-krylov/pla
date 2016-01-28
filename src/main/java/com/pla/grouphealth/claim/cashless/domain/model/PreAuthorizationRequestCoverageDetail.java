@@ -1,9 +1,18 @@
 package com.pla.grouphealth.claim.cashless.domain.model;
 
+import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.presentation.dto.BenefitDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.CoverageBenefitDetailDto;
 import lombok.*;
+import org.apache.commons.beanutils.BeanUtils;
+import org.nthdimenzion.utils.UtilValidator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Author - Mohan Sharma Created on 1/11/2016.
@@ -23,5 +32,26 @@ public class PreAuthorizationRequestCoverageDetail {
     private BigDecimal reserveAmount;
     private BigDecimal eligibleAmount;
     private BigDecimal approvedAmount;
+    private String coverageId;
 
+    public void updateWithCoverageDetails(CoverageBenefitDetailDto coverageBenefitDetailDto) {
+        if(isNotEmpty(coverageBenefitDetailDto)){
+            this.coverageCode = coverageBenefitDetailDto.getCoverageCode();
+            this.coverageId = coverageBenefitDetailDto.getCoverageId();
+            this.coverageName = coverageBenefitDetailDto.getCoverageName();
+            this.sumAssured = coverageBenefitDetailDto.getSumAssured();
+            this.totalAmountPaid = coverageBenefitDetailDto.getTotalAmountPaid();
+            this.balanceAmount = coverageBenefitDetailDto.getBalanceAmount();
+            this.reserveAmount = coverageBenefitDetailDto.getReserveAmount();
+            this.eligibleAmount = coverageBenefitDetailDto.getEligibleAmount();
+            this.approvedAmount = coverageBenefitDetailDto.getApprovedAmount();
+            this.benefitDetails = populateBenefitDetails(coverageBenefitDetailDto.getBenefitDetails());
+        }
+    }
+
+    private Set<PreAuthorizationRequestBenefitDetail> populateBenefitDetails(Set<BenefitDetailDto> benefitDetails) {
+        return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> {
+            return new PreAuthorizationRequestBenefitDetail(benefit.getBenefitName(), benefit.getBenefitCode(), benefit.getProbableClaimAmount());
+        }).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
 }

@@ -184,12 +184,16 @@ var  app=angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', '
                     url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/submitpreauthorization',
                     method: 'POST',
                     data: $scope.createUpdateDto
-                }).success(function () {
-                    window.location.reload();
+                }).success(function (data) {
+                    if (data.status == "200") {
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 3000);
+                    }
+
                 }).error();
 
             };
-
 
             $scope.back = function () {
                 window.location.reload();

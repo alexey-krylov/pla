@@ -6,6 +6,8 @@ import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationSe
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
+import com.pla.publishedlanguage.contract.IAuthenticationFacade;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
@@ -13,6 +15,9 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +44,9 @@ public class PreAuthorizationController {
     CommandGateway commandGateway;
     @Autowired
     PreAuthorizationService preAuthorizationService;
+    @Autowired
+    @Qualifier("authenticationFacade")
+    IAuthenticationFacade authenticationFacade;
 
     @RequestMapping(value = "/downloadGHCashlessClaimPreAuthtemplate/{ghCashlessClaimCode}", method = RequestMethod.GET)
     public void downloadInsuredTemplate(@PathVariable("ghCashlessClaimCode") String ghCashlessClaimCode, HttpServletResponse response) throws IOException {
@@ -80,10 +88,13 @@ public class PreAuthorizationController {
                 fileOutputStream.close();
                 return Result.failure("Uploaded Pre-Auth template is not valid.Please download to check the errors", Boolean.TRUE);
             }
-            UserDetails userDetails = getLoggedInUserDetail(request);
-            notNull(userDetails, "No user details found please login");
+            String userName = StringUtils.EMPTY;
+            Authentication authentication = authenticationFacade.getAuthentication();
+            if(!(authentication instanceof AnonymousAuthenticationToken)){
+                userName = authentication.getName();
+            }
             Set<PreAuthorizationDetailDto> preAuthorizationDetailDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook);
-            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(preAuthorizationUploadDto.getHcpCode(), preAuthorizationDetailDtoList, preAuthorizationUploadDto.getBatchDate(), userDetails.getUsername()));
+            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(preAuthorizationUploadDto.getHcpCode(), preAuthorizationDetailDtoList, preAuthorizationUploadDto.getBatchDate(), userName));
             return Result.success("Insured detail uploaded successfully - "+batchNumber);
         } catch (Exception e) {
             e.printStackTrace();

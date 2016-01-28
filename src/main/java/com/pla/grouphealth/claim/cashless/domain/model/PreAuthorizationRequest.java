@@ -46,22 +46,23 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private String batchNumber;
     private String batchUploaderUserId;
     private GHProposer ghProposer;
+    private Status status;
+    private DateTime createdOn;
+    private LocalDate preAuthorizationDate;
     private PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail;
     private PreAuthorizationRequestHCPDetail preAuthorizationRequestHCPDetail;
     private Set<PreAuthorizationRequestDiagnosisTreatmentDetail> preAuthorizationRequestDiagnosisTreatmentDetails;
     private PreAuthorizationRequestIllnessDetail preAuthorizationRequestIllnessDetail;
     private Set<PreAuthorizationRequestDrugService> preAuthorizationRequestDrugServices;
-    private Status status;
     private Set<GHProposerDocument> proposerDocuments;
-    private DateTime createdOn;
     private Map<String, ScheduleToken> scheduledTokens;
-    private boolean firstReminderSent;
-    private boolean secondReminderSent;
     private Set<CommentDetail> commentDetails;
-    private LocalDate preAuthorizationDate;
     private boolean submitted;
+    private LocalDate submissionDate;
     private String preAuthorizationProcessorUserId;
     private String preAuthorizationUnderWriterUserId;
+    private boolean firstReminderSent;
+    private boolean secondReminderSent;
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
@@ -260,28 +261,10 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public BigDecimal getSumOfAllProbableClaimAmount() {
-        BigDecimal sumOfAllProbableClaimAmount = BigDecimal.ZERO;
-        if(isNotEmpty(this.getPreAuthorizationRequestPolicyDetail())) {
-            Set<PreAuthorizationRequestCoverageDetail> coverageDetails = this.getPreAuthorizationRequestPolicyDetail().getCoverageDetailDtoList();
-            if(isNotEmpty(coverageDetails)){
-                for(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail :  coverageDetails){
-                    Set<PreAuthorizationRequestBenefitDetail> benefitDetails = preAuthorizationRequestCoverageDetail.getBenefitDetails();
-                    if(isNotEmpty(benefitDetails)){
-                        for(PreAuthorizationRequestBenefitDetail benefitDetail : benefitDetails){
-                            sumOfAllProbableClaimAmount = sumOfAllProbableClaimAmount.add(benefitDetail.getProbableClaimAmount());
-                        }
-                    }
-                }
-            }
-        }
-        return sumOfAllProbableClaimAmount;
+    public PreAuthorizationRequest updateWithSubmittedDate(LocalDate submissionDate) {
+        this.submissionDate = submissionDate;
+        return null;
     }
-
-    public int getAgeOfTheClient() {
-        return isNotEmpty(this.getPreAuthorizationRequestPolicyDetail()) ? isNotEmpty(this.getPreAuthorizationRequestPolicyDetail().getAssuredDetail()) ?  this.getPreAuthorizationRequestPolicyDetail().getAssuredDetail().getAgeNextBirthday() : 0 : 0;
-    }
-
 
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");

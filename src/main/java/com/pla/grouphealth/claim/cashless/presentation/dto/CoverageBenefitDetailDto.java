@@ -5,6 +5,7 @@ import com.pla.core.domain.model.plan.Plan;
 import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestBenefitDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestCoverageDetail;
 import com.pla.grouphealth.sharedresource.model.vo.BenefitPremiumLimit;
 import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
 import lombok.*;
@@ -73,6 +74,16 @@ public class CoverageBenefitDetailDto {
         return this;
     }
 
+    public CoverageBenefitDetailDto updateWithBalanceAmount(BigDecimal balanceAmount) {
+        this.balanceAmount = balanceAmount;
+        return this;
+    }
+
+    public CoverageBenefitDetailDto updateWithEligibleAmount(BigDecimal eligibleAmount) {
+        this.eligibleAmount = eligibleAmount;
+        return this;
+    }
+
     public CoverageBenefitDetailDto updateWithCoverageId(String coverageId) {
         this.coverageId = coverageId;
         return this;
@@ -113,5 +124,9 @@ public class CoverageBenefitDetailDto {
             this.eligibleAmount = BigDecimal.ZERO;
         }
         return this;
+    }
+
+    public CoverageBenefitDetailDto updateWithData(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail) {
+        return null;
     }
 }

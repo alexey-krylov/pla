@@ -21,6 +21,7 @@ import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
+import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
@@ -31,6 +32,7 @@ import com.pla.grouphealth.policy.domain.model.PolicyStatus;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
+import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
@@ -39,6 +41,7 @@ import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
@@ -47,12 +50,16 @@ import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -102,6 +109,9 @@ public class PreAuthorizationRequestService {
     HCPRateRepository hcpRateRepository;
     @Autowired
     BenefitFinder benefitFinder;
+    @Autowired
+    @Qualifier("authenticationFacade")
+    IAuthenticationFacade authenticationFacade;
 
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
         PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
@@ -605,6 +615,7 @@ public class PreAuthorizationRequestService {
                     .updateWithPolicyNumber(preAuthorizationRequestPolicyDetail.getPolicyNumber())
                     .updateWithPolicyName(preAuthorizationRequestPolicyDetail.getPolicyName())
                     .updateWithPlanCode(preAuthorizationRequestPolicyDetail.getPlanCode())
+                    .updateWithPlanId(preAuthorizationRequestPolicyDetail.getPlanId())
                     .updateWithPlanName(preAuthorizationRequestPolicyDetail.getPlanName())
                     .updateWithSumAssured(preAuthorizationRequestPolicyDetail.getSumAssured())
                     .updateWithRelationship(Relationship.valueOf(relationship))
@@ -630,12 +641,21 @@ public class PreAuthorizationRequestService {
         return isNotEmpty(coverageDetailDtoList) ? coverageDetailDtoList.parallelStream().map(new Function<PreAuthorizationRequestCoverageDetail, CoverageBenefitDetailDto>() {
             @Override
             public CoverageBenefitDetailDto apply(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail) {
-                CoverageBenefitDetailDto coverageBenefitDetailDto = new CoverageBenefitDetailDto();
-                try {
-                    BeanUtils.copyProperties(coverageBenefitDetailDto, preAuthorizationRequestCoverageDetail);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                CoverageBenefitDetailDto coverageBenefitDetailDto = new CoverageBenefitDetailDto()
+                        .updateWithCoverageName(preAuthorizationRequestCoverageDetail.getCoverageName())
+                        .updateWithCoverageCode(preAuthorizationRequestCoverageDetail.getCoverageCode())
+                        .updateWithCoverageId(preAuthorizationRequestCoverageDetail.getCoverageId())
+                        .updateWithSumAssured(preAuthorizationRequestCoverageDetail.getSumAssured())
+                        .updateWithTotalAmountPaid(preAuthorizationRequestCoverageDetail.getTotalAmountPaid())
+                        .updateWithBalanceAmount(preAuthorizationRequestCoverageDetail.getBalanceAmount())
+                        .updateWithReserveAmount(preAuthorizationRequestCoverageDetail.getReserveAmount())
+                        .updateWithEligibleAmount(preAuthorizationRequestCoverageDetail.getEligibleAmount())
+                        .updateWithApprovedAmount(preAuthorizationRequestCoverageDetail.getApprovedAmount());
+                Set<BenefitDetailDto> benefitDetailDtos = isNotEmpty(preAuthorizationRequestCoverageDetail.getBenefitDetails()) ? preAuthorizationRequestCoverageDetail.getBenefitDetails().stream().map(benefit -> {
+                    BenefitDetailDto benefitDetailDto = new BenefitDetailDto(benefit.getBenefitName(), benefit.getBenefitId(), benefit.getProbableClaimAmount());
+                    return benefitDetailDto;
+                }).collect(Collectors.toSet()) : Sets.newHashSet();
+                coverageBenefitDetailDto.updateWithBenefitDetails(benefitDetailDtos);
                 return coverageBenefitDetailDto;
             }
         }).collect(Collectors.toSet()) : Sets.newHashSet();
@@ -723,10 +743,10 @@ public class PreAuthorizationRequestService {
         return claimantHCPDetailDto;
     }
 
-    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationForDefaultList(String batchUploaderUserId) {
+    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationForDefaultList(String preAuthorizationProcessorUserId) {
         List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
         PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Order(Direction.DESC, "createdOn")));
-        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAllByBatchUploaderUserIdAndStatusIn(batchUploaderUserId, Lists.newArrayList(PreAuthorizationRequest.Status.INTIMATION, PreAuthorizationRequest.Status.EVALUATION, PreAuthorizationRequest.Status.RETURNED), pageRequest);
+        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAllByPreAuthorizationProcessorUserIdInAndStatusIn(Lists.newArrayList(preAuthorizationProcessorUserId, null), Lists.newArrayList(PreAuthorizationRequest.Status.INTIMATION, PreAuthorizationRequest.Status.EVALUATION, PreAuthorizationRequest.Status.RETURNED), pageRequest);
         if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
             result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(pages.getContent());
         return result;
@@ -889,8 +909,48 @@ public class PreAuthorizationRequestService {
         return result;
     }
 
-    public RoutingLevel getRoutingLevelForPreAuthorization(UnderWriterRoutingLevelDetailDto routingLevelDetailDto) {
-        return underWriterAdapter.getRoutingLevelWithoutCoverageDetails(routingLevelDetailDto);
+    public RoutingLevel getRoutingLevelForPreAuthorization(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws RoutingLevelNotFoundException {
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = getUnderWriterRoutingLevelDetailDto(preAuthorizationClaimantDetailCommand);
+        RoutingLevel routingLevel = underWriterAdapter.getRoutingLevelWithoutCoverageDetails(routingLevelDetailDto);
+        if(isEmpty(routingLevel))
+            throw new RoutingLevelNotFoundException(getRoutingLevelExceptionMessage(preAuthorizationClaimantDetailCommand));
+        return routingLevel;
+    }
+
+
+    private UnderWriterRoutingLevelDetailDto getUnderWriterRoutingLevelDetailDto(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
+        BigDecimal claimAmount = preAuthorizationClaimantDetailCommand.getSumOfAllProbableClaimAmount();
+        int age = preAuthorizationClaimantDetailCommand.getAgeOfTheClient();
+        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<>();
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(new PlanId(preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto().getPlanId()), LocalDate.now(), ProcessType.CLAIM.name());
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.CLAIM_AMOUNT.name(), claimAmount.toPlainString()));
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), String.valueOf(age)));
+        routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
+        return routingLevelDetailDto;
+    }
+
+    public String getRoutingLevelExceptionMessage(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
+        BigDecimal claimAmount = preAuthorizationClaimantDetailCommand.getSumOfAllProbableClaimAmount();
+        int age = preAuthorizationClaimantDetailCommand.getAgeOfTheClient();
+        return "No routing rule found for PreAuthorization : "+preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId()+" having age : "+age+" and Claim Amount : "+claimAmount;
+
+    }
+
+    public String getLoggedInUsername() {
+        String userName = StringUtils.EMPTY;
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            userName = authentication.getName();
+        }
+        return userName;
+    }
+
+    public UserDetails getUserDetailFromAuthentication() {
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            return (UserDetails) authentication.getPrincipal();
+        }
+        return null;
     }
 
     public List<PreAuthorizationClaimantDetailCommand> getDefaultListByUnderwriterLevel(String level, String username){

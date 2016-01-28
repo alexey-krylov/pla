@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -149,5 +150,27 @@ public class PreAuthorizationClaimantDetailCommand {
     public PreAuthorizationClaimantDetailCommand updateWithBatchUploaderUserId(String batchUploaderUserId) {
         this.batchUploaderUserId = batchUploaderUserId;
         return this;
+    }
+
+    public BigDecimal getSumOfAllProbableClaimAmount() {
+        BigDecimal sumOfAllProbableClaimAmount = BigDecimal.ZERO;
+        if(isNotEmpty(this.getClaimantPolicyDetailDto())) {
+            Set<CoverageBenefitDetailDto> coverageDetails = this.getClaimantPolicyDetailDto().getCoverageBenefitDetails();
+            if(isNotEmpty(coverageDetails)){
+                for(CoverageBenefitDetailDto coverageBenefitDetailDto :  coverageDetails){
+                    Set<BenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
+                    if(isNotEmpty(benefitDetails)){
+                        for(BenefitDetailDto benefitDetail : benefitDetails){
+                            sumOfAllProbableClaimAmount = sumOfAllProbableClaimAmount.add(benefitDetail.getProbableClaimAmount());
+                        }
+                    }
+                }
+            }
+        }
+        return sumOfAllProbableClaimAmount;
+    }
+
+    public int getAgeOfTheClient() {
+        return isNotEmpty(this.getClaimantPolicyDetailDto()) ? isNotEmpty(this.getClaimantPolicyDetailDto().getAssuredDetail()) ?  this.getClaimantPolicyDetailDto().getAssuredDetail().getAgeNextBirthday() : isNotEmpty(this.claimantPolicyDetailDto.getDependentAssuredDetail()) ? this.claimantPolicyDetailDto.getDependentAssuredDetail().getAgeNextBirthday() : 0 : 0;
     }
 }
