@@ -335,13 +335,13 @@ public class PreAuthorizationRequestController {
     }
 
     @Synchronized
-    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
+    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         ModelAndView modelAndView = new ModelAndView();
         preAuthorizationRequestService.populatePreAuthorizationWithPreAuthorizationUnderWriterUserId(preAuthorizationId, userName);
-        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+        modelAndView.setViewName("pla/grouphealth/claim/preauthunderwriterleveltwo");
         return modelAndView;
     }
 
@@ -349,7 +349,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     public ModelAndView loadUnderwriterViewForView(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+        modelAndView.setViewName("pla/grouphealth/claim/preauthunderwriterleveltwo");
         return modelAndView;
     }
 
@@ -361,12 +361,9 @@ public class PreAuthorizationRequestController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
         modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
-        if (level.equalsIgnoreCase("levelone")) {
-            modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
-        } else {
-            modelAndView.setViewName("pla/grouphealth/claim/preauthunderwriterleveltwo");
-        }
-        return modelAndView;
+        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+       return modelAndView;
     }
+
 
 }
