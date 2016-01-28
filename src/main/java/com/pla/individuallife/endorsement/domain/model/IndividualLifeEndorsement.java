@@ -42,7 +42,7 @@ public class IndividualLifeEndorsement extends AbstractAggregateRoot<String> {
 
     @Id
     @AggregateIdentifier
-    private String endorsementId;
+    private EndorsementId endorsementId;
 
     /*
     * Endorsement Request number
@@ -74,7 +74,7 @@ public class IndividualLifeEndorsement extends AbstractAggregateRoot<String> {
 
     private ILPolicyDto ilPolicyDto;
 
-    public IndividualLifeEndorsement(String endorsementId, String endorsementRequestNumber, ILPolicyDto ilPolicyDto, ILEndorsementType endorsementType, DateTime effectiveDate) {
+    public IndividualLifeEndorsement(EndorsementId endorsementId, String endorsementRequestNumber, ILPolicyDto ilPolicyDto, ILEndorsementType endorsementType, DateTime effectiveDate) {
         checkArgument(endorsementId != null, "Endorsement Id cannot be empty");
         checkArgument(endorsementRequestNumber != null, "Endorsement Request Number cannot be empty");
         checkArgument(ilPolicyDto != null, "Policy cannot be empty");
@@ -169,7 +169,7 @@ public class IndividualLifeEndorsement extends AbstractAggregateRoot<String> {
 
     @Override
     public String getIdentifier() {
-        return endorsementId;
+        return endorsementId.getEndorsementId();
     }
 
      public IndividualLifeEndorsement updateWithPremiumDetail(PremiumDetail premiumDetail) {

@@ -1,20 +1,20 @@
 package com.pla.individuallife.endorsement.application.command;
 
-import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
-import com.pla.individuallife.sharedresource.model.ILEndorsementType;
+import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Created by Raghu Bandi on 8/27/2015.
+ * Created by Raghu Bandi on 25-Jan-2016.
  */
+
 @Getter
 @Setter
 @AllArgsConstructor
-public class ILCreateEndorsementCommand {
+public class ILUpdateEndorsementCommand {
 
     private UserDetails userDetails;
-    private ILPolicyDto ilPolicyDto;
+    private ILEndorsementDto iLEndorsementDto;
 }

@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 
 /**
- * Created by Admin on 10/20/2015.
+ * Created by Raghu Babu on 10/20/2015.
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ILEndorsementStatusAuditEvent {
 
-    private String endorsementId;
+    private EndorsementId endorsementId;
 
     private EndorsementStatus status;
 

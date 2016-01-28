@@ -1,16 +1,17 @@
 package com.pla.sharedkernel.identifier;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * Created by Samir on 8/3/2015.
+ * Created by Raghu Bandi on 8/3/2015.
  */
 @Getter
+@Setter
+@NoArgsConstructor
 @ValueObject
 @EqualsAndHashCode(of = "endorsementId")
 @Embeddable

@@ -1,6 +1,9 @@
 package com.pla.individuallife.endorsement.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.List;
@@ -9,7 +12,10 @@ import java.util.List;
  * Created by Raghu on 8/3/2015.
  */
 @Getter
+@Setter
 @ValueObject
+@NoArgsConstructor
+@AllArgsConstructor
 public class ILEndorsement {
 
     private ILMemberEndorsement memberEndorsement;

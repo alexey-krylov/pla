@@ -1,7 +1,9 @@
 package com.pla.sharedkernel.domain.model;
 
 import com.pla.sharedkernel.identifier.PolicyId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 /**
@@ -9,6 +11,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
  */
 @ValueObject
 @Getter
+@NoArgsConstructor
 public class Policy {
 
     private PolicyId policyId;

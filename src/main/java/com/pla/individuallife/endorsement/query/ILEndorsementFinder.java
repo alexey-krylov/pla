@@ -10,6 +10,7 @@ import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
 import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
+import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -45,6 +46,10 @@ public class ILEndorsementFinder {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
+    private Repository<IndividualLifeEndorsement> ilEndorsementMongoRepository;
+
+
+    @Autowired
     public void setDataSource(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
@@ -52,8 +57,8 @@ public class ILEndorsementFinder {
     public Map findEndorsementById(String endorsementId) {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", endorsementId);
-        Map proposal = mongoTemplate.findOne(new BasicQuery(query), Map.class, "group_life_endorsement");
-        return proposal;
+        Map endorsement = mongoTemplate.findOne(new BasicQuery(query), Map.class, "individual_life_endorsement");
+        return endorsement;
     }
 
     public List<IndividualLifeEndorsement> findEndorsement(String endorsementId) {
@@ -67,7 +72,7 @@ public class ILEndorsementFinder {
         Criteria endorsementCriteria = Criteria.where("policy.policyNumber.policyNumber").is(policyNumber);
         endorsementCriteria.and("status").is(EndorsementStatus.APPROVED);
         Query query = new Query(endorsementCriteria);
-        return mongoTemplate.find(query, Map.class, "group_life_endorsement");
+        return mongoTemplate.find(query, Map.class, "individual_life_endorsement");
     }
 
     public List<IndividualLifeEndorsement> findEndorsementByPolicyNumber(String policyNumber) {
@@ -141,24 +146,24 @@ public class ILEndorsementFinder {
         Criteria endorsementCriteria = Criteria.where("_id").is(endorsementId);
         Query query = new Query(endorsementCriteria);
         query.fields().include("policy.policyId").include("policy.policyHolderName").include("policy.policyNumber").include("endorsementType.").include("effectiveDate");
-        List<Map> glEndorsement = mongoTemplate.find(query, Map.class, "group_life_endorsement");
-        if (isEmpty(glEndorsement)){
+        List<Map> ilEndorsement = mongoTemplate.find(query, Map.class, "individual_life_endorsement");
+        if (isEmpty(ilEndorsement)){
             return Collections.EMPTY_MAP;
         }
-        Criteria policyCriteria = Criteria.where("_id").is(((Map) glEndorsement.get(0).get("policy")).get("policyId"));
+        Criteria policyCriteria = Criteria.where("_id").is(((Map) ilEndorsement.get(0).get("policy")).get("policyId"));
         Query policyQuery = new Query(policyCriteria);
         policyQuery.fields().include("inceptionOn").include("expiredOn");
-        List<Map> glPolicy = mongoTemplate.find(policyQuery, Map.class, "group_life_policy");
-        if (isEmpty(glPolicy)){
+        List<Map> ilPolicy = mongoTemplate.find(policyQuery, Map.class, "individual_life_endorsement");
+        if (isEmpty(ilPolicy)){
             return Collections.EMPTY_MAP;
         }
         Map<String,Object> policyDetailMap = Maps.newLinkedHashMap();
-        policyDetailMap.put("policyHolderName",((Map) glEndorsement.get(0).get("policy")).get("policyHolderName"));
-        policyDetailMap.put("policyNumber",((Map)((Map) glEndorsement.get(0).get("policy")).get("policyNumber")).get("policyNumber"));
-        policyDetailMap.put("inceptionDate",glPolicy.get(0).get("inceptionOn"));
-        policyDetailMap.put("expiredDate",glPolicy.get(0).get("expiredOn"));
-        policyDetailMap.put("effectiveDate", glEndorsement.get(0).get("effectiveDate"));
-        policyDetailMap.put("endorsementType", GLEndorsementType.valueOf((String)glEndorsement.get(0).get("endorsementType")).getDescription());
+        policyDetailMap.put("policyHolderName",((Map) ilEndorsement.get(0).get("policy")).get("policyHolderName"));
+        policyDetailMap.put("policyNumber",((Map)((Map) ilEndorsement.get(0).get("policy")).get("policyNumber")).get("policyNumber"));
+        policyDetailMap.put("inceptionDate",ilPolicy.get(0).get("inceptionOn"));
+        policyDetailMap.put("expiredDate",ilPolicy.get(0).get("expiredOn"));
+        policyDetailMap.put("effectiveDate", ilEndorsement.get(0).get("effectiveDate"));
+        policyDetailMap.put("endorsementType", GLEndorsementType.valueOf((String) ilEndorsement.get(0).get("endorsementType")).getDescription());
         return policyDetailMap;
     }
 
@@ -188,5 +193,20 @@ public class ILEndorsementFinder {
                 return null;
             }
         }).collect(Collectors.toList());
+    }
+
+    public IndividualLifeEndorsement findEndorsementByEndorsementId(String endorsementId) {
+        if (isEmpty(endorsementId)) {
+            return null;
+        }
+        Criteria criteria = Criteria.where("_id").is(endorsementId);
+        Query query = new Query(criteria);
+        List<IndividualLifeEndorsement> endorsements =  mongoTemplate.find(query, IndividualLifeEndorsement.class);
+        return endorsements.get(0);
+
+/*        BasicDBObject query1 = new BasicDBObject();
+        query1.put("_id", endorsementId);
+        Map endorsement = mongoTemplate.findOne(new BasicQuery(query1), Map.class, "individual_life_endorsement");*/
+        //return null;
     }
 }

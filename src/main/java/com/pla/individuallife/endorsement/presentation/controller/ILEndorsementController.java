@@ -7,6 +7,7 @@ import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.endorsement.application.command.*;
 import com.pla.individuallife.endorsement.application.service.ILEndorsementService;
 import com.pla.individuallife.endorsement.application.service.IndividualLifeEndorsementChecker;
+import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement;
 import com.pla.individuallife.endorsement.domain.service.IndividualLifeEndorsementService;
 import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementApproverCommentDto;
 import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementDto;
@@ -150,10 +151,27 @@ public class ILEndorsementController {
     @RequestMapping(value = "/opencreateendorsementpage", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity createEndorsement(@RequestBody ILPolicyDto ilPolicyDto, HttpServletRequest request) {
+
+        //String endorsementRequestNumber = "135667";
+        //return new ResponseEntity(Result.success("Endorsement successfully created", endorsementRequestNumber), HttpStatus.OK);
+
         UserDetails userDetails = getLoggedInUserDetail(request);
         ILCreateEndorsementCommand ilCreateEndorsementCommand = new ILCreateEndorsementCommand(userDetails,ilPolicyDto);
         String endorsementRequestNumber = commandGateway.sendAndWait(ilCreateEndorsementCommand);
         return new ResponseEntity(Result.success("Endorsement successfully created", endorsementRequestNumber), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/openupdateendorsementpage", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity updateEndorsement(@RequestBody ILEndorsementDto iLEndorsementDto, HttpServletRequest request) {
+
+        //String endorsementRequestNumber = "135667";
+        //return new ResponseEntity(Result.success("Endorsement successfully created", endorsementRequestNumber), HttpStatus.OK);
+
+        UserDetails userDetails = getLoggedInUserDetail(request);
+        ILUpdateEndorsementCommand ilUpdateEndorsementCommand = new ILUpdateEndorsementCommand(userDetails,iLEndorsementDto);
+        String endorsementRequestNumber = commandGateway.sendAndWait(ilUpdateEndorsementCommand);
+        return new ResponseEntity(Result.success("Endorsement successfully updated", endorsementRequestNumber), HttpStatus.OK);
     }
 
 
@@ -263,6 +281,28 @@ public class ILEndorsementController {
         searchILEndorsementDto.setEndorsementTypes(ILEndorsementType.getAllEndorsementType());
         modelAndView.addObject("searchResult", ilEndorsementService.searchEndorsement(searchILEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchendorsement/{endorsementId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity searchEndorsement(@PathVariable("endorsementId") String endorsementId) {
+/*        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/individualLife/endorsement/searchEndorsement");
+        modelAndView.addObject("searchCriteria", searchILEndorsementDto);
+        searchILEndorsementDto.setEndorsementTypes(ILEndorsementType.getAllEndorsementType());
+        modelAndView.addObject("searchResult", ilEndorsementService.searchEndorsement(searchILEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
+        return modelAndView;*/
+
+        ILEndorsementDto iLEndorsementDto = ilEndorsementService.findEndorsementByEndorsementId(endorsementId);
+
+        //Map<String,Object> endorsement = Maps.newLinkedHashMap();
+        //endorsement.put("endorsementNumber", endorsmentMap.get("endorsementNumber") != null ? ((EndorsementNumber) endorsmentMap.get("endorsementNumber")).getEndorsementNumber() : "");
+        //endorsement.put("hasUploaded", endorsmentMap.get("endorsement") != null ? Boolean.TRUE : Boolean.FALSE);
+        //return new ResponseEntity(endorsement,HttpStatus.OK);
+        if (iLEndorsementDto != null) {
+            return new ResponseEntity(Result.success("Endorsement details found", iLEndorsementDto), HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.success("Endorsement details Not Found for "+ endorsementId), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

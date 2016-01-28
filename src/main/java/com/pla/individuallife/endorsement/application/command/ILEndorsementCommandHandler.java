@@ -69,6 +69,13 @@ public class ILEndorsementCommandHandler {
         return individualLifeEndorsement.getEndorsementRequestNumber();
     }
 
+    @CommandHandler
+    public String handle(ILUpdateEndorsementCommand ilUpdateEndorsementCommand) {
+        IndividualLifeEndorsement individualLifeEndorsement = individualLifeEndorsementService.updateEndorsement(ilUpdateEndorsementCommand.getILEndorsementDto().getIlPolicyDto().getPolicyId(), ilUpdateEndorsementCommand.getILEndorsementDto(), ilUpdateEndorsementCommand.getUserDetails());
+        ilEndorsementMongoRepository.add(individualLifeEndorsement);
+        return individualLifeEndorsement.getEndorsementRequestNumber();
+    }
+
 /*    @CommandHandler
     public String handle(ILEndorsementCommand ilEndorsementCommand) {
         IndividualLifeEndorsement individualLifeEndorsement = ilEndorsementMongoRepository.load(ilEndorsementCommand.getEndorsementId());

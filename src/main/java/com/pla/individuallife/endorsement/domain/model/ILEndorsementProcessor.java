@@ -2,6 +2,7 @@ package com.pla.individuallife.endorsement.domain.model;
 
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.sharedresource.model.vo.PremiumDetail;
+import com.pla.sharedkernel.identifier.EndorsementId;
 
 //import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 
@@ -22,7 +23,7 @@ public class ILEndorsementProcessor {
         //Policy policy = new Policy(new PolicyId(policyId), new PolicyNumber(policyNumber), policyHolderName);
         //ILEndorsementType endorsementType = ilPolicyDto.getIlEndorsementType();
         //endorsementType.populateInfoByType(ilPolicyDto);
-        IndividualLifeEndorsement individualLifeEndorsement = new IndividualLifeEndorsement(endorsementId, endorsementRequestNumber, ilPolicyDto, ilPolicyDto.getIlEndorsementType(),ilPolicyDto.getEffectiveDate());
+        IndividualLifeEndorsement individualLifeEndorsement = new IndividualLifeEndorsement(new EndorsementId(endorsementId), endorsementRequestNumber, ilPolicyDto, ilPolicyDto.getIlEndorsementType(),ilPolicyDto.getEffectiveDate());
         return individualLifeEndorsement;
     }
 

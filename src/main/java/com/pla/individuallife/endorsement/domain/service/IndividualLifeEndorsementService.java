@@ -5,6 +5,7 @@ import com.pla.individuallife.endorsement.domain.model.ILEndorsementProcessor;
 import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement;
 import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsementStatusAudit;
 import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementApproverCommentDto;
+import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementDto;
 import com.pla.individuallife.endorsement.query.ILEndorsementFinder;
 import com.pla.individuallife.endorsement.repository.ILEndorsementRepository;
 import com.pla.individuallife.endorsement.repository.ILEndorsementStatusAuditRepository;
@@ -42,9 +43,6 @@ public class IndividualLifeEndorsementService {
     private ILEndorsementFinder ilEndorsementFinder;
 
     @Autowired
-    private ILEndorsementRepository ilEndorsementRepository;
-
-    @Autowired
     private IPremiumCalculator premiumCalculator;
 
     private ILClientFinder ilFinder;
@@ -70,6 +68,16 @@ public class IndividualLifeEndorsementService {
         //String policyNumber = ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber();
         //String policyHolderName =  policyMap.get("proposer")!=null?((Proposer) policyMap.get("proposer")).getFirstName():null;
         return ilEndorsementProcessor.createEndorsement(endorsementId, endorsementRequestNumber, policyId, ilPolicyDto);
+    }
+
+    public IndividualLifeEndorsement updateEndorsement(String policyId, ILEndorsementDto iLEndorsementDto, UserDetails userDetails) {
+        ILEndorsementProcessor ilEndorsementProcessor = ilEndorsementRoleAdapter.userToEndorsementProcessor(userDetails);
+        //String endorsementId = ObjectId.get().toString();
+        //String endorsementRequestNumber = ilEndorsementRequestNumberGenerator.getEndorsementRequestNumber(IndividualLifeEndorsement.class);
+        //Map<String, Object> policyMap = ilFinder.findPolicyById(policyId);
+        //String policyNumber = ((PolicyNumber) policyMap.get("policyNumber")).getPolicyNumber();
+        //String policyHolderName =  policyMap.get("proposer")!=null?((Proposer) policyMap.get("proposer")).getFirstName():null;
+        return ilEndorsementProcessor.createEndorsement(iLEndorsementDto.getEndorsementId().getEndorsementId(), iLEndorsementDto.getEndorsementRequestNumber(), policyId, iLEndorsementDto.getIlPolicyDto());
     }
 
     public List<ILEndorsementApproverCommentDto> findApproverComments(String endorsementId) {

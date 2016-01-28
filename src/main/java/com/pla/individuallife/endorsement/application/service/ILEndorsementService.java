@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement;
 import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementDto;
 import com.pla.individuallife.endorsement.presentation.dto.SearchILEndorsementDto;
 import com.pla.individuallife.endorsement.query.ILEndorsementFinder;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
 import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import com.pla.individuallife.endorsement.application.service.ILEndorsementRepository;
 
 /**
  * Created by Raghu on 8/5/2015.
@@ -152,6 +154,18 @@ public class ILEndorsementService {
         }
         List<ILEndorsementDto> endorsementDtos = endorsements.stream().map(new ILEndorsementTransformation()).collect(Collectors.toList());
         return endorsementDtos;
+    }
+
+
+    public ILEndorsementDto findEndorsementByEndorsementId(String endorsementId) {
+
+        IndividualLifeEndorsement endorsement = ilEndorsementFinder.findEndorsementByEndorsementId(endorsementId);
+
+        if (endorsement == null) {
+            return null;
+        }
+        ILEndorsementDto iLEndorsementDto = new ILEndorsementDto(endorsement);
+        return iLEndorsementDto;
     }
 
     public List<ILEndorsementDto> getApprovedEndorsementByPolicyNumber(String policyNumber) {
@@ -294,8 +308,8 @@ public class ILEndorsementService {
             if (isNotEmpty(endorsementStatus)) {
                 endorsementStatus = EndorsementStatus.valueOf(endorsementStatus).getDescription();
             }
-            ILEndorsementDto glEndorsementDto = new ILEndorsementDto(endorsementId,endorsementNumber,endorsementRequestNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
-            return glEndorsementDto;
+            ILEndorsementDto ilEndorsementDto = new ILEndorsementDto(new EndorsementId(endorsementId),endorsementNumber,endorsementRequestNumber, policyNumber, endorsementTypeInString,endorsementCode, effectiveDate, policyHolderName, getIntervalInDays(effectiveDate), endorsementStatus);
+            return ilEndorsementDto;
         }
     }
 }

@@ -2,7 +2,9 @@ package com.pla.individuallife.sharedresource.model.vo;
 
 import com.pla.core.domain.model.CoverageName;
 import com.pla.sharedkernel.identifier.CoverageId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -12,6 +14,8 @@ import java.math.BigDecimal;
  */
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RiderPremium {
     private CoverageId coverageId;
     private CoverageName coverageName;

@@ -20,7 +20,7 @@ public class IndividualLifeEndorsementStatusAudit {
     @Id
     private ObjectId id;
 
-    private String endorsementId;
+    private EndorsementId endorsementId;
 
     private EndorsementStatus status;
 
@@ -30,7 +30,7 @@ public class IndividualLifeEndorsementStatusAudit {
 
     private String comment;
 
-    public IndividualLifeEndorsementStatusAudit(ObjectId id, String endorsementId, EndorsementStatus status, DateTime modifiedOn, String modifiedBy, String comment) {
+    public IndividualLifeEndorsementStatusAudit(ObjectId id, EndorsementId endorsementId, EndorsementStatus status, DateTime modifiedOn, String modifiedBy, String comment) {
         this.id = id;
         this.endorsementId = endorsementId;
         this.status = status;
