@@ -365,7 +365,13 @@ var  app=angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', '
                 $scope.diagnosisTreatmentDto.dateOfAdmission = formatDate(probAdmissionDate);
                 console.log("qwqe############"+$scope.diagnosisTreatmentDto.dateOfAdmission);
             };
-
+            $scope.hcpServiceDetails = [];
+            $scope.getHCPServiceDetails = function(){
+                $http.get("/pla/core/hcprate/gethcprateservicebyhcpcode/" + createUpdateDto.claimantHCPDetailDto.hcpCode).success(function (data, status, headers, config) {
+                    $scope.hcpServiceDetails = data;
+                }).error(function (response, status, headers, config) {
+                });
+            };
          }])
 })(angular);
 function formatDate(date) {

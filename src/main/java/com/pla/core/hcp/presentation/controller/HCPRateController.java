@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.util.Collections;
 import java.util.Set;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 12/17/2015.
@@ -96,5 +98,13 @@ public class HCPRateController {
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);
         }
+    }
+    @RequestMapping(value = "/gethcprateservicebyhcpcode/{hcpCode}", method = RequestMethod.GET)
+    public Set<String> getHcpRateServiceByHcpCode(@PathVariable("hcpCode") String hcpCode) {
+        if (isNotEmpty(hcpCode)) {
+            Set<String> hcpRateServices = hcpRateService.getHcpRateServiceByHcpCode(hcpCode);
+            return hcpRateServices;
+        }
+        return Collections.EMPTY_SET;
     }
 }

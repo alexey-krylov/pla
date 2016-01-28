@@ -6,6 +6,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.claim.cashless.application.command.*;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
@@ -14,6 +15,7 @@ import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocument
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
+import java.lang.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -37,9 +39,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang.StringUtils.equalsIgnoreCase;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -60,16 +65,18 @@ public class PreAuthorizationRequestController {
     IAuthenticationFacade authenticationFacade;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
-    public @ResponseBody
-    PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(@PathVariable("preAuthorizationId") String preAuthorizationId, @PathVariable("clientId") String clientId){
+    public
+    @ResponseBody
+    PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(@PathVariable("preAuthorizationId") String preAuthorizationId, @PathVariable("clientId") String clientId) {
         //return preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(new PreAuthorizationId(preAuthorizationId), clientId);
         return null;
     }
 
     @RequestMapping(value = "/loadpreauthorizationviewforupdate", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     PreAuthorizationClaimantDetailCommand loadpreauthorizationviewforupdate(@RequestParam String preAuthorizationId, HttpServletResponse response) throws IOException {
-        if(isEmpty(preAuthorizationId)){
+        if (isEmpty(preAuthorizationId)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return null;
         }
@@ -77,21 +84,21 @@ public class PreAuthorizationRequestController {
     }
 
     @RequestMapping(value = "/updatepreauthorization", method = RequestMethod.POST)
-    public Result createUpdate(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response){
+    public Result createUpdate(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(preAuthorizationClaimantDetailCommand);
-            return Result.success("Pre Authorization Request successfully created with PreAuthorizationRequestId - "+ preAuthorizationRequestId);
-        } catch (Exception e){
+            return Result.success("Pre Authorization Request successfully created with PreAuthorizationRequestId - " + preAuthorizationRequestId);
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/submitpreauthorization", method = RequestMethod.POST)
-    public Result submitPreAuthorization(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+    public Result submitPreAuthorization(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
@@ -112,7 +119,7 @@ public class PreAuthorizationRequestController {
         }
     }
 
-    @RequestMapping(value="/loadpreauthorizationrequest",method = RequestMethod.GET)
+    @RequestMapping(value = "/loadpreauthorizationrequest", method = RequestMethod.GET)
     public ModelAndView searchPreAuthorizationRecor() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
@@ -124,7 +131,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId, @PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws Exception {
-        if(isEmpty(clientId)){
+        if (isEmpty(clientId)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "clientId cannot be empty");
             return Lists.newArrayList();
         }
@@ -203,17 +210,19 @@ public class PreAuthorizationRequestController {
     }
 
     @RequestMapping(value = "/updatewithcomments", method = RequestMethod.POST)
-    public @ResponseBody Result updateWithComment(@Valid @RequestBody UpdateCommentCommand updateCommentCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request){
+    public
+    @ResponseBody
+    Result updateWithComment(@Valid @RequestBody UpdateCommentCommand updateCommentCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while updating comments", bindingResult.getAllErrors());
         }
-        try{
+        try {
             updateCommentCommand.setUserDetails(getLoggedInUserDetail(request));
             updateCommentCommand.setCommentDateTime(DateTime.now());
             Set<CommentDetail> comments = commandGateway.sendAndWait(updateCommentCommand);
             return Result.success("Proposal submitted successfully", comments);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage());
         }
@@ -222,7 +231,7 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid", method = RequestMethod.GET)
     @ResponseBody
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(@RequestParam String preAuthorizationId, HttpServletResponse response) throws IOException {
-        if(isEmpty(preAuthorizationId)){
+        if (isEmpty(preAuthorizationId)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return null;
         }
@@ -241,7 +250,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
     public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws IOException {
-        if(isEmpty(preAuthorizationId)){
+        if (isEmpty(preAuthorizationId)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return Sets.newHashSet();
         }
@@ -250,7 +259,7 @@ public class PreAuthorizationRequestController {
     }
 
     @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
-    public ModelAndView getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
+    public ModelAndView getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request) {
         String userName = StringUtils.EMPTY;
         Authentication authentication = authenticationFacade.getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
@@ -284,7 +293,7 @@ public class PreAuthorizationRequestController {
     }
 
     @RequestMapping(value = "/underwriter/approve", method = RequestMethod.POST)
-    public Result approvedByUnderwriter(@Valid @RequestBody ApprovePreAuthorizationCommand approvePreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+    public Result approvedByUnderwriter(@Valid @RequestBody ApprovePreAuthorizationCommand approvePreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
@@ -292,13 +301,13 @@ public class PreAuthorizationRequestController {
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(approvePreAuthorizationCommand);
             return Result.success("Pre Authorization Request successfully submitted");
-        } catch (Exception e){
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/underwriter/reject", method = RequestMethod.POST)
-    public Result rejectedByUnderwriter(@Valid @RequestBody RejectPreAuthorizationCommand rejectPreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+    public Result rejectedByUnderwriter(@Valid @RequestBody RejectPreAuthorizationCommand rejectPreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
@@ -306,13 +315,13 @@ public class PreAuthorizationRequestController {
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(rejectPreAuthorizationCommand);
             return Result.success("Pre Authorization Request successfully submitted");
-        } catch (Exception e){
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/underwriter/return", method = RequestMethod.POST)
-    public Result returnByUnderwriter(@Valid @RequestBody ReturnPreAuthorizationCommand returnPreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+    public Result returnByUnderwriter(@Valid @RequestBody ReturnPreAuthorizationCommand returnPreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
@@ -320,13 +329,13 @@ public class PreAuthorizationRequestController {
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(returnPreAuthorizationCommand);
             return Result.success("Pre Authorization Request successfully submitted");
-        } catch (Exception e){
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/underwriter/routetoseniorunderwriter", method = RequestMethod.POST)
-    public Result routeToSeniorUnderwriter(@Valid @RequestBody RoutePreAuthorizationCommand routePreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request){
+    public Result routeToSeniorUnderwriter(@Valid @RequestBody RoutePreAuthorizationCommand routePreAuthorizationCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
             return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
@@ -334,9 +343,38 @@ public class PreAuthorizationRequestController {
         try {
             String preAuthorizationRequestId = commandGateway.sendAndWait(routePreAuthorizationCommand);
             return Result.success("Pre Authorization Request successfully submitted");
-        } catch (Exception e){
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/loadunderwriterviewforupdateview", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView loadunderwriterviewforupdateview(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/underwriter/getdefaultlistofunderwriterlevels/{level}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getdefaultlistofunderwriterlevels(@PathVariable("level") String level, HttpServletResponse response) {
+        String userName = StringUtils.EMPTY;
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            userName = authentication.getName();
+        }
+
+        List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListByUnderwriterLevel(level, userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
+        if (level.equalsIgnoreCase("levelone")) {
+            modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+        } else {
+            modelAndView.setViewName("pla/grouphealth/claim/preauthunderwriterleveltwo");
+        }
+        return modelAndView;
     }
 
 }

@@ -21,6 +21,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -128,5 +129,14 @@ public class HCPRateService {
                 return hcpServiceDetail;
             }
         }).collect(Collectors.toSet());
+    }
+    public Set<String>  getHcpRateServiceByHcpCode(String hcpCode){
+         HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(hcpCode);
+        if(isEmpty(hcpRate)){
+            return Collections.EMPTY_SET;
+        }
+       Set<HCPServiceDetail> hcpServiceDetails = hcpRate.getHcpServiceDetails();
+      return  hcpServiceDetails.stream().map(HCPServiceDetail::getServiceAvailed).collect(Collectors.toSet());
+
     }
 }

@@ -142,7 +142,7 @@ public class PreAuthorizationRequestService {
 
     public PreAuthorizationRequest updatePreAuthorizationRequest(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) throws GenerateReminderFollowupException {
         String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
-        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
+        notNull(preAuthorizationRequestId, "PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationRequestId);
         preAuthorizationRequest.updateWithPreAuthorizationRequestId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
                 .updateWithPreAuthorizationId(preAuthorizationClaimantDetailCommand.getPreAuthorizationId())
@@ -892,4 +892,17 @@ public class PreAuthorizationRequestService {
     public RoutingLevel getRoutingLevelForPreAuthorization(UnderWriterRoutingLevelDetailDto routingLevelDetailDto) {
         return underWriterAdapter.getRoutingLevelWithoutCoverageDetails(routingLevelDetailDto);
     }
+
+    public List<PreAuthorizationClaimantDetailCommand> getDefaultListByUnderwriterLevel(String level, String username){
+        List<PreAuthorizationRequest> preAuthorizationRequests =Lists.newArrayList();
+        List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
+        if(level.equalsIgnoreCase("levelone"))
+            preAuthorizationRequests = preAuthorizationRequestRepository.findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1, Lists.newArrayList(username,null));
+        if(level.equalsIgnoreCase("leveltwo"))
+            preAuthorizationRequests = preAuthorizationRequestRepository.findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2, Lists.newArrayList(username,null));
+        if (isNotEmpty(preAuthorizationRequests))
+            result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
+        return result;
+    }
+
 }
