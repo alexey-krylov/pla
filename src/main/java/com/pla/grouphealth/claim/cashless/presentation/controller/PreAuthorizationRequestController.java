@@ -90,7 +90,7 @@ public class PreAuthorizationRequestController {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             UpdatePreAuthorizationCommand updatePreAuthorizationCommand = new UpdatePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, null, userName);
             commandGateway.sendAndWait(updatePreAuthorizationCommand);
-            return Result.success("Successfully updated");
+            return Result.success("PreAuthorization successfully updated");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
@@ -111,7 +111,7 @@ public class PreAuthorizationRequestController {
             preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userName);
             UpdatePreAuthorizationCommand updatePreAuthorizationCommand = new UpdatePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, routingLevel, userName);
             String preAuthorizationRequestId = commandGateway.sendAndWait(updatePreAuthorizationCommand);
-            return Result.success("Pre Authorization Request successfully submitted");
+            return Result.success("Pre Authorization successfully submitted");
         } catch (Exception e){
             return Result.failure(e.getMessage());
         }
@@ -254,16 +254,31 @@ public class PreAuthorizationRequestController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/underwriter/update", method = RequestMethod.POST)
+    public Result updatedByUnderwriter(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while updating Pre Authorization Request", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            String preAuthorizationRequestId = commandGateway.sendAndWait(new UnderwriterPreAuthorizationUpdateCommand(preAuthorizationClaimantDetailCommand, userName));
+            return Result.success("Pre Authorization successfully updated.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/underwriter/approve", method = RequestMethod.POST)
     public Result approvedByUnderwriter(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
-            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+            return Result.failure("error occured while approving Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             String preAuthorizationRequestId = commandGateway.sendAndWait(new ApprovePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
-            return Result.success("Pre Authorization Request successfully submitted");
+            return Result.success("Pre Authorization Request successfully approved.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
@@ -273,12 +288,12 @@ public class PreAuthorizationRequestController {
     public Result rejectedByUnderwriter(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
-            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+            return Result.failure("error occured while rejecting Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             String preAuthorizationRequestId = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
-            return Result.success("Pre Authorization Request successfully submitted");
+            return Result.success("Pre Authorization Request successfully rejected.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
@@ -288,12 +303,12 @@ public class PreAuthorizationRequestController {
     public Result returnByUnderwriter(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
-            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+            return Result.failure("error occured while returning Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             String preAuthorizationRequestId = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
-            return Result.success("Pre Authorization Request successfully submitted");
+            return Result.success("Pre Authorization Request successfully returned.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
@@ -303,12 +318,12 @@ public class PreAuthorizationRequestController {
     public Result routeToSeniorUnderwriter(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
-            return Result.failure("error occured while creating Pre Authorization Request", bindingResult.getAllErrors());
+            return Result.failure("error occured while routing Pre Authorization Request", bindingResult.getAllErrors());
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             String preAuthorizationRequestId = commandGateway.sendAndWait(new RoutePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
-            return Result.success("Pre Authorization Request successfully submitted");
+            return Result.success("Pre Authorization Request successfully routed to senior underwriter.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
