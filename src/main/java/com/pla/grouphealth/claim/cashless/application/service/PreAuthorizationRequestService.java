@@ -21,6 +21,7 @@ import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.command.UpdateCommentCommand;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
+import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.*;
@@ -965,4 +966,14 @@ public class PreAuthorizationRequestService {
         return result;
     }
 
+    public void populatePreAuthorizationWithPreAuthorizationUnderWriterUserId(String preAuthorizationId, String userName) throws PreAuthorizationInProcessingException {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        if(isNotEmpty(preAuthorizationRequest)){
+            if(isNotEmpty(preAuthorizationRequest.getPreAuthorizationUnderWriterUserId()) && !preAuthorizationRequest.getPreAuthorizationUnderWriterUserId().equals(userName)){
+                throw new PreAuthorizationInProcessingException("The record is already under processing.");
+            }
+        }
+        preAuthorizationRequest.updateWithPreAuthorizationUnderWriterUserId(userName);
+        preAuthorizationRequestRepository.save(preAuthorizationRequest);
+    }
 }
