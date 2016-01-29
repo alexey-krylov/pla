@@ -110,6 +110,10 @@
                     return false;
                 };
 
+                $http.get('/pla/core/master/getdocument').success(function(data){
+                    $scope.documentList=data;
+
+                });
                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + preAuthorizationId).success(function (data, status, headers, config) {
                     $scope.additionalDocumentList = data;
                     $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
@@ -181,7 +185,7 @@
                 $scope.submitPreAuthorizationRequest = function () {
                     $scope.createUpdateDto.submitEventFired = true;
                     $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/submitpreauthorization',
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/update',
                         method: 'POST',
                         data: $scope.createUpdateDto
                     }).success(function () {
@@ -319,8 +323,9 @@
                 };
                 $scope.changeClaimDate = function(iem){
                     $scope.createUpdateDto.claimIntimationDate = formatDate(iem);
-                    console.log("qwqe############"+$scope.createUpdateDto.claimIntimationDate );
+
                     $scope.createUpdateDto.claimIntimationDate=$scope.createUpdateDto.claimIntimationDate;
+                    console.log("qwqe############"+$scope.createUpdateDto.claimIntimationDate );
                 };
 
 
@@ -366,12 +371,56 @@
                     console.log("qwqe############"+$scope.diagnosisTreatmentDto.dateOfAdmission);
                 };
                 $scope.hcpServiceDetails = [];
+
                 $scope.getHCPServiceDetails = function(){
                     $http.get("/pla/core/hcprate/gethcprateservicebyhcpcode/" + createUpdateDto.claimantHCPDetailDto.hcpCode).success(function (data, status, headers, config) {
                         $scope.hcpServiceDetails = data;
                     }).error(function (response, status, headers, config) {
                     });
                 };
+
+                $scope.underwriterApprove = function () {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
+                        method: 'POST',
+                        data: $scope.removeAdditionalDocumentCommand
+                    }).success(function () {
+
+                    }).error();
+                };
+                $scope.underwriterReject = function () {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
+                        method: 'POST',
+                        data: $scope.removeAdditionalDocumentCommand
+                    }).success(function () {
+
+                    }).error();
+
+                };
+                $scope.underwriterReturn = function () {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
+                        method: 'POST',
+                        data: $scope.removeAdditionalDocumentCommand
+                    }).success(function () {
+
+                    }).error();
+
+                };
+
+                $scope.underwriterRouteSenitor = function () {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
+                        method: 'POST',
+                        data: $scope.removeAdditionalDocumentCommand
+                    }).success(function () {
+
+                    }).error();
+
+                };
+
+
             }])
 })(angular);
 function formatDate(date) {
