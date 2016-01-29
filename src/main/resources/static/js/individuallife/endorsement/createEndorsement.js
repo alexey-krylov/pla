@@ -169,6 +169,41 @@ app.config(["$routeProvider", function ($routeProvider) {
             }).error(function (response, status, headers, config) {
             });
 
+
+            /**
+             * Finding Branch Detail Releated to Bank Name
+             * @type {Array}
+             */
+             $scope.bankBranchDetails=[];// Collecting Branch Details
+
+            $scope.$watch('ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                    // //alert("Bank Details.."+JSON.stringify(bankCode));
+                    if (bankCode) {
+                        $http.get('/pla/individuallife/endorsement/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetails = response;
+                            //console.log("Bank Details :"+JSON.stringify(response));
+                        }).error(function (response, status, headers, config) {
+                        });
+                    }
+                }
+            });
+
+        $scope.$watch('ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName', function (newvalue, oldvalue) {
+            if (newvalue) {
+                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode = newvalue;
+            }
+        });
+
+        /**
+         * Clearing The Detail Related to Basnk Name
+         */
+            $scope.clearBankBranchName=function(){
+                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName = null;
+                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode=null;
+            }
+
             $scope.LADOB = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -572,6 +607,9 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'BENEFICIARY_DETAILS_CHANGE' && $scope.ilEndrosementDetils.beneficiariesNew == null){
                 $scope.ilEndrosementDetils.beneficiariesNew=[];
                 angular.copy($scope.ilEndrosementDetils.beneficiaries,$scope.ilEndrosementDetils.beneficiariesNew);
+            }else if($scope.policy.endrosementType == 'PAYMENT_MODE_CHANGE' && $scope.ilEndrosementDetils.premiumPaymentDetailsNew == null){
+                $scope.ilEndrosementDetils.premiumPaymentDetailsNew={};
+                angular.copy($scope.ilEndrosementDetils.premiumPaymentDetails,$scope.ilEndrosementDetils.premiumPaymentDetailsNew);
             }
 
             if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
@@ -659,6 +697,16 @@ app.config(["$routeProvider", function ($routeProvider) {
                 if(angular.equals($scope.ilEndrosementDetils.beneficiariesNew,$scope.ilEndrosementDetils.beneficiaries)){
                     $scope.serverError = true;
                     $scope.serverErrMsg = 'Both Existing and Updated Beneficiary Details Should Not be Same.';
+                    return;
+                }
+                else{
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+            }else if(endrosementTypeCheck == 'PAYMENT_MODE_CHANGE'){
+                if(angular.equals($scope.ilEndrosementDetils.premiumPaymentDetailsNew,$scope.ilEndrosementDetils.premiumPaymentDetails)){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Both Existing and Updated Premium Payment Details Should Not be Same.';
                     return;
                 }
                 else{

@@ -545,6 +545,12 @@ public class ILEndorsementController {
         }).map(new RelationTransformer()).collect(Collectors.toList());
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllBankBranchNames/{bankCode}")
+    @ResponseBody
+    public List<Map<String, Object>> getAllBankBranchNames(@PathVariable("bankCode") String bankCode) {
+        return masterFinder.getAllBankBranch(bankCode);
+    }
+
     private class RelationTransformer implements Function<Relationship, Map<String,Object>> {
         public Map<String, Object> apply(Relationship relationship) {
             Map<String, Object> relationMap = Maps.newLinkedHashMap();
