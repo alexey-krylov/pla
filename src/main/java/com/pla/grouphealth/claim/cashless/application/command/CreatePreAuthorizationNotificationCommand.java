@@ -17,12 +17,12 @@ import java.util.List;
  */
 @NoArgsConstructor
 @Getter
-public class CreateClaimNotificationCommand extends CreateNotificationCommand{
+public class CreatePreAuthorizationNotificationCommand extends CreateNotificationCommand{
 
     private String preAuthorizationRequestId;
     private List<String> pendingDocumentList;
 
-    public CreateClaimNotificationCommand(String preAuthorizationRequestId, String roleType, LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, List<String> pendingDocumentList){
+    public CreatePreAuthorizationNotificationCommand(String preAuthorizationRequestId, String roleType, LineOfBusinessEnum lineOfBusiness, ProcessType processType, WaitingForEnum waitingFor, ReminderTypeEnum reminderType, List<String> pendingDocumentList){
         super(roleType,lineOfBusiness,processType,waitingFor,reminderType);
         this.preAuthorizationRequestId = preAuthorizationRequestId;
         this.pendingDocumentList = pendingDocumentList;

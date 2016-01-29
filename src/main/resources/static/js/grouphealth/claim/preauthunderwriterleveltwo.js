@@ -11,7 +11,7 @@
     }])
         .config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when('/', {
-                    templateUrl: 'preauthunderwriterleveltwo.html',
+                    templateUrl: 'preauthorizationunderwriter.html',
                     controller: 'createpreauthunderwriterleveltwoctrl',
                     resolve:{
                         createUpdateDto: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {

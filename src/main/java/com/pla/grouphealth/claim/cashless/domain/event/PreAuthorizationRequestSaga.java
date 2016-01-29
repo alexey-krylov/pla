@@ -2,10 +2,9 @@ package com.pla.grouphealth.claim.cashless.domain.event;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.pla.grouphealth.claim.cashless.application.command.CreateClaimNotificationCommand;
+import com.pla.grouphealth.claim.cashless.application.command.CreatePreAuthorizationNotificationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
@@ -22,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
-import org.axonframework.repository.Repository;
 import org.axonframework.saga.annotation.AbstractAnnotatedSaga;
 import org.axonframework.saga.annotation.SagaEventHandler;
 import org.axonframework.saga.annotation.StartSaga;
@@ -31,7 +29,6 @@ import org.nthdimenzion.axonframework.repository.GenericMongoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -98,7 +95,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
         if(!preAuthorizationRequest.isFirstReminderSent() && !preAuthorizationRequest.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreateClaimNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
+                commandGateway.send(new CreatePreAuthorizationNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
                 preAuthorizationRequest.updateFlagForFirstReminderSent(Boolean.TRUE);
             }
         }
@@ -124,7 +121,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
         if(preAuthorizationRequest.isFirstReminderSent() && !preAuthorizationRequest.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(preAuthorizationRequest);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreateClaimNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
+                commandGateway.send(new CreatePreAuthorizationNotificationCommand(event.getPreAuthorizationRequestId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
                 preAuthorizationRequest.updateFlagForSecondReminderSent(Boolean.TRUE);
             }
         }

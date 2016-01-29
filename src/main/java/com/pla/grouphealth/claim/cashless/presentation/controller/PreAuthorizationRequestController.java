@@ -330,7 +330,7 @@ public class PreAuthorizationRequestController {
     }
 
     @Synchronized
-    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
+    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();

@@ -4,8 +4,7 @@ import com.pla.core.application.service.notification.NotificationTemplateService
 import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.core.repository.NotificationTemplateRepository;
-import com.pla.grouphealth.claim.cashless.application.command.CreateClaimNotificationCommand;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.application.command.CreatePreAuthorizationNotificationCommand;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
@@ -22,7 +21,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -76,9 +74,9 @@ public class NotificationCommandHandler {
     }
 
     @CommandHandler
-    public void createClaimNotification(CreateClaimNotificationCommand createClaimNotificationCommand) throws Exception {
-        HashMap<String,String> dataMap = notificationTemplateService.getPreAuthorizationNotificationTemplateData(createClaimNotificationCommand.getPreAuthorizationRequestId(), createClaimNotificationCommand.getPendingDocumentList());
-        buildAndSendNotification(dataMap, createClaimNotificationCommand.getPreAuthorizationRequestId(), createClaimNotificationCommand.getRoleType(), createClaimNotificationCommand.getLineOfBusiness(), createClaimNotificationCommand.getProcessType(), createClaimNotificationCommand.getWaitingFor(), createClaimNotificationCommand.getReminderType());
+    public void createClaimNotification(CreatePreAuthorizationNotificationCommand createPreAuthorizationNotificationCommand) throws Exception {
+        HashMap<String,String> dataMap = notificationTemplateService.getPreAuthorizationNotificationTemplateData(createPreAuthorizationNotificationCommand.getPreAuthorizationRequestId(), createPreAuthorizationNotificationCommand.getPendingDocumentList());
+        buildAndSendNotification(dataMap, createPreAuthorizationNotificationCommand.getPreAuthorizationRequestId(), createPreAuthorizationNotificationCommand.getRoleType(), createPreAuthorizationNotificationCommand.getLineOfBusiness(), createPreAuthorizationNotificationCommand.getProcessType(), createPreAuthorizationNotificationCommand.getWaitingFor(), createPreAuthorizationNotificationCommand.getReminderType());
     }
 
     @Synchronized

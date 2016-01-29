@@ -51,7 +51,7 @@
 
 
 </script>
-<script type="text/ng-template" id="preauthunderwriterleveltwo.html">
+<script type="text/ng-template" id="preauthorizationunderwriter.html">
     <nth-alert></nth-alert>
     <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
@@ -267,19 +267,18 @@
                                         </thead>
 
                                         <tbody ng-repeat= "coverageDetailDto in createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails">
-                                        <tr ng-repeat="coverage in coverageDetailDto.benefitDetails">
-                                             <td ng-bind="coverageDetailDto.coverageName"></td>
-                                             <td ng-bind="coverage.benefitName"></td>
-                                             <td ng-bind="coverageDetailDto.sumAssured"></td>
-                                             <td ng-bind="coverageDetailDto.totalAmountPaid"></td>
-                                             <td ng-bind="coverageDetailDto.balanceAmount"></td>
-                                             <td ng-bind="coverageDetailDto.reserveAmount"></td>
-                                             <td ng-bind="coverageDetailDto.eligibleAmount"></td>
-                                             <td ng-bind="coverage.probableClaimAmount"></td>
-                                             <td ng-bind="coverageDetailDto.approvedAmount"></td>
+                                        <tr ng-repeat="benefit in coverageDetailDto.benefitDetails">
+                                            <td ng-bind="coverageDetailDto.coverageName"></td>
+                                            <td ng-bind="benefit.benefitName"></td>
+                                            <td ng-bind="coverageDetailDto.sumAssured"></td>
+                                            <td ng-bind="coverageDetailDto.totalAmountPaid"></td>
+                                            <td ng-bind="coverageDetailDto.balanceAmount"></td>
+                                            <td ng-bind="coverageDetailDto.reserveAmount"></td>
+                                            <td ng-bind="coverageDetailDto.eligibleAmount"></td>
+                                            <td ng-bind="benefit.probableClaimAmount"></td>
+                                            <td ng-bind="coverageDetailDto.approvedAmount"></td>
                                         </tr>
                                         </tbody>
-
                                     </table>
 
 
@@ -299,19 +298,17 @@
                                         <tr>
                                             <th style="width: 1%"></th>
                                             <th >Comment</th>
-                                            <th>Date and Time</th>
                                             <th>User Name</th>
-
-
+                                            <th>Date and Time</th>
                                         </tr>
-
-                                        <tr>
+                                        <tr ng-show="!commentDetails.length"  style="text-align: center">
+                                            <td colspan="4"><text><i>No comment details found</i></text></td>
+                                        </tr>
+                                        <tr ng-repeat="comment in commentDetails">
                                             <td></td>
-
-                                            <td>123as</td>
-                                            <td>32</td>
-                                            <td>123as</td>
-
+                                            <td ng-bind="comment.comments"></td>
+                                            <td ng-bind="comment.userName"></td>
+                                            <td ng-bind="comment.commentDateTime"></td>
                                         </tr>
 
                                         </thead>
@@ -333,19 +330,19 @@
                         </accordion>
                         <div class="row">
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-info btn-sm" ng-click="back()">Cancel</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-info btn-sm" ng-click="underwriterRouteSenitor()">Refer To Senior UnderWriter</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenitor()">Refer To Senior UnderWriter</button>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-info btn-sm" ng-click="underwriterReturn()">Return</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReturn()">Return</button>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-info btn-sm" ng-click="underwriterReject()">Reject</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReject()">Reject</button>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button " class="btn btn-info btn-sm" ng-click="underwriterApprove()">Approved</button>
+                                <button type="button " class="btn btn-primary btn-sm" ng-click="underwriterApprove()">Approved</button>
                             </div>
 
                         </div>
