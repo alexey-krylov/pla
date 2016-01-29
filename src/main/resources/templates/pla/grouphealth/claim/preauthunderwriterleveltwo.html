@@ -265,31 +265,21 @@
                                             <th> Approved Amount</th>
                                         </tr>
                                         </thead>
-                                        <tr ng-repeat = "coverageDetailDto in createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails">
-                                            <!--<td ng-bind="coverageDetailDto.benefitDetails"></td>-->
-                                        <tr ng-repeat = "coverage in coverageDetailDto.benefitDetails">
 
-                                        <td >{{coverage.benefitName}}</td>
-                                            <!--<td ng-bind="coverageDetailDto.totalAmountPaid"></td>-->
-                                            <!--<td ng-bind="coverageDetailDto.totalAmountPaid"></td>-->
-                                            <!--<td ng-bind="coverageDetailDto.balanceAmount"></td>-->
-                                            <!--<td ng-bind="coverageDetailDto.reserveAmount"></td>-->
-                                            <!--<td ng-bind="coverageDetailDto.eligibleAmount"></td>-->
-
-                                            <!--<td ng-bind="coverageDetailDto.approvedAmount"></td>-->
-                                            </tr>
-                                            <!--<td ng-bind="coverageDetailDto.approvedAmount"></td>-->
-                                            <!--<tr ng-repeat = "coverage in coverageDetailDto.benefitDetails">-->
-                                            <!--<td ng-bind="coverage.benefitName"></td>-->
-                                            </tr>
-
-
-                                        <tbody>
-                                        <form id="viewAssuredForm">
-                                            <tr>
-                                            </tr>
-                                        </form>
+                                        <tbody ng-repeat= "coverageDetailDto in createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails">
+                                        <tr ng-repeat="coverage in coverageDetailDto.benefitDetails">
+                                             <td ng-bind="coverageDetailDto.coverageName"></td>
+                                             <td ng-bind="coverage.benefitName"></td>
+                                             <td ng-bind="coverageDetailDto.sumAssured"></td>
+                                             <td ng-bind="coverageDetailDto.totalAmountPaid"></td>
+                                             <td ng-bind="coverageDetailDto.balanceAmount"></td>
+                                             <td ng-bind="coverageDetailDto.reserveAmount"></td>
+                                             <td ng-bind="coverageDetailDto.eligibleAmount"></td>
+                                             <td ng-bind="coverage.probableClaimAmount"></td>
+                                             <td ng-bind="coverageDetailDto.approvedAmount"></td>
+                                        </tr>
                                         </tbody>
+
                                     </table>
 
 
@@ -338,9 +328,9 @@
                                                 <label class="control-label"> Comments</label>
 
                                                 <input  type="text" name="lengthOfStay"
-                                                        ng-disabled="true" ng-maxlength="3"
+                                                        ng-disabled="true" ng-maxlength="250"
                                                         ng-model="diagnosisTreatmentDtoToUpdate.lengthOfStay"
-                                                        class="form-control input-md"/>
+                                                        class="form-control input-lg"/>
                                             </div>
                                         </div>
                                     </div>
