@@ -315,18 +315,11 @@
                                         </tr>
 
                                         </thead>
-                                        <tbody>
-                                        <form id="viewAssuredFormone">
-                                            <tr>
-                                            </tr>
-                                        </form>
-                                        </tbody>
                                     </table>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group ">
                                                 <label class="control-label"> Comments</label>
-
                                                 <input  type="text" name="lengthOfStay"
                                                         ng-disabled="true" ng-maxlength="250"
                                                         ng-model="diagnosisTreatmentDtoToUpdate.lengthOfStay"
@@ -964,7 +957,7 @@
                                             <div class="form-group ">
                                                 <label class="control-label">Age Next Birthday</label>
                                                 <input type="text" class="form-control input-sm"
-                                                       ng-readonly="true" name="ageNextBirthday" ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.ageNextBirthday"/>
+                                                       name="ageNextBirthday" ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.ageNextBirthday"/>
                                                 <p style="color:red" ng-show="ageCalculateStatus">
                                                     Age Next Birthday should be in between 18 years to 60 years.
                                                 </p>
@@ -1069,7 +1062,7 @@
                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"
-                                     disable-all-fields="isViewMode">
+                                     >
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group  ">
@@ -1130,7 +1123,7 @@
                                             <div class="form-group ">
                                                 <label class="control-label">Age Next Birthday</label>
                                                 <input type="text" class="form-control input-sm"
-                                                       ng-readonly="true" name="ageNextBirthday" ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.ageNextBirthday"/>
+                                                       name="ageNextBirthday" ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.ageNextBirthday"/>
                                                 <p style="color:red" ng-show="ageCalculateStatus">
                                                     Age Next Birthday should be in between 18 years to 60 years.
                                                 </p>
@@ -1248,7 +1241,7 @@
                                     </div>
                                 </div>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
-                                     disable-all-fields="isViewMode">
+                                    >
 
                                     <div class="row">
                                         <div class="col-md-4">
@@ -1359,7 +1352,7 @@
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
-                                     disable-all-fields="isViewMode">
+                                    >
 
                                     <div class="row">
                                         <div class="col-md-4">
@@ -1476,7 +1469,7 @@
                                                                            ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:550px;"
-                                     disable-all-fields="isViewMode">
+                                    >
                                     <div class="row">
                                         <table  class="table table-bordered table-hover">
                                             <thead ng-repeat="treatmentDiagnosis in createUpdateDto.diagnosisTreatmentDtos">
@@ -1921,7 +1914,7 @@
 
 
                 <div class="step-pane" data-step="6">
-                    <ng-form name="step6" disable-all-fields="isViewMode">
+                    <ng-form name="step6" >
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
@@ -1929,16 +1922,38 @@
                                                            ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
                                                             'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
-                                     disable-all-fields="isViewMode">
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;">
+                                    <div class="form-group " ng-repeat="document in documentList">
+                                        <label class="col-sm-5 control-label">{{document.documentName}}</label>
+
+                                        <div class="input-group">
+                                            <a href="/pla/grouphealth/claim/cashless/preauthorizationrequest/downloadmandatorydocument/{{document.gridFsDocId}}"
+                                               style="display:inline;float:right;font-weight:bold;"
+                                               hg-show="!document.submitted">{{document.fileName | limitTo: 40}}</a>
+                                            <button class="btn btn-default"
+                                                    style="display:inline;float:right;margin-right:600px;"
+                                                    ng-file-select=""   ng-disabled="isViewMode"
+                                                    ng-model="document.documentAttached">Browse
+                                            </button>
+                                            <input class="form-control input-sm" style="width:200px;"
+                                                   value="{{document.documentAttached[0].name}}"
+                                                   readonly="true"/>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group col-md-6 required">
                                         <label class="control-label">Mandatory Documents</label>
                                         <div>
-                                            <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents" max-length="0" data-all-none-buttons="true" data-html="1" data-multiple="1" placeholder="----Select MandatoryDocuments----" ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   >
+                                            <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents"
+                                                    max-length="0" data-all-none-buttons="true" data-html="1"
+                                                    data-multiple="1"
+                                                    placeholder="----Select MandatoryDocuments----"
+                                                    ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   >
                                                 Action <span class="caret"></span>
                                             </button>
                                         </div>
                                     </div>
+
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
                                          ng-click="uploadDocumentFiles()">Upload All
                                     </div>
@@ -1949,8 +1964,8 @@
                                     Additional Documents <i class="pull-right glyphicon"
                                                             ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.additionalDocuments, 'glyphicon-chevron-right': !accordionStatusDocuments.additionalDocuments}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                     disable-all-fields="isViewMode">
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;" >
+
 
                                     <div class="row">
                                         <button class="btn btn-default"
@@ -1974,7 +1989,6 @@
                                                 </div>
                                                 <div class="col-lg-4" ng-hide="">
                                                     <div class="form-group">
-
                                                         <label class="control-label">Browse File</label>
                                                         <button class="btn btn-default"
                                                                 style="display:inline;float:right;margin-top:20px;"
