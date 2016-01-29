@@ -37,8 +37,12 @@
             event.preventDefault();
         }
     }
-
-    requirejs(['main','angular-file-upload'],function(){
+    requirejs.config({
+        paths: {
+            angucomplete: 'http://ghiden.github.io/angucomplete-alt/js/libs/angucomplete-alt'
+        }
+    });
+    requirejs(['main','angular-file-upload', 'angucomplete'],function(){
         require(['/pla/js/grouphealth/claim/preauthunderwriterleveltwo.js?t=7'], function () {
             angular.element(document).ready(function() {
                 angular.bootstrap(document, ['createpreauthunderwriterleveltwo']);
@@ -1939,20 +1943,6 @@
                                                    readonly="true"/>
                                         </div>
                                     </div>
-
-                                    <div class="form-group col-md-6 required">
-                                        <label class="control-label">Mandatory Documents</label>
-                                        <div>
-                                            <button type="button" class="btn btn-default bs-select" ng-model="createMandatoryDocument.documents"
-                                                    max-length="0" data-all-none-buttons="true" data-html="1"
-                                                    data-multiple="1"
-                                                    placeholder="----Select MandatoryDocuments----"
-                                                    ng-options="mandatoryDocument.documentCode as mandatoryDocument.documentName for mandatoryDocument in documentList | orderBy:'documentName'"   >
-                                                Action <span class="caret"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
                                          ng-click="uploadDocumentFiles()">Upload All
                                     </div>
@@ -2019,6 +2009,47 @@
                                             ng-click="uploadAdditionalDocument()" ng-disabled="!checkDocumentAttached || isViewMode">
                                         Upload
                                     </button>
+                                </div>
+                            </accordion-group>
+                            <accordion-group is-open="accordionAddtionalRequirement.documents">
+                                <accordion-heading>
+                                    Add Additional Requirement <i class="pull-right glyphicon"
+                                                                  ng-class="{'glyphicon-chevron-down': accordionAddtionalRequirement.documents,
+                                                            'glyphicon-chevron-right': !accordionAddtionalRequirement.documents}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;">
+                                    <table class="table table-striped table-bordered" id="assured-table1" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 1%"></th>
+                                            <th >Selected Document</th>
+                                        </tr>
+                                        <tr ng-show="!createUpdateDto.additionalRequiredDocuments.length"  style="text-align: center">
+                                            <td colspan="4"><text><i>No documents selected</i></text></td>
+                                        </tr>
+                                        <tr ng-repeat="comment in createUpdateDto.additionalRequiredDocuments">
+                                            <td><img id="loading-image" src="/pla/images/blackdot.png"/></td>
+                                            <td ng-bind="comment.documentName"></td>
+                                        </tr>
+
+                                        </thead>
+                                    </table>
+                                    <div class="form-group col-md-6 required">
+                                        <label class="control-label">Document Title</label>
+                                        <angucomplete-alt id="addRequirement" placeholder="Search Documents" pause="100"
+                                                          selected-object="populateDocumentSelected"
+                                                          disable-input="uneditable"
+                                                          local-data="documentmaster"
+                                                          initial-value="mandatoryDocument.documentName"
+                                                          remote-url-data-field=""
+                                                          search-fields="documentName"
+                                                          title-field="documentName"
+                                                          minlength="2"
+                                                          input-class="form-control input-sm"
+                                                          match-class="highlight"
+                                                          clear-selected="true">
+                                        </angucomplete-alt>
+                                    </div>
                                 </div>
                             </accordion-group>
 

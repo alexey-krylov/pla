@@ -111,7 +111,15 @@
 
                 $http.get('/pla/core/master/getdocument').success(function(data){
                     $scope.documentmaster = data;
-
+                    for(var documentIndex in $scope.documentmaster){
+                        var document = $scope.documentmaster[documentIndex];
+                        for(var uploadedDocIndex in $scope.documentList){
+                            var uploadedDoc = $scope.documentList[uploadedDocIndex];
+                            if(document.documentCode == uploadedDoc.documentCode){
+                                delete $scope.documentmaster[documentIndex];
+                            }
+                        }
+                    }
                 });
                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + preAuthorizationId).success(function (data, status, headers, config) {
                     $scope.additionalDocumentList = data;
