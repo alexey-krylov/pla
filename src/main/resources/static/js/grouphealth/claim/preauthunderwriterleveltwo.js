@@ -1,7 +1,7 @@
 (function (angular) {
     "use strict";
     var  app=angular.module('createpreauthunderwriterleveltwo', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
-        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages','angularFileUpload'])
+        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages','angularFileUpload', 'angucomplete-alt'])
     app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
         datepickerPopupConfig.datepickerPopup = 'MM/dd/yyyy';
         datepickerPopupConfig.currentText = 'Today';
@@ -86,15 +86,14 @@
                 $scope.documentList = documentList;
                 $scope.additionalDocumentList = [{}];
                 $scope.disableSubmit = false;
-                /*This scope value is binded to fueluxWizard directive and hence it changes as and when next button is clicked*/
+                $scope.documentmaster = [];
                 $scope.selectedItem = 1;
-
+                $scope.comment = {};
                 $scope.fileSaved = null;
                 $scope.isViewMode = false;
-                //alert(preAuthorizationId+" "+clientId);
-                if ($scope.createUpdateDto.submitted) {
-                    $scope.isViewMode = true;
-                }
+                /*if ($scope.createUpdateDto.submitted) {
+                 $scope.isViewMode = true;
+                 }*/
                 $scope.$watch('documentList', function (newCollection, oldCollection) {
                     $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
                 });
@@ -111,7 +110,7 @@
                 };
 
                 $http.get('/pla/core/master/getdocument').success(function(data){
-                    $scope.documentList=data;
+                    $scope.documentmaster = data;
 
                 });
                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + preAuthorizationId).success(function (data, status, headers, config) {
@@ -380,46 +379,77 @@
                 };
 
                 $scope.underwriterApprove = function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
-                        method: 'POST',
-                        data: $scope.removeAdditionalDocumentCommand
-                    }).success(function () {
-
-                    }).error();
+                    $.when($scope.constructCommentDetails()).done(function(){
+                        /*$http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function () {
+                        }).error();*/
+                        console.log($scope.createUpdateDto);
+                    });
                 };
+
                 $scope.underwriterReject = function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
-                        method: 'POST',
-                        data: $scope.removeAdditionalDocumentCommand
-                    }).success(function () {
+                    $.when($scope.constructCommentDetails()).done(function(){
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function () {
 
-                    }).error();
-
+                        }).error();
+                    });
                 };
+
                 $scope.underwriterReturn = function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
-                        method: 'POST',
-                        data: $scope.removeAdditionalDocumentCommand
-                    }).success(function () {
+                    $.when($scope.constructCommentDetails()).done(function(){
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function () {
 
-                    }).error();
-
+                        }).error();
+                    });
                 };
 
                 $scope.underwriterRouteSenitor = function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
-                        method: 'POST',
-                        data: $scope.removeAdditionalDocumentCommand
-                    }).success(function () {
+                    $.when($scope.constructCommentDetails()).done(function() {
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function () {
 
-                    }).error();
-
+                        }).error();
+                    });
                 };
 
+                $scope.constructCommentDetails = function() {
+                    if ($scope.comment) {
+                        if ($scope.createUpdateDto.commentDetails) {
+                            $scope.createUpdateDto.commentDetails.push($scope.comment);
+                        } else {
+                            $scope.createUpdateDto.commentDetails = new Array($scope.comment);
+                        }
+                    }
+                };
+
+                $scope.populateDocumentSelected = function(data){
+                    $scope.additionalDocumentAskedFor = {};
+                    if (data.originalObject) {
+                        if ($scope.createUpdateDto.additionalRequiredDocuments) {
+                            $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
+                            $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
+                            $scope.createUpdateDto.additionalRequiredDocuments.push($scope.additionalDocumentAskedFor);
+                        } else {
+                            $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
+                            $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
+                            $scope.createUpdateDto.additionalRequiredDocuments = new Array($scope.additionalDocumentAskedFor);
+                        }
+                    }
+                };
 
             }])
 })(angular);

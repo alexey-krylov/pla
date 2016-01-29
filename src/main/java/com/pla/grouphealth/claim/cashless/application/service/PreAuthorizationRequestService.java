@@ -603,6 +603,7 @@ public class PreAuthorizationRequestService {
                     .updateWithPreAuthorizationId(preAuthorizationRequest.getPreAuthorizationId())
                     .updateWithStatus(preAuthorizationRequest.getStatus())
                     .updateWithBatchNumber(preAuthorizationRequest.getBatchNumber())
+                    .updateWithBatchUploaderUserId(preAuthorizationRequest.getBatchUploaderUserId())
                     .updateWithClaimType(preAuthorizationRequest.getClaimType())
                     .updateWithClaimIntimationDate(preAuthorizationRequest.getClaimIntimationDate())
                     .updateWithPreAuthorizationDate(preAuthorizationRequest.getPreAuthorizationDate())

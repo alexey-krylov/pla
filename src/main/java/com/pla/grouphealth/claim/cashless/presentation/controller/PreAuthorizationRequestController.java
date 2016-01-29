@@ -330,13 +330,13 @@ public class PreAuthorizationRequestController {
     }
 
     @Synchronized
-    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         ModelAndView modelAndView = new ModelAndView();
         preAuthorizationRequestService.populatePreAuthorizationWithPreAuthorizationUnderWriterUserId(preAuthorizationId, userName);
-        modelAndView.setViewName("pla/grouphealth/claim/preauthunderwriterleveltwo");
+        modelAndView.setViewName("pla/grouphealth/claim/preauthorizationunderwriter");
         return modelAndView;
     }
 
@@ -344,7 +344,7 @@ public class PreAuthorizationRequestController {
     @ResponseBody
     public ModelAndView loadUnderwriterViewForView(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/preauthunderwriterleveltwo");
+        modelAndView.setViewName("pla/grouphealth/claim/preauthorizationunderwriter");
         return modelAndView;
     }
 
