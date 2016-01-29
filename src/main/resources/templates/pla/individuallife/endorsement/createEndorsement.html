@@ -111,7 +111,7 @@
                                         <option value="ASSURED_CONTACT_DETAILS_CHANGE">Change of Contact Details- Life Assured</option>
                                         <option value="POLICYHOLDER_CONTACT_DETAILS_CHANGE">Change of Contact Details- Policyholder</option>
                                         <option value="changeSumAssured">Change in Sum Assured</option>
-                                        <option value="changeBeneficiary">Add/Change/Delete Beneficiary</option>
+                                        <option value="BENEFICIARY_DETAILS_CHANGE">Add/Change/Delete Beneficiary</option>
                                         <option value="changeAgent">Add/Change/Delete Agent</option>
                                         <option value="changePaymentMode">Change Payment Mode</option>
                                         <option value="premiumAdjustment">Premium Adjustment</option>
@@ -809,7 +809,7 @@
                             </accordion-group>
                         </accordion>
 
-                        <accordion ng-if="policy.endrosementType== 'changeBeneficiary'">
+                        <accordion ng-if="policy.endrosementType== 'BENEFICIARY_DETAILS_CHANGE'">
                             <accordion-group is-open="true">
                                 <accordion-heading>
                                     Beneficiary Details <i class="pull-right glyphicon"
@@ -835,15 +835,20 @@
                                                 <th>
                                                     Share %
                                                 </th>
+                                                <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr ng-repeat="beneficiary in beneficiariesList">
+                                            <tr ng-repeat="beneficiary in ilEndrosementDetils.beneficiariesNew">
                                                 <td>{{beneficiary.firstName +' '+ beneficiary.surname}}</td>
                                                 <td>{{beneficiary.relationshipId}}</td>
                                                 <!--<td>{{beneficiary.share}}</td>-->
                                                 <td>
                                                     <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="shareSumTest()" min="0" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
+                                                </td>
+                                                <td>
+                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#beneficialModal" ng-click="updateBeneficiary($index)"><span class="glyphicon glyphicon-edit">&nbsp;Update</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm" ng-click="deleteBeneficiary($index)"><span class="glyphicon glyphicon-trash">&nbsp;Delete</span></button>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -1224,7 +1229,7 @@
                                                     <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/" name="beneficiaryNrc" ng-model="newBeneficiary.nrc"/>
 
                                                     <div class="error" ng-messages="beneficiaryForm.beneficiaryNrc.$error" ng-if="beneficiaryForm.beneficiaryNrc.$dirty">
-                                                        &lt;!&ndash;<small class="error" ng-message="required">Please enter NRC.</small>&ndash;&gt;
+                                                       <small class="error" ng-message="required">Please enter NRC.</small>
                                                         <small ng-message="maxlength">Only 11 characters are allowed.</small>
                                                         <small ng-message="pattern"> Follow Pattern 999999/99/1</small>
                                                     </div>
@@ -1241,7 +1246,7 @@
                                                            ng-required="true" ng-readonly="true"/>
                                                 </div>
 
-                                               <!--<div class="form-group required">
+                                               <div class="form-group required">
                                                      <label class="control-label">Relationship To Life Assured</label>
                                                      <select class="form-control input-sm" name="relationship" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="newBeneficiary.relationshipId" ng-options="applicableRelationship.relationCode as applicableRelationship.description for applicableRelationship in applicableRelationships">
                                                      </select>
@@ -1249,7 +1254,7 @@
                                                      <div class="error" ng-messages="beneficiaryForm.relationship.$error" ng-if="beneficiaryForm.relationship.$dirty">
                                                          <small class="error" ng-message="required">Please choose RelationshipId.</small>
                                                      </div>
-                                                 </div>-->
+                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group required">
@@ -1300,12 +1305,303 @@
                                                         <small ng-message="required">Please enter share%.</small>
                                                     </div>
                                                 </div>
+                                                <div class="form-group required" ng-if="isShowTrusteeType">
+                                                    <label class="control-label">Trustee Type</label>
+                                                    <select class="form-control input-sm" name="trusteeType" ng-model="newBeneficiary.trusteeType" ng-disabled="mode=='new'||mode=='view'" ng-required="true">
+                                                        <option  value="INDIVIDUAL">Individual</option>
+                                                        <option  value="ORGANIZATION">Organization</option>
+                                                    </select>
+                                                    <div class="error" ng-messages="beneficiaryForm.trusteeType.$error" ng-if="beneficiaryForm.trusteeType.$dirty">
+                                                        <small class="error" ng-message="required">Please provide TrusteeType Information.</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-if="isShowTrusteeType" ng-form="planBeneficiary">
+                                            <div class="panel panel-primary">
+                                                <div class="panel-heading" >
+                                                    <div class="row">
+                                                        <div class="col-md-4">Trustee Information
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body ng-cloak">
+                                                    <div class="row" ng-if="newBeneficiary.trusteeType == 'INDIVIDUAL' ">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Title</label>
+                                                                <select class="form-control input-sm" name="title" ng-required="true" ng-model="newBeneficiary.trusteeDetail.title" ng-disabled="mode=='new'||mode=='view'" ng-options="title as title for title in titleList">
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Surname</label>
+                                                                <input type="text" class="form-control input-sm" name="surname" ng-disabled="mode=='new'||mode=='view'" ng-pattern="/[a-zA-Z]/" ng-maxlength="14" ng-model="newBeneficiary.trusteeDetail.surname" ng-required="true"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.surname.$error" ng-if="planBeneficiary.surname.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Surname.</small>
+                                                                    <small ng-message="maxlength">Only 14 characters are allowed.</small>
+                                                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Date Of Birth</label>
+                                                                <div class='input-group date'>
+                                                                    <input type="text" class="form-control input-sm"
+                                                                           ng-click="launchTrusteeDobIl($event)" max-date="todayDate" datepicker-popup="dd/MM/yyyy"
+                                                                           ng-model="newBeneficiary.trusteeDetail.dateOfBirth"
+                                                                           datepicker-options="datePickerSettingsForUpdateILTrusteeDOB.dateOptions"
+                                                                           is-open="datePickerSettingsForUpdateILTrusteeDOB.isOpened" close-text="Close"
+                                                                           show-button-bar="false"
+                                                                           name="trusteeDob" ng-required="true"
+                                                                           ng-change="showTrusteeAge(newBeneficiary.trusteeDetail.dateOfBirth)"
+                                                                           onkeypress="return isNumeric(event)"
+                                                                           validate-date="" validate-update-dob="" />
+                                                                        <span class="input-group-btn">
+                                                                        <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
+                                                                                ng-click="launchTrusteeDobIl($event)">
+                                                                            <i class="glyphicon glyphicon-calendar"></i></button>
+                                                                        </span>
+                                                                </div>
+                                                                <p style="color:red" ng-show="isBeneficiaryTrusteeDOBSame">
+                                                                    Trustee DOB and Beneficiary DOB Should Not be Same.
+                                                                </p>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Mobile Number</label>
+                                                                <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="newBeneficiary.trusteeDetail.mobileNumber"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.mobileNumber.$error" ng-if="planBeneficiary.mobileNumber.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Mobile Number</small>
+                                                                    <small ng-message="pattern">Please enter a valid mobile number.</small>
+                                                                    <small ng-message="maxlength">Only 10 number are allowed.</small>
+                                                                    <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Address Line 1</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="newBeneficiary.trusteeDetail.address1" ng-required="true"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.addressLine1.$error" ng-if="planBeneficiary.addressLine1.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                                    <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label">Postal Code</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postCode" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="newBeneficiary.trusteeDetail.postalCode"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.postCode.$error">
+                                                                    <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                                    <small ng-message="pattern">Only Numeric are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Town</label>
+                                                                <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="newBeneficiary.trusteeDetail.town"
+                                                                        ng-options="city.geoId as city.geoName for city in trusteeCities"/>
+                                                                <div class="error" ng-messages="planBeneficiary.town.$error" ng-if="planBeneficiary.town.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Town</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group required">
+                                                                <label class="control-label">First Name</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="firstName" ng-pattern="/[a-zA-Z]/" ng-maxlength="20" ng-model="newBeneficiary.trusteeDetail.firstName" ng-required="true"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.firstName.$error" ng-if="planBeneficiary.firstName.$dirty">
+                                                                    <small class="error" ng-message="required">
+                                                                        Please enter FirstName
+                                                                    </small>
+                                                                    <small ng-message="maxlength">Only 20 characters are allowed.</small>
+                                                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                                                </div>
+                                                                <p style="color:red" ng-show="isBeneficiaryTrusteeNameSame">
+                                                                    Trustee Name and Beneficiary Name Should Not be Same.
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label">NRC</label>
+                                                                <input type="text" class="form-control input-sm" name="nrc" ng-disabled="mode=='new'||mode=='view'" ng-model="newBeneficiary.trusteeDetail.nrc" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.nrc.$error" ng-if="planBeneficiary.nrc.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter NRC.</small>
+                                                                    <small ng-message="maxlength">Only 11 characters are allowed.</small>
+                                                                    <small ng-message="pattern"> Follw Pattern 999999/99/1</small>
+                                                                </div>
+
+                                                                <p style="color:red" ng-show="isBeneficiaryTrusteeNRCSame">
+                                                                    Trustee NRC and Beneficiary NRC Should Not be Same.
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="form-group required">
+                                                                <label class="control-label required">Age</label>
+                                                                <input type="text" class="form-control input-sm" name="beneficiaryAge1"  ng-model="newBeneficiary.trusteeDetail.age"
+                                                                       ng-required="true" ng-readonly="true"/>
+
+                                                                <p style="color:red" ng-hide="isTrusteeValid">
+                                                                    Age of Trustee Should  18 year or more.
+                                                                </p>
+
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label">Email ID</label>
+                                                                <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="email" ng-model="newBeneficiary.trusteeDetail.emailId" />
+
+                                                                <div class="error" ng-messages="planBeneficiary.email.$error"  ng-if="planBeneficiary.email.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter  email address. </small>
+                                                                    <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Address Line 2</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="newBeneficiary.trusteeDetail.address2"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.addressLine2.$error" ng-if="planBeneficiary.addressLine2.$dirty">
+                                                                    <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Province</label>
+                                                                <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                                        ng-model="newBeneficiary.trusteeDetail.province" ng-required="true" ng-change="getTrusteeProvinceValue(newBeneficiary.trusteeDetail.province)" ng-init="getTrusteeProvinceValue(newBeneficiary.trusteeDetail.province)">
+                                                                </select>
+
+                                                                <div class="error" ng-messages="planBeneficiary.province.$error" ng-if="planBeneficiary.province.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Province</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" ng-if="newBeneficiary.trusteeType == 'ORGANIZATION' ">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Name</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="name" ng-pattern="/[a-zA-Z]/" ng-maxlength="40" ng-model="beneficiary.trusteeDetail.organizationName" ng-required="true"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.name.$error" ng-if="planBeneficiary.name.$dirty">
+                                                                    <small class="error" ng-message="required">
+                                                                        Organization Name
+                                                                    </small>
+                                                                    <small ng-message="maxlength">Only 40 characters are allowed.</small>
+                                                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Phone Number</label>
+                                                                <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="13" ng-disabled="mode=='new'||mode=='view'" maxlength="13" ng-maxLength="13" name="orgPhoneNumber" ng-pattern="/^\d+$/" ng-model="beneficiary.trusteeDetail.organizationPhoneNumber"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.orgPhoneNumber.$error" ng-if="planBeneficiary.orgPhoneNumber.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Mobile Number</small>
+                                                                    <small ng-message="pattern">Please enter a valid mobile number.</small>
+                                                                    <small ng-message="maxlength">Only 13 number are allowed.</small>
+                                                                    <small ng-message="minlength">Minimum 13 number are allowed.</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label">Address Line 2</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine2" ng-maxlength="100" ng-model="beneficiary.trusteeDetail.address2"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.addressLine2.$error" ng-if="planBeneficiary.addressLine2.$dirty">
+                                                                    <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Province</label>
+                                                                <select class="form-control input-sm" name="province" ng-disabled="mode=='new'||mode=='view'" ng-options="province.provinceId as province.provinceName for province in provinces"
+                                                                        ng-model="beneficiary.trusteeDetail.province" ng-required="true" ng-change="getTrusteeProvinceValue(beneficiary.trusteeDetail.province)" ng-init="getTrusteeProvinceValue(beneficiary.trusteeDetail.province)">
+                                                                </select>
+
+                                                                <div class="error" ng-messages="planBeneficiary.province.$error" ng-if="planBeneficiary.province.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Province</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Title</label>
+                                                                <select class="form-control input-sm" name="title" ng-required="true" ng-model="beneficiary.trusteeDetail.title" ng-disabled="mode=='new'||mode=='view'" ng-options="title as title for title in titles">
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Mobile Number</label>
+                                                                <input type="text" class="form-control input-sm" ng-required="true" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="beneficiary.trusteeDetail.mobileNumber"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.mobileNumber.$error" ng-if="planBeneficiary.mobileNumber.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Mobile Number</small>
+                                                                    <small ng-message="pattern">Please enter a valid mobile number.</small>
+                                                                    <small ng-message="maxlength">Only 10 number are allowed.</small>
+                                                                    <small ng-message="minlength">Minimum 10 number are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Email ID</label>
+                                                                <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="email" ng-model="beneficiary.trusteeDetail.emailId" />
+
+                                                                <div class="error" ng-messages="planBeneficiary.email.$error"  ng-if="planBeneficiary.email.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter  email address. </small>
+                                                                    <small class="error" ng-message="email">Please enter  Valid email address. </small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Address Line 1</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="addressLine1" ng-maxlength="100" ng-model="beneficiary.trusteeDetail.address1" ng-required="true"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.addressLine1.$error" ng-if="planBeneficiary.addressLine1.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Address Line 1</small>
+                                                                    <small ng-message="maxlength">Only 100 characters are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Postal Code</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="postCode" ng-maxlength="7" ng-pattern="/^\d+$/" ng-model="beneficiary.trusteeDetail.postalCode"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.postCode.$error">
+                                                                    <small ng-message="maxlength">Only 7 characters are allowed.</small>
+                                                                    <small ng-message="pattern">Only Numeric are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Town</label>
+                                                                <select class="form-control input-sm" name="town" ng-disabled="mode=='new'||mode=='view'" ng-required="true" ng-model="beneficiary.trusteeDetail.town"
+                                                                        ng-options="city.geoId as city.geoName for city in trusteeCities"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.town.$error" ng-if="planBeneficiary.town.$dirty">
+                                                                    <small class="error" ng-message="required">Please enter Town</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group required">
+                                                                <label class="control-label">Contact Person Name</label>
+                                                                <input type="text" class="form-control input-sm" ng-disabled="mode=='new' || mode=='view'" name="contactPersonName" ng-pattern="/[a-zA-Z]/" ng-maxlength="40" ng-model="beneficiary.trusteeDetail.contactPersonName" ng-required="true"/>
+
+                                                                <div class="error" ng-messages="planBeneficiary.contactPersonName.$error" ng-if="planBeneficiary.contactPersonName.$dirty">
+                                                                    <small class="error" ng-message="required">
+                                                                        Please enter Contact person name.
+                                                                    </small>
+                                                                    <small ng-message="maxlength">Only 40 characters are allowed.</small>
+                                                                    <small ng-message="pattern">Only alphabets are allowed.</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-default" data-dismiss="modal" ng-disabled="beneficiaryForm.$invalid" ng-click="addBeneficiary(newBeneficiary)">Add</button>
-                                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-default" data-dismiss="modal" ng-hide="isUpdateBeneficiary" ng-disabled="beneficiaryForm.$invalid || isBeneficiaryTrusteeNameSame || isBeneficiaryTrusteeNRCSame || isBeneficiaryTrusteeDOBSame" ng-click="addBeneficiary(newBeneficiary)">Add</button>
+                                        <button class="btn btn-default" data-dismiss="modal" ng-show="isUpdateBeneficiary" ng-disabled="beneficiaryForm.$invalid || isBeneficiaryTrusteeNameSame || isBeneficiaryTrusteeNRCSame || isBeneficiaryTrusteeDOBSame" ng-click="updateBeneficiaryToOriginalList(newBeneficiary)">Update</button>
+                                        <button class="btn btn-default" data-dismiss="modal" ng-click="clearNewBeneficiary()">Cancel</button>
                                     </div>
                                 </div>
                             </div>

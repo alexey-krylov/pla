@@ -156,6 +156,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.townListForLAEmp=[];
             $scope.townListForPHRes=[];  //Capturing TownList For PolicyHolder Contact Change (Residential)
             $scope.townListForPHEmp=[];  //Capturing TownList For PolicyHolder Contact Change (Employement)
+            $scope.trusteeCities=[]; //Capturing TownList For Trustee(Beneficiary change type Endrosement)
 
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
@@ -188,6 +189,28 @@ app.config(["$routeProvider", function ($routeProvider) {
                 };
 
         $scope.datePickerSettingsForUpdateLifeAssuredDOB = {
+            isOpened:false,
+            dateOptions:{
+                formatYear:'yyyy' ,
+                startingDay:1
+
+            }
+        }
+
+        /**
+         * Date of Birth Of Trustee Individual
+         * @param $event
+         */
+        $scope.launchTrusteeDobIl = function ($event) {
+            if($scope.ilEndrosementDetils.beneficiariesNew == null){
+                $scope.ilEndrosementDetils.beneficiariesNew=[];
+            }
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePickerSettingsForUpdateILTrusteeDOB.isOpened = true;
+        };
+
+        $scope.datePickerSettingsForUpdateILTrusteeDOB = {
             isOpened:false,
             dateOptions:{
                 formatYear:'yyyy' ,
@@ -277,6 +300,7 @@ app.config(["$routeProvider", function ($routeProvider) {
                 $scope.ilEndrosementDetils.policyHolderNew.correctedAge=correcteAge;
             }
         });
+
             $scope.launchBeneficiaryDob = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -311,6 +335,10 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         });
 
+        /**
+         * Getting EMPTownList and ResidentialTownList of LifeAssured during change of Change of Contact Details- Policy Holder
+         */
+
         $scope.$watch('ilEndrosementDetils.policyHolderNew.residentialAddress.address.province',function(newVal,oldVal){
             if(newVal){
                 var provinceDetails = _.findWhere($scope.provinces, {provinceId: newVal});
@@ -327,23 +355,44 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         });
 
-       /* $scope.getEmpTownList = function (province) {
-            //alert(province);
+
+        /**
+         * Getting TownList of Trustee during change of Change of Beneficiary
+         */
+
+        $scope.getTrusteeProvinceValue = function (province) {
             var provinceDetails = _.findWhere($scope.provinces, {provinceId: province});
             if (provinceDetails)
-                $scope.empTownList = provinceDetails.cities;
-        }*/
+                $scope.trusteeCities = provinceDetails.cities;
+        }
 
-            $scope.showBeneficiaryDob = function (dob) {
-                    if (dob != null) {
-                        $scope.newBeneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
-                    }
-                };
+
+        $scope.isShowTrusteeType=false; // To Decide Trustee Type and Trustee Information To Display or Not
+
+        $scope.showBeneficiaryDob = function (dob) {
+                if (dob != null) {
+                    $scope.newBeneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
+                }
+                        if (($scope.newBeneficiary.age >= 0) && ($scope.newBeneficiary.age < 18)) {
+                            $scope.isShowTrusteeType = true;
+                        }else{
+                            $scope.isShowTrusteeType=false;
+                        }
+            };
+        $scope.applicableRelationships=[]; //Will Take All The relationshipAccording to Beneficiary Age
+        $scope.$watch('newBeneficiary.age', function (newVal, oldVal) {
+            if (newVal) {
+                $http.get("getallrelations/" + newVal).success(function (response, status, headers, config) {
+                    $scope.applicableRelationships = response;
+                }).error(function (response, status, headers, config) {
+                });
+            }
+        });
 
             $scope.shareSumTest = function () {
                 var sum = 0;
-                for (var i=0; i< $scope.beneficiariesList.length;i++) {
-                    sum = parseFloat(sum) + parseFloat($scope.beneficiariesList[i].share);
+                for (var i=0; i< $scope.ilEndrosementDetils.beneficiariesNew.length;i++) {
+                    sum = parseFloat(sum) + parseFloat($scope.ilEndrosementDetils.beneficiariesNew[i].share);
                 }
                 //console.log('sum: ' + sum);
                 if (sum == 100.00) {
@@ -357,24 +406,29 @@ app.config(["$routeProvider", function ($routeProvider) {
             };
 
         $scope.addBeneficiary = function (beneficiary) {
-            if ($scope.beneficiariesList.length == 0) {
-                $scope.beneficiariesList.push(beneficiary);
+            if ($scope.ilEndrosementDetils.beneficiariesNew.length == 0) {
+                $scope.ilEndrosementDetils.beneficiariesNew.push(beneficiary);
             }
 
             else {
                 var checkLoopNameStatus = "true";
-                for (var i=0;i< $scope.beneficiariesList.length;i++) {
-                    if (beneficiary.nrc && $scope.beneficiariesList[i].nrc == beneficiary.nrc) {
+                for (var i=0;i< $scope.ilEndrosementDetils.beneficiariesNew.length;i++) {
+                    if (beneficiary.nrc && $scope.ilEndrosementDetils.beneficiariesNew[i].nrc == beneficiary.nrc) {
                         checkLoopNameStatus = "false";
                         break;
-                    } else if (($scope.beneficiariesList[i].firstName == beneficiary.firstName) &&
-                        ($scope.beneficiariesList[i].gender == beneficiary.gender) && ((moment($scope.beneficiariesList[i].dateOfBirth).diff(moment(beneficiary.dateOfBirth), 'days')) == 0)) {
+                    } else if (($scope.ilEndrosementDetils.beneficiariesNew[i].firstName == beneficiary.firstName) &&
+                        ($scope.ilEndrosementDetils.beneficiariesNew[i].gender == beneficiary.gender) && ((moment($scope.ilEndrosementDetils.beneficiariesNew[i].dateOfBirth).diff(moment(beneficiary.dateOfBirth), 'days')) == 0)) {
                         checkLoopNameStatus = "false";
                         break;
+                    }else if (beneficiary.relationshipId == 'FATHER_IN_LAW' || beneficiary.relationshipId == 'MOTHER_IN_LAW' || beneficiary.relationshipId == 'FATHER' || beneficiary.relationshipId == 'MOTHER') {
+                        if (($scope.ilEndrosementDetils.beneficiariesNew[i].relationshipId == beneficiary.relationshipId)) {
+                            checkLoopNameStatus = "false";
+                            break;
+                        }
                     }
                 }
                 if (checkLoopNameStatus == "true") {
-                    $scope.beneficiariesList.unshift(beneficiary);
+                    $scope.ilEndrosementDetils.beneficiariesNew.unshift(beneficiary);
                 } else {
                     alert("This record is already existing");
                 }
@@ -382,7 +436,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             //$scope.clear();
             $scope.newBeneficiary={};
             $('#beneficialModal').modal('hide');
-            console.log("BeneficiaryList:" + JSON.stringify($scope.beneficiariesList));
+            console.log("BeneficiaryList:" + JSON.stringify($scope.ilEndrosementDetils.beneficiariesNew));
         };
 
         $scope.searchAgent = function () {
@@ -515,6 +569,9 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'POLICYHOLDER_CONTACT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.policyHolderNew == null){
                 $scope.ilEndrosementDetils.policyHolderNew={};
                 angular.copy($scope.ilEndrosementDetils.policyHolder,$scope.ilEndrosementDetils.policyHolderNew);
+            }else if($scope.policy.endrosementType == 'BENEFICIARY_DETAILS_CHANGE' && $scope.ilEndrosementDetils.beneficiariesNew == null){
+                $scope.ilEndrosementDetils.beneficiariesNew=[];
+                angular.copy($scope.ilEndrosementDetils.beneficiaries,$scope.ilEndrosementDetils.beneficiariesNew);
             }
 
             if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
@@ -538,7 +595,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             if(endrosementTypeCheck == 'ASSURED_NAME_CHANGE'){
                 if(angular.equals($scope.ilEndrosementDetils.lifeAssuredNew, $scope.ilEndrosementDetils.lifeAssured)){
                     $scope.serverError = true;
-                    $scope.serverErrMsg = 'Both Existing and Updated Life Assured Name Details Should Not be Same..';
+                    $scope.serverErrMsg = 'Both Existing and Updated Life Assured Name Details Should Not be Same.';
                     return;
                 }
                 else{
@@ -548,7 +605,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if(endrosementTypeCheck == 'POLICYHOLDER_NAME_CHANGE'){
                 if(angular.equals($scope.ilEndrosementDetils.policyHolderNew, $scope.ilEndrosementDetils.policyHolder)){
                     $scope.serverError = true;
-                    $scope.serverErrMsg = 'Both Existing and Updated Policy Holder Name Details Should Not be Same..';
+                    $scope.serverErrMsg = 'Both Existing and Updated Policy Holder Name Details Should Not be Same.';
                     return;
                 }
                 else{
@@ -558,7 +615,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if(endrosementTypeCheck == 'ASSURED_CONTACT_DETAILS_CHANGE'){
                 if(angular.equals($scope.ilEndrosementDetils.lifeAssuredNew, $scope.ilEndrosementDetils.lifeAssured)){
                     $scope.serverError = true;
-                    $scope.serverErrMsg = 'Both Existing and Updated Life Assured Contact Details Should Not be Same..';
+                    $scope.serverErrMsg = 'Both Existing and Updated Life Assured Contact Details Should Not be Same.';
                     return;
                 }
                 else{
@@ -568,7 +625,40 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if(endrosementTypeCheck == 'POLICYHOLDER_CONTACT_DETAILS_CHANGE'){
                 if(angular.equals($scope.ilEndrosementDetils.policyHolderNew, $scope.ilEndrosementDetils.policyHolder)){
                     $scope.serverError = true;
-                    $scope.serverErrMsg = 'Both Existing and Updated Policy Holder Contact Details Should Not be Same..';
+                    $scope.serverErrMsg = 'Both Existing and Updated Policy Holder Contact Details Should Not be Same.';
+                    return;
+                }
+                else{
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+            }else if(endrosementTypeCheck == 'BENEFICIARY_DETAILS_CHANGE'){
+                //Checking is Beneficiaries is Empty or Not
+                if(!$scope.ilEndrosementDetils.beneficiariesNew.length >0){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Beneficiary Details Should Not be Empty.';
+                    angular.copy($scope.ilEndrosementDetils.beneficiaries,$scope.ilEndrosementDetils.beneficiariesNew);
+                    return;
+                }
+                else{
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+                //Checking is Beneficiaries's Share % Sum is 100 or Not
+                if($scope.commisionMessage){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Sum of share % is not 100..Please update share % to ensure it should be 100';
+                    return;
+                }
+                else {
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+
+                //Checking Existing and Updated Beneficiary Details is Same or Not
+                if(angular.equals($scope.ilEndrosementDetils.beneficiariesNew,$scope.ilEndrosementDetils.beneficiaries)){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Both Existing and Updated Beneficiary Details Should Not be Same.';
                     return;
                 }
                 else{
@@ -612,6 +702,9 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         }
 
+        /**
+         * LifeAssured Gender Change Operation is happening
+         */
         $scope.changeLifeAssuredGender=function(){
             if($scope.policy.endrosementType == 'ASSURED_GENDER_CHANGE'){
                 if($scope.ilEndrosementDetils.lifeAssuredNew == null){
@@ -624,6 +717,186 @@ app.config(["$routeProvider", function ($routeProvider) {
                 }
             }
         }
+
+        /**
+         * Update Beneficiary
+         */
+        $scope.newBeneficiary={};
+        $scope.isUpdateBeneficiary=false;
+
+        /**
+         * Selected Beneficiary Detail retrival Logic
+         * @param index
+         */
+        $scope.updateBeneficiary=function(index){
+            angular.copy($scope.ilEndrosementDetils.beneficiariesNew[index],$scope.newBeneficiary);
+            $scope.indexToUpdate=index;
+            $scope.isUpdateBeneficiary=true;
+        }
+
+        $scope.deleteBeneficiary=function(index){
+            $scope.ilEndrosementDetils.beneficiariesNew.splice(index,1);
+        }
+
+        /**
+         * Updated Beneficary will Add To NewBeneficiary List
+         * @param beneficiary
+         */
+        $scope.updateBeneficiaryToOriginalList = function (beneficiary) {
+
+            $scope.ilEndrosementDetils.beneficiariesNew.splice($scope.indexToUpdate,1);
+
+            if ($scope.ilEndrosementDetils.beneficiariesNew.length == 0) {
+                $scope.ilEndrosementDetils.beneficiariesNew.push(beneficiary);
+            }
+
+            else {
+                var checkLoopNameStatus = "true";
+                for (var i=0;i< $scope.ilEndrosementDetils.beneficiariesNew.length;i++) {
+                    if (beneficiary.nrc && $scope.ilEndrosementDetils.beneficiariesNew[i].nrc == beneficiary.nrc) {
+                        checkLoopNameStatus = "false";
+                        break;
+                    } else if (($scope.ilEndrosementDetils.beneficiariesNew[i].firstName == beneficiary.firstName) &&
+                        ($scope.ilEndrosementDetils.beneficiariesNew[i].gender == beneficiary.gender) && ((moment($scope.beneficiariesList[i].dateOfBirth).diff(moment(beneficiary.dateOfBirth), 'days')) == 0)) {
+                        checkLoopNameStatus = "false";
+                        break;
+                    }else if (beneficiary.relationshipId == 'FATHER_IN_LAW' || beneficiary.relationshipId == 'MOTHER_IN_LAW' || beneficiary.relationshipId == 'FATHER' || beneficiary.relationshipId == 'MOTHER') {
+                        if (($scope.ilEndrosementDetils.beneficiariesNew[i].relationshipId == beneficiary.relationshipId)) {
+                            checkLoopNameStatus = "false";
+                            break;
+                        }
+                    }
+                }
+                if (checkLoopNameStatus == "true") {
+                    $scope.ilEndrosementDetils.beneficiariesNew.unshift(beneficiary);
+                } else {
+                    alert("This record is already existing");
+                }
+            }
+            //$scope.clear();
+            $scope.newBeneficiary={};
+            $('#beneficialModal').modal('hide');
+            console.log("BeneficiaryList:" + JSON.stringify($scope.beneficiariesList));
+        };
+
+        //Clearing The Assignning Beneficiary from Local Object On Clicking On Cancel button
+        $scope.clearNewBeneficiary=function(){
+            $scope.newBeneficiary={};
+            $('#beneficialModal').modal('hide');
+        }
+
+        $scope.isBeneficiaryTrusteeDOBSame = false; // Variable to Test DOB of Both Trustee and Beneficiary are same Or Not
+
+        /**
+         * Watch Function Are Meant to Check Dob Of Both Beneficiary and Trustee Are Same Or Not
+         */
+        $scope.$watch('newBeneficiary.trusteeDetail.dateOfBirth', function (newVal, oldVal) {
+            if (newVal && $scope.newBeneficiary.dateOfBirth) {
+                if (((moment(newVal).diff(moment($scope.newBeneficiary.dateOfBirth), 'days')) == 0)) {
+                    //alert('Both Are Same..');
+                    $scope.isBeneficiaryTrusteeDOBSame = true;
+                }
+                else {
+                    $scope.isBeneficiaryTrusteeDOBSame = false;
+                }
+            }
+        });
+        $scope.$watch('newBeneficiary.dateOfBirth', function (newVal, oldVal) {
+            if($scope.newBeneficiary.trusteeDetail == null){
+                $scope.newBeneficiary.trusteeDetail={};
+            }
+            if (newVal && $scope.newBeneficiary.trusteeDetail.dateOfBirth != null) {
+                if (newVal == $scope.newBeneficiary.trusteeDetail.dateOfBirth) {
+                    $scope.isBeneficiaryTrusteeDOBSame = true;
+                }
+                else {
+                    $scope.isBeneficiaryTrusteeDOBSame = false;
+                }
+            }
+        });
+
+        /**
+         * Checking For Age of Trustee
+         * @type {boolean}
+         */
+        $scope.isTrusteeValid = true; //Testing For Trustee's Age is Above 18yr or less.
+        $scope.showTrusteeAge = function (dob) {
+            if (dob != null) {
+                $scope.newBeneficiary.trusteeDetail.age = moment().diff(new moment(new Date(dob)), 'years');
+            }
+            $scope.isTrusteeValid = false;
+            //$scope.beneficiary.age = moment().diff(new moment(new Date(dob)), 'years');
+
+            if ($scope.newBeneficiary.trusteeDetail.age < 18) {
+                $scope.isTrusteeValid = false;
+            }
+            else {
+                $scope.isTrusteeValid = true;
+            }
+        };
+
+
+        /**
+         *
+         * Chceking the FirstName of Beneficiary and Trustee FirstName Same or Not
+         */
+        $scope.isBeneficiaryTrusteeNameSame = false; //To Test Beneficiary and Trustee Name Same or Not
+        $scope.$watch('newBeneficiary.trusteeDetail.firstName', function (newVal, oldVal) {
+
+            if (newVal) {
+                if (newVal == $scope.newBeneficiary.firstName) {
+                    //alert('both are Same');
+                    $scope.isBeneficiaryTrusteeNameSame = true;
+                }
+                else {
+                    $scope.isBeneficiaryTrusteeNameSame = false;
+                }
+            }
+
+        });
+
+        $scope.$watch('newBeneficiary.firstName', function (newVal, oldVal) {
+            if (newVal) {
+
+                if (newVal == $scope.newBeneficiary.trusteeDetail.firstName) {
+                    //alert('Both Are Same..');
+                    $scope.isBeneficiaryTrusteeNameSame = true;
+                }
+                else {
+                    $scope.isBeneficiaryTrusteeNameSame = false;
+                }
+            }
+        });
+
+        /**
+         *
+         * Checking the NRC of Beneficiary and Trustee FirstName Same or Not
+         */
+        $scope.isBeneficiaryTrusteeNRCSame = false; // To Test Beneficiary and Trustee NRC same Or Not
+        $scope.$watch('newBeneficiary.nrc', function (newVal, oldVal) {
+            if (newVal) {
+
+                if (newVal == $scope.newBeneficiary.trusteeDetail.nrc) {
+                    //alert('Both Are  Same..');
+                    $scope.isBeneficiaryTrusteeNRCSame = true;
+                }
+                else {
+                    $scope.isBeneficiaryTrusteeNRCSame = false;
+                }
+            }
+        });
+        $scope.$watch('newBeneficiary.trusteeDetail.nrc', function (newVal, oldVal) {
+            if (newVal) {
+
+                if (newVal == $scope.newBeneficiary.nrc) {
+                    //alert('Both Are Same..');
+                    $scope.isBeneficiaryTrusteeNRCSame = true;
+                }
+                else {
+                    $scope.isBeneficiaryTrusteeNRCSame = false;
+                }
+            }
+        });
 
         $scope.addAdditionalDocument = function () {
             $scope.additionalDocumentList.unshift({});

@@ -7,7 +7,6 @@ import com.pla.core.query.MasterFinder;
 import com.pla.individuallife.endorsement.application.command.*;
 import com.pla.individuallife.endorsement.application.service.ILEndorsementService;
 import com.pla.individuallife.endorsement.application.service.IndividualLifeEndorsementChecker;
-import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement;
 import com.pla.individuallife.endorsement.domain.service.IndividualLifeEndorsementService;
 import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementApproverCommentDto;
 import com.pla.individuallife.endorsement.presentation.dto.ILEndorsementDto;
@@ -21,6 +20,7 @@ import com.pla.individuallife.sharedresource.dto.SearchILPolicyDto;
 import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 import com.pla.sharedkernel.domain.model.EndorsementNumber;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
+import com.pla.sharedkernel.domain.model.Relationship;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import org.apache.poi.util.IOUtils;
@@ -42,9 +42,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
@@ -519,6 +523,35 @@ public class ILEndorsementController {
     public List<ILEndorsementDto> getApprovedEndorsementByPolicyNumber(@PathVariable("policyNumber") String policyNumber) {
         List<ILEndorsementDto> glEndorsementSchedules = ilEndorsementService.getApprovedEndorsementByPolicyNumber(policyNumber);
         return glEndorsementSchedules;
+    }
+
+    @RequestMapping(value = "/getallrelations/{age}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list all the relations")
+    public List<Map<String,Object>> getAllRelationShip(@PathVariable("age") Integer age) {
+        if (age<=16) {
+            return Arrays.asList(Relationship.values()).parallelStream().filter(new Predicate<Relationship>() {
+                @Override
+                public boolean test(Relationship relationship) {
+                    return Arrays.asList(Relationship.DAUGHTER,Relationship.SON,Relationship.STEP_DAUGHTER,Relationship.STEP_SON,Relationship.SISTER,Relationship.BROTHER).contains(relationship);
+                }
+            }).map(new RelationTransformer()).collect(Collectors.toList());
+        }
+        return Arrays.asList(Relationship.values()).parallelStream().filter(new Predicate<Relationship>() {
+            @Override
+            public boolean test(Relationship relationship) {
+                return !(Arrays.asList(Relationship.DAUGHTER, Relationship.SON, Relationship.STEP_DAUGHTER, Relationship.STEP_SON).contains(relationship));
+            }
+        }).map(new RelationTransformer()).collect(Collectors.toList());
+    }
+
+    private class RelationTransformer implements Function<Relationship, Map<String,Object>> {
+        public Map<String, Object> apply(Relationship relationship) {
+            Map<String, Object> relationMap = Maps.newLinkedHashMap();
+            relationMap.put("relationCode", relationship.name());
+            relationMap.put("description", relationship.description);
+            return relationMap;
+        }
     }
 
 }
