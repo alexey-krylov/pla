@@ -1,7 +1,7 @@
 (function (angular) {
     "use strict";
-    var  app=angular.module('createpreauthunderwriterleveltwo', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
-        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages','angularFileUpload', 'angucomplete-alt'])
+    var  app=angular.module('createpreauthunderwriterleveltwo', ['common', 'ngRoute','ngMessages', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
+        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','angularFileUpload', 'angucomplete-alt'])
     app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
         datepickerPopupConfig.datepickerPopup = 'MM/dd/yyyy';
         datepickerPopupConfig.currentText = 'Today';
@@ -10,10 +10,12 @@
         datepickerPopupConfig.closeOnDateSelection = true;
     }])
         .config(["$routeProvider", function ($routeProvider) {
+            var stepsSaved = {};
             $routeProvider.when('/', {
                     templateUrl: 'preauthorizationunderwriter.html',
                     controller: 'createpreauthunderwriterleveltwoctrl',
                     resolve:{
+
                         createUpdateDto: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                             var deferred = $q.defer();
                             var preAuthorizationId = getQueryParameter('preAuthorizationId');
@@ -58,14 +60,16 @@
                             var clientId = getQueryParameter('clientId');
                             deferred.resolve(clientId)
                             return deferred.promise;
-                        }]
+                        }],
+                        stepsSaved: function () {
+                            return stepsSaved;}
                     }
 
                 }
             )}])
 
-        .controller('createpreauthunderwriterleveltwoctrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','preAuthorizationId','clientId',
-            function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, preAuthorizationId, clientId) {
+        .controller('createpreauthunderwriterleveltwoctrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','stepsSaved','documentList','$upload','preAuthorizationId','clientId',
+            function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload,stepsSaved,preAuthorizationId, clientId) {
                 $scope.createUpdateDto = createUpdateDto;
                 console.log(JSON.stringify(createUpdateDto));
                 $scope.drugServicesDtoList = $scope.createUpdateDto.drugServicesDtos;
@@ -135,20 +139,37 @@
                     $scope.drugServicesDto = {};
                     $scope.diagnosisTreatmentDtosUpdate = {};
                     $scope.createUpdateDto.drugServicesDtosSave = [];
+                    $scope.provisionaldignosisdiv=true;
                 };
+
 
                 $scope.updateTreatmentAndDiagnosis = function (diagnosisTreatmentDto) {
                     if ($scope.isEditDiagnosisTriggered) {
                         $scope.createUpdateDto.diagnosisTreatmentDtos[$scope.treatmentDiagnosisIndex] = diagnosisTreatmentDto;
                         $scope.savePreAuthorizationRequest();
                         $scope.isEditDiagnosisTriggered = false;
+                        $scope.provisionaldignosisdiv=false;
                     } else {
                         $scope.createUpdateDto.diagnosisTreatmentDtos.push(diagnosisTreatmentDto);
                         console.log(JSON.stringify($scope.createUpdateDto));
-                    }
 
+                    }
+                    $scope.provisionaldignosisdiv = false;
+                    $scope.stepsSaved["4"] = false;
                 };
 
+
+                $scope.activenextbuttonforprovisional = function(){
+                    $scope.provisionaldignosisdiv = true;
+                    $scope.stepsSaved["4"] = true;
+                };
+                $scope.activenextbuttonforprovisionalclickon= function(){
+                    $scope.provisionaldignosisdiv = true;
+                    $scope.stepsSaved["4"] = true;
+                };
+
+
+//for add sevice drug availed
                 $scope.updateDrugServicesDto = function (drugServicesDto, index) {
                     $scope.index = index;
                     $scope.isEditDrugTriggered = true;
@@ -165,14 +186,35 @@
                         $scope.drugServicesDtoList.push(diagnosisTreatmentDtoToUpdate);
                         $scope.savePreAuthorizationRequest();
                     }
+                    $scope.showservicedrugdiv = false;
+                    $scope.stepsSaved["1"] = false;
                 };
+
+                $scope.activenextbuttonfordrugservice= function(){
+                    $scope.showservicedrugdiv = false;
+                    $scope.stepsSaved["1"] = false;
+                };
+
 
                 $scope.deleteTreatmentDiagnosis = function (index) {
                     $scope.createUpdateDto.drugServicesDtos.splice(index, 1);
                     $scope.savePreAuthorizationRequest();
 
                 };
+                /*Holds the indicator for steps in which save button is clicked*/
+                $scope.stepsSaved = stepsSaved;
 
+                $scope.create= function(){
+                    $scope.showservicedrugdiv = true;
+                    $scope.stepsSaved["1"] = true;
+                };
+//end service drug availed
+                var saveStep = function () {
+                    $scope.stepsSaved[$scope.selectedItem] = true;
+                };
+                $scope.isSaveDisabled = function (formName) {
+                    return formName.$invalid;
+                };
                 $scope.savePreAuthorizationRequest = function () {
 
                     $http({
@@ -458,6 +500,19 @@
                         }
                     }
                 };
+
+               $scope.checkNo = function(){
+                   $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.htndetails;
+                   $scope.createUpdateDto.illnessDetailDto.htndetails=null;
+                   $scope.two = true;
+
+               }
+                $scope.checkYes = function(){
+                    $scope.createUpdateDto.illnessDetailDto.htndetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
+                    $scope.two = false;
+
+                }
+
 
             }])
 })(angular);
