@@ -71,10 +71,21 @@ public class ILEndorsementService {
 
     }
 
-    public ILPolicyDto searchPolicy(SearchILPolicyDto searchGLPolicyDto) {
+    public ILPolicyDto searchByPolicyNumber(SearchILPolicyDto searchGLPolicyDto) {
 
-        List<IndividualLifePolicy> searchedPolicy = ilFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), new String[]{"IN_FORCE"});
-        if (isNotEmpty(searchedPolicy)) {
+        ILPolicyDto policyDto = ilPolicyFinder.searchByPolicyNumber(searchGLPolicyDto.getPolicyNumber(), new String[]{"IN_FORCE"});
+
+        if (policyDto.getProposalPlanDetail() != null) {
+            PlanId planId = new PlanId(policyDto.getProposalPlanDetail().getPlanId());
+            Set<PlanId> planIds = Sets.newLinkedHashSet();
+            planIds.add(planId);
+            Set<String> endorsementTypes = iPlanAdapter.getConfiguredEndorsementType(planIds);
+            policyDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
+        }
+        return policyDto;
+
+        /*  List<IndividualLifePolicy> searchedPolicy = ilFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), new String[]{"IN_FORCE"});
+          if (isNotEmpty(searchedPolicy)) {
             IndividualLifePolicy individualLifePolicy = searchedPolicy.get(0);
             ILPolicyDetailDto policyDetailDto = new ILPolicyDetailDto();
             ILPolicyDto ilPolicyDto = new ILPolicyDto();
@@ -95,13 +106,11 @@ public class ILEndorsementService {
             ilPolicyDto.setInceptionOn(individualLifePolicy.getInceptionOn());
             ilPolicyDto.setProposalPlanDetail(individualLifePolicy.getProposalPlanDetail());
             //ilPolicyDto.getPolicyNumber().setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
-            /*policyDetailDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
+            *//*policyDetailDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
             policyDetailDto.setPolicyHolderName(individualLifePolicy.getProposer().getFirstName());
-            policyDetailDto.setPolicyId(individualLifePolicy.getPolicyId().getPolicyId());*/
+            policyDetailDto.setPolicyId(individualLifePolicy.getPolicyId().getPolicyId());*//*
             return ilPolicyDto;
-        }
-//        return ILPolicyDto.createEmptyDetail();
-        return null;
+        }*/
     }
 
     private List<Map<String,String>> getAllEndorsementTypes(Set<String> endorsementTypes){

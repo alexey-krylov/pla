@@ -115,11 +115,9 @@ public class ILEndorsementController {
 
         SearchILPolicyDto searchILPolicyDto = new SearchILPolicyDto();
         searchILPolicyDto.setPolicyNumber(policyNumber);
-        ILPolicyDto ilPolicyDto = ilEndorsementService.searchPolicy(searchILPolicyDto);
-
+        ILPolicyDto ilPolicyDto = ilEndorsementService.searchByPolicyNumber(searchILPolicyDto);
         if (ilPolicyDto != null) {
             return new ResponseEntity(Result.success("Policy details found", ilPolicyDto), HttpStatus.OK);
-
         }
         return new ResponseEntity(Result.success("Policy details Not Found for "+policyNumber), HttpStatus.INTERNAL_SERVER_ERROR);
         //modelAndView.addObject("searchResult", ilPolicyDto);

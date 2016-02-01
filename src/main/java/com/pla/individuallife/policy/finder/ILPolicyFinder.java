@@ -3,8 +3,10 @@ package com.pla.individuallife.policy.finder;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.pla.core.query.PlanFinder;
+import com.pla.individuallife.policy.domain.model.IndividualLifePolicy;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.sharedresource.dto.AgentDetailDto;
 import com.pla.individuallife.sharedresource.model.vo.*;
@@ -154,6 +156,47 @@ public class ILPolicyFinder {
     public Map findProposalIdByPolicyNumber(String policyNumber) {
         Query query = new Query(Criteria.where("policyNumber.policyNumber").is(policyNumber));
         return mongoTemplate.findOne(query, Map.class, IL_POLICY_COLLECTION_NAME);
+    }
+
+    public ILPolicyDto searchByPolicyNumber(String policyNumber, String[] statuses) {
+        Criteria criteria = Criteria.where("policyStatus").in(statuses);
+        if (isNotEmpty(policyNumber)) {
+            criteria = criteria.and("policyNumber.policyNumber").is(policyNumber);
+        }
+        Query query = new Query(criteria);
+        Map policy = mongoTemplate.findOne(query, Map.class, IL_POLICY_COLLECTION_NAME);
+
+        ILPolicyDto dto = new ILPolicyDto();
+        if (policy.get("proposedAssured") != null) {
+            dto.setProposedAssured(ProposedAssuredBuilder.getProposedAssuredBuilder((ProposedAssured) policy.get("proposedAssured")).createProposedAssuredDto());
+        }
+        if (policy.get("proposer") != null) {
+            dto.setProposer(ProposerBuilder.getProposerBuilder((Proposer) policy.get("proposer")).createProposerDto());
+        }
+        dto.setProposalPlanDetail((ProposalPlanDetail) policy.get("proposalPlanDetail"));
+        if (dto.getProposalPlanDetail() != null) {
+            dto.getProposalPlanDetail().setPlanName(planFinder.getPlanName(new PlanId(dto.getProposalPlanDetail().getPlanId())));
+        }
+        dto.setBeneficiaries((List<Beneficiary>) policy.get("beneficiaries"));
+        dto.setTotalBeneficiaryShare(new BigDecimal(policy.get("totalBeneficiaryShare").toString()) );
+        dto.setGeneralDetails((GeneralDetails) policy.get("generalDetails"));
+        dto.setCompulsoryHealthStatement((List<Question>) policy.get("compulsoryHealthStatement"));
+        dto.setFamilyPersonalDetail((FamilyPersonalDetail) policy.get("familyPersonalDetail"));
+        dto.setAdditionaldetails((AdditionalDetails) policy.get("additionalDetails"));
+        dto.setPremiumPaymentDetails((PremiumPaymentDetails) policy.get("premiumPaymentDetails"));
+        AgentCommissionShareModel model = (AgentCommissionShareModel) policy.get("agentCommissionShareModel");
+        Set<AgentDetailDto> agentCommissionDetails = new HashSet<AgentDetailDto>();
+        model.getCommissionShare().forEach(commissionShare -> agentCommissionDetails.add(new AgentDetailDto(commissionShare.getAgentId().toString(), getAgentFullNameById(commissionShare.getAgentId().toString()), commissionShare.getAgentCommission())));
+        dto.setAgentCommissionDetails(agentCommissionDetails);
+        dto.setPolicyId(policy.get("_id").toString());
+        dto.setPolicyStatus(policy.get("policyStatus").toString());
+        dto.setProposal((Proposal) policy.get("proposal"));
+        dto.setPolicyNumber((PolicyNumber) policy.get("policyNumber"));
+        dto.setInceptionOn(policy.get("inceptionOn") != null ? new DateTime(policy.get("inceptionOn")) : null);
+        dto.setExpiryDate(policy.get("expiredOn") != null ? new DateTime(policy.get("expiredOn")) : null);
+        dto.setOpportunityId(policy.get("opportunityId")!=null?((OpportunityId)policy.get("opportunityId")).getOpportunityId():"");
+        dto.setProposerDocuments(policy.get("proposalDocuments") != null ? (List) policy.get("proposalDocuments") : Collections.EMPTY_LIST);
+        return dto;
     }
 
 }
