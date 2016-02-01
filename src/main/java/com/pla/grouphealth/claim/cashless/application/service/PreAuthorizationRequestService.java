@@ -1046,9 +1046,9 @@ public class PreAuthorizationRequestService {
     public List<PreAuthorizationClaimantDetailCommand> getDefaultListByUnderwriterLevel(String level, String username){
         List<PreAuthorizationRequest> preAuthorizationRequests =Lists.newArrayList();
         List<PreAuthorizationClaimantDetailCommand> result = Lists.newArrayList();
-        if(level.equalsIgnoreCase("levelone"))
+        if(level.equalsIgnoreCase("LEVEL1"))
             preAuthorizationRequests = preAuthorizationRequestRepository.findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1, Lists.newArrayList(username,null));
-        if(level.equalsIgnoreCase("leveltwo"))
+        if(level.equalsIgnoreCase("LEVEL2"))
             preAuthorizationRequests = preAuthorizationRequestRepository.findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2, Lists.newArrayList(username,null));
         if (isNotEmpty(preAuthorizationRequests))
             result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
@@ -1096,5 +1096,16 @@ public class PreAuthorizationRequestService {
                         }).flatMap(data -> data.stream()).collect(Collectors.toSet()) : Sets.newHashSet();
                     }
                 }).flatMap(data -> data.stream()).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
+
+    public String getUnderwriterLevelForPreAuthorization(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        if(isNotEmpty(preAuthorizationRequest)){
+            if(preAuthorizationRequest.getStatus().equals(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1))
+                return "LEVEL1";
+            if(preAuthorizationRequest.getStatus().equals(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2))
+                return "LEVEL2";
+        }
+        return StringUtils.EMPTY;
     }
 }

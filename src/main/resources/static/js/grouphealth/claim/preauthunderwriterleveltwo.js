@@ -267,7 +267,20 @@
                 };
 
                 $scope.back = function () {
-                    window.location.reload();
+                    //window.location.reload();
+                    $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getunderwriterlevelforpreauthorization/"+preAuthorizationId)
+                        .success(function(response) {
+                        if (response) {
+                            console.log(response.data);
+                            if (response.data === 'LEVEL1') {
+                                window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                            }
+                            if (response.data === 'LEVEL2') {
+                                window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL2';
+                            }
+                        }
+                    }).error(function (response) {
+                    });
                 };
 
                 $scope.isBrowseDisable = function (document) {
@@ -446,12 +459,12 @@
 
                 $scope.underwriterApprove = function () {
                     $.when($scope.constructCommentDetails()).done(function(){
-                        /*$http({
-                         url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
-                         method: 'POST',
-                         data: $scope.createUpdateDto
-                         }).success(function () {
-                         }).error();*/
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function () {
+                        }).error();
                         console.log($scope.createUpdateDto);
                     });
                 };
@@ -489,6 +502,18 @@
                         }).success(function () {
 
                         }).error();
+                    });
+                };
+
+                $scope.addRequirement = function () {
+                    $.when($scope.constructCommentDetails()).done(function(){
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function () {
+                        }).error();
+                        console.log($scope.createUpdateDto);
                     });
                 };
 

@@ -17,4 +17,10 @@ public class SearchPreAuthorizationRecordDto {
     private String clientId;
     private String hcpCode;
     private String preAuthorizationId;
+    private String underwriterLevel;
+
+    public SearchPreAuthorizationRecordDto updateWithUnderwriterLevel(String level) {
+        this.underwriterLevel = level;
+        return this;
+    }
 }

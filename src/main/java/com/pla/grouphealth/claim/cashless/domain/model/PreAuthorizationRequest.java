@@ -61,6 +61,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private LocalDate submissionDate;
     private String preAuthorizationProcessorUserId;
     private String preAuthorizationUnderWriterUserId;
+    private String underWriterRoutedToSeniorUnderWriterUserId;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
@@ -278,6 +279,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
             AdditionalDocument additionalDocument = new AdditionalDocument(document.getDocumentCode(), document.getDocumentName());
             return additionalDocument;
         }).collect(Collectors.toSet()) : Sets.newHashSet();
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithUnderWriterRoutedToSeniorUnderWriterUserId(String userName) {
+        this.underWriterRoutedToSeniorUnderWriterUserId = userName;
         return this;
     }
 

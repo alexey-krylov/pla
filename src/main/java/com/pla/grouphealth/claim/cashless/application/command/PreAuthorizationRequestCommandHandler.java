@@ -99,6 +99,7 @@ public class PreAuthorizationRequestCommandHandler {
 
         preAuthorizationRequest
                 .updateWithPreAuthorizationUnderWriterUserId(null)
+                .updateWithUnderWriterRoutedToSeniorUnderWriterUserId(routePreAuthorizationCommand.getUserName())
                 .updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2);
         return Boolean.TRUE;
     }
@@ -110,8 +111,8 @@ public class PreAuthorizationRequestCommandHandler {
         notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
         preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, addRequirementPreAuthorizationCommand.getUserName());
-        preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
-        preAuthorizationRequest.savedRegisterFollowUpReminders();
+        //preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
+        //preAuthorizationRequest.savedRegisterFollowUpReminders();
         return Boolean.TRUE;
     }
 

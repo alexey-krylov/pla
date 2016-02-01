@@ -19,6 +19,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import java.lang.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.joda.time.DateTime;
@@ -284,7 +285,7 @@ public class PreAuthorizationRequestController {
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
-            String preAuthorizationRequestId = commandGateway.sendAndWait(new ApprovePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
+            boolean result = commandGateway.sendAndWait(new ApprovePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully approved.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -300,7 +301,7 @@ public class PreAuthorizationRequestController {
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
-            String preAuthorizationRequestId = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
+            boolean result = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully rejected.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -316,7 +317,7 @@ public class PreAuthorizationRequestController {
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
-            String preAuthorizationRequestId = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
+            boolean result = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully returned.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -332,7 +333,23 @@ public class PreAuthorizationRequestController {
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
-            String preAuthorizationRequestId = commandGateway.sendAndWait(new RoutePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
+            boolean result = commandGateway.sendAndWait(new RoutePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
+            return Result.success("Pre Authorization Request successfully routed to senior underwriter.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/addrequirement", method = RequestMethod.POST)
+    public Result addRequirement(@Valid @RequestBody PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while routing Pre Authorization Request", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
+            boolean result = commandGateway.sendAndWait(new AddRequirementPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully routed to senior underwriter.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -365,7 +382,7 @@ public class PreAuthorizationRequestController {
         List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListByUnderwriterLevel(level, userName);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
-        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto().updateWithUnderwriterLevel(level));
         modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
        return modelAndView;
     }
@@ -378,5 +395,20 @@ public class PreAuthorizationRequestController {
             return Collections.EMPTY_SET;
         }
         return preAuthorizationRequestService.getAllRelevantServices(preAuthorizationId);
+    }
+
+    @RequestMapping(value = "/getunderwriterlevelforpreauthorization/{preAuthorizationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getUnderwriterLevelForPreAuthorization(@PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws IOException {
+        if(isEmpty(preAuthorizationId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return Result.failure();
+        }
+        try {
+            Object level = preAuthorizationRequestService.getUnderwriterLevelForPreAuthorization(preAuthorizationId);
+            return Result.success("", level);
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
     }
 }

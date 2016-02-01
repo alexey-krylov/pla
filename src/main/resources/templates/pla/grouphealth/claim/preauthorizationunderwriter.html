@@ -334,7 +334,7 @@
                                             <td></td>
                                             <td ng-bind="comment.comments"></td>
                                             <td ng-bind="comment.userName"></td>
-                                            <td ng-bind="comment.commentDateTime"></td>
+                                            <td ng-bind="comment.commentDateTime | date : 'dd/MM/yyyy'"></td>
                                         </tr>
 
                                         </thead>
@@ -352,9 +352,9 @@
                             </accordion-group>
                         </accordion>
                         <div class="row">
-                            <!--<div class="col-sm-1">-->
-                                <!--<button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>-->
-                            <!--</div>-->
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
+                            </div>
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenitor()">Refer To Senior UnderWriter</button>
                             </div>
@@ -643,19 +643,6 @@
                             </accordion-group>
                         </accordion>
                     </ng-form>
-
-                    <div class="row">
-                        <!--<div class="col-sm-6">-->
-                            <!--<button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>-->
-                        <!--</div>-->
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm" style="float: right" ng-disabled="isViewMode"
-                                    ng-click="savePreAuthorizationRequest()"
-                                    >Save
-                            </button>
-                        </div>
-
-                    </div>
                 </div>
 
 
@@ -1092,18 +1079,6 @@
                         </accordion>
 
                     </ng-form>
-
-                    <div class="row">
-                        <!--<div class="col-sm-6">-->
-                            <!--<button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>-->
-                        <!--</div>-->
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="savePreAuthorizationRequest()" ng-disabled=" isViewMode"
-                                    >Save
-                            </button>
-                        </div>
-                    </div>
 
                 </div>
 
@@ -1617,7 +1592,7 @@
                             <!--<div class="col-sm-6">-->
                                 <!--<button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>-->
                             <!--</div>-->
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" style="float: right">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right"
                                         ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode"
                                         >Save
@@ -1879,7 +1854,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6" style="float: right">
                                         <button type="button" class="btn btn-primary btn-sm" style="float: right"
                                                 ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode"
                                                 >Save
@@ -2036,13 +2011,10 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-6">
-
-                                        <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                                ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode || disableSubmit">Submit
+                                    <div class="col-sm-6" style="float: right">
+                                        <button type="button" class="btn btn-primary btn-sm" style="float: right"
+                                                ng-click="addRequirement()" ng-disabled="isViewMode"
+                                        >Save
                                         </button>
                                     </div>
                                 </div>
