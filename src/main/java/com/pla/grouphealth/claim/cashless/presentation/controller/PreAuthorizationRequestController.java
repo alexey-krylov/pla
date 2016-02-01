@@ -317,7 +317,7 @@ public class PreAuthorizationRequestController {
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
-            boolean result = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
+            boolean result = commandGateway.sendAndWait(new ReturnPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully returned.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());

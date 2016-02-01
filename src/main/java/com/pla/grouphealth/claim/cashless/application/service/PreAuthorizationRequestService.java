@@ -695,7 +695,8 @@ public class PreAuthorizationRequestService {
                     .updateWithClaimantPolicyDetailDto(constructClaimantPolicyDetailDtoFromPreAuthorizationRequest(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail(), preAuthorizationRequest.getRelationship(), preAuthorizationRequest.getCategory(), preAuthorizationRequest.getGhProposer()))
                     .updateWithSubmittedFlag(preAuthorizationRequest.isSubmitted())
                     .updateWithProcessorUserId(preAuthorizationRequest.getPreAuthorizationProcessorUserId())
-                    .updateWithComments(preAuthorizationRequest.getCommentDetails());
+                    .updateWithComments(preAuthorizationRequest.getCommentDetails())
+                    .updateWithAdditionalRequiredDocuments(preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter());
         }
         return preAuthorizationClaimantDetailCommand;
     }

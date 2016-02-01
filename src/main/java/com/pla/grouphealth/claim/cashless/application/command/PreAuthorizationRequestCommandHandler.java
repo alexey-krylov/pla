@@ -82,6 +82,7 @@ public class PreAuthorizationRequestCommandHandler {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
         preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, returnPreAuthorizationCommand.getUserName());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
+        preAuthorizationRequest.updatePreAuthorizationSubmitted(Boolean.FALSE);
         return Boolean.TRUE;
     }
 

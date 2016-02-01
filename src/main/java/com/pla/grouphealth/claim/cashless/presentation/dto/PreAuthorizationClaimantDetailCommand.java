@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
+import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.model.*;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.nthdimenzion.utils.UtilValidator;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -174,5 +176,10 @@ public class PreAuthorizationClaimantDetailCommand {
 
     public int getAgeOfTheClient() {
         return isNotEmpty(this.getClaimantPolicyDetailDto()) ? isNotEmpty(this.getClaimantPolicyDetailDto().getAssuredDetail()) ?  this.getClaimantPolicyDetailDto().getAssuredDetail().getAgeNextBirthday() : isNotEmpty(this.claimantPolicyDetailDto.getDependentAssuredDetail()) ? this.claimantPolicyDetailDto.getDependentAssuredDetail().getAgeNextBirthday() : 0 : 0;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithAdditionalRequiredDocuments(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
+        this.additionalRequiredDocuments = isNotEmpty(additionalRequiredDocumentsByUnderwriter) ? additionalRequiredDocumentsByUnderwriter.stream().map(document -> new ClientDocumentDto(document.getDocumentCode(), document.getDocumentName(), Boolean.FALSE)).collect(Collectors.toSet()): Sets.newHashSet();
+        return this;
     }
 }

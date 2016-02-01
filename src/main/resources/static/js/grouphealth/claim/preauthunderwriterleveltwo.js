@@ -25,7 +25,7 @@
                             }).error(function (response, status, headers, config) {
                                 deferred.reject();
                             });
-//                        console.log(deferred);
+//                        //console.log(deferred);
 
                             return deferred.promise;
                         }],
@@ -74,7 +74,6 @@
         .controller('createpreauthunderwriterleveltwoctrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','stepsSaved','$upload','preAuthorizationId','clientId',
             function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload,stepsSaved,preAuthorizationId, clientId) {
                 $scope.createUpdateDto = createUpdateDto;
-                console.log(JSON.stringify(createUpdateDto));
                 $scope.drugServicesDtoList = $scope.createUpdateDto.drugServicesDtos;
                 $scope.treatmentDiagnosis = {};
                 $scope.diagnosisTreatmentDtoToUpdate = {};
@@ -99,9 +98,9 @@
                 $scope.fileSaved = null;
                 $scope.isViewMode = false;
                 $scope.stepsSaved = stepsSaved;
-                /*if ($scope.createUpdateDto.submitted) {
-                 $scope.isViewMode = true;
-                 }*/
+                if ($scope.createUpdateDto.status !== 'Underwriting') {
+                    $scope.isViewMode = true;
+                }
 
                 $scope.$watch('documentList', function (newCollection, oldCollection) {
                     $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
@@ -110,7 +109,6 @@
                 $scope.shouldSubmitBeDisabled = function (documentList) {
                     for (var i = 0; i < documentList.length; i++) {
                         var document = documentList[i];
-                        console.log(document);
                         if (document.fileName == null || document.content == null) {
                             return true;
                         }
@@ -118,21 +116,23 @@
                     return false;
                 };
 
-                $http.get('/pla/core/master/getdocument').success(function(data){
-                    $scope.documentmaster = data;
-                    //console.log($scope.documentList);
-                    for(var documentIndex in $scope.documentmaster){
-                        var document = $scope.documentmaster[documentIndex];
-                        for(var uploadedDocIndex in $scope.documentList){
-                            var uploadedDoc = $scope.documentList[uploadedDocIndex];
-                            if(document.documentCode.trim() === uploadedDoc.documentId.trim()){
-                                console.log(document);
-                                $scope.documentmaster.splice(documentIndex, 1);
-                                //delete $scope.documentmaster[documentIndex];
+                $scope.getAllDocuments = function(){
+                    $http.get('/pla/core/master/getdocument').success(function(data){
+                        $scope.documentmaster = data;
+                        for(var documentIndex in $scope.documentmaster){
+                            var document = $scope.documentmaster[documentIndex];
+                            for(var uploadedDocIndex in $scope.documentList){
+                                var uploadedDoc = $scope.documentList[uploadedDocIndex];
+                                if(document.documentCode.trim() === uploadedDoc.documentId.trim()){
+                                    console.log(document.documentCode.trim()+" - "+uploadedDoc.documentId.trim());
+                                    delete $scope.documentmaster[documentIndex];
+                                }
                             }
                         }
-                    }
-                });
+                        $scope.documentmaster = $scope.documentmaster.filter(function(n){ return n != undefined });
+                        console.log($scope.documentmaster);
+                    });
+                };
 
                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + preAuthorizationId).success(function (data, status, headers, config) {
                     $scope.additionalDocumentList = data;
@@ -163,7 +163,7 @@
                         $scope.provisionaldignosisdiv=false;
                     } else {
                         $scope.createUpdateDto.diagnosisTreatmentDtos.push(diagnosisTreatmentDto);
-                        console.log(JSON.stringify($scope.createUpdateDto));
+                        //console.log(JSON.stringify($scope.createUpdateDto));
 
                     }
                     $scope.provisionaldignosisdiv = false;
@@ -270,16 +270,19 @@
                     //window.location.reload();
                     $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getunderwriterlevelforpreauthorization/"+preAuthorizationId)
                         .success(function(response) {
-                        if (response) {
-                            console.log(response.data);
-                            if (response.data === 'LEVEL1') {
-                                window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                            if (response) {
+                                //console.log(response.data);
+                                if (response.data === 'LEVEL1') {
+                                    window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                                }
+                                if (response.data === 'LEVEL2') {
+                                    window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL2';
+                                }
+                                if(response.data === '' || angular.isUndefined(response.data)){
+                                    window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationfordefaultlist';
+                                }
                             }
-                            if (response.data === 'LEVEL2') {
-                                window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL2';
-                            }
-                        }
-                    }).error(function (response) {
+                        }).error(function (response) {
                     });
                 };
 
@@ -296,7 +299,7 @@
                     for (var i = 0; i < $scope.documentList.length; i++) {
                         var document = $scope.documentList[i];
                         var files = document.documentAttached;
-                        console.log(files);
+                        //console.log(files);
                         if (files) {
                             $upload.upload({
                                 url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/uploadmandatorydocument',
@@ -308,7 +311,7 @@
                                 },
                                 method: 'POST'
                             }).progress(function (evt) {
-                                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                                //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                             }).success(function (data, status, headers, config) {
                                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
                                     $scope.documentList = response;
@@ -402,7 +405,7 @@
                     $scope.createUpdateDto.claimIntimationDate = formatDate(iem);
 
                     $scope.createUpdateDto.claimIntimationDate=$scope.createUpdateDto.claimIntimationDate;
-                    console.log("qwqe############"+$scope.createUpdateDto.claimIntimationDate );
+                    //console.log("qwqe############"+$scope.createUpdateDto.claimIntimationDate );
                 };
 
                 $scope.launchPreAuthDate = function ($event){
@@ -413,7 +416,7 @@
 
                 $scope.changePreAuthDate=function(preAuthDate) {
                     $scope.createUpdateDto.preAuthorizationDate = formatDate(preAuthDate);
-                    console.log("qwqe############"+$scope.createUpdateDto.preAuthorizationDate );
+                    //console.log("qwqe############"+$scope.createUpdateDto.preAuthorizationDate );
                 };
 
                 $scope.launchProbableDate = function ($event){
@@ -424,7 +427,7 @@
 
                 $scope.changeProbableDate=function(ProbableDate) {
                     $scope.diagnosisTreatmentDto.pregnancyDateOfDelivery = formatDate(ProbableDate);
-                    console.log("qwqe############"+$scope.diagnosisTreatmentDto.pregnancyDateOfDelivery );
+                    //console.log("qwqe############"+$scope.diagnosisTreatmentDto.pregnancyDateOfDelivery );
                 };
 
                 $scope.launchFirstConsultanceDate = function ($event){
@@ -445,7 +448,7 @@
 
                 $scope.changeProbAdmissionDate=function(probAdmissionDate) {
                     $scope.diagnosisTreatmentDto.dateOfAdmission = formatDate(probAdmissionDate);
-                    console.log("qwqe############"+$scope.diagnosisTreatmentDto.dateOfAdmission);
+                    //console.log("qwqe############"+$scope.diagnosisTreatmentDto.dateOfAdmission);
                 };
 
                 $scope.hcpServiceDetails = [];
@@ -463,9 +466,24 @@
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
                             method: 'POST',
                             data: $scope.createUpdateDto
-                        }).success(function () {
-                        }).error();
-                        console.log($scope.createUpdateDto);
+                        }).success(function(response, status, headers, config) {
+                            if(status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                    .success(function (response, status, headers, config) {
+                                        $scope.createUpdateDto = response;
+                                        if (data.status == "200") {
+                                            setTimeout(function() {
+                                                window.location.reload();
+                                            }, 3000);
+                                        }
+                                    }).error(function (response, status, headers, config) {
+                                });
+                            }
+                        }).error(
+                            function(status){
+                                //console.log(status);
+                            }
+                        );
                     });
                 };
 
@@ -475,9 +493,24 @@
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
                             method: 'POST',
                             data: $scope.createUpdateDto
-                        }).success(function () {
-
-                        }).error();
+                        }).success(function(response, status, headers, config) {
+                            if(status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                    .success(function (response, status, headers, config) {
+                                        $scope.createUpdateDto = response;
+                                        if (data.status == "200") {
+                                            setTimeout(function() {
+                                                window.location.reload();
+                                            }, 3000);
+                                        }
+                                    }).error(function (response, status, headers, config) {
+                                });
+                            }
+                        }).error(
+                            function(status){
+                                //console.log(status);
+                            }
+                        );
                     });
                 };
 
@@ -487,9 +520,24 @@
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
                             method: 'POST',
                             data: $scope.createUpdateDto
-                        }).success(function () {
-
-                        }).error();
+                        }).success(function(response, status, headers, config) {
+                            if(status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                    .success(function (response, status, headers, config) {
+                                        $scope.createUpdateDto = response;
+                                        if (data.status == "200") {
+                                            setTimeout(function() {
+                                                window.location.reload();
+                                            }, 3000);
+                                        }
+                                    }).error(function (response, status, headers, config) {
+                                });
+                            }
+                        }).error(
+                            function(status){
+                                //console.log(status);
+                            }
+                        );
                     });
                 };
 
@@ -499,9 +547,19 @@
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
                             method: 'POST',
                             data: $scope.createUpdateDto
-                        }).success(function () {
-
-                        }).error();
+                        }).success(function(response, status, headers, config) {
+                            if(status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                    .success(function (data) {
+                                        $scope.createUpdateDto = data;
+                                    }).error(function (response, status, headers, config) {
+                                });
+                            }
+                        }).error(
+                            function(status){
+                                //console.log(status);
+                            }
+                        );
                     });
                 };
 
@@ -511,9 +569,24 @@
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
                             method: 'POST',
                             data: $scope.createUpdateDto
-                        }).success(function () {
-                        }).error();
-                        console.log($scope.createUpdateDto);
+                        }).success(function(response, status, headers, config) {
+                            if(status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                    .success(function (data) {
+                                        $scope.createUpdateDto = data;
+                                        $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
+                                            $scope.documentList = response;
+                                            $scope.getAllDocuments();
+                                        });
+                                    }).error(function (response, status, headers, config) {
+                                });
+                            }
+                        }).error(
+                            function(status){
+                                //console.log(status);
+                            }
+                        );
+                        //console.log($scope.createUpdateDto);
                     });
                 };
 
@@ -530,7 +603,7 @@
                 $scope.populateDocumentSelected = function(data){
                     $scope.additionalDocumentAskedFor = {};
                     if (data.originalObject) {
-                        if ($scope.createUpdateDto.additionalRequiredDocuments) {
+                        if ($scope.createUpdateDto.additionalRequiredDocuments.length > 0) {
                             $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
                             $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
                             $scope.createUpdateDto.additionalRequiredDocuments.push($scope.additionalDocumentAskedFor);

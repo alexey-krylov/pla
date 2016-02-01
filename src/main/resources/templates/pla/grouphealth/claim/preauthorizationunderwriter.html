@@ -356,16 +356,16 @@
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenitor()">Refer To Senior UnderWriter</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenitor()" ng-disabled="isViewMode">Refer To Senior UnderWriter</button>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReturn()">Return</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReturn()" ng-disabled="isViewMode">Return</button>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReject()">Reject</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReject()" ng-disabled="isViewMode">Reject</button>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button " class="btn btn-primary btn-sm" ng-click="underwriterApprove()">Approved</button>
+                                <button type="button " class="btn btn-primary btn-sm" ng-click="underwriterApprove()" ng-disabled="isViewMode">Approved</button>
                             </div>
 
                         </div>
@@ -2006,7 +2006,8 @@
                                                           minlength="2"
                                                           input-class="form-control input-sm"
                                                           match-class="highlight"
-                                                          clear-selected="true">
+                                                          clear-selected="true"
+                                        ng-init="getAllDocuments()">
                                         </angucomplete-alt>
                                     </div>
                                 </div>
