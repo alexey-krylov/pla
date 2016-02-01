@@ -371,7 +371,8 @@ var  app=angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute', '
             };
             $scope.hcpServiceDetails = [];
             $scope.getHCPServiceDetails = function(){
-                $http.get("/pla/core/hcprate/gethcprateservicebyhcpcode/" + createUpdateDto.claimantHCPDetailDto.hcpCode).success(function (data, status, headers, config) {
+                //$http.get("/pla/core/hcprate/gethcprateservicebyhcpcode/" + createUpdateDto.claimantHCPDetailDto.hcpCode).success(function (data, status, headers, config) {
+                $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getallrelevantservices/" + preAuthorizationId).success(function (data, status, headers, config) {
                     $scope.hcpServiceDetails = data;
                 }).error(function (response, status, headers, config) {
                 });

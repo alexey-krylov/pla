@@ -14,6 +14,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PreAuthorizationRequestBenefitDetail {
     private String benefitName;
-    private String benefitId;
+    private String benefitCode;
     private BigDecimal probableClaimAmount;
 }

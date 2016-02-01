@@ -46,8 +46,8 @@ public class ServiceBenefitCoverageMappingController {
     }
 
     @RequestMapping(value="/getAllServicesFromHCPRate" ,method =  RequestMethod.GET)
-    public List<String> getAllServicesFromHCPRate(){
-        return sbcmService.getAllServicesFromHCPRate();
+    public List<String> getAllServicesFromHCPRate(@RequestParam String planCode){
+        return sbcmService.getAllServicesFromHCPRate(planCode);
     }
 
     @RequestMapping(value = "/createServiceBenefitCoverageMapping", method = RequestMethod.POST)

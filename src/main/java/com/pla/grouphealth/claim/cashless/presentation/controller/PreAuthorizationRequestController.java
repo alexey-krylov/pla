@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
@@ -88,6 +91,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             UpdatePreAuthorizationCommand updatePreAuthorizationCommand = new UpdatePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, null, userName);
             commandGateway.sendAndWait(updatePreAuthorizationCommand);
             return Result.success("PreAuthorization successfully updated");
@@ -109,6 +113,7 @@ public class PreAuthorizationRequestController {
             }
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand.setPreAuthProcessorUserId(userName);
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             UpdatePreAuthorizationCommand updatePreAuthorizationCommand = new UpdatePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, routingLevel, userName);
             String preAuthorizationRequestId = commandGateway.sendAndWait(updatePreAuthorizationCommand);
             return Result.success("Pre Authorization successfully submitted");
@@ -262,6 +267,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             String preAuthorizationRequestId = commandGateway.sendAndWait(new UnderwriterPreAuthorizationUpdateCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization successfully updated.");
         } catch (Exception e) {
@@ -277,6 +283,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             String preAuthorizationRequestId = commandGateway.sendAndWait(new ApprovePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully approved.");
         } catch (Exception e) {
@@ -292,6 +299,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             String preAuthorizationRequestId = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully rejected.");
         } catch (Exception e) {
@@ -307,6 +315,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             String preAuthorizationRequestId = commandGateway.sendAndWait(new RejectPreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully returned.");
         } catch (Exception e) {
@@ -322,6 +331,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
+            preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
             String preAuthorizationRequestId = commandGateway.sendAndWait(new RoutePreAuthorizationCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization Request successfully routed to senior underwriter.");
         } catch (Exception e) {
@@ -350,7 +360,7 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/underwriter/getdefaultlistofunderwriterlevels/{level}", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getdefaultlistofunderwriterlevels(@PathVariable("level") String level, HttpServletResponse response) {
+    public ModelAndView getDefaultListOfUnderwriterLevels(@PathVariable("level") String level, HttpServletResponse response) {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListByUnderwriterLevel(level, userName);
         ModelAndView modelAndView = new ModelAndView();
@@ -360,5 +370,13 @@ public class PreAuthorizationRequestController {
        return modelAndView;
     }
 
-
+    @RequestMapping(value = "/getallrelevantservices/{preAuthorizationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Set<String> getAllRelevantServices(@PathVariable("preAuthorizationId") String preAuthorizationId, HttpServletResponse response) throws IOException {
+        if(isEmpty(preAuthorizationId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return Collections.EMPTY_SET;
+        }
+        return preAuthorizationRequestService.getAllRelevantServices(preAuthorizationId);
+    }
 }

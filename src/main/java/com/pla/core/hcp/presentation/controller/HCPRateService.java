@@ -130,13 +130,4 @@ public class HCPRateService {
             }
         }).collect(Collectors.toSet());
     }
-    public Set<String>  getHcpRateServiceByHcpCode(String hcpCode){
-         HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(hcpCode);
-        if(isEmpty(hcpRate)){
-            return Collections.EMPTY_SET;
-        }
-       Set<HCPServiceDetail> hcpServiceDetails = hcpRate.getHcpServiceDetails();
-      return  hcpServiceDetails.stream().map(HCPServiceDetail::getServiceAvailed).collect(Collectors.toSet());
-
-    }
 }

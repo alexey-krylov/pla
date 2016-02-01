@@ -19,7 +19,7 @@
                     }],
                     services: ['$q', '$http', function ($q, $http) {
                         var deferred = $q.defer();
-                        $http.get('/pla/core/sbcm/getAllServicesFromHCPRate').success(function (response, status, headers, config) {
+                        $http.get('/pla/core/sbcm/getAllServicesFromHCPRate?planCode=').success(function (response, status, headers, config) {
                             deferred.resolve(response)
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
@@ -32,13 +32,15 @@
         )}]);
 
     app.controller('createSbcmController',['$scope','$http','plans' ,'services','getQueryParameter', function ( $scope, $http, plans, services,getQueryParameter ){
-        $scope.plans=plans;
-        $scope.services=services;
+        $scope.plans = plans;
+        $scope.services = services;
         $scope.coverages = [];
         $scope.benefits = [];
         $scope.createsbcmcommand = {};
-        $scope.mode=getQueryParameter('mode');
+        $scope.createsbcmcommand.planCode = null;
+        $scope.mode = getQueryParameter('mode');
         $scope.serviceBenefitCoverageMappingId = getQueryParameter("serviceBenefitCoverageMappingId");
+        $scope.planCode = null;
 
         if($scope.serviceBenefitCoverageMappingId){
             $http.get("/pla/core/sbcm/getSBCMBySBCMId?serviceBenefitCoverageMappingId="+$scope.serviceBenefitCoverageMappingId).success(function(data){
@@ -64,6 +66,13 @@
             }
         });
 
+        $scope.$watch('createsbcmcommand.planCode', function(newValue, oldValue){
+            $http.get('/pla/core/sbcm/getAllServicesFromHCPRate?planCode='+newValue)
+                .success(function (response) {
+                    $scope.services = response;
+                }).error(function (response, status, headers, config) {
+            });
+        });
         $scope.saveHCPRates=function(){
             console.log($scope.createsbcmcommand);
             $http({

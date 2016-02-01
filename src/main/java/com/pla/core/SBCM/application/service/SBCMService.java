@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -120,7 +121,7 @@ public class SBCMService {
         return benefitMap;
     }
 
-    public List<String> getAllServicesFromHCPRate(){
+    public List<String> getAllServicesFromHCPRate(String planCode){
         List<HCPRate> hcpRateList = sbcmFinder.getAllServicesFromHCPRate();
         Set<String> services =  isNotEmpty(hcpRateList) ? hcpRateList.stream().map(new Function<HCPRate, Set<String>>() {
             @Override
@@ -128,9 +129,21 @@ public class SBCMService {
                 return isNotEmpty(hcpRate.getHcpServiceDetails()) ? getAllServicesFromHCPServiceDetail(hcpRate.getHcpServiceDetails()) : Collections.EMPTY_SET;
             }
         }).flatMap(Set::stream).collect(Collectors.toSet()) : Sets.newHashSet();
+        if(isNotEmpty(planCode)) {
+            services = removeServicesWhichAreAlreadyMapped(planCode, services);
+        }
         List<String> sortedServices =  Lists.newArrayList(services);
         sortedServices.sort(String::compareTo);
         return sortedServices;
+    }
+
+    private Set<String> removeServicesWhichAreAlreadyMapped(String planCode, Set<String> services) {
+        List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAllByPlanCode(planCode);
+        if(isNotEmpty(sbcms)) {
+            Set<String> servicesConsumed = sbcms.stream().map(ServiceBenefitCoverageMapping::getService).collect(Collectors.toSet());
+            services = services.stream().filter(s -> !servicesConsumed.contains(s)).collect(Collectors.toSet());
+        }
+        return services;
     }
 
     private Set<String> getAllServicesFromHCPServiceDetail(Set<HCPServiceDetail> hcpServiceDetails) {

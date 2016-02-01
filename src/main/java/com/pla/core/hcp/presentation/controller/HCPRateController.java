@@ -99,12 +99,4 @@ public class HCPRateController {
             return Result.failure(e.getMessage(), Boolean.FALSE);
         }
     }
-    @RequestMapping(value = "/gethcprateservicebyhcpcode/{hcpCode}", method = RequestMethod.GET)
-    public Set<String> getHcpRateServiceByHcpCode(@PathVariable("hcpCode") String hcpCode) {
-        if (isNotEmpty(hcpCode)) {
-            Set<String> hcpRateServices = hcpRateService.getHcpRateServiceByHcpCode(hcpCode);
-            return hcpRateServices;
-        }
-        return Collections.EMPTY_SET;
-    }
 }
