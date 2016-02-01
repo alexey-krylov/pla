@@ -170,6 +170,7 @@
 
 //for add sevice drug availed
                 $scope.updateDrugServicesDto = function (drugServicesDto, index) {
+                    $scope.create();
                     $scope.index = index;
                     $scope.isEditDrugTriggered = true;
                     $scope.diagnosisTreatmentDtoToUpdate = drugServicesDto;
