@@ -327,10 +327,10 @@
                                             <th>User Name</th>
                                             <th>Date and Time</th>
                                         </tr>
-                                        <tr ng-show="!commentDetails.length"  style="text-align: center">
+                                        <tr ng-show="!createUpdateDto.commentDetails.length"  style="text-align: center">
                                             <td colspan="4"><text><i>No comment details found</i></text></td>
                                         </tr>
-                                        <tr ng-repeat="comment in commentDetails">
+                                        <tr ng-repeat="comment in createUpdateDto.commentDetails">
                                             <td></td>
                                             <td ng-bind="comment.comments"></td>
                                             <td ng-bind="comment.userName"></td>
@@ -339,19 +339,14 @@
 
                                         </thead>
                                     </table>
-                                    <!--<div class="row">-->
-                                        <!--<div class="col-md-4">-->
-                                            <!--<div class="form-group required  required">-->
-                                                <!--<label class="control-label"> Comments</label>-->
-                                                <!--<input  type="text" name="lengthOfStay"-->
-
-                                                        <!--ng-model="diagnosisTreatmentDtoToUpdate.lengthOfStay"-->
-
-                                                        <!--ng-required="true"-->
-                                                        <!--class="form-control input-lg"/>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label"> Comments</label>
+                                                <textarea  type="text" name="comment" ng-model="comment.comments" rows="2" columns="8" class="form-control input-md"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </accordion-group>
