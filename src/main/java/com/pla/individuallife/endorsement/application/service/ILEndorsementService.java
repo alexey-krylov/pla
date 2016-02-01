@@ -12,6 +12,7 @@ import com.pla.individuallife.policy.domain.model.IndividualLifePolicy;
 import com.pla.individuallife.policy.finder.ILPolicyFinder;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
 import com.pla.individuallife.proposal.presentation.dto.ILProposalMandatoryDocumentDto;
+import com.pla.individuallife.proposal.query.ILProposalFinder;
 import com.pla.individuallife.sharedresource.dto.ILPolicyDetailDto;
 import com.pla.individuallife.sharedresource.dto.SearchILPolicyDto;
 import com.pla.individuallife.sharedresource.model.ILEndorsementType;
@@ -63,6 +64,8 @@ public class ILEndorsementService {
     private IPlanAdapter iPlanAdapter;
     @Autowired
     private ILPolicyFinder ilPolicyFinder;
+    @Autowired
+    private ILProposalFinder ilProposalFinder;
 
     public ILEndorsementService() {
 
@@ -159,12 +162,20 @@ public class ILEndorsementService {
     public ILEndorsementDto findEndorsementByEndorsementId(String endorsementId) {
 
         IndividualLifeEndorsement endorsement = ilEndorsementFinder.findEndorsementByEndorsementId(endorsementId);
-
         if (endorsement == null) {
             return null;
         }
         ILEndorsementDto iLEndorsementDto = new ILEndorsementDto(endorsement);
         return iLEndorsementDto;
+    }
+
+    public Map<String, Object> getAgentDetailsByPlanAndAgentId(String planId, String agentId) {
+
+        Map<String, Object> agent = ilProposalFinder.getAgentByPlanAndAgentId(planId,agentId);
+        if (agent == null) {
+            return null;
+        }
+        return agent;
     }
 
     public List<ILEndorsementDto> getApprovedEndorsementByPolicyNumber(String policyNumber) {

@@ -50,6 +50,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 
 /**
@@ -285,6 +286,14 @@ public class ILEndorsementController {
         searchILEndorsementDto.setEndorsementTypes(ILEndorsementType.getAllEndorsementType());
         modelAndView.addObject("searchResult", ilEndorsementService.searchEndorsement(searchILEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/getAgentDetailsByPlanAndAgentId/{planId}/{agentId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getAgentDetailsByPlanAndAgentId(@PathVariable("planId") String planId,@PathVariable("agentId") String agentId ) {
+        Map<String, Object> agent = ilEndorsementService.getAgentDetailsByPlanAndAgentId(planId, agentId);
+        checkArgument(agent != null, "Agent not found for the plan");
+        return agent;
     }
 
     @RequestMapping(value = "/searchendorsement/{endorsementId}", method = RequestMethod.GET)

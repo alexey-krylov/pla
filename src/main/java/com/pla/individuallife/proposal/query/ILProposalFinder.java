@@ -74,6 +74,13 @@ public class ILProposalFinder {
     private static final String SEARCH_PLAN_BY_AGENT_IDS = "SELECT DISTINCT C.* FROM AGENT A JOIN agent_authorized_plan b " +
             "ON A.`agent_id`=B.`agent_id` JOIN plan_coverage_benefit_assoc C " +
             "ON B.`plan_id`=C.`plan_id` where A.agent_id IN (:agentIds) and c.line_of_business=:lineOfBusiness group by C.plan_id ";
+
+    public static final String FIND_AGENT_BY_PLAN_AND_AGENT_ID = "SELECT A.agent_id AS agentId, A.first_name AS firstName, A.last_name AS lastName \n" +
+            " FROM agent A JOIN agent_authorized_plan B ON A.agent_id = B.agent_id\n" +
+            " AND B.plan_id = :plan_id\n" +
+            " AND A.agent_id= :agentId\n" +
+            " AND A.agent_status = 'ACTIVE'";
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private MongoTemplate mongoTemplate;
 
@@ -580,6 +587,13 @@ public class ILProposalFinder {
                 .map(quotationNumber -> quotationNumber.getQuotation().getQuotationNumber()).collect(Collectors.toSet());
         Set<String> activeQuotations = quotationNumbers.parallelStream().filter(quotationNumber -> !convertedQuotation.contains(quotationNumber)).collect(Collectors.toSet());
         return activeQuotations;
+    }
+
+    public Map<String, Object> getAgentByPlanAndAgentId(String planId, String agentId) {
+        Preconditions.checkArgument(isNotEmpty(planId));
+        Preconditions.checkArgument(isNotEmpty(agentId));
+        List<Map<String, Object>> agents = namedParameterJdbcTemplate.queryForList(FIND_AGENT_BY_PLAN_AND_AGENT_ID, new MapSqlParameterSource().addValue("planId", planId).addValue("agentId", agentId));
+        return isNotEmpty(agents) ? agents.get(0) : null;
     }
 
 }
