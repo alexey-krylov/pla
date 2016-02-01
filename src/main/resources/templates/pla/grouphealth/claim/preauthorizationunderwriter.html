@@ -1607,7 +1607,7 @@
                                             <button type="button" class="btn btn-danger btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)"  ng-disabled="step4.$invalid">Update</button>
                                         </div>
                                         <div class="col-sm-3" style="float:right">
-                                            <button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()" >Cancel</button>
+                                            <button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
                                         </div>
                                     </div>
                                     </div>
@@ -1865,9 +1865,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio" ng-required="true"
                                                                                         name="psychiatricCondition"
-                                                                                        value="Yes"
+                                                                                        value="Yes" ng-click="activepshyciatric()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.psychiatricCondition"/>Yes</label>
-                                                <label><input type="radio" name="psychiatricCondition" value="No" ng-required="true"
+                                                <label><input type="radio" name="psychiatricCondition" value="No" ng-required="true" ng-click="deactivepshyciatric()"
                                                               ng-model="createUpdateDto.illnessDetailDto.psychiatricCondition"/>No</label>
                                             </div>
                                         </div>
@@ -1877,7 +1877,7 @@
 
                                         <div class="form-group col-md-4">
 
-                                            <textarea name="textarea"  ng-model="createUpdateDto.illnessDetailDto.psychiatricConditionDetails" ng-required="true"
+                                            <textarea name="textarea" ng-disabel="pshyciatric"  ng-model="createUpdateDto.illnessDetailDto.psychiatricConditionDetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>

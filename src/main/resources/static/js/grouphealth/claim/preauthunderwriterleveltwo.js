@@ -130,8 +130,12 @@
                 }).error(function (response, status, headers, config) {
                     deferred.reject();
                 });
-
+                $scope.tratementdignosisnextbuttonfalse= function(){
+                    $scope.provisionaldignosisdiv = true;
+                    $scope.stepsSaved["4"] = true;
+                };
                 $scope.viewTreatmentDiagnosis = function (treatmentDiagnosis, treatmentDiagnosisIndex) {
+                    $scope.tratementdignosisnextbuttonfalse();
                     $scope.isEditDiagnosisTriggered = true;
                     $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;
                     $scope.diagnosisTreatmentDto = treatmentDiagnosis;
@@ -157,7 +161,10 @@
                     $scope.stepsSaved["4"] = false;
                 };
 
-
+                $scope.create= function(){
+                    $scope.provisionaldignosisdiv = true;
+                    $scope.stepsSaved["4"] = true;
+                };
                 $scope.activenextbuttonforprovisional = function(){
                     $scope.provisionaldignosisdiv = true;
                     $scope.stepsSaved["4"] = true;
@@ -196,7 +203,10 @@
                     $scope.stepsSaved["1"] = false;
                 };
 
-
+                $scope.nextBtnActiveOnCancelButton= function(){
+                    $scope.provisionaldignosisdiv = false;
+                    $scope.stepsSaved["4"] = false;
+                };
                 $scope.deleteTreatmentDiagnosis = function (index) {
                     $scope.createUpdateDto.drugServicesDtos.splice(index, 1);
                     $scope.savePreAuthorizationRequest();
