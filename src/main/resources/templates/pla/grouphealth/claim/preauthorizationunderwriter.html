@@ -391,7 +391,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label ">Batch Number</label>
                                                 <input type="text"  class="form-control input-sm" name="batchNumber"
                                                        ng-model="createUpdateDto.batchNumber"  />
@@ -399,7 +399,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group required ">
+                                            <div class="form-group ">
                                                 <label class="control-label">Pre Authorization Date</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
@@ -411,7 +411,7 @@
                                                            ng-disabled="mode =='view' || mode=='edit'"
                                                            ng-model="createUpdateDto.preAuthorizationDate" name="preAuthorizationDate"/>
                                                    <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                            <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="true"
                                                     ng-click="launchPreAuthDate($event)">
                                                 <i class="glyphicon glyphicon-calendar"></i></button>
                                           </span>
@@ -421,7 +421,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Policy Number</label>
                                                 <input
                                                         name="policyNumber"
@@ -435,21 +435,21 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Category</label>
                                                 <input  class="form-control input-sm"    ng-model="createUpdateDto.claimantPolicyDetailDto.category" name="category" />
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Relationship</label>
                                                 <input type="text"  class="form-control input-sm" ng-model="createUpdateDto.claimantPolicyDetailDto.relationship" name="relationship"  />
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group required ">
+                                            <div class="form-group  ">
                                                 <label class="control-label">HCP Name</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimantHCPDetailDto.hcpName" name="hcpName"   />
                                             </div>
@@ -457,13 +457,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Claim Type</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimType" name="claimType"  />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group required">
+                                            <div class="form-group ">
                                                 <label class="control-label">Claim Intimation Date</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
@@ -475,7 +475,7 @@
                                                            ng-disabled="mode =='view' || mode=='edit'"
                                                            ng-model="createUpdateDto.claimIntimationDate" name="claimIntimationDate"/>
                                      <span class="input-group-btn">
-                                      <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                      <button type="button" class="btn btn-default btn-sm" view-enabled=""  ng-disabled="true"
                                               ng-click="launchClaimDate($event)">
                                           <i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
@@ -502,21 +502,21 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Proposer Name</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.proposerName" name="proposerName"/>
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Address Line 1</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.address1" name="address1"/>
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label>Address Line 2</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.address2" name="address2"/>
                                             </div>
@@ -525,21 +525,21 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group required ">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Province</label>
                                                 <input type="text"  class="form-control input-sm"    ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.province" name="province"/>
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Town</label>
                                                 <input type="text"  class="form-control input-sm"  ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.town" name="town"/>
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label>Postal Code</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.postalCode" name="postalCode"/>
                                             </div>
@@ -548,7 +548,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Email</label>
                                                 <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.emailAddress" name="emailAddress"/>
 
@@ -556,14 +556,14 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Work Phone</label>
                                                 <input type="text" class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.workPhone" name="workPhone"/>
                                             </div>
 
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Contact Person Detail</label>
                                                 <input type="text" class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.contactPersonName" name="contactPersonName"/>
                                             </div>
@@ -573,20 +573,20 @@
                                     <div class="row">
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Mobiel Number</label>
                                                 <input type="text" class="form-control input-sm" ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.contactPersonMobileNumber" name="contactPersonMobileNumber"/>
                                             </div>
 
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Email Address</label>
                                                 <input type="text" class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.contactPersonEmailId" name="contactPersonName"/>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Work Phone</label>
                                                 <input type="text" class="form-control input-sm"   ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.contactPersonWorkPhone" name="contactPersonWorkPhone"/>
                                             </div>
@@ -618,7 +618,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Sum Assured</label>
                                                 <input  type="text"
                                                         name="sumAssured"
@@ -677,7 +677,7 @@
                                      disable-all-fields="true">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Title</label>
                                                 <input type="text" class="form-control input-sm" name="salutation"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.salutation" />
@@ -687,7 +687,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">First Name</label>
                                                 <input type="text" class="form-control input-sm"   name="firstName" ng-pattern="/[a-zA-Z]/"
                                                        ng-maxlength="20" ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.firstName" />
@@ -696,7 +696,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Surname</label>
                                                 <input type="text" class="form-control input-sm"
                                                        name="surname" ng-pattern="/[a-zA-Z]/"
@@ -708,7 +708,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group required ">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Date OF Birth</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
@@ -729,7 +729,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Age Next Birthday</label>
                                                 <input type="text" class="form-control input-sm"
                                                        name="ageNextBirthday" ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.ageNextBirthday"/>
@@ -741,7 +741,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">NRC</label>
                                                 <input type="text" class="form-control input-sm" name="nrcNumber"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.nrcNumber" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
@@ -755,7 +755,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Sex</label>
                                                 <select  class="form-control input-md" name="gender"        ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.gender">
                                                     <option value="Male">Male</option>
@@ -765,7 +765,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Sum Assured</label>
                                                 <input id="sum_assured1"
                                                        class="form-control input-md"
@@ -777,7 +777,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Reserve Amount</label>
                                                 <input
                                                         name="reserveAmount"
@@ -792,7 +792,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Category</label>
                                                 <input ng-disabled="true"
                                                        type="text"
@@ -804,7 +804,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Man Number</label>
                                                 <input  class="form-control input-md"
                                                         name="manNumber"
@@ -818,7 +818,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Client ID</label>
                                                 <input type="text" class="form-control input-sm" name="clientId"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.clientId"/>
@@ -836,11 +836,11 @@
                                     Assured Detail <i class="pull-right glyphicon"
                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"
-                                     >
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"  disable-all-fields="true" >
+
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group required">
+                                            <div class="form-group ">
                                                 <label class="control-label">Title</label>
                                                 <input type="text" class="form-control input-sm" name="salutation"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.salutation" />
@@ -850,7 +850,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">First Name</label>
                                                 <input type="text" class="form-control input-sm"   name="firstName" ng-pattern="/[a-zA-Z]/"
                                                        ng-maxlength="20" ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.firstName" />
@@ -859,7 +859,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Surname</label>
                                                 <input type="text" class="form-control input-sm"
                                                        name="surname" ng-pattern="/[a-zA-Z]/"
@@ -871,7 +871,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Date OF Birth</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
@@ -882,7 +882,7 @@
                                                            max-date="todayDate"
                                                            ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.dateOfBirth" name="dateOfBirth"/>
                                     <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""  ng-disabled="isViewMode"
+                                    <button type="button" class="btn btn-default btn-sm" view-enabled=""  ng-disabled="true"
                                             ng-click="showDob($event)">
                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
@@ -895,7 +895,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Age Next Birthday</label>
                                                 <input type="text" class="form-control input-sm"
                                                        name="ageNextBirthday" ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.ageNextBirthday"/>
@@ -907,7 +907,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">NRC</label>
                                                 <input type="text" class="form-control input-sm" name="nrcNumber"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.nrcNumber" ng-maxlength="11" ng-pattern="/^[0-9]{6}\/[0-9]{2}\/[0-9]{1}$/"/>
@@ -921,7 +921,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Sex</label>
                                                 <input type="text" class="form-control input-sm"  name="gender"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.gender"/>
@@ -930,7 +930,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Sum Assured</label>
                                                 <input id="sum_assur1"
                                                        class="form-control input-md"
@@ -945,7 +945,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Reserve Amount</label>
                                                 <input id="reserve_amounts"
                                                        name="reserveAmount"
@@ -960,7 +960,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Category</label>
                                                 <input ng-disabled="true"
                                                        type="text"
@@ -973,7 +973,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Man Number</label>
                                                 <input  class="form-control input-md"
                                                         name="manNumber"
@@ -987,11 +987,12 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Last Salary</label>
                                                 <input
                                                         type="text"
                                                         class="form-control input-md"
+                                                        ng-disabled="true"
                                                         ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.mainAssuredLastSalary"
                                                         maxlength="5"
                                                         name="lastSalary"/>
@@ -1003,9 +1004,9 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Client ID</label>
-                                                <input type="text" class="form-control input-sm" name="clientId"
+                                                <input type="text" class="form-control input-sm" name="clientId"   ng-disabled="true"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.clientId"/>
 
                                             </div>
@@ -1017,7 +1018,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Main Assured Full Name</label>
                                                 <input id="assuredFullName"
                                                        name="mainAssuredFullName"
@@ -1029,7 +1030,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group required">
+                                            <div class="form-group ">
                                                 <label class="control-label">Reletionship With Main Assured</label>
                                                 <input  class="form-control input-md" type ="text"
                                                         ng-disabled="true"
@@ -1041,7 +1042,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Main Assured NRC</label>
                                                 <input type="text"
                                                        name="mainAssuredNRC"
@@ -1055,7 +1056,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Main Assured MAN Number</label>
                                                 <input type="text"
                                                        class="form-control input-md"
@@ -1068,11 +1069,11 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Last Salary</label>
                                                 <input name="mainAssuredLastSalary"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.mainAssuredLastSalary"
-                                                       type="text"
+                                                       type="text"    ng-disabled="true"
                                                        maxlength="5"
                                                        class="form-control input-md"/>
 
@@ -1080,9 +1081,9 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label">Client ID</label>
-                                                <input type="text" class="form-control input-sm" name="mainAssuredClientId"
+                                                <input type="text" class="form-control input-sm" name="mainAssuredClientId"   ng-disabled="true"
                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.mainAssuredClientId"/>
 
                                             </div>
@@ -1126,7 +1127,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group  ">
                                                 <label class="control-label"> Hospitalization Event</label>
 
                                                 <select  class="form-control input-md" name="claimantHCPDetailDto" ng-required="true"  ng-model="createUpdateDto.claimantHCPDetailDto.hospitalizationEvent">
