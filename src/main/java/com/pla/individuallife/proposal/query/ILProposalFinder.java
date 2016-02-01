@@ -77,7 +77,7 @@ public class ILProposalFinder {
 
     public static final String FIND_AGENT_BY_PLAN_AND_AGENT_ID = "SELECT A.agent_id AS agentId, A.first_name AS firstName, A.last_name AS lastName \n" +
             " FROM agent A JOIN agent_authorized_plan B ON A.agent_id = B.agent_id\n" +
-            " AND B.plan_id = :plan_id\n" +
+            " AND B.plan_id = :planId\n" +
             " AND A.agent_id= :agentId\n" +
             " AND A.agent_status = 'ACTIVE'";
 
