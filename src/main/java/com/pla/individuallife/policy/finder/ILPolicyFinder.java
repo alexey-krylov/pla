@@ -194,9 +194,41 @@ public class ILPolicyFinder {
         dto.setPolicyNumber((PolicyNumber) policy.get("policyNumber"));
         dto.setInceptionOn(policy.get("inceptionOn") != null ? new DateTime(policy.get("inceptionOn")) : null);
         dto.setExpiryDate(policy.get("expiredOn") != null ? new DateTime(policy.get("expiredOn")) : null);
-        dto.setOpportunityId(policy.get("opportunityId")!=null?((OpportunityId)policy.get("opportunityId")).getOpportunityId():"");
+        dto.setOpportunityId(policy.get("opportunityId") != null ? ((OpportunityId) policy.get("opportunityId")).getOpportunityId() : "");
         dto.setProposerDocuments(policy.get("proposalDocuments") != null ? (List) policy.get("proposalDocuments") : Collections.EMPTY_LIST);
+        dto.setPolicyHolder((Proposer) policy.get("proposer"));
+        //dto.setBeneficiaries((List<Beneficiary>) policy.get("beneficiaries"));
+        dto.setLifeAssured((ProposedAssured) policy.get("proposedAssured"));
         return dto;
+
+
+         /*  List<IndividualLifePolicy> searchedPolicy = ilFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), new String[]{"IN_FORCE"});
+          if (isNotEmpty(searchedPolicy)) {
+            IndividualLifePolicy individualLifePolicy = searchedPolicy.get(0);
+            ILPolicyDetailDto policyDetailDto = new ILPolicyDetailDto();
+            ILPolicyDto ilPolicyDto = new ILPolicyDto();
+            PlanId planId = new PlanId(individualLifePolicy.getProposalPlanDetail().getPlanId());
+            Set<PlanId> planIds = Sets.newLinkedHashSet();
+            planIds.add(planId);
+            Set<String> endorsementTypes = iPlanAdapter.getConfiguredEndorsementType(planIds);
+            ilPolicyDto.setProposal(individualLifePolicy.getProposal());
+            ilPolicyDto.setPremiumPaymentDetails(individualLifePolicy.getPremiumPaymentDetails());
+            //ilPolicyDto.setIlEndorsementType(individualLifePolicy.getIL)
+            ilPolicyDto.setBeneficiaries(individualLifePolicy.getBeneficiaries());
+            //ilPolicyDto.setAgentCommissionDetails(individualLifePolicy.getAgentCommissionShareModel());
+            ilPolicyDto.setPolicyNumber(individualLifePolicy.getPolicyNumber());
+            ilPolicyDto.setPolicyHolder(individualLifePolicy.getProposer());
+            ilPolicyDto.setLifeAssured(individualLifePolicy.getProposedAssured());
+            ilPolicyDto.setPolicyId(individualLifePolicy.getPolicyId().getPolicyId());
+            ilPolicyDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
+            ilPolicyDto.setInceptionOn(individualLifePolicy.getInceptionOn());
+            ilPolicyDto.setProposalPlanDetail(individualLifePolicy.getProposalPlanDetail());
+            //ilPolicyDto.getPolicyNumber().setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
+            *//*policyDetailDto.setEndorsementTypes(getAllEndorsementTypes(endorsementTypes));
+            policyDetailDto.setPolicyHolderName(individualLifePolicy.getProposer().getFirstName());
+            policyDetailDto.setPolicyId(individualLifePolicy.getPolicyId().getPolicyId());*//*
+            return ilPolicyDto;
+        }*/
     }
 
 }

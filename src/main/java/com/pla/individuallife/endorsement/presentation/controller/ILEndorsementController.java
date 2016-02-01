@@ -109,9 +109,6 @@ public class ILEndorsementController {
     @RequestMapping(value = "/searchpolicy/{policyNumber}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity searchPolicy(@PathVariable("policyNumber") String policyNumber) {
-        //ModelAndView modelAndView = new ModelAndView();
-        //modelAndView.setViewName("pla/individuallife/endorsement/searchPolicy");
-        //modelAndView.addObject("searchCriteria", new SearchILPolicyDto());
 
         SearchILPolicyDto searchILPolicyDto = new SearchILPolicyDto();
         searchILPolicyDto.setPolicyNumber(policyNumber);
@@ -120,8 +117,6 @@ public class ILEndorsementController {
             return new ResponseEntity(Result.success("Policy details found", ilPolicyDto), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Policy details Not Found for "+policyNumber), HttpStatus.INTERNAL_SERVER_ERROR);
-        //modelAndView.addObject("searchResult", ilPolicyDto);
-        //return modelAndView;
     }
 
 /*    @RequestMapping(value = "/downloadtemplatebyendorsementtype/{endorsementType}/{endorsementId}", method = RequestMethod.GET)
@@ -154,10 +149,8 @@ public class ILEndorsementController {
     @RequestMapping(value = "/opencreateendorsementpage", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity createEndorsement(@RequestBody ILPolicyDto ilPolicyDto, HttpServletRequest request) {
-
         //String endorsementRequestNumber = "135667";
         //return new ResponseEntity(Result.success("Endorsement successfully created", endorsementRequestNumber), HttpStatus.OK);
-
         UserDetails userDetails = getLoggedInUserDetail(request);
         ILCreateEndorsementCommand ilCreateEndorsementCommand = new ILCreateEndorsementCommand(userDetails,ilPolicyDto);
         String endorsementRequestNumber = commandGateway.sendAndWait(ilCreateEndorsementCommand);
@@ -167,10 +160,8 @@ public class ILEndorsementController {
     @RequestMapping(value = "/openupdateendorsementpage", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity updateEndorsement(@RequestBody ILEndorsementDto iLEndorsementDto, HttpServletRequest request) {
-
         //String endorsementRequestNumber = "135667";
         //return new ResponseEntity(Result.success("Endorsement successfully created", endorsementRequestNumber), HttpStatus.OK);
-
         UserDetails userDetails = getLoggedInUserDetail(request);
         ILUpdateEndorsementCommand ilUpdateEndorsementCommand = new ILUpdateEndorsementCommand(userDetails,iLEndorsementDto);
         String endorsementRequestNumber = commandGateway.sendAndWait(ilUpdateEndorsementCommand);
