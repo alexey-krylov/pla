@@ -183,7 +183,14 @@
                     $scope.stepsSaved["4"] = true;
                 };
 
-//for add sevice drug availed
+//for add sevice drug availed section start
+                //create function detect Add Service/Drug button
+                $scope.create= function(){
+                    $scope.showservicedrugdiv = true;
+                    $scope.diagnosisTreatmentDtoToUpdate='';
+                    $scope.stepsSaved["1"] = true;
+                };
+                //updateDrugServicesDto function detect update button
                 $scope.updateDrugServicesDto = function (drugServicesDto, index) {
                     $scope.create();
                     $scope.index = index;
@@ -205,7 +212,7 @@
                     $scope.showservicedrugdiv = false;
                     $scope.stepsSaved["1"] = false;
                 };
-
+//cancel button
                 $scope.activenextbuttonfordrugservice= function(){
                     $scope.showservicedrugdiv = false;
                     $scope.stepsSaved["1"] = false;
@@ -223,12 +230,8 @@
 
                 /*Holds the indicator for steps in which save button is clicked*/
 
-                $scope.create= function(){
-                    $scope.showservicedrugdiv = true;
-                    $scope.stepsSaved["1"] = true;
-                };
+//end service drug availed section
 
-//end service drug availed
                 var saveStep = function () {
                     $scope.stepsSaved[$scope.selectedItem] = true;
                 };

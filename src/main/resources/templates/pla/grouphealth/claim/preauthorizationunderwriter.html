@@ -254,11 +254,11 @@
 
                                     </div>
                                     <div class="row">
+                                        <!--<div class="col-sm-6">-->
+                                            <!--<button type="button" class="btn btn-default btn-sm" ng-click="activenextbuttonfordrugservice()">Cancel</button>-->
+                                        <!--</div>-->
                                         <div class="col-sm-6">
-                                            <button type="button" class="btn btn-default btn-sm" ng-click="activenextbuttonfordrugservice()">Cancel</button>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="step1.$invalid"
+                                            <button type="button" class="btn btn-primary btn-sm" style="float: right" ng-disabled="step1.$invalid"
                                                     ng-click="saveDiagnosisTreatmentDto(diagnosisTreatmentDtoToUpdate)"
                                                     >Save
                                             </button>
@@ -352,9 +352,9 @@
                             </accordion-group>
                         </accordion>
                         <div class="row">
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
-                            </div>
+                            <!--<div class="col-sm-1">-->
+                                <!--<button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>-->
+                            <!--</div>-->
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenitor()">Refer To Senior UnderWriter</button>
                             </div>
@@ -645,11 +645,11 @@
                     </ng-form>
 
                     <div class="row">
+                        <!--<div class="col-sm-6">-->
+                            <!--<button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>-->
+                        <!--</div>-->
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right" ng-disabled="isViewMode"
+                            <button type="button" class="btn btn-primary btn-sm" style="float: right" ng-disabled="isViewMode"
                                     ng-click="savePreAuthorizationRequest()"
                                     >Save
                             </button>
@@ -1094,9 +1094,9 @@
                     </ng-form>
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
+                        <!--<div class="col-sm-6">-->
+                            <!--<button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>-->
+                        <!--</div>-->
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" style="float: right"
                                     ng-click="savePreAuthorizationRequest()" ng-disabled=" isViewMode"
@@ -1602,9 +1602,9 @@
                                         <div class="col-sm-3" style="float:right">
                                             <button type="button" class="btn btn-danger btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)"  ng-disabled="step4.$invalid">Update</button>
                                         </div>
-                                        <div class="col-sm-3" style="float:right">
-                                            <button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
-                                        </div>
+                                        <!--<div class="col-sm-3" style="float:right">-->
+                                            <!--<button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>-->
+                                        <!--</div>-->
                                     </div>
                                     </div>
                                     <!--=====================ending a section(trtmntDtls)==================== -->
@@ -1614,9 +1614,9 @@
                         </accordion>
 
                         <div class="row">
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                            </div>
+                            <!--<div class="col-sm-6">-->
+                                <!--<button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>-->
+                            <!--</div>-->
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-default btn-sm" style="float: right"
                                         ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode"
@@ -1878,6 +1878,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-primary btn-sm" style="float: right"
+                                                ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode"
+                                                >Save
+                                        </button>
+                                    </div>
+                                </div>
                             </accordion-group>
                         </accordion>
                     </ng-form>
@@ -2027,23 +2035,24 @@
                                         </angucomplete-alt>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+
+                                        <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default btn-sm" style="float: right"
+                                                ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode || disableSubmit">Submit
+                                        </button>
+                                    </div>
+                                </div>
                             </accordion-group>
 
                         </accordion>
                     </ng-form>
 
 
-                    <div class="row">
-                        <div class="col-sm-6">
 
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" style="float: right"
-                                    ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode || disableSubmit">Submit
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
