@@ -1680,9 +1680,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio" ng-required="true"
                                                                                         name="idhHOD"
-                                                                                        value="Yes"
+                                                                                        value="Yes" ng-click="activeIhd()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.idhHOD"/>Yes</label>
-                                                <label><input type="radio" name="idhHOD" value="false" ng-required="true"
+                                                <label><input type="radio" name="idhHOD" value="false" ng-required="true" disabel="true" ng-click="deactiveIhd()"
                                                               ng-model="createUpdateDto.illnessDetailDto.idhHOD"/>No</label>
                                             </div>
                                         </div>
@@ -1692,7 +1692,7 @@
 
                                         <div class="form-group required col-md-4">
 
-                                            <textarea name="textarea"   ng-model="createUpdateDto.illnessDetailDto.ihdhoddetails" ng-required="true"
+                                            <textarea name="textarea" ng-disabel="ihdDetails"  ng-model="createUpdateDto.illnessDetailDto.ihdhoddetails" ng-required="true"
 
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
@@ -1705,9 +1705,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio" ng-required="true"
                                                                                         name="dibetes"
-                                                                                        value="Yes"
+                                                                                        value="Yes"  ng-click="activeDibetes()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.diabetes"/>Yes</label>
-                                                <label><input type="radio" name="ihd" value="No" ng-required="true"
+                                                <label><input type="radio" name="ihd" value="No" ng-required="true" ng-click="deactiveDibetes()"
                                                               ng-model="createUpdateDto.illnessDetailDto.diabetes"/>No</label>
                                             </div>
                                         </div>
@@ -1720,7 +1720,7 @@
 
                                         <div class="form-group required col-md-4">
 
-                                            <textarea name="textarea"   ng-model="createUpdateDto.illnessDetailDto.diabetesDetails" ng-required="true"
+                                            <textarea name="textarea"  ng-disabel="dibetes" ng-model="createUpdateDto.illnessDetailDto.diabetesDetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>
@@ -1731,9 +1731,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"
                                                                                         name="asthma" ng-required="true"
-                                                                                        value="Yes"
+                                                                                        value="Yes" ng-click="activeAsthma()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.asthmaCOPDTB"/>Yes</label>
-                                                <label><input type="radio" name="asthma" value="No"
+                                                <label><input type="radio" name="asthma" value="No"  ng-click="deactiveAsthma()"
                                                               ng-model="createUpdateDto.illnessDetailDto.asthmaCOPDTB"/>No</label>
                                             </div>
                                         </div>
@@ -1744,7 +1744,7 @@
 
                                         <div class="form-group required col-md-4">
 
-                                            <textarea name="textarea"    ng-model="createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails" ng-required="true"
+                                            <textarea name="textarea"  ng-disabel="asthma"  ng-model="createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>
@@ -1759,9 +1759,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"
                                                                                         name="aids" ng-required="true"
-                                                                                        value="Yes"
+                                                                                        value="Yes" ng-click="activeStd()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.stdhivaids"/>Yes</label>
-                                                <label><input type="radio" name="aids" value="No"
+                                                <label><input type="radio" name="aids" value="No"   ng-click="deactiveStd()"
                                                               ng-model="createUpdateDto.illnessDetailDto.stdhivaids"/>No</label>
                                             </div>
                                         </div>
@@ -1773,7 +1773,7 @@
 
                                         <div class="form-group required  col-md-4">
 
-                                            <textarea name="textarea"    ng-model="createUpdateDto.illnessDetailDto.stdhivaidsdetails" ng-required="true"
+                                            <textarea name="textarea" ng-disabel="std"   ng-model="createUpdateDto.illnessDetailDto.stdhivaidsdetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>
@@ -1783,11 +1783,11 @@
                                             <label class="control-label">Arthiritis</label>
 
                                             <div class="radio" style="margin:0px">
-                                                <label style="margin-right:30px"><input type="radio" ng-required="true"
+                                                <label style="margin-right:30px"><input type="radio"  ng-required="true"
                                                                                         name="arthritis"
-                                                                                        value="Yes"
+                                                                                        value="Yes"   ng-click="activeArthiritis()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.arthritis"/>Yes</label>
-                                                <label><input type="radio" name="arthritis" value="No" ng-required="true"
+                                                <label><input type="radio" name="arthritis" value="No" ng-required="true"   ng-click="deactiveArthiritis()"
                                                               ng-model="createUpdateDto.illnessDetailDto.arthritis"/>No</label>
                                             </div>
                                         </div>
@@ -1800,7 +1800,7 @@
 
                                         <div class="form-group  col-md-4">
 
-                                            <textarea name="textarea"   ng-model="createUpdateDto.illnessDetailDto.arthritisDetails" ng-required="true"
+                                            <textarea name="textarea"  ng-disabel="Arthiritis"  ng-model="createUpdateDto.illnessDetailDto.arthritisDetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>
@@ -1812,9 +1812,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio" ng-required="true"
                                                                                         name="cancerTumorCyst"
-                                                                                        value="Yes"
+                                                                                        value="Yes"  ng-click="activeCancer()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.cancerTumorCyst"/>Yes</label>
-                                                <label><input type="radio" name="cancerTumorCyst" value="No" ng-required="true"
+                                                <label><input type="radio" name="cancerTumorCyst" value="No" ng-required="true" ng-click="deactiveCancer()"
                                                               ng-model="createUpdateDto.illnessDetailDto.cancerTumorCyst"/>No</label>
                                             </div>
                                         </div>
@@ -1827,7 +1827,7 @@
 
                                         <div class="form-group col-md-4">
 
-                                            <textarea name="textarea"  ng-model="createUpdateDto.illnessDetailDto.cancerTumorCystDetails" ng-required="true"
+                                            <textarea name="textarea"  ng-disabel="cancer" ng-model="createUpdateDto.illnessDetailDto.cancerTumorCystDetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>
@@ -1839,9 +1839,9 @@
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"
                                                                                         name="alcoholDrugAbuse"
-                                                                                        value="Yes"  ng-required="true"
+                                                                                        value="Yes"  ng-required="true" ng-click="activeAlcohol()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuse"/>Yes</label>
-                                                <label><input type="radio" name="alcoholDrugAbuse" value="No"
+                                                <label><input type="radio" name="alcoholDrugAbuse" value="No" ng-click="deactiveAlcohol()"
                                                               ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuse"/>No</label>
                                             </div>
                                         </div>
@@ -1854,7 +1854,7 @@
 
                                         <div class="form-group required col-md-4">
 
-                                            <textarea name="textarea"  ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails" ng-required="true"
+                                            <textarea name="textarea"  ng-disabel="alcohol" ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails" ng-required="true"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
                                     </div>
