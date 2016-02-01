@@ -87,7 +87,7 @@ public class ILEndorsementController {
     @RequestMapping(value = "/createendorsement",method = RequestMethod.GET)
     public ModelAndView openViewPageGroup(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individualLife/endorsement/createEndorsement");
+        modelAndView.setViewName("pla/individuallife/endorsement/createEndorsement");
         return modelAndView;
     }
 
@@ -238,7 +238,7 @@ public class ILEndorsementController {
     @RequestMapping(value = "/opensearchendorsement", method = RequestMethod.GET)
     public ModelAndView openSearchEndorsementPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individualLife/endorsement/searchEndorsement");
+        modelAndView.setViewName("pla/individuallife/endorsement/searchEndorsement");
         SearchILEndorsementDto searchILEndorsementDto = new SearchILEndorsementDto();
         searchILEndorsementDto.setEndorsementTypes(ILEndorsementType.getAllEndorsementType());
         modelAndView.addObject("searchCriteria", searchILEndorsementDto);

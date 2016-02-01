@@ -58,50 +58,81 @@
     <form method="post" action="searchendorsement" novalidate="true" name="searchEndorsementforILPolicy"
           id="searchEndorsementforILPolicy">
         <div class="row well well-sm" style="margin: 0;">
-            <div class="col-md-2">
+            <div class="row">
+                <div class="col-md-2">
 
-                <h5 th:text="#{searchendorsement}" class="pull-left">Search Endorsement</h5>
-            </div>
-            <!--<div class="col-md-2">
-                <div class="form-group">
-                    <label th:text="#{endorsementType}">Endorsement Type</label>
-                    &lt;!&ndash; <input type="text" class="form-control input-sm" name="endorsementType"
-                             />th:value="${searchCriteria.endorsementType}" &ndash;&gt;
-                    <select  class="btn btn-default btn-sm" th:field="*{searchCriteria.endorsementType}" style=" text-align: left;width:170px;background-color:#fff;">
-                        <option value="">------------Select------------</option>
-                        <option th:each="endorsementType :${searchCriteria.endorsementTypes}"
-                                name="code" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}" ></option>
-                    </select>
+                    <h5 th:text="#{searchendorsement}" class="pull-left">Search Endorsement</h5>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{endorsementType}">Endorsement Type</label>
+                        <select  class="btn btn-default btn-sm" th:field="*{searchCriteria.endorsementType}" style=" text-align: left;width:170px;background-color:#fff;">
+                            <option value="">------------Select------------</option>
+                            <option th:each="endorsementType :${searchCriteria.endorsementTypes}"
+                                    name="code" th:value="${{endorsementType.code}}" th:text="${endorsementType.description}" ></option>
+                        </select>
 
+                    </div>
                 </div>
-            </div>-->
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label th:text="#{policyHolderSurname}">Policy Holder Surname</label>
-                    <input type="text" class="form-control input-sm" name="policyHolderSurname"
-                           th:value="${searchCriteria.policyHolderSurname}"  /><!---->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{policyHolderSurname}">Policy Holder Surname</label>
+                        <input type="text" class="form-control input-sm" name="policyHolderSurname"
+                               th:value="${searchCriteria.policyHolderSurname}"  /><!---->
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label th:text="#{policyHolderFirstName}">Policy Holder FirstName</label>
-                    <input type="text" class="form-control input-sm" name="policyHolderFirstName"
-                           th:value="${searchCriteria.policyHolderFirstName}"/>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{policyHolderFirstName}">Policy Holder FirstName</label>
+                        <input type="text" class="form-control input-sm" name="policyHolderFirstName"
+                               th:value="${searchCriteria.policyHolderFirstName}"/>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{policyHolderNrc}">Policy Holder Nrc</label>
+                        <input type="text" class="form-control input-sm" name="policyHolderNrc"
+                               th:value="${searchCriteria.policyHolderNrc}"/>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label th:text="#{policyHolderNrc}">Policy Holder Nrc</label>
-                    <input type="text" class="form-control input-sm" name="policyHolderNrc"
-                           th:value="${searchCriteria.policyHolderNrc}"/>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{policyNumber}">Policy Number</label>
+                        <input type="text" class="form-control input-sm" name="policyNumber"
+                               th:value="${searchCriteria.policyNumber}"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-1">
-                <button type="submit" style="margin-left: 32%;margin-top: 20px" class="btn btn-default btn-sm"
-                        id="search">Search
-                </button>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{lifeAssuredSurName}">Life Assured SurName</label>
+                        <input type="text" class="form-control input-sm" name="lifeAssuredSurName"
+                               th:value="${searchCriteria.lifeAssuredSurName}"/>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{lifeAssuredFirstName}">Life Assured FirstName</label>
+                        <input type="text" class="form-control input-sm" name="lifeAssuredFirstName"
+                               th:value="${searchCriteria.lifeAssuredFirstName}"/>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{lifeAssuredNRC}">Life Assured NRC</label>
+                        <input type="text" class="form-control input-sm" name="lifeAssuredNRC"
+                               th:value="${searchCriteria.lifeAssuredNRC}"/>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" style="margin-left: 12%;margin-top: 20px" class="btn btn-default btn-sm"
+                            id="search">Search
+                    </button>
+                </div>
             </div>
         </div>
     </form>

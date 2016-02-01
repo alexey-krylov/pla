@@ -112,7 +112,7 @@
                                         <option value="POLICYHOLDER_CONTACT_DETAILS_CHANGE">Change of Contact Details- Policyholder</option>
                                         <option value="changeSumAssured">Change in Sum Assured</option>
                                         <option value="BENEFICIARY_DETAILS_CHANGE">Add/Change/Delete Beneficiary</option>
-                                        <option value="changeAgent">Add/Change/Delete Agent</option>
+                                        <option value="AGENT_DETAILS_CHANGE">Add/Change/Delete Agent</option>
                                         <option value="PAYMENT_MODE_CHANGE">Change Payment Mode</option>
                                         <option value="premiumAdjustment">Premium Adjustment</option>
                                     </select>
@@ -858,7 +858,7 @@
                             </accordion-group>
                         </accordion>
 
-                        <accordion ng-if="policy.endrosementType== 'changeAgent'">
+                        <accordion ng-if="policy.endrosementType== 'AGENT_DETAILS_CHANGE'">
                             <accordion-group is-open="true" ng-class="{'accordion-error':isAgentEmpty}">
                                 <accordion-heading>
                                     Agent Details
@@ -883,7 +883,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="row in agentDetails">
+                                        <tr ng-repeat="row in ilEndrosementDetils.agentCommissionDetailsNew">
                                             <td>{{row.agentId}}</td>
                                             <td>{{row.firstName+ ' ' + (row.lastName !=null ?(row.lastName + ' ') : '')}}</td>
 

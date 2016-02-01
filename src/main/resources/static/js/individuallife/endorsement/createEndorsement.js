@@ -493,34 +493,10 @@ app.config(["$routeProvider", function ($routeProvider) {
 
         };
 
-        $scope.addAgent = function (agent) {
-            if ($scope.agentDetails.length == 0) {
-                $scope.agentDetails.unshift(agent);
-            }
-            else {
-                var checkLoopNameStatus = "true";
-
-                for (var i=0;i< $scope.agentDetails.length;i++) {
-                    if ($scope.agentDetails[i].agentId == agent.agentId) {
-                        checkLoopNameStatus = "false";
-                        break;
-                    }
-                }
-
-                if (checkLoopNameStatus == "true") {
-                    $scope.agentDetails.unshift(agent);
-                }
-                else {
-                    alert("Particular AgentId is Already Added..Please Choose different AgentId");
-                }
-            }
-            $scope.newAgent={};
-            $('#agentModal').modal('hide');
-        };
         $scope.deleteAgent=function(agentId){
-            for(var i=0;i< $scope.agentDetails.length;i++){
-                if($scope.agentDetails[i].agentId == agentId){
-                    $scope.agentDetails.splice(i,1);
+            for(var i=0;i< $scope.ilEndrosementDetils.agentCommissionDetailsNew.length;i++){
+                if($scope.ilEndrosementDetils.agentCommissionDetailsNew[i].agentId == agentId){
+                    $scope.ilEndrosementDetils.agentCommissionDetailsNew.splice(i,1);
                 }
             }
             $scope.commisionSumTest();
@@ -610,6 +586,9 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'PAYMENT_MODE_CHANGE' && $scope.ilEndrosementDetils.premiumPaymentDetailsNew == null){
                 $scope.ilEndrosementDetils.premiumPaymentDetailsNew={};
                 angular.copy($scope.ilEndrosementDetils.premiumPaymentDetails,$scope.ilEndrosementDetils.premiumPaymentDetailsNew);
+            }else if($scope.policy.endrosementType == 'AGENT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.agentCommissionDetailsNew == null){
+                $scope.ilEndrosementDetils.agentCommissionDetailsNew=[];
+                angular.copy($scope.ilEndrosementDetils.agentCommissionDetails,$scope.ilEndrosementDetils.agentCommissionDetailsNew);
             }
 
             if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
@@ -713,6 +692,26 @@ app.config(["$routeProvider", function ($routeProvider) {
                     $scope.serverError = false;
                     $scope.serverErrMsg = '';
                 }
+            }else if(endrosementTypeCheck == 'AGENT_DETAILS_CHANGE'){
+                if(!$scope.ilEndrosementDetils.agentCommissionDetailsNew.length >0){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Agent Details Should Not be Empty.';
+                    angular.copy($scope.ilEndrosementDetils.agentCommissionDetails,$scope.ilEndrosementDetils.agentCommissionDetailsNew);
+                    return;
+                }else if($scope.agentMessage){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Sum of commission % is not 100..Please update commission % to ensure it should be 100.';
+                    return;
+                }else if(angular.equals($scope.ilEndrosementDetils.agentCommissionDetailsNew,$scope.ilEndrosementDetils.agentCommissionDetails)){
+                    $scope.serverError = true;
+                    $scope.serverErrMsg = 'Both Existing and Updated Agent Details Should Not be Same.';
+                    return;
+                }
+                else{
+                    $scope.serverError = false;
+                    $scope.serverErrMsg = '';
+                }
+
             }
 
             if($scope.endorsementRequestNumber == null) {
@@ -945,6 +944,77 @@ app.config(["$routeProvider", function ($routeProvider) {
                 }
             }
         });
+
+
+        $scope.agentMessage = false; //Agents Commission Sum Checking is 100 Or Not
+        /***
+         * Commision Test For All Agent
+         */
+        $scope.commisionSumTest = function () {
+            var sum = 0;
+            for (var i in $scope.ilEndrosementDetils.agentCommissionDetailsNew) {
+                sum = parseFloat(sum) + parseFloat($scope.ilEndrosementDetils.agentCommissionDetailsNew[i].commission);
+            }
+            if (sum == 100.00) {
+                $scope.agentMessage = false;
+            }
+            else {
+                $scope.agentMessage = true;
+            }
+        };
+
+        /**
+         * Agent Search Logic
+         */
+
+        $scope.searchAgent = function () {
+            $scope.check = false;
+            $scope.checking = true;
+            //console.log('Testing In SearchCode..');
+            $scope.agentId = $scope.newAgent.agentId;
+            //console.log('Value is: ' + $scope.agentId);
+            $http.get("getAgentDetailsByPlanAndAgentId/"+$scope.ilEndrosementDetils.proposalPlanDetail.planId+'/' + $scope.agentId).success(function (response, status, headers, config) {
+                $scope.newAgent = response;
+                $scope.checking = false;
+            }).error(function (response, status, headers, config) {
+                var check = status;
+                if (check == 500) {
+                    $scope.check = true;
+                    $scope.newAgent.firstName = null;
+                    $scope.newAgent.lastName = null;
+                }
+            });
+
+        };
+
+        /**
+         * Agent Addition
+         * @param agent
+         */
+        $scope.addAgent = function (agent) {
+            if ($scope.ilEndrosementDetils.agentCommissionDetailsNew.length == 0) {
+                $scope.ilEndrosementDetils.agentCommissionDetailsNew.unshift(agent);
+            }
+            else {
+                var checkLoopNameStatus = "true";
+
+                for (var i in $scope.ilEndrosementDetils.agentCommissionDetailsNew) {
+                    if ($scope.ilEndrosementDetils.agentCommissionDetailsNew[i].agentId == agent.agentId) {
+                        checkLoopNameStatus = "false";
+                        break;
+                    }
+                }
+
+                if (checkLoopNameStatus == "true") {
+                    $scope.ilEndrosementDetils.agentCommissionDetailsNew.unshift(agent);
+                }
+                else {
+                    alert("Please Select Different AgentId");
+                }
+            }
+            $scope.newAgent={};
+            $('#agentModal').modal('hide');
+        };
 
         $scope.addAdditionalDocument = function () {
             $scope.additionalDocumentList.unshift({});
