@@ -501,88 +501,105 @@
                         );
                     });
                 };
-
+                $scope.myModal = false;
+                $scope.toggleModal = function(){
+                    $("#myModal").modal('show');
+                };
                 $scope.underwriterReject = function () {
-                    window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+                    if (!$scope.comment.comments) {
+                        $scope.toggleModal();
+                    } else {
+                        window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/' + preAuthorizationId, "_blank", "toolbar=no,resizable=no," +
                         "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-                    /*$.when($scope.constructCommentDetails()).done(function(){
-                        $http({
-                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
-                            method: 'POST',
-                            data: $scope.createUpdateDto
-                        }).success(function(response, status, headers, config) {
-                            if(status === 200) {
-                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
-                                    .success(function (response, status, headers, config) {
-                                        $scope.createUpdateDto = response;
-                                        if (status == 200) {
-                                            setTimeout(function() {
-                                                window.location.reload();
-                                            }, 2000);
-                                        }
-                                    }).error(function (response, status, headers, config) {
-                                });
-                            }
-                        }).error(
-                            function(status){
-                                //console.log(status);
-                            }
-                        );
-                    });*/
+                        /*$.when($scope.constructCommentDetails()).done(function(){
+                         $http({
+                         url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
+                         method: 'POST',
+                         data: $scope.createUpdateDto
+                         }).success(function(response, status, headers, config) {
+                         if(status === 200) {
+                         $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                         .success(function (response, status, headers, config) {
+                         $scope.createUpdateDto = response;
+                         if (status == 200) {
+                         setTimeout(function() {
+                         window.location.reload();
+                         }, 2000);
+                         }
+                         }).error(function (response, status, headers, config) {
+                         });
+                         }
+                         }).error(
+                         function(status){
+                         //console.log(status);
+                         }
+                         );
+                         });*/
+                    }
                 };
 
+
+
                 $scope.underwriterReturn = function () {
-                    $.when($scope.constructCommentDetails()).done(function(){
+                    if (!$scope.comment.comments) {
+                        $scope.toggleModal();
+                    } else{
+                    $.when($scope.constructCommentDetails()).done(function () {
                         $http({
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
                             method: 'POST',
                             data: $scope.createUpdateDto
-                        }).success(function(response, status, headers, config) {
-                            if(status === 200) {
+                        }).success(function (response, status, headers, config) {
+                            if (status === 200) {
                                 $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
                                     .success(function (response, status, headers, config) {
                                         $scope.createUpdateDto = response;
                                         if (status == 200) {
-                                            setTimeout(function() {
+                                            setTimeout(function () {
                                                 window.location.reload();
                                             }, 2000);
                                         }
                                     }).error(function (response, status, headers, config) {
-                                });
+                                    });
                             }
                         }).error(
-                            function(status){
+                            function (status) {
                                 //console.log(status);
                             }
                         );
                     });
+                }
                 };
 
                 $scope.underwriterRouteSenior = function () {
-                    $.when($scope.constructCommentDetails()).done(function() {
-                        $http({
-                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
-                            method: 'POST',
-                            data: $scope.createUpdateDto
-                        }).success(function(response, status, headers, config) {
-                            if(status === 200) {
-                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
-                                    .success(function (response, status, headers, config) {
-                                        $scope.createUpdateDto = data;
-                                        if (status == 200) {
-                                            setTimeout(function() {
-                                                window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
-                                            }, 1000);
-                                        }
-                                    }).error(function (response, status, headers, config) {
-                                });
-                            }
-                        }).error(
-                            function(status){
-                                //console.log(status);
-                            }
-                        );
-                    });
+                    if (!$scope.comment.comments) {
+                        $scope.toggleModal();
+                    } else {
+                        $.when($scope.constructCommentDetails()).done(function () {
+                            $http({
+                                url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
+                                method: 'POST',
+                                data: $scope.createUpdateDto
+                            }).success(function (response, status, headers, config) {
+                                if (status === 200) {
+                                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                        .success(function (response, status, headers, config) {
+                                            $scope.createUpdateDto = data;
+                                            if (status == 200) {
+                                                setTimeout(function () {
+                                                    window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                                                }, 1000);
+                                            }
+                                        }).error(function (response, status, headers, config) {
+                                        });
+                                }
+                            }).error(
+                                function (status) {
+                                    //console.log(status);
+                                }
+                            );
+                        });
+                    }
                 };
 
                 $scope.addRequirement = function () {
@@ -636,8 +653,12 @@
                         }
                     }
                 };
+                var mode = getQueryParameter("mode");
+                if (mode == 'view'){
+                    $scope.isViewMode=true;
 
-                $scope.checkNo = function(){
+                }
+                    $scope.checkNo = function(){
                     $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.htndetails;
                     $scope.createUpdateDto.illnessDetailDto.htndetails=null;
                     $scope.two = true;
