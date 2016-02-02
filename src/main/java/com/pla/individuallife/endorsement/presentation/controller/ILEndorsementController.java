@@ -266,9 +266,8 @@ public class ILEndorsementController {
     }
 
     @RequestMapping(value = "/searchendorsement", method = RequestMethod.POST)
-    @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To search endorsement")
-    public ModelAndView searchEndorsement(@RequestBody SearchILEndorsementDto searchILEndorsementDto) {
+    public ModelAndView searchEndorsement(SearchILEndorsementDto searchILEndorsementDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/individualLife/endorsement/searchEndorsement");
         modelAndView.addObject("searchCriteria", searchILEndorsementDto);

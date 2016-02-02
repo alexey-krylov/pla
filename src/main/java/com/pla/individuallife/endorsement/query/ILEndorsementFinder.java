@@ -105,7 +105,7 @@ public class ILEndorsementFinder {
         }
 
         if (isNotEmpty(policyNumber)) {
-            criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);
+            criteria = criteria.and("ilPolicyDto.policyNumber.policyNumber").is(policyNumber);
         }
         if (isNotEmpty(policyHolderFirstName)) {
             //String policyHolderNamePattern = "^" + policyHolderName;

@@ -313,9 +313,21 @@ public class ILEndorsementService {
             String endorsementId = map.get("_id").toString();
             String endorsementNumber = map.get("endorsementNumber") != null ? ((EndorsementNumber) map.get("endorsementNumber")).getEndorsementNumber() : "";
             String endorsementRequestNumber = map.get("endorsementRequestNumber") != null ? ((String) map.get("endorsementRequestNumber")) : "";
-            Policy policy = map.get("policy") != null ? (Policy) map.get("policy") : null;
-            String policyNumber = policy != null ? policy.getPolicyNumber().getPolicyNumber() : "";
-            String policyHolderName = policy != null ? policy.getPolicyHolderName() : "";
+            ILPolicyDto ilPolicyDto = map.get("ilPolicyDto") != null ? (ILPolicyDto) map.get("ilPolicyDto") : null;
+            String policyHolderName;
+            String policyNumber;
+            if (ilPolicyDto != null) {
+                policyNumber = ilPolicyDto.getPolicyNumber().getPolicyNumber();
+                policyHolderName = ilPolicyDto.getPolicyHolder().getFirstName();
+                String policyHolderLastName = ilPolicyDto.getPolicyHolder().getSurname();
+                if (policyHolderLastName != null) {
+                    policyHolderName = policyHolderName+" "+policyHolderLastName;
+                }
+            } else {
+                policyNumber = "";
+                policyHolderName = "";
+            }
+
             String endorsementTypeInString = map.get("endorsementType") != null ? (String) map.get("endorsementType") : "";
             String endorsementStatus = map.get("status") != null ? (String) map.get("status") : "";
             String endorsementCode = "";
