@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +18,15 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = "preAuthorizationId")
 @Embeddable
 @NoArgsConstructor
-@AllArgsConstructor
+@JsonSerialize(using = com.fasterxml.jackson.databind.ser.std.ToStringSerializer.class)
 public class PreAuthorizationId implements Serializable{
     private String preAuthorizationId;
+    public PreAuthorizationId(String preAuthorizationId) {
+        this.preAuthorizationId = preAuthorizationId;
+    }
+
+    @Override
+    public String toString() {
+        return preAuthorizationId;
+    }
 }

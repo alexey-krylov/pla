@@ -8,6 +8,8 @@ import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRe
 import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.model.CommentDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
+
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
@@ -411,4 +413,21 @@ public class PreAuthorizationRequestController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/openemailpreAuthorization/{preAuthorizationId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPage(@PathVariable("preAuthorizationId") String preAuthorizationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/emailGhClaim");
+        modelAndView.addObject("mailContent", preAuthorizationRequestService.getPreScriptedEmail(preAuthorizationId));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getaddrequirementrequestletter/{preAuthorizationId}", method = RequestMethod.GET)
+    public ModelAndView getAddRequirementRequestLetter(@PathVariable("preAuthorizationId") String preAuthorizationId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/emailGhClaim");
+        modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(preAuthorizationId));
+        return modelAndView;
+    }
+
 }

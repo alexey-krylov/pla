@@ -58,6 +58,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -74,6 +75,8 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.data.domain.Sort.Direction;
 import static org.springframework.data.domain.Sort.Order;
 import static org.springframework.util.Assert.notNull;
+
+import org.apache.velocity.app.VelocityEngine;
 
 /**
  * Author - Mohan Sharma Created on 1/6/2016.
@@ -108,6 +111,8 @@ public class PreAuthorizationRequestService {
     @Autowired
     @Qualifier("authenticationFacade")
     private IAuthenticationFacade authenticationFacade;
+    @Autowired
+    private VelocityEngine velocityEngine;
 
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
         PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
@@ -1109,4 +1114,56 @@ public class PreAuthorizationRequestService {
         }
         return StringUtils.EMPTY;
     }
+
+    public GHPreAuthorizationMailDto getPreScriptedEmail(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest= preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        String subject = "Preauthorization  Rejection :: " + preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber();
+        String address1 =  isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine1(): null;
+        String address2 = isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine2(): null;
+        String mailAddress= address1+","+address2;
+        Map emailContent = getEmaildata(preAuthorizationRequest);
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/groupHealthPreAuthorizationUnderWriterTemplate.vm", emailContentMap);
+        GHPreAuthorizationMailDto ghPreAuthorizationMailDto = new GHPreAuthorizationMailDto(subject, emailBody, mailAddress);
+        ghPreAuthorizationMailDto.setPreAuthorizationId(preAuthorizationId);
+        return ghPreAuthorizationMailDto;
+    }
+    public GHPreAuthorizationMailDto getAddRequirementRequestLetter(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest= preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        String subject = "Preauthorization  Rejection :: " + preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber();
+        String address1 =  isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine1(): null;
+        String address2 = isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine2(): null;
+        String mailAddress= address1+","+address2;
+        Map emailContent = getEmaildata(preAuthorizationRequest);
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthPreAuthorizationRequestLetter.vm", emailContentMap);
+        GHPreAuthorizationMailDto ghPreAuthorizationMailDto = new GHPreAuthorizationMailDto(subject, emailBody, mailAddress);
+        ghPreAuthorizationMailDto.setPreAuthorizationId(preAuthorizationId);
+        return ghPreAuthorizationMailDto;
+    }
+
+    public Map getEmaildata(PreAuthorizationRequest preAuthorizationRequest){
+        PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail =  preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail();
+        String plan = isNotEmpty(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail())? preAuthorizationRequestPolicyDetail.getPlanName():null;
+        String salutation =isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail())? preAuthorizationRequestPolicyDetail.getAssuredDetail().getSalutation():null;
+        String firstName = isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail())? preAuthorizationRequestPolicyDetail.getAssuredDetail().getFirstName():null;
+        String surName = isNotEmpty(preAuthorizationRequestPolicyDetail.getAssuredDetail())? preAuthorizationRequestPolicyDetail.getAssuredDetail().getSurname():null;
+        String province = isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail() )?preAuthorizationRequest.getGhProposer().getContactDetail().getProvince(): null;
+        String town = isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getTown(): null;
+        LocalDate preAuthorizationDate = preAuthorizationRequest.getPreAuthorizationDate() ;
+        Map<String, Object> emailContent = Maps.newHashMap();
+        emailContent.put("currentDateTime", LocalDate.now());
+        emailContent.put("plan",plan);
+        emailContent.put("town",town);
+        emailContent.put("policyNumber",preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber());
+        emailContent.put("province",province);
+        emailContent.put("surName",surName);
+        emailContent.put("firstName",firstName);
+        emailContent.put("preAuthorizationDate",preAuthorizationDate);
+        emailContent.put("salutation",salutation) ;
+        return emailContent;
+    }
+
 }

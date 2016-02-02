@@ -20,14 +20,19 @@ var searchPreAuthorizationModule = (function(){
 
     PreAuthorizationServices.viewPreAuthorization =  function(){
     //activate deactive when click radio button
-
          var preAuthorizationId = this.preAuthorizationId;
          var clientId=this.clientId;
          window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadunderwriterviewforview?preAuthorizationId=" + preAuthorizationId +"&clientId="+ clientId+ "&mode=view";
 
 
     };
+    PreAuthorizationServices.emailPolicy = function () {
+        var  preAuthorizationId =this.preAuthorizationId;
+        //  window.location.href = "/pla/grouplife/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
+        window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/openemailpreAuthorization/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
 
+    };
 
     PreAuthorizationServices.reload = function(){
         window.location.reload();
