@@ -343,7 +343,10 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="control-label"> Comments</label>
-                                                <textarea  type="text" name="comment" ng-model="comment.comments" rows="2" columns="8" class="form-control input-md"/>
+                                                <textarea name="commentBox" ng-model="comment.comments" class="form-control input-md"/>
+                                                <div class="error" ng-messages="step1.commentBox.$error" ng-if="step1.commentBox.$dirty">
+                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -356,7 +359,7 @@
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenitor()" ng-disabled="isViewMode">Refer To Senior UnderWriter</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterRouteSenior()" ng-disabled="isViewMode || isSeniorUnderwriter" ng-init="checkIfUnderwriterLevel2()">Refer To Senior UnderWriter</button>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="underwriterReturn()" ng-disabled="isViewMode">Return</button>
@@ -1986,9 +1989,9 @@
                                         <tr ng-show="!createUpdateDto.additionalRequiredDocuments.length"  style="text-align: center">
                                             <td colspan="4"><text><i>No documents selected</i></text></td>
                                         </tr>
-                                        <tr ng-repeat="comment in createUpdateDto.additionalRequiredDocuments">
+                                        <tr ng-repeat="document in createUpdateDto.additionalRequiredDocuments">
                                             <td><img id="loading-image" src="/pla/images/blackdot.png"/></td>
-                                            <td ng-bind="comment.documentName"></td>
+                                            <td ng-bind="document.documentName"></td>
                                         </tr>
 
                                         </thead>
