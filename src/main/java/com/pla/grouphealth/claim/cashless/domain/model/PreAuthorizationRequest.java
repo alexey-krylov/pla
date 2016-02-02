@@ -287,6 +287,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public PreAuthorizationRequest updateAdditionalRequiredDocuments(Set<AdditionalDocument> additionalDocuments) {
+        this.additionalRequiredDocumentsByUnderwriter = additionalDocuments;
+        return this;
+    }
+
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
 

@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.application.command;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
+import com.pla.grouphealth.claim.cashless.domain.model.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
@@ -20,8 +21,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 1/4/2016.
@@ -32,8 +35,6 @@ public class PreAuthorizationCommandHandler {
     PreAuthorizationService preAuthorizationService;
     @Autowired
     private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
-    /*@Autowired
-    private Repository<PreAuthorizationRequest> preAuthorizationRequestMongoRepository;*/
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -64,6 +65,20 @@ public class PreAuthorizationCommandHandler {
             existingDocument.updateWithNameAndContent(fileName, gridFsDocId, ghClaimDocumentCommand.getFile().getContentType());
         }
         preAuthorizationRequest.updateWithDocuments(documents);
+        Set<AdditionalDocument> additionalDocuments = preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter();
+        if(isNotEmpty(additionalDocuments)) {
+            additionalDocuments =  markAdditionalRequiredDocumentSubmitted(preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter(), ghClaimDocumentCommand.getDocumentId());
+            preAuthorizationRequest.updateAdditionalRequiredDocuments(additionalDocuments);
+        }
         preAuthorizationRequestRepository.save(preAuthorizationRequest);
+    }
+
+    private Set<AdditionalDocument> markAdditionalRequiredDocumentSubmitted(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter, String documentId) {
+        return additionalRequiredDocumentsByUnderwriter.stream().map(document -> {
+            if(document.getDocumentCode().trim().equals(documentId.trim())){
+                document.setHasSubmitted(Boolean.TRUE);
+            }
+            return document;
+        }).collect(Collectors.toSet());
     }
 }

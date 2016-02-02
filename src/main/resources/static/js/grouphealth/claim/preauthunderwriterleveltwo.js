@@ -505,7 +505,7 @@
                 $scope.underwriterReject = function () {
                     window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
                         "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-                    $.when($scope.constructCommentDetails()).done(function(){
+                    /*$.when($scope.constructCommentDetails()).done(function(){
                         $http({
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
                             method: 'POST',
@@ -528,7 +528,7 @@
                                 //console.log(status);
                             }
                         );
-                    });
+                    });*/
                 };
 
                 $scope.underwriterReturn = function () {
