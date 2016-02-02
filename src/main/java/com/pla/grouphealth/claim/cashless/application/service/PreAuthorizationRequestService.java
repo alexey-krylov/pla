@@ -1118,7 +1118,7 @@ public class PreAuthorizationRequestService {
     public GHPreAuthorizationMailDto getPreScriptedEmail(String preAuthorizationId) {
         PreAuthorizationRequest preAuthorizationRequest= preAuthorizationRequestRepository.findOne(preAuthorizationId);
         String subject = "Preauthorization  Rejection :: " + preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber();
-        String address1 =  isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine1(): null;
+        String address1 =  isNotEmpty(preAuthorizationRequest.getGhProposer())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine1(): null;
         String address2 = isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine2(): null;
         String mailAddress= address1+","+address2;
         Map emailContent = getEmaildata(preAuthorizationRequest);
@@ -1166,4 +1166,13 @@ public class PreAuthorizationRequestService {
         return emailContent;
     }
 
+    public boolean checkIfPreAuthorizationRejectionEmailSent(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        return preAuthorizationRequest.isRejectionEmailSent();
+    }
+
+    public boolean checkIfPreAuthorizationRequirementEmailSent(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        return preAuthorizationRequest.isAdditionalRequirementEmailSent();
+    }
 }

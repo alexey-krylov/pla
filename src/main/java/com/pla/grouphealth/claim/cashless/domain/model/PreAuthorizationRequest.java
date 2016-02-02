@@ -64,6 +64,8 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private String underWriterRoutedToSeniorUnderWriterUserId;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
+    private boolean rejectionEmailSent;
+    private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
 
     public PreAuthorizationRequest(Status status){

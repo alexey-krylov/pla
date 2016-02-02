@@ -11,12 +11,17 @@ import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId
 import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
 
 import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
+import com.pla.grouphealth.claim.cashless.presentation.dto.GHPreAuthorizationMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
+import com.pla.grouplife.policy.presentation.dto.GLPolicyMailDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.sharedkernel.identifier.PolicyId;
+import com.pla.sharedkernel.service.EmailAttachment;
+import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import java.lang.*;
@@ -47,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.nthdimenzion.presentation.AppUtils.deleteTempFileIfExists;
 import static org.nthdimenzion.presentation.AppUtils.getLoggedInUserDetail;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -66,6 +72,8 @@ public class PreAuthorizationRequestController {
     @Autowired
     @Qualifier("authenticationFacade")
     IAuthenticationFacade authenticationFacade;
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
     public
@@ -386,7 +394,7 @@ public class PreAuthorizationRequestController {
         modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
         modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto().updateWithUnderwriterLevel(level));
         modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
-       return modelAndView;
+        return modelAndView;
     }
 
     @RequestMapping(value = "/getallrelevantservices/{preAuthorizationId}", method = RequestMethod.GET)
@@ -430,4 +438,59 @@ public class PreAuthorizationRequestController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/underwriter/emailpreauthorizationrejectionletter", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailPreAuthorizationRejectionLetter(@RequestBody GHPreAuthorizationMailDto ghPreAuthorizationMailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            mailService.sendMailWithAttachment(ghPreAuthorizationMailDto.getSubject(), ghPreAuthorizationMailDto.getMailContent(), Lists.newArrayList(), ghPreAuthorizationMailDto.getRecipientMailAddress().split(";"));
+            return Result.success("Email sent successfully");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/emailpreauthorizationrequirementletter", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailPreAuthorizationRequirementLetter(@RequestBody GHPreAuthorizationMailDto ghPreAuthorizationMailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            mailService.sendMailWithAttachment(ghPreAuthorizationMailDto.getSubject(), ghPreAuthorizationMailDto.getMailContent(), Lists.newArrayList(), ghPreAuthorizationMailDto.getRecipientMailAddress().split(";"));
+            return Result.success("Email sent successfully");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/checkifpreauthorizationrejectionemailsent/{preAuthorizationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result checkIfPreAuthorizationRejectionEmailSent(@PathVariable("preAuthorizationId") String preAuthorizationId) {
+        if (isEmpty(preAuthorizationId)) {
+            return Result.failure("PreAuthorizationId cannot be empty.");
+        }
+        try {
+            boolean result = preAuthorizationRequestService.checkIfPreAuthorizationRejectionEmailSent(preAuthorizationId);
+            return Result.success("Email sent successfully", result);
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/checkifpreauthorizationrequirementemailsent/{preAuthorizationId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result checkIfPreAuthorizationRequirementEmailSent(@PathVariable("preAuthorizationId") String preAuthorizationId) {
+        if (isEmpty(preAuthorizationId)) {
+            return Result.failure("PreAuthorizationId cannot be empty.");
+        }
+        try {
+            boolean result = preAuthorizationRequestService.checkIfPreAuthorizationRequirementEmailSent(preAuthorizationId);
+            return Result.success("Email sent successfully", result);
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
 }

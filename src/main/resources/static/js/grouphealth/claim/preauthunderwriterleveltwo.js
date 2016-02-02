@@ -506,36 +506,55 @@
                     $("#myModal").modal('show');
                 };
                 $scope.underwriterReject = function () {
-                    if (!$scope.comment.comments) {
-                        $scope.toggleModal();
-                    } else {
-                        window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/' + preAuthorizationId, "_blank", "toolbar=no,resizable=no," +
+                    var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
                         "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-                        /*$.when($scope.constructCommentDetails()).done(function(){
-                         $http({
-                         url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
-                         method: 'POST',
-                         data: $scope.createUpdateDto
-                         }).success(function(response, status, headers, config) {
-                         if(status === 200) {
-                         $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
-                         .success(function (response, status, headers, config) {
-                         $scope.createUpdateDto = response;
-                         if (status == 200) {
-                         setTimeout(function() {
-                         window.location.reload();
-                         }, 2000);
-                         }
-                         }).error(function (response, status, headers, config) {
-                         });
-                         }
-                         }).error(
-                         function(status){
-                         //console.log(status);
-                         }
-                         );
-                         });*/
-                    }
+                    var timer = setInterval(function() {
+                        if(win.closed) {
+                            clearInterval(timer);
+                            $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrejectionemailsent/' + preAuthorizationId)
+                                .success(function(response) {
+                                    if(response.data === true){
+                                        $.when($scope.constructCommentDetails()).done(function () {
+                                            $http({
+                                                url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
+                                                method: 'POST',
+                                                data: $scope.createUpdateDto
+                                            }).success(function (response, status, headers, config) {
+                                                if (status === 200) {
+                                                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                                        .success(function (response, status, headers, config) {
+                                                            $scope.createUpdateDto = response;
+                                                            if (status == 200) {
+                                                                setTimeout(function () {
+                                                                    window.location.reload();
+                                                                }, 2000);
+                                                            }
+                                                        }).error(function (response, status, headers, config) {
+                                                    });
+                                                }
+                                            }).error(
+                                                function (status) {
+                                                    //console.log(status);
+                                                }
+                                            );
+                                        });
+                                    }
+                                }).error(function(response){
+                            });
+                        }
+                    }, 500);
+                };
+
+                $scope.rejectionEmailSent = false;
+                $scope.checkRejectionEmailSent = function(){
+                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrejectionemailsent/' + preAuthorizationId)
+                        .success(function(response) {
+                            if(response.data === true){
+                                $scope.rejectionEmailSent = true;
+                            }
+                        }).error(function(response){
+                        $scope.rejectionEmailSent = false;
+                    });
                 };
 
 
