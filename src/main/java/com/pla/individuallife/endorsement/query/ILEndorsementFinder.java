@@ -8,7 +8,6 @@ import com.pla.grouplife.sharedresource.model.GLEndorsementType;
 import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement;
 import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
-import com.pla.sharedkernel.identifier.EndorsementId;
 import com.pla.sharedkernel.identifier.PolicyId;
 import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;

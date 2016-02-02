@@ -5,7 +5,6 @@ var searchEndorsementModule = (function () {
     services.statusValue = false;
 
     services.getTheItemSelected = function (ele) {
-
         this.selectedItem = $(ele).val();
         this.status = $(ele).parent().find('.endorsementStatus').val();
         this.endorsementType = $(ele).parent().find('.endorsementCode').val();
@@ -28,6 +27,12 @@ var searchEndorsementModule = (function () {
     services.viewEndorsement = function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
+
+    };
+    services.updateEndorsement = function () {
+        var endorsementId = this.selectedItem;
+        var endorsementType=this.endorsementType;
+        window.location.href = "/pla/individuallife/endorsement/editEndorsement?endorsementId=" + endorsementId +"&mode=edit";
 
     };
 

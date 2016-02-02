@@ -158,6 +158,9 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.townListForPHEmp=[];  //Capturing TownList For PolicyHolder Contact Change (Employement)
             $scope.trusteeCities=[]; //Capturing TownList For Trustee(Beneficiary change type Endrosement)
 
+            $scope.endorsementId = getQueryParameter('endorsementId');
+            $scope.mode = getQueryParameter('mode');
+
             $http.get('/pla/core/master/getgeodetail').success(function (response, status, headers, config) {
                 $scope.provinces = response;
             }).error(function (response, status, headers, config) {
@@ -1069,7 +1072,17 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         }
 
-
+        /**
+         * Retriving the Data During Updation Time
+         */
+        if($scope.endorsementId){
+            $http.get("/pla/individuallife/endorsement/searchendorsement/"+$scope.endorsementId).success(function(response, status, headers, config){
+                console.log('****** EndorsementResponse...');
+                console.log(JSON.stringify(response));
+            }).error(function (response, status, headers, config) {
+                console.log('Error........');
+            });
+        }
         $scope.documentList=[
             {
                 "documentId":"BROUGHT_IN_DEAD_(BID)_CERTIFICATE",

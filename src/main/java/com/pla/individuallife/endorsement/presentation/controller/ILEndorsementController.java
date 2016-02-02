@@ -173,7 +173,7 @@ public class ILEndorsementController {
     @ApiOperation(httpMethod = "GET", value = "To open edit proposal page")
     private ModelAndView openCreateEndorosement() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individualLife/endorsement/createEndorsement");
+        modelAndView.setViewName("pla/individuallife/endorsement/createEndorsement");
         return modelAndView;
     }
 
@@ -269,10 +269,10 @@ public class ILEndorsementController {
     @ApiOperation(httpMethod = "POST", value = "To search endorsement")
     public ModelAndView searchEndorsement(SearchILEndorsementDto searchILEndorsementDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/individualLife/endorsement/searchEndorsement");
+        modelAndView.setViewName("pla/individuallife/endorsement/searchEndorsement");
         modelAndView.addObject("searchCriteria", searchILEndorsementDto);
         searchILEndorsementDto.setEndorsementTypes(ILEndorsementType.getAllEndorsementType());
-        modelAndView.addObject("searchResult", ilEndorsementService.searchEndorsement(searchILEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE","RETURN"}));
+        modelAndView.addObject("searchResult", ilEndorsementService.searchEndorsement(searchILEndorsementDto, new String[]{"DRAFT", "APPROVER_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL1_PENDING_ACCEPTANCE", "UNDERWRITER_LEVEL2_PENDING_ACCEPTANCE", "RETURN"}));
         return modelAndView;
     }
 

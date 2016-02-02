@@ -147,6 +147,8 @@
                         </div>
                         <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"
                            onclick="searchEndorsementModule.viewEndorsement()">View</a>
+                        <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"
+                           onclick="searchEndorsementModule.updateEndorsement()">Update</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -159,73 +161,32 @@
                             <th th:text="#{endorsementType}">Endorsement Type</th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyHolderName}">Policy HolderName</th>
-                            <th th:text="#{status}">Status</th>
                             <th th:text="#{ageing}">Ageing</th>
                             <th th:text="#{endorsementEffectiveDate}">Endorsement Effective Date</th>
+                            <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         <form id="viewAgentsForm">
-                            <!--/*/ <th:block th:each="endorsement : ${searchResult}"> /*/-->
-                            <tr >
-                                <td>
-                                    <input type="radio" name="endorsementId" th:value="${endorsement.endorsementId}"
-                                           value="5100000010315"/>
-                                    <input type="hidden" class="endorsementStatus"
-                                           th:value="${endorsement.status}"/>
-                                    <input type="hidden" class="endorsementCode"
-                                           th:value="${endorsement.endorsementCode}"/>
-
-
-                                    <input type="hidden" name="endorsementId"
-                                           th:value="${endorsement.endorsementId}"/>
-                                </td>
-                                <td th:text="${endorsement.endorsementNumber}">5100000010315</td>
-                                <td th:text="${endorsement.endorsementType}">5100000010315</td>
-                                <td th:text="${endorsement.policyNumber}">5100000010315</td>
-                                <td th:text="${endorsement.policyHolderName}"></td>
-                                <td th:text="${endorsement.status}"></td>
-                                <td th:text="${endorsement.aging}"></td>
-                                <td th:text="${endorsement.effectiveDate}"></td>
-
-                            </tr>
-                            <!--/*-->
-                            <tr>
-                                <td><input type="radio" name="proposalNumber" value="5100000020415"/></td>
-                                <td>5100000020415</td>
-                                <td>06/04/2015</td>
-                                <td>ZPC</td>
-                                <td>Death plan</td>
-                                <td>Agent Name 2</td>
-                                <td>A002</td>
-                                <td>002</td>
-
-                                <!--  <select  onchange="GetSelectedTextValue()" name="variety"   class="btn btn-default btn-sm btn-disabled variety" disabled="disabled">
-                                      <option value="">Select</option>
-                                      <option value="1">Change PolicyHolder Name</option>
-                                      <option value="2">Change Contact Details</option>
-                                      <option value="3">Download Doc 1</option>
-                                      <option value="4">Download Doc 2</option>
-                                      <option value="5">Download Doc 3</option>
-                                  </select>-->
-                                <!-- <select th:field="*{type}">
-                                 <option th:each="type : ${searchResult.endorsementTypes}"
-                                         th:value="${type}"
-                                         th:text="#{${'seedstarter.type.' + type}}">Wireframe</option>
-                             </select>-->
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="proposalNumber" value="5100000030515"/></td>
-                                <td>5100000030515</td>
-                                <td>06/05/2015</td>
-                                <td>Pla</td>
-                                <td>CI plan</td>
-                                <td>Agent Name 3</td>
-                                <td>A003</td>
-                                <td>003</td>
-                            </tr>
-                            <!--*/-->
-                            <!--/*/ </th:block> /*/-->
+                            <th:block th:each="endorsement : ${searchResult}">
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="endorsementId" th:value="${endorsement.endorsementId}"
+                                               value="5100000010315"/>
+                                        <input type="hidden" class="endorsementStatus"
+                                               th:value="${endorsement.endorsementStatus}"/>
+                                        <input type="hidden" class="endorsementCode"
+                                               th:value="${endorsement.endorsementCode}"/>
+                                    </td>
+                                    <td th:text="${endorsement.endorsementRequestNumber}">5100000010315</td>
+                                    <td th:text="${endorsement.endorsementType}">5100000010315</td>
+                                    <td th:text="${endorsement.policyNumber}">5100000010315</td>
+                                    <td th:text="${endorsement.policyHolderName}"></td>
+                                    <td th:text="${endorsement.aging}"></td>
+                                    <td th:text="${endorsement.effectiveDate}?${#dates.format(endorsement.effectiveDate,'dd/MM/yyyy')}"></td>
+                                    <td th:text="${endorsement.endorsementStatus}"></td>
+                                </tr>
+                            </th:block>
                         </form>
                         </tbody>
                     </table>
