@@ -52,7 +52,7 @@ function sendEmail() {
     }
 
     $.ajax({
-        url: '/pla/grouphealth/policy/emailpolicy',
+        url: '/pla/grouphealth/claim/emailpolicy',
         type: 'POST',
         data: JSON.stringify({
             recipientMailAddress: toAddress, subject: subject, mailContent:mailContent,
