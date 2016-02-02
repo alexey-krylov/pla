@@ -414,18 +414,18 @@ public class PreAuthorizationRequestController {
         }
     }
 
-    @RequestMapping(value = "/openemailpreAuthorization/{preAuthorizationId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/underwriter/getpreauthorizationrejectionletter/{preAuthorizationId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("preAuthorizationId") String preAuthorizationId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/emailGhClaim");
+        modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrejectionletter");
         modelAndView.addObject("mailContent", preAuthorizationRequestService.getPreScriptedEmail(preAuthorizationId));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/getaddrequirementrequestletter/{preAuthorizationId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/underwriter/getaddrequirementrequestletter/{preAuthorizationId}", method = RequestMethod.GET)
     public ModelAndView getAddRequirementRequestLetter(@PathVariable("preAuthorizationId") String preAuthorizationId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/emailGhClaim");
+        modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrequirementletter");
         modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(preAuthorizationId));
         return modelAndView;
     }

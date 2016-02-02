@@ -478,7 +478,7 @@
                 $scope.underwriterApprove = function () {
                     $.when($scope.constructCommentDetails()).done(function(){
                         $http({
-                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest//underwriter/approve',
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/approve',
                             method: 'POST',
                             data: $scope.createUpdateDto
                         }).success(function(response, status, headers, config) {
@@ -503,7 +503,8 @@
                 };
 
                 $scope.underwriterReject = function () {
-                    $scope.isCommentRequired = true;
+                    window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+                        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
                     $.when($scope.constructCommentDetails()).done(function(){
                         $http({
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/reject',
@@ -531,7 +532,7 @@
                 };
 
                 $scope.underwriterReturn = function () {
-                    /*$.when($scope.constructCommentDetails()).done(function(){
+                    $.when($scope.constructCommentDetails()).done(function(){
                         $http({
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
                             method: 'POST',
@@ -554,11 +555,10 @@
                                 //console.log(status);
                             }
                         );
-                    });*/
+                    });
                 };
 
                 $scope.underwriterRouteSenior = function () {
-                    $scope.isCommentRequired = true;
                     $.when($scope.constructCommentDetails()).done(function() {
                         $http({
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/routetoseniorunderwriter',
