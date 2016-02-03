@@ -1128,10 +1128,11 @@
                                                                ng-change="changelaunchFirstConsultanceDate(diagnosisTreatmentDto.dateOfConsultation)"
                                                                is-open="datepickerconsultance.opened"
                                                                ng-required="true"
+                                                               ng-disabled="DisabelClaimDate"
                                                                name="dateOfConsultation"
                                                                ng-model="diagnosisTreatmentDto.dateOfConsultation"/>
                                                       <span class="input-group-btn">
-                                                         <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
+                                                         <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode || DisabelClaimDate"
                                                                  ng-click="launchFirstConsultanceDate($event)">
                                                              <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>

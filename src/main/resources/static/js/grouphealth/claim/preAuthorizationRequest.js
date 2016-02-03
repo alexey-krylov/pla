@@ -151,7 +151,10 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };
+            $scope.DisabelClaimDate = false;
             $scope.activenextbuttonforprovisional = function(){
+                $scope.DisabelClaimDate = true;
+                $scope.diagnosisTreatmentDto = null;
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };
