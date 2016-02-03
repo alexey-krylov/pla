@@ -449,91 +449,91 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
             };
 
             $scope.activeIhd = function(){
-                $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=  $scope.createUpdateDto.illnessDetailDto.ihdhoddetail;
+                $scope.idh = false;
 
             };
             $scope.deactiveIhd = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.ihdhoddetails;
+                $scope.createUpdateDto.illnessDetailDto.ihdhoddetail = $scope.createUpdateDto.illnessDetailDto.ihdhoddetails;
                 $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=null;
-                $scope.two = true;
+                $scope.idh = true;
 
             };
             $scope.activeDibetes = function(){
-                $scope.createUpdateDto.illnessDetailDto.diabetes=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.diabetesDetails=$scope.createUpdateDto.illnessDetailDto.diabetesDetail;
+                $scope.dibetes = false;
 
             };
             $scope.deactiveDibetes = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.diabetes;
-                $scope.createUpdateDto.illnessDetailDto.diabetes=null;
-                $scope.two = true;
+                $scope.createUpdateDto.illnessDetailDto.diabetesDetail= $scope.createUpdateDto.illnessDetailDto.diabetesDetails;
+                $scope.createUpdateDto.illnessDetailDto.diabetesDetails=null;
+                $scope.dibetes = true;
 
             };
             $scope.activeAsthma = function(){
-                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail;
+                $scope.asthma = false;
 
             };
             $scope.deactiveAsthma = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails;
+                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail= $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails;
                 $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=null;
-                $scope.two = true;
+                $scope.asthma = true;
 
             };
             $scope.activeStd = function(){
-                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail;
+                $scope.std = false;
 
             };
             $scope.deactiveStd = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails;
+                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail= $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails;
                 $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=null;
-                $scope.two = true;
+                $scope.std = true;
 
             };
             $scope.activeArthiritis = function(){
-                $scope.createUpdateDto.illnessDetailDto.arthritisDetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.arthritisDetails=$scope.createUpdateDto.illnessDetailDto.arthritisDetail;
+                $scope.Arthiritis = false;
 
             };
             $scope.deactiveArthiritis = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.arthritisDetails;
+                $scope.createUpdateDto.illnessDetailDto.arthritisDetail= $scope.createUpdateDto.illnessDetailDto.arthritisDetails;
                 $scope.createUpdateDto.illnessDetailDto.arthritisDetails=null;
-                $scope.two = true;
+                $scope.Arthiritis = true;
 
             };
             $scope.activeCancer = function(){
-                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail;
+                $scope.cancer = false;
 
             };
             $scope.deactiveCancer = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails;
+                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail= $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails;
                 $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=null;
-                $scope.two = true;
+                $scope.cancer = true;
 
             };
             $scope.activeAlcohol = function(){
-                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail;
+                $scope.alcohol = false;
 
             };
             $scope.deactiveAlcohol = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails;
+                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail = $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails;
                 $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=null;
-                $scope.two = true;
+                $scope.alcohol = true;
 
             };
-            $scope.activeAlcohol = function(){
-                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
+            $scope.activepshyciatric = function(){
+                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail;
+                $scope.pshyciatric = false;
 
             };
-            $scope.deactiveAlcohol = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails;
+            $scope.deactivepshyciatric = function(){
+                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail= $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails;
                 $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=null;
-                $scope.two = true;
+                $scope.pshyciatric = true;
 
             };
 
