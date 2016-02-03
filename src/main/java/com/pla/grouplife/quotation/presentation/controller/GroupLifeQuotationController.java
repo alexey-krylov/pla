@@ -269,7 +269,7 @@ public class GroupLifeQuotationController {
     }
 
 
-    private void emailQuotation(byte[] pdfData, GLQuotationMailDto mailDto) throws IOException, DocumentException {
+    private void emailQuotation(byte[] pdfData, GLQuotationMailDto mailDto) throws Exception {
         String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
         File file = new File(fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(file);

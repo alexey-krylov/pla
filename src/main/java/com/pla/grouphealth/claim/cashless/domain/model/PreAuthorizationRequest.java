@@ -294,6 +294,16 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public PreAuthorizationRequest updateRejectionEmailSentFlag(Boolean rejectionEmailSent) {
+        this.rejectionEmailSent = rejectionEmailSent;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateRequirementEmailSentFlag(Boolean additionalRequirementEmailSent) {
+        this.additionalRequirementEmailSent = additionalRequirementEmailSent;
+        return this;
+    }
+
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
 

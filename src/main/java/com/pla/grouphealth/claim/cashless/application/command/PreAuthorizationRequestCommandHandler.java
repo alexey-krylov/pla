@@ -97,7 +97,6 @@ public class PreAuthorizationRequestCommandHandler {
         * logic to get the senior underwriter userId
         * preAuthorizationRequest.updateWithPreAuthorizationUnderWriterUserId(userId);
         * */
-
         preAuthorizationRequest
                 .updateWithPreAuthorizationUnderWriterUserId(null)
                 .updateWithUnderWriterRoutedToSeniorUnderWriterUserId(routePreAuthorizationCommand.getUserName())
@@ -113,7 +112,7 @@ public class PreAuthorizationRequestCommandHandler {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
         preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, addRequirementPreAuthorizationCommand.getUserName());
         //preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
-        //preAuthorizationRequest.savedRegisterFollowUpReminders();
+        preAuthorizationRequest.savedRegisterFollowUpReminders();
         return Boolean.TRUE;
     }
 

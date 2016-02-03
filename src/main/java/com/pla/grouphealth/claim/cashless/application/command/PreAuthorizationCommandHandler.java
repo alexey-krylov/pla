@@ -69,6 +69,7 @@ public class PreAuthorizationCommandHandler {
         if(isNotEmpty(additionalDocuments)) {
             additionalDocuments =  markAdditionalRequiredDocumentSubmitted(preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter(), ghClaimDocumentCommand.getDocumentId());
             preAuthorizationRequest.updateAdditionalRequiredDocuments(additionalDocuments);
+            preAuthorizationRequest.updateRequirementEmailSentFlag(Boolean.FALSE);
         }
         preAuthorizationRequestRepository.save(preAuthorizationRequest);
     }

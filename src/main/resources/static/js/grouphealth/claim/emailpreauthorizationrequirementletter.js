@@ -52,17 +52,24 @@ function sendEmail() {
     }
 
     $.ajax({
-        url: '/pla/grouphealth/claim/emailpolicy',
+        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/emailpreauthorizationrequirementletter',
         type: 'POST',
         data: JSON.stringify({
             recipientMailAddress: toAddress, subject: subject, mailContent:mailContent,
-            policyId:policyId,policyNumber:policyNumber
+            preAuthorizationId:preAuthorizationId, policyNumber:policyNumber
         }),
         contentType: 'application/json; charset=utf-8',
         success: function (msg) {
             if (msg.status == '200') {
                 $('#loading').hide();
                 $('#alert-modal-success').modal('show');
+
+                $('#alert-modal-success').on('hidden.bs.modal', function (){
+                    window.close();
+                });
+            } else {
+                $('#loading').hide();
+                $('#alert-modal-error').modal('show');
 
                 $('#alert-modal-success').on('hidden.bs.modal', function (){
                     window.close();

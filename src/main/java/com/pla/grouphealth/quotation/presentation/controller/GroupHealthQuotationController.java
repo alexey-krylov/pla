@@ -267,7 +267,7 @@ public class GroupHealthQuotationController {
         return Result.success("Email sent successfully");
     }
 
-    private void emailQuotation(byte[] quotationData, GLQuotationMailDto mailDto) throws IOException, DocumentException {
+    private void emailQuotation(byte[] quotationData, GLQuotationMailDto mailDto) throws Exception {
         String fileName = "QuotationNo-" + mailDto.getQuotationNumber() + ".pdf";
         File file = new File(fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(file);

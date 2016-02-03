@@ -446,6 +446,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             mailService.sendMailWithAttachment(ghPreAuthorizationMailDto.getSubject(), ghPreAuthorizationMailDto.getMailContent(), Lists.newArrayList(), ghPreAuthorizationMailDto.getRecipientMailAddress().split(";"));
+            preAuthorizationRequestService.updateRejectionEmailSentFlag(ghPreAuthorizationMailDto.getPreAuthorizationId());
             return Result.success("Email sent successfully");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -460,6 +461,7 @@ public class PreAuthorizationRequestController {
         }
         try {
             mailService.sendMailWithAttachment(ghPreAuthorizationMailDto.getSubject(), ghPreAuthorizationMailDto.getMailContent(), Lists.newArrayList(), ghPreAuthorizationMailDto.getRecipientMailAddress().split(";"));
+            preAuthorizationRequestService.updateRequirementEmailSentFlag(ghPreAuthorizationMailDto.getPreAuthorizationId());
             return Result.success("Email sent successfully");
         } catch (Exception e) {
             return Result.failure(e.getMessage());

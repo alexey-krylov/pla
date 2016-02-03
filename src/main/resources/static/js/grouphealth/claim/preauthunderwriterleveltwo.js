@@ -501,13 +501,15 @@
                         );
                     });
                 };
+
                 $scope.myModal = false;
                 $scope.toggleModal = function(){
                     $("#myModal").modal('show');
                 };
+
                 $scope.underwriterReject = function () {
                     if (!$scope.comment.comments) {
-                        $scope.message = " Comment Required ";
+                        $scope.message = "Comment is mandatory to reject Pre-Authorization.";
                         $scope.toggleModal();
                     } else {
                         var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/' + preAuthorizationId, "_blank", "toolbar=no,resizable=no," +
@@ -542,8 +544,8 @@
                                                     }
                                                 );
                                             });
-                                        }else{
-                                            $scope.message = " Please Send Rejection Email First ";
+                                        } else{
+                                            $scope.message = " Please email the rejection letter.";
                                             $scope.toggleModal();
                                         }
                                     }).error(function (response) {
@@ -569,7 +571,7 @@
 
                 $scope.underwriterReturn = function () {
                     if (!$scope.comment.comments) {
-                        $scope.message = " Comment Required ";
+                        $scope.message = "Comment is mandatory to return Pre-Authorization.";
                         $scope.toggleModal();
                     } else{
                     $.when($scope.constructCommentDetails()).done(function () {
@@ -601,7 +603,7 @@
 
                 $scope.underwriterRouteSenior = function () {
                     if (!$scope.comment.comments) {
-                        $scope.message = " Comment Required ";
+                        $scope.message = "Comment is mandatory to route Pre-Authorization to senior Underwriter.";
                         $scope.toggleModal();
                     } else {
                         $.when($scope.constructCommentDetails()).done(function () {
@@ -613,7 +615,7 @@
                                 if (status === 200) {
                                     $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
                                         .success(function (response, status, headers, config) {
-                                            $scope.createUpdateDto = data;
+                                            $scope.createUpdateDto = response;
                                             if (status == 200) {
                                                 setTimeout(function () {
                                                     window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
@@ -632,30 +634,45 @@
                 };
 
                 $scope.addRequirement = function () {
-                    $.when($scope.constructCommentDetails()).done(function(){
-                        $http({
-                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
-                            method: 'POST',
-                            data: $scope.createUpdateDto
-                        }).success(function(response, status, headers, config) {
-                            if(status === 200) {
-                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
-                                    .success(function (response, status, headers, config) {
-                                        $scope.createUpdateDto = response;
-                                        $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
-                                            $scope.documentList = response;
-                                            $scope.getAllDocuments();
+                    var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getaddrequirementrequestletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+                        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                    var timer = setInterval(function(){
+                        if(win.closed){
+                            clearInterval(timer);
+                            $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrequirementemailsent/' + preAuthorizationId)
+                                .success(function(response){
+                                    if(response.data === true){
+                                        $.when($scope.constructCommentDetails()).done(function(){
+                                            $http({
+                                                url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
+                                                method: 'POST',
+                                                data: $scope.createUpdateDto
+                                            }).success(function(response, status, headers, config) {
+                                                if(status === 200) {
+                                                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                                        .success(function (response, status, headers, config) {
+                                                            $scope.createUpdateDto = response;
+                                                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
+                                                                $scope.documentList = response;
+                                                                $scope.getAllDocuments();
+                                                            });
+                                                        }).error(function (response, status, headers, config) {
+                                                    });
+                                                }
+                                            }).error(
+                                                function(status){
+                                                    //console.log(status);
+                                                }
+                                            );
+                                            //console.log($scope.createUpdateDto);
                                         });
-                                    }).error(function (response, status, headers, config) {
-                                });
-                            }
-                        }).error(
-                            function(status){
-                                //console.log(status);
-                            }
-                        );
-                        //console.log($scope.createUpdateDto);
-                    });
+                                    } else{
+                                        $scope.message = "Please email the requirements letter.";
+                                        $scope.toggleModal();
+                                    }
+                                }).error();
+                        }
+                    }, 500);
                 };
 
                 $scope.constructCommentDetails = function() {

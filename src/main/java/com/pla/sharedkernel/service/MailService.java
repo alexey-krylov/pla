@@ -29,35 +29,31 @@ public class MailService {
     }
 
     public Map<String, Object> sendMailWithAttachment(final String subject, final String messageBody, final List<EmailAttachment> attachments, final String[] recipientMailAddress) throws DocumentException,
-            IOException {
+            IOException, Exception {
         final Map<String, Object> resultMap = new HashMap<String, Object>();
-        try {
-            MimeMessagePreparator preparator = new MimeMessagePreparator() {
-                public void prepare(MimeMessage mimeMessage) throws Exception {
-                    Properties properties = new Properties();
-                    ClassLoader bundleClassLoader = Thread.currentThread().getContextClassLoader();
-                    properties.load(bundleClassLoader.getResourceAsStream("mailsettings.properties"));
-                    MimeMessageHelper message = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, "UTF-8");
-                    message.setTo(recipientMailAddress);
-                    message.setFrom(properties.getProperty("mail.sentFrom"));
-                    message.setSubject(subject);
-                    message.setText(messageBody, true);
-                    for (final EmailAttachment attachment : attachments) {
-                        String attachmentName = attachment.getFileName();
-                        FileDataSource dataSource = new FileDataSource(attachment.getFile()) {
-                            @Override
-                            public String getContentType() {
-                                return attachment.getContentType();
-                            }
-                        };
-                        message.addAttachment(attachmentName, dataSource);
-                    }
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                Properties properties = new Properties();
+                ClassLoader bundleClassLoader = Thread.currentThread().getContextClassLoader();
+                properties.load(bundleClassLoader.getResourceAsStream("mailsettings.properties"));
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, "UTF-8");
+                message.setTo(recipientMailAddress);
+                message.setFrom(properties.getProperty("mail.sentFrom"));
+                message.setSubject(subject);
+                message.setText(messageBody, true);
+                for (final EmailAttachment attachment : attachments) {
+                    String attachmentName = attachment.getFileName();
+                    FileDataSource dataSource = new FileDataSource(attachment.getFile()) {
+                        @Override
+                        public String getContentType() {
+                            return attachment.getContentType();
+                        }
+                    };
+                    message.addAttachment(attachmentName, dataSource);
                 }
-            };
-            this.mailSender.send(preparator);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+            }
+        };
+        this.mailSender.send(preparator);
         return resultMap;
     }
 

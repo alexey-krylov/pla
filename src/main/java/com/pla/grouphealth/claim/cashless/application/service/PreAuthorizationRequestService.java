@@ -1162,7 +1162,7 @@ public class PreAuthorizationRequestService {
         emailContent.put("surName",surName);
         emailContent.put("firstName",firstName);
         emailContent.put("preAuthorizationDate",preAuthorizationDate);
-        emailContent.put("salutation",salutation) ;
+        emailContent.put("salutation",salutation);
         return emailContent;
     }
 
@@ -1174,5 +1174,19 @@ public class PreAuthorizationRequestService {
     public boolean checkIfPreAuthorizationRequirementEmailSent(String preAuthorizationId) {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
         return preAuthorizationRequest.isAdditionalRequirementEmailSent();
+    }
+
+    public PreAuthorizationRequest updateRejectionEmailSentFlag(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        preAuthorizationRequest.updateRejectionEmailSentFlag(Boolean.TRUE);
+        preAuthorizationRequest = preAuthorizationRequestRepository.save(preAuthorizationRequest);
+        return preAuthorizationRequest;
+    }
+
+    public PreAuthorizationRequest updateRequirementEmailSentFlag(String preAuthorizationId) {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        preAuthorizationRequest.updateRequirementEmailSentFlag(Boolean.TRUE);
+        preAuthorizationRequest = preAuthorizationRequestRepository.save(preAuthorizationRequest);
+        return preAuthorizationRequest;
     }
 }
