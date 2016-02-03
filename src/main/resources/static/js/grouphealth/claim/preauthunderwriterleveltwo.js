@@ -245,7 +245,7 @@
 
                 $scope.savePreAuthorizationRequest = function () {
                     $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/update',
+                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/updatepreauthorization',
                         method: 'POST',
                         data: $scope.createUpdateDto
                     }).success(function (response) {

@@ -9,8 +9,23 @@
 ##        <span style='mso-no-proof:yes'>${emailContent.mailSentDate}</span></span>
 ##    </h3>
 ##
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'> ${emailContent.preAuthorizationDate} ${emailContent.surName}
+        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'> ${emailContent.province} ${emailContent.town}
+        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+
+
+
+
     <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
-font-family:"Tahoma","sans-serif"'>Date:<o:p></o:p></span></p>
+font-family:"Tahoma","sans-serif"'>Date:${emailContent.currentDateTime}<o:p></o:p></span></p>
 
 ##    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
 ##font-family:"Tahoma","sans-serif"'>Marsh Zambia ltd<o:p></o:p></span></p>
@@ -23,6 +38,7 @@ font-family:"Tahoma","sans-serif"'>Date:<o:p></o:p></span></p>
 ##            style='mso-bidi-font-weight:normal'><u><span lang=EN-GB style='font-size:11.0pt;
 ##font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Attention: ${emailContent.contactPersonName}
 ##        <o:p></o:p></span></u></b></p>
+
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
