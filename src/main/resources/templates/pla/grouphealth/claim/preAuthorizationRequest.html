@@ -943,7 +943,7 @@
                                 </accordion-heading>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <button type="button" class="btn btn-danger btn-sm"   ng-if="!provisionaldignosisdiv"   ng-click="activenextbuttonforprovisional()">Add Diagnosis and Treatment</button>
+                                        <button type="button" class="btn btn-danger btn-sm"  ng-disabled="isViewMode"  ng-if="!provisionaldignosisdiv"   ng-click="activenextbuttonforprovisional()">Add Diagnosis and Treatment</button>
                                     </div>
                                 </div>
 
@@ -954,7 +954,7 @@
                                             <thead ng-repeat="treatmentDiagnosis in createUpdateDto.diagnosisTreatmentDtos">
                                             <tr>
                                                 <th>Provisional Diagnosis and  Treatment - {{$index+1}}</th>
-                                                <th><button type="button" class="btn btn-primary btn-sm"    ng-click="viewTreatmentDiagnosis(treatmentDiagnosis, $index)">View Diagnosis and Treatment</button></th>
+                                                <th><button type="button" class="btn btn-primary btn-sm"    ng-disabled="isViewMode"  ng-click="viewTreatmentDiagnosis(treatmentDiagnosis, $index)">View Diagnosis and Treatment</button></th>
                                             </tr>
                                             </thead>
                                         </table>
@@ -1286,10 +1286,10 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-3" style="float:right">
-                                                <button type="button" class="btn btn-danger btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)" >Save</button>
+                                                <button type="button" class="btn btn-danger btn-sm"  ng-disabled="isViewMode" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)" >Save</button>
                                             </div>
                                             <div class="col-sm-3" style="float:right">
-                                            <button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
+                                            <button type="button" class="btn btn-danger btn-sm"  ng-disabled="isViewMode" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1588,7 +1588,7 @@
                                 </accordion-heading>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <button type="button" class="btn btn-danger btn-sm" ng-click="create()" ng-if="!showservicedrugdiv">Add Service/Drug  Record</button>
+                                        <button type="button" class="btn btn-danger btn-sm"  ng-disabled="isViewMode" ng-click="create()" ng-if="!showservicedrugdiv">Add Service/Drug  Record</button>
                                     </div>
                                 </div>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:340px;"  disable-all-fields="isViewMode">
@@ -1750,14 +1750,15 @@
 
                                         </div>
                                         <div class="row">
-                                            <!--<div class="col-sm-6">-->
-                                            <!--<button type="button" class="btn btn-default btn-sm" ng-click="activenextbuttonfordrugservice()">Cancel</button>-->
-                                            <!--</div>-->
+                                            <div class="col-sm-6">
+                                            <button type="button" class="btn btn-default btn-sm" ng-click="activenextbuttonfordrugservice()">Cancel</button>
+                                            </div>
                                             <div class="col-sm-6">
                                                 <button type="button" class="btn btn-primary btn-sm"   style="float: right" ng-disabled="step5.$invalid  || isViewMode"
                                                         ng-click="saveDiagnosisTreatmentDto(diagnosisTreatmentDtoToUpdate)"
                                                         >Save
                                                 </button>
+
                                             </div>
                                         </div>
                                     </div>
@@ -1821,24 +1822,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode" ng-click="back()">Cancel</button>
-                            </div>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-click="underwriterRouteSenior()">Refer To Senior UnderWriter</button>
-                            </div>
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-click="underwriterReturn()">Return</button>
-                            </div>
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-click="underwriterReject()">Reject</button>
-                            </div>
-                            <div class="col-sm-1">
-                                <button type="button " class="btn btn-primary btn-sm" ng-disabled="isViewMode" ng-click="underwriterApprove()">Approved</button>
-                            </div>
 
-                        </div>
                     </ng-form>
                 </div><!--ending point of one panel-->
 
