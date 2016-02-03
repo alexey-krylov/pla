@@ -88,9 +88,9 @@
                                 <div class="form-group">
                                     <label class="control-label">Policy Number</label>
                                     <div class='input-group'>
-                                        <input type="text" ng-blur="searchPolicyNumber()" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="otherName" ng-maxlength="20" ng-model="policy.policyNumber"/>
+                                        <input type="text" ng-blur="searchPolicyNumber()" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'||endorsementRequestNumber" name="otherName" ng-maxlength="20" ng-model="policy.policyNumber"/>
                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default btn-sm" ng-click="searchPolicyNumber()">
+                                                <button type="button" class="btn btn-default btn-sm" ng-click="searchPolicyNumber()" ng-disabled="mode=='new'||mode=='view'||endorsementRequestNumber">
                                                     <i class="glyphicon glyphicon-search"></i>
                                                 </button>
                                            </span>
@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Endrosement Type</label>
-                                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="endrosementType" ng-model="policy.endrosementType" ng-required="true" ng-change="clearData()">
+                                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'||endorsementRequestNumber" name="endrosementType" ng-model="policy.endrosementType" ng-required="true" ng-change="clearData()">
                                         <option value="">--- Select Endrosement Type -- </option>
                                         <option value="ASSURED_NAME_CHANGE">Correction of Name- Life Assured</option>
                                         <option value="POLICYHOLDER_NAME_CHANGE">Correction of Name- Policyholder</option>

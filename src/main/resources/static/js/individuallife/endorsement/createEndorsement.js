@@ -728,7 +728,16 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
             else{
                 // Update Endrosement
+                angular.copy($scope.ilEndrosementDetils,$scope.toUpdateResponseResponse.data); // Keeping One Copy Of Original Object
                 console.log('Updating Endrosement...');
+                console.log(JSON.stringify($scope.toUpdateResponseResponse));
+
+                $http.post('/pla/individuallife/endorsement/openupdateendorsementpage',$scope.toUpdateResponseResponse).success(function (response, status, headers, config) {
+                    console.log('*************');
+                    console.log('Response:-'+response.id);
+                    $scope.endorsementRequestNumber = response.id;
+                }).error(function (response, status, headers, config) {
+                });
             }
         }
 
@@ -1075,10 +1084,18 @@ app.config(["$routeProvider", function ($routeProvider) {
         /**
          * Retriving the Data During Updation Time
          */
+        $scope.toUpdateResponseResponse={}; //Setting Object Need to Update Endrosement
         if($scope.endorsementId){
             $http.get("/pla/individuallife/endorsement/searchendorsement/"+$scope.endorsementId).success(function(response, status, headers, config){
                 console.log('****** EndorsementResponse...');
                 console.log(JSON.stringify(response));
+                angular.copy(response.data,$scope.toUpdateResponseResponse); // Keeping One Copy Of Response Object
+                $scope.endorsementRequestNumber = response.data.endorsementRequestNumber;
+                $scope.ilEndrosementDetils=response.data.ilPolicyDto;
+                $scope.policy.endrosementType=response.data.endorsementType;
+                angular.copy($scope.ilEndrosementDetils,$scope.ilEndrosementDetilsCopy); // Keeping One Copy Of Original Object
+                $scope.policy.policyHolderName=$scope.ilEndrosementDetils.policyHolder.firstName;
+                $scope.policy.policyNumber=$scope.ilEndrosementDetils.policyNumber.policyNumber;
             }).error(function (response, status, headers, config) {
                 console.log('Error........');
             });
