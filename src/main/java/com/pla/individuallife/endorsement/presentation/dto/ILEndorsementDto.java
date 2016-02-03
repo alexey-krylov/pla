@@ -83,7 +83,7 @@ public class ILEndorsementDto {
         endorsementNumber = endorsement.getEndorsementNumber();
         endorsementRequestNumber = endorsement.getEndorsementRequestNumber();
         policyNumber = endorsement.getIlPolicyDto().getPolicyNumber().getPolicyNumber();
-        endorsementType = endorsement.getEndorsementType().getDescription();
+        endorsementType = endorsement.getEndorsementType().toString();
         effectiveDate = endorsement.getEffectiveDate();
         policyHolderName = endorsement.getIlPolicyDto().getPolicyHolder().getFirstName();
          // The following additional field have been added by Raghu Bandi
