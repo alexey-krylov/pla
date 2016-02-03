@@ -74,7 +74,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
             $scope.isEditDrugTriggered = false;
             $scope.isEditDiagnosisTriggered = false;
             $scope.createUpdateCommand = {};
-            $scope.diagnosisTreatmentDtos = {};
+            $scope.diagnosisTreatmentDto = {};
             $scope.createUpdateCommand.claimantHCPDetailDto = $scope.createUpdateDto.claimantHCPDetailDto;
             $scope.createUpdateCommand.claimantHCPDetailDto = {};
             $scope.createUpdateCommand.claimantPolicyDetailDto = {};
@@ -151,10 +151,9 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };
-            $scope.DisabelClaimDate = false;
             $scope.activenextbuttonforprovisional = function(){
-                $scope.DisabelClaimDate = true;
-                $scope.diagnosisTreatmentDto = null;
+                $scope.diagnosisTreatmentDto = {};
+                $scope.diagnosisTreatmentDto.dateOfConsultation = $scope.createUpdateDto.diagnosisTreatmentDtos[0].dateOfConsultation;
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };
@@ -165,7 +164,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
 //for add sevice drug availed section start
             //create function detect Add Service/Drug button
-            $scope.create= function(){
+            $scope.create = function(){
                 $scope.showservicedrugdiv = true;
                 $scope.diagnosisTreatmentDtoToUpdate='';
                 $scope.stepsSaved["5"] = true;
@@ -186,7 +185,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
                     $scope.isEditDrugTriggered = false;
 
                 } else {
-                    $scope.drugServicesDtoList.push(diagnosisTreatmentDtoToUpdate);
+                    $scope.createUpdateDto.drugServicesDtos.push(diagnosisTreatmentDtoToUpdate);
                     $scope.savePreAuthorizationRequest();
                 }
                 $scope.showservicedrugdiv = false;
@@ -222,7 +221,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             $scope.savePreAuthorizationRequest = function () {
                 $http({
-                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/update',
+                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/updatepreauthorization',
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).success(function (response) {

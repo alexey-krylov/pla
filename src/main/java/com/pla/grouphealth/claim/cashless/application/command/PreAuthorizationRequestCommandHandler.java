@@ -38,7 +38,7 @@ public class PreAuthorizationRequestCommandHandler {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
         preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, updatePreAuthorizationCommand.getUserName());
         preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.EVALUATION)
-                .updateWithProcessorUserId(preAuthorizationClaimantDetailCommand.getPreAuthProcessorUserId());
+                .updateWithProcessorUserId(updatePreAuthorizationCommand.getUserName());
         if(preAuthorizationClaimantDetailCommand.isSubmitEventFired()) {
             RoutingLevel routingLevel = updatePreAuthorizationCommand.getRoutingLevel();
             if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_ONE))

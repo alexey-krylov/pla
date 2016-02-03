@@ -279,7 +279,7 @@ public class PreAuthorizationRequestController {
         try {
             String userName = preAuthorizationRequestService.getLoggedInUsername();
             preAuthorizationClaimantDetailCommand = preAuthorizationRequestService.reConstructProbableClaimAmountForServices(preAuthorizationClaimantDetailCommand);
-            String preAuthorizationRequestId = commandGateway.sendAndWait(new UnderwriterPreAuthorizationUpdateCommand(preAuthorizationClaimantDetailCommand, userName));
+            commandGateway.sendAndWait(new UnderwriterPreAuthorizationUpdateCommand(preAuthorizationClaimantDetailCommand, userName));
             return Result.success("Pre Authorization successfully updated.");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
