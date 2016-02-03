@@ -59,20 +59,14 @@
                             var clientId = getQueryParameter('clientId');
                             deferred.resolve(clientId)
                             return deferred.promise;
-                        }],
-                        stepsSaved: ['$q', function ($q) {
-                            var deferred = $q.defer();
-                            var stepsSaved = [];
-                            deferred.resolve(stepsSaved);
-                            return deferred.promise;
                         }]
                     }
 
                 }
             )}])
 
-        .controller('createpreauthunderwriterleveltwoctrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','stepsSaved','$upload','preAuthorizationId','clientId',
-            function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload,stepsSaved,preAuthorizationId, clientId) {
+        .controller('createpreauthunderwriterleveltwoctrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','preAuthorizationId','clientId',
+            function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload,preAuthorizationId, clientId) {
                 $scope.createUpdateDto = createUpdateDto;
                 $scope.drugServicesDtoList = $scope.createUpdateDto.drugServicesDtos;
                 $scope.treatmentDiagnosis = {};
@@ -97,7 +91,7 @@
                 $scope.comment = {};
                 $scope.fileSaved = null;
                 $scope.isViewMode = false;
-                $scope.stepsSaved = stepsSaved;
+                $scope.stepsSaved = [];
                 $scope.isSeniorUnderwriter = false;
                 $scope.$watch('createUpdateDto.status', function(newVal, oldVal){
                     if ($scope.createUpdateDto.status !== 'Underwriting') {
@@ -513,7 +507,7 @@
                         $scope.toggleModal();
                     } else {
                         var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getpreauthorizationrejectionletter/' + preAuthorizationId, "_blank", "toolbar=no,resizable=no," +
-                        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                            "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
                         var timer = setInterval(function () {
                             if (win.closed) {
                                 clearInterval(timer);
@@ -536,7 +530,7 @@
                                                                     }, 2000);
                                                                 }
                                                             }).error(function (response, status, headers, config) {
-                                                            });
+                                                        });
                                                     }
                                                 }).error(
                                                     function (status) {
@@ -549,7 +543,7 @@
                                             $scope.toggleModal();
                                         }
                                     }).error(function (response) {
-                                    });
+                                });
                             }
                         }, 500);
                     }
@@ -574,6 +568,31 @@
                         $scope.message = "Comment is mandatory to return Pre-Authorization.";
                         $scope.toggleModal();
                     } else{
+                        var requirementAdded = $scope.isRequirementAdded($scope.documentList);
+                        if(requirementAdded) {
+                            var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getaddrequirementrequestletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+                                "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                            var timer = setInterval(function(){
+                                if(win.closed){
+                                    clearInterval(timer);
+                                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrequirementemailsent/' + preAuthorizationId)
+                                        .success(function(response){
+                                            if(response.data === true){
+                                                $scope.returnPreAuthorization();
+                                            } else{
+                                                $scope.message = "Please email the requirements letter.";
+                                                $scope.toggleModal();
+                                            }
+                                        }).error();
+                                }
+                            }, 500);
+                        } else {
+                            $scope.returnPreAuthorization();
+                        }
+                    }
+                };
+
+                $scope.returnPreAuthorization = function(){
                     $.when($scope.constructCommentDetails()).done(function () {
                         $http({
                             url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/return',
@@ -590,7 +609,7 @@
                                             }, 2000);
                                         }
                                     }).error(function (response, status, headers, config) {
-                                    });
+                                });
                             }
                         }).error(
                             function (status) {
@@ -598,7 +617,16 @@
                             }
                         );
                     });
-                }
+                };
+
+                $scope.isRequirementAdded = function (documentList) {
+                    for (var i = 0; i < documentList.length; i++) {
+                        var document = documentList[i];
+                        if (document.fileName == null || document.content == null) {
+                            return true;
+                        }
+                    }
+                    return false;
                 };
 
                 $scope.underwriterRouteSenior = function () {
@@ -622,7 +650,7 @@
                                                 }, 1000);
                                             }
                                         }).error(function (response, status, headers, config) {
-                                        });
+                                    });
                                 }
                             }).error(
                                 function (status) {
@@ -634,45 +662,69 @@
                 };
 
                 $scope.addRequirement = function () {
-                    var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getaddrequirementrequestletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
-                        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-                    var timer = setInterval(function(){
-                        if(win.closed){
-                            clearInterval(timer);
-                            $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrequirementemailsent/' + preAuthorizationId)
-                                .success(function(response){
-                                    if(response.data === true){
-                                        $.when($scope.constructCommentDetails()).done(function(){
-                                            $http({
-                                                url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
-                                                method: 'POST',
-                                                data: $scope.createUpdateDto
-                                            }).success(function(response, status, headers, config) {
-                                                if(status === 200) {
-                                                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
-                                                        .success(function (response, status, headers, config) {
-                                                            $scope.createUpdateDto = response;
-                                                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
-                                                                $scope.documentList = response;
-                                                                $scope.getAllDocuments();
-                                                            });
-                                                        }).error(function (response, status, headers, config) {
-                                                    });
-                                                }
-                                            }).error(
-                                                function(status){
-                                                    //console.log(status);
-                                                }
-                                            );
-                                            //console.log($scope.createUpdateDto);
+                    $.when($scope.constructCommentDetails()).done(function(){
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function(response, status, headers, config) {
+                            if(status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                                    .success(function (response, status, headers, config) {
+                                        $scope.createUpdateDto = response;
+                                        $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
+                                            $scope.documentList = response;
+                                            $scope.getAllDocuments();
                                         });
-                                    } else{
-                                        $scope.message = "Please email the requirements letter.";
-                                        $scope.toggleModal();
-                                    }
-                                }).error();
-                        }
-                    }, 500);
+                                    }).error(function (response, status, headers, config) {
+                                });
+                            }
+                        }).error(
+                            function(status){
+                                //console.log(status);
+                            }
+                        );
+                        //console.log($scope.createUpdateDto);
+                    });
+                    /*var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getaddrequirementrequestletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+                     "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                     var timer = setInterval(function(){
+                     if(win.closed){
+                     clearInterval(timer);
+                     $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrequirementemailsent/' + preAuthorizationId)
+                     .success(function(response){
+                     if(response.data === true){
+                     $.when($scope.constructCommentDetails()).done(function(){
+                     $http({
+                     url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
+                     method: 'POST',
+                     data: $scope.createUpdateDto
+                     }).success(function(response, status, headers, config) {
+                     if(status === 200) {
+                     $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                     .success(function (response, status, headers, config) {
+                     $scope.createUpdateDto = response;
+                     $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
+                     $scope.documentList = response;
+                     $scope.getAllDocuments();
+                     });
+                     }).error(function (response, status, headers, config) {
+                     });
+                     }
+                     }).error(
+                     function(status){
+                     //console.log(status);
+                     }
+                     );
+                     //console.log($scope.createUpdateDto);
+                     });
+                     } else{
+                     $scope.message = "Please email the requirements letter.";
+                     $scope.toggleModal();
+                     }
+                     }).error();
+                     }
+                     }, 500);*/
                 };
 
                 $scope.constructCommentDetails = function() {
@@ -704,7 +756,7 @@
                     $scope.isViewMode=true;
 
                 }
-                    $scope.checkNo = function(){
+                $scope.checkNo = function(){
                     $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.htndetails;
                     $scope.createUpdateDto.illnessDetailDto.htndetails=null;
                     $scope.two = true;
