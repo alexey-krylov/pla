@@ -6,6 +6,7 @@ import com.pla.grouplife.claim.presentation.dto.ClaimMandatoryDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.underwriter.finder.UnderWriterFinder;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +35,18 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Finder
 @Service
 
-public class GLClaimFinder {
+public class GLClaimFinder{
 
     private static final String GL_POLICY_COLLECTION_NAME = "group_life_policy";
     private static final String GL_LIFE_CLAIM_COLLECTION_NAME = "group_life_claim";
      private static final String GL_LIFE_CLAIM_STATUS_COLLECTION_NAME ="group_life_claim_status";
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private MongoTemplate mongoTemplate;
 
-
+   @Autowired
+   private UnderWriterFinder underWriterFinder;
     @Autowired
     public void setDataSource(DataSource dataSource, MongoTemplate mongoTemplate) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -67,6 +71,8 @@ public class GLClaimFinder {
             " plan_id=:planId " +
             " AND PROCESS=:processType";
 
+    public static final String GET_ALL_DOCUMENT_NAME_ASSOCIATED_WITH_DOCUMENT_CODE = " SELECT document_name documentName  FROM document WHERE  " +
+            " document_code=:documentCode";
 
 
 
@@ -102,6 +108,7 @@ public class GLClaimFinder {
         }
         if (isNotEmpty(surName)) {
             criteria = criteria.and("insureds.lastName").is(surName);
+
         }
         if (isNotEmpty(dateOfBirth)) {
             criteria = criteria.and("insureds.dateOfBirth").is(dateOfBirth);
@@ -174,6 +181,16 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
     }
 
+    public Map getIntimationDetail(String claimId){
+        Criteria criteria = null;
+        if (isNotEmpty(claimId)) {
+            criteria = Criteria.where("_id").is(claimId);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.findOne(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
+
+
 
     public List<Map> getClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber) {
 
@@ -231,6 +248,39 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
 
+    public List<Map> getApprovedClaimDetailsLevelOne(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber,String[] statuses) {
+        if (isEmpty(claimNumber) && isEmpty(policyNumber) && isEmpty(policyHolderName)&& isEmpty(clientId)&& isEmpty(assuredName)&& isEmpty(nrcNumber)) {
+            return Lists.newArrayList();
+        }
+
+        Criteria criteria = null;
+
+        criteria = Criteria.where("claimStatus").in(statuses);
+
+        if (isNotEmpty(claimNumber)) {
+            criteria = criteria.and("claimNumber.claimNumber").is(claimNumber);
+        }
+        if (isNotEmpty(policyNumber)) {
+            criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);
+        }
+        if (isNotEmpty(policyHolderName)) {
+            criteria = criteria.and("policy.policyHolderName").is(policyHolderName);
+        }
+        if (isNotEmpty(clientId)) {
+            criteria = criteria.and("familyId.familyId").is(clientId);
+        }
+        if (isNotEmpty(assuredName)) {
+            criteria = criteria.and("assuredDetail.firstName").is(assuredName);
+        }
+        if (isNotEmpty(nrcNumber)) {
+            criteria = criteria.and("assuredDetail.nrcNumber").is(nrcNumber);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
+
+
+
     public List<Map> findClaimStatusDetailsById(String claimId) {
         Criteria criteria = null;
        // String[] statuses = new String[]{"APPROVED"};
@@ -276,7 +326,19 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
 
+    public List<Map> getEarlierAssuredClaimDetails(String firstName,String lastName,BigDecimal amount){
+        Criteria criteria = null;
 
+        criteria = Criteria.where("assuredDetail.firstName").is(firstName);
+        if (isNotEmpty(lastName)) {
+            criteria = criteria.and("assuredDetail.lastName").is(lastName);
+        }
+        if (isNotEmpty(amount)) {
+            criteria = criteria.and("claimAmount").is(amount);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
 
 
     public Map findClaimById(String claimId) {
@@ -319,10 +381,11 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("planId", planId).addValue("processType", processType.toString());
         List<MandatoryDocumentDto> listOfMandatoryDocuments = namedParameterJdbcTemplate.query(GET_ALL_DOCUMENTS_ASSOCIATED_WITH_PLAN_AND_PROCESS, sqlParameterSource, new BeanPropertyRowMapper<MandatoryDocumentDto>(MandatoryDocumentDto.class));
         for (MandatoryDocumentDto mandatoryDocumentDto : listOfMandatoryDocuments) {
-            Long docId=mandatoryDocumentDto.getDocumentId();
-            listOfMandatoryDocuments=getMandatoryDocumentById( docId);
+            Long docId = mandatoryDocumentDto.getDocumentId();
+            listOfMandatoryDocuments = getMandatoryDocumentById(docId);
         }
-        return listOfMandatoryDocuments;
+
+       return listOfMandatoryDocuments;
     }
  public List<MandatoryDocumentDto> getMandatoryDocumentById(Long documentId){
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("documentId",documentId);
@@ -331,13 +394,27 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         for (MandatoryDocumentDto mandatoryDocumentDto : mandatoryDocumentDtos){
             List<String> document = Lists.newArrayList();
             for (Map<String,Object> documents :listOfDocument) {
-                document.add((String) documents.get("documentCode"));
+                document.add((String) documents.get("documentName"));
                 mandatoryDocumentDto.setDocument(document);
             }
+            mandatoryDocumentDto.setDocuments(listOfDocument);
         }
         return mandatoryDocumentDtos;
     }
+    public List<Map> getClaimReviewByClaimId(String claimId){
+        if(isEmpty(claimId)){
+        return Lists.newArrayList();
+    }
+        Criteria criteria = null;
+        String[] statuses = new String[]{"EVALUATION","ROUTED"};
+        criteria = Criteria.where("claimStatus").in(statuses);
+        if (isNotEmpty(claimId)) {
+            criteria = criteria.and("claimId").is(claimId);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_STATUS_COLLECTION_NAME);
 
+    }
 
 
 }

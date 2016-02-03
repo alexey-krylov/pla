@@ -1,7 +1,5 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.grouplife.sharedresource.model.vo.CoveragePremiumDetail;
-import com.pla.grouplife.sharedresource.model.vo.PlanPremiumDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +15,7 @@ import java.util.Set;
 public class PlanCoverageDetailDto {
 
     private String policyNumber;
-    private PlanPremiumDetail planPremiumDetail;
-    private Set<CoveragePremiumDetail> coveragePremiumDetails;
+    private PlanDetailDto planDetailDto;
+    private Set<CoverageDetailDto> coverageDetailDtos;
     private Set<String> claimTypes;
 }

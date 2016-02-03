@@ -1,7 +1,6 @@
 package com.pla.grouplife.claim.presentation.controller;
 
-import com.google.common.collect.Lists;
-import com.pla.core.dto.MandatoryDocumentDto;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.query.MasterFinder;
 import com.pla.grouplife.claim.application.command.*;
 import com.pla.grouplife.claim.application.service.GLClaimService;
@@ -18,6 +17,9 @@ import org.nthdimenzion.presentation.Result;
 import org.nthdimenzion.utils.UtilValidator;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,8 +54,8 @@ public class GroupLifeClaimController {
     @Autowired
     private CommandGateway commandGateway;
 
-
-
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     @RequestMapping(value = "/openpolicysearchpage", method = RequestMethod.GET)
     public ModelAndView searchPolicy() {
@@ -61,20 +65,15 @@ public class GroupLifeClaimController {
         return modelAndView;
     }
 
-
     @RequestMapping(value = "/searchpolicy", method = RequestMethod.POST)
-       public ModelAndView searchPolicy(SearchPolicyDto searchPolicyDto){
+    public ModelAndView searchPolicy(SearchPolicyDto searchPolicyDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/claim/searchPolicy");
         modelAndView.addObject("searchResult", glClaimService.searchGLPolicy(searchPolicyDto));
         modelAndView.addObject("searchCriteria", searchPolicyDto);
         return modelAndView;
 
-
-//        return glClaimService.searchGLPolicy(searchPolicyDto);
-
     }
-
 
     @RequestMapping(value = "/openclaimintimationpage", method = RequestMethod.GET)
     public ModelAndView claimIntimation() {
@@ -90,14 +89,15 @@ public class GroupLifeClaimController {
     }
 
 
-     @RequestMapping(value = "/getrelationship/{policyId}/{category}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getrelationship/{policyId}/{category}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getConfiguredRelationshipForCategoryAndPolicy(@PathVariable("policyId") String policyId,@PathVariable("category") String category) {
-        return glClaimService.getConfiguredRelationShip(policyId,category);
+    public Map<String, Object> getConfiguredRelationshipForCategoryAndPolicy(@PathVariable("policyId") String policyId, @PathVariable("category") String category) {
+        return glClaimService.getConfiguredRelationShip(policyId, category);
     }
+
     @RequestMapping(value = "/getplandetail/{policyId}/{category}/{relationship}", method = RequestMethod.GET)
     @ResponseBody
-    public PlanCoverageDetailDto getPlanDetails(@PathVariable("policyId") String policyId,@PathVariable("category") String category,@PathVariable("relationship") String relationship) {
+    public PlanCoverageDetailDto getPlanDetails(@PathVariable("policyId") String policyId, @PathVariable("category") String category, @PathVariable("relationship") String relationship) {
         return glClaimService.getPlanDetailForCategoryAndRelationship(policyId, category, relationship);
     }
 
@@ -106,10 +106,11 @@ public class GroupLifeClaimController {
     public List<GLInsuredDetailDto> assuredSearch(@RequestBody AssuredSearchDto assuredSearchDto) {
         return glClaimService.assuredSearch(assuredSearchDto);
     }
+
     @RequestMapping(value = "/assureddetail/{policyId}/{clientId}", method = RequestMethod.GET)
     @ResponseBody
-    public ClaimAssuredDetailDto assuredSearch(@PathVariable("policyId") String policyId,@PathVariable("clientId") String clientId) {
-        return glClaimService. getAssuredDetails(policyId,clientId);
+    public ClaimAssuredDetailDto assuredSearch(@PathVariable("policyId") String policyId, @PathVariable("clientId") String clientId) {
+        return glClaimService.getAssuredDetails(policyId, clientId);
     }
 
     @RequestMapping(value = "/createclaimintimation", method = RequestMethod.POST)
@@ -119,18 +120,28 @@ public class GroupLifeClaimController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(Result.failure("Error in creating  Claim Intimation Record", bindingResult.getAllErrors()), HttpStatus.OK);
         }
+        String claimId = "";
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             glClaimIntimationCommand.setUserDetails(userDetails);
-            commandGateway.sendAndWait(glClaimIntimationCommand);
+            claimId = commandGateway.sendAndWait(glClaimIntimationCommand);
         } catch (GLClaimException e) {
             LOGGER.error("Error in creating  Claim Intimation", e);
             return new ResponseEntity(Result.failure("Error in creating  Claim Intimation"), HttpStatus.OK);
         }
-        return new ResponseEntity(Result.success(" Claim Intimation created successfully"), HttpStatus.OK);
+        return new ResponseEntity(Result.success(" Claim Intimation created successfully",claimId), HttpStatus.OK);
 
     }
+
     @RequestMapping(value = "/openclaimintimationsearchpage", method = RequestMethod.GET)
+    public ModelAndView searchClaimIntimation() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/searchClaimIntimation");
+        modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
+        return modelAndView;
+    }
+   /*
+   @RequestMapping(value = "/openclaimintimationsearchpage", method = RequestMethod.GET)
     public ModelAndView searchClaimIntimation() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/claim/searchClaimIntimation");
@@ -139,13 +150,32 @@ public class GroupLifeClaimController {
     }
 
 
-@RequestMapping(value = "/searchclaimintimation", method = RequestMethod.POST)
-@ResponseBody
-public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
+    @RequestMapping(value = "/searchclaimintimation", method = RequestMethod.POST)
+    public ModelAndView getClaimIntimationDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/searchClaimIntimation");
+        modelAndView.addObject("searchResult", glClaimService.getClaimIntimationRecord(searchClaimIntimationDto));
+        modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
+        return modelAndView;
 
-    return glClaimService.getClaimIntimationRecord(searchClaimIntimationDto);
+    }
 
-}
+    */
+
+    @RequestMapping(value = "/searchclaimintimation", method = RequestMethod.POST)
+    @ResponseBody
+    public List<GLClaimIntimationDto> getClaimIntimationDetail(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
+
+        return glClaimService.getClaimIntimationRecord(searchClaimIntimationDto);
+    }
+
+    @RequestMapping(value = "/getclaimdetail/{claimId}", method = RequestMethod.GET)
+    @ResponseBody
+    public GLClaimIntimationDetailsDto getIntimationDetail(@PathVariable("claimId") String claimId) {
+        return glClaimService.getClaimIntimationDetails(claimId);
+
+    }
+
     @RequestMapping(value = "/openclaimregistrationpage", method = RequestMethod.GET)
     public ModelAndView claimRegistration() {
         ModelAndView modelAndView = new ModelAndView();
@@ -181,9 +211,9 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
         return new ResponseEntity(Result.success("Disability Claim registered successfully"), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/viewclaimdetail", method = RequestMethod.POST)
+    @RequestMapping(value = "/getclaimdetail", method = RequestMethod.POST)
     @ResponseBody
-    public List<GLClaimDetailDto> claimSearch(@RequestBody SearchClaimDto searchClaimDto) {
+    public List<GLClaimIntimationDto> claimSearch(@RequestBody SearchClaimDto searchClaimDto) {
         return glClaimService.getClaimDetail(searchClaimDto);
     }
 
@@ -215,6 +245,20 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
         }
     }
 
+     @RequestMapping(value = "/getclaimsforapproval", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
+    public List<GLClaimDataDto> getRoutedClaim(@RequestBody SearchClaimDto searchClaimDto) {
+         return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"ROUTED"});
+
+    }
+    @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
+    public List<GLClaimDataDto> getRoutedClaimForLevel1(@RequestBody SearchClaimDto searchClaimDto) {
+        return glClaimService.getApprovedClaimDetailLevelOne(searchClaimDto, new String[]{"ROUTED"});
+
+    }
     @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To approve claim")
@@ -244,30 +288,44 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @RequestMapping(value = "/getapprovedclaim", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are approved")
-    public List<GLClaimDataDto> getApprovedClaim(@RequestBody  SearchClaimDto searchClaimDto) {
-       return  glClaimService.getApprovedClaimDetail(searchClaimDto,new String[]{"APPROVED"});
+    public List<GLClaimDataDto> getApprovedClaim(@RequestBody SearchClaimDto searchClaimDto) {
+        return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"APPROVED"});
 
     }
 
 
     @RequestMapping(value = "/getclaimreopen", method = RequestMethod.POST)
     @ResponseBody
-    public List<GLClaimDataDto> reopenClaimDetail(@RequestBody  SearchClaimDto searchClaimDto ) {
+    public List<GLClaimDataDto> reopenClaimDetail(@RequestBody SearchClaimDto searchClaimDto) {
 
         return glClaimService.getClaimRecordForReopen(searchClaimDto);
 
     }
+
     @RequestMapping(value = "/getclaimforamendment", method = RequestMethod.POST)
     @ResponseBody
-    public List<GLClaimDataDto> amendmentClaimDetail(@RequestBody  SearchClaimDto searchClaimDto ) {
+    public List<GLClaimDataDto> amendmentClaimDetail(@RequestBody SearchClaimDto searchClaimDto) {
 
-        return  glClaimService.getApprovedClaimDetail(searchClaimDto,new String[]{"APPROVED","PAID"});
+        return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"APPROVED", "PAID"});
 
     }
+    @RequestMapping(value = "/claimamendment", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity amendClaim(@RequestBody GLClaimAmendmentCommand glClaimAmendmentCommand, HttpServletRequest request) {
+        glClaimAmendmentCommand.setUserDetails(getLoggedInUserDetail(request));
+        try {
 
+            commandGateway.sendAndWait(glClaimAmendmentCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(Result.success("Claim amended successfully"), HttpStatus.OK);
+    }
     @RequestMapping(value = "/settelment", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To submit claim for settlement")
@@ -283,15 +341,14 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
     }
 
 
-
     @RequestMapping(value = "/waivedocument", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To waive mandatory document by Approver")
     public ResponseEntity waiveDocument(@RequestBody GLClaimWaiveMandatoryDocumentCommand cmd, HttpServletRequest request) {
         try {
             cmd.setUserDetails(getLoggedInUserDetail(request));
-            String claimId =  commandGateway.sendAndWait(cmd);
-            return new ResponseEntity(Result.success("Mandatory Document waives successfully",claimId), HttpStatus.OK);
+            String claimId = commandGateway.sendAndWait(cmd);
+            return new ResponseEntity(Result.success("Mandatory Document waives successfully", claimId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -303,13 +360,13 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
     @ResponseBody
     //public ResponseEntity removeGLClaimDocument(@RequestParam String claimId, @RequestParam String gridFsDocId, HttpServletRequest request) {
     public ResponseEntity removeGLClaimDocument(@RequestBody GLClaimDocumentRemoveCommand removeCommand, HttpServletRequest request) {
-        if(UtilValidator.isEmpty(removeCommand.getGridFsDocId()) || UtilValidator.isEmpty(removeCommand.getClaimId())){
+        if (UtilValidator.isEmpty(removeCommand.getGridFsDocId()) || UtilValidator.isEmpty(removeCommand.getClaimId())) {
             return new ResponseEntity(Result.failure("request parameter cannot be empty"), HttpStatus.BAD_REQUEST);
         }
 
         try {
             removeCommand.setUserDetails(getLoggedInUserDetail(request));
-            if(commandGateway.sendAndWait(removeCommand))
+            if (commandGateway.sendAndWait(removeCommand))
 
                 return new ResponseEntity(Result.success("Document deleted successfully"), HttpStatus.OK);
         } catch (Exception e) {
@@ -320,11 +377,10 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
     }
 
 
-
     @Synchronized
     @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity uploadMandatoryDocument(@RequestBody GLClaimDocumentCommand glClaimDocumentCommand, HttpServletRequest request) {
+    public ResponseEntity uploadMandatoryDocument(GLClaimDocumentCommand glClaimDocumentCommand, HttpServletRequest request) {
         glClaimDocumentCommand.setUserDetails(getLoggedInUserDetail(request));
         try {
             commandGateway.sendAndWait(glClaimDocumentCommand);
@@ -352,16 +408,36 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
         return ghClaimMandatoryDocumentDtos;
     }
 
-
+    //3jan
     @RequestMapping(value = "/getallrequiredmandatorydocuments/{planId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
-    public List<MandatoryDocumentDto> findAllMandatoryDocuments(@PathVariable("planId") String planId) {
-        List<MandatoryDocumentDto> glClaimMandatoryDocuments = glClaimService.getAllMandatoryDocumentsForClaim(planId);
+    public List<GLClaimMandatoryDocumentDto> findAllMandatoryDocuments(@PathVariable("planId") String planId) {
+        List<GLClaimMandatoryDocumentDto> glClaimMandatoryDocuments = glClaimService.getAllMandatoryDocumentsForClaim(planId);
         return glClaimMandatoryDocuments;
 
     }
 
+    //31dec
+    @RequestMapping(value = "/getclaimdmandatorydocuments/{planId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<GLClaimMandatoryDocumentDto> findAllClaimMandatoryDocuments(@PathVariable("planId") String planId) {
+        List<GLClaimMandatoryDocumentDto> glClaimMandatoryDocuments = glClaimService.getAllClaimMandatoryDocuments(planId);
+        return glClaimMandatoryDocuments;
+
+    }
+    @RequestMapping(value = "/downloadmandatorydocument/{gridfsdocid}", method = RequestMethod.GET)
+    public void downloadMandatoryDocument(@PathVariable("gridfsdocid") String gridfsDocId, HttpServletResponse response) throws IOException {
+        GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(gridfsDocId)));
+        response.reset();
+        response.setContentType(gridFSDBFile.getContentType());
+        response.setHeader("content-disposition", "attachment; filename=" + gridFSDBFile.getFilename() + "");
+        OutputStream outputStream = response.getOutputStream();
+        org.apache.commons.io.IOUtils.copy(gridFSDBFile.getInputStream(), outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
 
     @RequestMapping(value = "/getclaimtypes", method = RequestMethod.GET)
     @ResponseBody
@@ -393,44 +469,39 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
     public List<Map<String, Object>> getdisabilityNatureTypes() {
         return DisabilityNature.getDisabilityNature();
     }
+
     @RequestMapping(value = "/getdisabilityextent", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>>  getDisabilityExtent() {
-        return DisabilityExtent. getDisabilityExtent();
+    public List<Map<String, Object>> getDisabilityExtent() {
+        return DisabilityExtent.getDisabilityExtent();
     }
 
     @RequestMapping(value = "/getassuredconfined", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>>  getAssuredConfined() {
+    public List<Map<String, Object>> getAssuredConfined() {
         return AssuredConfinedToHouse.getAssuredConfinedTypes();
     }
 
     @RequestMapping(value = "/getassuredoutdooractivity", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String, Object>>  getAssuredOutdoorActive() {
+    public List<Map<String, Object>> getAssuredOutdoorActive() {
         return AssuredOutdoorActive.getAssuredOutdoorActivity();
     }
-
-
-    @RequestMapping(value = "/getuploadeddocuments", method = RequestMethod.POST)
+    @RequestMapping(value = "/getassureddailytask", method = RequestMethod.GET)
     @ResponseBody
-    public List<GLClaimDocument> findUploadedDocuments(@RequestBody GLClaimDocumentCommand gldocs) {
-        List<GLClaimDocument> glClaimDocuments = Lists.newArrayList();
-        GLClaimDocument docs = null;
-        try {
-            docs = glClaimService.getAddedDocument(gldocs.getFile(), gldocs.getDocumentId(), gldocs.isMandatory());
+    public List<Map<String, Object>> getAssuredDailyTask() {
+        return AssuredTaskOfDailyLiving.getAllAssuredTaskTypes();
+    }
 
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            ;
-        }
-        glClaimDocuments.add(docs);
-        return glClaimDocuments;
+    @RequestMapping(value = "/getapplycondition", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getApplyConditionTypes() {
+        return ApplyConditionTypes.getApplyConditionTypes();
     }
 
     @RequestMapping(value = "/openclaimintimation/{claimId}", method = RequestMethod.GET)
     public ResponseEntity createClaim(@PathVariable("claimId") String claimId, HttpServletRequest request) {
-        if (glClaimService.configuredForPlan(claimId)==null) {
+        if (glClaimService.configuredForPlan(claimId) == null) {
             return new ResponseEntity(Result.failure("The claim routing for  plan is not configured"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -442,15 +513,8 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
     public UnderWriterRoutingLevel getClaimRouting(@PathVariable("planId") String planId, HttpServletRequest request) {
 
 
-        return glClaimService.configuredForSelectedPlan(planId);
-    }
-
-
-
-    @RequestMapping(value = "/claimintimationdetail/{policyNumber}", method = RequestMethod.GET)
-    @ResponseBody
-    public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@PathVariable("policyNumber") String policyNumber) {
-        return glClaimService.getClaimIntimationDetail(policyNumber);
+        //return glClaimService.configuredForPlan(planId);
+        return  glClaimService.configuredForSelectedPlan(planId);
     }
 
     @RequestMapping(value = "/createclaimisettlement", method = RequestMethod.POST)
@@ -471,13 +535,15 @@ public List<ClaimIntimationDetailDto> getClaimIntimationDetail(@RequestBody Sear
         return new ResponseEntity(Result.success(" Claim Settlement created successfully"), HttpStatus.OK);
 
     }
+
     @RequestMapping(value = "/getcategory/{policyId}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getConfiguredCategoryForPolicy(@PathVariable("policyId") String policyId) {
         return glClaimService.getConfiguredCategory(policyId);
     }
-
 }
+
+
 
 
 

@@ -1,6 +1,5 @@
 package com.pla.grouplife.claim.domain.model;
 
-import com.pla.grouplife.sharedresource.dto.ContactPersonDetailDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +36,7 @@ public class ClaimantDetail {
    // private String workPhone;
 
 
-    List<ContactPersonDetailDto> contactPersonDetail;
+    List<ContactPersonDetail> contactPersonDetail;
 
    public ClaimantDetail(String proposerName, String addressLine1, String addressLine2, String postalCode, String province,
                          String town, String emailId, String mobileNumber){
@@ -54,7 +53,7 @@ public class ClaimantDetail {
 
 
    }
-  public ClaimantDetail withContactPersonDetails( List<ContactPersonDetailDto> contactPersonDetail){
+  public ClaimantDetail withContactPersonDetails( List<ContactPersonDetail> contactPersonDetail){
       this.contactPersonDetail=contactPersonDetail;
       return this;
   }

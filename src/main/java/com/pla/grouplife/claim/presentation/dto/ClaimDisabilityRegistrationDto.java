@@ -1,23 +1,26 @@
-package com.pla.grouplife.claim.domain.model;
+package com.pla.grouplife.claim.presentation.dto;
 
-import lombok.*;
+import com.pla.grouplife.claim.domain.model.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joda.time.LocalDate;
 
 import java.util.List;
 
 /**
- * Created by ak
+ * Created by nthdimensioncompany on 7/1/2016.
  */
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 
-public class DisabilityClaimRegistration {
-
+public class ClaimDisabilityRegistrationDto {
     private LocalDate dateOfDisability;
     private DisabilityNature natureOfDisability;
-    private DisabilityExtent  extendOfDisability;
+    private DisabilityExtent extendOfDisability;
     private LocalDate dateOfDiagnosis;
     private String  exactDiagnosis;
     private String nameOfDoctorAndHospitalAddress;
@@ -31,9 +34,8 @@ public class DisabilityClaimRegistration {
     private AssuredConfinedToHouse assuredConfinedToIndoor;
     private LocalDate fromIndoorDate;
     private String assuredIndoorDetails;
-    private AssuredOutdoorActive  assuredAbleToGetOutdoor;
+    private AssuredOutdoorActive assuredAbleToGetOutdoor;
     private LocalDate fromOutdoorDate;
     private String assuredOutdoorDetails;
     private String visitingMedicalOfficerDetails;
-
 }

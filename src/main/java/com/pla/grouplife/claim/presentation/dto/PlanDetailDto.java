@@ -1,4 +1,4 @@
-package com.pla.grouplife.claim.domain.model;
+package com.pla.grouplife.claim.presentation.dto;
 
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
@@ -7,15 +7,14 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import java.math.BigDecimal;
 
 /**
- * Created by Mirror on 8/19/2015.
+ * Created by nthdimensioncompany on 31/12/2015.
  */
 @ValueObject
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
+@Setter
 @AllArgsConstructor
-
-public class PlanDetail {
+public class PlanDetailDto {
 
     private PlanId planId;;
 

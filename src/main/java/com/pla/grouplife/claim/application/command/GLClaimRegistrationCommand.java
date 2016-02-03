@@ -28,10 +28,10 @@ public class GLClaimRegistrationCommand {
     private LocalDate dateOfDeath;
     private DateTime timeOfDeath;
     private String durationOfIllness;
-    private String  nameOfDocterAndHospialAddress;
+    private String  nameOfDoctorAndHospitalAddress;
     private String contactNumber;
     private LocalDate firstConsultation;
-    private String treatementTaken;
+    private String treatmentTaken;
     private CauseOfDeathAccidental causeOfDeathAccidental;
     private AccidentTypes typeOfAccident;
     private String placeOfAccident;
@@ -42,6 +42,7 @@ public class GLClaimRegistrationCommand {
     private String registrationNumber;
     private String policeStationName;
     private UserDetails userDetails;
+    private String comments;
     private Set<GLClaimDocumentCommand> uploadedDocuments;
 }
 

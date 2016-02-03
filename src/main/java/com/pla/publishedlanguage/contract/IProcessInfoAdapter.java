@@ -29,4 +29,6 @@ public interface IProcessInfoAdapter {
     public BigDecimal getServiceTaxAmount();
 
     public int getMoratoriumPeriod(LineOfBusinessEnum lineOfBusiness);
+
+    public int getEarlyDeathClaimTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException;
 }

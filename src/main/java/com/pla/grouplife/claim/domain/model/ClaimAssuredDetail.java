@@ -1,6 +1,5 @@
 package com.pla.grouplife.claim.domain.model;
 
-import com.pla.grouplife.claim.presentation.dto.ClaimMainAssuredDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import lombok.*;
 import org.joda.time.LocalDate;
@@ -46,7 +45,9 @@ public class ClaimAssuredDetail {
 
     private String  occupation;
 
-    private ClaimMainAssuredDetailDto claimMainAssuredDetail;
+    //String assuredClientId;
+
+    private ClaimMainAssuredDetail claimMainAssuredDetail;
 
 
 }

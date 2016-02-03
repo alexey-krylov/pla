@@ -218,7 +218,7 @@ public class ProductLineGeneralInformation {
         if(isEmpty(premiumFollowUpFrequency)){
             raiseProcessTypeNotFoundException("Premium FollowUp Frequency");
         }
-       return premiumFollowUpFrequency.parallelStream().filter(new Predicate<PremiumFollowUpFrequency>() {
+        return premiumFollowUpFrequency.parallelStream().filter(new Predicate<PremiumFollowUpFrequency>() {
             @Override
             public boolean test(PremiumFollowUpFrequency premiumFollowUpFrequency) {
                 return premiumFollowUpFrequency.getPremiumFrequency().equals(premiumFrequency);

@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * Created by nthdimensioncompany on 4/11/2015.
+ * Created by ak.
  */
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class GLClaimDetailDto {
     private AssuredDetailDto assuredDetail;
     private Policy policy;
     private ClaimStatus claimStatus;
-    //private ClaimRegistrationDto claimRegistrationDto;
+
 
     public GLClaimDetailDto withClaimNumberAndClaimId (String claimNumber, String claimId){
         this.claimNumber=claimNumber;

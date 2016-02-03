@@ -1,8 +1,7 @@
 package com.pla.grouplife.claim.application.command;
 
 import com.pla.grouplife.claim.domain.model.ClaimantDetail;
-import com.pla.grouplife.claim.presentation.dto.AssuredDetailDto;
-import com.pla.grouplife.claim.presentation.dto.BankDetailsDto;
+import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.Getter;
@@ -30,8 +29,11 @@ public class CreateGLClaimIntimationCommand {
     private DateTime claimIntimationDate;
     private DateTime claimIncidenceDate;
     private ClaimantDetail claimantDetail;
-    private AssuredDetailDto assuredDetail;
+    private PlanDetailDto planDetail;
+    private Set<CoverageDetailDto> coverageDetails;
     private BankDetailsDto bankDetails;
+    private ClaimAssuredDetailDto claimAssuredDetail;
     private Set<GLClaimDocumentCommand> uploadedDocuments;
     private UserDetails userDetails;
+    //private String comment;
 }

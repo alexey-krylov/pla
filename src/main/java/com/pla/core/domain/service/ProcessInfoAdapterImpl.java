@@ -79,5 +79,10 @@ public class ProcessInfoAdapterImpl implements IProcessInfoAdapter {
         ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusiness);
         return productLineGeneralInformation.getMoratoriumPeriod();
     }
+    @Override
+    public int getEarlyDeathClaimTimePeriod(LineOfBusinessEnum lineOfBusinessEnum, ProcessType processType) throws ProcessInfoException {
+        ProductLineGeneralInformation productLineGeneralInformation = generalInformationService.findProductLineInformationByLineOfBusinessId(lineOfBusinessEnum);
+        return productLineGeneralInformation.getProductLineProcessItemValue(processType,ProductLineProcessType.EARLY_DEATH_CRITERIA);
+    }
 
 }

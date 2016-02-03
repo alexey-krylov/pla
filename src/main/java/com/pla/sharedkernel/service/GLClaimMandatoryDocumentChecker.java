@@ -6,6 +6,7 @@ import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  * Created by ak
  */
 @Service
-public class GLClaimMandatoryDocumentChecker {
+public class GLClaimMandatoryDocumentChecker implements Serializable{
 
     @Autowired
     private GLClaimService glClaimService;
@@ -23,9 +24,17 @@ public class GLClaimMandatoryDocumentChecker {
     public boolean isRequiredForSubmission(String claimId) {
         List<String> uploadedDocumentNames = getAllUploadedMandatoryDocument(claimId);
         Set<ClientDocumentDto> documentRequiredForSubmission = glClaimService.getMandatoryDocumentRequiredForSubmission(claimId);
-        long count = documentRequiredForSubmission.parallelStream().filter(new MandatoryDocumentFilter(uploadedDocumentNames)).count();
-        return count!=0;
+        long count=0;
+       // if(documentRequiredForSubmission!=null){
+             count = documentRequiredForSubmission.parallelStream().filter(new MandatoryDocumentFilter(uploadedDocumentNames)).count();
+            return count != 0;
+      //  }
+      // return count;
     }
+
+
+
+
 
     public List<String> findDocumentRequiredForSubmission(String claimId) {
         List<String> uploadedDocumentNames =  getAllUploadedMandatoryDocument(claimId);
@@ -61,3 +70,5 @@ public class GLClaimMandatoryDocumentChecker {
         }
     }
 }
+
+

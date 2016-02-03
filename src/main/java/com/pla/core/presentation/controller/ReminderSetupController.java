@@ -343,6 +343,24 @@ public class ReminderSetupController {
         }
         return Result.success("Notification created successfully");
     }
+/*
+   @RequestMapping(value = "/createclaimnotification", method = RequestMethod.POST)
+    @ResponseBody
+    public Result createClaimNotification(@RequestBody CreateClaimNotificationCommand createClaimNotificationCommand, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Error in creating Notification", bindingResult.getAllErrors());
+        }
+        try {
+            commandGateway.sendAndWait(createClaimNotificationCommand);
+        } catch (NotificationException e) {
+            return Result.failure(e.getMessage());
+        }
+        return Result.success("Notification created successfully");
+    }
+ */
+
+
+
 
     //   ===================== Notification Template Services Ends  ==========================
 

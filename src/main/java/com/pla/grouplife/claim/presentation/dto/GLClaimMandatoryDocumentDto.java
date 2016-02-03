@@ -31,6 +31,10 @@ public class GLClaimMandatoryDocumentDto {
 
         private boolean isRequireForSubmission;
 
+       private Boolean isApproved  = Boolean.FALSE;
+
+        private Boolean mandatory;
+
         public GLClaimMandatoryDocumentDto(String documentId, String documentName) {
             this.documentId = documentId;
             this.documentName = documentName;

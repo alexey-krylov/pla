@@ -1,29 +1,28 @@
 package com.pla.grouplife.claim.domain.model;
 
-import com.pla.sharedkernel.identifier.PlanId;
+import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.*;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
 
 /**
- * Created by Mirror on 8/19/2015.
+ * Created by ak on 31/12/2015.
  */
 @ValueObject
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
 @AllArgsConstructor
+public class CoverageDetail {
 
-public class PlanDetail {
+    private String coverageCode;
 
-    private PlanId planId;;
+    private CoverageId coverageId;
 
-    private String planName;
-
-    private String planCode;
-
-    private BigDecimal premiumAmount;
+    private String coverageName;
 
     private BigDecimal sumAssured;
+
+    private BigDecimal premium;
 }

@@ -2,6 +2,7 @@ package com.pla.grouplife.claim.domain.model;
 
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.PolicyId;
+import org.joda.time.DateTime;
 
 /**
  * Created by ak
@@ -14,6 +15,10 @@ public class GLClaimRegistrationProcessor {
 
     }
 
+    public GroupLifeClaim submitClaimRegistration(DateTime approvalOn,  GroupLifeClaim groupLifeClaim,String comment) {
+        groupLifeClaim = groupLifeClaim.createClaimRegistrationRecord(approvalOn,this.userName,comment);
+        return groupLifeClaim;
+    }
     public GroupLifeClaim createClaim(String claimIdInString, String claimNumberInString, String policyId, String policyNumber, String policyHolderName, ClaimType claimType) {
         ClaimId claimId = new ClaimId(claimIdInString);
         ClaimNumber claimNumber = new ClaimNumber(claimNumberInString);

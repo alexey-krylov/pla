@@ -42,7 +42,7 @@ public class GroupLifeClaimSaga extends AbstractAnnotatedSaga {
     private transient CommandGateway commandGateway;
 
     @Autowired
-    private Repository<GroupLifeClaim> groupLifeClaimRepository;
+    private Repository<GroupLifeClaim> glClaimMongoRepository;
 
     @Autowired
     private GLClaimMandatoryDocumentChecker glClaimMandatoryDocumentChecker;
@@ -62,7 +62,7 @@ public class GroupLifeClaimSaga extends AbstractAnnotatedSaga {
             int noOfDaysToPurge = processInfoAdapter.getPurgeTimePeriod(LineOfBusinessEnum.GROUP_LIFE, ProcessType.CLAIM);
             int noOfDaysToClosure = processInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_LIFE, ProcessType.CLAIM);
             int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_LIFE, ProcessType.CLAIM);
-            GroupLifeClaim claimAggregate = groupLifeClaimRepository.load(event.getClaimId());
+            GroupLifeClaim claimAggregate =glClaimMongoRepository.load(event.getClaimId());
             DateTime claimSubmitDate = claimAggregate.getSubmittedOn();
             DateTime firstReminderDateTime = claimSubmitDate.plusDays(firstReminderDay);
             DateTime purgeScheduleDateTime = claimSubmitDate.plusDays(noOfDaysToPurge);
@@ -81,7 +81,7 @@ public class GroupLifeClaimSaga extends AbstractAnnotatedSaga {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Claim Reminder Event .....", event);
         }
-        GroupLifeClaim claimAggregate = groupLifeClaimRepository.load(event.getClaimId());
+        GroupLifeClaim claimAggregate = glClaimMongoRepository.load(event.getClaimId());
         if (ClaimStatus.EVALUATION.equals(claimAggregate.getClaimStatus()) && glClaimMandatoryDocumentChecker.isRequiredForSubmission(event.getClaimId().getClaimId())) {
             commandGateway.send(new CreateClaimNotificationCommand(event.getClaimId(), RolesUtil.GROUP_LIFE_CLAIM_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.CLAIM,
                     WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1));
@@ -101,7 +101,7 @@ public class GroupLifeClaimSaga extends AbstractAnnotatedSaga {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GL Claim Reminder Event .....", event);
         }
-        GroupLifeClaim claimAggregate = groupLifeClaimRepository.load(event.getClaimId());
+        GroupLifeClaim claimAggregate = glClaimMongoRepository.load(event.getClaimId());
         if (ClaimStatus.EVALUATION.equals(claimAggregate.getClaimStatus()) && glClaimMandatoryDocumentChecker.isRequiredForSubmission(event.getClaimId().getClaimId())) {
             commandGateway.send(new CreateClaimNotificationCommand(event.getClaimId(), RolesUtil.GROUP_LIFE_CLAIM_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_LIFE, ProcessType.CLAIM,
                     WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2));

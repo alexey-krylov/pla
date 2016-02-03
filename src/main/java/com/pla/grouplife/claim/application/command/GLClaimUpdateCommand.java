@@ -17,9 +17,8 @@ import java.util.Set;
 public class GLClaimUpdateCommand {
 
     private String claimId;
-    private String claimNumber;
-    private GLDisabilityClaimRegistrationCommand disableCommand;
     private GLClaimRegistrationCommand claimCommand;
+    private GLDisabilityClaimRegistrationCommand disableCommand;
     private Set<GLClaimDocumentCommand> uploadedDocuments;
     private UserDetails userDetails;
 }

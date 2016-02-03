@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum ClaimStatus {
 
-INTIMATED("Claim Intimated"),EVALUATION("Claim Registered"),CANCELLED("Cancelled"),ROUTED("Routed to UnderWriter"),APPROVED("Approved"),REPUDIATED("Repudiated"),AWAITING("Awaiting Disbursement"),PAID("Paid");
+INTIMATION("Claim Intimated"),EVALUATION("Claim Registered"),CANCELLED("Cancelled"),UNDERWRITING("Routed to UnderWriter"),APPROVED("Approved"),REPUDIATED("Rejected"),AWAITING_DISBURSEMENT("Settlement pending"),PAID_DISBURSED("Settled");
 
 
     private String description;
