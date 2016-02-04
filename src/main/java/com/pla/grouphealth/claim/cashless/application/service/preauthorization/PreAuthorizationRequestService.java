@@ -625,14 +625,14 @@ public class PreAuthorizationRequestService {
         return mandatoryDocumentDtos;
     }
 
-    private Set<ClientDocumentDto> populateWithAdditionalRequiredDocumentsByUnderwriter(Set<ClientDocumentDto> mandatoryDocuments, Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
+    public Set<ClientDocumentDto> populateWithAdditionalRequiredDocumentsByUnderwriter(Set<ClientDocumentDto> mandatoryDocuments, Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
         additionalRequiredDocumentsByUnderwriter.stream().forEach(document -> {
             mandatoryDocuments.add(new ClientDocumentDto(document.getDocumentCode(), document.getDocumentName(), false));
         });
         return mandatoryDocuments;
     }
 
-    private GHPlanPremiumDetail getGHPlanPremiumDetailByFamilyId(FamilyId familyId, GroupHealthPolicy groupHealthPolicy) throws Exception{
+    public GHPlanPremiumDetail getGHPlanPremiumDetailByFamilyId(FamilyId familyId, GroupHealthPolicy groupHealthPolicy) throws Exception{
         Set<GHInsured> insureds = groupHealthPolicy.getInsureds();
         GHInsured groupHealthInsured = null;
         GHInsuredDependent ghInsuredDependent = null;

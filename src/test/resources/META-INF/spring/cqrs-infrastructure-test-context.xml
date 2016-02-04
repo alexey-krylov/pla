@@ -144,5 +144,8 @@
     <extension:mongo-repository id="preAuthorizationRequestMongoRepository"
                                 aggregate-type="com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest"
                                 mongo-template="mongoTemplate"/>
+    <extension:mongo-repository id="groupHealthCashlessClaimAxonRepository"
+                                aggregate-type="com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim"
+                                mongo-template="mongoTemplate"/>
 
 </beans>

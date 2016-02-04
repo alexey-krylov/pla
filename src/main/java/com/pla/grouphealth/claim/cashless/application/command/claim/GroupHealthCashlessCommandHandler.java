@@ -9,6 +9,7 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDat
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
+import org.axonframework.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
@@ -35,11 +36,11 @@ public class GroupHealthCashlessCommandHandler {
     PreAuthorizationService preAuthorizationService;
     @Autowired
     SequenceGenerator sequenceGenerator;
+    @Autowired
+    private Repository<GroupHealthCashlessClaim> groupHealthCashlessClaimAxonRepository;
 
     @CommandHandler
     public void createClaim(UploadGroupHealthCashlessClaimCommand uploadGroupHealthCashlessClaimCommand){
-        String runningSequence = sequenceGenerator.getSequence(GroupHealthCashlessClaimBatch.class);
-        runningSequence = String.format("%08d", Integer.parseInt(runningSequence.trim()));
         List<List<ClaimUploadedExcelDataDto>> refurbishedSet = preAuthorizationService.createSubListBasedOnSimilarCriteria(uploadGroupHealthCashlessClaimCommand.getClaimUploadedExcelDataDtos());
         notEmpty(refurbishedSet, "Error uploading no PreAuthorization data list found to save");
         List<GroupHealthCashlessClaim> groupHealthCashlessClaimList = refurbishedSet.stream().map(new Function<List<ClaimUploadedExcelDataDto>, GroupHealthCashlessClaim>() {
@@ -48,6 +49,5 @@ public class GroupHealthCashlessCommandHandler {
                 return groupHealthCashlessClaimService.constructGroupHealthCashlessClaimEntity(claimUploadedExcelDataDtos, uploadGroupHealthCashlessClaimCommand.getBatchDate(), uploadGroupHealthCashlessClaimCommand.getBatchUploaderUserId(), uploadGroupHealthCashlessClaimCommand.getHcpCode());
             }
         }).collect(Collectors.toList());
-        final String finalRunningSequence = runningSequence;
     }
 }

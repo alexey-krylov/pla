@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.grouphealth.claim.cashless.application.command.claim.UploadGroupHealthCashlessClaimCommand;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
@@ -7,7 +8,10 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
+import com.pla.sharedkernel.domain.model.FamilyId;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -29,8 +33,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/03/2016.
@@ -117,5 +124,17 @@ public class GroupHealthCashlessClaimController {
         outputStream.flush();
         outputStream.close();
         errorTemplateFile.delete();
+    }
+
+    @RequestMapping(value = "/getmandatorydocuments/{clientId}/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
+    public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(@PathVariable("clientId") String clientId, @PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws Exception {
+        if (isEmpty(clientId)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "clientId cannot be empty");
+            return Lists.newArrayList();
+        }
+        List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = groupHealthCashlessClaimService.findMandatoryDocuments(new FamilyId(clientId), groupHealthCashlessClaimId);
+        return ghProposalMandatoryDocumentDtos;
     }
 }

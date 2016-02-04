@@ -3,10 +3,14 @@ package com.pla.grouphealth.claim.cashless.domain.model.claim;
 import com.pla.grouphealth.claim.cashless.presentation.dto.AssuredDetail;
 import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimantPolicyDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.DependentAssuredDetail;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
 
@@ -26,8 +30,6 @@ public class GroupHealthCashlessClaimAssuredDetail {
     private int ageNextBirthday;
     private String nrcNumber;
     private String gender;
-    private BigDecimal sumAssured;
-    private BigDecimal reserveAmount;
     private String category;
     private String manNumber;
     private String clientId;
@@ -39,42 +41,42 @@ public class GroupHealthCashlessClaimAssuredDetail {
     private String mainAssuredClientId;
     private boolean dependentAssuredDetailPresent;
 
-    public GroupHealthCashlessClaimAssuredDetail updateWithAssuredDetails(ClaimantPolicyDetailDto claimantPolicyDetailDto) {
-        AssuredDetail assuredDetail = claimantPolicyDetailDto.getAssuredDetail();
-        DependentAssuredDetail dependentAssuredDetail = claimantPolicyDetailDto.getDependentAssuredDetail();
+    public GroupHealthCashlessClaimAssuredDetail updateWithAssuredDetails(GHInsured assuredDetail, String clientId) {
         if(isNotEmpty(assuredDetail)) {
             this.salutation = assuredDetail.getSalutation();
             this.firstName = assuredDetail.getFirstName();
-            this.surname = assuredDetail.getSurname();
+            this.surname = assuredDetail.getSalutation();
             this.dateOfBirth = assuredDetail.getDateOfBirth();
-            this.ageNextBirthday = assuredDetail.getAgeNextBirthday();
+            this.ageNextBirthday = AppUtils.getAgeOnNextBirthDate(assuredDetail.getDateOfBirth());
             this.nrcNumber = assuredDetail.getNrcNumber();
-            this.gender = assuredDetail.getGender();
-            this.sumAssured = assuredDetail.getSumAssured();
-            this.reserveAmount = assuredDetail.getReserveAmount();
+            this.gender = isNotEmpty(assuredDetail.getGender()) ? assuredDetail.getGender().name() : StringUtils.EMPTY;
             this.category = assuredDetail.getCategory();
             this.manNumber = assuredDetail.getManNumber();
-            this.clientId = assuredDetail.getClientId();
+            this.clientId = clientId;
             this.dependentAssuredDetailPresent = Boolean.FALSE;
-        } else{
-            this.salutation = dependentAssuredDetail.getSalutation();
-            this.firstName = dependentAssuredDetail.getFirstName();
-            this.surname = dependentAssuredDetail.getSurname();
-            this.dateOfBirth = dependentAssuredDetail.getDateOfBirth();
-            this.ageNextBirthday = dependentAssuredDetail.getAgeNextBirthday();
-            this.nrcNumber = dependentAssuredDetail.getNrcNumber();
-            this.gender = dependentAssuredDetail.getGender();
-            this.sumAssured = dependentAssuredDetail.getSumAssured();
-            this.reserveAmount = dependentAssuredDetail.getReserveAmount();
-            this.category = dependentAssuredDetail.getCategory();
-            this.manNumber = dependentAssuredDetail.getManNumber();
-            this.clientId = dependentAssuredDetail.getClientId();
-            this.mainAssuredClientId = dependentAssuredDetail.getMainAssuredClientId();
-            this.mainAssuredFullName = dependentAssuredDetail.getMainAssuredFullName();
-            this.relationshipWithMainAssured = dependentAssuredDetail.getRelationshipWithMainAssured();
-            this.mainAssuredNRC = dependentAssuredDetail.getMainAssuredNRC();
-            this.mainAssuredMANNumber = dependentAssuredDetail.getMainAssuredMANNumber();
-            this.mainAssuredLastSalary = dependentAssuredDetail.getMainAssuredLastSalary();
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaimAssuredDetail updateWithAssuredDetailsForDependent(GHInsuredDependent ghInsuredDependent, GHInsured groupHealthInsured, String clientId) {
+        if(isNotEmpty(ghInsuredDependent)) {
+            this.salutation = ghInsuredDependent.getSalutation();
+            this.firstName = ghInsuredDependent.getFirstName();
+            this.surname = ghInsuredDependent.getLastName();
+            this.dateOfBirth = ghInsuredDependent.getDateOfBirth();
+            this.ageNextBirthday = AppUtils.getAgeOnNextBirthDate(ghInsuredDependent.getDateOfBirth());
+            this.nrcNumber = ghInsuredDependent.getNrcNumber();
+            this.gender = isNotEmpty(ghInsuredDependent.getGender()) ? ghInsuredDependent.getGender().name() : StringUtils.EMPTY;
+            this.category = ghInsuredDependent.getCategory();
+            this.manNumber = ghInsuredDependent.getManNumber();
+            this.clientId = clientId;
+            if(isNotEmpty(groupHealthInsured)) {
+                this.mainAssuredClientId = groupHealthInsured.getFamilyId().getFamilyId();
+                this.mainAssuredFullName = groupHealthInsured.getFirstName() + " " + groupHealthInsured.getLastName();
+                this.relationshipWithMainAssured = ghInsuredDependent.getRelationship().description;
+                this.mainAssuredNRC = groupHealthInsured.getNrcNumber();
+                this.mainAssuredMANNumber = groupHealthInsured.getManNumber();
+            }
             this.dependentAssuredDetailPresent = Boolean.TRUE;
         }
         return this;

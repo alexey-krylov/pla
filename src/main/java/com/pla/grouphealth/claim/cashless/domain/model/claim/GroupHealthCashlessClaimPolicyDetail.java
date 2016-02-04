@@ -1,5 +1,11 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.pla.core.domain.model.plan.PlanDetail;
+import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
+import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimantPolicyDetailDto;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
+import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
+import com.pla.sharedkernel.domain.model.PolicyNumber;
 import com.pla.sharedkernel.identifier.PlanId;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
@@ -18,12 +24,10 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Immutable
 @Embeddable
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-@AllArgsConstructor
 @Getter
 @Setter
 public class GroupHealthCashlessClaimPolicyDetail {
-    private String policyNumber;
+    private PolicyNumber policyNumber;
     private String policyName;
     private String planCode;
     private String planName;
@@ -32,35 +36,42 @@ public class GroupHealthCashlessClaimPolicyDetail {
     private Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails;
     private PlanId planId;
 
-    /*public GHCashlessClaimPolicyDetail updateWithDetails(PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand) {
-        ClaimantPolicyDetailDto claimantPolicyDetailDto = preAuthorizationClaimantDetailCommand.getClaimantPolicyDetailDto();
-        if(isNotEmpty(claimantPolicyDetailDto)) {
-            this.policyName = claimantPolicyDetailDto.getPolicyName();
-            this.policyNumber = claimantPolicyDetailDto.getPolicyNumber();
-            this.planCode = claimantPolicyDetailDto.getPlanCode();
-            if(isNotEmpty(claimantPolicyDetailDto.getPlanId()))
-                this.planId = new PlanId(claimantPolicyDetailDto.getPlanId());
-            this.planName = claimantPolicyDetailDto.getPlanName();
-            this.sumAssured = claimantPolicyDetailDto.getSumAssured();
-            PreAuthorizationRequestAssuredDetail assuredDetail = isNotEmpty(this.assuredDetail) ? this.assuredDetail : new PreAuthorizationRequestAssuredDetail();
-            this.assuredDetail = assuredDetail.updateWithAssuredDetails(claimantPolicyDetailDto);
-            this.coverageDetailDtoList = constructPreAuthorizationRequestCoverageDetail(claimantPolicyDetailDto.getCoverageBenefitDetails());
+    public GroupHealthCashlessClaimPolicyDetail updateWithPolicyNumber(PolicyNumber policyNumber) {
+        this.policyNumber = policyNumber;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetail updateWithPolicyName(String schemeName) {
+        this.policyName = schemeName;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetail updateWithSumAssured(BigDecimal sumAssured) {
+        this.sumAssured = sumAssured;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetail updateWithPlanDetails(PlanDetail planDetail, PlanId planId) {
+        if(isNotEmpty(planDetail)){
+            this.planCode = planDetail.getPlanCode();
+            this.planName = planDetail.getPlanName();
+            this.planId = planId;
         }
         return this;
-    }*/
+    }
 
-   /* private Set<PreAuthorizationRequestCoverageDetail> constructPreAuthorizationRequestCoverageDetail(Set<CoverageBenefitDetailDto> benefitDetails) {
-        return isNotEmpty(benefitDetails) ? benefitDetails.parallelStream().map(new Function<CoverageBenefitDetailDto, PreAuthorizationRequestCoverageDetail>() {
-            @Override
-            public PreAuthorizationRequestCoverageDetail apply(CoverageBenefitDetailDto coverageBenefitDetailDto) {
-                PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail = new PreAuthorizationRequestCoverageDetail();
-                preAuthorizationRequestCoverageDetail.updateWithCoverageDetails(coverageBenefitDetailDto);
-                *//*
-                * Unable to do deep copying
-                * *//*
-                //BeanUtils.copyProperties(preAuthorizationRequestCoverageDetail, coverageBenefitDetailDto);
-                return preAuthorizationRequestCoverageDetail;
-            }
-        }).collect(Collectors.toSet()) : Sets.newHashSet();
-    }*/
+    public GroupHealthCashlessClaimPolicyDetail updateWithCoverages(Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails) {
+        this.coverageDetails = coverageDetails;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetail updateWithAssuredDetails(GHInsured groupHealthInsured, String clientId) {
+        this.assuredDetail = new GroupHealthCashlessClaimAssuredDetail().updateWithAssuredDetails(groupHealthInsured, clientId);
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetail updateWithDependentAssuredDetail(GHInsuredDependent ghInsuredDependent, GHInsured groupHealthInsured, String clientId) {
+        this.assuredDetail = new GroupHealthCashlessClaimAssuredDetail().updateWithAssuredDetailsForDependent(ghInsuredDependent, groupHealthInsured, clientId);
+        return this;
+    }
 }
