@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.application.command.claim;
 
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
+import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatch;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorization;
@@ -10,6 +11,7 @@ import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepo
 import com.pla.sharedkernel.util.SequenceGenerator;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.repository.Repository;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.*;
 import static org.springframework.util.Assert.notEmpty;
 
 /**
@@ -49,5 +52,15 @@ public class GroupHealthCashlessCommandHandler {
                 return groupHealthCashlessClaimService.constructGroupHealthCashlessClaimEntity(claimUploadedExcelDataDtos, uploadGroupHealthCashlessClaimCommand.getBatchDate(), uploadGroupHealthCashlessClaimCommand.getBatchUploaderUserId(), uploadGroupHealthCashlessClaimCommand.getHcpCode());
             }
         }).collect(Collectors.toList());
+        if(isNotEmpty(groupHealthCashlessClaimList)){
+            groupHealthCashlessClaimList.stream().forEach(claim -> {
+                groupHealthCashlessClaimAxonRepository.add(claim);
+                try {
+                    claim.savedRegisterFollowUpReminders();
+                } catch (GenerateReminderFollowupException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }

@@ -1449,6 +1449,56 @@ public enum GHCashlessClaimExcelHeader {
             }
             return errorMessage;
         }
+    }, STATUS("Status"){
+        @Override
+        public String getAllowedValue(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
+            return claimUploadedExcelDataDto.getStatus();
+        }
+
+        @Override
+        public ClaimUploadedExcelDataDto populatePreAuthorizationDetail(ClaimUploadedExcelDataDto claimUploadedExcelDataDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            claimUploadedExcelDataDto.setStatus(cellValue);
+            return claimUploadedExcelDataDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
+            return "";
+        }
+    }, COMMENTS("Comments"){
+        @Override
+        public String getAllowedValue(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
+            return claimUploadedExcelDataDto.getComments();
+        }
+
+        @Override
+        public ClaimUploadedExcelDataDto populatePreAuthorizationDetail(ClaimUploadedExcelDataDto claimUploadedExcelDataDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            claimUploadedExcelDataDto.setComments(cellValue);
+            return claimUploadedExcelDataDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
+            String errorMessage = "";
+            try {
+                Cell statusCell = row.getCell(excelHeaders.indexOf(STATUS.description));
+                String status = getCellValue(statusCell);
+                if(isEmpty(status) && status.trim().equalsIgnoreCase("IGNORE") && isEmpty(value)) {
+                    errorMessage = errorMessage + "Please provide comments as status selected is Ignore";
+                    return errorMessage;
+                }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
     };
 
     private String description;

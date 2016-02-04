@@ -1,5 +1,8 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.pla.grouphealth.claim.cashless.domain.event.GroupHealthCashlessClaimFollowUpReminderEvent;
+import com.pla.grouphealth.claim.cashless.domain.event.PreAuthorizationFollowUpReminderEvent;
+import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
@@ -158,6 +161,14 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     public GroupHealthCashlessClaim updateStatus(Status status) {
         this.status = status;
         return this;
+    }
+
+    public void savedRegisterFollowUpReminders() throws GenerateReminderFollowupException {
+        try {
+            registerEvent(new GroupHealthCashlessClaimFollowUpReminderEvent(this.getGroupHealthCashlessClaimId()));
+        } catch (Exception e){
+            throw new GenerateReminderFollowupException(e.getMessage());
+        }
     }
 
     public enum Status {

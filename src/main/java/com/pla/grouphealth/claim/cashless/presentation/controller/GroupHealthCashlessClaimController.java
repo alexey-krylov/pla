@@ -16,16 +16,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
+import org.axonframework.commandhandling.callbacks.FutureCallback;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,6 +40,8 @@ import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 /**
  * Author - Mohan Sharma Created on 2/03/2016.
  */
+@RestController
+@RequestMapping(value = "/grouphealth/claim/cashless/claim")
 public class GroupHealthCashlessClaimController {
 
     @Autowired
@@ -104,8 +104,9 @@ public class GroupHealthCashlessClaimController {
                 userName = authentication.getName();
             }
             Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(ghCashlessCLaimTemplate);
-            int batchNumber = commandGateway.sendAndWait(new UploadGroupHealthCashlessClaimCommand(claimRelatedFileUploadDto.getHcpCode(), claimUploadedExcelDataDtoList, claimRelatedFileUploadDto.getBatchDate(), userName));
-            return Result.success("Insured detail uploaded successfully - "+batchNumber);
+            FutureCallback callback = new FutureCallback();
+            commandGateway.send(new UploadGroupHealthCashlessClaimCommand(claimRelatedFileUploadDto.getHcpCode(), claimUploadedExcelDataDtoList, claimRelatedFileUploadDto.getBatchDate(), userName), callback);
+            return Result.success("claim details successfully uploaded.");
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);
@@ -116,7 +117,7 @@ public class GroupHealthCashlessClaimController {
     public void downloadErrorInsuredTemplate(@PathVariable("hcpCode") String hcpCode, HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/msexcel");
-        response.setHeader("content-disposition", "attachment; filename=" + "PreAuthorizationTemplate.xls" + "");
+        response.setHeader("content-disposition", "attachment; filename=" + "GroupHealthCashlessClaimTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
         File errorTemplateFile = new File(hcpCode);
         InputStream inputStream = new FileInputStream(errorTemplateFile);

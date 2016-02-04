@@ -120,7 +120,7 @@ public class GroupHealthCashlessClaimService {
                 .updateWithGroupHealthCashlessClaimIllnessDetail(constructGroupHealthCashlessClaimIllnessDetail(claimUploadedExcelDataDto))
                 .updateWithGroupHealthCashlessClaimDrugServices(constructGroupHealthCashlessClaimDrugServices(claimUploadedExcelDataDtos))
                 .updateWithGroupHealthCashlessClaimPolicyDetail(constructGroupHealthCashlessClaimPolicyDetail(claimUploadedExcelDataDtos, claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId, hcpCode,groupHealthCashlessClaim));
-        return null;
+        return groupHealthCashlessClaim;
     }
 
     private GroupHealthCashlessClaimPolicyDetail constructGroupHealthCashlessClaimPolicyDetail(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos, String policyNumber, String clientId, String hcpCode, GroupHealthCashlessClaim groupHealthCashlessClaim) {
