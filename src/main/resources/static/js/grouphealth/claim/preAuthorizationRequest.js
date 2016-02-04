@@ -442,13 +442,16 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
 
+
             $scope.checkYes = function(){
+                $scope.isrequire = true;
                 $scope.createUpdateDto.illnessDetailDto.htndetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
                 $scope.two = false;
 
             };
 
             $scope.activeIhd = function(){
+                $scope.isrequireIhd = true;
                 $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=  $scope.createUpdateDto.illnessDetailDto.ihdhoddetail;
                 $scope.idh = false;
 
@@ -460,6 +463,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activeDibetes = function(){
+                $scope.isrequireDibetes=true;
                 $scope.createUpdateDto.illnessDetailDto.diabetesDetails=$scope.createUpdateDto.illnessDetailDto.diabetesDetail;
                 $scope.dibetes = false;
 
@@ -471,6 +475,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activeAsthma = function(){
+                $scope.isrequireAsthma=true;
                 $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail;
                 $scope.asthma = false;
 
@@ -482,6 +487,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activeStd = function(){
+                $scope.isrequireStd=true;
                 $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail;
                 $scope.std = false;
 
@@ -493,6 +499,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activeArthiritis = function(){
+                $scope.isrequireArthiritis=true;
                 $scope.createUpdateDto.illnessDetailDto.arthritisDetails=$scope.createUpdateDto.illnessDetailDto.arthritisDetail;
                 $scope.Arthiritis = false;
 
@@ -504,6 +511,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activeCancer = function(){
+                $scope.isrequireCancer=true;
                 $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail;
                 $scope.cancer = false;
 
@@ -515,6 +523,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activeAlcohol = function(){
+                $scope.isrequireAlcohol=true;
                 $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail;
                 $scope.alcohol = false;
 
@@ -526,6 +535,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             };
             $scope.activepshyciatric = function(){
+                $scope.isrequirepshyciatric=true;
                 $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail;
                 $scope.pshyciatric = false;
 
