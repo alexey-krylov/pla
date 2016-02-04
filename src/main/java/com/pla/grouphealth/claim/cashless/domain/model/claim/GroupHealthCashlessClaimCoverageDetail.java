@@ -1,6 +1,5 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
-import com.pla.grouphealth.claim.cashless.presentation.dto.CoverageBenefitDetailDto;
 import lombok.*;
 
 import java.math.BigDecimal;

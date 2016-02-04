@@ -1,8 +1,5 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
-import com.pla.grouphealth.claim.cashless.presentation.dto.AssuredDetail;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimantPolicyDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.DependentAssuredDetail;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import lombok.Getter;

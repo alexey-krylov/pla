@@ -2,7 +2,7 @@ package com.pla.grouphealth.claim.cashless.query;
 
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.SearchPreAuthorizationRecordDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

@@ -1,12 +1,11 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantProposerDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantProposerDetail;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
-import org.nthdimenzion.utils.UtilValidator;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.nthdimenzion.utils.UtilValidator.*;

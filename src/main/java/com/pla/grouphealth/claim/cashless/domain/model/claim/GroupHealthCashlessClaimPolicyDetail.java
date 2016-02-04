@@ -1,8 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
 import com.pla.core.domain.model.plan.PlanDetail;
-import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimantPolicyDetailDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import com.pla.sharedkernel.domain.model.PolicyNumber;

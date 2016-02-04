@@ -1,7 +1,7 @@
 package com.pla.grouphealth.claim.cashless.application.service.preauthorization;
 
 import com.google.common.collect.Lists;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
 import org.apache.commons.lang.StringUtils;

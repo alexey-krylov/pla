@@ -1,7 +1,7 @@
 package com.pla.grouphealth.claim.cashless.domain.model.preauthorization;
 
 import com.pla.core.hcp.domain.model.HCPAddress;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimantHCPDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimantHCPDetailDto;
 import lombok.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;

@@ -21,16 +21,15 @@ import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.repository.GroupHealthCashlessClaimRepository;
-import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
+import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
-import com.pla.grouplife.claim.domain.model.ClaimIntimationType;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
@@ -39,6 +38,7 @@ import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.sharedkernel.util.SequenceGenerator;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -51,6 +51,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
@@ -483,5 +484,48 @@ public class GroupHealthCashlessClaimService {
             }).collect(Collectors.toList());
         }
         return mandatoryDocumentDtos;
+    }
+
+    public GroupHealthCashlessClaimDto getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        GroupHealthCashlessClaimDto groupHealthCashlessClaimDto = new GroupHealthCashlessClaimDto();
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            groupHealthCashlessClaimDto
+                    .updateWithGroupHealthCashlessClaimId(groupHealthCashlessClaim.getGroupHealthCashlessClaimId())
+                    .updateWithCategory(groupHealthCashlessClaim.getCategory())
+                    .updateWithRelationship(groupHealthCashlessClaim.getRelationship())
+                    .updateWithClaimType(groupHealthCashlessClaim.getClaimType())
+                    .updateWithClaimIntimationDate(groupHealthCashlessClaim.getClaimIntimationDate())
+                    .updateWithBatchNumber(groupHealthCashlessClaim.getBatchNumber())
+                    .updateWithBatchUploaderUserId(groupHealthCashlessClaim.getBatchUploaderUserId())
+                    .updateWithStatus(groupHealthCashlessClaim.getStatus())
+                    .updateWithCreatedOn(groupHealthCashlessClaim.getCreatedOn())
+                    .updateWithGhProposer(groupHealthCashlessClaim.getGhProposer())
+                    .updateWithGroupHealthCashlessClaimHCPDetailDto(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail())
+                    .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(groupHealthCashlessClaim.getGroupHealthCashlessClaimDiagnosisTreatmentDetails())
+                    .updateWithGroupHealthCashlessClaimIllnessDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimIllnessDetail())
+                    .updateWithGroupHealthCashlessClaimDrugServices(groupHealthCashlessClaim.getGroupHealthCashlessClaimDrugServices())
+                    .updateWithCommentDetails(groupHealthCashlessClaim.getCommentDetails())
+                    .updateWithSubmittedFlag(groupHealthCashlessClaim.isSubmitted())
+                    .updateWithSubmissionDate(groupHealthCashlessClaim.getSubmissionDate())
+                    .updateWithClaimProcessorUserId(groupHealthCashlessClaim.getClaimProcessorUserId())
+                    .updateWithClaimUnderWriterUserId(groupHealthCashlessClaim.getClaimUnderWriterUserId())
+                    .updateWithUnderWriterRoutedToSeniorUnderWriterUserId(groupHealthCashlessClaim.getUnderWriterRoutedToSeniorUnderWriterUserId())
+                    .updateWithFirstReminderSent(groupHealthCashlessClaim.isFirstReminderSent())
+                    .updateWithSecondReminderSent(groupHealthCashlessClaim.isSecondReminderSent())
+                    .updateWithRejectionEmailSent(groupHealthCashlessClaim.isRejectionEmailSent())
+                    .updateWithAdditionalRequirementEmailSent(groupHealthCashlessClaim.isAdditionalRequirementEmailSent())
+                    .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaim.getAdditionalRequiredDocumentsByUnderwriter())
+                    .updateWithGroupHealthCashlessClaimPolicyDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail());
+        }
+        return groupHealthCashlessClaimDto;
+    }
+
+    public void populateDetailsToGroupHealthCashlessClaim(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto){
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId());
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            groupHealthCashlessClaim.updateWithBatchNumber(groupHealthCashlessClaimDto.getBatchNumber())
+                    .updateWithCategory(groupHealthCashlessClaim.getCategory());
+        }
     }
 }

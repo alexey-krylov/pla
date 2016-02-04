@@ -1,0 +1,193 @@
+package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
+
+import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
+import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
+import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
+import com.pla.sharedkernel.domain.model.Relationship;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.nthdimenzion.utils.UtilValidator;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
+
+/**
+ * Author - Mohan Sharma Created on 2/4/2016.
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+public class GroupHealthCashlessClaimDto {
+    private String groupHealthCashlessClaimId;
+    private String category;
+    private String relationship;
+    private String claimType;
+    private LocalDate claimIntimationDate;
+    private String batchNumber;
+    private String batchUploaderUserId;
+    private String status;
+    private DateTime createdOn;
+    private GHProposerDto ghProposer;
+    private GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetail;
+    private GroupHealthCashlessClaimHCPDetailDto groupHealthCashlessClaimHCPDetail;
+    private Set<GroupHealthCashlessClaimDiagnosisTreatmentDetailDto> groupHealthCashlessClaimDiagnosisTreatmentDetails;
+    private GroupHealthCashlessClaimIllnessDetailDto groupHealthCashlessClaimIllnessDetail;
+    private Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices;
+    private Set<CommentDetail> commentDetails;
+    private boolean submitted;
+    private LocalDate submissionDate;
+    private String claimProcessorUserId;
+    private String claimUnderWriterUserId;
+    private String underWriterRoutedToSeniorUnderWriterUserId;
+    private boolean firstReminderSent;
+    private boolean secondReminderSent;
+    private boolean rejectionEmailSent;
+    private boolean additionalRequirementEmailSent;
+    private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimId(String groupHealthCashlessClaimId) {
+        this.groupHealthCashlessClaimId = groupHealthCashlessClaimId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithCategory(String category) {
+        this.category = category;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithRelationship(Relationship relationship) {
+        if(isNotEmpty(relationship))
+            this.relationship = relationship.description;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithClaimType(String claimType) {
+        this.claimType = claimType;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithClaimIntimationDate(LocalDate claimIntimationDate) {
+        this.claimIntimationDate = claimIntimationDate;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithBatchUploaderUserId(String batchUploaderUserId) {
+        this.batchUploaderUserId = batchUploaderUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithStatus(GroupHealthCashlessClaim.Status status) {
+        if(isNotEmpty(status))
+            this.status = status.getDescription();
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithCreatedOn(DateTime createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGhProposer(GHProposer ghProposer) {
+        if(isNotEmpty(ghProposer)){
+            this.ghProposer = new GHProposerDto().updateWithDetails(ghProposer);
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimHCPDetailDto(GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail) {
+        if(isNotEmpty(groupHealthCashlessClaimHCPDetail)){
+            this.groupHealthCashlessClaimHCPDetail = new GroupHealthCashlessClaimHCPDetailDto().updateWithDetails(groupHealthCashlessClaimHCPDetail);
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(Set<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails) {
+        this.groupHealthCashlessClaimDiagnosisTreatmentDetails = isNotEmpty(groupHealthCashlessClaimDiagnosisTreatmentDetails) ? groupHealthCashlessClaimDiagnosisTreatmentDetails.stream().map(detail -> new GroupHealthCashlessClaimDiagnosisTreatmentDetailDto().updateWithDetails(detail)).collect(Collectors.toSet()) : Sets.newHashSet();
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimIllnessDetail(GroupHealthCashlessClaimIllnessDetail groupHealthCashlessClaimIllnessDetail) {
+        if(isNotEmpty(groupHealthCashlessClaimIllnessDetail))
+            this.groupHealthCashlessClaimIllnessDetail  = new GroupHealthCashlessClaimIllnessDetailDto().updateWithDetails(groupHealthCashlessClaimIllnessDetail);
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimDrugServices(Set<GroupHealthCashlessClaimDrugService> groupHealthCashlessClaimDrugServices) {
+        this.groupHealthCashlessClaimDrugServices = isNotEmpty(groupHealthCashlessClaimDrugServices) ? groupHealthCashlessClaimDrugServices.stream().map(detail -> new GroupHealthCashlessClaimDrugServiceDto().updateWithDetails(detail)).collect(Collectors.toSet()) : Sets.newHashSet();
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithCommentDetails(Set<CommentDetail> commentDetails) {
+        this.commentDetails = commentDetails;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithSubmittedFlag(boolean submitted) {
+        this.submitted = submitted;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithSubmissionDate(LocalDate submissionDate) {
+        this.submissionDate = submissionDate;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithClaimProcessorUserId(String claimProcessorUserId) {
+        this.claimProcessorUserId = claimProcessorUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithClaimUnderWriterUserId(String claimUnderWriterUserId) {
+        this.claimUnderWriterUserId = claimUnderWriterUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithUnderWriterRoutedToSeniorUnderWriterUserId(String underWriterRoutedToSeniorUnderWriterUserId) {
+        this.underWriterRoutedToSeniorUnderWriterUserId = underWriterRoutedToSeniorUnderWriterUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithFirstReminderSent(boolean firstReminderSent) {
+        this.firstReminderSent = firstReminderSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithSecondReminderSent(boolean secondReminderSent) {
+        this.secondReminderSent = secondReminderSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithRejectionEmailSent(boolean rejectionEmailSent) {
+        this.rejectionEmailSent = rejectionEmailSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithAdditionalRequirementEmailSent(boolean additionalRequirementEmailSent) {
+        this.additionalRequirementEmailSent = additionalRequirementEmailSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithAdditionalRequiredDocumentsByUnderwriter(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
+        this.additionalRequiredDocumentsByUnderwriter = additionalRequiredDocumentsByUnderwriter;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimPolicyDetail(GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail) {
+        this.groupHealthCashlessClaimPolicyDetail = new GroupHealthCashlessClaimPolicyDetailDto().updateWithDetails(groupHealthCashlessClaimPolicyDetail);
+        return this;
+    }
+}

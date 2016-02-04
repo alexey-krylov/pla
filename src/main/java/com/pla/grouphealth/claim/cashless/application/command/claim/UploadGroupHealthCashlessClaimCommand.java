@@ -1,6 +1,6 @@
 package com.pla.grouphealth.claim.cashless.application.command.claim;
 
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import lombok.Getter;
 import org.joda.time.DateTime;
 

@@ -8,10 +8,10 @@ import com.pla.grouphealth.claim.cashless.application.service.preauthorization.P
 import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestId;
 
-import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
-import com.pla.grouphealth.claim.cashless.presentation.dto.GHPreAuthorizationMailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHClaimDocumentCommand;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHPreAuthorizationMailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;

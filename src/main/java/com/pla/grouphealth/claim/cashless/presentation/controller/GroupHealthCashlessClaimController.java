@@ -6,8 +6,11 @@ import com.pla.grouphealth.claim.cashless.application.command.claim.UploadGroupH
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimRelatedFileUploadDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
@@ -137,5 +140,15 @@ public class GroupHealthCashlessClaimController {
         }
         List<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = groupHealthCashlessClaimService.findMandatoryDocuments(new FamilyId(clientId), groupHealthCashlessClaimId);
         return ghProposalMandatoryDocumentDtos;
+    }
+
+    @RequestMapping(value = "/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid", method = RequestMethod.GET)
+    @ResponseBody
+    public GroupHealthCashlessClaimDto getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(@RequestParam String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
+        if (isEmpty(groupHealthCashlessClaimId)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return null;
+        }
+        return groupHealthCashlessClaimService.getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(groupHealthCashlessClaimId);
     }
 }

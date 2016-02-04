@@ -66,8 +66,8 @@
         <axon:async executor="taskExecutor" transaction-manager="transactionManager"/>
         <axon:types>
             com.pla.individuallife.quotation.saga.ILQuotationARSaga,com.pla.core.saga.PlanSaga,com.pla.grouplife.quotation.saga.GroupLifeQuotationSaga,com.pla.grouphealth.quotation.saga.GroupHealthQuotationSaga,com.pla.individuallife.proposal.domain.event.IndividualLifeProposalSaga,
-            com.pla.grouplife.proposal.domain.event.GroupLifeProposalSaga,com.pla.grouphealth.proposal.domain.event.GroupHealthProposalSaga,com.pla.grouplife.claim.domain.event.GroupLifeClaimSaga,com.pla.grouphealth.claim.cashless.domain.event.PreAuthorizationRequestSaga,
-            com.pla.grouphealth.claim.cashless.domain.event.GroupHealthCashlessClaimSaga
+            com.pla.grouplife.proposal.domain.event.GroupLifeProposalSaga,com.pla.grouphealth.proposal.domain.event.GroupHealthProposalSaga,com.pla.grouplife.claim.domain.event.GroupLifeClaimSaga,com.pla.grouphealth.claim.cashless.domain.event.preauthorization.PreAuthorizationRequestSaga,
+            com.pla.grouphealth.claim.cashless.domain.event.claim.GroupHealthCashlessClaimSaga
         </axon:types>
     </axon:saga-manager>
 

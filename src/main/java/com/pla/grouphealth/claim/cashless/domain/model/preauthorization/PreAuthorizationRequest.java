@@ -1,11 +1,11 @@
 package com.pla.grouphealth.claim.cashless.domain.model.preauthorization;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.claim.cashless.domain.event.PreAuthorizationFollowUpReminderEvent;
+import com.pla.grouphealth.claim.cashless.domain.event.preauthorization.PreAuthorizationFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
-import com.pla.grouphealth.claim.cashless.presentation.dto.*;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;

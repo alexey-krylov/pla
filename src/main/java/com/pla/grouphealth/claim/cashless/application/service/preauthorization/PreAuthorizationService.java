@@ -14,12 +14,12 @@ import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAutho
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationId;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationClaimantDetailCommand;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
-import com.pla.grouphealth.claim.cashless.repository.GroupHealthCashlessClaimRepository;
-import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRepository;
-import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
+import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
+import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRepository;
+import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.sharedkernel.util.SequenceGenerator;

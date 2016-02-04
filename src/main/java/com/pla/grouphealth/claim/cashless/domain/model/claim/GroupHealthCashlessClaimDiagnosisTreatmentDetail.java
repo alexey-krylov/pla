@@ -1,11 +1,10 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
-import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
-import org.nthdimenzion.utils.UtilValidator;
 
 import javax.persistence.Embeddable;
 

@@ -1,8 +1,8 @@
 package com.pla.grouphealth.claim.cashless.domain.model.preauthorization;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.claim.cashless.presentation.dto.BenefitDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.CoverageBenefitDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.BenefitDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.CoverageBenefitDetailDto;
 import lombok.*;
 
 import java.math.BigDecimal;

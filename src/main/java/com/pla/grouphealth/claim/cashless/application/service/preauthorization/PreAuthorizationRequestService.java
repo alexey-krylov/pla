@@ -24,9 +24,9 @@ import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInPro
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
-import com.pla.grouphealth.claim.cashless.presentation.dto.*;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
-import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
+import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;

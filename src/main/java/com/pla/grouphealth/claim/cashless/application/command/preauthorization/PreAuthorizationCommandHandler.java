@@ -5,8 +5,8 @@ import com.pla.grouphealth.claim.cashless.application.service.preauthorization.P
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
-import com.pla.grouphealth.claim.cashless.presentation.dto.GHClaimDocumentCommand;
-import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHClaimDocumentCommand;
+import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
