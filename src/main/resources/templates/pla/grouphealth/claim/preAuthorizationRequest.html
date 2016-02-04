@@ -1338,7 +1338,8 @@
                                         <div class="form-group required col-md-4">
                                             <label class="control-label">HTN</label>
                                             <div class="radio" style="margin:0px">
-                                                <label style="margin-right:30px"><input type="radio"
+                                                <label style="margin-right:30px">
+                                                    <input type="radio"
                                                                                         name="htn"
                                                                                         value="Yes" ng-click="checkYes()"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.htn"/>Yes</label>
@@ -1892,9 +1893,10 @@
                                                    readonly="true"/>
                                         </div>
                                     </div>
-                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                         ng-click="uploadDocumentFiles()" ng-disabled="isViewMode">Upload All
-                                    </div>
+                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"  ng-disabled="step6.$invalid || isViewMode"
+                                         ng-click="uploadDocumentFiles()">Upload All
+
+                                </div>
                                 </div>
                             </accordion-group>
 
