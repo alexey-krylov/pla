@@ -66,7 +66,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
     private Map<String, ScheduleToken> scheduledTokens = Maps.newLinkedHashMap();
 
     @StartSaga
-    @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
+    @SagaEventHandler(associationProperty = "groupHealthCashlessClaimId")
     public void handle(GroupHealthCashlessClaimFollowUpReminderEvent event) throws ProcessInfoException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Handling GroupHealthCashlessClaimFollowUpReminderEvent .....", event);
@@ -76,11 +76,11 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         int firstReminderDay = processInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         int secondReminderDay = processInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
-        DateTime preAuthCreatedDate = groupHealthCashlessClaim.getCreatedOn();
-        DateTime firstReminderDateTime = preAuthCreatedDate.plusDays(firstReminderDay);
-        DateTime purgeScheduleDateTime = preAuthCreatedDate.plusDays(noOfDaysToPurge);
-        DateTime secondReminderDateTime = preAuthCreatedDate.plusDays(firstReminderDay + secondReminderDay);
-        DateTime closureScheduleDateTime = preAuthCreatedDate.plusDays(firstReminderDay + secondReminderDay + noOfDaysToClosure);
+        DateTime claimCreationDate = groupHealthCashlessClaim.getCreatedOn();
+        DateTime firstReminderDateTime = claimCreationDate.plusDays(firstReminderDay);
+        DateTime purgeScheduleDateTime = claimCreationDate.plusDays(noOfDaysToPurge);
+        DateTime secondReminderDateTime = claimCreationDate.plusDays(firstReminderDay + secondReminderDay);
+        DateTime closureScheduleDateTime = claimCreationDate.plusDays(firstReminderDay + secondReminderDay + noOfDaysToClosure);
         ScheduleToken firstReminderScheduleToken = eventScheduler.schedule(firstReminderDateTime, new GroupHealthCashlessClaimFirstReminderEvent(event.getGroupHealthCashlessClaimId()));
         ScheduleToken secondReminderScheduleToken = eventScheduler.schedule(secondReminderDateTime, new GroupHealthCashlessClaimSecondReminderEvent(event.getGroupHealthCashlessClaimId()));
         ScheduleToken closureScheduleToken = eventScheduler.schedule(closureScheduleDateTime, new GroupHealthCashlessClaimClosureEvent(event.getGroupHealthCashlessClaimId()));
@@ -90,7 +90,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         groupHealthCashlessClaim.updateWithScheduledTokens(scheduledTokens);
     }
 
-    @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
+    @SagaEventHandler(associationProperty = "groupHealthCashlessClaimId")
     public void handle(GroupHealthCashlessClaimFirstReminderEvent event){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
         if(!groupHealthCashlessClaim.isFirstReminderSent() && !groupHealthCashlessClaim.isSecondReminderSent()) {
@@ -116,7 +116,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         return getNameListOfPendingMandatoryDocument(mandatoryDocuments, groupHealthCashlessClaim.getProposerDocuments());
     }
 
-    @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
+    @SagaEventHandler(associationProperty = "groupHealthCashlessClaimId")
     public void handle(GroupHealthCashlessClaimSecondReminderEvent event){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
         if(groupHealthCashlessClaim.isFirstReminderSent() && !groupHealthCashlessClaim.isSecondReminderSent()) {
@@ -128,7 +128,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         }
     }
 
-    @SagaEventHandler(associationProperty = "preAuthorizationRequestId")
+    @SagaEventHandler(associationProperty = "groupHealthCashlessClaimId")
     public void handle(GroupHealthCashlessClaimClosureEvent event){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
         List<String> pendingDocumentList = getPendingDocumentList(groupHealthCashlessClaim);

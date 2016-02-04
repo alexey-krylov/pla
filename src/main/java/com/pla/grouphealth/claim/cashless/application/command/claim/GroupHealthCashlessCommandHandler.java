@@ -46,10 +46,13 @@ public class GroupHealthCashlessCommandHandler {
     public void createClaim(UploadGroupHealthCashlessClaimCommand uploadGroupHealthCashlessClaimCommand){
         List<List<ClaimUploadedExcelDataDto>> refurbishedSet = preAuthorizationService.createSubListBasedOnSimilarCriteria(uploadGroupHealthCashlessClaimCommand.getClaimUploadedExcelDataDtos());
         notEmpty(refurbishedSet, "Error uploading no PreAuthorization data list found to save");
+        String batchNumber = sequenceGenerator.getSequence(GroupHealthCashlessClaimBatch.class);
+        batchNumber = String.format("%08d", Integer.parseInt(batchNumber.trim()));
+        final String finalBatchNumber = batchNumber;
         List<GroupHealthCashlessClaim> groupHealthCashlessClaimList = refurbishedSet.stream().map(new Function<List<ClaimUploadedExcelDataDto>, GroupHealthCashlessClaim>() {
             @Override
             public GroupHealthCashlessClaim apply(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos) {
-                return groupHealthCashlessClaimService.constructGroupHealthCashlessClaimEntity(claimUploadedExcelDataDtos, uploadGroupHealthCashlessClaimCommand.getBatchDate(), uploadGroupHealthCashlessClaimCommand.getBatchUploaderUserId(), uploadGroupHealthCashlessClaimCommand.getHcpCode());
+                return groupHealthCashlessClaimService.constructGroupHealthCashlessClaimEntity(claimUploadedExcelDataDtos, uploadGroupHealthCashlessClaimCommand.getBatchDate(), uploadGroupHealthCashlessClaimCommand.getBatchUploaderUserId(), uploadGroupHealthCashlessClaimCommand.getHcpCode(), finalBatchNumber);
             }
         }).collect(Collectors.toList());
         if(isNotEmpty(groupHealthCashlessClaimList)){

@@ -101,9 +101,7 @@ public class GroupHealthCashlessClaimService {
         return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, GHCashlessClaimExcelHeader.getAllowedHeaders(), GHCashlessClaimExcelHeader.class, dataMap);
     }
 
-    public GroupHealthCashlessClaim constructGroupHealthCashlessClaimEntity(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos, DateTime batchDate, String batchUploaderUserId, String hcpCode) {
-        String batchNumber = sequenceGenerator.getSequence(GroupHealthCashlessClaimBatch.class);
-        batchNumber = String.format("%08d", Integer.parseInt(batchNumber.trim()));
+    public GroupHealthCashlessClaim constructGroupHealthCashlessClaimEntity(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos, DateTime batchDate, String batchUploaderUserId, String hcpCode, String batchNumber) {
         notEmpty(claimUploadedExcelDataDtos, "No uploaded details found.");
         ClaimUploadedExcelDataDto claimUploadedExcelDataDto = claimUploadedExcelDataDtos.iterator().next();
         notNull(claimUploadedExcelDataDto, "No uploaded details found.");
