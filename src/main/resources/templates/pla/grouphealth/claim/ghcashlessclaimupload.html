@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
+    <link href="https://www.fuelcdn.com/fuelux/3.6.3/css/fuelux.min.css" rel="stylesheet"/>
+    <script data-main="../../../../static/js/requireConfig"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+
+    <!--*/-->
+</head>
+<body class="fuelux">
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<script>
+    var isEnterKey = function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+
+        if (charCode == 13) {
+            event.preventDefault();
+        }
+    }
+    requirejs(['main', 'angular-file-upload'], function () {
+        require(['/pla/js/grouphealth/claim/ghcashlessclaimupload.js?t=19'], function () {
+            angular.element(document).ready(function () {
+                angular.bootstrap(document, ['CashLessClaimUpload']);
+            });
+        });
+    });
+</script>
+<script type="text/ng-template" id="ghcashlessclaimupload.html">
+    <nth-alert></nth-alert>
+    <div class="wizard fuelux-wizard" selected-item="selectedWizard" style="overflow: visible"
+         ng-class="{'form-submitted':isFormSubmitted}" remove-steps="stepsToRemove">
+        <ul class="steps" style="margin-left: 0">
+            <li data-step="1">
+                <span class="badge badge-info"></span>Cash Less Claim Upload<span class="chevron"></span>
+            </li>
+        </ul>
+        <div class="step-content">
+            <div class="step-pane active" data-step="1">
+                <ng-form name="hcpForm">
+                    <div class="row">
+                        <div class="col-lg-6">
+                        </div>
+                        <div class="col-lg-6">
+                            <button type="button" class="btn btn-success  pull-right" data-animation="am-flip-x" bs-dropdown="dropdown" ng-disabled="uploadPreAuthorizationDto.hcpCode == '' || uploadPreAuthorizationDto.hcpCode == null" >Downloads
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Hcp Name</label>
+                                <div class="form-group required">
+                                    <select class="form-control input-sm" name="payPointStatus"
+                                            ng-model="uploadPreAuthorizationDto.hcpCode" ng-disabled="mode =='view'"
+                                            ng-options="hcp.hcpCode as hcp.hcpName for hcp in hcps"
+                                            ng-required="true"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row bs-callout-info bs-callout-info">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Batch Number</label>
+                                <input  type="text" class="form-control input-sm" id="batchNumber"
+                                        name="batchNumber"
+                                        ng-readonly="true"
+                                        placeholder="Enter Batch Number" ng-disabled="mode =='view'"/>
+                                <div class="error" ng-messages="hcpRateForm.hcpName.$error"
+                                     ng-if="hcpRateForm.contactPersonDetail.$dirty">
+                                    <small ng-message="required">Please Enter Batch Number .</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group required">
+                                <label class="control-label">Batch  Date</label>
+                                <div class='input-group date'>
+                                    <input type="text" class="form-control input-sm" id="batchDate"
+                                           name="batchDate"
+                                           ng-model="uploadPreAuthorizationDto.batchDate"
+                                           is-open="submissionbatchDate"
+
+                                           datepicker-popup=""
+                                           placeholder="Enter Batch  Date"
+                                           ng-disabled="mode =='view'"/>
+                                      <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                              ng-click="launchbatchDate($event)">
+                                          <i class="glyphicon glyphicon-calendar"></i></button>
+                                      </span>
+                                </div>
+                                <div class="error" ng-messages="hcpForm.fromdate.$error"
+                                     ng-if="hcpForm.fromdate.$dirty">
+                                    <small ng-message="pattern">Please Enter Batch  Date.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row bs-callout-info bs-callout-info">
+                        <div class="col-lg-9">
+                            <div class="form-group required">
+                                <label class="control-label ">Upload File</label>
+                                <div class="form-group" style="margin-left:1px;; ">
+                                    <input type="text" class="form-control input-sm"  name="file"
+                                           ng-required="true" placeholder="Browse File" ng-model="fileName"
+                                           style="width: 62%;display: inline-block" ng-readonly="true"/>
+                                    <button type="file" class="btn btn-default btn-sm" ng-file-select=""
+                                            ng-model="fileSaved">
+                                        <span class="glyphicon glyphicon-upload"></span>
+                                    </button>
+                                    <div class="error" ng-messages="hcpForm.file.$error"
+                                         ng-if="hcpForm.file.$dirty">
+                                        <small ng-message="pattern">
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row bs-callout-info bs-callout-info">
+                        <div class="form-group col-md-6">
+                            <button type="button" class="btn btn-primary  pull-right" style="margin-top:25px;" data-animation="am-flip-x" ng-disabled="hcpForm.$invalid"  ng-click="uploadPreAuthorizationTemplate()">Upload</button>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <button type="button" class="btn btn-danger  pull-right" style="margin-top:25px;" data-animation="am-flip-x">cancel</button>
+                        </div>
+                    </div>
+                </ng-form>
+            </div>
+        </div>
+    </div>
+    <style>
+        .fuelux .checkbox-custom:before {
+            font-family: "Glyphicons Halflings" !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border: 1px solid #adadad;
+            border-radius: 4px;
+            color: #fff;
+            content: " ";
+            font-size: 12px;
+            height: 18px;
+            left: 0;
+            padding: 1px 0 0 1px;
+            position: absolute;
+            top: 3px;
+            width: 18px;
+        }
+        .btn {
+            font-size: 12px;
+        }
+    </style>
+</script>
+<div class="ng-view container">
+
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
