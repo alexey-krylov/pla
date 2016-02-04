@@ -1,16 +1,10 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
-
-import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Author - Mohan Sharma Created on 1/7/2016.

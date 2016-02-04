@@ -1,6 +1,5 @@
 package com.pla.grouphealth.claim.cashless.domain.event;
 
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

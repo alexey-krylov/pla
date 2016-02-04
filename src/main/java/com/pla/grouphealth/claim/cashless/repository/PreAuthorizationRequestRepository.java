@@ -1,9 +1,6 @@
 package com.pla.grouphealth.claim.cashless.repository;
 
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

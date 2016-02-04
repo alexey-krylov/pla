@@ -1,8 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.PlanDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestAssuredDetail;
 import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.sharedkernel.domain.model.Relationship;
 import com.pla.sharedkernel.identifier.PlanId;
@@ -11,10 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.nthdimenzion.presentation.AppUtils;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 

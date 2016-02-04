@@ -132,7 +132,7 @@
                                 aggregate-type="com.pla.grouplife.claim.domain.model.GLClaimSettlement"
                                 mongo-template="mongoTemplate"/>
     <extension:mongo-repository id="preAuthorizationRequestMongoRepository"
-                                aggregate-type="com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest"
+                                aggregate-type="com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest"
                                 mongo-template="mongoTemplate"/>
 
 </beans>

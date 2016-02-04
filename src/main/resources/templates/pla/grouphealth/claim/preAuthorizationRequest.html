@@ -1893,7 +1893,7 @@
                                         </div>
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                         ng-click="uploadDocumentFiles()">Upload All
+                                         ng-click="uploadDocumentFiles()" ng-disabled="isViewMode">Upload All
                                     </div>
                                 </div>
                             </accordion-group>
@@ -1965,7 +1965,7 @@
                             <div class="row">
                                 <div class="col-sm-6" style="float: right">
                                     <button type="button" class="btn btn-primary btn-sm" style="float: right"
-                                            ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode"
+                                            ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode || disableSubmit"
                                             >Submit
                                     </button>
                                 </div>

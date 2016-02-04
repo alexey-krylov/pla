@@ -2,9 +2,9 @@ package com.pla.grouphealth.claim.cashless.domain.event;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.pla.grouphealth.claim.cashless.application.command.CreatePreAuthorizationNotificationCommand;
-import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.application.command.preauthorization.CreatePreAuthorizationNotificationCommand;
+import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.repository.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;

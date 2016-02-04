@@ -1,10 +1,8 @@
 package com.pla.grouphealth.claim.cashless.query;
 
 import com.google.common.collect.Lists;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
-import org.joda.time.DateTime;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

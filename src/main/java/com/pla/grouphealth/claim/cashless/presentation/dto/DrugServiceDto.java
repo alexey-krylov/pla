@@ -1,6 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

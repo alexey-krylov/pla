@@ -1,10 +1,11 @@
 package com.pla.grouphealth.claim.cashless.presentation.controller;
 
 import com.google.common.collect.Maps;
-import com.pla.grouphealth.claim.cashless.application.command.UploadPreAuthorizationCommand;
-import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationService;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.PreAuthorizationUploadDto;
+import com.pla.grouphealth.claim.cashless.application.command.preauthorization.UploadPreAuthorizationCommand;
+import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationExcelHeader;
+import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
+import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchPreAuthorizationRecordDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import org.apache.commons.lang.StringUtils;
@@ -12,13 +13,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.util.IOUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.nthdimenzion.presentation.AppUtils;
 import org.nthdimenzion.presentation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,11 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.nthdimenzion.presentation.AppUtils.*;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -49,12 +48,12 @@ public class PreAuthorizationController {
     IAuthenticationFacade authenticationFacade;
 
     @RequestMapping(value = "/downloadGHCashlessClaimPreAuthtemplate/{ghCashlessClaimCode}", method = RequestMethod.GET)
-    public void downloadInsuredTemplate(@PathVariable("ghCashlessClaimCode") String ghCashlessClaimCode, HttpServletResponse response) throws IOException {
+    public void downloadInsuredTemplate(@PathVariable("ghCashlessClaimCode") String ghCashlessClaimCode, HttpServletResponse response) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         response.reset();
         response.setContentType("application/msexcel");
         response.setHeader("content-disposition", "attachment; filename=" + "PreAuthorizationTemplate.xls" + "");
         OutputStream outputStream = response.getOutputStream();
-        HSSFWorkbook hcpRateExcel = preAuthorizationService.getGHCashlessClaimPreAuthtemplate(ghCashlessClaimCode);
+        HSSFWorkbook hcpRateExcel = preAuthorizationService.getGHCashlessClaimPreAuthtemplate(ghCashlessClaimCode, PreAuthorizationExcelHeader.class);
         hcpRateExcel.write(outputStream);
         outputStream.flush();
         outputStream.close();
@@ -69,8 +68,8 @@ public class PreAuthorizationController {
 
     @RequestMapping(value = "/uploadPreAuthorizationTemplate", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadPreAuthorizationTemplate(PreAuthorizationUploadDto preAuthorizationUploadDto, HttpServletRequest request) throws IOException {
-        MultipartFile file = preAuthorizationUploadDto.getFile();
+    public Result uploadPreAuthorizationTemplate(ClaimRelatedFileUploadDto claimRelatedFileUploadDto, HttpServletRequest request) throws IOException {
+        MultipartFile file = claimRelatedFileUploadDto.getFile();
         if (!("application/x-ms-excel".equals(file.getContentType())|| "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel",Boolean.FALSE);
         }
@@ -78,10 +77,10 @@ public class PreAuthorizationController {
         HSSFWorkbook preAuthTemplateWorkbook = new HSSFWorkbook(fs);
         try {
             Map dataMap = Maps.newHashMap();
-            dataMap.put("hcpCode", preAuthorizationUploadDto.getHcpCode());
+            dataMap.put("hcpCode", claimRelatedFileUploadDto.getHcpCode());
             boolean isValidInsuredTemplate = preAuthorizationService.isValidInsuredTemplate(preAuthTemplateWorkbook, dataMap);
             if (!isValidInsuredTemplate) {
-                File insuredTemplateWithError = new File(preAuthorizationUploadDto.getHcpCode());
+                File insuredTemplateWithError = new File(claimRelatedFileUploadDto.getHcpCode());
                 FileOutputStream fileOutputStream = new FileOutputStream(insuredTemplateWithError);
                 preAuthTemplateWorkbook.write(fileOutputStream);
                 fileOutputStream.flush();
@@ -93,8 +92,8 @@ public class PreAuthorizationController {
             if(!(authentication instanceof AnonymousAuthenticationToken)){
                 userName = authentication.getName();
             }
-            Set<PreAuthorizationDetailDto> preAuthorizationDetailDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook);
-            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(preAuthorizationUploadDto.getHcpCode(), preAuthorizationDetailDtoList, preAuthorizationUploadDto.getBatchDate(), userName));
+            Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook);
+            int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(claimRelatedFileUploadDto.getHcpCode(), claimUploadedExcelDataDtoList, claimRelatedFileUploadDto.getBatchDate(), userName));
             return Result.success("Insured detail uploaded successfully - "+batchNumber);
         } catch (Exception e) {
             e.printStackTrace();

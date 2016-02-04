@@ -1,12 +1,9 @@
 package com.pla.sharedkernel.service;
 
-import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationRequestService;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestDrugService;
+import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
-import com.pla.sharedkernel.domain.model.PolicyNumber;
-import com.pla.sharedkernel.identifier.PolicyId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

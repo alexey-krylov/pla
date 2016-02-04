@@ -4,7 +4,7 @@ import com.pla.core.application.service.notification.NotificationTemplateService
 import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.core.repository.NotificationTemplateRepository;
-import com.pla.grouphealth.claim.cashless.application.command.CreatePreAuthorizationNotificationCommand;
+import com.pla.grouphealth.claim.cashless.application.command.preauthorization.CreatePreAuthorizationNotificationCommand;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;

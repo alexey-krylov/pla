@@ -1,14 +1,17 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.claim.cashless.domain.model.*;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationId;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestHCPDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestPolicyDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
+import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
 import java.util.List;

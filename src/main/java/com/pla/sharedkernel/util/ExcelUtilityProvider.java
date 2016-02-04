@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.core.SBCM.domain.model.ServiceBenefitCoverageMapping;
 import com.pla.core.SBCM.repository.SBCMRepository;
-import com.pla.grouphealth.claim.cashless.application.service.PreAuthorizationExcelHeader;
+import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationExcelHeader;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.publishedlanguage.contract.IExcelPropagator;
@@ -63,7 +63,7 @@ public class ExcelUtilityProvider {
         while (dataRowIterator.hasNext()) {
             Row currentRow = dataRowIterator.next();
             String errorMessage = validateRow(currentRow, excelHeaders, dynamicClass, dataMap);
-            if(dynamicClass.getName().equalsIgnoreCase("PreAuthorizationExcelHeader")){
+            if(dynamicClass.getName().equalsIgnoreCase("PreAuthorizationExcelHeader") || dynamicClass.getName().equalsIgnoreCase("GHCashlessClaimExcelHeader")){
                 String serviceNotCoveredError = isServiceDrugCoveredUnderThePolicy(currentRow, excelHeaders);
                 if(isNotEmpty(serviceNotCoveredError))
                     errorMessage = errorMessage + " \n " + serviceNotCoveredError;

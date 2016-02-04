@@ -1,22 +1,12 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import com.google.common.collect.Sets;
-import com.pla.core.domain.model.plan.Plan;
-import com.pla.core.domain.model.plan.PlanCoverage;
-import com.pla.core.domain.model.plan.PlanCoverageBenefit;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestBenefitDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationRequestCoverageDetail;
-import com.pla.grouphealth.sharedresource.model.vo.BenefitPremiumLimit;
-import com.pla.sharedkernel.domain.model.CoverageBenefitDefinition;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
 import lombok.*;
-import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
