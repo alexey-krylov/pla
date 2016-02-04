@@ -44,8 +44,40 @@
         });
     });
 
+</script><script id="plan-sumassured.tpl" type="text/ng-template">
+    <div ng-switch="plan.sumAssured.sumAssuredType" ng-form="planSumAssured">
+        <div ng-switch-when="SPECIFIED_VALUES">
+            <select class="form-control input-sm" ng-model="ilEndrosementDetils.proposalPlanDetailNew.sumAssured" name="sumAssured"
+                    ng-options="value.text as value.text for value in plan.sumAssured.sumAssuredValue"
+                    view-enabled="" ng-required="true"></select>
+        </div>
+        <div ng-switch-when="RANGE">
+            <input type="number" view-enabled="" class="form-control input-sm" min="{{plan.sumAssured.minSumInsured}}"
+                   name="plansumAssured" validate-sumassured=""
+                   max="{{plan.sumAssured.maxSumInsured}}" ng-model="ilEndrosementDetils.proposalPlanDetailNew.sumAssured" ng-required="true"/>
+            <div class="error" ng-messages="planSumAssured.plansumAssured.$error">
+                <small ng-message="min">Sum Assured cannot be less then {{plan.sumAssured.minSumInsured}}.</small>
+                <small ng-message="max">Sum Assured cannot be more than {{plan.sumAssured.maxSumInsured}}.</small>
+                <small ng-message="invalidMultiple">Please enter multiples of {{plan.sumAssured.multiplesOf}}</small>
+            </div>
+        </div>
+        <div ng-switch-when="INCOME_MULTIPLIER">
+            <input type="number" view-enabled="" class="form-control input-sm" min="0"
+                   max="{{plan.sumAssured.incomeMultiplier}}"
+                   name="sumAssured"
+                   ng-model="ilEndrosementDetils.proposalPlanDetailNew.sumAssured" ng-required="true"/>
+
+            <div class="error" ng-messages="planSumAssured.sumAssured.$error" ng-if="planSumAssured.$dirty">
+                <small ng-message="max">Sum Assured cannot be greater than {{plan.sumAssured.incomeMultiplier}}.
+                </small>
+            </div>
+        </div>
+    </div>
 </script>
+
 <script type="text/ng-template" id="createEndorsementTpl.html">
+
+
     <p class="container lead">
     <ol class="container breadcrumb" style="margin-left: 12px;width:99%">
         <li>Endorsement</li>
@@ -138,7 +170,8 @@
                                                is-open="datePickerSettingsForUpdateEffectiveDate.isOpened" close-text="Close"
                                                show-button-bar="false"
                                                name="effectiveUpdateDate" ng-required="true"
-                                               onkeypress="return isNumeric(event)" />
+                                               onkeypress="return isNumeric(event)"
+                                               ng-disabled="mode=='new'||mode=='view'" />
                                                 <span class="input-group-btn">
                                                     <button ng-disabled="mode=='new'||mode=='view'" type="button" class="btn btn-default btn-sm"
                                                             ng-click="updateEffectiveDate($event)">
@@ -847,8 +880,8 @@
                                                     <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-change="shareSumTest()" min="0" ng-init="shareSumTest()" ng-model="beneficiary.share"  ng-blur="shareSumTest()" value="{{beneficiary.share}}" />
                                                 </td>
                                                 <td>
-                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#beneficialModal" ng-click="updateBeneficiary($index)"><span class="glyphicon glyphicon-edit">&nbsp;Update</span></button>
-                                                    <button type="button" class="btn btn-primary btn-sm" ng-click="deleteBeneficiary($index)"><span class="glyphicon glyphicon-trash">&nbsp;Delete</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="mode=='new'||mode=='view'" data-toggle="modal" data-target="#beneficialModal" ng-click="updateBeneficiary($index)"><span class="glyphicon glyphicon-edit">&nbsp;Update</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm" ng-disabled="mode=='new'||mode=='view'" ng-click="deleteBeneficiary($index)"><span class="glyphicon glyphicon-trash">&nbsp;Delete</span></button>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -1044,21 +1077,32 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Plan</label>
-                                            <input type="text" class="form-control input-sm" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="policy.mobileNumber1"/>
+                                            <input type="text" class="form-control input-sm" ng-minlength="10" ng-disabled="mode=='new'||mode=='view'" maxlength="10" readonly="true" ng-maxLength="10" name="mobileNumber" ng-pattern="/^\d+$/" ng-model="ilEndrosementDetils.proposalPlanDetailNew.planName"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Ealier Sum Assured</label>
-                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="policy.homePhone1"/>
+                                            <input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" readonly="true" name="residentPhone" ng-maxlength="10" maxlength="10" ng-pattern="/^\d+$/" ng-model="ilEndrosementDetils.proposalPlanDetail.sumAssured"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">New Sum Assured</label>
-                                            <input type="email" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="policy.emailAddress1"/>
+                                            <!--<input type="text" class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'" name="spouseEmailId" ng-model="ilEndrosementDetils.proposalPlanDetailNew.sumAssured"/>-->
+                                            <sumassured ng-model="ilEndrosementDetils.proposalPlanDetailNew.sumAssured"></sumassured>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Sum Assured To be Changed In</label>
+                                            <button style="display: block;" type="button" class="btn btn-default btn-sm bs-select" data-all-none-buttons="true"
+                                                    ng-model="plan.riderToChange"  data-multiple="1" ng-change="toggleSelection($event,plan.riderToChange)"
+                                                    ng-options="riderDetail.coverageId as riderDetail.coverageName for riderDetail in ilEndrosementDetils.proposalPlanDetail.riderDetails" placeholder="Select one or more Riders">
+                                                Action <span class="caret"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div ng-repeat="rider in ilEndrosementDetils.proposalPlanDetailNew.riderDetails">
+                                    <strong>Change Sum Assured- optional cover 1 </strong>
+                                </div>
                                 <strong>Change Sum Assured- optional cover 1 </strong>
                                 <div class="row bs-callout  bs-callout-info" style="margin: 5px;padding:10px">
                                     <div class="col-md-6">
@@ -1686,7 +1730,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="cancel()">Cancel</button>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" style="float: right" ng-disabled="step1.$invalid" class="btn btn-default btn-sm" ng-click="createEndrosement()">Save</button>
+                            <button type="button" style="float: right" ng-disabled="step1.$invalid || mode=='new'||mode=='view' || isEndrosementCreated" class="btn btn-default btn-sm" ng-click="createEndrosement()">Save</button>
                         </div>
                     </div>
                 </div>

@@ -27,6 +27,7 @@ var searchEndorsementModule = (function () {
     services.viewEndorsement = function () {
         var endorsementId = this.selectedItem;
         var endorsementType=this.endorsementType;
+        window.location.href = "/pla/individuallife/endorsement/editEndorsement?endorsementId=" + endorsementId +"&mode=view";
 
     };
     services.updateEndorsement = function () {

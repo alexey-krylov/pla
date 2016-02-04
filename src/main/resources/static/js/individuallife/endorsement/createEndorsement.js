@@ -52,6 +52,59 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         }
     })
+        .directive('sumassured',['$http', function ($http, $compile) {
+            return {
+                templateUrl: 'plan-sumassured.tpl',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, elem, attrs, ctrl) {
+
+                    if (!ctrl)return;
+
+                }
+            };
+        }])
+
+        .directive('validateSumassured', function () {
+            return {
+                // restrict to an attribute type.
+                restrict: 'A',
+                // element must have ng-model attribute.
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    scope.$watch('ilEndrosementDetils.proposalPlanDetailNew.sumAssured', function (newval, oldval) {
+                        if (newval == oldval)return;
+                        if (newval) {
+                            console.log('validating...***');
+                            var plan = scope.$eval('plan');
+                            if (plan && plan.sumAssured.sumAssuredType == 'RANGE') {
+                                var multiplesOf = plan.sumAssured.multiplesOf;
+                                var modulus = parseInt(newval) % parseInt(multiplesOf);
+                                var valid = modulus == 0;
+                                ctrl.$setValidity('invalidMultiple', valid);
+                            }
+                        }
+                        return valid ? newval : undefined;
+                    });
+                }
+            }
+        })
+
+        .directive('viewEnabled', function () {
+            return {
+                link: function (scope, elem, attr, ctrl) {
+                    var mode = scope.mode;
+                    if (mode != 'view') {
+                        return;
+                    }
+                    $(elem).attr('readonly', true);
+                    $(elem).attr('disabled', true);
+
+                }
+            }
+
+        })
+
         .directive('validateNrc', function () {
             return {
                 // restrict to an attribute type.
@@ -151,6 +204,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             $scope.policy={};
             $scope.ilEndrosementDetils={};
             $scope.plan={};
+            $scope.plan.riderToChange=[]; //Rider coverageId Collection during the Sum Assured Plan Change
             $scope.serverError=false;
             $scope.endorsementRequestNumber=null;  // Capturing Endrosement RequestNumber..
             $scope.townListForLAEmp=[];
@@ -592,6 +646,10 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'AGENT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.agentCommissionDetailsNew == null){
                 $scope.ilEndrosementDetils.agentCommissionDetailsNew=[];
                 angular.copy($scope.ilEndrosementDetils.agentCommissionDetails,$scope.ilEndrosementDetils.agentCommissionDetailsNew);
+            }else if($scope.policy.endrosementType == 'changeSumAssured' && $scope.ilEndrosementDetils.proposalPlanDetailNew == null){
+                $scope.ilEndrosementDetils.proposalPlanDetailNew=[];
+                angular.copy($scope.ilEndrosementDetils.proposalPlanDetail,$scope.ilEndrosementDetils.proposalPlanDetailNew);
+                $scope.ilEndrosementDetils.proposalPlanDetailNew.riderDetails=[];
             }
 
             if($scope.policy.endrosementType == 'ASSURED_DOB_CHANGE'){
@@ -600,12 +658,15 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'POLICYHOLDER_DOB_CHANGE'){
                 $scope.earlierAgeCalculationForPolicyHolder();
                 $scope.planSetUp();
+            }else if($scope.policy.endrosementType == 'changeSumAssured'){
+                $scope.planSetUp();
             }
         }
 
         /**
          * Method to Create Endrosement From Policy
          */
+        $scope.isEndrosementCreated=false;  // Deciding to Enable the Save Button or Not In 1st Tab
         $scope.createEndrosement=function(){
             angular.extend($scope.ilEndrosementDetils,{"ilEndorsementType":$scope.policy.endrosementType});
             console.log('** Submit..');
@@ -723,6 +784,7 @@ app.config(["$routeProvider", function ($routeProvider) {
                     console.log('*************');
                     console.log('Response:-'+response.id);
                     $scope.endorsementRequestNumber = response.id;
+                    $scope.isEndrosementCreated=true;
                 }).error(function (response, status, headers, config) {
                 });
             }
@@ -1028,6 +1090,31 @@ app.config(["$routeProvider", function ($routeProvider) {
             $('#agentModal').modal('hide');
         };
 
+        /**
+         * To Test Sum Assured To be Changed In or Not
+         * @param $event
+         * @param riderTochange
+         */
+
+       /* $scope.toggleSelection=function($event,riderTochange){
+            //Sum Assured To be Changed In
+            var checkbox = $event.target;
+            if(checkbox.checked){
+                var riderSelected = _.findWhere($scope.ilEndrosementDetils.proposalPlanDetail.riderDetails, {coverageId: riderTochange});
+                if(riderSelected){
+                    $scope.ilEndrosementDetils.proposalPlanDetailNew.riderDetails.push(riderSelected)
+                }
+            }else{
+                for (var i = 0; i < $scope.ilEndrosementDetils.proposalPlanDetailNew.riderDetails; i++) {
+
+                    if($scope.ilEndrosementDetils.proposalPlanDetailNew.riderDetails[i].coverageId == influencingFactorCode)
+                    {
+                        $scope.ilEndrosementDetils.proposalPlanDetailNew.riderDetails.splice(i, 1);
+                    }
+                }
+            }
+        }
+*/
         $scope.addAdditionalDocument = function () {
             $scope.additionalDocumentList.unshift({});
             $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
