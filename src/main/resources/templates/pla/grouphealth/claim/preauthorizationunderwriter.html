@@ -1593,30 +1593,27 @@
                                     Have you past  ever suffered from any of the following chronic illiness      <i class="pull-right glyphicon"
                                                                                                                     ng-class="{'glyphicon-chevron-down': accordionStatus.Details, 'glyphicon-chevron-right': !accordionStatus.Details}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:1140px;"
-                                     disable-all-fields="isViewMode" >
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:1140px;">
                                     <div class="row">
                                         <div class="form-group required col-md-4">
                                             <label class="control-label">HTN</label>
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"
                                                                                         name="htn"
-                                                                                        value="Yes" ng-click="checkYes()"
+                                                                                        value="Yes"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.htn"/>Yes</label>
 
-                                                <label><input type="radio" name="htn"   disabel="true"
-                                                              value="No" ng-click="checkNo()"
+                                                <label><input type="radio" name="htn"   disabel="true" value="No"
                                                               ng-model="createUpdateDto.illnessDetailDto.htn"/>No</label>
                                             </div>
 
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <label class="control-label">Please Provide full Details</label>
                                         <div class="form-group  col-md-4">
                                             <textarea name="textarea" ng-model="createUpdateDto.illnessDetailDto.htndetails"
-                                                      ng-disabled="two"  ng-required="isrequire"
-                                                      style="width:950px;height:60px;left:30px"></textarea>
+                                                      ng-disabled="disableHtn"  ng-required="isrequire"
+                                                      style="width:950px;height:60px;left:30px" ng-init="checkCondition()"></textarea>
                                         </div>
                                         <div class="error" ng-messages="step5.textarea.$error" ng-if="step5.textarea.$dirty">
                                             <small class="error" ng-message="required">Please enterProvide full Details</small>

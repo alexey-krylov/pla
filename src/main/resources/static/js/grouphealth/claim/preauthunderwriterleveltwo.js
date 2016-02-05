@@ -784,7 +784,34 @@
                     $scope.two = true;
 
                 };
-
+                $scope.disableHtn = false;
+                /*$scope.$watch('createUpdateDto.illnessDetailDto.htn', function(newVal, oldval){
+                    if(($scope.createUpdateDto.illnessDetailDto.htn === 'No')){
+                       // alert("hi");
+                        console.log(createUpdateDto.illnessDetailDto.htn);
+                        $scope.disableHtn = true;
+                    }
+                    else {
+                        alert(newVal);
+                        $scope.disableHtn = false;
+                    }
+                });
+*/
+                $scope.disableHtn = true;
+                $scope.$watch(
+                    function(){
+                        return {htn: $scope.createUpdateDto.illnessDetailDto.htn, htnDetails: $scope.createUpdateDto.illnessDetailDto.htndetails};
+                    },
+                    function(newVal, oldVal) {
+                        if(newVal.htn === 'No'){
+                            $scope.disableHtn = true;
+                        }
+                        else {
+                            $scope.disableHtn = false;
+                        }
+                    },
+                    true
+                );
 
                 $scope.checkYes = function(){
                     $scope.isrequire = true;
