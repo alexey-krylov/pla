@@ -548,10 +548,12 @@ insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (16,'com.pla.grouplife.endorsement.domain.model.GroupLifeEndorsement',1000000,' ');
 INSERT  INTO `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) VALUES (17,'com.pla.core.hcp.domain.model.HCP', 0,' ');
 insert  into `entity_sequence`(`sequence_id`,`sequence_name`,`sequence_number`,`sequence_prefix`) values (18,'com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement',1000000,' ');
-INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(19,'com.pla.grouphealth.claim.cashless.domain.model.PreAuthorization',0,' ');
-INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(20,'com.pla.grouphealth.claim.cashless.domain.model.PreAuthorizationId',0,' ');
-INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(21,'com.pla.grouplife.claim.domain.model.GroupLifeClaim',1000000,' ');
-INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(22,'com.pla.individuallife.claim.domain.model.IndividualLifeClaim',1000000,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(19,'com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorization',0,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(20,'com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationId',0,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(21,'com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatch',0,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(22,'com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim',0,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(23,'com.pla.grouplife.claim.domain.model.GroupLifeClaim',1000000,' ');
+INSERT INTO entity_sequence(sequence_id,sequence_name,sequence_number,sequence_prefix)VALUES(24,'com.pla.individuallife.claim.domain.model.IndividualLifeClaim',1000000,' ');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('BROKER','Broker');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('DIRECT','Direct');
 insert into `channel_type` (`CHANNEL_CODE`, `CHANNEL_DESCRIPTION`) values('PERSONAL','Personel Selling');
