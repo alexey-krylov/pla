@@ -37,6 +37,7 @@ import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.grouphealth.sharedresource.model.vo.*;
+import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
@@ -52,9 +53,14 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -102,7 +108,9 @@ public class GroupHealthCashlessClaimService {
     private IUnderWriterAdapter underWriterAdapter;
     @Autowired
     private GridFsTemplate gridFsTemplate;
-
+    @Autowired
+    @Qualifier("authenticationFacade")
+    IAuthenticationFacade authenticationFacade;
     public boolean isValidInsuredTemplate(HSSFWorkbook insuredTemplateWorkbook, Map dataMap) {
         return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, GHCashlessClaimExcelHeader.getAllowedHeaders(), GHCashlessClaimExcelHeader.class, dataMap);
     }
@@ -660,4 +668,22 @@ public class GroupHealthCashlessClaimService {
     private Set<String> getServicesAvailedFromPreAuthorization(Set<GroupHealthCashlessClaimDrugServiceDto> drugServiceDtos) {
         return isNotEmpty(drugServiceDtos) ? drugServiceDtos.stream().map(GroupHealthCashlessClaimDrugServiceDto::getServiceName).collect(Collectors.toSet()) : Sets.newHashSet();
     }
+    public String getLoggedInUsername() {
+        String userName = StringUtils.EMPTY;
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            userName = authentication.getName();
+        }
+        return userName;
+    }
+
+    public List<GroupHealthCashlessClaimDto> getPreAuthorizationForDefaultList(String preAuthorizationProcessorUserId) {
+        List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
+        PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
+//        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAllByPreAuthorizationProcessorUserIdInAndStatusIn(Lists.newArrayList(preAuthorizationProcessorUserId, null), Lists.newArrayList(PreAuthorizationRequest.Status.INTIMATION, PreAuthorizationRequest.Status.EVALUATION, PreAuthorizationRequest.Status.RETURNED), pageRequest);
+//        if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
+//            result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(pages.getContent());
+        return result;
+    }
+
 }

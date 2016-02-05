@@ -8,6 +8,7 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
@@ -72,10 +73,7 @@ public class GroupHealthCashlessClaimController {
     @RequestMapping(value = "/getghcashlessclaimuploadview" ,method = RequestMethod.GET)
     public ModelAndView preAuthUpload(){
         ModelAndView modelAndView=new ModelAndView();
-        /*
-        * create html and send the file
-        * */
-        //modelAndView.setViewName("pla/grouphealth/claim/preauthorizationupload");
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimupload");
         return modelAndView;
     }
 
@@ -150,5 +148,16 @@ public class GroupHealthCashlessClaimController {
             return null;
         }
         return groupHealthCashlessClaimService.getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(groupHealthCashlessClaimId);
+    }
+
+    @RequestMapping(value = "/getcashlessclaimfordefaultlist", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getCashlessForDefaultList(HttpServletRequest request) {
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchCashLessClaim");
+        List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getPreAuthorizationForDefaultList(userName);
+        modelAndView.addObject("CashlessResult", searchResult);
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimDto());
+        return modelAndView;
     }
 }
