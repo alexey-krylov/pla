@@ -6,8 +6,10 @@ import com.google.common.collect.Sets;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.core.domain.model.notification.NotificationBuilder;
 import com.pla.core.dto.CoverageClaimTypeDto;
+import com.pla.core.dto.CoverageDto;
 import com.pla.core.dto.MandatoryDocumentDto;
 import com.pla.core.dto.ProductClaimTypeDto;
+import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.ProductClaimMapperFinder;
 import com.pla.grouplife.claim.domain.model.*;
@@ -69,6 +71,8 @@ public class GLClaimService implements Serializable{
     @Autowired
     private ProductClaimMapperFinder productClaimMapperFinder;
 
+    @Autowired
+    private CoverageFinder coverageFinder;
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -722,7 +726,7 @@ public class GLClaimService implements Serializable{
                 Insured insuredResult=insureds.get(0);
                 PlanPremiumDetail planPremiumDetail=insuredResult.getPlanPremiumDetail();
                 String planName=null;
-                Set<String>claimTypes=null;
+                Set<String>claimTypes=new LinkedHashSet<String>();
                 String searchPlanCode=planPremiumDetail.getPlanCode();
                 List<Map<String, Object>> planMap=productClaimMapperFinder.getPlanDetailBy(LineOfBusinessEnum.GROUP_LIFE);
                 for(Map<String,Object>plan:planMap){
@@ -740,7 +744,10 @@ public class GLClaimService implements Serializable{
                 for(ProductClaimTypeDto productClaimTypeDto:productClaimList){
                     List<CoverageClaimTypeDto> coverageClaimType= productClaimTypeDto.getCoverageClaimType();
                     for(CoverageClaimTypeDto coverageClaimTypeDto:coverageClaimType){
-                        claimTypes=  coverageClaimTypeDto.getClaimTypes();
+                        Set<String> claimTypesResult=  coverageClaimTypeDto.getClaimTypes();
+                        for(String claimString:claimTypesResult){
+                            claimTypes.add(claimString);
+                        }
                     }
 
                 }
@@ -758,9 +765,11 @@ public class GLClaimService implements Serializable{
                 if(coveragePremiumDetailList!=null) {
                     for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetailList) {
                         CoverageDetailDto coverageDetailDto = new CoverageDetailDto();
+                        String coverageIdInString=coveragePremiumDetail.getCoverageId().getCoverageId();
+                        CoverageDto coverageDto=coverageFinder.findCoverageById(coverageIdInString);
                         coverageDetailDto.setCoverageId(coveragePremiumDetail.getCoverageId());
                         coverageDetailDto.setCoverageCode(coveragePremiumDetail.getCoverageCode());
-                        coverageDetailDto.setCoverageName(coveragePremiumDetail.getCoverageName());
+                        coverageDetailDto.setCoverageName(coverageDto.getCoverageName());
                         coverageDetailDto.setSumAssured(coveragePremiumDetail.getSumAssured());
                         coverageDetailDto.setPremium(coveragePremiumDetail.getPremium());
                         coverageDetailDtos.add(coverageDetailDto);
@@ -807,9 +816,11 @@ public class GLClaimService implements Serializable{
                 if(coveragePremiumDetailList!=null) {
                     for (CoveragePremiumDetail coveragePremiumDetail : coveragePremiumDetailList) {
                         CoverageDetailDto coverageDetailDto = new CoverageDetailDto();
+                        String coverageIdInString=coveragePremiumDetail.getCoverageId().getCoverageId();
+                        CoverageDto coverageDto=coverageFinder.findCoverageById(coverageIdInString);
                         coverageDetailDto.setCoverageId(coveragePremiumDetail.getCoverageId());
                         coverageDetailDto.setCoverageCode(coveragePremiumDetail.getCoverageCode());
-                        coverageDetailDto.setCoverageName(coveragePremiumDetail.getCoverageName());
+                        coverageDetailDto.setCoverageName(coverageDto.getCoverageName());
                         coverageDetailDto.setSumAssured(coveragePremiumDetail.getSumAssured());
                         coverageDetailDto.setPremium(coveragePremiumDetail.getPremium());
                         coverageDetailDtos.add(coverageDetailDto);
