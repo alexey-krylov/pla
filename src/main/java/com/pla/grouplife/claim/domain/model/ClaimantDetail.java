@@ -35,6 +35,7 @@ public class ClaimantDetail {
 
    // private String workPhone;
 
+    //private String claimantClientId
 
     List<ContactPersonDetail> contactPersonDetail;
 

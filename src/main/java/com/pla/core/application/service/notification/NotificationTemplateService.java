@@ -20,6 +20,7 @@ import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.exception.ProcessInfoException;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.service.GHMandatoryDocumentChecker;
+import com.pla.sharedkernel.service.GLClaimMandatoryDocumentChecker;
 import com.pla.sharedkernel.service.GLMandatoryDocumentChecker;
 import com.pla.sharedkernel.service.ILMandatoryDocumentChecker;
 import org.apache.commons.io.FileUtils;
@@ -82,12 +83,16 @@ public class NotificationTemplateService {
     @Autowired
     private GHMandatoryDocumentChecker ghMandatoryDocumentChecker;
 
+    @Autowired
+    private GLClaimMandatoryDocumentChecker glClaimMandatoryDocumentChecker;
 
     public static ImmutableMap<LineOfBusinessEnum,String> proposalEntitiesMap = ImmutableMap.of(LineOfBusinessEnum.GROUP_LIFE,"group_life_proposal",LineOfBusinessEnum.GROUP_HEALTH,"group_health_proposal",LineOfBusinessEnum.INDIVIDUAL_LIFE,"individual_life_proposal");
 
     public static ImmutableMap<LineOfBusinessEnum,String> quotationEntitiesMap = ImmutableMap.of(LineOfBusinessEnum.GROUP_LIFE,"group_life_quotation",LineOfBusinessEnum.GROUP_HEALTH,"group_health_quotation",
             LineOfBusinessEnum.INDIVIDUAL_LIFE,"individual_life_quotation");
 
+    public static ImmutableMap<LineOfBusinessEnum,String> claimEntitiesMap = ImmutableMap.of
+            (LineOfBusinessEnum.GROUP_LIFE,"group_life_claim",LineOfBusinessEnum.INDIVIDUAL_LIFE,"individual_life_claim");
 
     public HashMap<String,String> getQuotationNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String quotationId) throws ProcessInfoException {
         int closureTimePeriod = iProcessInfoAdapter.getClosureTimePeriod(lineOfBusiness, ProcessType.QUOTATION);
@@ -127,7 +132,7 @@ public class NotificationTemplateService {
         Query query = new Query(quotationCriteria);
         query.fields().include("quotationNumber").exclude("_id");
         List<Map> quotationNotificationDetail =  mongoTemplate.find(query, Map.class, quotationEntitiesMap.get(lineOfBusiness));
-       return isNotEmpty(quotationNotificationDetail)?quotationNotificationDetail.get(0).get("quotationNumber")!=null?(String)quotationNotificationDetail.get(0).get("quotationNumber"):"":"";
+        return isNotEmpty(quotationNotificationDetail)?quotationNotificationDetail.get(0).get("quotationNumber")!=null?(String)quotationNotificationDetail.get(0).get("quotationNumber"):"":"";
     }
     public HashMap<String,String> getProposalNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String proposalId, WaitingForEnum waitingFor){
         Criteria proposalCriteria = Criteria.where("_id").is(proposalId);
@@ -139,7 +144,7 @@ public class NotificationTemplateService {
         HashMap<String,String>  proposalNotificationMap = transformProposalNotificationData(proposalNotificationDetailMap);
         String waitingForEnum = waitingFor!=null?waitingFor.name():"";
         StringBuilder documentNameBuilder = getDocumentsRequiredSubmission(waitingForEnum,lineOfBusiness,proposalId);
-        proposalNotificationMap.put("documentName",documentNameBuilder.toString());
+        proposalNotificationMap.put("documentName", documentNameBuilder.toString());
         return proposalNotificationMap;
     }
 
@@ -314,9 +319,44 @@ public class NotificationTemplateService {
 
     private StringBuilder genericMethodToGetDocumentsRequiredSubmission(List<String> pendingDocumentList){
         StringBuilder documentNameBuilder = new StringBuilder();
-            for (String documentName : pendingDocumentList){
+        for (String documentName : pendingDocumentList){
+            documentNameBuilder.append(documentName+"\n\t");
+        }
+        return documentNameBuilder;
+    }
+
+    public HashMap<String,String> getClaimNotificationTemplateData(LineOfBusinessEnum lineOfBusiness, String claimId, WaitingForEnum waitingFor){
+        Criteria claimCriteria = Criteria.where("_id").is(claimId);
+        Query query = new Query(claimCriteria);
+        query.fields().include("proposer.proposerName").include("proposer.surname").include("proposer.title").include("proposalNumber").include
+                ("proposer.residentialAddress.address.address1")
+                .include("proposer.residentialAddress.address.address2").include("proposer.residentialAddress.address.province").include
+                ("proposer.residentialAddress.address.town")
+                .include("submittedOn").exclude("_id");
+        List<Map> claimNotificationDetailMap = mongoTemplate.find(query, Map.class, claimEntitiesMap.get(lineOfBusiness));
+        HashMap<String,String>  claimNotificationMap = transformProposalNotificationData(claimNotificationDetailMap);
+        String waitingForEnum = waitingFor!=null?waitingFor.name():"";
+        StringBuilder documentNameBuilder = getClaimDocumentsRequiredSubmission(waitingForEnum, lineOfBusiness, claimId);
+        claimNotificationMap.put("documentName",documentNameBuilder.toString());
+        return claimNotificationMap;
+    }
+    private StringBuilder getClaimDocumentsRequiredSubmission(String waitingFor,LineOfBusinessEnum lineOfBusiness,String ClaimId){
+        StringBuilder documentNameBuilder = new StringBuilder();
+        if (WaitingForEnum.MANDATORY_DOCUMENTS.name().equals(waitingFor)){
+            List<String> documentsRequiredForSubmission=null;
+            switch (lineOfBusiness){
+                // case INDIVIDUAL_LIFE:
+                //  documentsRequiredForSubmission  = ilMandatoryDocumentChecker.findDocumentRequiredForSubmission(ClaimId);
+                //  break;
+                case GROUP_LIFE:
+                    documentsRequiredForSubmission = glClaimMandatoryDocumentChecker.findDocumentRequiredForSubmission(ClaimId);
+                    break;
+
+            }
+            for (String documentName : documentsRequiredForSubmission ){
                 documentNameBuilder.append(documentName+"\n\t");
             }
+        }
         return documentNameBuilder;
     }
 }

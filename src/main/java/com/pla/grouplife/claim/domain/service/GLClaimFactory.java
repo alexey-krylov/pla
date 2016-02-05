@@ -56,8 +56,8 @@ public class GLClaimFactory {
         this.idGenerator=idGenerator;
     }
    public  GroupLifeClaim  createClaim(CreateGLClaimIntimationCommand createCommand){
-       BigDecimal reserveSum=BigDecimal.ZERO;;
-       BigDecimal claimAmount=BigDecimal.ZERO;
+        BigDecimal reserveSum=BigDecimal.ZERO;;
+        BigDecimal claimAmount=BigDecimal.ZERO;
         BigDecimal updatedClaimAmount=BigDecimal.ZERO;
 
        //getting claimId
@@ -176,14 +176,15 @@ public class GLClaimFactory {
        //creating groupLife Claim
        GroupLifeClaim groupLifeClaim=new GroupLifeClaim(claimId,claimNumber,claimType,claimIntimationDate);
        groupLifeClaim.withIncidenceDate(claimIncidenceDate);
-       groupLifeClaim.withProposerAndPolicy(proposer,policy);
+       groupLifeClaim.withProposerAndPolicy(proposer, policy);
        groupLifeClaim.withAssuredDetail(assuredDetail);
        groupLifeClaim.withPlanDetail(planDetail);
        groupLifeClaim.withCoverageDetails(coverages);
        groupLifeClaim.withBankDetails(bankDetails);
        groupLifeClaim.withClaimDocuments(claimDocuments);
        groupLifeClaim.updateWithReserveAmount(reserveSum);
-       groupLifeClaim.updateWithClaimAmount(reserveSum);
+       claimAmount=reserveSum;
+       groupLifeClaim.updateWithClaimAmount(claimAmount);
 
        if(earlyClaimDays>noOfDays){
            groupLifeClaim.withEarlyClaim(true);

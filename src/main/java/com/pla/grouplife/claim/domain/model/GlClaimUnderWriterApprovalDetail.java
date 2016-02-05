@@ -18,30 +18,31 @@ import java.util.List;
 
 public class GlClaimUnderWriterApprovalDetail {
 
-    private PlanDetail planDetail;
-    private List<CoverageDetail> coverageDetails;
-    private List<BigDecimal> approvedAmount;
-    private List<BigDecimal> recoveredAmount;
+    private GLClaimApproverPlanDetail planDetail;
+    private List<ApproverCoverageDetail> coverageDetails;
     private BigDecimal totalApprovedAmount;
     private BigDecimal totalRecoveredAmount;
+    private BigDecimal additionalAmountPaid;
     private List<ClaimReviewDetail> reviewDetails;
     private String comment;
     private DateTime referredToReassuredOn;
     private DateTime responseReceivedOn;
 
-    public GlClaimUnderWriterApprovalDetail(PlanDetail planDetail,List<CoverageDetail> coverageDetails,List<BigDecimal> approvedAmount,BigDecimal totalApprovedAmount,
+    public GlClaimUnderWriterApprovalDetail(GLClaimApproverPlanDetail planDetail,List<ApproverCoverageDetail> coverageDetails,BigDecimal totalApprovedAmount,
                                             String comment,DateTime referredToReassuredOn,DateTime responseReceivedOn){
         this.planDetail=planDetail;
         this.coverageDetails=coverageDetails;
-        this.approvedAmount=approvedAmount;
         this.totalApprovedAmount=totalApprovedAmount;
         this.comment=comment;
         this.referredToReassuredOn=referredToReassuredOn;
         this.responseReceivedOn=responseReceivedOn;
     }
-    public GlClaimUnderWriterApprovalDetail withRecoveredAmountDetails( List<BigDecimal> recoveredAmount,BigDecimal totalRecoveredAmount){
-        this.recoveredAmount=recoveredAmount;
+    public GlClaimUnderWriterApprovalDetail withRecoveredAmountDetails( BigDecimal totalRecoveredAmount){
         this.totalRecoveredAmount=totalRecoveredAmount;
+        return this;
+    }
+    public GlClaimUnderWriterApprovalDetail withAdditionalAmountPaidDetails( BigDecimal amount){
+        this.additionalAmountPaid=amount;
         return this;
     }
     public GlClaimUnderWriterApprovalDetail withClaimReviewDetails(List<ClaimReviewDetail> reviewDetails){

@@ -5,6 +5,7 @@ import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.core.repository.NotificationTemplateRepository;
 import com.pla.grouphealth.claim.cashless.application.command.preauthorization.CreatePreAuthorizationNotificationCommand;
+import com.pla.sharedkernel.application.CreateClaimNotificationCommand;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
 import com.pla.sharedkernel.application.CreateProposalNotificationCommand;
 import com.pla.sharedkernel.application.CreateQuotationNotificationCommand;
@@ -111,5 +112,23 @@ public class NotificationCommandHandler {
                 .withRoleType(createNotificationHistoryCommand.getRoleType());
         notificationHistory = notificationBuilder.createNotificationHistory();
         notificationHistoryRepository.save(notificationHistory);
+    }
+
+    @CommandHandler
+    public void createNotificationForClaim(CreateClaimNotificationCommand createClaimNotificationCommand) throws Exception {
+        checkArgument(createClaimNotificationCommand!=null,"Create claim command cannot be empty");
+        JpaRepository<Notification, NotificationId> notificationRepository = jpaRepositoryFactory.getCrudRepository(Notification.class);
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findNotification(createClaimNotificationCommand.getLineOfBusiness(),
+                createClaimNotificationCommand.getProcessType(), createClaimNotificationCommand.getWaitingFor(), createClaimNotificationCommand.getReminderType());
+        checkArgument(notificationTemplate != null, "Notification Template is not uploaded");
+        HashMap<String,String>  claimNotificationDetailMap = notificationTemplateService.getClaimNotificationTemplateData
+                (createClaimNotificationCommand.getLineOfBusiness(), createClaimNotificationCommand.getClaimId().getClaimId(),createClaimNotificationCommand.getWaitingFor());
+        NotificationBuilder notificationBuilder = notificationTemplateService.generateNotification(createClaimNotificationCommand.getLineOfBusiness(),
+                createClaimNotificationCommand.getProcessType(), createClaimNotificationCommand.getWaitingFor(),
+                createClaimNotificationCommand.getReminderType(), createClaimNotificationCommand.getClaimId().getClaimId(), createClaimNotificationCommand.getRoleType
+                        (), notificationTemplate.getReminderFile(),claimNotificationDetailMap);
+        NotificationId notificationId = new NotificationId(idGenerator.nextId());
+        Notification notification  = notificationBuilder.createNotification(notificationId);
+        notificationRepository.save(notification);
     }
 }

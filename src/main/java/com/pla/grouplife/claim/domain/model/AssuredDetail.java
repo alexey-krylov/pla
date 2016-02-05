@@ -43,42 +43,8 @@ public class AssuredDetail {
     private String  occupation;
 
     private MainAssuredDetails mainAssuredDetails;
-/*
-    private String companyName;
 
-    private String manNumber;
-
-    private String nrcNumber;
-
-    private String salutation;
-
-    private String firstName;
-
-    private String lastName;
-
-    private LocalDate dateOfBirth;
-
-    private Gender gender;
-
-    private String category;
-
-    private BigDecimal annualIncome;
-
-    // private BigDecimal sumAssured;
-
-    //private BigDecimal reserveAmount;
-
-    private String occupationClass;
-
-    private String occupationCategory;
-
-    private Integer noOfAssured;
-
-    private FamilyId familyId;
-
-    private Relationship relationship;  */
-
-
+    //private String assuredClientId
 
 
 }

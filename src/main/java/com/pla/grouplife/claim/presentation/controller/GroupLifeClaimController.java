@@ -186,31 +186,41 @@ public class GroupLifeClaimController {
 
     @RequestMapping(value = "/claimregistration", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity registerClaim(@RequestBody GLClaimRegistrationCommand glClaimRegistrationCommand, HttpServletRequest request) {
-        glClaimRegistrationCommand.setUserDetails(getLoggedInUserDetail(request));
-        try {
+    public ResponseEntity registerClaim(@RequestBody GLClaimRegistrationCommand glClaimRegistrationCommand,BindingResult bindingResult, HttpServletRequest request) {
 
-            commandGateway.sendAndWait(glClaimRegistrationCommand);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(Result.failure("Error in creating  Claim Registration Record", bindingResult.getAllErrors()), HttpStatus.OK);
+        }
+        String claimId = "";
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            glClaimRegistrationCommand.setUserDetails(userDetails);
+            claimId=commandGateway.sendAndWait(glClaimRegistrationCommand);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error("Error in creating  Claim Registration", e);
+            return new ResponseEntity(Result.failure("Error in creating Claim Registration"), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Claim registered successfully"), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/disabilityclaimregistration", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity registerDisabilityClaim(@RequestBody GLDisabilityClaimRegistrationCommand glClaimRegistrationCommand, HttpServletRequest request) {
-        glClaimRegistrationCommand.setUserDetails(getLoggedInUserDetail(request));
+    public ResponseEntity registerDisabilityClaim(@RequestBody GLDisabilityClaimRegistrationCommand glClaimRegistrationCommand,BindingResult bindingResult, HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(Result.failure("Error in creating  Disability Claim Registration Record", bindingResult.getAllErrors()), HttpStatus.OK);
+        }
+        String claimId = "";
         try {
-            commandGateway.sendAndWait(glClaimRegistrationCommand);
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            glClaimRegistrationCommand.setUserDetails(userDetails);
+            claimId = commandGateway.sendAndWait(glClaimRegistrationCommand);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error("Error in creating  Disability Claim Registration", e);
+            return new ResponseEntity(Result.failure("Error in creating Disability Claim Registration"), HttpStatus.OK);
         }
         return new ResponseEntity(Result.success("Disability Claim registered successfully"), HttpStatus.OK);
     }
-
     @RequestMapping(value = "/getclaimdetail", method = RequestMethod.POST)
     @ResponseBody
     public List<GLClaimIntimationDto> claimSearch(@RequestBody SearchClaimDto searchClaimDto) {
