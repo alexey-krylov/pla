@@ -32,6 +32,7 @@ import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -110,17 +111,21 @@ public class PreAuthorizationService {
         return excelUtilityProvider.isValidInsuredExcel(insuredTemplateWorkbook, PreAuthorizationExcelHeader.getAllowedHeaders(), PreAuthorizationExcelHeader.class, dataMap);
     }
 
-    public Set<ClaimUploadedExcelDataDto> transformToPreAuthorizationDetailDto(HSSFWorkbook preAuthTemplateWorkbook) {
+    public Set<ClaimUploadedExcelDataDto> transformToPreAuthorizationDetailDto(HSSFWorkbook preAuthTemplateWorkbook, Class dynamicClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = dynamicClass.getDeclaredMethod("getAllowedHeaders");
+        final List<String> headers = (List<String>) method.invoke(null);
         Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos = Sets.newLinkedHashSet();
         HSSFSheet hssfSheet = preAuthTemplateWorkbook.getSheetAt(0);
         Iterator<Row> rowIterator = hssfSheet.rowIterator();
         Row headerRow = rowIterator.next();
-        final List<String> headers = PreAuthorizationExcelHeader.getAllowedHeaders();
         List<Row> dataRows = Lists.newArrayList(rowIterator);
         for (Row currentRow : dataRows) {
             ClaimUploadedExcelDataDto claimUploadedExcelDataDto = new ClaimUploadedExcelDataDto();
             for (String header : headers) {
-                claimUploadedExcelDataDto = PreAuthorizationExcelHeader.getEnum(header).populatePreAuthorizationDetail(claimUploadedExcelDataDto, currentRow, headers);
+                Method getEnumMethod = dynamicClass.getMethod("getEnum", String.class);
+                Object dynamicEnum = getEnumMethod.invoke(null, header);
+                Method populatePreAuthorizationDetailMethod = dynamicClass.getMethod("populatePreAuthorizationDetail", ClaimUploadedExcelDataDto.class, Row.class, List.class);
+                claimUploadedExcelDataDto = (ClaimUploadedExcelDataDto) populatePreAuthorizationDetailMethod.invoke(dynamicEnum, claimUploadedExcelDataDto, currentRow, headers);
             }
             claimUploadedExcelDataDtos.add(claimUploadedExcelDataDto);
         }

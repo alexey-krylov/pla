@@ -190,6 +190,7 @@ public class GroupHealthCashlessClaimService {
 
     private Set<GroupHealthCashlessClaimCoverageDetail> constructProbableClaimAmountForServices(Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails, List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos, Plan plan, String hcpCode, GHPlanPremiumDetail planDetail) {
         Set<String> services = getServicesFromUploadedDetails(claimUploadedExcelDataDtos);
+        notEmpty(services, "Error calculating probable claim amount services not found");
         Set<ServiceBenefitCoverageMapping> sbcmSet = null;
         List<Map<String, Object>> refurbishedList = Lists.newArrayList();
         if (isNotEmpty(services) && isNotEmpty(plan.getPlanDetail())) {
@@ -273,7 +274,7 @@ public class GroupHealthCashlessClaimService {
     }
 
     private Set<String> getServicesFromUploadedDetails(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos) {
-        return isNotEmpty(claimUploadedExcelDataDtos) ? claimUploadedExcelDataDtos.parallelStream().map(ClaimUploadedExcelDataDto::getService).collect(Collectors.toSet()) : Sets.newHashSet();
+        return isNotEmpty(claimUploadedExcelDataDtos) ? claimUploadedExcelDataDtos.parallelStream().filter(drug -> drug.getStatus().equals(GroupHealthCashlessClaimDrugServiceDto.Status.PROCESS.name())).map(ClaimUploadedExcelDataDto::getService).collect(Collectors.toSet()) : Sets.newHashSet();
     }
 
     private Set<String> getListOfServices(List<ServiceBenefitCoverageMapping> serviceBenefitCoverageMappings, Set<String> services) {
@@ -666,7 +667,7 @@ public class GroupHealthCashlessClaimService {
     }
 
     private Set<String> getServicesAvailedFromPreAuthorization(Set<GroupHealthCashlessClaimDrugServiceDto> drugServiceDtos) {
-        return isNotEmpty(drugServiceDtos) ? drugServiceDtos.stream().map(GroupHealthCashlessClaimDrugServiceDto::getServiceName).collect(Collectors.toSet()) : Sets.newHashSet();
+        return isNotEmpty(drugServiceDtos) ? drugServiceDtos.stream().filter(drug -> drug.getStatus().equals(GroupHealthCashlessClaimDrugServiceDto.Status.PROCESS)).map(GroupHealthCashlessClaimDrugServiceDto::getServiceName).collect(Collectors.toSet()) : Sets.newHashSet();
     }
     public String getLoggedInUsername() {
         String userName = StringUtils.EMPTY;

@@ -92,7 +92,7 @@ public class PreAuthorizationController {
             if(!(authentication instanceof AnonymousAuthenticationToken)){
                 userName = authentication.getName();
             }
-            Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook);
+            Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook, PreAuthorizationExcelHeader.class);
             int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(claimRelatedFileUploadDto.getHcpCode(), claimUploadedExcelDataDtoList, claimRelatedFileUploadDto.getBatchDate(), userName));
             return Result.success("Insured detail uploaded successfully - "+batchNumber);
         } catch (Exception e) {

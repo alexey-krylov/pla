@@ -8,6 +8,10 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -26,6 +30,7 @@ public class GroupHealthCashlessClaimDrugServiceDto {
     private String duration;
     private int lengthOfStay;
     private String strength;
+    private Status status;
 
     public GroupHealthCashlessClaimDrugServiceDto updateWithDetails(GroupHealthCashlessClaimDrugService groupHealthCashlessClaimDrugService) {
         if(isNotEmpty(groupHealthCashlessClaimDrugService)){
@@ -38,5 +43,12 @@ public class GroupHealthCashlessClaimDrugServiceDto {
             }
         }
         return this;
+    }
+    public enum Status{
+        IGNORE, PROCESS;
+
+        public static List<String> getStatusList() {
+            return Arrays.stream(values()).map(Status::name).collect(Collectors.toList());
+        }
     }
 }

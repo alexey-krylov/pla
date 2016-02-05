@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/03/2016.
@@ -81,6 +82,7 @@ public class GroupHealthCashlessClaimController {
     @RequestMapping(value = "/uploadghcashlessclaimtemplate", method = RequestMethod.POST)
     @ResponseBody
     public Result uploadPreAuthorizationTemplate(ClaimRelatedFileUploadDto claimRelatedFileUploadDto, HttpServletRequest request) throws IOException {
+        Result result = null;
         MultipartFile file = claimRelatedFileUploadDto.getFile();
         if (!("application/x-ms-excel".equals(file.getContentType())|| "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {
             return Result.failure("Uploaded file is not valid excel",Boolean.FALSE);
@@ -104,10 +106,11 @@ public class GroupHealthCashlessClaimController {
             if(!(authentication instanceof AnonymousAuthenticationToken)){
                 userName = authentication.getName();
             }
-            Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(ghCashlessCLaimTemplate);
+            Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(ghCashlessCLaimTemplate, GHCashlessClaimExcelHeader.class);
             FutureCallback callback = new FutureCallback();
             commandGateway.send(new UploadGroupHealthCashlessClaimCommand(claimRelatedFileUploadDto.getHcpCode(), claimUploadedExcelDataDtoList, claimRelatedFileUploadDto.getBatchDate(), userName), callback);
-            return Result.success("claim details successfully uploaded.");
+            callback.onSuccess(callback.get());
+            return Result.success("Claim Details successfully uploaded.");
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);

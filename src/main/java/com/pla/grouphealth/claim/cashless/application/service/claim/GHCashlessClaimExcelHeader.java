@@ -1466,7 +1466,12 @@ public enum GHCashlessClaimExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
-            return "";
+            String errorMessage = "";
+            if(isEmpty(value)) {
+                errorMessage = errorMessage + "Please select status.";
+                return errorMessage;
+            }
+            return errorMessage;
         }
     }, COMMENTS("Comments"){
         @Override
@@ -1489,7 +1494,7 @@ public enum GHCashlessClaimExcelHeader {
             try {
                 Cell statusCell = row.getCell(excelHeaders.indexOf(STATUS.description));
                 String status = getCellValue(statusCell);
-                if(isEmpty(status) && status.trim().equalsIgnoreCase("IGNORE") && isEmpty(value)) {
+                if(isNotEmpty(status) && status.trim().equalsIgnoreCase("IGNORE") && isEmpty(value)) {
                     errorMessage = errorMessage + "Please provide comments as status selected is Ignore";
                     return errorMessage;
                 }

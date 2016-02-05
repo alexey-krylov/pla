@@ -3,6 +3,9 @@ package com.pla.grouphealth.claim.cashless.application.service.preauthorization;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
+import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimDrugService;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -25,12 +28,12 @@ public class PreAuthorizationExcelGenerator {
         Method method = classZ.getDeclaredMethod("getAllowedHeaders");
         final List<String> headers = (List<String>) method.invoke(null);
         List<Map<Integer, String>> excelData = Lists.newArrayList();
-        Map<Integer, List<String>> constraintCellDataMap = getMapContainingTheDropdownValues(hcpServiceDetailDtos, headers);
+        Map<Integer, List<String>> constraintCellDataMap = getMapContainingTheDropdownValues(hcpServiceDetailDtos, headers, classZ);
         HSSFWorkbook workbook = ExcelGeneratorUtil.generateExcelWithDvConstraintCell(headers, excelData, constraintCellDataMap);
         return workbook;
     }
 
-    private Map<Integer, List<String>> getMapContainingTheDropdownValues(List<HCPServiceDetailDto> hcpServiceDetailDtos, List<String> headers) {
+    private Map<Integer, List<String>> getMapContainingTheDropdownValues(List<HCPServiceDetailDto> hcpServiceDetailDtos, List<String> headers, Class classZ) {
         Map<Integer, List<String>> constraintCellDataMap = Maps.newHashMap();
         constraintCellDataMap.put(headers.indexOf("Hospitalization Event"), Lists.newArrayList("Planned", "Emergency"));
         constraintCellDataMap.put(headers.indexOf("Please indicate whether it is a"), Lists.newArrayList("Illness", "Pregnancy", "Trauma"));
@@ -51,6 +54,9 @@ public class PreAuthorizationExcelGenerator {
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From HTN"), Lists.newArrayList("Yes", "No"));
         constraintCellDataMap.put(headers.indexOf("Service to be Availed - Service"), getAllRelatedServices(hcpServiceDetailDtos));
         constraintCellDataMap.put(headers.indexOf("Service to be Availed - Type"), Lists.newArrayList("Normal", "After Hour"));
+        if(classZ.equals(GHCashlessClaimExcelHeader.class)){
+            constraintCellDataMap.put(headers.indexOf("Status"), GroupHealthCashlessClaimDrugServiceDto.Status.getStatusList());
+        }
         return constraintCellDataMap;
     }
 
