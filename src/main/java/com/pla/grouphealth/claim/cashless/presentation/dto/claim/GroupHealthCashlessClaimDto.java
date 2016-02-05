@@ -108,7 +108,7 @@ public class GroupHealthCashlessClaimDto {
         return this;
     }
 
-    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimHCPDetailDto(GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail) {
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimHCPDetail(GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail) {
         if(isNotEmpty(groupHealthCashlessClaimHCPDetail)){
             this.groupHealthCashlessClaimHCPDetail = new GroupHealthCashlessClaimHCPDetailDto().updateWithDetails(groupHealthCashlessClaimHCPDetail);
         }
@@ -188,6 +188,11 @@ public class GroupHealthCashlessClaimDto {
 
     public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimPolicyDetail(GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail) {
         this.groupHealthCashlessClaimPolicyDetail = new GroupHealthCashlessClaimPolicyDetailDto().updateWithDetails(groupHealthCashlessClaimPolicyDetail);
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimPolicyDetailDto(GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetailDto) {
+        this.groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaimPolicyDetailDto;
         return this;
     }
 }

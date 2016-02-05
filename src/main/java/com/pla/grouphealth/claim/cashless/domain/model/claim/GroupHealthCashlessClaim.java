@@ -1,14 +1,18 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.claim.GroupHealthCashlessClaimFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
 import org.axonframework.domain.AbstractAggregateRoot;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
@@ -17,8 +21,11 @@ import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -168,17 +175,200 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         }
     }
 
+    public GroupHealthCashlessClaim updateWithGhProposerDto(GHProposerDto ghProposerDto) {
+        if(isNotEmpty(ghProposerDto)) {
+            GHProposer ghProposer = isNotEmpty(this.getGhProposer()) ? this.getGhProposer() : getInstance(GHProposer.class);
+            try {
+                BeanUtils.copyProperties(ghProposer, ghProposerDto);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            this.ghProposer = ghProposer;
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithClaimIntimationDate(LocalDate claimIntimationDate) {
+        this.claimIntimationDate = claimIntimationDate;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithStatus(Status status) {
+        this.status = status;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithCreatedOn(DateTime createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimHCPDetailFromDto(GroupHealthCashlessClaimHCPDetailDto groupHealthCashlessClaimHCPDetailDto) {
+        if(isNotEmpty(groupHealthCashlessClaimHCPDetailDto)) {
+            GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail = isNotEmpty(this.getGroupHealthCashlessClaimHCPDetail()) ? this.getGroupHealthCashlessClaimHCPDetail() : getInstance(GroupHealthCashlessClaimHCPDetail.class);
+            try {
+                BeanUtils.copyProperties(groupHealthCashlessClaimHCPDetail, groupHealthCashlessClaimHCPDetailDto);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            this.groupHealthCashlessClaimHCPDetail = groupHealthCashlessClaimHCPDetail;
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetailsFromDto(Set<GroupHealthCashlessClaimDiagnosisTreatmentDetailDto> groupHealthCashlessClaimDiagnosisTreatmentDetails) {
+        if(isNotEmpty(groupHealthCashlessClaimDiagnosisTreatmentDetails)) {
+            this.groupHealthCashlessClaimDiagnosisTreatmentDetails = groupHealthCashlessClaimDiagnosisTreatmentDetails.parallelStream().map(treatmentDiagnosis -> {
+                GroupHealthCashlessClaimDiagnosisTreatmentDetail groupHealthCashlessClaimDiagnosisTreatmentDetail = getInstance(GroupHealthCashlessClaimDiagnosisTreatmentDetail.class);
+                try {
+                    BeanUtils.copyProperties(groupHealthCashlessClaimDiagnosisTreatmentDetail, treatmentDiagnosis);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return groupHealthCashlessClaimDiagnosisTreatmentDetail;
+            }).collect(Collectors.toSet());
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimIllnessDetailFromDto(GroupHealthCashlessClaimIllnessDetailDto groupHealthCashlessClaimIllnessDetailDto) {
+        if(isNotEmpty(groupHealthCashlessClaimIllnessDetailDto)){
+            GroupHealthCashlessClaimIllnessDetail groupHealthCashlessClaimIllnessDetail = isNotEmpty(this.groupHealthCashlessClaimIllnessDetail) ? this.groupHealthCashlessClaimIllnessDetail : getInstance(GroupHealthCashlessClaimIllnessDetail.class);
+            try {
+                BeanUtils.copyProperties(groupHealthCashlessClaimIllnessDetail, groupHealthCashlessClaimIllnessDetailDto);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            this.groupHealthCashlessClaimIllnessDetail = groupHealthCashlessClaimIllnessDetail;
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimDrugServicesFromDto(Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices) {
+        if(isNotEmpty(groupHealthCashlessClaimDrugServices)) {
+            this.groupHealthCashlessClaimDrugServices = groupHealthCashlessClaimDrugServices.parallelStream().map(drugServiceDto -> {
+                GroupHealthCashlessClaimDrugService groupHealthCashlessClaimDrugService = getInstance(GroupHealthCashlessClaimDrugService.class);
+                try {
+                    BeanUtils.copyProperties(groupHealthCashlessClaimDrugService, drugServiceDto);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return groupHealthCashlessClaimDrugService;
+            }).collect(Collectors.toSet());
+        }
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithCommentDetails(Set<CommentDetail> commentDetails) {
+        this.commentDetails = commentDetails;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithSubmittedFlag(boolean submitted) {
+        this.submitted = submitted;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithSubmissionDate(LocalDate submissionDate) {
+        this.submissionDate = submissionDate;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithClaimProcessorUserId(String claimProcessorUserId) {
+        this.claimProcessorUserId = claimProcessorUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithClaimUnderWriterUserId(String claimUnderWriterUserId) {
+        this.claimUnderWriterUserId = claimUnderWriterUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithUnderWriterRoutedToSeniorUnderWriterUserId(String underWriterRoutedToSeniorUnderWriterUserId) {
+        this.underWriterRoutedToSeniorUnderWriterUserId = underWriterRoutedToSeniorUnderWriterUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithFirstReminderSent(boolean firstReminderSent) {
+        this.firstReminderSent = firstReminderSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithSecondReminderSent(boolean secondReminderSent) {
+        this.secondReminderSent = secondReminderSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithRejectionEmailSent(boolean rejectionEmailSent) {
+        this.rejectionEmailSent = rejectionEmailSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithAdditionalRequirementEmailSent(boolean additionalRequirementEmailSent) {
+        this.additionalRequirementEmailSent = additionalRequirementEmailSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithAdditionalRequiredDocumentsByUnderwriter(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
+        this.additionalRequiredDocumentsByUnderwriter = additionalRequiredDocumentsByUnderwriter;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimPolicyDetailFromDto(GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetailDto) {
+        if(isNotEmpty(groupHealthCashlessClaimPolicyDetailDto)){
+            GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = isNotEmpty(this.groupHealthCashlessClaimPolicyDetail) ? this.groupHealthCashlessClaimPolicyDetail : getInstance(GroupHealthCashlessClaimPolicyDetail.class);
+            try {
+                BeanUtils.copyProperties(groupHealthCashlessClaimPolicyDetail, groupHealthCashlessClaimPolicyDetailDto);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            this.groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaimPolicyDetail;
+        }
+        return this;
+    }
+
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
 
         private String description;
 
-        private Status(String description){
+        Status(String description){
             this.description = description;
         }
 
         public String getDescription() {
             return description;
         }
+
+        public static Status getStatus(String status) {
+            for (Status s : Status.values()) {
+                if (status.equals(s.description)) {
+                    return s;
+                }
+            }
+            return null;
+        }
+    }
+
+
+    private <T> T getInstance(Class<T> tClass) {
+        try {
+            Constructor<T> constructor = tClass.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

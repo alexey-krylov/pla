@@ -40,5 +40,10 @@ public class GroupHealthCashlessClaimPolicyDetailDto {
         }
         return this;
     }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithCoverages(Set<GroupHealthCashlessClaimCoverageDetail> coverageBenefitDetails) {
+        this.coverageDetails = coverageBenefitDetails;
+        return this;
+    }
 }
 
