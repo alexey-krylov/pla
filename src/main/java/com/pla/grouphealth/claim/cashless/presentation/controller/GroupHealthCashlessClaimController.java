@@ -72,13 +72,19 @@ public class GroupHealthCashlessClaimController {
     }
 
     @RequestMapping(value = "/getghcashlessclaimuploadview" ,method = RequestMethod.GET)
-    public ModelAndView preAuthUpload(){
+    public ModelAndView cashlessUpload(){
         ModelAndView modelAndView=new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimupload");
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaim");
         return modelAndView;
     }
 
 
+    @RequestMapping(value = "/loadpageforghcashlessclaimupdateview/{claimId}" ,method = RequestMethod.GET)
+    public ModelAndView loadPageforghCashlessClaimupdateview(@PathVariable ("claimId") String claimId){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimupload");
+        return modelAndView;
+    }
     @RequestMapping(value = "/uploadghcashlessclaimtemplate", method = RequestMethod.POST)
     @ResponseBody
     public Result uploadPreAuthorizationTemplate(ClaimRelatedFileUploadDto claimRelatedFileUploadDto, HttpServletRequest request) throws IOException {
@@ -157,7 +163,7 @@ public class GroupHealthCashlessClaimController {
     @ResponseBody
     public ModelAndView getCashlessForDefaultList(HttpServletRequest request) {
         String userName = groupHealthCashlessClaimService.getLoggedInUsername();
-        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchCashLessClaim");
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchcashlessclaim");
         List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getPreAuthorizationForDefaultList(userName);
         modelAndView.addObject("CashlessResult", searchResult);
         modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimDto());

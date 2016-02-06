@@ -78,4 +78,9 @@ public class GroupHealthCashlessClaimAssuredDetail {
         }
         return this;
     }
+
+    public GroupHealthCashlessClaimAssuredDetail updateWithCLientId(String clientId) {
+        this.clientId = clientId;
+        return this;
+    }
 }

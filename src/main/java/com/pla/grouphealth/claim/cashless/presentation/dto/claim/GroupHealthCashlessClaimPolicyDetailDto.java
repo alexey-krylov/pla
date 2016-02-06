@@ -9,10 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.beanutils.BeanUtils;
+import org.nthdimenzion.utils.UtilValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Set;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Author - Mohan Sharma Created on 2/4/2016.
@@ -43,6 +46,37 @@ public class GroupHealthCashlessClaimPolicyDetailDto {
 
     public GroupHealthCashlessClaimPolicyDetailDto updateWithCoverages(Set<GroupHealthCashlessClaimCoverageDetail> coverageBenefitDetails) {
         this.coverageDetails = coverageBenefitDetails;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithPolicyNumber(PolicyNumber policyNumber) {
+        this.policyNumber = policyNumber;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithPolicyName(String policyName) {
+        this.policyName = policyName;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithClientId(GroupHealthCashlessClaimAssuredDetail assuredDetail) {
+        if(isNotEmpty(assuredDetail)){
+            this.assuredDetail = constructClientIdFromGroupHealthCashlessClaimAssuredDetail(assuredDetail);
+        }
+        return this;
+    }
+
+    private GroupHealthCashlessClaimAssuredDetail constructClientIdFromGroupHealthCashlessClaimAssuredDetail(GroupHealthCashlessClaimAssuredDetail assuredDetail) {
+        return new GroupHealthCashlessClaimAssuredDetail().updateWithCLientId(assuredDetail.getClientId());
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithPlanName(String planName) {
+        this.planName = planName;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithPlanCode(String planCode) {
+        this.planCode = planCode;
         return this;
     }
 }

@@ -54,6 +54,7 @@ import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -678,13 +679,28 @@ public class GroupHealthCashlessClaimService {
         return userName;
     }
 
-    public List<GroupHealthCashlessClaimDto> getPreAuthorizationForDefaultList(String preAuthorizationProcessorUserId) {
+    public List<GroupHealthCashlessClaimDto> getPreAuthorizationForDefaultList(String claimUserId) {
         List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
         PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
-//        Page<PreAuthorizationRequest> pages = preAuthorizationRequestRepository.findAllByPreAuthorizationProcessorUserIdInAndStatusIn(Lists.newArrayList(preAuthorizationProcessorUserId, null), Lists.newArrayList(PreAuthorizationRequest.Status.INTIMATION, PreAuthorizationRequest.Status.EVALUATION, PreAuthorizationRequest.Status.RETURNED), pageRequest);
-//        if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
-//            result = convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(pages.getContent());
+        Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(GroupHealthCashlessClaim.Status.INTIMATION, GroupHealthCashlessClaim.Status.EVALUATION, GroupHealthCashlessClaim.Status.RETURNED), pageRequest);
+        if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
+            result = convertCashlessClaimToCashlessClaimantDetailCommand(pages.getContent());
         return result;
     }
 
+    private List<GroupHealthCashlessClaimDto> convertCashlessClaimToCashlessClaimantDetailCommand(List<GroupHealthCashlessClaim> groupHealthCashlessClaims) {
+        return isNotEmpty(groupHealthCashlessClaims) ? groupHealthCashlessClaims.parallelStream().map(new Function<GroupHealthCashlessClaim, GroupHealthCashlessClaimDto>() {
+            @Override
+            public GroupHealthCashlessClaimDto apply(GroupHealthCashlessClaim groupHealthCashlessClaim) {
+                return new GroupHealthCashlessClaimDto()
+                        .updateWithStatus(groupHealthCashlessClaim.getStatus())
+                        .updateWithBatchNumber(groupHealthCashlessClaim.getBatchNumber())
+                        .updateWithGroupHealthCashlessClaimId(groupHealthCashlessClaim.getGroupHealthCashlessClaimId())
+                        .updateWithClaimType(groupHealthCashlessClaim.getClaimType())
+                        .updateWithClaimIntimationDate(groupHealthCashlessClaim.getClaimIntimationDate())
+                        .updateWithGroupHealthCashlessClaimPolicyNumber(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
+                        .updateWithGroupHealthCashlessClaimHCPDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail());
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
 }

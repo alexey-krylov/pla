@@ -195,4 +195,18 @@ public class GroupHealthCashlessClaimDto {
         this.groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaimPolicyDetailDto;
         return this;
     }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimPolicyNumber(GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail) {
+        this.groupHealthCashlessClaimPolicyDetail = constructPolicyDetail(groupHealthCashlessClaimPolicyDetail);
+        return this;
+    }
+
+    private GroupHealthCashlessClaimPolicyDetailDto constructPolicyDetail(GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail) {
+        return new GroupHealthCashlessClaimPolicyDetailDto()
+                .updateWithPolicyNumber(groupHealthCashlessClaimPolicyDetail.getPolicyNumber())
+                .updateWithPolicyName(groupHealthCashlessClaimPolicyDetail.getPolicyName())
+                .updateWithPlanName(groupHealthCashlessClaimPolicyDetail.getPlanName())
+                .updateWithPlanCode(groupHealthCashlessClaimPolicyDetail.getPlanCode())
+                .updateWithClientId(groupHealthCashlessClaimPolicyDetail.getAssuredDetail());
+    }
 }
