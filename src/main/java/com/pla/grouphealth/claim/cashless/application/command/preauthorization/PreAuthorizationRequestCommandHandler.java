@@ -132,7 +132,7 @@ public class PreAuthorizationRequestCommandHandler {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRemoveAdditionalDocumentCommand.getPreAuthorizationId());
         if(isNotEmpty(preAuthorizationRequest)){
             Set<GHProposerDocument> ghProposerDocuments = preAuthorizationRequest.getProposerDocuments();
-            result =  removeDocumentByGridFsDocId(ghProposerDocuments, preAuthorizationRemoveAdditionalDocumentCommand.getGridFsDocId());
+            result =  preAuthorizationRequestService.removeDocumentByGridFsDocId(ghProposerDocuments, preAuthorizationRemoveAdditionalDocumentCommand.getGridFsDocId());
         }
         return result;
     }
@@ -155,18 +155,4 @@ public class PreAuthorizationRequestCommandHandler {
                 .updateWithAdditionalRequirementAskedFor(preAuthorizationClaimantDetailCommand.getAdditionalRequiredDocuments());
         return preAuthorizationRequest;
     }
-
-    private boolean removeDocumentByGridFsDocId(Set<GHProposerDocument> ghProposerDocuments, String gridFsDocId) {
-        if(UtilValidator.isNotEmpty(ghProposerDocuments)) {
-            for (Iterator iterator = ghProposerDocuments.iterator(); iterator.hasNext(); ) {
-                GHProposerDocument ghProposerDocument = (GHProposerDocument) iterator.next();
-                if (ghProposerDocument.getGridFsDocId().equals(gridFsDocId)) {
-                    iterator.remove();
-                    return Boolean.TRUE;
-                }
-            }
-        }
-        return Boolean.FALSE;
-    }
-
 }

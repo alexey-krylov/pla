@@ -20,17 +20,16 @@ import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
+import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestBenefitDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestDrugService;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestHCPDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimPolicyDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.DrugServiceDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
@@ -40,12 +39,15 @@ import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
+import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.sharedkernel.util.SequenceGenerator;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -536,7 +538,7 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaimDto;
     }
 
-    public void populateDetailsToGroupHealthCashlessClaim(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto){
+    public GroupHealthCashlessClaim populateDetailsToGroupHealthCashlessClaim(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId());
         if(isNotEmpty(groupHealthCashlessClaim)){
             groupHealthCashlessClaim
@@ -567,6 +569,7 @@ public class GroupHealthCashlessClaimService {
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaimDto.getAdditionalRequiredDocumentsByUnderwriter())
                     .updateWithGroupHealthCashlessClaimPolicyDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail());;
         }
+        return groupHealthCashlessClaim;
     }
 
     public GroupHealthCashlessClaimDto  reConstructProbableClaimAmountForServices(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) {
@@ -702,5 +705,58 @@ public class GroupHealthCashlessClaimService {
                         .updateWithGroupHealthCashlessClaimHCPDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail());
             }
         }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+    public RoutingLevel getRoutingLevelForPreAuthorization(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) throws RoutingLevelNotFoundException {
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = getUnderWriterRoutingLevelDetailDto(groupHealthCashlessClaimDto);
+        RoutingLevel routingLevel = underWriterAdapter.getRoutingLevelWithoutCoverageDetails(routingLevelDetailDto);
+        if(isEmpty(routingLevel))
+            throw new RoutingLevelNotFoundException(getRoutingLevelExceptionMessage(groupHealthCashlessClaimDto));
+        return routingLevel;
+    }
+
+    private UnderWriterRoutingLevelDetailDto getUnderWriterRoutingLevelDetailDto(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) {
+        BigDecimal claimAmount = groupHealthCashlessClaimDto.getSumOfAllProbableClaimAmount();
+        int age = groupHealthCashlessClaimDto.getAgeOfTheClient();
+        List<UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem> underWriterInfluencingFactorItems = new ArrayList<>();
+        UnderWriterRoutingLevelDetailDto routingLevelDetailDto = new UnderWriterRoutingLevelDetailDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail().getPlanId(), LocalDate.now(), ProcessType.CLAIM.name());
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.CLAIM_AMOUNT.name(), claimAmount.toPlainString()));
+        underWriterInfluencingFactorItems.add(new UnderWriterRoutingLevelDetailDto.UnderWriterInfluencingFactorItem(UnderWriterInfluencingFactor.AGE.name(), String.valueOf(age)));
+        routingLevelDetailDto.setUnderWriterInfluencingFactor(underWriterInfluencingFactorItems);
+        return routingLevelDetailDto;
+    }
+
+    public String getRoutingLevelExceptionMessage(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) {
+        BigDecimal claimAmount = groupHealthCashlessClaimDto.getSumOfAllProbableClaimAmount();
+        int age = groupHealthCashlessClaimDto.getAgeOfTheClient();
+        return "No routing rule found for Group Health Cashless claim : "+groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId()+" having age : "+age+" and Claim Amount : "+claimAmount;
+
+    }
+
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isEmpty(groupHealthCashlessClaim)){
+            return Sets.newHashSet();
+        }
+        Set<GHProposerDocument> uploadedDocuments = isNotEmpty(groupHealthCashlessClaim.getProposerDocuments()) ? groupHealthCashlessClaim.getProposerDocuments() : Sets.newHashSet();
+        Set<GHProposalMandatoryDocumentDto> mandatoryDocumentDtos = Sets.newHashSet();
+        if (isNotEmpty(uploadedDocuments)) {
+            mandatoryDocumentDtos = uploadedDocuments.stream().filter(uploadedDocument -> !uploadedDocument.isMandatory()).map(new Function<GHProposerDocument, GHProposalMandatoryDocumentDto>() {
+                @Override
+                public GHProposalMandatoryDocumentDto apply(GHProposerDocument ghProposerDocument) {
+                    GHProposalMandatoryDocumentDto mandatoryDocumentDto = new GHProposalMandatoryDocumentDto(ghProposerDocument.getDocumentId(), ghProposerDocument.getDocumentName());
+                    GridFSDBFile gridFSDBFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(ghProposerDocument.getGridFsDocId())));
+                    mandatoryDocumentDto.setFileName(gridFSDBFile.getFilename());
+                    mandatoryDocumentDto.setContentType(gridFSDBFile.getContentType());
+                    mandatoryDocumentDto.setGridFsDocId(gridFSDBFile.getId().toString());
+                    try {
+                        mandatoryDocumentDto.updateWithContent(IOUtils.toByteArray(gridFSDBFile.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return mandatoryDocumentDto;
+                }
+            }).collect(Collectors.toSet());
+        }
+        return mandatoryDocumentDtos;
     }
 }

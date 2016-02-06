@@ -48,6 +48,7 @@ import org.apache.commons.lang.StringUtils;
 import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
+import org.nthdimenzion.utils.UtilValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -1189,5 +1190,18 @@ public class PreAuthorizationRequestService {
         preAuthorizationRequest.updateRequirementEmailSentFlag(Boolean.TRUE);
         preAuthorizationRequest = preAuthorizationRequestRepository.save(preAuthorizationRequest);
         return preAuthorizationRequest;
+    }
+
+    public boolean removeDocumentByGridFsDocId(Set<GHProposerDocument> ghProposerDocuments, String gridFsDocId) {
+        if(UtilValidator.isNotEmpty(ghProposerDocuments)) {
+            for (Iterator iterator = ghProposerDocuments.iterator(); iterator.hasNext(); ) {
+                GHProposerDocument ghProposerDocument = (GHProposerDocument) iterator.next();
+                if (ghProposerDocument.getGridFsDocId().equals(gridFsDocId)) {
+                    iterator.remove();
+                    return Boolean.TRUE;
+                }
+            }
+        }
+        return Boolean.FALSE;
     }
 }

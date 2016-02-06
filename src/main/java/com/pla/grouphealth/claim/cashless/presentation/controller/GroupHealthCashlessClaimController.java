@@ -2,20 +2,30 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.application.command.claim.GroupHealthCashlessClaimDocumentCommand;
+import com.pla.grouphealth.claim.cashless.application.command.claim.GroupHealthCashlessClaimRemoveAdditionalDocumentCommand;
+import com.pla.grouphealth.claim.cashless.application.command.claim.UpdateGroupHealthCashlessClaimCommand;
 import com.pla.grouphealth.claim.cashless.application.command.claim.UploadGroupHealthCashlessClaimCommand;
+import com.pla.grouphealth.claim.cashless.application.command.preauthorization.PreAuthorizationRemoveAdditionalDocumentCommand;
+import com.pla.grouphealth.claim.cashless.application.command.preauthorization.UpdatePreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
+import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestId;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
+import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.wordnik.swagger.annotations.ApiOperation;
+import lombok.Synchronized;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -27,12 +37,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -53,6 +66,8 @@ public class GroupHealthCashlessClaimController {
     private CommandGateway commandGateway;
     @Autowired
     private PreAuthorizationService preAuthorizationService;
+    @Autowired
+    private PreAuthorizationRequestService preAuthorizationRequestService;
     @Autowired
     private GroupHealthCashlessClaimService groupHealthCashlessClaimService;
     @Autowired
@@ -137,6 +152,51 @@ public class GroupHealthCashlessClaimController {
         errorTemplateFile.delete();
     }
 
+
+    @RequestMapping(value = "/updategrouphealthcashlessclaim", method = RequestMethod.POST)
+    public Result createUpdate(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while updating cashless claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            UpdateGroupHealthCashlessClaimCommand updateGroupHealthCashlessClaimCommand = new UpdateGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, null, userName);
+            FutureCallback callback = new FutureCallback();
+            commandGateway.send(updateGroupHealthCashlessClaimCommand, callback);
+            callback.onSuccess(callback.get());
+            return Result.success("Group Health cashless claim successfully updated");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+
+    @RequestMapping(value = "/submitgrouphealthcashlessclaim", method = RequestMethod.POST)
+    public Result submitPreAuthorization(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while creating Group Health cashless claim", bindingResult.getAllErrors());
+        }
+        try {
+            RoutingLevel routingLevel = null;
+            if(groupHealthCashlessClaimDto.isSubmitEventFired()) {
+                routingLevel = groupHealthCashlessClaimService.getRoutingLevelForPreAuthorization(groupHealthCashlessClaimDto);
+            }
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto.updateWithClaimProcessorUserId(userName);
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            UpdateGroupHealthCashlessClaimCommand updateGroupHealthCashlessClaimCommand = new UpdateGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, routingLevel, userName);
+            FutureCallback callback = new FutureCallback();
+            commandGateway.send(updateGroupHealthCashlessClaimCommand, callback);
+            callback.onSuccess(callback.get());
+            return Result.success("Group Health cashless claim successfully submitted");
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/getmandatorydocuments/{clientId}/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list mandatory documents which is being configured in Mandatory Document SetUp")
@@ -168,5 +228,52 @@ public class GroupHealthCashlessClaimController {
         modelAndView.addObject("CashlessResult", searchResult);
         modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimDto());
         return modelAndView;
+    }
+
+    @Synchronized
+    @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
+    @ResponseBody
+    public Result uploadMandatoryDocument(GroupHealthCashlessClaimDocumentCommand groupHealthCashlessClaimDocumentCommand, HttpServletRequest request) {
+        groupHealthCashlessClaimDocumentCommand.setUserDetails(preAuthorizationRequestService.getUserDetailFromAuthentication());
+        try {
+            FutureCallback callback = new FutureCallback();
+            commandGateway.send(groupHealthCashlessClaimDocumentCommand, callback);
+            callback.onSuccess(callback.get());
+            return Result.success("Documents uploaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/getadditionaldocuments/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list additional documents which is being configured in Mandatory Document SetUp")
+    public Set<GHProposalMandatoryDocumentDto> findAdditionalDocuments(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
+        if (isEmpty(groupHealthCashlessClaimId)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "groupHealthCashlessClaimId cannot be empty");
+            return Sets.newHashSet();
+        }
+        Set<GHProposalMandatoryDocumentDto> ghProposalMandatoryDocumentDtos = groupHealthCashlessClaimService.findAdditionalDocuments(groupHealthCashlessClaimId);
+        return ghProposalMandatoryDocumentDtos;
+    }
+
+    @Synchronized
+    @RequestMapping(value = "/removeadditionalDocument", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removePreAuthorizationAdditionalDocument(@Valid @RequestBody GroupHealthCashlessClaimRemoveAdditionalDocumentCommand groupHealthCashlessClaimRemoveAdditionalDocumentCommand, BindingResult bindingResult, ModelMap modelMap, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while removing additional documents", bindingResult.getAllErrors());
+        }
+        try {
+            FutureCallback callback = new FutureCallback();
+            commandGateway.send(groupHealthCashlessClaimRemoveAdditionalDocumentCommand, callback);
+            callback.onSuccess(callback.get());
+            return Result.success("Document deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
     }
 }

@@ -64,14 +64,6 @@ public class PreAuthorizationRequestController {
     @Autowired
     private MailService mailService;
 
-    @RequestMapping(value = "/getpreauthorizationbypreauthorizationIdandclientId/{preAuthorizationId}/{clientId}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    PreAuthorizationClaimantDetailCommand getPreAuthorizationByPreAuthorizationIdAndClientId(@PathVariable("preAuthorizationId") String preAuthorizationId, @PathVariable("clientId") String clientId) {
-        //return preAuthorizationRequestService.getPreAuthorizationByPreAuthorizationIdAndClientId(new PreAuthorizationId(preAuthorizationId), clientId);
-        return null;
-    }
-
     @RequestMapping(value = "/loadpreauthorizationviewforupdate", method = RequestMethod.GET)
     public
     @ResponseBody

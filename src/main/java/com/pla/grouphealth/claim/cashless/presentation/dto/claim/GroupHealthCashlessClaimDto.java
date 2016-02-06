@@ -5,6 +5,8 @@ import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.BenefitDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.CoverageBenefitDetailDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.sharedkernel.domain.model.Relationship;
@@ -15,6 +17,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.utils.UtilValidator;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,6 +47,7 @@ public class GroupHealthCashlessClaimDto {
     private Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices;
     private Set<CommentDetail> commentDetails;
     private boolean submitted;
+    private boolean submitEventFired;
     private LocalDate submissionDate;
     private String claimProcessorUserId;
     private String claimUnderWriterUserId;
@@ -208,5 +212,27 @@ public class GroupHealthCashlessClaimDto {
                 .updateWithPlanName(groupHealthCashlessClaimPolicyDetail.getPlanName())
                 .updateWithPlanCode(groupHealthCashlessClaimPolicyDetail.getPlanCode())
                 .updateWithClientId(groupHealthCashlessClaimPolicyDetail.getAssuredDetail());
+    }
+
+    public BigDecimal getSumOfAllProbableClaimAmount() {
+        BigDecimal sumOfAllProbableClaimAmount = BigDecimal.ZERO;
+        if(isNotEmpty(this.groupHealthCashlessClaimPolicyDetail)) {
+            Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails = this.groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
+            if(isNotEmpty(coverageDetails)){
+                for(GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail :  coverageDetails){
+                    Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
+                    if(isNotEmpty(benefitDetails)){
+                        for(GroupHealthCashlessClaimBenefitDetail benefitDetail : benefitDetails){
+                            sumOfAllProbableClaimAmount = sumOfAllProbableClaimAmount.add(benefitDetail.getProbableClaimAmount());
+                        }
+                    }
+                }
+            }
+        }
+        return sumOfAllProbableClaimAmount;
+    }
+
+    public int getAgeOfTheClient() {
+        return isNotEmpty(this.groupHealthCashlessClaimPolicyDetail) ? isNotEmpty(this.groupHealthCashlessClaimPolicyDetail.getAssuredDetail()) ?  this.groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getAgeNextBirthday()  : 0 : 0;
     }
 }
