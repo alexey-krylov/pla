@@ -251,12 +251,16 @@ public class GroupHealthCashlessClaimService {
             Set<String> serviceList = isNotEmpty(map.get("services")) ? (Set<String>) map.get("services") : Sets.newHashSet();
             BigDecimal payableAmount = BigDecimal.ZERO;
             for(String service : serviceList) {
-                HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCodeAndService(new HCPCode(hcpCode), service);
+                /*HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCodeAndService(new HCPCode(hcpCode), service);
                 notNull(hcpRate, "No HCP Rate configured for hcp- " + hcpCode + " service - " + service);
                 HCPServiceDetail hcpServiceDetail = isNotEmpty(hcpRate.getHcpServiceDetails()) ? getHCPDetail(hcpRate.getHcpServiceDetails(), service) : null;
-                notNull(hcpServiceDetail, "No HCP Rate configured as no HCPServiceDetail found.");
+                notNull(hcpServiceDetail, "No HCP Rate configured as no HCPServiceDetail found.");*/
+                Optional<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoOptional = claimUploadedExcelDataDtos.parallelStream().filter(dto -> dto.getService().trim().equals(service.trim())).findAny();
+                if(!claimUploadedExcelDataDtoOptional.isPresent())
+                    throw new RuntimeException("No service found to calculate the amount");
+                ClaimUploadedExcelDataDto claimUploadedExcelDataDto = claimUploadedExcelDataDtoOptional.get();
                 int lengthOfStay = getLengthOfStayByService(service, claimUploadedExcelDataDtos);
-                BigDecimal amount = calculateProbableClaimAmount(lengthOfStay, hcpServiceDetail.getNormalAmount(), (CoverageBenefitDefinition) map.get("coverageBenefitDefinition"));
+                BigDecimal amount = calculateProbableClaimAmount(lengthOfStay, claimUploadedExcelDataDto.getBillAmount(), (CoverageBenefitDefinition) map.get("coverageBenefitDefinition"));
                 payableAmount = payableAmount.add(amount);
                 map.put("payableAmount", payableAmount);
             }

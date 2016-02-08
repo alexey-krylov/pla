@@ -2,26 +2,20 @@ package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
 
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.BenefitDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.CoverageBenefitDetailDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposer;
-import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/4/2016.

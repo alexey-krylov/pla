@@ -178,11 +178,8 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     public GroupHealthCashlessClaim updateWithGhProposerDto(GHProposerDto ghProposerDto) {
         if(isNotEmpty(ghProposerDto)) {
             GHProposer ghProposer = isNotEmpty(this.getGhProposer()) ? this.getGhProposer() : getInstance(GHProposer.class);
-            try {
-                BeanUtils.copyProperties(ghProposer, ghProposerDto);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            assert ghProposer != null;
+            ghProposer.updateWithDetails(ghProposerDto);
             this.ghProposer = ghProposer;
         }
         return this;

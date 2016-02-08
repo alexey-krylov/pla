@@ -1,5 +1,6 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHProposerDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantProposerDetail;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,5 +53,15 @@ public class GHProposer {
     private GHProposerContactDetail updateWithContactDetail(PreAuthorizationClaimantProposerDetail preAuthorizationClaimantProposerDetail) {
         GHProposerContactDetail contactDetail = isNotEmpty(this.contactDetail) ? this.contactDetail : new GHProposerContactDetail();
         return contactDetail.updateWithContactDetails(preAuthorizationClaimantProposerDetail);
+    }
+
+    public GHProposer updateWithDetails(GHProposerDto ghProposerDto) {
+        if(isNotEmpty(ghProposerDto)){
+            this.proposerCode = ghProposerDto.getProposerCode();
+            this.proposerName = ghProposerDto.getProposerName();
+            GHProposerContactDetail contactDetail = isNotEmpty(this.contactDetail) ? this.contactDetail : new GHProposerContactDetail();
+            this.contactDetail = contactDetail.constructContactDetail(ghProposerDto.getContactDetail());
+        }
+        return this;
     }
 }

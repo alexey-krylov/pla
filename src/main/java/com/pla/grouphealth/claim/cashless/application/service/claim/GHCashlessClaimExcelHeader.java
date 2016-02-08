@@ -37,7 +37,7 @@ public enum GHCashlessClaimExcelHeader {
 
         @Override
         public ClaimUploadedExcelDataDto populatePreAuthorizationDetail(ClaimUploadedExcelDataDto claimUploadedExcelDataDto, Row
-        row, List<String> headers) {
+                row, List<String> headers) {
             int cellNumber = headers.indexOf(this.getDescription());
             Cell cell = row.getCell(cellNumber);
             String cellValue = getCellValue(cell);
@@ -47,7 +47,7 @@ public enum GHCashlessClaimExcelHeader {
 
         @Override
         public String validateAndIfNotBuildErrorMessage(IExcelPropagator
-        iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
+                                                                iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
             String errorMessage = "";
 
             try {
@@ -1375,7 +1375,7 @@ public enum GHCashlessClaimExcelHeader {
             }
             return  errorMessage;
         }
-    },SERVICE("Service to be Availed - Service"){
+    },SERVICE("Service Availed - Service"){
         @Override
         public String getAllowedValue(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
             return claimUploadedExcelDataDto.getService();
@@ -1395,7 +1395,7 @@ public enum GHCashlessClaimExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Service to be Availed - Service cannot be empty.";
+                    errorMessage = errorMessage + "Service Availed - Service cannot be empty.";
                     return errorMessage;
                 }
                 Cell policyNumberCell = row.getCell(excelHeaders.indexOf(POLICY_NUMBER.description));
@@ -1420,7 +1420,7 @@ public enum GHCashlessClaimExcelHeader {
             }
             return errorMessage;
         }
-    },TYPE("Service to be Availed - Type"){
+    },TYPE("Service Availed - Type"){
         @Override
         public String getAllowedValue(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
             return claimUploadedExcelDataDto.getType();
@@ -1440,9 +1440,42 @@ public enum GHCashlessClaimExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Service to be Availed - Type cannot be empty.";
+                    errorMessage = errorMessage + "Service Availed - Type cannot be empty.";
                     return errorMessage;
                 }
+            } catch (Exception e) {
+                errorMessage = errorMessage + e.getMessage();
+                return errorMessage;
+            }
+            return errorMessage;
+        }
+    },BILL_AMOUNT("Bill Amount"){
+        @Override
+        public String getAllowedValue(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
+            return isNotEmpty(claimUploadedExcelDataDto.getBillAmount()) ? claimUploadedExcelDataDto.getBillAmount().toString() : StringUtils.EMPTY;
+        }
+
+        @Override
+        public ClaimUploadedExcelDataDto populatePreAuthorizationDetail(ClaimUploadedExcelDataDto claimUploadedExcelDataDto, Row row, List<String> headers) {
+            int cellNumber = headers.indexOf(this.getDescription());
+            Cell cell = row.getCell(cellNumber);
+            String cellValue = getCellValue(cell);
+            if(isNotEmpty(cellValue))
+                claimUploadedExcelDataDto.setBillAmount(new BigDecimal(cellValue));
+            return claimUploadedExcelDataDto;
+        }
+
+        @Override
+        public String validateAndIfNotBuildErrorMessage(IExcelPropagator iExcelPropagator, Row row, String value, List<String> excelHeaders, Map dataMap) {
+            String errorMessage = "";
+            try {
+                if(isEmpty(value)) {
+                    errorMessage = errorMessage + "Bill Amount cannot be empty.";
+                    return errorMessage;
+                }
+                value = isNotEmpty(value) ? String.valueOf( new BigDecimal(value).intValue()) : value;
+            } catch(NumberFormatException e){
+                errorMessage = errorMessage + "Bill amount should be a number";
             } catch (Exception e) {
                 errorMessage = errorMessage + e.getMessage();
                 return errorMessage;

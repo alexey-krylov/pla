@@ -1,7 +1,9 @@
 package com.pla.grouphealth.sharedresource.model.vo;
 
 import com.google.common.collect.Lists;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHProposerContactDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantProposerDetail;
+import com.pla.grouphealth.sharedresource.dto.ContactPersonDetailDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -69,6 +72,23 @@ public class GHProposerContactDetail {
         }
         ContactPersonDetail contactPersonDetail = new ContactPersonDetail(preAuthorizationClaimantProposerDetail.getContactPersonEmailId(), preAuthorizationClaimantProposerDetail.getContactPersonName(), preAuthorizationClaimantProposerDetail.getContactPersonMobileNumber(), preAuthorizationClaimantProposerDetail.getContactPersonWorkPhone());
         return Lists.newArrayList(contactPersonDetail);
+    }
+
+    public GHProposerContactDetail constructContactDetail(GHProposerContactDetailDto contactDetail) {
+        if(isNotEmpty(contactDetail)){
+            this.addressLine1 = contactDetail.getAddressLine1();
+            this.addressLine2 = contactDetail.getAddressLine2();
+            this.postalCode = contactDetail.getPostalCode();
+            this.province = contactDetail.getProvince();
+            this.town = contactDetail.getTown();
+            this.emailAddress = contactDetail.getEmailAddress();
+            this.contactPersonDetail = constructContactPersonDetailFromGHProposerContactDetailDto(contactDetail.getContactPersonDetail());
+        }
+        return this;
+    }
+
+    private List<ContactPersonDetail> constructContactPersonDetailFromGHProposerContactDetailDto(List<ContactPersonDetailDto> contactPersonDetail) {
+        return isNotEmpty(contactPersonDetail) ?  contactPersonDetail.parallelStream().map(contactPersonDetailDto -> new ContactPersonDetail(contactPersonDetailDto.getContactPersonEmail(), contactPersonDetailDto.getContactPersonName(), contactPersonDetailDto.getContactPersonMobileNumber(), contactPersonDetailDto.getContactPersonWorkPhoneNumber())).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
     @Getter

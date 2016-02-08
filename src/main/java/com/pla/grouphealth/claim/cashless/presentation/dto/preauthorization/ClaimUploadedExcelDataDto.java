@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.math.BigDecimal;
+
 /**
  * Author - Mohan Sharma Created on 1/4/2016.
  */
@@ -65,6 +67,7 @@ public class ClaimUploadedExcelDataDto {
     private String detailsPsychiatricCondition;
     private String service;
     private String type;
+    private BigDecimal billAmount;
     private String status;
     private String comments;
 

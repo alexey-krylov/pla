@@ -180,45 +180,41 @@ public class GroupHealthCashlessCommandHandler {
         return Boolean.TRUE;
     }
 
-/*    @CommandHandler
-    public boolean routeToSeniorUnderwriter(RoutePreAuthorizationCommand routePreAuthorizationCommand) {
-        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = routePreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
-        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
-        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, routePreAuthorizationCommand.getUserName());
-        *//*
-        * logic to get the senior underwriter userId
-        * preAuthorizationRequest.updateWithPreAuthorizationUnderWriterUserId(userId);
-        * *//*
-        preAuthorizationRequest
-                .updateWithPreAuthorizationUnderWriterUserId(null)
-                .updateWithUnderWriterRoutedToSeniorUnderWriterUserId(routePreAuthorizationCommand.getUserName())
-                .updateStatus(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2);
+    @CommandHandler
+    public boolean routeToSeniorUnderwriter(RouteGroupHealthCashlessClaimCommand routeGroupHealthCashlessClaimCommand) {
+        GroupHealthCashlessClaimDto groupHealthCashlessClaimDto = routeGroupHealthCashlessClaimCommand.getGroupHealthCashlessClaimDto();
+        String groupHealthCashlessClaimId = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId();
+        notNull(groupHealthCashlessClaimId ,"groupHealthCashlessClaimId is empty for the record");
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
+        groupHealthCashlessClaim = groupHealthCashlessClaimService.populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto);
+        groupHealthCashlessClaim
+                .updateWithClaimUnderWriterUserId(null)
+                .updateWithUnderWriterRoutedToSeniorUnderWriterUserId(routeGroupHealthCashlessClaimCommand.getUserName())
+                .updateStatus(GroupHealthCashlessClaim.Status.UNDERWRITING_LEVEL2);
         return Boolean.TRUE;
     }
 
     @CommandHandler
-    public boolean addRequirementToPreAuthorization(AddRequirementPreAuthorizationCommand addRequirementPreAuthorizationCommand) throws GenerateReminderFollowupException {
-        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = addRequirementPreAuthorizationCommand.getPreAuthorizationClaimantDetailCommand();
-        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
-        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, addRequirementPreAuthorizationCommand.getUserName());
+    public boolean addRequirementToPreAuthorization(AddRequirementGroupHealthCashlessClaimCommand addRequirementGroupHealthCashlessClaimCommand) throws GenerateReminderFollowupException {
+        GroupHealthCashlessClaimDto groupHealthCashlessClaimDto = addRequirementGroupHealthCashlessClaimCommand.getGroupHealthCashlessClaimDto();
+        String groupHealthCashlessClaimId = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId();
+        notNull(groupHealthCashlessClaimId ,"groupHealthCashlessClaimId is empty for the record");
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
+        groupHealthCashlessClaim = groupHealthCashlessClaimService.populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto);
         //preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.RETURNED);
-        preAuthorizationRequest.savedRegisterFollowUpReminders();
+        groupHealthCashlessClaim.savedRegisterFollowUpReminders();
         return Boolean.TRUE;
     }
 
     @CommandHandler
-    public boolean underwriterPreAuthorizationUpdate(UnderwriterPreAuthorizationUpdateCommand underwriterPreAuthorizationUpdateCommand) throws GenerateReminderFollowupException {
-        PreAuthorizationClaimantDetailCommand preAuthorizationClaimantDetailCommand = underwriterPreAuthorizationUpdateCommand.getPreAuthorizationClaimantDetailCommand();
-        String preAuthorizationRequestId = preAuthorizationClaimantDetailCommand.getPreAuthorizationRequestId();
-        notNull(preAuthorizationRequestId ,"PreAuthorizationRequestId is empty for the record");
-        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestMongoRepository.load(preAuthorizationRequestId);
-        preAuthorizationRequest = populateDetailsToPreAuthorization(preAuthorizationClaimantDetailCommand, preAuthorizationRequest, underwriterPreAuthorizationUpdateCommand.getUserName());
+    public boolean underwriterPreAuthorizationUpdate(UnderwriterGroupHealthCashlessClaimUpdateCommand underwriterGroupHealthCashlessClaimUpdateCommand) throws GenerateReminderFollowupException {
+        GroupHealthCashlessClaimDto groupHealthCashlessClaimDto = underwriterGroupHealthCashlessClaimUpdateCommand.getGroupHealthCashlessClaimDto();
+        String groupHealthCashlessClaimId = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId();
+        notNull(groupHealthCashlessClaimId ,"groupHealthCashlessClaimId is empty for the record");
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
+        groupHealthCashlessClaimService.populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto);
         return Boolean.TRUE;
-    }*/
+    }
 
     private Set<AdditionalDocument> markAdditionalRequiredDocumentSubmitted(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter, String documentId) {
         return additionalRequiredDocumentsByUnderwriter.stream().map(document -> {

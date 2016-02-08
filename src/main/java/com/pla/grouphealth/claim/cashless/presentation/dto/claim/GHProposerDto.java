@@ -9,6 +9,8 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
 
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+
 /**
  * Author - Mohan Sharma Created on 2/4/2016.
  */
@@ -19,16 +21,17 @@ public class GHProposerDto {
 
     private String proposerName;
     private String proposerCode;
-    private GHProposerContactDetail contactDetail;
+    private GHProposerContactDetailDto contactDetail;
 
     public GHProposerDto updateWithDetails(GHProposer ghProposer) {
-        try {
-            BeanUtils.copyProperties(this, ghProposer);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        this.proposerCode = ghProposer.getProposerCode();
+        this.proposerName = ghProposer.getProposerName();
+        this.contactDetail = constructContactDetails(ghProposer.getContactDetail());
         return this;
+    }
+
+    private GHProposerContactDetailDto constructContactDetails(GHProposerContactDetail contactDetail) {
+        return new GHProposerContactDetailDto()
+                .updateWithContacts(contactDetail);
     }
 }

@@ -52,8 +52,8 @@ public class PreAuthorizationExcelGenerator {
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From Diabetes"), Lists.newArrayList("Yes", "No"));
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From IHD/CAD"), Lists.newArrayList("Yes", "No"));
         constraintCellDataMap.put(headers.indexOf("Past history of any chronic illness - Suffering From HTN"), Lists.newArrayList("Yes", "No"));
-        constraintCellDataMap.put(headers.indexOf("Service to be Availed - Service"), getAllRelatedServices(hcpServiceDetailDtos));
-        constraintCellDataMap.put(headers.indexOf("Service to be Availed - Type"), Lists.newArrayList("Normal", "After Hour"));
+        constraintCellDataMap.put(headers.indexOf("Service Availed - Service"), getAllRelatedServices(hcpServiceDetailDtos));
+        constraintCellDataMap.put(headers.indexOf("Service Availed - Type"), Lists.newArrayList("Normal", "After Hour"));
         if(classZ.equals(GHCashlessClaimExcelHeader.class)){
             constraintCellDataMap.put(headers.indexOf("Status"), GroupHealthCashlessClaimDrugServiceDto.Status.getStatusList());
         }
