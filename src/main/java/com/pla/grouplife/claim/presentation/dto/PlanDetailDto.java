@@ -1,7 +1,9 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.sharedkernel.identifier.PlanId;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import java.math.BigDecimal;
@@ -16,7 +18,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PlanDetailDto {
 
-    private PlanId planId;;
+    private String planId;;
 
     private String planName;
 

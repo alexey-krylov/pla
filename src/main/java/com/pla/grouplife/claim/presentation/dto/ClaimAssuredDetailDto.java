@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 
 /**
- * Created by nthdimensioncompany on 30/12/2015.
+ * Created by ak on 30/12/2015.
  */
 
 @Getter

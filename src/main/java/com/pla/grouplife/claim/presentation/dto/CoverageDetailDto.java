@@ -1,6 +1,5 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.sharedkernel.identifier.CoverageId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class CoverageDetailDto {
 
     private String coverageCode;
 
-    private CoverageId coverageId;
+    private String coverageId;
 
     private String coverageName;
 

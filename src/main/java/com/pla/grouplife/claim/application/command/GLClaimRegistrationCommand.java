@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
@@ -25,17 +24,17 @@ public class GLClaimRegistrationCommand {
     private String claimId;
     private String causeOfDeath;
     private String placeOfDeath;
-    private LocalDate dateOfDeath;
+    private DateTime dateOfDeath;
     private DateTime timeOfDeath;
     private String durationOfIllness;
     private String  nameOfDoctorAndHospitalAddress;
     private String contactNumber;
-    private LocalDate firstConsultation;
+    private DateTime firstConsultation;
     private String treatmentTaken;
     private CauseOfDeathAccidental causeOfDeathAccidental;
     private AccidentTypes typeOfAccident;
     private String placeOfAccident;
-    private LocalDate dateOfAccident;
+    private DateTime dateOfAccident;
     private DateTime  timeOfAccident;
     private PostMortemAutopsyDone postMortemAutopsyDone;
     private PoliceReportRegistered policeReportRegistered;

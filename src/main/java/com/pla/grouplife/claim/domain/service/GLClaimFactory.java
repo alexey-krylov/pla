@@ -120,7 +120,8 @@ public class GLClaimFactory {
        PlanDetailDto planDetailDto=createCommand.getPlanDetail();
        //calculating paln and coverage sum assured for claim amount
        List<CoverageId> coverageIdList=new ArrayList<CoverageId>();
-       PlanId planId=planDetailDto.getPlanId();
+       String planIdInString=planDetailDto.getPlanId();
+       PlanId  planId=new PlanId(planIdInString);
        Map planMap=planFinder.findPlanByPlanId(planId);
        List<LinkedHashMap> coverageList=(List<LinkedHashMap>)planMap.get("coverages");
        for(LinkedHashMap planCoverage:coverageList) {
@@ -131,13 +132,17 @@ public class GLClaimFactory {
            coverageIdList.add(tempCoverageId) ;
        }
 
-       PlanDetail planDetail=new PlanDetail(planDetailDto.getPlanId(),planDetailDto.getPlanName(),planDetailDto.getPlanCode(),planDetailDto.getPremiumAmount(),planDetailDto.getSumAssured());
+       PlanDetail planDetail=new PlanDetail(planId,planDetailDto.getPlanName(),planDetailDto.getPlanCode(),planDetailDto.getPremiumAmount(),planDetailDto.getSumAssured());
        Set<CoverageDetailDto> coverageDetailDtoList=createCommand.getCoverageDetails();
        Set<CoverageDetail> coverages=new LinkedHashSet<CoverageDetail>();
        BigDecimal tempSumAssured=BigDecimal.ZERO;
+       String coverageIdInString=null;
+       CoverageId coverageId=null;
        if(coverageDetailDtoList!=null){
            for(CoverageDetailDto coverageDetailDto:coverageDetailDtoList){
-               CoverageDetail coverageDetail=new CoverageDetail(coverageDetailDto.getCoverageCode(),coverageDetailDto.getCoverageId(),
+               coverageIdInString=coverageDetailDto.getCoverageId();
+               coverageId=new CoverageId(coverageIdInString);
+               CoverageDetail coverageDetail=new CoverageDetail(coverageDetailDto.getCoverageCode(),coverageId,
                        coverageDetailDto.getCoverageName(),coverageDetailDto.getPremium(),coverageDetailDto.getSumAssured());
                if(coverageDetailDto.getSumAssured()!=null){
                tempSumAssured.add(coverageDetailDto.getSumAssured());}

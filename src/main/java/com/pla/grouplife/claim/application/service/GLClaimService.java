@@ -283,12 +283,12 @@ public class GLClaimService implements Serializable{
             claimantDetail.withContactPersonDetails(contactPersonDetailList);
             claimIntimationDetailDto.withClaimant(claimantDetail);
             PlanDetail planDetail=(PlanDetail)claimRecordMap.get("planDetail");
-            PlanDetailDto planDetailDto=new PlanDetailDto(planDetail.getPlanId(),planDetail.getPlanCode(),planDetail.getPlanName(),planDetail.getPremiumAmount(),planDetail.getSumAssured());
+            PlanDetailDto planDetailDto=new PlanDetailDto(planDetail.getPlanId().getPlanId(),planDetail.getPlanCode(),planDetail.getPlanName(),planDetail.getPremiumAmount(),planDetail.getSumAssured());
             claimIntimationDetailDto.setPlanDetail(planDetailDto);
             List<CoverageDetail> coverageDetails=( List<CoverageDetail>)claimRecordMap.get("coverageDetails");
             Set<CoverageDetailDto> coverageDetailsSet=new LinkedHashSet<CoverageDetailDto>();
             for(CoverageDetail coverageDetail:coverageDetails){
-                CoverageDetailDto coverageDetailDto=new CoverageDetailDto(coverageDetail.getCoverageCode(),coverageDetail.getCoverageId(),coverageDetail.getCoverageName(),coverageDetail.getSumAssured(),coverageDetail.getPremium()) ;
+                CoverageDetailDto coverageDetailDto=new CoverageDetailDto(coverageDetail.getCoverageCode(),coverageDetail.getCoverageId().getCoverageId(),coverageDetail.getCoverageName(),coverageDetail.getSumAssured(),coverageDetail.getPremium()) ;
                 coverageDetailsSet.add(coverageDetailDto);
             }
             claimIntimationDetailDto.setCoverageDetails(coverageDetailsSet);
@@ -753,7 +753,7 @@ public class GLClaimService implements Serializable{
                 }
                 PlanPremiumDetail planPremiumDetails=insured.getPlanPremiumDetail();
                 PlanDetailDto planDetailDto=new PlanDetailDto();
-                planDetailDto.setPlanId(planPremiumDetails.getPlanId());
+                planDetailDto.setPlanId(planPremiumDetails.getPlanId().getPlanId());
                 planDetailDto.setPlanCode(planPremiumDetails.getPlanCode());
                 planDetailDto.setPlanName(planName);
                 planDetailDto.setPremiumAmount(planPremiumDetails.getPremiumAmount());
@@ -767,7 +767,7 @@ public class GLClaimService implements Serializable{
                         CoverageDetailDto coverageDetailDto = new CoverageDetailDto();
                         String coverageIdInString=coveragePremiumDetail.getCoverageId().getCoverageId();
                         CoverageDto coverageDto=coverageFinder.findCoverageById(coverageIdInString);
-                        coverageDetailDto.setCoverageId(coveragePremiumDetail.getCoverageId());
+                        coverageDetailDto.setCoverageId(coveragePremiumDetail.getCoverageId().getCoverageId());
                         coverageDetailDto.setCoverageCode(coveragePremiumDetail.getCoverageCode());
                         coverageDetailDto.setCoverageName(coverageDto.getCoverageName());
                         coverageDetailDto.setSumAssured(coveragePremiumDetail.getSumAssured());
@@ -805,7 +805,7 @@ public class GLClaimService implements Serializable{
 
                 PlanPremiumDetail planPremiumDetails=insured.getPlanPremiumDetail();
                 PlanDetailDto planDetailDto=new PlanDetailDto();
-                planDetailDto.setPlanId(planPremiumDetails.getPlanId());
+                planDetailDto.setPlanId(planPremiumDetails.getPlanId().getPlanId());
                 planDetailDto.setPlanCode(planPremiumDetails.getPlanCode());
                 planDetailDto.setPlanName(planName);
                 planDetailDto.setPremiumAmount(planPremiumDetails.getPremiumAmount());
@@ -818,7 +818,7 @@ public class GLClaimService implements Serializable{
                         CoverageDetailDto coverageDetailDto = new CoverageDetailDto();
                         String coverageIdInString=coveragePremiumDetail.getCoverageId().getCoverageId();
                         CoverageDto coverageDto=coverageFinder.findCoverageById(coverageIdInString);
-                        coverageDetailDto.setCoverageId(coveragePremiumDetail.getCoverageId());
+                        coverageDetailDto.setCoverageId(coveragePremiumDetail.getCoverageId().getCoverageId());
                         coverageDetailDto.setCoverageCode(coveragePremiumDetail.getCoverageCode());
                         coverageDetailDto.setCoverageName(coverageDto.getCoverageName());
                         coverageDetailDto.setSumAssured(coveragePremiumDetail.getSumAssured());

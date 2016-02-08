@@ -1,7 +1,7 @@
 package com.pla.grouplife.claim.domain.model;
 
 import lombok.*;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -15,24 +15,24 @@ import java.util.List;
 
 public class DisabilityClaimRegistration {
 
-    private LocalDate dateOfDisability;
+    private DateTime dateOfDisability;
     private DisabilityNature natureOfDisability;
     private DisabilityExtent  extendOfDisability;
-    private LocalDate dateOfDiagnosis;
+    private DateTime dateOfDiagnosis;
     private String  exactDiagnosis;
     private String nameOfDoctorAndHospitalAddress;
     private String contactNumberOfHospital;
-    private LocalDate  dateOfFirstConsultation;
+    private DateTime  dateOfFirstConsultation;
     private String treatmentTaken;
     private List<AssuredTaskOfDailyLiving> capabilityOfAssuredDailyLiving;
     private String assuredGainfulActivities;
     private String detailsOfWorkActivities;
-    private LocalDate fromActivitiesDate;
+    private DateTime fromActivitiesDate;
     private AssuredConfinedToHouse assuredConfinedToIndoor;
-    private LocalDate fromIndoorDate;
+    private DateTime fromIndoorDate;
     private String assuredIndoorDetails;
     private AssuredOutdoorActive  assuredAbleToGetOutdoor;
-    private LocalDate fromOutdoorDate;
+    private DateTime fromOutdoorDate;
     private String assuredOutdoorDetails;
     private String visitingMedicalOfficerDetails;
 

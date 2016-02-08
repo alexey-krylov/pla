@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,17 +17,17 @@ import org.joda.time.LocalDate;
 public class ClaimRegistrationDto {
     private String causeOfDeath;
     private String placeOfDeath;
-    private LocalDate dateOfDeath;
+    private DateTime dateOfDeath;
     private DateTime timeOfDeath;
     private String durationOfIllness;
     private String  nameOfDocterAndHospialAddress;
     private String contactNumber;
-    private LocalDate firstConsultation;
+    private DateTime firstConsultation;
     private String treatementTaken;
     private CauseOfDeathAccidental causeOfDeathAccidental;
     private AccidentTypes typeOfAccident;
     private String placeOfAccident;
-    private LocalDate dateOfAccident;
+    private DateTime dateOfAccident;
     private DateTime  timeOfAccident;
     private PostMortemAutopsyDone postMortemAutopsyDone;
     private PoliceReportRegistered policeReportRegistered;
