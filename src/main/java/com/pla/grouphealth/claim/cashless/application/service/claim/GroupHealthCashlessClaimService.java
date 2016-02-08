@@ -11,8 +11,6 @@ import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.hcp.domain.model.HCP;
-import com.pla.core.hcp.domain.model.HCPCode;
-import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
@@ -22,8 +20,10 @@ import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
-import com.pla.grouphealth.claim.cashless.domain.model.claim.PreAuthorizationDetail;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestBenefitDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestPolicyDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
@@ -70,6 +70,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.*;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notEmpty;
@@ -120,26 +121,36 @@ public class GroupHealthCashlessClaimService {
         notEmpty(claimUploadedExcelDataDtos, "No uploaded details found.");
         ClaimUploadedExcelDataDto claimUploadedExcelDataDto = claimUploadedExcelDataDtos.iterator().next();
         notNull(claimUploadedExcelDataDto, "No uploaded details found.");
-        GroupHealthCashlessClaim groupHealthCashlessClaim = new GroupHealthCashlessClaim(GroupHealthCashlessClaim.Status.INTIMATION);
+        GroupHealthCashlessClaim groupHealthCashlessClaim = new GroupHealthCashlessClaim(Status.INTIMATION);
         groupHealthCashlessClaim
                 .updateWithGroupHealthCashlessClaimId(constructGroupHealthCashlessClaimId(claimUploadedExcelDataDto))
                 .updateWithCreationDate(batchDate)
                 .updateWithBatchNumber(batchNumber)
                 .updateWithBatchUploaderUserId(batchUploaderUserId)
                 .updateWithClaimType("Cashless")
+                .updateWithPreAuthorizationDetails(constructPreAuthorizationDetails(claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId))
                 .updateWithProposerDetails(constructGroupHealthProposer(claimUploadedExcelDataDto))
                 .updateWithGroupHealthCashlessClaimHCPDetail(constructHCPDetails(hcpCode, claimUploadedExcelDataDto.getHospitalizationEvent()))
                 .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(constructGroupHealthCashlessClaimDiagnosisTreatmentDetails(claimUploadedExcelDataDtos))
                 .updateWithGroupHealthCashlessClaimIllnessDetail(constructGroupHealthCashlessClaimIllnessDetail(claimUploadedExcelDataDto))
                 .updateWithGroupHealthCashlessClaimDrugServices(constructGroupHealthCashlessClaimDrugServices(claimUploadedExcelDataDtos))
-                .updateWithGroupHealthCashlessClaimPolicyDetail(constructGroupHealthCashlessClaimPolicyDetail(claimUploadedExcelDataDtos, claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId, hcpCode,groupHealthCashlessClaim))
-                .updateWithPreAuthorizationDetails(constructPreAuthorizationDetails(claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId));
+                .updateWithGroupHealthCashlessClaimPolicyDetail(constructGroupHealthCashlessClaimPolicyDetail(claimUploadedExcelDataDtos, claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId, hcpCode,groupHealthCashlessClaim));
         return groupHealthCashlessClaim;
     }
 
-    private Set<PreAuthorizationDetail> constructPreAuthorizationDetails(String policyNumber, String clientId) {
-        //List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPolicyNumberAndClientId(policyNumber, clientId);
-        return null;
+    public Set<PreAuthorizationDetailTaggedToClaim> constructPreAuthorizationDetails(String policyNumber, String clientId) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationRequestPolicyDetailPolicyNumberAndPreAuthorizationRequestPolicyDetailAssuredDetailClientIdAndStatus(policyNumber, clientId, PreAuthorizationRequest.Status.APPROVED);
+        return constructPreAuthorizationDetail(preAuthorizationRequests);
+    }
+
+    private Set<PreAuthorizationDetailTaggedToClaim> constructPreAuthorizationDetail(List<PreAuthorizationRequest> preAuthorizationRequests) {
+        return isNotEmpty(preAuthorizationRequests) ? preAuthorizationRequests.parallelStream().map(preAuthorizationRequest ->
+                new PreAuthorizationDetailTaggedToClaim()
+                        .updateWithPreAuthorizationId(preAuthorizationRequest.getPreAuthorizationRequestId())
+                        .updateWithPreAuthorizationDate(preAuthorizationRequest.getPreAuthorizationDate())
+                        .updateWithPolicyRelatedDetails(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail())
+                        .updateWithCoverageDetails(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail())
+                        .updateWithAssuredDetails(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail())).collect(Collectors.toSet()) : Sets.newHashSet();
     }
 
     private GroupHealthCashlessClaimPolicyDetail constructGroupHealthCashlessClaimPolicyDetail(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos, String policyNumber, String clientId, String hcpCode, GroupHealthCashlessClaim groupHealthCashlessClaim) {
@@ -187,7 +198,7 @@ public class GroupHealthCashlessClaimService {
                 Plan plan = plans.get(0);
                 groupHealthCashlessClaimPolicyDetail
                         .updateWithSumAssured(planDetail.getSumAssured())
-                        .updateWithCoverages(constructCoverageBenefitDetails(planDetail, clientId))
+                        .updateWithCoverages(constructCoverageBenefitDetails(planDetail, clientId, groupHealthCashlessClaim.getPreAuthorizationDetails(), groupHealthPolicy.getPolicyNumber()))
                         .updateWithPlanDetails(plan.getPlanDetail(), plan.getPlanId())
                         .updateWithCoverages(constructProbableClaimAmountForServices(groupHealthCashlessClaimPolicyDetail.getCoverageDetails(), claimUploadedExcelDataDtos, plan, hcpCode, planDetail));
             }
@@ -326,7 +337,7 @@ public class GroupHealthCashlessClaimService {
         return 1;
     }
 
-    private Set<GroupHealthCashlessClaimCoverageDetail> constructCoverageBenefitDetails(GHPlanPremiumDetail planDetail, String clientId) {
+    private Set<GroupHealthCashlessClaimCoverageDetail> constructCoverageBenefitDetails(GHPlanPremiumDetail planDetail, String clientId, Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails, PolicyNumber policyNumber) {
         return isNotEmpty(planDetail) ? isNotEmpty(planDetail.getCoveragePremiumDetails()) ? planDetail.getCoveragePremiumDetails().parallelStream().map(new Function<GHCoveragePremiumDetail, GroupHealthCashlessClaimCoverageDetail>() {
             @Override
             public GroupHealthCashlessClaimCoverageDetail apply(GHCoveragePremiumDetail ghCoveragePremiumDetail) {
@@ -338,14 +349,14 @@ public class GroupHealthCashlessClaimService {
                             .updateWithCoverageId(coverageDto.getCoverageId())
                             .updateWithCoverageCode(coverageDto.getCoverageCode())
                             .updateWithSumAssured(ghCoveragePremiumDetail.getSumAssured())
-                            .updateWithTotalAmountPaid(getTotalAmountPaidTillNow(planDetail, clientId))
-                            .updateWithReserveAmount(getReservedAmountOfTheClient(clientId))
+                            .updateWithTotalAmountPaid(getTotalAmountPaidTillNow(clientId, policyNumber, coverageDto.getCoverageId()))
+                            .updateWithReserveAmount(getReservedAmountOfTheClient(clientId, policyNumber, coverageDto.getCoverageId()))
                             .updateWithBalanceAndEligibleAmount()
-                            .updateWithBenefitDetails(constructBenefitDetails(coverageDto.getBenefitDtos(), groupHealthCashlessClaimCoverageDetail, isNotEmpty(ghCoveragePremiumDetail.getBenefitPremiumLimits()) ? ghCoveragePremiumDetail.getBenefitPremiumLimits() : Sets.newHashSet()));
+                            .updateWithBenefitDetails(constructBenefitDetails(coverageDto.getBenefitDtos(), groupHealthCashlessClaimCoverageDetail, isNotEmpty(ghCoveragePremiumDetail.getBenefitPremiumLimits()) ? ghCoveragePremiumDetail.getBenefitPremiumLimits() : Sets.newHashSet(), preAuthorizationDetails));
                 }
                 return groupHealthCashlessClaimCoverageDetail;
             }
-        }).collect(Collectors.toSet()) : constructCoveragesFromPlanBaseCoverage(planDetail.getPlanCode(), planDetail, clientId) : Sets.newHashSet();
+        }).collect(Collectors.toSet()) : constructCoveragesFromPlanBaseCoverage(planDetail.getPlanCode(), planDetail, clientId, policyNumber) : Sets.newHashSet();
     }
 
     private Set<GroupHealthCashlessClaimDrugService> constructGroupHealthCashlessClaimDrugServices(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos) {
@@ -382,12 +393,47 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaimId;
     }
 
-    private BigDecimal getReservedAmountOfTheClient(String clientId) {
-        return BigDecimal.ZERO;
+    private BigDecimal getReservedAmountOfTheClient(String clientId, PolicyNumber policyNumber, String coverageId) {
+        BigDecimal totalReservedAmount = BigDecimal.ZERO;
+        assert policyNumber != null;
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationRequestPolicyDetailPolicyNumberAndPreAuthorizationRequestPolicyDetailAssuredDetailClientIdAndStatus(policyNumber.getPolicyNumber(), clientId, PreAuthorizationRequest.Status.APPROVED);
+        if(isNotEmpty(preAuthorizationRequests)){
+            for(PreAuthorizationRequest preAuthorizationRequest : preAuthorizationRequests){
+                PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail = preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail();
+                if(isNotEmpty(preAuthorizationRequestPolicyDetail)){
+                    Set<PreAuthorizationRequestCoverageDetail> coverageDetails = preAuthorizationRequestPolicyDetail.getCoverageDetailDtoList();
+                    if(isNotEmpty(coverageDetails)){
+                        for(PreAuthorizationRequestCoverageDetail coverageDetail : coverageDetails){
+                            if(coverageDetail.getCoverageId().equals(coverageId)){
+                                totalReservedAmount = totalReservedAmount.add(coverageDetail.getApprovedAmount());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return totalReservedAmount;
     }
 
-    private BigDecimal getTotalAmountPaidTillNow(GHPlanPremiumDetail planDetail, String clientId) {
-        return BigDecimal.ZERO;
+    private BigDecimal getTotalAmountPaidTillNow(String clientId, PolicyNumber policyNumber, String coverageId) {
+        BigDecimal amountPaidTillDate = BigDecimal.ZERO;
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailPolicyNumberAndGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndStatus(policyNumber, clientId, Status.DISBURSED);
+        if(isNotEmpty(groupHealthCashlessClaims)){
+            for(GroupHealthCashlessClaim groupHealthCashlessClaim : groupHealthCashlessClaims){
+                GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
+                if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)){
+                    Set<GroupHealthCashlessClaimCoverageDetail> groupHealthCashlessClaimCoverageDetails = groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
+                    if(isNotEmpty(groupHealthCashlessClaimCoverageDetails)){
+                        for(GroupHealthCashlessClaimCoverageDetail cashlessClaimCoverageDetail : groupHealthCashlessClaimCoverageDetails){
+                            if(cashlessClaimCoverageDetail.getCoverageId().equals(coverageId)){
+                                amountPaidTillDate = amountPaidTillDate.add(cashlessClaimCoverageDetail.getApprovedAmount());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return amountPaidTillDate;
     }
 
     private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetailsFromBaseCoverage(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<PlanCoverageBenefit> planCoverageBenefits) {
@@ -408,7 +454,7 @@ public class GroupHealthCashlessClaimService {
         return benefits;
     }
 
-    private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<BenefitPremiumLimit> benefitPremiumLimits) {
+    private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<BenefitPremiumLimit> benefitPremiumLimits, Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
         Set<GroupHealthCashlessClaimBenefitDetail> benefits = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
         if (isEmpty(benefits))
             benefits = Sets.newHashSet();
@@ -419,6 +465,7 @@ public class GroupHealthCashlessClaimService {
                     GroupHealthCashlessClaimBenefitDetail groupHealthCashlessClaimBenefitDetail = new GroupHealthCashlessClaimBenefitDetail();
                     groupHealthCashlessClaimBenefitDetail.setBenefitName(isNotEmpty(benefit.get("benefitName")) ? benefit.get("benefitName").toString() : StringUtils.EMPTY);
                     groupHealthCashlessClaimBenefitDetail.setBenefitCode(isNotEmpty(benefit.get("benefitCode")) ? benefit.get("benefitCode").toString() : StringUtils.EMPTY);
+                    groupHealthCashlessClaimBenefitDetail.setPreAuthorizationAmount(getPreAuthorizationAmount(benefitCode, preAuthorizationDetails, groupHealthCashlessClaimCoverageDetail.getCoverageId()));
                     benefits.add(groupHealthCashlessClaimBenefitDetail);
                 }
             }
@@ -426,7 +473,23 @@ public class GroupHealthCashlessClaimService {
         return benefits;
     }
 
-    private Set<GroupHealthCashlessClaimCoverageDetail> constructCoveragesFromPlanBaseCoverage(String planCode, GHPlanPremiumDetail planDetail, String clientId) {
+    private BigDecimal getPreAuthorizationAmount(String benefitCode, Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails, String coverageId) {
+        BigDecimal preAuthorizationAmount = BigDecimal.ZERO;
+        Set<PreAuthorizationRequestCoverageDetail> coverageDetails = preAuthorizationDetails.stream().map(preAuth -> preAuth.getCoverageDetails()).flatMap(Collection::stream).collect(Collectors.toSet());
+        for(PreAuthorizationRequestCoverageDetail coverageDetail : coverageDetails){
+            Set<PreAuthorizationRequestBenefitDetail> benefitDetails = coverageDetail.getBenefitDetails();
+            if(isNotEmpty(benefitDetails)){
+                for(PreAuthorizationRequestBenefitDetail benefitDetail : benefitDetails){
+                    if(benefitCode.equals(benefitDetail.getBenefitCode()) && coverageId.equals(coverageDetail.getCoverageId())){
+                        preAuthorizationAmount = preAuthorizationAmount.add(coverageDetail.getApprovedAmount());
+                    }
+                }
+            }
+        }
+        return preAuthorizationAmount;
+    }
+
+    private Set<GroupHealthCashlessClaimCoverageDetail> constructCoveragesFromPlanBaseCoverage(String planCode, GHPlanPremiumDetail planDetail, String clientId, PolicyNumber policyNumber) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         Set<GroupHealthCashlessClaimCoverageDetail> groupHealthCashlessClaimCoverageDetails = Sets.newHashSet();
         if(isNotEmpty(plans)) {
@@ -442,8 +505,8 @@ public class GroupHealthCashlessClaimService {
                                 .updateWithCoverageId(coverageDto.getCoverageId())
                                 .updateWithCoverageCode(coverageDto.getCoverageCode())
                                 .updateWithSumAssured(planCoverage.getCoverageSumAssured().getSumAssuredValue().first())
-                                .updateWithTotalAmountPaid(getTotalAmountPaidTillNow(planDetail, clientId))
-                                .updateWithReserveAmount(getReservedAmountOfTheClient(clientId))
+                                .updateWithTotalAmountPaid(getTotalAmountPaidTillNow(clientId, policyNumber, coverageDto.getCoverageId()))
+                                .updateWithReserveAmount(getReservedAmountOfTheClient(clientId, policyNumber, coverageDto.getCoverageId()))
                                 .updateWithBalanceAndEligibleAmount()
                                 .updateWithBenefitDetails(constructBenefitDetailsFromBaseCoverage(coverageDto.getBenefitDtos(), groupHealthCashlessClaimCoverageDetail, planCoverage.getPlanCoverageBenefits()));
                     }
@@ -540,7 +603,8 @@ public class GroupHealthCashlessClaimService {
                     .updateWithRejectionEmailSent(groupHealthCashlessClaim.isRejectionEmailSent())
                     .updateWithAdditionalRequirementEmailSent(groupHealthCashlessClaim.isAdditionalRequirementEmailSent())
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaim.getAdditionalRequiredDocumentsByUnderwriter())
-                    .updateWithGroupHealthCashlessClaimPolicyDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail());
+                    .updateWithGroupHealthCashlessClaimPolicyDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
+                    .updateWithPreAuthorizationDetails(groupHealthCashlessClaim.getPreAuthorizationDetails());
         }
         return groupHealthCashlessClaimDto;
     }
@@ -556,7 +620,7 @@ public class GroupHealthCashlessClaimService {
                     .updateWithBatchNumber(groupHealthCashlessClaimDto.getBatchNumber())
                     .updateWithBatchNumber(groupHealthCashlessClaimDto.getBatchNumber())
                     .updateWithBatchUploaderUserId(groupHealthCashlessClaimDto.getBatchUploaderUserId())
-                    .updateWithStatus(GroupHealthCashlessClaim.Status.getStatus(groupHealthCashlessClaimDto.getStatus()))
+                    .updateWithStatus(Status.getStatus(groupHealthCashlessClaimDto.getStatus()))
                     .updateWithGhProposerDto(groupHealthCashlessClaimDto.getGhProposer())
                     .updateWithGroupHealthCashlessClaimHCPDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimHCPDetail())
                     .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetailsFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDiagnosisTreatmentDetails())
@@ -584,7 +648,8 @@ public class GroupHealthCashlessClaimService {
             Set<GroupHealthCashlessClaimCoverageDetail> coverageBenefitDetails = groupHealthCashlessClaimPolicyDetailDto.getCoverageDetails();
             GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId());
             List<Map<String, Object>> refurbishedList = Lists.newArrayList();
-            Set<String> services = getServicesAvailedFromPreAuthorization(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDrugServices());
+            Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDrugServices();
+            Set<String> services = getServicesAvailedFromPreAuthorization(groupHealthCashlessClaimDrugServices);
             List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAllByPlanCode(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail().getPlanCode());
             List<Plan> plans = planRepository.findPlanByCodeAndName(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPlanCode());
             Plan plan = null;
@@ -622,12 +687,16 @@ public class GroupHealthCashlessClaimService {
                 BigDecimal payableAmount = BigDecimal.ZERO;
                 GroupHealthCashlessClaimHCPDetail hcp = groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail();
                 for (String service : serviceList) {
-                    HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCodeAndService(hcp.getHcpCode(), service);
+                    Optional<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServiceDtoOptional = groupHealthCashlessClaimDrugServices.stream().filter(drug -> drug.getServiceName().equals(service)).findAny();
+                    if(!groupHealthCashlessClaimDrugServiceDtoOptional.isPresent())
+                        throw new RuntimeException("No service details found for the given service");
+                    GroupHealthCashlessClaimDrugServiceDto groupHealthCashlessClaimDrugServiceDto = groupHealthCashlessClaimDrugServiceDtoOptional.get();
+                    /*HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCodeAndService(hcp.getHcpCode(), service);
                     notNull(hcpRate, "No HCP Rate configured for hcp- " + hcp.getHcpCode() + " service - " + service);
                     HCPServiceDetail hcpServiceDetail = isNotEmpty(hcpRate.getHcpServiceDetails()) ? getHCPDetail(hcpRate.getHcpServiceDetails(), service) : null;
-                    notNull(hcpRate, "No HCP Rate configured as no HCPServiceDetail found.");
+                    notNull(hcpRate, "No HCP Rate configured as no HCPServiceDetail found.");*/
                     int lengthOfStay = getLengthOfStayForClaimService(service, groupHealthCashlessClaim.getGroupHealthCashlessClaimDrugServices());
-                    BigDecimal amount = calculateProbableClaimAmount(lengthOfStay, hcpServiceDetail.getNormalAmount(), (CoverageBenefitDefinition) map.get("coverageBenefitDefinition"));
+                    BigDecimal amount = calculateProbableClaimAmount(lengthOfStay, groupHealthCashlessClaimDrugServiceDto.getBillAmount(), (CoverageBenefitDefinition) map.get("coverageBenefitDefinition"));
                     payableAmount = payableAmount.add(amount);
                     map.put("payableAmount", payableAmount);
                 }
@@ -691,7 +760,7 @@ public class GroupHealthCashlessClaimService {
     public List<GroupHealthCashlessClaimDto> getPreAuthorizationForDefaultList(String claimUserId) {
         List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
         PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
-        Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(GroupHealthCashlessClaim.Status.INTIMATION, GroupHealthCashlessClaim.Status.EVALUATION, GroupHealthCashlessClaim.Status.RETURNED), pageRequest);
+        Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(Status.INTIMATION, Status.EVALUATION, Status.RETURNED), pageRequest);
         if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
             result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(pages.getContent());
         return result;

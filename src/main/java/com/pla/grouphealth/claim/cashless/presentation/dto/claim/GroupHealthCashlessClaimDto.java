@@ -50,6 +50,7 @@ public class GroupHealthCashlessClaimDto {
     private boolean rejectionEmailSent;
     private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
+    private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
 
     public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimId(String groupHealthCashlessClaimId) {
         this.groupHealthCashlessClaimId = groupHealthCashlessClaimId;
@@ -190,6 +191,11 @@ public class GroupHealthCashlessClaimDto {
 
     public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimPolicyNumber(GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail) {
         this.groupHealthCashlessClaimPolicyDetail = constructPolicyDetail(groupHealthCashlessClaimPolicyDetail);
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithPreAuthorizationDetails(Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
+        this.preAuthorizationDetails = preAuthorizationDetails;
         return this;
     }
 

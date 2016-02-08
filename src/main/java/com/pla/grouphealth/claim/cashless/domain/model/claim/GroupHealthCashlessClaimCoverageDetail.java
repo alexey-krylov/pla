@@ -1,11 +1,16 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -62,10 +67,13 @@ public class GroupHealthCashlessClaimCoverageDetail {
     public GroupHealthCashlessClaimCoverageDetail updateWithBalanceAndEligibleAmount() {
         BigDecimal sumAssured = this.sumAssured;
         BigDecimal totalAmountPaid = this.totalAmountPaid;
+        BigDecimal reservedAmount = this.reserveAmount;
         if(sumAssured.compareTo(totalAmountPaid) == 1){
             BigDecimal balanceAmount = sumAssured.subtract(totalAmountPaid);
             this.balanceAmount = balanceAmount;
-            this.eligibleAmount = balanceAmount;
+            if(balanceAmount.compareTo(reservedAmount) == 1) {
+                this.eligibleAmount = balanceAmount.subtract(reservedAmount);
+            }
         }
         if(sumAssured.compareTo(totalAmountPaid) == 0){
             this.balanceAmount = BigDecimal.ZERO;

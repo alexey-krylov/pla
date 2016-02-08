@@ -18,4 +18,5 @@ public class GroupHealthCashlessClaimBenefitDetail {
     private String benefitName;
     private String benefitCode;
     private BigDecimal probableClaimAmount;
+    private BigDecimal preAuthorizationAmount;
 }

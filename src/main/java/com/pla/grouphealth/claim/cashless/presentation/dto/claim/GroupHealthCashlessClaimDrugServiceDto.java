@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.nthdimenzion.utils.UtilValidator;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class GroupHealthCashlessClaimDrugServiceDto {
     private int lengthOfStay;
     private String strength;
     private Status status;
+    private BigDecimal billAmount;
 
     public GroupHealthCashlessClaimDrugServiceDto updateWithDetails(GroupHealthCashlessClaimDrugService groupHealthCashlessClaimDrugService) {
         if(isNotEmpty(groupHealthCashlessClaimDrugService)){

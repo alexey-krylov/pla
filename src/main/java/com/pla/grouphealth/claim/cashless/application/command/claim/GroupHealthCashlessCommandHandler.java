@@ -164,7 +164,7 @@ public class GroupHealthCashlessCommandHandler {
         notNull(groupHealthCashlessClaimId ,"groupHealthCashlessClaimId is empty for the record");
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
         groupHealthCashlessClaim = groupHealthCashlessClaimService.populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto);
-        groupHealthCashlessClaim.updateStatus(GroupHealthCashlessClaim.Status.REJECTED);
+        groupHealthCashlessClaim.updateStatus(GroupHealthCashlessClaim.Status.REPUDIATED);
         return Boolean.TRUE;
     }
 

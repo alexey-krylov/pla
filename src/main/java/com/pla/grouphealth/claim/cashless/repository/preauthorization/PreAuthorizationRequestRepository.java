@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest.*;
+
 /**
  * Author - Mohan Sharma Created on 12/30/2015.
  */
@@ -20,7 +22,9 @@ public interface PreAuthorizationRequestRepository extends MongoRepository<PreAu
     Page<PreAuthorizationRequest> findAllByPreAuthorizationProcessorUserIdInAndStatusIn(List<String> users, ArrayList<PreAuthorizationRequest.Status> statusList, Pageable p);
 
     @Query("{'preAuthorizationUnderWriterUserId' : ?0, 'status' : ?1}")
-    List<PreAuthorizationRequest> findAllByPreAuthorizationUnderWriterUserIdAndStatus(String preAuthorizationUnderWriterUserId, PreAuthorizationRequest.Status status);
+    List<PreAuthorizationRequest> findAllByPreAuthorizationUnderWriterUserIdAndStatus(String preAuthorizationUnderWriterUserId, Status status);
 
-    List<PreAuthorizationRequest> findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(PreAuthorizationRequest.Status status, List<String> users);
+    List<PreAuthorizationRequest> findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(Status status, List<String> users);
+
+    List<PreAuthorizationRequest> findAllByPreAuthorizationRequestPolicyDetailPolicyNumberAndPreAuthorizationRequestPolicyDetailAssuredDetailClientIdAndStatus(String policyNumber, String clientId, Status status);
 }

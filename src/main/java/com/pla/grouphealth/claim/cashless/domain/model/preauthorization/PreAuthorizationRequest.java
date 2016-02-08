@@ -69,6 +69,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private boolean rejectionEmailSent;
     private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
+    private Set<String> sameServicesPreviouslyAvailedPreAuth;
 
     public PreAuthorizationRequest(Status status){
         this.status = status;
@@ -305,8 +306,13 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public PreAuthorizationRequest updateWithSameServicesPreviouslyAvailedPreAuth(Set<String> sameServicesPreviouslyAvailedPreAuth) {
+        this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
+        return this;
+    }
+
     public enum Status {
-        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
+        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation"), CLOSED("Approved");
 
         private String description;
 

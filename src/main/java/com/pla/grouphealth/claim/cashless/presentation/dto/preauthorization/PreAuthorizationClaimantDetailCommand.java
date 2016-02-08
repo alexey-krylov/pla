@@ -45,6 +45,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private Set<CommentDetail> commentDetails;
     private String batchUploaderUserId;
     private Set<ClientDocumentDto> additionalRequiredDocuments;
+    private Set<String> sameServicesPreviouslyAvailedPreAuth;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
@@ -183,6 +184,11 @@ public class PreAuthorizationClaimantDetailCommand {
 
     public PreAuthorizationClaimantDetailCommand updateWithAdditionalRequiredDocuments(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
         this.additionalRequiredDocuments = isNotEmpty(additionalRequiredDocumentsByUnderwriter) ? additionalRequiredDocumentsByUnderwriter.stream().map(document -> new ClientDocumentDto(document.getDocumentCode(), document.getDocumentName(), Boolean.FALSE)).collect(Collectors.toSet()): Sets.newHashSet();
+        return this;
+    }
+
+    public PreAuthorizationClaimantDetailCommand updateWithSameServicesPreviouslyAvailedPreAuth(Set<String> sameServicesPreviouslyAvailedPreAuth) {
+        this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
         return this;
     }
 }

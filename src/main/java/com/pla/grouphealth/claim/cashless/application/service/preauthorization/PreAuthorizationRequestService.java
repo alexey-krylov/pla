@@ -116,7 +116,7 @@ public class PreAuthorizationRequestService {
     @Autowired
     private VelocityEngine velocityEngine;
 
-    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(PreAuthorizationRequestId preAuthorizationRequestId) {
+    public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(String preAuthorizationRequestId) {
         PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
         notNull(preAuthorizationRequest, "No PreAuthorizationRequest found with given Id");
         if (isNotEmpty(preAuthorizationRequest))
@@ -148,7 +148,8 @@ public class PreAuthorizationRequestService {
                 .updateWithPreAuthorizationRequestHCPDetail(preAuthorizationClaimantDetailCommand.getClaimantHCPDetailDto())
                 .updateWithPreAuthorizationRequestDiagnosisTreatmentDetail(preAuthorizationClaimantDetailCommand.getDiagnosisTreatmentDtos())
                 .updateWithPreAuthorizationRequestIllnessDetail(preAuthorizationClaimantDetailCommand.getIllnessDetailDto())
-                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos());
+                .updateWithPreAuthorizationRequestDrugService(preAuthorizationClaimantDetailCommand.getDrugServicesDtos())
+                .updateWithSameServicesPreviouslyAvailedPreAuth(preAuthorizationClaimantDetailCommand.getSameServicesPreviouslyAvailedPreAuth());
         preAuthorizationRequestMongoRepository.add(preAuthorizationRequest);
         return preAuthorizationRequest;
     }
@@ -166,7 +167,8 @@ public class PreAuthorizationRequestService {
                 .updateWithDiagnosisTreatment(constructDiagnosisTreatmentDto(preAuthorization))
                 .updateWithIllnessDetails(constructIllnessDetailDto(preAuthorization))
                 .updateWithDrugServices(constructDrugServiceDtos(preAuthorization))
-                .updateWithPreAuthorizationDate(isNotEmpty(preAuthorization.getBatchDate()) ? preAuthorization.getBatchDate().toLocalDate() : LocalDate.now());
+                .updateWithPreAuthorizationDate(isNotEmpty(preAuthorization.getBatchDate()) ? preAuthorization.getBatchDate().toLocalDate() : LocalDate.now())
+                .updateWithSameServicesPreviouslyAvailedPreAuth(preAuthorization.getSameServicesPreviouslyAvailedPreAuth());
         return preAuthorizationClaimantDetailCommand;
     }
 
@@ -565,8 +567,8 @@ public class PreAuthorizationRequestService {
         return ClaimantHCPDetailDto.getInstance();
     }
 
-    private PreAuthorizationRequest getPreAuthorizationRequestById(PreAuthorizationRequestId preAuthorizationRequestId) {
-        return preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationRequestId.getPreAuthorizationRequestId());
+    private PreAuthorizationRequest getPreAuthorizationRequestById(String preAuthorizationRequestId) {
+        return preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationRequestId);
     }
 
     public List<GHProposalMandatoryDocumentDto> findMandatoryDocuments(FamilyId familyId, String preAuthorizationId) throws Exception {

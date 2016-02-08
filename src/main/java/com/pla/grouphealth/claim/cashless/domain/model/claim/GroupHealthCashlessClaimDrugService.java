@@ -7,6 +7,8 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
 
+import java.math.BigDecimal;
+
 import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
@@ -27,6 +29,7 @@ public class GroupHealthCashlessClaimDrugService {
     private String duration;
     private int lengthOfStay;
     private String strength;
+    private BigDecimal billAmount;
 
     public GroupHealthCashlessClaimDrugService updateWithDetails(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
         if(isNotEmpty(claimUploadedExcelDataDto)) {
@@ -38,6 +41,7 @@ public class GroupHealthCashlessClaimDrugService {
             this.duration = claimUploadedExcelDataDto.getDiagnosisTreatmentMedicalDuration();
             this.lengthOfStay = claimUploadedExcelDataDto.getDiagnosisTreatmentSurgeryLengthOStay();
             this.strength = claimUploadedExcelDataDto.getDiagnosisTreatmentDrugStrength();
+            this.billAmount = claimUploadedExcelDataDto.getBillAmount();
         }
         return this;
     }

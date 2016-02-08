@@ -72,7 +72,7 @@ public class PreAuthorizationRequestController {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return null;
         }
-        return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
+        return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(preAuthorizationId);
     }
 
     @RequestMapping(value = "/updatepreauthorization", method = RequestMethod.POST)
@@ -205,7 +205,7 @@ public class PreAuthorizationRequestController {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
             return null;
         }
-        return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(new PreAuthorizationRequestId(preAuthorizationId));
+        return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(preAuthorizationId);
     }
 
     @RequestMapping(value = "/loadpreauthorizationviewforupdateview", method = RequestMethod.GET)

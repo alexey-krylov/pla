@@ -10,6 +10,7 @@ import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.grouphealth.claim.cashless.application.command.preauthorization.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationId;
@@ -170,9 +171,13 @@ public class PreAuthorizationService {
         * getList of previously availed claim having same service
         * */
         Set<String> sameServicesPreviouslyAvailedPreAuth = Sets.newLinkedHashSet();
-        for(PreAuthorizationDetail preAuthorizationDetail : preAuthorizationDetails) {
-            List<PreAuthorization> preAuthorizations = preAuthorizationRepository.findAllPreAuthorizationByServiceAndClientId(preAuthorizationDetail.getClientId(), preAuthorizationDetail.getService());
-            sameServicesPreviouslyAvailedPreAuth.addAll(preAuthorizations.stream().map(preAuthorization -> preAuthorization.getPreAuthorizationId().getPreAuthorizationId()).collect(Collectors.toList()));
+        if(isNotEmpty(preAuthorizationDetails)){
+            PreAuthorizationDetail preAuthorizationDetail = preAuthorizationDetails.iterator().next();
+            Set<String> services = preAuthorizationDetails.stream().map(PreAuthorizationDetail::getService).collect(Collectors.toSet());
+            List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndGroupHealthCashlessClaimDrugServicesServiceNameIn(preAuthorizationDetail.getClientId(), services);
+            for(GroupHealthCashlessClaim groupHealthCashlessClaim : groupHealthCashlessClaims) {
+                sameServicesPreviouslyAvailedPreAuth.add(groupHealthCashlessClaim.getGroupHealthCashlessClaimId());
+            }
         }
         return sameServicesPreviouslyAvailedPreAuth;
     }

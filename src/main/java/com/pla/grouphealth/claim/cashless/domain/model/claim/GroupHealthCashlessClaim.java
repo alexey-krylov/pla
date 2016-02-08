@@ -69,7 +69,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private boolean rejectionEmailSent;
     private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
-    private Set<PreAuthorizationDetail> preAuthorizationDetails;
+    private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -352,13 +352,14 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public GroupHealthCashlessClaim updateWithPreAuthorizationDetails(Set<PreAuthorizationDetail> preAuthorizationDetails) {
+    public GroupHealthCashlessClaim updateWithPreAuthorizationDetails(Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
         this.preAuthorizationDetails = preAuthorizationDetails;
         return this;
     }
 
     public enum Status {
-        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"), APPROVED("Approved"), REJECTED("Rejected"), RETURNED("Evaluation");
+        INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"),
+        APPROVED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), AMOUNT_MISMATCHED("Evaluation");
 
         private String description;
 
