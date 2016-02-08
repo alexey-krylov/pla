@@ -138,7 +138,7 @@ public class GroupHealthCashlessClaimService {
     }
 
     private Set<PreAuthorizationDetail> constructPreAuthorizationDetails(String policyNumber, String clientId) {
-        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPolicyNumberAndClientId(policyNumber, clientId);
+        //List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPolicyNumberAndClientId(policyNumber, clientId);
         return null;
     }
 

@@ -23,6 +23,4 @@ public interface PreAuthorizationRequestRepository extends MongoRepository<PreAu
     List<PreAuthorizationRequest> findAllByPreAuthorizationUnderWriterUserIdAndStatus(String preAuthorizationUnderWriterUserId, PreAuthorizationRequest.Status status);
 
     List<PreAuthorizationRequest> findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(PreAuthorizationRequest.Status status, List<String> users);
-
-    List<PreAuthorizationRequest> findAllByPolicyNumberAndClientId(String policyNumber, String clientId);
 }
