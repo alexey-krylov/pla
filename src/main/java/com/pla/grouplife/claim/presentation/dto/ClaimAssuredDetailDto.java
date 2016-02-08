@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
@@ -27,6 +28,8 @@ public class ClaimAssuredDetailDto {
     private String surName;
 
     private LocalDate dateOfBirth;
+
+    private DateTime dateOfBirthInDateTime;
 
     private  int ageOnNextBirthDate;
 

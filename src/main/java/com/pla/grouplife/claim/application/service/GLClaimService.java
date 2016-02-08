@@ -298,10 +298,21 @@ public class GLClaimService implements Serializable{
             ClaimAssuredDetail assuredDetail=(ClaimAssuredDetail)claimRecordMap.get("assuredDetail");
             ClaimMainAssuredDetail claimMainAssuredDetail=assuredDetail.getClaimMainAssuredDetail();
         ClaimMainAssuredDetailDto claimMainAssuredDetailDto=new ClaimMainAssuredDetailDto(claimMainAssuredDetail.getFullName(),claimMainAssuredDetail.getRelationship(),claimMainAssuredDetail.getNrcNumber(),claimMainAssuredDetail.getManNumber(),claimMainAssuredDetail.getLastSalary());
-            ClaimAssuredDetailDto claimAssuredDetail=new ClaimAssuredDetailDto(assuredDetail.getTitle(),assuredDetail.getFirstName(),assuredDetail.getSurName(),
-                    assuredDetail.getDateOfBirth(),assuredDetail.getAgeOnNextBirthDate(),assuredDetail.getNrcNumber(),assuredDetail.getGender(),
-                    assuredDetail.getSumAssured(),assuredDetail.getReserveAmount(),assuredDetail.getCategory(),assuredDetail.getManNumber(),assuredDetail.getLastSalary(),
-                    assuredDetail.getOccupation(), claimMainAssuredDetailDto);
+            ClaimAssuredDetailDto claimAssuredDetail=new ClaimAssuredDetailDto();
+        claimAssuredDetail.setTitle(assuredDetail.getTitle());
+        claimAssuredDetail.setFirstName(assuredDetail.getFirstName());
+        claimAssuredDetail.setSurName(claimAssuredDetail.getSurName());
+                claimAssuredDetail. setDateOfBirth(assuredDetail.getDateOfBirth());
+        claimAssuredDetail.setAgeOnNextBirthDate(assuredDetail.getAgeOnNextBirthDate());
+        claimAssuredDetail.setNrcNumber(assuredDetail.getNrcNumber());
+        claimAssuredDetail.setGender(assuredDetail.getGender());
+        claimAssuredDetail.setSumAssured(assuredDetail.getSumAssured());
+        claimAssuredDetail.setReserveAmount(assuredDetail.getReserveAmount());
+        claimAssuredDetail.setCategory(assuredDetail.getCategory());
+        claimAssuredDetail.setManNumber(assuredDetail.getManNumber());
+        claimAssuredDetail.setLastSalary(assuredDetail.getLastSalary());
+        claimAssuredDetail.setOccupation(assuredDetail.getOccupation());
+        claimAssuredDetail.updateWithMainAssured(claimMainAssuredDetailDto);
             claimIntimationDetailDto.withAssuredDetail(claimAssuredDetail);
             ClaimDisabilityRegistrationDto disabilityRegistrationDetails=null;
             ClaimRegistrationDto claimRegistrationDetails=null;

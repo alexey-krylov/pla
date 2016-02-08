@@ -106,10 +106,22 @@ public class GLClaimFactory {
 
        //getting assured detail
        ClaimAssuredDetailDto claimAssuredDetail=createCommand.getClaimAssuredDetail();
+       LocalDate dateFromCommand=null;
+       LocalDate dateOfBirthDate=claimAssuredDetail.getDateOfBirth();
+       if(dateOfBirthDate!=null){
+           dateFromCommand=dateOfBirthDate;
+       }
+
+       DateTime dateTimeOfBirth=claimAssuredDetail.getDateOfBirthInDateTime();
+       if(dateTimeOfBirth!=null){
+       LocalDate resultDate=dateTimeOfBirth.toLocalDate();
+           dateFromCommand=resultDate;
+       }
        ClaimMainAssuredDetailDto claimMainAssuredDetail= claimAssuredDetail.getClaimMainAssuredDetail();
+
        ClaimMainAssuredDetail claimMainAssuredDetails=new ClaimMainAssuredDetail(claimMainAssuredDetail.getFullName(),claimMainAssuredDetail.getRelationship(),claimMainAssuredDetail.getNrcNumber(),claimMainAssuredDetail.getManNumber(),claimMainAssuredDetail.getLastSalary());
        ClaimAssuredDetail assuredDetail=new ClaimAssuredDetail(createCommand.getClaimAssuredDetail().getTitle(),createCommand.getClaimAssuredDetail().getFirstName(),
-               createCommand.getClaimAssuredDetail().getSurName() ,createCommand.getClaimAssuredDetail().getDateOfBirth() ,createCommand.getClaimAssuredDetail().getAgeOnNextBirthDate(),
+               createCommand.getClaimAssuredDetail().getSurName() ,dateFromCommand ,createCommand.getClaimAssuredDetail().getAgeOnNextBirthDate(),
                createCommand.getClaimAssuredDetail().getNrcNumber(), createCommand.getClaimAssuredDetail().getGender(), createCommand.getClaimAssuredDetail().getSumAssured(),
                createCommand.getClaimAssuredDetail().getReserveAmount(), createCommand.getClaimAssuredDetail().getCategory(),
                createCommand.getClaimAssuredDetail().getManNumber(), createCommand.getClaimAssuredDetail().getLastSalary(),
