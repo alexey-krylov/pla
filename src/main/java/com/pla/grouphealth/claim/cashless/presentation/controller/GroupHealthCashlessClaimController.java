@@ -3,10 +3,8 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.claim.cashless.application.command.claim.GroupHealthCashlessClaimDocumentCommand;
-import com.pla.grouphealth.claim.cashless.application.command.claim.GroupHealthCashlessClaimRemoveAdditionalDocumentCommand;
-import com.pla.grouphealth.claim.cashless.application.command.claim.UpdateGroupHealthCashlessClaimCommand;
-import com.pla.grouphealth.claim.cashless.application.command.claim.UploadGroupHealthCashlessClaimCommand;
+import com.pla.grouphealth.claim.cashless.application.command.claim.*;
+import com.pla.grouphealth.claim.cashless.application.command.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
@@ -16,6 +14,7 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCash
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
@@ -287,6 +286,101 @@ public class GroupHealthCashlessClaimController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/underwriter/update", method = RequestMethod.POST)
+    public Result updatedByUnderwriter(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while updating Group Health Cashless Claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            commandGateway.sendAndWait(new UnderwriterGroupHealthCashlessClaimUpdateCommand(groupHealthCashlessClaimDto, userName));
+            return Result.success("Group Health Cashless Claim successfully updated.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/approve", method = RequestMethod.POST)
+    public Result approvedByUnderwriter(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while approving Group Health Cashless Claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            boolean result = commandGateway.sendAndWait(new ApproveGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, userName));
+            return Result.success("Group Health Cashless Claim successfully approved.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/reject", method = RequestMethod.POST)
+    public Result rejectedByUnderwriter(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while rejecting Group Health Cashless Claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            boolean result = commandGateway.sendAndWait(new RejectGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, userName));
+            return Result.success("Group Health Cashless Claim successfully rejected.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/return", method = RequestMethod.POST)
+    public Result returnByUnderwriter(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while returning Group Health Cashless Claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            boolean result = commandGateway.sendAndWait(new ReturnGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, userName));
+            return Result.success("Group Health Cashless Claim successfully returned.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/routetoseniorunderwriter", method = RequestMethod.POST)
+    public Result routeToSeniorUnderwriter(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while routing Group Health Cashless Claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            boolean result = commandGateway.sendAndWait(new RouteGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, userName));
+            return Result.success("Group Health Cashless Claim successfully routed to senior underwriter.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/addrequirement", method = RequestMethod.POST)
+    public Result addRequirement(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            modelMap.put(BindingResult.class.getName() + ".copyCartForm", bindingResult);
+            return Result.failure("error occured while routing Group Health Cashless Claim", bindingResult.getAllErrors());
+        }
+        try {
+            String userName = preAuthorizationRequestService.getLoggedInUsername();
+            groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
+            boolean result = commandGateway.sendAndWait(new AddRequirementGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, userName));
+            return Result.success("Group Health Cashless Claim successfully routed to senior underwriter.");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
     @RequestMapping(value = "/getallrelevantservices/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
     @ResponseBody
     public Set<String> getAllRelevantServices(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {

@@ -38,7 +38,6 @@ public class GroupHealthCashlessClaimDto {
     private String batchNumber;
     private String batchUploaderUserId;
     private String status;
-    private DateTime createdOn;
     private GHProposerDto ghProposer;
     private GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetail;
     private GroupHealthCashlessClaimHCPDetailDto groupHealthCashlessClaimHCPDetail;
@@ -97,11 +96,6 @@ public class GroupHealthCashlessClaimDto {
     public GroupHealthCashlessClaimDto updateWithStatus(GroupHealthCashlessClaim.Status status) {
         if(isNotEmpty(status))
             this.status = status.getDescription();
-        return this;
-    }
-
-    public GroupHealthCashlessClaimDto updateWithCreatedOn(DateTime createdOn) {
-        this.createdOn = createdOn;
         return this;
     }
 
