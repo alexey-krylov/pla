@@ -546,7 +546,6 @@ public class GroupHealthCashlessClaimService {
                     .updateWithBatchNumber(groupHealthCashlessClaimDto.getBatchNumber())
                     .updateWithBatchUploaderUserId(groupHealthCashlessClaimDto.getBatchUploaderUserId())
                     .updateWithStatus(GroupHealthCashlessClaim.Status.getStatus(groupHealthCashlessClaimDto.getStatus()))
-                    .updateWithCreatedOn(groupHealthCashlessClaimDto.getCreatedOn())
                     .updateWithGhProposerDto(groupHealthCashlessClaimDto.getGhProposer())
                     .updateWithGroupHealthCashlessClaimHCPDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimHCPDetail())
                     .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetailsFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDiagnosisTreatmentDetails())
