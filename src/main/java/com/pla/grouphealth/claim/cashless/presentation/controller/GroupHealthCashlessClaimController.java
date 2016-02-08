@@ -87,7 +87,7 @@ public class GroupHealthCashlessClaimController {
     @RequestMapping(value = "/getghcashlessclaimuploadview" ,method = RequestMethod.GET)
     public ModelAndView cashlessUpload(){
         ModelAndView modelAndView=new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaim");
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimupload");
         return modelAndView;
     }
 

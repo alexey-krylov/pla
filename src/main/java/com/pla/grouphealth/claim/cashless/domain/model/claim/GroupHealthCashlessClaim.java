@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.claim.GroupHealthCashlessClaimFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
@@ -23,6 +24,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -67,6 +69,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private boolean rejectionEmailSent;
     private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
+    private Set<PreAuthorizationDetail> preAuthorizationDetails;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -346,6 +349,11 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
 
     public GroupHealthCashlessClaim updateRequirementEmailSentFlag(Boolean additionalRequirementEmailSent) {
         this.additionalRequirementEmailSent = additionalRequirementEmailSent;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithPreAuthorizationDetails(Set<PreAuthorizationDetail> preAuthorizationDetails) {
+        this.preAuthorizationDetails = preAuthorizationDetails;
         return this;
     }
 

@@ -22,6 +22,7 @@ import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
@@ -131,8 +132,14 @@ public class GroupHealthCashlessClaimService {
                 .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(constructGroupHealthCashlessClaimDiagnosisTreatmentDetails(claimUploadedExcelDataDtos))
                 .updateWithGroupHealthCashlessClaimIllnessDetail(constructGroupHealthCashlessClaimIllnessDetail(claimUploadedExcelDataDto))
                 .updateWithGroupHealthCashlessClaimDrugServices(constructGroupHealthCashlessClaimDrugServices(claimUploadedExcelDataDtos))
-                .updateWithGroupHealthCashlessClaimPolicyDetail(constructGroupHealthCashlessClaimPolicyDetail(claimUploadedExcelDataDtos, claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId, hcpCode,groupHealthCashlessClaim));
+                .updateWithGroupHealthCashlessClaimPolicyDetail(constructGroupHealthCashlessClaimPolicyDetail(claimUploadedExcelDataDtos, claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId, hcpCode,groupHealthCashlessClaim))
+                .updateWithPreAuthorizationDetails(constructPreAuthorizationDetails(claimUploadedExcelDataDto.policyNumber, claimUploadedExcelDataDto.clientId));
         return groupHealthCashlessClaim;
+    }
+
+    private Set<PreAuthorizationDetail> constructPreAuthorizationDetails(String policyNumber, String clientId) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPolicyNumberAndClientId(policyNumber, clientId);
+        return null;
     }
 
     private GroupHealthCashlessClaimPolicyDetail constructGroupHealthCashlessClaimPolicyDetail(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos, String policyNumber, String clientId, String hcpCode, GroupHealthCashlessClaim groupHealthCashlessClaim) {

@@ -1,6 +1,7 @@
 package com.pla.sharedkernel.util;
 
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -90,9 +91,18 @@ public class ExcelGeneratorUtil {
 
     private static HSSFRow createRowWithDvConstraintCellData(HSSFWorkbook workbook, HSSFSheet hssfSheet, int rowNumber, int lastRowNumber, int noOfCell, Map<Integer, String> cellData, Map<Integer, List<String>> constraintCellData) {
         HSSFRow hssfRow = createRow(hssfSheet, rowNumber);
+        String columnIndex = StringUtils.EMPTY;
         for (int cellNumber = 0; cellNumber < noOfCell; cellNumber++) {
             if (isNotEmpty(constraintCellData.get(cellNumber))) {
-                String columnIndex = cellNumber > 25 ? getRefurbishedColumnIndex(cellNumber) : String.valueOf((char) (65 + cellNumber));
+                if(cellNumber <= 25){
+                    columnIndex = String.valueOf((char) (65 + cellNumber));
+                }
+                if(cellNumber > 25 && cellNumber <= 51) {
+                    columnIndex = getRefurbishedColumnIndex(cellNumber);
+                }
+                if(cellNumber > 51){
+                    columnIndex = getRefurbishedColumnIndexWhenColumnNumberGreaterThan51(cellNumber);
+                }
                 String hiddenSheetName = "hidden" + columnIndex;
                 if(workbook.getSheet(hiddenSheetName) == null) {
                     HSSFSheet hiddenSheetForNamedCell = workbook.getSheet(hiddenSheetName) == null ? workbook.createSheet(hiddenSheetName) : workbook.getSheet(hiddenSheetName);
@@ -120,6 +130,10 @@ public class ExcelGeneratorUtil {
 
     private static String getRefurbishedColumnIndex(int cellNumber) {
         return String.valueOf((char)65)+String.valueOf((char)((65 + cellNumber) - 26));
+    }
+
+    private static String getRefurbishedColumnIndexWhenColumnNumberGreaterThan51(int cellNumber) {
+        return String.valueOf((char)66)+String.valueOf((char)((65 + cellNumber) - 52));
     }
 
     private static HSSFRow createRowWithDvConstraintCellData(HSSFWorkbook workbook, HSSFSheet hssfSheet, int rowNumber, int lastRowNumber, int noOfCell, Map<Integer, String> cellData) {
