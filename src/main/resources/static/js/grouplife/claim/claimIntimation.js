@@ -10,6 +10,47 @@ var App = angular.module('claimIntimation', ['common', 'ngRoute', 'mgcrea.ngStra
             datepickerPopupConfig.closeOnDateSelection = true;
 }
 ]);
+App .directive('modal', function () {
+    return {
+        template: '<div class="modal fade">' +
+        '<div class="modal-dialog modal-sm">' +
+        '<div class="modal-content">' +
+        '<div class="modal-header">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+        '<h4 class="modal-title">{{ title }}</h4>' +
+        '</div>' +
+        '<div class="modal-body" ng-transclude></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>',
+        restrict: 'E',
+        transclude: true,
+        replace: true,
+        scope: true,
+        link: function postLink(scope, element, attrs) {
+            scope.title = attrs.title;
+
+            scope.$watch(attrs.visible, function (value) {
+                if (value == true)
+                    $(element).modal('show');
+                else
+                    $(element).modal('hide');
+            });
+
+            $(element).on('shown.bs.modal', function () {
+                scope.$apply(function () {
+                    scope.$parent[attrs.visible] = true;
+                });
+            });
+
+            $(element).on('hidden.bs.modal', function () {
+                scope.$apply(function () {
+                    scope.$parent[attrs.visible] = false;
+                });
+            });
+        }
+    };
+});
 
 App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$upload','getQueryParameter','provinces','bankDetails','globalConstants','occupations',
         function ($scope, $http, $window,$upload,getQueryParameter,provinces,bankDetails,globalConstants,occupations) {
@@ -23,8 +64,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.provinces = [];
         $scope.provinces = provinces;
         $scope.towns=[];
-        $scope.bankDetails=[];
-        $scope.bankDetails=bankDetails;
+        $scope.bankDetailsResponse=[];
+        $scope.bankDetailsResponse=bankDetails;
         $scope.bankBranchDetails=[];
         $scope.rcvPolicyId = getQueryParameter('policyId');
         $scope.minIntimationDate=moment().add(0,'days').format("YYYY-MM-DD");
@@ -133,11 +174,12 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             /***
              * Getting List of Related Branch
              */
+            $scope.bankDetails={};
             $scope.$watch('bankDetails.bankName', function (newvalue, oldvalue) {
                 if (newvalue) {
-                    var bankCode = _.findWhere($scope.bankDetails, {bankName: newvalue});
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
                     if (bankCode) {
-                        $http.get('/pla/individuallife/proposal/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/claim/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
                             $scope.bankBranchDetails = response;
                         }).error(function (response, status, headers, config) {
                         });
@@ -148,6 +190,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             /***
              * Geating All Details Of Particular PolicyNumber and Populating in GL ClaimIntimation Screen
              */
+            $scope.isAssuredDetailsShared=false; //to Enable or Disable the Advnce Search Button
+
             if($scope.rcvPolicyId){
                 // Logic to Populate All The date to ClaimIntimation Class
                 //$scope.policyNumber=$scope.rcvPolicyNumber;
@@ -158,10 +202,12 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                    $scope.claimDetails.policyNumber=response.policyNumber;
                    $scope.claimantDetail=response.claimantDetail;
                    $scope.categorySet=response.categorySet;
+                   $scope.isAssuredDetailsShared=response.isAssuredDetailsShared;
                 }).error(function (response, status, headers, config) {
                 });
 
-                $scope.claimIntimationDate=moment(new Date()).format('YYYY-MM-DD');
+                //$scope.claimIntimationDate=moment(new Date()).format('YYYY-MM-DD');
+                $scope.claimDetails.claimIntimationDate=moment().add(0,'days').format("YYYY-MM-DD");
 
             }
             /**
@@ -176,8 +222,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
              * Calculating Nex DOB
              */
             $scope.calculateAssuredDOB=function(){
-                if ($scope.assuredDetails.dateOfBirth) {
-                    $scope.assuredDetails.nextDob = moment().diff(new moment(new Date($scope.assuredDetails.dateOfBirth)), 'years') + 1;
+                if ($scope.assuredDetails.dateOfBirthInDateTime) {
+                    $scope.assuredDetails.nextDob = moment().diff(new moment(new Date($scope.assuredDetails.dateOfBirthInDateTime)), 'years') + 1;
                     //alert('dateof Birth');
                 }
             }
@@ -195,19 +241,46 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             /**
              * Retrieving PlanDetailWithClaimTYpeList
              */
+
+            $scope.documentList=[
+                {
+                    "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
+                    "documentName": "Active At Work Declaration Form",
+                    "file": null,
+                    "content": null,
+                    "submitted": false,
+                    "fileName": null,
+                    "contentType": null,
+                    "gridFsDocId": null,
+                    "requireForSubmission": false
+                },
+                {
+                    "documentId": "ADDRESS_PROOF",
+                    "documentName": "Address Proof",
+                    "file": null,
+                    "content": null,
+                    "submitted": false,
+                    "fileName": null,
+                    "contentType": null,
+                    "gridFsDocId": null,
+                    "requireForSubmission": false
+                }
+            ]
+
             $scope.getPlanDetailWithClaimTypeList=function(){
                 $http.get('/pla/grouplife/claim/getplandetail/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category+'/'+$scope.claimDetails.relationship).success(function (response, status, headers, config) {
                     console.log(JSON.stringify(response));
                     $scope.claimTypes=response.claimTypes;
                     $scope.planDetail=response.planDetailDto;  //planDetailDto
+                    $scope.coverageList=response.coverageDetailDtos;
 
                     //Retriving the DocumentList
-                     $http.get('/pla/grouplife/claim/getclaimdmandatorydocuments/'+$scope.planDetail.planId).success(function (response, status, headers, config) {
+                     $http.get('/pla/grouplife/claim/getallrequiredmandatorydocuments/'+$scope.planDetail.planId).success(function (response, status, headers, config) {
                                         console.log('Document List...******');
                                         console.log(JSON.stringify(response));
-//                                        $scope.documentList=response;
+                                        //$scope.documentList=response;
 
-                                        $scope.documentList=[
+                                       $scope.documentList=[
                                           {
                                             "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
                                             "documentName": "Active At Work Declaration Form",
@@ -250,17 +323,36 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             "relationship":$scope.claimDetails.relationship,
             "category":$scope.claimDetails.category,
             "claimantDetail":$scope.claimantDetail,
-            "planDetailDto":$scope.planDetail,
+            "planDetail":$scope.planDetail,
             "bankDetails":$scope.bankDetails,
-            "claimAssuredDetailDto":$scope.assuredDetails};
+            "claimType":$scope.claimDetails.claimType,
+            "claimAssuredDetail":$scope.assuredDetails,
+            "coverageDetails":$scope.coverageList,
+            "claimIntimationDate":$scope.claimDetails.claimIntimationDate,
+            "claimIncidenceDate":$scope.claimDetails.claimIncidenceDate};
 
-           /*  $http.post('/pla/grouplife/claim/createclaimintimation',claimSubmitObj).success(function (response, status, headers, config) {
+                console.log('******************');
+                console.log(JSON.stringify(claimSubmitObj));
+
+            $http.post('/pla/grouplife/claim/createclaimintimation',claimSubmitObj).success(function (response, status, headers, config) {
                                 console.log('generate Claim Intimation Response..');
                                 console.log(JSON.stringify(response));
+                                $scope.claimId=response.id;
+                                $scope.showModal = true;
+                                $scope.errorMessage = 'Are You Want to Upload The Document?';
                             }).error(function (response, status, headers, config) {
-                            });*/
+                            });
 
             }
+
+            $scope.proceedToNext = function () {
+                $scope.showModal = false;
+            }
+
+            $scope.backToSearchPolicy=function(){
+                $window.location.href = '/pla/grouplife/claim/openpolicysearchpage';
+            }
+
             /**
              * Adding Contact Details..
              * @type {{contact: boolean}}
@@ -366,75 +458,46 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 $scope.closeAssuredSearchModal();
             }
-            /**
-             * Claim Detail HarCoded Value
-             */
-
-            /*$scope.claimantDetail={
-                "proposerName":"sca",
-                "addressLine1":"dsa",
-                "addressLine2":"asa",
-                "postalCode":"1212121",
-                "province":"PR-LUA",
-                "town":"CI-SAM",
-                "workPhone":"2222222222",
-                "contactPersonEmail":"mail@mail.com",
-                "emailId":"mail@mail.com",
-                "contactPersonName":"ascas",
-                "mobileNumber":"2222222222",
-                "contactPersonPhone":"2222222222"
-            }*/
-            /*$scope.claimantDetail={
-                "proposerName":"AXIZ",
-                "addressLine1":"aaaaaa",
-                "addressLine2":"aaa",
-                "postalCode":"aaa",
-                "province":"PR-EAS",
-                "town":"CI-KAT",
-                "emailId":"mail@mail.com",
-                "workPhone":"2222222222",
-                "mobileNumber":"2222222222",
-                "contactPersonDetail":[
-                    {
-                        "contactPersonName":"e",
-                        "contactPersonEmail":null,
-                        "contactPersonMobileNumber":"4444444444",
-                        "contactPersonWorkPhoneNumber":"4444444444444"
-                    }
-                ]
-            }*/
-
-/*
-            $http.get("/pla/grouplife/claim/getclaimtype")
-             .success(function (data) {
-                $scope.claimTypes = data
-                    });
-*/
-
-
-    $scope.items=[
-         {
-           "assuredNumber":"code1",
-            "assuredFirst":"document1",
-            "assuredSurname":"codesurname",
-            "assuredDOB":"8/4/15"
-          },
-
-          {
-             "assuredNumber":"code2",
-             "assuredFirst":"document12",
-             "assuredSurname":"code22",
-             "assuredDOB":"8/4/16"
-           }
-     ];
-
        $scope.launchclaimDate = function ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                     $scope.claimIntimationDate = true;
                 };
 
-       $scope.showDisabilityDate= function ($event){
+            /**
+             * FileUploading mandatoryDocument
+             * @param $event
+             */
+            $scope.uploadDocumentFiles = function () {
+                // //console.log($scope.documentList.length);
+                for (var i = 0; i < $scope.documentList.length; i++) {
+                    var document = $scope.documentList[i];
+                    var files = document.documentAttached;
+                    //console.dir(files);
+                    // //alert(files.name);
+                    if (files) {
+                        //console.log('File Uploading....');
+                        $upload.upload({
+                            url: '/pla/grouplife/claim/uploadmandatorydocument',
+                            file: files,
+                            fields: {
+                                documentId: document.documentId,
+                                claimId: "56b87cb47c858b58656e55f3",
+                                mandatory: true,
+                                isApproved: true
+                            },
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                        });
+                    }
+
+                }
+            };
+
+
+            $scope.showDisabilityDate= function ($event){
             $event.preventDefault();
             $event.stopPropagation();
            $scope.openDisabilityDate=true;
@@ -549,7 +612,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                                }],
                                bankDetails: ['$q', '$http', function ($q, $http) {
                                    var deferred = $q.defer();
-                                   $http.get('/pla/individuallife/proposal/getAllBankNames').success(function (response, status, headers, config) {
+                                   $http.get('/pla/grouplife/claim/getAllBankNames').success(function (response, status, headers, config) {
                                        deferred.resolve(response)
                                    }).error(function (response, status, headers, config) {
                                        deferred.reject();
