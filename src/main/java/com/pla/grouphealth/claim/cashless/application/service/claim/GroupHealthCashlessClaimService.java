@@ -28,8 +28,6 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCash
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimPolicyDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.DrugServiceDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
@@ -44,7 +42,6 @@ import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
 import com.pla.sharedkernel.identifier.BenefitId;
 import com.pla.sharedkernel.identifier.CoverageId;
-import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.util.ExcelUtilityProvider;
 import com.pla.sharedkernel.util.SequenceGenerator;
 import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
@@ -687,25 +684,10 @@ public class GroupHealthCashlessClaimService {
         PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
         Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(GroupHealthCashlessClaim.Status.INTIMATION, GroupHealthCashlessClaim.Status.EVALUATION, GroupHealthCashlessClaim.Status.RETURNED), pageRequest);
         if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
-            result = convertCashlessClaimToCashlessClaimantDetailCommand(pages.getContent());
+            result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(pages.getContent());
         return result;
     }
 
-    private List<GroupHealthCashlessClaimDto> convertCashlessClaimToCashlessClaimantDetailCommand(List<GroupHealthCashlessClaim> groupHealthCashlessClaims) {
-        return isNotEmpty(groupHealthCashlessClaims) ? groupHealthCashlessClaims.parallelStream().map(new Function<GroupHealthCashlessClaim, GroupHealthCashlessClaimDto>() {
-            @Override
-            public GroupHealthCashlessClaimDto apply(GroupHealthCashlessClaim groupHealthCashlessClaim) {
-                return new GroupHealthCashlessClaimDto()
-                        .updateWithStatus(groupHealthCashlessClaim.getStatus())
-                        .updateWithBatchNumber(groupHealthCashlessClaim.getBatchNumber())
-                        .updateWithGroupHealthCashlessClaimId(groupHealthCashlessClaim.getGroupHealthCashlessClaimId())
-                        .updateWithClaimType(groupHealthCashlessClaim.getClaimType())
-                        .updateWithClaimIntimationDate(groupHealthCashlessClaim.getClaimIntimationDate())
-                        .updateWithGroupHealthCashlessClaimPolicyNumber(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
-                        .updateWithGroupHealthCashlessClaimHCPDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail());
-            }
-        }).collect(Collectors.toList()) : Lists.newArrayList();
-    }
     public RoutingLevel getRoutingLevelForPreAuthorization(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) throws RoutingLevelNotFoundException {
         UnderWriterRoutingLevelDetailDto routingLevelDetailDto = getUnderWriterRoutingLevelDetailDto(groupHealthCashlessClaimDto);
         RoutingLevel routingLevel = underWriterAdapter.getRoutingLevelWithoutCoverageDetails(routingLevelDetailDto);
@@ -758,5 +740,80 @@ public class GroupHealthCashlessClaimService {
             }).collect(Collectors.toSet());
         }
         return mandatoryDocumentDtos;
+    }
+
+    public List<GroupHealthCashlessClaimDto> getDefaultListByUnderwriterLevel(String level, String username){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims =Lists.newArrayList();
+        List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
+        if(level.equalsIgnoreCase("LEVEL1"))
+            groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByStatusAndClaimUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1, Lists.newArrayList(username,null));
+        if(level.equalsIgnoreCase("LEVEL2"))
+            groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByStatusAndClaimUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2, Lists.newArrayList(username,null));
+        if (isNotEmpty(groupHealthCashlessClaims))
+            result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
+        return result;
+    }
+
+
+    private List<GroupHealthCashlessClaimDto> convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(List<GroupHealthCashlessClaim> groupHealthCashlessClaims) {
+        return isNotEmpty(groupHealthCashlessClaims) ? groupHealthCashlessClaims.parallelStream().map(new Function<GroupHealthCashlessClaim, GroupHealthCashlessClaimDto>() {
+            @Override
+            public GroupHealthCashlessClaimDto apply(GroupHealthCashlessClaim groupHealthCashlessClaim) {
+                return new GroupHealthCashlessClaimDto()
+                        .updateWithStatus(groupHealthCashlessClaim.getStatus())
+                        .updateWithBatchNumber(groupHealthCashlessClaim.getBatchNumber())
+                        .updateWithGroupHealthCashlessClaimId(groupHealthCashlessClaim.getGroupHealthCashlessClaimId())
+                        .updateWithClaimType(groupHealthCashlessClaim.getClaimType())
+                        .updateWithClaimIntimationDate(groupHealthCashlessClaim.getClaimIntimationDate())
+                        .updateWithGroupHealthCashlessClaimPolicyNumber(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
+                        .updateWithGroupHealthCashlessClaimHCPDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail());
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+    public Set<String> getAllRelevantServices(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        notNull(groupHealthCashlessClaim, "No claim record found with given id");
+        Set<String> services = Sets.newHashSet();
+        if (isNotEmpty(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())) {
+            List<ServiceBenefitCoverageMapping> sbcms = sbcmRepository.findAllByPlanCode(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPlanCode());
+            Set<ServiceBenefitCoverageMapping> sbcmSet = getAllSBCMWithGivenCoverageBenefitPlan(groupHealthCashlessClaim, sbcms);
+            services = isNotEmpty(sbcmSet) ?  sbcmSet.stream().map(ServiceBenefitCoverageMapping::getService).collect(Collectors.toSet()) : services;
+        }
+        return services;
+    }
+
+    public String getUnderwriterLevelForPreAuthorization(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            if(groupHealthCashlessClaim.getStatus().equals(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1))
+                return "LEVEL1";
+            if(groupHealthCashlessClaim.getStatus().equals(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2))
+                return "LEVEL2";
+        }
+        return StringUtils.EMPTY;
+    }
+
+    public boolean checkIfGroupHealthCashlessClaimRejectionEmailSent(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        return groupHealthCashlessClaim.isRejectionEmailSent();
+    }
+
+    public boolean checkIfGroupHealthCashlessClaimRequirementEmailSent(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        return groupHealthCashlessClaim.isAdditionalRequirementEmailSent();
+    }
+
+    public GroupHealthCashlessClaim updateRejectionEmailSentFlag(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        groupHealthCashlessClaim.updateRejectionEmailSentFlag(Boolean.TRUE);
+        groupHealthCashlessClaim = groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
+        return groupHealthCashlessClaim;
+    }
+
+    public GroupHealthCashlessClaim updateRequirementEmailSentFlag(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        groupHealthCashlessClaim.updateRequirementEmailSentFlag(Boolean.TRUE);
+        groupHealthCashlessClaim = groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
+        return groupHealthCashlessClaim;
     }
 }

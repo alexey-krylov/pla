@@ -7,23 +7,20 @@ import com.pla.grouphealth.claim.cashless.application.command.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.application.command.claim.GroupHealthCashlessClaimRemoveAdditionalDocumentCommand;
 import com.pla.grouphealth.claim.cashless.application.command.claim.UpdateGroupHealthCashlessClaimCommand;
 import com.pla.grouphealth.claim.cashless.application.command.claim.UploadGroupHealthCashlessClaimCommand;
-import com.pla.grouphealth.claim.cashless.application.command.preauthorization.PreAuthorizationRemoveAdditionalDocumentCommand;
-import com.pla.grouphealth.claim.cashless.application.command.preauthorization.UpdatePreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestId;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHCashlessClaimMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHClaimDocumentCommand;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.sharedkernel.service.MailService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import lombok.Synchronized;
 import org.apache.commons.lang.StringUtils;
@@ -48,12 +45,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/03/2016.
@@ -73,6 +70,8 @@ public class GroupHealthCashlessClaimController {
     @Autowired
     @Qualifier("authenticationFacade")
     private IAuthenticationFacade authenticationFacade;
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping(value = "/downloadghcashlessclaimtemplate/{hcpCode}", method = RequestMethod.GET)
     public void downloadInsuredTemplate(@PathVariable("hcpCode") String ghCashlessClaimCode, HttpServletResponse response) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -152,6 +151,15 @@ public class GroupHealthCashlessClaimController {
         errorTemplateFile.delete();
     }
 
+    @RequestMapping(value = "/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid", method = RequestMethod.GET)
+    @ResponseBody
+    public GroupHealthCashlessClaimDto getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(@RequestParam String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
+        if (isEmpty(groupHealthCashlessClaimId)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
+            return null;
+        }
+        return groupHealthCashlessClaimService.getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(groupHealthCashlessClaimId);
+    }
 
     @RequestMapping(value = "/updategrouphealthcashlessclaim", method = RequestMethod.POST)
     public Result createUpdate(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response) {
@@ -209,16 +217,6 @@ public class GroupHealthCashlessClaimController {
         return ghProposalMandatoryDocumentDtos;
     }
 
-    @RequestMapping(value = "/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid", method = RequestMethod.GET)
-    @ResponseBody
-    public GroupHealthCashlessClaimDto getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(@RequestParam String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
-        if (isEmpty(groupHealthCashlessClaimId)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "preAuthorizationId cannot be empty");
-            return null;
-        }
-        return groupHealthCashlessClaimService.getGroupHealthCashlessClaimDtoBygroupHealthCashlessClaimId(groupHealthCashlessClaimId);
-    }
-
     @RequestMapping(value = "/getcashlessclaimfordefaultlist", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getCashlessForDefaultList(HttpServletRequest request) {
@@ -226,7 +224,7 @@ public class GroupHealthCashlessClaimController {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchcashlessclaim");
         List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getPreAuthorizationForDefaultList(userName);
         modelAndView.addObject("CashlessResult", searchResult);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimDto());
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
         return modelAndView;
     }
 
@@ -273,6 +271,118 @@ public class GroupHealthCashlessClaimController {
             return Result.success("Document deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/getdefaultlistofunderwriterlevels/{level}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getDefaultListOfUnderwriterLevels(@PathVariable("level") String level, HttpServletResponse response) {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getDefaultListByUnderwriterLevel(level, userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithUnderwriterLevel(level));
+        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallrelevantservices/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Set<String> getAllRelevantServices(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
+        if(isEmpty(groupHealthCashlessClaimId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "groupHealthCashlessClaimId cannot be empty");
+            return Collections.EMPTY_SET;
+        }
+        return groupHealthCashlessClaimService.getAllRelevantServices(groupHealthCashlessClaimId);
+    }
+
+    @RequestMapping(value = "/getunderwriterlevelfromclaim/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getUnderwriterLevelForPreAuthorization(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
+        if(isEmpty(groupHealthCashlessClaimId)){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "groupHealthCashlessClaimId cannot be empty");
+            return Result.failure();
+        }
+        try {
+            Object level = groupHealthCashlessClaimService.getUnderwriterLevelForPreAuthorization(groupHealthCashlessClaimId);
+            return Result.success("", level);
+        } catch (Exception e){
+            return Result.failure(e.getMessage());
+        }
+    }
+
+
+    @RequestMapping(value = "/underwriter/getgrouphealthcashlessclaimrejectionletter/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    public ModelAndView openEmailPage(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrejectionletter");
+        //modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getPreScriptedEmail(preAuthorizationId));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/underwriter/getgrouphealthcashlessclaimaddrequirementrequestletter/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    public ModelAndView getAddRequirementRequestLetter(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrequirementletter");
+        modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/underwriter/emailgrouphealthcashlessclaimrejectionletter", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailPreAuthorizationRejectionLetter(@RequestBody GHCashlessClaimMailDto ghCashlessClaimMailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            mailService.sendMailWithAttachment(ghCashlessClaimMailDto.getSubject(), ghCashlessClaimMailDto.getMailContent(), Lists.newArrayList(), ghCashlessClaimMailDto.getRecipientMailAddress().split(";"));
+            groupHealthCashlessClaimService.updateRejectionEmailSentFlag(ghCashlessClaimMailDto.getGroupHealthCashlessClaimid());
+            return Result.success("Email sent successfully");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/emailgrouphealthcashlessclaimrequirementletter", method = RequestMethod.POST)
+    @ResponseBody
+    public Result emailPreAuthorizationRequirementLetter(@RequestBody GHCashlessClaimMailDto ghCashlessClaimMailDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return Result.failure("Email cannot be sent due to wrong data");
+        }
+        try {
+            mailService.sendMailWithAttachment(ghCashlessClaimMailDto.getSubject(), ghCashlessClaimMailDto.getMailContent(), Lists.newArrayList(), ghCashlessClaimMailDto.getRecipientMailAddress().split(";"));
+            groupHealthCashlessClaimService.updateRequirementEmailSentFlag(ghCashlessClaimMailDto.getGroupHealthCashlessClaimid());
+            return Result.success("Email sent successfully");
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result checkIfPreAuthorizationRejectionEmailSent(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
+        if (isEmpty(groupHealthCashlessClaimId)) {
+            return Result.failure("PreAuthorizationId cannot be empty.");
+        }
+        try {
+            boolean result = groupHealthCashlessClaimService.checkIfGroupHealthCashlessClaimRejectionEmailSent(groupHealthCashlessClaimId);
+            return Result.success("Email sent successfully", result);
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/underwriter/checkifgrouphealthcashlessclaimrequirementemailsent/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result checkIfPreAuthorizationRequirementEmailSent(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
+        if (isEmpty(groupHealthCashlessClaimId)) {
+            return Result.failure("PreAuthorizationId cannot be empty.");
+        }
+        try {
+            boolean result = groupHealthCashlessClaimService.checkIfGroupHealthCashlessClaimRequirementEmailSent(groupHealthCashlessClaimId);
+            return Result.success("Email sent successfully", result);
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
