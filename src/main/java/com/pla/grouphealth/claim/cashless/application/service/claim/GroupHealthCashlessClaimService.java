@@ -11,6 +11,8 @@ import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.hcp.domain.model.HCP;
+import com.pla.core.hcp.domain.model.HCPCode;
+import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
@@ -28,7 +30,9 @@ import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDoc
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimPolicyDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
+import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
 import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
@@ -108,6 +112,8 @@ public class GroupHealthCashlessClaimService {
     PreAuthorizationRequestService preAuthorizationRequestService;
     @Autowired
     private IUnderWriterAdapter underWriterAdapter;
+    @Autowired
+    private GHCashlessClaimFinder GHCashlessClaimFinder;
     @Autowired
     private GridFsTemplate gridFsTemplate;
     @Autowired
@@ -757,7 +763,7 @@ public class GroupHealthCashlessClaimService {
         return userName;
     }
 
-    public List<GroupHealthCashlessClaimDto> getPreAuthorizationForDefaultList(String claimUserId) {
+    public List<GroupHealthCashlessClaimDto> getCashlessClaimByDefaultList(String claimUserId) {
         List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
         PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
         Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(Status.INTIMATION, Status.EVALUATION, Status.RETURNED), pageRequest);
@@ -894,4 +900,16 @@ public class GroupHealthCashlessClaimService {
         groupHealthCashlessClaim = groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
         return groupHealthCashlessClaim;
     }
+
+    public  List<GroupHealthCashlessClaimDto> getCashlessClaimByCriteria (SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto);
+       return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
+
+    }
+
+    public List<GroupHealthCashlessClaimDto> searchCashlessClaimUnderwriterCriteria (SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto);
+        return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
+    }
 }
+

@@ -15,6 +15,7 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHeal
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
+import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
@@ -50,6 +51,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/03/2016.
@@ -92,10 +94,11 @@ public class GroupHealthCashlessClaimController {
     }
 
 
-    @RequestMapping(value = "/loadpageforghcashlessclaimupdateview/{claimId}" ,method = RequestMethod.GET)
-    public ModelAndView loadPageforghCashlessClaimupdateview(@PathVariable ("claimId") String claimId){
+    @RequestMapping(value = "/loadpageforghcashlessclaimupdateview" ,method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView loadPageforghCashlessClaimupdateview(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException{
         ModelAndView modelAndView=new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimupload");
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaim");
         return modelAndView;
     }
     @RequestMapping(value = "/uploadghcashlessclaimtemplate", method = RequestMethod.POST)
@@ -221,11 +224,22 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView getCashlessForDefaultList(HttpServletRequest request) {
         String userName = groupHealthCashlessClaimService.getLoggedInUsername();
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchcashlessclaim");
-        List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getPreAuthorizationForDefaultList(userName);
+        List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getCashlessClaimByDefaultList(userName);
         modelAndView.addObject("CashlessResult", searchResult);
         modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
         return modelAndView;
     }
+
+    @RequestMapping(value = "/getghcashlessclaimbycriteria", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView getCashlessClaimByCriteria(@RequestBody @Valid SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto) {
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchcashlessclaim");
+        List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto);
+        modelAndView.addObject("CashlessResult", searchResult);
+        modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
+        return modelAndView;
+    }
+
 
     @Synchronized
     @RequestMapping(value = "/uploadmandatorydocument", method = RequestMethod.POST)
@@ -282,8 +296,21 @@ public class GroupHealthCashlessClaimController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
         modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithUnderwriterLevel(level));
-        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
+        modelAndView.setViewName("pla/grouphealth/claim/searchghcashlessclaimunderwriter");
         return modelAndView;
+    }
+
+    @RequestMapping (value= "/searchghcashlessclaimunderwriterbycriteria" , method = RequestMethod.GET)
+    @ResponseBody
+    public  ModelAndView searchCashlessClaimUnderwriterByCriteria(@RequestBody @Valid SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimunderwriter");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        if (isNotEmpty(userName)){
+            List<GroupHealthCashlessClaimDto> ghCashlessClaimMailDtos = groupHealthCashlessClaimService.searchCashlessClaimUnderwriterCriteria(searchGroupHealthCashlessClaimRecordDto);
+            modelAndView.addObject("searchResult", ghCashlessClaimMailDtos);
+          }
+         modelAndView.addObject("searchResult", searchGroupHealthCashlessClaimRecordDto);
+         return modelAndView;
     }
 
     @RequestMapping(value = "/underwriter/update", method = RequestMethod.POST)

@@ -25,7 +25,7 @@ import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundE
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.*;
-import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
+import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
 import com.pla.grouphealth.policy.repository.GHPolicyRepository;
@@ -101,7 +101,7 @@ public class PreAuthorizationRequestService {
     @Autowired
     private GridFsTemplate gridFsTemplate;
     @Autowired
-    private PreAuthorizationFinder preAuthorizationFinder;
+    private GHCashlessClaimFinder GHCashlessClaimFinder;
     @Autowired
     private CoverageFinder coverageFinder;
     @Autowired
@@ -660,12 +660,12 @@ public class PreAuthorizationRequestService {
     }
 
     public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
-        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
+        List<PreAuthorizationRequest> preAuthorizationRequests = GHCashlessClaimFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
         return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
     }
 
     public List<PreAuthorizationClaimantDetailCommand> searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, String username) {
-        List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto, username);
+        List<PreAuthorizationRequest> preAuthorizationRequests = GHCashlessClaimFinder.searchPreAuthorizationRecord(searchPreAuthorizationRecordDto, username);
         return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
     }
 

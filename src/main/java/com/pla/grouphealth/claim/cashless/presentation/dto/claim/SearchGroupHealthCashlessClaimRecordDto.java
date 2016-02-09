@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

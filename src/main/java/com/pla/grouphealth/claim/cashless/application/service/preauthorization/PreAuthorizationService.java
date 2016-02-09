@@ -17,7 +17,7 @@ import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAutho
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
-import com.pla.grouphealth.claim.cashless.query.PreAuthorizationFinder;
+import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
 import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRepository;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
@@ -50,7 +50,7 @@ public class PreAuthorizationService {
 
     private GroupHealthCashlessClaimRepository groupHealthCashlessClaimRepository;
     private PreAuthorizationRepository preAuthorizationRepository;
-    private PreAuthorizationFinder preAuthorizationFinder;
+    private GHCashlessClaimFinder GHCashlessClaimFinder;
     private PreAuthorizationExcelGenerator preAuthorizationExcelGenerator;
     private ExcelUtilityProvider excelUtilityProvider;
     private HCPRateRepository hcpRateRepository;
@@ -62,10 +62,10 @@ public class PreAuthorizationService {
     private PreAuthorizationRequestService preAuthorizationRequestService;
 
     @Autowired
-    public PreAuthorizationService(GroupHealthCashlessClaimRepository groupHealthCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, PreAuthorizationFinder preAuthorizationFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator, HCPFinder hcpFinder, GHPolicyRepository ghPolicyRepository, PreAuthorizationRequestRepository preAuthorizationRequestRepository) {
+    public PreAuthorizationService(GroupHealthCashlessClaimRepository groupHealthCashlessClaimRepository, PreAuthorizationRepository preAuthorizationRepository, GHCashlessClaimFinder GHCashlessClaimFinder, PreAuthorizationExcelGenerator preAuthorizationExcelGenerator, ExcelUtilityProvider excelUtilityProvider, HCPRateRepository hcpRateRepository, SequenceGenerator sequenceGenerator, HCPFinder hcpFinder, GHPolicyRepository ghPolicyRepository, PreAuthorizationRequestRepository preAuthorizationRequestRepository) {
         this.groupHealthCashlessClaimRepository = groupHealthCashlessClaimRepository;
         this.preAuthorizationRepository = preAuthorizationRepository;
-        this.preAuthorizationFinder = preAuthorizationFinder;
+        this.GHCashlessClaimFinder = GHCashlessClaimFinder;
         this.preAuthorizationExcelGenerator = preAuthorizationExcelGenerator;
         this.excelUtilityProvider = excelUtilityProvider;
         this.hcpRateRepository = hcpRateRepository;

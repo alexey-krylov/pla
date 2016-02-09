@@ -13,18 +13,16 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 templateUrl: 'ghcashlessclaim.html',
                 controller: 'cashLessClaimCtrl',
                 resolve:{
-
                     createUpdateDto: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
                         var groupHealthCashlessClaimId = getQueryParameter('groupHealthCashlessClaimId');
-
                         $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId='+groupHealthCashlessClaimId).success(function (response, status, headers, config) {
                             deferred.resolve(response);
 
                         }).error(function (response, status, headers, config) {
                             deferred.reject();
                         });
-//                        //console.log(deferred);
+//
 
                         return deferred.promise;
                     }],
@@ -43,6 +41,20 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                         } else {
                             return false;
                         }
+                    }],
+                    groupHealthCashlessClaimId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
+                        var deferred = $q.defer();
+                        var deferred = $q.defer();
+                        var groupHealthCashlessClaimId = getQueryParameter('groupHealthCashlessClaimId');
+                        deferred.resolve(groupHealthCashlessClaimId)
+                        return deferred.promise;
+                    }],
+                    clientId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
+                        var deferred = $q.defer();
+                        var deferred = $q.defer();
+                        var clientId = getQueryParameter('clientId');
+                        deferred.resolve(clientId)
+                        return deferred.promise;
                     }]
 
                 }
@@ -50,10 +62,11 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             }
         )}])
 
-    .controller('cashLessClaimCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload',
-        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload) {
+    .controller('cashLessClaimCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
+        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList,clientId, $upload,groupHealthCashlessClaimId) {
             $scope.createUpdateDto = createUpdateDto;
-            $scope.drugServicesDtoList = $scope.createUpdateDto.drugServicesDtos;
+            console.log(documentList);
+            $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
             $scope.treatmentDiagnosis = {};
             $scope.diagnosisTreatmentDtoToUpdate = {};
             $scope.index = null;
@@ -61,14 +74,15 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             $scope.isEditDrugTriggered = false;
             $scope.isEditDiagnosisTriggered = false;
             $scope.createUpdateCommand = {};
-            $scope.diagnosisTreatmentDto = {};
-            $scope.createUpdateCommand.claimantHCPDetailDto = $scope.createUpdateDto.claimantHCPDetailDto;
-            $scope.createUpdateCommand.claimantHCPDetailDto = {};
-            $scope.createUpdateCommand.claimantPolicyDetailDto = {};
-            $scope.createUpdateCommand.diagnosisTreatmentDtos = [];
-            $scope.createUpdateCommand.illnessDetailDto = {};
-            $scope.createUpdateCommand.drugServicesDtos = [];
+            $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = {};
+            $scope.createUpdateCommand.groupHealthCashlessClaimHCPDetail = $scope.createUpdateDto.groupHealthCashlessClaimHCPDetail;
+            $scope.createUpdateCommand.groupHealthCashlessClaimHCPDetail = {};
+            $scope.createUpdateCommand.groupHealthCashlessClaimPolicyDetail = {};
+            $scope.createUpdateCommand.groupHealthCashlessClaimDiagnosisTreatmentDetails = [];
+            $scope.createUpdateCommand.groupHealthCashlessClaimIllnessDetail = {};
+            $scope.createUpdateCommand.groupHealthCashlessClaimDrugServices = [];
             $scope.documentList = documentList;
+            console.log(JSON.stringify($scope.createUpdateDto));
             $scope.additionalDocumentList = [{}];
             $scope.disableSubmit = false;
             $scope.documentmaster = [];
@@ -96,7 +110,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 return false;
             };
 
-            //$http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + preAuthorizationId).success(function (data, status, headers, config) {
+            //$http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
             //    $scope.additionalDocumentList = data;
             //    $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
             //}).error(function (response, status, headers, config) {
@@ -109,24 +123,27 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             };
 
             $scope.viewTreatmentDiagnosis = function (treatmentDiagnosis, treatmentDiagnosisIndex) {
+                console.log($scope.treatmentDiagnosis);
+                console.log($scope.treatmentDiagnosisIndex);
                 $scope.tratementdignosisnextbuttonfalse();
                 $scope.isEditDiagnosisTriggered = true;
                 $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;
-                $scope.diagnosisTreatmentDto = treatmentDiagnosis;
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = treatmentDiagnosis;
                 $scope.drugServicesDto = {};
                 $scope.diagnosisTreatmentDtosUpdate = {};
                 $scope.createUpdateDto.drugServicesDtosSave = [];
                 $scope.provisionaldignosisdiv=true;
             };
 
-            $scope.updateTreatmentAndDiagnosis = function (diagnosisTreatmentDto) {
+            $scope.updateTreatmentAndDiagnosis = function (groupHealthCashlessClaimDiagnosisTreatmentDetails) {
                 if ($scope.isEditDiagnosisTriggered) {
-                    $scope.createUpdateDto.diagnosisTreatmentDtos[$scope.treatmentDiagnosisIndex] = diagnosisTreatmentDto;
-                    $scope.savePreAuthorizationRequest();
+                    $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[$scope.treatmentDiagnosisIndex] = groupHealthCashlessClaimDiagnosisTreatmentDetails;
+                    $scope.saveCashlessClaimRequest();
                     $scope.isEditDiagnosisTriggered = false;
                     $scope.provisionaldignosisdiv=false;
                 } else {
-                    $scope.createUpdateDto.diagnosisTreatmentDtos.push(diagnosisTreatmentDto);
+                    groupHealthCashlessClaimDiagnosisTreatmentDetails
+                    $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails.push(groupHealthCashlessClaimDiagnosisTreatmentDetails);
                     //console.log(JSON.stringify($scope.createUpdateDto));
 
                 }
@@ -139,8 +156,8 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 $scope.stepsSaved["3"] = true;
             };
             $scope.activenextbuttonforprovisional = function(){
-                $scope.diagnosisTreatmentDto = {};
-                $scope.diagnosisTreatmentDto.dateOfConsultation = $scope.createUpdateDto.diagnosisTreatmentDtos[0].dateOfConsultation;
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = {};
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfConsultation = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].dateOfConsultation;
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };
@@ -167,13 +184,13 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
 
             $scope.saveDiagnosisTreatmentDto = function (diagnosisTreatmentDtoToUpdate) {
                 if ($scope.isEditDrugTriggered) {
-                    $scope.createUpdateDto.drugServicesDtos[$scope.index] = diagnosisTreatmentDtoToUpdate;
-                    $scope.savePreAuthorizationRequest();
+                    $scope.createUpdateDto.groupHealthCashlessClaimDrugServices[$scope.index] = diagnosisTreatmentDtoToUpdate;
+                    $scope.saveCashlessClaimRequest();
                     $scope.isEditDrugTriggered = false;
 
                 } else {
-                    $scope.createUpdateDto.drugServicesDtos.push(diagnosisTreatmentDtoToUpdate);
-                    $scope.savePreAuthorizationRequest();
+                    $scope.createUpdateDto.groupHealthCashlessClaimDrugServices.push(diagnosisTreatmentDtoToUpdate);
+                    $scope.saveCashlessClaimRequest();
                 }
                 $scope.showservicedrugdiv = false;
                 $scope.stepsSaved["5"] = false;
@@ -189,8 +206,8 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 $scope.stepsSaved["3"] = false;
             };
             $scope.deleteTreatmentDiagnosis = function (index) {
-                $scope.createUpdateDto.drugServicesDtos.splice(index, 1);
-                $scope.savePreAuthorizationRequest();
+                $scope.createUpdateDto.groupHealthCashlessClaimDrugServices.splice(index, 1);
+                $scope.saveCashlessClaimRequest();
 
             };
 
@@ -206,13 +223,15 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 return formName.$invalid;
             };
 
-            $scope.savePreAuthorizationRequest = function () {
+            $scope.saveCashlessClaimRequest = function () {
+                console.log(JSON.stringify($scope.createUpdateDto));
                 $http({
-                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/updatepreauthorization',
+                    url: '/pla/grouphealth/claim/cashless/claim/updategrouphealthcashlessclaim',
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).success(function (response) {
-                    $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId='+preAuthorizationId)
+                    alert($scope.createUpdateDto);
+                    $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId='+groupHealthCashlessClaimId)
                         .success(function (response) {
                             $scope.createUpdateDto = response;
                         }).error(function (response, status, headers, config) {
@@ -223,7 +242,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             $scope.submitPreAuthorizationRequest = function () {
                 $scope.createUpdateDto.submitEventFired = true;
                 $http({
-                    url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/submitpreauthorization',
+                    url: '/pla/grouphealth/claim/cashless/claim/submitgrouphealthcashlessclaim',
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).success(function (data) {
@@ -239,7 +258,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
 
             $scope.back = function () {
                 //window.location.reload();
-                window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationfordefaultlist';
+                window.location.href = '/pla/grouphealth/claim/cashless/claim/getcashlessclaimfordefaultlist';
             };
 
             $scope.isBrowseDisable = function (document) {
@@ -258,7 +277,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                     //console.log(files);
                     if (files) {
                         $upload.upload({
-                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/uploadmandatorydocument',
+                            url: '/pla/grouphealth/claim/cashless/claim/uploadmandatorydocument',
                             file: files,
                             fields: {
                                 documentId: document.documentId,
@@ -269,7 +288,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                         }).progress(function (evt) {
                             //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                         }).success(function (data, status, headers, config) {
-                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
+                            $http.get("/pla/grouphealth/claim/cashless/claim/getmandatorydocuments/" + clientId + "/" + groupHealthCashlessClaimId).success(function (response, status, headers, config) {
                                 $scope.documentList = response;
                             });
                         });
@@ -285,7 +304,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                     var files = document.documentAttached;
                     if (files) {
                         $upload.upload({
-                            url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/uploadmandatorydocument',
+                            url: '/pla/grouphealth/claim/cashless/claim/uploadmandatorydocument',
                             file: files,
                             fields: {
                                 documentId: document.documentId,
@@ -296,7 +315,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                         }).progress(function (evt) {
 
                         }).success(function (data, status, headers, config) {
-                            $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + preAuthorizationId).success(function (response, status, headers, config) {
+                            $http.get("/pla/grouphealth/claim/cashless/claim/getadditionaldocuments/" + groupHealthCashlessClaimId).success(function (response, status, headers, config) {
                                 $scope.additionalDocumentList = response;
                             });
                         });
@@ -304,7 +323,25 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
 
                 }
             };
+            $scope.removeAdditionalDocumentCommand = {};
+            $scope.removeAdditionalDocument = function (index, gridFsDocId) {
+                $scope.removeAdditionalDocumentCommand.gridFsDocId = gridFsDocId;
+                $scope.removeAdditionalDocumentCommand.groupHealthCashlessClaimId = $scope.createUpdateDto.groupHealthCashlessClaimId;
+                if (gridFsDocId) {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/claim/removeadditionalDocument',
+                        method: 'POST',
+                        data: $scope.removeAdditionalDocumentCommand
+                    }).success(function () {
+                        $scope.additionalDocumentList.splice(index, 1);
+                        $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+                    }).error();
+                } else {
+                    $scope.additionalDocumentList.splice(index, 1);
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
+                }
+            };
             $scope.isUploadEnabledForAdditionalDocument = function () {
                 var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
@@ -330,25 +367,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 }
             };
 
-            $scope.removeAdditionalDocumentCommand = {};
-            $scope.removeAdditionalDocument = function (index, gridFsDocId) {
-                $scope.removeAdditionalDocumentCommand.gridFsDocId = gridFsDocId;
-                $scope.removeAdditionalDocumentCommand.preAuthorizationId = $scope.createUpdateDto.preAuthorizationId;
-                if (gridFsDocId) {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/removeadditionalDocument',
-                        method: 'POST',
-                        data: $scope.removeAdditionalDocumentCommand
-                    }).success(function () {
-                        $scope.additionalDocumentList.splice(index, 1);
-                        $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
-                    }).error();
-                } else {
-                    $scope.additionalDocumentList.splice(index, 1);
-                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
 
-                }
-            };
 
             $scope.launchClaimDate = function ($event) {
                 $event.preventDefault();
@@ -382,8 +401,8 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             };
 
             $scope.changeProbableDate=function(ProbableDate) {
-                $scope.diagnosisTreatmentDto.pregnancyDateOfDelivery = formatDate(ProbableDate);
-                //console.log("qwqe############"+$scope.diagnosisTreatmentDto.pregnancyDateOfDelivery );
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.pregnancyDateOfDelivery = formatDate(ProbableDate);
+                //console.log("qwqe############"+$scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.pregnancyDateOfDelivery );
             };
 
             $scope.launchFirstConsultanceDate = function ($event){
@@ -393,7 +412,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             };
 
             $scope.changelaunchFirstConsultanceDate=function(consultationDate) {
-                $scope.diagnosisTreatmentDto.dateOfConsultation = formatDate(consultationDate);
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfConsultation = formatDate(consultationDate);
             };
 
             $scope.launchProbAdmissionDate = function ($event){
@@ -403,14 +422,14 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             };
 
             $scope.changeProbAdmissionDate=function(probAdmissionDate) {
-                $scope.diagnosisTreatmentDto.dateOfAdmission = formatDate(probAdmissionDate);
-                //console.log("qwqe############"+$scope.diagnosisTreatmentDto.dateOfAdmission);
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission = formatDate(probAdmissionDate);
+                //console.log("qwqe############"+$scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission);
             };
 
             $scope.hcpServiceDetails = [];
 
             $scope.getHCPServiceDetails = function(){
-                $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getallrelevantservices/" + preAuthorizationId).success(function (data, status, headers, config) {
+                $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getallrelevantservices/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
                     $scope.hcpServiceDetails = data;
                 }).error(function (response, status, headers, config) {
                 });
@@ -422,117 +441,171 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 $scope.isViewMode=true;
 
             }
-            $scope.checkNo = function(){
-                $scope.createUpdateDto.illnessDetailDto.htndetail= $scope.createUpdateDto.illnessDetailDto.htndetails;
-                $scope.createUpdateDto.illnessDetailDto.htndetails=null;
-                $scope.two = true;
+            $scope.disableHtn = true;
+            $scope.$watch(
+                function(){
+                    return {htn: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.htn === 'No'){
+                        $scope.disableHtn = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails){
+                            $scope.isrequire = true;}
+                        $scope.disableHtn = false;
+                    }
+                },
+                true
+            );
+            $scope.disableIhd = true;
+            $scope.$watch(
+                function(){
+                    return {idh: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.idhHOD, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.idh === 'No'){
+                        $scope.disableIhd = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails){
+                            $scope.isrequireIhd = true;}
+                        $scope.disableIhd = false;
+                    }
+                },
+                true
+            );
+            $scope.disdibetes= true;
+            $scope.$watch(
+                function(){
+                    return {Dibetes: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetes, diabetesDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.Dibetes === 'No'){
+                        $scope.disdibetes = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails){
+                            $scope.isrequireDibetes = true;}
+                        $scope.disdibetes = false;
+                    }
+                },
+                true
+            );
+            $scope.disAsthma= true;
+            $scope.$watch(
+                function(){
+                    return {Asthma: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.Asthma === 'No'){
+                        $scope.disAsthma = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails){
+                            $scope.isrequireAsthma = true;}
+                        $scope.disAsthma = false;
+                    }
+                },
+                true
+            );
+            $scope.disStd= true;
+            $scope.$watch(
+                function(){
+                    return {Std: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.Std === 'No'){
+                        $scope.disStd = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails){
+                            $scope.isrequireStd = true;}
+                        $scope.disStd = false;
+                    }
+                },
+                true
+            );
+            $scope.disArthiritis= true;
+            $scope.$watch(
+                function(){
+                    return {Arthiritis: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritis, stdhivaidsdetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.Arthiritis === 'No'){
+                        $scope.disArthiritis = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails){
+                            $scope.isrequireArthiritis = true;}
+                        $scope.disArthiritis = false;
+                    }
+                },
+                true
+            );
+            $scope.disCancer= true;
+            $scope.$watch(
+                function(){
+                    return {Cancer: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCyst, cancerTumorCystDetail: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetail};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.Cancer === 'No'){
+                        $scope.disCancer = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails){
+                            $scope.isrequireCancer = true;}
+                        $scope.disCancer = false;
+                    }
+                },
+                true
+            );
+            $scope.dispshyciatric= true;
+            $scope.$watch(
+                function(){
+                    return {pshyciatric: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.pshyciatric === 'No'){
+                        $scope.dispshyciatric = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails){
+                            $scope.isrequirepshyciatric= true;}
+                        $scope.dispshyciatric = false;
+                    }
+                },
+                true
+            );
 
-            };
 
 
-            $scope.checkYes = function(){
-                $scope.isrequire = true;
-                $scope.createUpdateDto.illnessDetailDto.htndetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
-                $scope.two = false;
-
-            };
-
-            $scope.activeIhd = function(){
-                $scope.isrequireIhd = true;
-                $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=  $scope.createUpdateDto.illnessDetailDto.ihdhoddetail;
-                $scope.idh = false;
-
-            };
-            $scope.deactiveIhd = function(){
-                $scope.createUpdateDto.illnessDetailDto.ihdhoddetail = $scope.createUpdateDto.illnessDetailDto.ihdhoddetails;
-                $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=null;
-                $scope.idh = true;
-
-            };
-            $scope.activeDibetes = function(){
-                $scope.isrequireDibetes=true;
-                $scope.createUpdateDto.illnessDetailDto.diabetesDetails=$scope.createUpdateDto.illnessDetailDto.diabetesDetail;
-                $scope.dibetes = false;
-
-            };
-            $scope.deactiveDibetes = function(){
-                $scope.createUpdateDto.illnessDetailDto.diabetesDetail= $scope.createUpdateDto.illnessDetailDto.diabetesDetails;
-                $scope.createUpdateDto.illnessDetailDto.diabetesDetails=null;
-                $scope.dibetes = true;
-
-            };
-            $scope.activeAsthma = function(){
-                $scope.isrequireAsthma=true;
-                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail;
-                $scope.asthma = false;
-
-            };
-            $scope.deactiveAsthma = function(){
-                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail= $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails;
-                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=null;
-                $scope.asthma = true;
-
-            };
-            $scope.activeStd = function(){
-                $scope.isrequireStd=true;
-                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail;
-                $scope.std = false;
-
-            };
-            $scope.deactiveStd = function(){
-                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail= $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails;
-                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=null;
-                $scope.std = true;
-
-            };
-            $scope.activeArthiritis = function(){
-                $scope.isrequireArthiritis=true;
-                $scope.createUpdateDto.illnessDetailDto.arthritisDetails=$scope.createUpdateDto.illnessDetailDto.arthritisDetail;
-                $scope.Arthiritis = false;
-
-            };
-            $scope.deactiveArthiritis = function(){
-                $scope.createUpdateDto.illnessDetailDto.arthritisDetail= $scope.createUpdateDto.illnessDetailDto.arthritisDetails;
-                $scope.createUpdateDto.illnessDetailDto.arthritisDetails=null;
-                $scope.Arthiritis = true;
-
-            };
-            $scope.activeCancer = function(){
-                $scope.isrequireCancer=true;
-                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail;
-                $scope.cancer = false;
-
-            };
-            $scope.deactiveCancer = function(){
-                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail= $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails;
-                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=null;
-                $scope.cancer = true;
-
-            };
-            $scope.activeAlcohol = function(){
-                $scope.isrequireAlcohol=true;
-                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail;
-                $scope.alcohol = false;
-
-            };
-            $scope.deactiveAlcohol = function(){
-                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail = $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails;
-                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=null;
-                $scope.alcohol = true;
-
-            };
-            $scope.activepshyciatric = function(){
-                $scope.isrequirepshyciatric=true;
-                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail;
-                $scope.pshyciatric = false;
-
-            };
-            $scope.deactivepshyciatric = function(){
-                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail= $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails;
-                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=null;
-                $scope.pshyciatric = true;
-
-            };
+            $scope.disAlcohol= true;
+            $scope.$watch(
+                function(){
+                    return {Alcohol: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails};
+                },
+                function(newVal, oldVal) {
+                    if(newVal.Alcohol === 'No'){
+                        $scope.disAlcohol = true;
+                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails='';
+                    }
+                    else {
+                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails){
+                            $scope.isrequireAlcohol= true;}
+                        $scope.disAlcohol = false;
+                    }
+                },
+                true
+            );
 
         }]);
 
