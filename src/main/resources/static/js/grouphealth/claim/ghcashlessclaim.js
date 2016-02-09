@@ -137,20 +137,35 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
 
             $scope.updateTreatmentAndDiagnosis = function (groupHealthCashlessClaimDiagnosisTreatmentDetails) {
                 if ($scope.isEditDiagnosisTriggered) {
-                    $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[$scope.treatmentDiagnosisIndex] = groupHealthCashlessClaimDiagnosisTreatmentDetails;
+                    console.log("update insd btn"+JSON.stringify(groupHealthCashlessClaimDiagnosisTreatmentDetails));
+                    $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[$scope.treatmentDiagnosisIndex++] = groupHealthCashlessClaimDiagnosisTreatmentDetails;
                     $scope.saveCashlessClaimRequest();
                     $scope.isEditDiagnosisTriggered = false;
                     $scope.provisionaldignosisdiv=false;
                 } else {
                     groupHealthCashlessClaimDiagnosisTreatmentDetails
                     $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails.push(groupHealthCashlessClaimDiagnosisTreatmentDetails);
-                    //console.log(JSON.stringify($scope.createUpdateDto));
+                    console.log("new btn crt insd btn####"+JSON.stringify($scope.createUpdateDto));
 
                 }
                 $scope.provisionaldignosisdiv = false;
                 $scope.stepsSaved["3"] = false;
             };
-
+            $scope.saveCashlessClaimRequest = function () {
+                console.log(JSON.stringify($scope.createUpdateDto));
+                $http({
+                    url: '/pla/grouphealth/claim/cashless/claim/updategrouphealthcashlessclaim',
+                    method: 'POST',
+                    data: $scope.createUpdateDto
+                }).success(function (response) {
+                    //alert($scope.createUpdateDto);
+                    $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId='+groupHealthCashlessClaimId)
+                        .success(function (response) {
+                            $scope.createUpdateDto = response;
+                        }).error(function (response, status, headers, config) {
+                        });
+                }).error();
+            };
             $scope.create= function(){
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
@@ -223,21 +238,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 return formName.$invalid;
             };
 
-            $scope.saveCashlessClaimRequest = function () {
-                console.log(JSON.stringify($scope.createUpdateDto));
-                $http({
-                    url: '/pla/grouphealth/claim/cashless/claim/updategrouphealthcashlessclaim',
-                    method: 'POST',
-                    data: $scope.createUpdateDto
-                }).success(function (response) {
-                    alert($scope.createUpdateDto);
-                    $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId='+groupHealthCashlessClaimId)
-                        .success(function (response) {
-                            $scope.createUpdateDto = response;
-                        }).error(function (response, status, headers, config) {
-                        });
-                }).error();
-            };
+
 
             $scope.submitPreAuthorizationRequest = function () {
                 $scope.createUpdateDto.submitEventFired = true;

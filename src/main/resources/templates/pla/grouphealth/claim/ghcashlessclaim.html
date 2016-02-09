@@ -96,13 +96,13 @@
 
 
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group  ">
-                                                <label class="control-label ">Batch Number</label>
-                                                <input type="text"  class="form-control input-sm" name="batchNumber"
-                                                       ng-model="createUpdateDto.batchNumber"  />
-                                            </div>
-                                        </div>
+                                        <!--<div class="col-md-4">-->
+                                            <!--<div class="form-group  ">-->
+                                                <!--<label class="control-label ">Batch Number</label>-->
+                                                <!--<input type="text"  class="form-control input-sm" name="batchNumber"-->
+                                                       <!--ng-model="createUpdateDto.batchNumber"  />-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
                                         <div class="col-md-4">
                                             <div class="form-group ">
@@ -111,11 +111,11 @@
                                                     <input type="text" class="form-control input-sm"
                                                            datepicker-popup=""
                                                            view-enabled=""
-                                                           ng-change="changePreAuthDate(createUpdateDto.preAuthorizationDate)"
+                                                           ng-change="changePreAuthDate(createUpdateDto.preAuthorizationDetails[0].preAuthorizationDate)"
                                                            max-date="todayDate"
                                                            is-open="datepickerpreauth.opened"
                                                            ng-disabled="mode =='view' || mode=='edit'"
-                                                           ng-model="createUpdateDto.preAuthorizationDate" name="preAuthorizationDate"/>
+                                                           ng-model="createUpdateDto.preAuthorizationDetails[0].preAuthorizationDate" name="preAuthorizationDate"/>
                                                    <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="true"
                                                     ng-click="launchPreAuthDate($event)">
@@ -137,6 +137,12 @@
                                                         class="form-control input-md" />
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Category</label>
+                                                <input  class="form-control input-sm"    ng-model="createUpdateDto.category" name="category" />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -151,21 +157,6 @@
                                             <div class="form-group  ">
                                                 <label class="control-label">Relationship</label>
                                                 <input type="text"  class="form-control input-sm" ng-model="createUpdateDto.relationship" name="relationship"  />
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <div class="form-group  ">
-                                                <label class="control-label">HCP Name</label>
-                                                <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpName" name="hcpName"   />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group  ">
-                                                <label class="control-label">Claim Type</label>
-                                                <input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimType" name="claimType"  />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -194,7 +185,47 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                        <!--<div class="col-md-4">-->
+                                            <!--<div class="form-group  ">-->
+                                                <!--<label class="control-label">HCP Name</label>-->
+                                                <!--<input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpName" name="hcpName"   />-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    </div>
+                                    <!--<div class="row">-->
+                                        <!--<div class="col-md-4">-->
+                                            <!--<div class="form-group  ">-->
+                                                <!--<label class="control-label">Claim Type</label>-->
+                                                <!--<input type="text"  class="form-control input-sm"   ng-model="createUpdateDto.claimType" name="claimType"  />-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-md-4">-->
+                                            <!--<div class="form-group ">-->
+                                                <!--<label class="control-label">Claim Intimation Date</label>-->
+                                                <!--<div class='input-group date'>-->
+                                                    <!--<input type="text" class="form-control input-sm"-->
+                                                           <!--datepicker-popup=""-->
+                                                           <!--view-enabled=""-->
+                                                           <!--ng-change="changeClaimDate(createUpdateDto.claimIntimationDate)"-->
+                                                           <!--max-date="todayDate"-->
+                                                           <!--is-open="datepicker.opened"-->
+                                                           <!--ng-disabled="mode =='view' || mode=='edit'"-->
+                                                           <!--ng-model="createUpdateDto.claimIntimationDate" name="claimIntimationDate"/>-->
+                                     <!--<span class="input-group-btn">-->
+                                      <!--<button type="button" class="btn btn-default btn-sm" view-enabled=""  ng-disabled="true"-->
+                                              <!--ng-click="launchClaimDate($event)">-->
+                                          <!--<i class="glyphicon glyphicon-calendar"></i></button>-->
+                                     <!--</span>-->
+                                                <!--</div>-->
+                                                <!--<div class="error" ng-messages="step1.claimIntimationDate.$error"-->
+                                                     <!--ng-if="step1.claimIntimationDate.$dirty">-->
+                                                    <!--<small ng-message="pattern">Please Enter Claim Intimation Date.-->
+                                                    <!--</small>-->
+                                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                             </accordion-group>
                         </accordion>
                         <accordion close-others="true">
