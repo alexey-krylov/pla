@@ -71,21 +71,21 @@ public class GHInsuredFactory {
                 String occupationClass = ghFinder.getOccupationClass(insuredDto.getOccupationClass());
                 BigDecimal basicAnnualPremium = premiumDetail.getPremiumAmount() != null ? premiumDetail.getPremiumAmount() :
                         computePlanBasicAnnualPremium(premiumDetail.getPlanId(), premiumDetail.getSumAssured().toPlainString(),
-                                String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, null,computedPremiumDtos);
-                if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null && premiumDetail.getPremiumAmount()== null) {
+                                String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, null, computedPremiumDtos);
+                if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null && premiumDetail.getPremiumAmount() == null) {
                     int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
                     basicAnnualPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, basicAnnualPremium);
                 }
-                if (insuredDto.getNoOfAssured() != null && isEmpty(computedPremiumDtos)){
-                    Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
-                    ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
-                    ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
-                    ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY,basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+                if (insuredDto.getNoOfAssured() != null && isEmpty(computedPremiumDtos)) {
+                    Set<ModelFactorOrganizationInformation> modelFactorItems = getModalFactor();
+                    ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY, basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
+                    ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY, basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
+                    ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY, basicAnnualPremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
                     computedPremiumDtos.add(semiAnnualPremium);
                     computedPremiumDtos.add(quarterlyPremium);
                     computedPremiumDtos.add(monthlyPremium);
                 }
-                final GHInsuredBuilder[] insuredBuilder = {GHInsured.getInsuredBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured(),computedPremiumDtos)};
+                final GHInsuredBuilder[] insuredBuilder = {GHInsured.getInsuredBuilder(new PlanId(premiumDetail.getPlanId()), premiumDetail.getPlanCode(), basicAnnualPremium, premiumDetail.getSumAssured(), computedPremiumDtos)};
                 insuredBuilder[0].withCategory(insuredDto.getOccupationCategory()).withInsuredName(insuredDto.getSalutation(), insuredDto.getFirstName(), insuredDto.getLastName())
                         .withOccupation(insuredDto.getOccupationClass()).withInsuredNrcNumber(insuredDto.getNrcNumber()).withCompanyName(insuredDto.getCompanyName())
                         .withManNumber(insuredDto.getManNumber()).withDateOfBirth(insuredDto.getDateOfBirth()).
@@ -93,8 +93,8 @@ public class GHInsuredFactory {
                         .withExistingIllness(insuredDto.getExistingIllness()).withNoOfAssured(insuredDto.getNoOfAssured()).withPremiumType(insuredDto.getPremiumType()).withRateOfPremium(insuredDto.getRateOfPremium());
                 insuredDto.getCoveragePremiumDetails().forEach(coveragePremiumDetail -> {
                     List<ComputedPremiumDto> computedPremiumDtoCov = Lists.newArrayList();
-                    BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId(),computedPremiumDtoCov) : coveragePremiumDetail.getPremium();
-                    if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null  && premiumDetail.getPremiumAmount()== null) {
+                    BigDecimal coverageBasicPremium = coveragePremiumDetail.getPremium() == null ? computePlanBasicAnnualPremium(premiumDetail.getPlanId(), coveragePremiumDetail.getSumAssured().toPlainString(), String.valueOf(getAgeOnNextBirthDate(insuredDto.getDateOfBirth())), occupationClass, insuredDto.getGender().name(), 365, coveragePremiumDetail.getCoverageId(), computedPremiumDtoCov) : coveragePremiumDetail.getPremium();
+                    if (insuredDto.getNoOfAssured() == null && insuredDto.getDateOfBirth() != null && premiumDetail.getPremiumAmount() == null) {
                         int ageOnNextBirthDate = getAgeOnNextBirthDate(insuredDto.getDateOfBirth());
                         coverageBasicPremium = computePremiumByApplyingAgeLoadingFactor(ageOnNextBirthDate, coverageBasicPremium);
                     }
@@ -128,7 +128,9 @@ public class GHInsuredFactory {
         for (GHInsured insured : insureds) {
             List<ComputedPremiumDto> computedPremiumDtos = Lists.newArrayList();
             GHPlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
+            BigDecimal netAnnualPre = getNetAnnualPremiumPaymentAmount(premiumDetailDto,insureds);
             String occupationClass = ghFinder.getOccupationClass(insured.getOccupationClass());
+
             BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? insured.getPlanPremiumDetail().getPremiumAmount() :
                     premiumDetailDto.getPolicyTermValue() != 365 ?
                             computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
@@ -142,9 +144,9 @@ public class GHInsuredFactory {
             }
             if (insured.getNoOfAssured() != null && isEmpty(computedPremiumDtos)){
                 Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
-                ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
-                ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
-                ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY,insuredPlanProratePremium.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
+                ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,netAnnualPre.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
+                ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,netAnnualPre.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
+                ComputedPremiumDto monthlyPremium = new ComputedPremiumDto(PremiumFrequency.MONTHLY,netAnnualPre.multiply(ModelFactorOrganizationInformation.getMonthlyModalFactor(modelFactorItems)));
                 computedPremiumDtos.add(semiAnnualPremium);
                 computedPremiumDtos.add(quarterlyPremium);
                 computedPremiumDtos.add(monthlyPremium);
@@ -214,6 +216,28 @@ public class GHInsuredFactory {
             }
         }
         return insureds;
+    }
+
+
+    public BigDecimal getNetAnnualPremiumPaymentAmount(GHPremiumDetailDto premiumDetail,Set<GHInsured> insureds) {
+        BigDecimal totalBasicAmount = this.getTotalBasicPremiumForInsured(insureds);
+        BigDecimal addOnBenefitAmount = premiumDetail.getAddOnBenefit() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getAddOnBenefit().divide(new BigDecimal(100))));
+        BigDecimal profitAndSolvencyAmount = premiumDetail.getProfitAndSolvencyLoading() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getProfitAndSolvencyLoading().divide(new BigDecimal(100))));
+        BigDecimal waiverOfExcessLoading = premiumDetail.getWaiverOfExcessLoading() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getWaiverOfExcessLoading().divide(new BigDecimal(100))));
+        BigDecimal discountAmount = premiumDetail.getDiscounts() == null ? BigDecimal.ZERO : totalBasicAmount.multiply((premiumDetail.getDiscounts().divide(new BigDecimal(100))));
+        BigDecimal totalInsuredPremiumAmount = totalBasicAmount.add(addOnBenefitAmount.add(profitAndSolvencyAmount).add(waiverOfExcessLoading)).subtract(discountAmount);
+        BigDecimal vat = premiumDetail.getVat() == null ? BigDecimal.ZERO : totalInsuredPremiumAmount.multiply((premiumDetail.getVat().divide(new BigDecimal(100))));
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.add(vat);
+        totalInsuredPremiumAmount = totalInsuredPremiumAmount.setScale(2, BigDecimal.ROUND_CEILING);
+        return totalInsuredPremiumAmount;
+    }
+
+    public BigDecimal getTotalBasicPremiumForInsured(Set<GHInsured> insureds) {
+        BigDecimal totalBasicAnnualPremium = BigDecimal.ZERO;
+        for (GHInsured insured : insureds) {
+            totalBasicAnnualPremium = totalBasicAnnualPremium.add(insured.getBasicAnnualPremium());
+        }
+        return totalBasicAnnualPremium;
     }
 
     private BigDecimal computeBasicProratePremium(String planId, String sumAssured, String age, String occupationClass, String gender, int noOfDays, String coverageId) {
