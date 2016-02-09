@@ -18,6 +18,7 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Created by Samir on 4/28/2015.
+ * Modified By Mohan Sharma to get the correct column index in case of columns greater than 26
  */
 public class ExcelGeneratorUtil {
 

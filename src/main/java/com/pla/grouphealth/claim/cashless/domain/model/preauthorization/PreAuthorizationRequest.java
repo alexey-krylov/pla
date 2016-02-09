@@ -280,7 +280,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
 
     public PreAuthorizationRequest updateWithAdditionalRequirementAskedFor(Set<ClientDocumentDto> additionalRequiredDocuments) {
         this.additionalRequiredDocumentsByUnderwriter =  isNotEmpty(additionalRequiredDocuments) ? additionalRequiredDocuments.stream().map(document -> {
-            AdditionalDocument additionalDocument = new AdditionalDocument(document.getDocumentCode(), document.getDocumentName());
+            AdditionalDocument additionalDocument = new AdditionalDocument(document.getDocumentCode(), document.isHasSubmitted(), document.getDocumentName());
             return additionalDocument;
         }).collect(Collectors.toSet()) : Sets.newHashSet();
         return this;

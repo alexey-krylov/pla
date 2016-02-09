@@ -183,7 +183,7 @@ public class PreAuthorizationClaimantDetailCommand {
     }
 
     public PreAuthorizationClaimantDetailCommand updateWithAdditionalRequiredDocuments(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
-        this.additionalRequiredDocuments = isNotEmpty(additionalRequiredDocumentsByUnderwriter) ? additionalRequiredDocumentsByUnderwriter.stream().map(document -> new ClientDocumentDto(document.getDocumentCode(), document.getDocumentName(), Boolean.FALSE)).collect(Collectors.toSet()): Sets.newHashSet();
+        this.additionalRequiredDocuments = isNotEmpty(additionalRequiredDocumentsByUnderwriter) ? additionalRequiredDocumentsByUnderwriter.stream().map(document -> new ClientDocumentDto(document.getDocumentCode(), document.getDocumentName(), document.isHasSubmitted())).collect(Collectors.toSet()): Sets.newHashSet();
         return this;
     }
 

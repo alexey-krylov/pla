@@ -19,6 +19,7 @@ import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
+import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
@@ -45,6 +46,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.velocity.app.VelocityEngine;
 import org.axonframework.repository.Repository;
 import org.joda.time.LocalDate;
 import org.nthdimenzion.ddd.domain.annotations.DomainService;
@@ -77,8 +79,6 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.data.domain.Sort.Direction;
 import static org.springframework.data.domain.Sort.Order;
 import static org.springframework.util.Assert.notNull;
-
-import org.apache.velocity.app.VelocityEngine;
 
 /**
  * Author - Mohan Sharma Created on 1/6/2016.
@@ -115,6 +115,8 @@ public class PreAuthorizationRequestService {
     private IAuthenticationFacade authenticationFacade;
     @Autowired
     private VelocityEngine velocityEngine;
+    @Autowired
+    private GroupHealthCashlessClaimService groupHealthCashlessClaimService;
 
     public PreAuthorizationClaimantDetailCommand getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(String preAuthorizationRequestId) {
         PreAuthorizationRequest preAuthorizationRequest = getPreAuthorizationRequestById(preAuthorizationRequestId);
@@ -239,7 +241,7 @@ public class PreAuthorizationRequestService {
                 Plan plan = plans.get(0);
                 claimantPolicyDetailDto
                         .updateWithSumAssured(planDetail.getSumAssured())
-                        .updateWithCoverages(constructCoverageBenefitDetails(planDetail, clientId))
+                        .updateWithCoverages(constructCoverageBenefitDetails(planDetail, clientId, groupHealthPolicy.getPolicyNumber()))
                         .updateWithPlanCode(plan.getPlanDetail())
                         .updateWithPlanId(plan.getPlanId())
                         .updateWithPlanName(plan.getPlanDetail())
@@ -457,7 +459,7 @@ public class PreAuthorizationRequestService {
         return isNotEmpty(preAuthorizationDetails) ? preAuthorizationDetails.stream().map(PreAuthorizationDetail::getService).collect(Collectors.toSet()) : Sets.newHashSet();
     }
 
-    private Set<CoverageBenefitDetailDto> constructCoverageBenefitDetails(GHPlanPremiumDetail planDetail, String clientId) {
+    private Set<CoverageBenefitDetailDto> constructCoverageBenefitDetails(GHPlanPremiumDetail planDetail, String clientId, PolicyNumber policyNumber) {
         /*
         * if coverage is empty from policy take base coverage
         * */
@@ -472,17 +474,17 @@ public class PreAuthorizationRequestService {
                             .updateWithCoverageId(coverageDto.getCoverageId())
                             .updateWithCoverageCode(coverageDto.getCoverageCode())
                             .updateWithSumAssured(ghCoveragePremiumDetail.getSumAssured())
-                            .updateWithTotalAmountPaid(getTotalAmountPaidTillNow(planDetail, clientId))
-                            .updateWithReserveAmount(getReservedAmountOfTheClient(clientId))
+                            .updateWithTotalAmountPaid(groupHealthCashlessClaimService.getTotalAmountPaidTillNow(clientId, policyNumber, coverageDto.getCoverageId()))
+                            .updateWithReserveAmount(groupHealthCashlessClaimService.getReservedAmountOfTheClient(clientId, policyNumber, coverageDto.getCoverageId()))
                             .updateWithBalanceAndEligibleAmount()
                             .updateWithBenefitDetails(constructBenefitDetails(coverageDto.getBenefitDtos(), coverageBenefitDetailDto, isNotEmpty(ghCoveragePremiumDetail.getBenefitPremiumLimits()) ? ghCoveragePremiumDetail.getBenefitPremiumLimits() : Sets.newHashSet()));
                 }
                 return coverageBenefitDetailDto;
             }
-        }).collect(Collectors.toSet()) : constructCoveragesFromPlanBaseCoverage(planDetail.getPlanCode(), planDetail, clientId) : Sets.newHashSet();
+        }).collect(Collectors.toSet()) : constructCoveragesFromPlanBaseCoverage(planDetail.getPlanCode(), planDetail, clientId, policyNumber) : Sets.newHashSet();
     }
 
-    private Set<CoverageBenefitDetailDto> constructCoveragesFromPlanBaseCoverage(String planCode, GHPlanPremiumDetail planDetail, String clientId) {
+    private Set<CoverageBenefitDetailDto> constructCoveragesFromPlanBaseCoverage(String planCode, GHPlanPremiumDetail planDetail, String clientId, PolicyNumber policyNumber) {
         List<Plan> plans = planRepository.findPlanByCodeAndName(planCode);
         Set<CoverageBenefitDetailDto> coverageBenefitDetailDtos = Sets.newHashSet();
         if(isNotEmpty(plans)) {
@@ -498,8 +500,8 @@ public class PreAuthorizationRequestService {
                                 .updateWithCoverageId(coverageDto.getCoverageId())
                                 .updateWithCoverageCode(coverageDto.getCoverageCode())
                                 //.updateWithSumAssured(planCoverage.getSumAssured())
-                                .updateWithTotalAmountPaid(getTotalAmountPaidTillNow(planDetail, clientId))
-                                .updateWithReserveAmount(getReservedAmountOfTheClient(clientId))
+                                .updateWithTotalAmountPaid(groupHealthCashlessClaimService.getTotalAmountPaidTillNow(clientId, policyNumber, coverageDto.getCoverageId()))
+                                .updateWithReserveAmount(groupHealthCashlessClaimService.getReservedAmountOfTheClient(clientId, policyNumber, coverageDto.getCoverageId()))
                                 .updateWithBalanceAndEligibleAmount()
                                 .updateWithBenefitDetails(constructBenefitDetailsFromBaseCoverage(coverageDto.getBenefitDtos(), coverageBenefitDetailDto, planCoverage.getPlanCoverageBenefits()));
                     }

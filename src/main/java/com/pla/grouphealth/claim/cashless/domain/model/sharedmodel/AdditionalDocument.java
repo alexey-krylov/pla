@@ -1,9 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model.sharedmodel;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * Author - Mohan Sharma Created on 1/28/2016.
@@ -12,6 +9,8 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(of = {"documentCode"})
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdditionalDocument {
     private String documentCode;
     private boolean hasSubmitted;

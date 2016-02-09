@@ -1,18 +1,15 @@
 package com.pla.grouphealth.claim.cashless.application.command.claim;
 
 import com.google.common.collect.Sets;
-import com.pla.grouphealth.claim.cashless.application.command.preauthorization.PreAuthorizationRemoveAdditionalDocumentCommand;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatch;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.sharedresource.model.vo.GHProposerDocument;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
@@ -25,7 +22,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,9 +30,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
-import static org.springframework.util.Assert.*;
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notEmpty;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * Author - Mohan Sharma Created on 2/3/2016.

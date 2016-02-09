@@ -11,8 +11,6 @@ import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.hcp.domain.model.HCP;
-import com.pla.core.hcp.domain.model.HCPCode;
-import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.query.HCPFinder;
 import com.pla.core.hcp.repository.HCPRateRepository;
@@ -74,7 +72,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.*;
+import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notEmpty;
@@ -399,7 +397,7 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaimId;
     }
 
-    private BigDecimal getReservedAmountOfTheClient(String clientId, PolicyNumber policyNumber, String coverageId) {
+    public BigDecimal getReservedAmountOfTheClient(String clientId, PolicyNumber policyNumber, String coverageId) {
         BigDecimal totalReservedAmount = BigDecimal.ZERO;
         assert policyNumber != null;
         List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationRequestPolicyDetailPolicyNumberAndPreAuthorizationRequestPolicyDetailAssuredDetailClientIdAndStatus(policyNumber.getPolicyNumber(), clientId, PreAuthorizationRequest.Status.APPROVED);
@@ -421,7 +419,7 @@ public class GroupHealthCashlessClaimService {
         return totalReservedAmount;
     }
 
-    private BigDecimal getTotalAmountPaidTillNow(String clientId, PolicyNumber policyNumber, String coverageId) {
+    public BigDecimal getTotalAmountPaidTillNow(String clientId, PolicyNumber policyNumber, String coverageId) {
         BigDecimal amountPaidTillDate = BigDecimal.ZERO;
         List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailPolicyNumberAndGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndStatus(policyNumber, clientId, Status.DISBURSED);
         if(isNotEmpty(groupHealthCashlessClaims)){

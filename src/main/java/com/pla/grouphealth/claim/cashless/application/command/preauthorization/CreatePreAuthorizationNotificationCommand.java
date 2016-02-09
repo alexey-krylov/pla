@@ -7,6 +7,7 @@ import com.pla.sharedkernel.domain.model.WaitingForEnum;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @NoArgsConstructor
 @Getter
+@Setter
 public class CreatePreAuthorizationNotificationCommand extends CreateNotificationCommand{
 
     private String preAuthorizationRequestId;

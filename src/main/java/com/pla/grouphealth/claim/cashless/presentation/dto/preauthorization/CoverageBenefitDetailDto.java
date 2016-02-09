@@ -104,19 +104,21 @@ public class CoverageBenefitDetailDto {
     public CoverageBenefitDetailDto updateWithBalanceAndEligibleAmount() {
         BigDecimal sumAssured = this.sumAssured;
         BigDecimal totalAmountPaid = this.totalAmountPaid;
+        BigDecimal reservedAmount = this.reserveAmount;
         if(sumAssured.compareTo(totalAmountPaid) == 1){
             BigDecimal balanceAmount = sumAssured.subtract(totalAmountPaid);
             this.balanceAmount = balanceAmount;
-            this.eligibleAmount = balanceAmount;
+            if(balanceAmount.compareTo(reservedAmount) == 1) {
+                this.eligibleAmount = balanceAmount.subtract(reservedAmount);
+            }
+            if(balanceAmount.compareTo(reservedAmount) == 0) {
+                this.eligibleAmount = BigDecimal.ZERO;
+            }
         }
         if(sumAssured.compareTo(totalAmountPaid) == 0){
             this.balanceAmount = BigDecimal.ZERO;
             this.eligibleAmount = BigDecimal.ZERO;
         }
         return this;
-    }
-
-    public CoverageBenefitDetailDto updateWithData(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail) {
-        return null;
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.application.command.claim.*;
-import com.pla.grouphealth.claim.cashless.application.command.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
@@ -14,8 +13,6 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCash
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
@@ -103,7 +100,7 @@ public class GroupHealthCashlessClaimController {
     }
     @RequestMapping(value = "/uploadghcashlessclaimtemplate", method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadPreAuthorizationTemplate(ClaimRelatedFileUploadDto claimRelatedFileUploadDto, HttpServletRequest request) throws IOException {
+    public Result uploadGroupHealthCashlessClaimTemplate(ClaimRelatedFileUploadDto claimRelatedFileUploadDto, HttpServletRequest request) throws IOException {
         Result result = null;
         MultipartFile file = claimRelatedFileUploadDto.getFile();
         if (!("application/x-ms-excel".equals(file.getContentType())|| "application/ms-excel".equals(file.getContentType()) || "application/msexcel".equals(file.getContentType()) || "application/vnd.ms-excel".equals(file.getContentType()))) {

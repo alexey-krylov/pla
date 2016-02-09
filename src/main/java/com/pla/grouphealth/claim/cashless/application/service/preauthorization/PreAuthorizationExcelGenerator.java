@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.core.hcp.presentation.dto.HCPServiceDetailDto;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
-import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimDrugService;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.sharedkernel.util.ExcelGeneratorUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
