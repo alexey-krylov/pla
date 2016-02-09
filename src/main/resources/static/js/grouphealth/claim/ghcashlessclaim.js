@@ -138,7 +138,8 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             $scope.updateTreatmentAndDiagnosis = function (groupHealthCashlessClaimDiagnosisTreatmentDetails) {
                 if ($scope.isEditDiagnosisTriggered) {
                     console.log("update insd btn"+JSON.stringify(groupHealthCashlessClaimDiagnosisTreatmentDetails));
-                    $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[$scope.treatmentDiagnosisIndex++] = groupHealthCashlessClaimDiagnosisTreatmentDetails;
+                    $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[$scope.treatmentDiagnosisIndex] = groupHealthCashlessClaimDiagnosisTreatmentDetails;
+                    alert($scope.treatmentDiagnosisIndex);
                     $scope.saveCashlessClaimRequest();
                     $scope.isEditDiagnosisTriggered = false;
                     $scope.provisionaldignosisdiv=false;
