@@ -427,6 +427,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
             $scope.getHCPServiceDetails = function(){
                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getallrelevantservices/" + preAuthorizationId).success(function (data, status, headers, config) {
                     $scope.hcpServiceDetails = data;
+                    console.log(data);
                 }).error(function (response, status, headers, config) {
                 });
             };
