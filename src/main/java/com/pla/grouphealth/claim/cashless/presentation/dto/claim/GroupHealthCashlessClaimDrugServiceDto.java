@@ -4,17 +4,10 @@ import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashless
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.beanutils.BeanUtils;
-import org.nthdimenzion.utils.UtilValidator;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/4/2016.
@@ -31,26 +24,22 @@ public class GroupHealthCashlessClaimDrugServiceDto {
     private String duration;
     private int lengthOfStay;
     private String strength;
-    private Status status;
+    private String status;
     private BigDecimal billAmount;
 
     public GroupHealthCashlessClaimDrugServiceDto updateWithDetails(GroupHealthCashlessClaimDrugService groupHealthCashlessClaimDrugService) {
         if(isNotEmpty(groupHealthCashlessClaimDrugService)){
-            try {
-                BeanUtils.copyProperties(this, groupHealthCashlessClaimDrugService);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            this.type = groupHealthCashlessClaimDrugService.getType();
+            this.serviceName = groupHealthCashlessClaimDrugService.getServiceName();
+            this.drugName = groupHealthCashlessClaimDrugService.getDrugName();
+            this.drugType = groupHealthCashlessClaimDrugService.getDrugType();
+            this.accommodationType = groupHealthCashlessClaimDrugService.getAccommodationType();
+            this.duration = groupHealthCashlessClaimDrugService.getDuration();
+            this.lengthOfStay = groupHealthCashlessClaimDrugService.getLengthOfStay();
+            this.strength = groupHealthCashlessClaimDrugService.getStrength();
+            this.billAmount = groupHealthCashlessClaimDrugService.getBillAmount();
+            this.status = isNotEmpty(groupHealthCashlessClaimDrugService.getStatus()) ? groupHealthCashlessClaimDrugService.getStatus().name() : "PROCESS";
         }
         return this;
-    }
-    public enum Status{
-        IGNORE, PROCESS;
-
-        public static List<String> getStatusList() {
-            return Arrays.stream(values()).map(Status::name).collect(Collectors.toList());
-        }
     }
 }

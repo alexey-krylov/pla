@@ -1,15 +1,20 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 
 import javax.persistence.Embeddable;
-
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 1/9/2016.
@@ -29,6 +34,7 @@ public class GroupHealthCashlessClaimDrugService {
     private String duration;
     private int lengthOfStay;
     private String strength;
+    private Status status;
     private BigDecimal billAmount;
 
     public GroupHealthCashlessClaimDrugService updateWithDetails(ClaimUploadedExcelDataDto claimUploadedExcelDataDto) {
@@ -42,7 +48,32 @@ public class GroupHealthCashlessClaimDrugService {
             this.lengthOfStay = claimUploadedExcelDataDto.getDiagnosisTreatmentSurgeryLengthOStay();
             this.strength = claimUploadedExcelDataDto.getDiagnosisTreatmentDrugStrength();
             this.billAmount = claimUploadedExcelDataDto.getBillAmount();
+            this.status = isNotEmpty(claimUploadedExcelDataDto.getStatus()) ? Status.valueOf(claimUploadedExcelDataDto.getStatus()) : Status.PROCESS;
         }
         return this;
+    }
+
+    public GroupHealthCashlessClaimDrugService updateDetails(GroupHealthCashlessClaimDrugServiceDto drugServiceDto) {
+        if(isNotEmpty(drugServiceDto)) {
+            this.type = drugServiceDto.getType();
+            this.serviceName = drugServiceDto.getServiceName();
+            this.drugName = drugServiceDto.getDrugName();
+            this.drugType = drugServiceDto.getDrugType();
+            this.accommodationType = drugServiceDto.getAccommodationType();
+            this.duration = drugServiceDto.getDuration();
+            this.lengthOfStay = drugServiceDto.getLengthOfStay();
+            this.strength = drugServiceDto.getStrength();
+            this.billAmount = drugServiceDto.getBillAmount();
+            this.status = isNotEmpty(drugServiceDto.getStatus()) ? Status.valueOf(drugServiceDto.getStatus()) : Status.PROCESS;
+        }
+        return this;
+    }
+
+    public enum Status{
+        IGNORE, PROCESS;
+
+        public static List<String> getStatusList() {
+            return Arrays.stream(values()).map(Status::name).collect(Collectors.toList());
+        }
     }
 }

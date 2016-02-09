@@ -65,7 +65,6 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
     .controller('cashLessClaimCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
         function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList,clientId, $upload,groupHealthCashlessClaimId) {
             $scope.createUpdateDto = createUpdateDto;
-            console.log(documentList);
             $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
             $scope.treatmentDiagnosis = {};
             $scope.diagnosisTreatmentDtoToUpdate = {};
@@ -205,6 +204,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                     $scope.isEditDrugTriggered = false;
 
                 } else {
+                    diagnosisTreatmentDtoToUpdate.status = 'PROCESS';
                     $scope.createUpdateDto.groupHealthCashlessClaimDrugServices.push(diagnosisTreatmentDtoToUpdate);
                     $scope.saveCashlessClaimRequest();
                 }
@@ -431,7 +431,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             $scope.hcpServiceDetails = [];
 
             $scope.getHCPServiceDetails = function(){
-                $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getallrelevantservices/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
+                $http.get("/pla/grouphealth/claim/cashless/claim/getallrelevantservices/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
                     $scope.hcpServiceDetails = data;
                 }).error(function (response, status, headers, config) {
                 });

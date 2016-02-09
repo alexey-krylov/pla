@@ -251,19 +251,10 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     }
 
     public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimDrugServicesFromDto(Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices) {
-        if(isNotEmpty(groupHealthCashlessClaimDrugServices)) {
-            this.groupHealthCashlessClaimDrugServices = groupHealthCashlessClaimDrugServices.parallelStream().map(drugServiceDto -> {
-                GroupHealthCashlessClaimDrugService groupHealthCashlessClaimDrugService = getInstance(GroupHealthCashlessClaimDrugService.class);
-                try {
-                    BeanUtils.copyProperties(groupHealthCashlessClaimDrugService, drugServiceDto);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                return groupHealthCashlessClaimDrugService;
-            }).collect(Collectors.toSet());
-        }
+        this.groupHealthCashlessClaimDrugServices = isNotEmpty(groupHealthCashlessClaimDrugServices) ? groupHealthCashlessClaimDrugServices.parallelStream().map(drugServiceDto -> {
+            GroupHealthCashlessClaimDrugService groupHealthCashlessClaimDrugService = getInstance(GroupHealthCashlessClaimDrugService.class);
+            return groupHealthCashlessClaimDrugService.updateDetails(drugServiceDto);
+        }).collect(Collectors.toSet()) : Sets.newHashSet();
         return this;
     }
 
@@ -359,7 +350,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
 
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"),
-        APPROVED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), AMOUNT_MISMATCHED("Evaluation");
+        APPROVED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), SERVICE_MISMATCHED("Evaluation");
 
         private String description;
 
@@ -381,6 +372,28 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         }
     }
 
+    public GroupHealthCashlessClaim populateDetailsToGroupHealthCashlessClaim(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto){
+        if(isNotEmpty(this)){
+            this.updateWithCategory(groupHealthCashlessClaimDto.getCategory())
+                    .updateWithRelationship(Relationship.getRelationship(groupHealthCashlessClaimDto.getRelationship()))
+                    .updateWithClaimType(groupHealthCashlessClaimDto.getClaimType())
+                    .updateWithClaimIntimationDate(groupHealthCashlessClaimDto.getClaimIntimationDate())
+                    .updateWithBatchNumber(groupHealthCashlessClaimDto.getBatchNumber())
+                    .updateWithBatchNumber(groupHealthCashlessClaimDto.getBatchNumber())
+                    .updateWithBatchUploaderUserId(groupHealthCashlessClaimDto.getBatchUploaderUserId())
+                    .updateWithGhProposerDto(groupHealthCashlessClaimDto.getGhProposer())
+                    .updateWithGroupHealthCashlessClaimHCPDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimHCPDetail())
+                    .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetailsFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDiagnosisTreatmentDetails())
+                    .updateWithGroupHealthCashlessClaimIllnessDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimIllnessDetail())
+                    .updateWithGroupHealthCashlessClaimDrugServicesFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDrugServices())
+                    .updateWithCommentDetails(groupHealthCashlessClaimDto.getCommentDetails())
+                    .updateWithClaimProcessorUserId(groupHealthCashlessClaimDto.getClaimProcessorUserId())
+                    .updateWithClaimUnderWriterUserId(groupHealthCashlessClaimDto.getClaimUnderWriterUserId())
+                    .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaimDto.getAdditionalRequiredDocumentsByUnderwriter())
+                    .updateWithGroupHealthCashlessClaimPolicyDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail());
+        }
+        return this;
+    }
 
     private <T> T getInstance(Class<T> tClass) {
         try {

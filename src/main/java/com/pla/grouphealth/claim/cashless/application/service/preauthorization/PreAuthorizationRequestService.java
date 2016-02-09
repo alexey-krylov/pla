@@ -322,6 +322,9 @@ public class PreAuthorizationRequestService {
                 payableAmount = payableAmount.add(amount);
                 map.put("payableAmount", payableAmount);
             }
+            if(isEmpty(serviceList)){
+                map.put("payableAmount", BigDecimal.ZERO);
+            }
         });
         final List<Map<String, Object>> finalRefurbishedList = refurbishedList;
         return coverageBenefitDetails.stream().map(new Function<CoverageBenefitDetailDto, CoverageBenefitDetailDto>() {
@@ -387,6 +390,9 @@ public class PreAuthorizationRequestService {
                     BigDecimal amount = calculateProbableClaimAmount(lengthOfStay, hcpServiceDetail.getNormalAmount(), (CoverageBenefitDefinition) map.get("coverageBenefitDefinition"));
                     payableAmount = payableAmount.add(amount);
                     map.put("payableAmount", payableAmount);
+                }
+                if(isEmpty(serviceList)){
+                    map.put("payableAmount", BigDecimal.ZERO);
                 }
             });
             final List<Map<String, Object>> finalRefurbishedList = refurbishedList;
