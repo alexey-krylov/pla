@@ -1,6 +1,6 @@
 
 var App = angular.module('claimIntimation', ['common', 'ngRoute', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover', 'directives',
-                                               , 'ngSanitize', 'commonServices', 'ngMessages','angularFileUpload']);
+                                               , 'ngSanitize', 'commonServices', 'ngMessages','angularFileUpload','ngAnimate','mgcrea.ngStrap']);
 
        App.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
             datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
@@ -80,6 +80,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.assuredCriteria={};
         $scope.assuredSearchResult=[];
         $scope.documentList = [];
+        $scope.additionalDocumentList = [{}];
+        $scope.rcvClaimIdForRegistration = getQueryParameter('claimId');
             /***
              *
              * @param $event for Claim intimation Date
@@ -148,8 +150,57 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }
             }
+            $scope.incidenceDetails={};  //Capturing Data For Incidence Details
+            /**
+             * Setting For Date of Death for Incidenct Details
+             * @param $event
+             */
+            $scope.openDod = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForDOD.isOpened = true;
+            };
+            $scope.datePickerSettingsForDOD = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
 
+                }
+            }
 
+            /***
+             * Date of First Consultation Date setting
+             */
+            $scope.openDeathConsult = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForDeathConsult.isOpened = true;
+            };
+            $scope.datePickerSettingsForDeathConsult = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+            /**
+             * Date of Accident Date Setting
+             */
+            $scope.openDeathAccident = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForDeathAccident.isOpened = true;
+            };
+            $scope.datePickerSettingsForDeathAccident = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
             /**
              *
              * @param province
@@ -186,6 +237,38 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     }
                 }
             });
+
+            /**
+             * Retrival All Claim For Registraton
+             */
+            //$scope.incidenceDetails.timeOfDeath=moment("1969-12-31T18:42:00.000Z").format('YYYY-MM-DDTHH:mm:ss:00.000');
+            if($scope.rcvClaimIdForRegistration){
+                $http.get('/pla/grouplife/claim/getclaimdetail/' + $scope.rcvClaimIdForRegistration).success(function (response, status, headers, config) {
+                    console.log(JSON.stringify(response));
+                    $scope.claimId=response.claimId;
+                    $scope.claimDetails=response;
+                    $scope.claimantDetail=response.claimantDetail;
+                    $scope.planDetail=response.planDetail;
+                    $scope.bankDetails=response.bankDetails;
+                    $scope.assuredDetails=response.claimAssuredDetail;
+                    $scope.coverageList=response.coverageDetails;
+                }).error(function (response, status, headers, config) {
+                });
+
+            }
+
+            /**
+             * Incidence Detail Save Logic Implemented
+             */
+            $scope.saveIncidenceDetails=function(){
+                console.log('*****************');
+                //console.log(JSON.stringify($scope.incidenceDetails));
+                var createRegistration={
+                    "incidentDetails":$scope.incidenceDetails,
+                    "claimId":$scope.claimId
+                }
+                console.log(JSON.stringify(createRegistration));
+            }
 
             /***
              * Geating All Details Of Particular PolicyNumber and Populating in GL ClaimIntimation Screen
@@ -482,7 +565,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                             file: files,
                             fields: {
                                 documentId: document.documentId,
-                                claimId: "56b87cb47c858b58656e55f3",
+                                claimId: $scope.claimId,
                                 mandatory: true,
                                 isApproved: true
                             },
@@ -494,6 +577,79 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     }
 
                 }
+            };
+
+            $scope.addAdditionalDocument = function () {
+                $scope.additionalDocumentList.unshift({});
+                $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+            };
+            $scope.isUploadEnabledForAdditionalDocument = function () {
+                var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
+                console.log("enable value" + enableAdditionalUploadButton);
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    //  alert(i+"--"+files)
+                    //  alert(i+"--"+document.content);
+                    if (!(files || document.content)) {
+                        enableAdditionalUploadButton = false;
+                        break;
+                    }
+                }
+                return enableAdditionalUploadButton;
+            }
+
+            /**
+             * Uploading Additional Document
+             */
+            $scope.uploadAdditionalDocument = function () {
+                for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
+                    var document = $scope.additionalDocumentList[i];
+                    var files = document.documentAttached;
+                    if (files) {
+                        $upload.upload({
+                            url: '/pla/grouplife/claim/uploadmandatorydocument',
+                            file: files,
+                            fields: {documentId: document.documentId, claimId: $scope.claimId, mandatory: false},
+                            method: 'POST'
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            //console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                            // JSON.stringify(data));
+                        });
+                    }
+
+                }
+            };
+            $scope.callAdditionalDoc = function (file) {
+                if (file[0]) {
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+                }
+            }
+
+            /**
+             * Removal of Additional Document List
+             * @param index
+             * @param gridFsDocId
+             */
+            $scope.removeAdditionalDocument = function (index, gridFsDocId) {
+                $scope.additionalDocumentList.splice(index, 1);
+                $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+
+               /* if (gridFsDocId) {
+                    $http.post("/pla/grouphealth/proposal/removeGHProposalAdditionalDocument?proposalId=" + $scope.proposalId + "&gridFsDocId=" + gridFsDocId).success(function (data, status) {
+                        console.log(data);
+                        if (data.status == '200') {
+                            $scope.additionalDocumentList.splice(index, 1);
+                            $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+                        }
+                    });
+                } else {
+                    $scope.additionalDocumentList.splice(index, 1);
+                    $scope.checkDocumentAttached = $scope.isUploadEnabledForAdditionalDocument();
+
+                }*/
             };
 
 

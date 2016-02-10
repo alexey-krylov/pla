@@ -34,7 +34,10 @@ var viewPolicyModule = (function () {
            window.location.href ="/pla/grouplife/claim/openclaimintimationpage/?policyId=" + policyId + "&mode=edit";
           //  window.location.href ="/pla/grouplife/claim/openclaimintimationpage";
        };
-
+    services.createRegistration = function () {
+        var claimId = this.selectedItem;
+        window.location.href ="/pla/grouplife/claim/openclaimregistrationpage/?claimId=" + claimId + "&mode=edit";
+    };
 
     return services;
 })();

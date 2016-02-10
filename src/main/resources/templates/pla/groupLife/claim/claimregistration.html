@@ -8,7 +8,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.js"></script>
 
+    <script src="//cdn.jsdelivr.net/angularjs/1.4.5/angular.min.js" data-semver="1.4.5"></script>
+    <script src="//cdn.jsdelivr.net/angularjs/1.4.5/angular-animate.min.js" data-semver="1.4.5"></script>
+    <script src="//cdn.jsdelivr.net/angularjs/1.4.5/angular-sanitize.min.js" data-semver="1.4.5"></script>
+    <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.js" data-semver="v2.3.7"></script>
+    <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.tpl.js" data-semver="v2.3.7"></script>
+    <script src="//mgcrea.github.io/angular-strap/docs/angular-strap.docs.tpl.js" data-semver="v2.3.7"></script>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.3.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css" />
+    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/docs.min.css" />
 </head>
 <body class="fuelux ng-cloak" style="overflow-x: hidden;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
@@ -105,9 +117,9 @@
                                 <td><span>{{assuredResult.manNumber}}</span></td>
                                 <td><span>{{assuredResult.clientId}}</span></td>
                                 <td>
-                                     <button class="btn btn-default btn-sm"
-                                             ng-click="selectCurrentAssured($index,assuredResult.clientId)">Select
-                                     </button>
+                                    <button class="btn btn-default btn-sm"
+                                            ng-click="selectCurrentAssured($index,assuredResult.clientId)">Select
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
@@ -126,8 +138,10 @@
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Claimant Details<span class="chevron"></span>
                 </li>
-                <li data-step="2"><span class="badge">2</span>Assured Details<span class="chevron"></span></li>
-                <li data-step="3"><span class="badge">3</span>Mandatory Document<span class="chevron"></span></li>
+                <li data-step="2"><span class="badge">2</span>Deceased Details<span class="chevron"></span></li>
+                <li data-step="3"><span class="badge">3</span>Incidence Details<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Mandatory Document<span class="chevron"></span></li>
+
             </ul>
             <div class="actions">
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
@@ -178,16 +192,16 @@
                                         <div class="form-group">
                                             <label class="control-label">Relationship</label>
                                             <select  class="form-control input-sm" ng-model="claimDetails.relationship" name="relationship"
-                                                      ng-options="relationship for relationship in reltaionShipList" ng-change="getPlanDetailWithClaimTypeList()">
+                                                     ng-options="relationship for relationship in reltaionShipList" ng-change="getPlanDetailWithClaimTypeList()">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 10px;">
                                         <div class="col-md-4" style="margin-top:10px;">
                                             <!-- <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="claimintimationModal" ng-click="showAsssuredSearchModal()">Assured Search</button>-->
-                                           <!-- <button type="button" class="btn btn-info">
-                                                <span class="glyphicon glyphicon-search"></span> Assured Search
-                                            </button>&nbsp;&nbsp;-->
+                                            <!-- <button type="button" class="btn btn-info">
+                                                 <span class="glyphicon glyphicon-search"></span> Assured Search
+                                             </button>&nbsp;&nbsp;-->
                                             <button type="button" class="btn btn-info" title="Advance Search" ng-click="openAdvaceSearch()" ng-disabled="!isAssuredDetailsShared">
                                                 <span class="glyphicon glyphicon-plus-sign"></span> Advance Search
                                             </button>
@@ -264,7 +278,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">Claim Type</label>
                                                 <select  class="form-control input-sm" ng-model="claimDetails.claimType" name="claimType"
-                                                        ng-options="claimType for claimType in claimTypes">
+                                                         ng-options="claimType for claimType in claimTypes">
 
                                                 </select>
                                             </div>
@@ -621,7 +635,7 @@
                             <accordion-group>
                                 <accordion-heading>
                                     Assured Details <i class="pull-right glyphicon"
-                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
+                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
                                 </accordion-heading>
                                 <div class="col-md-6">
                                     <div class="form-group ">
@@ -669,7 +683,7 @@
                                         <select class="form-control input-sm" name="occupation"  ng-model="assuredDetail.occupation"
                                                 ng-options="occupation.description as occupation.description for occupation in occupations">
                                             <option value="">Select Occupation</option>
-                                                </select>
+                                        </select>
 
                                         <div class="error" ng-messages="step2.occupation.$error" ng-if="step2.occupation.$dirty">
                                             <small class="error" ng-message="required">Please enter Occupation</small>
@@ -790,15 +804,187 @@
                             </div>
                         </div>
                     </ng-form>
-
-               </div>
+                </div>
                 <div class="step-pane" data-step="3">
                     <ng-form name="step3">
+                        <accordion close-others="true">
+                            <accordion-group is-open="true" ng-form="incidenceDetailsForm">
+                                <accordion-heading>
+                                    Incidence Details <i class="pull-right glyphicon"
+                                                          ng-class="{'glyphicon-chevron-down': accordionStatus.incidenceDetails, 'glyphicon-chevron-right': !accordionStatus.incidenceDetails}"></i>
+                                </accordion-heading>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label">Cause of Death</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" ng-model="incidenceDetails.causeOfDeath"/>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Date Of Death</label>
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-click="openDod($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                       ng-model="incidenceDetails.dateOfDeath"
+                                                       datepicker-options="datePickerSettingsForDOD.dateOptions"
+                                                       is-open="datePickerSettingsForDOD.isOpened" close-text="Close"
+                                                       show-button-bar="false"
+                                                       onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openDod($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">For how long was deceased suffering from the last illness</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" ng-model="incidenceDetails.durationOfIllness"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Number</label>
+                                            <input type="text" class="form-control input-sm" ng-minlength="10" maxlength="10" ng-maxLength="10" name="contactNumber" ng-pattern="/^\d+$/" ng-model="incidenceDetails.contactNumber" />
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Treatment taken</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" ng-model="incidenceDetails.treatementTaken" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label">Place Of Death</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="50" ng-model="incidenceDetails.placeOfDeath" />
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Time Of Death</label>{{incidenceDetails.timeOfDeath}}
+                                            <!--<input type="time" class="form-control input-sm" name="deathTime" ng-model="incidenceDetails.timeOfDeath"/>-->
+                                            <!--<input class="form-control input-sm" ui-timepicker="" ng-model="incidenceDetails.timeOfDeath" />-->
+                                            <input type="text" class="form-control" size="8" ng-model="incidenceDetails.timeOfDeath" data-time-format="HH:mm:ss"
+                                                   data-time-type="date" data-min-time="00:00:00" data-max-time="23:59:59" data-autoclose="1" name="time2" bs-timepicker="" data-length="3"/>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Name of Doctor and Hospital Address</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" ng-model="incidenceDetails.nameOfDocterAndHospialAddress"/>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Date of First Consultation</label>
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-click="openDeathConsult($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                       ng-model="incidenceDetails.firstConsultation"
+                                                       datepicker-options="datePickerSettingsForDeathConsult.dateOptions"
+                                                       is-open="datePickerSettingsForDeathConsult.isOpened" close-text="Close"
+                                                       show-button-bar="false"
+                                                       onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openDeathConsult($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Was the cause of death accidental ?</label>
+                                            <div></div>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isDeathAccidential" value="true" ng-value="true" ng-model="incidenceDetails.isCauseOfDeathAccidental"/> Yes
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isDeathAccidential" value="false" ng-value="false" ng-model="incidenceDetails.isCauseOfDeathAccidental"/> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 4px;padding:10px">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Type Of Accident</label>
+                                            <select class="form-control input-sm" ng-model="incidenceDetails.typeOfAccident">
+                                                <option value="">-- Select Accident Type --</option>
+                                                <option value="ANIMAL_OR_INSECT_BITE">Animal or Insect Bite</option>
+                                                <option value="MURDER">Murder</option>
+                                                <option value="SUICIDE">Suicide</option>
+                                                <option value="ROAD_TRAFFIC_ACCIDENT">Road Traffic Accident</option>
+                                                <option value="NATURAL_CALAMITY">Natural Calamity</option>
+                                                <option value="OTHERS">Others</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Date Of Accident</label>
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-click="openDeathAccident($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                       ng-model="incidenceDetails.dateOfAccident"
+                                                       datepicker-options="datePickerSettingsForDeathAccident.dateOptions"
+                                                       is-open="datePickerSettingsForDeathAccident.isOpened" close-text="Close"
+                                                       show-button-bar="false"
+                                                       onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openDeathAccident($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Was Post Mortem/ Autopsy Done ?</label>
+                                            <div></div>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isPostMortemAutopsyDone" value="true" ng-value="true" ng-model="incidenceDetails.isPostMortemAutopsyDone"/> Yes
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isPostMortemAutopsyDone" value="false" ng-value="false" ng-model="incidenceDetails.isPostMortemAutopsyDone"/> No
+                                            </label>
+                                        </div>
+                                        <div class="form-group" ng-if="incidenceDetails.isPoliceReportRegistered">
+                                            <label class="control-label">Registration Number</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="20" maxlength="20" ng-model="incidenceDetails.registrationNumber"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" ng-if="incidenceDetails.isCauseOfDeathAccidental">
+                                            <label class="control-label">Place Of Accident</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="50" maxlength="20" ng-model="incidenceDetails.placeOfAccident"/>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Time Of Accident</label>
+                                            <!--<input type="time" class="form-control input-sm" name="deathTime" ng-model="incidenceDetails.timeOfAccident"/>-->
+                                            <!--<input class="form-control input-sm" ui-timepicker="" ng-model="incidenceDetails.timeOfAccident" />-->
+                                            <input type="text" class="form-control" size="8" ng-model="incidenceDetails.timeOfAccident" data-time-format="HH:mm:ss"
+                                                   data-time-type="date" data-min-time="00:00:00" data-max-time="23:59:59" data-autoclose="1" name="time2" bs-timepicker="" data-length="3"/>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Police Report Registered ?</label>
+                                            <div></div>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isPoliceReportRegistered" value="true" ng-value="true" ng-model="incidenceDetails.isPoliceReportRegistered"/> Yes
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isPoliceReportRegistered" value="false" ng-value="false" ng-model="incidenceDetails.isPoliceReportRegistered"/> No
+                                            </label>
+                                        </div>
+                                        <div class="form-group" ng-if="incidenceDetails.isPoliceReportRegistered">
+                                            <label class="control-label">Police Station</label>
+                                            <input type="text" class="form-control input-sm" name="policeStation" ng-maxlength="100" maxlength="100" ng-model="incidenceDetails.policeStationName"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="saveIncidenceDetails()">Save</button>
+                            </div>
+                        </div>
+                    </ng-form>
+
+                </div>
+                <div class="step-pane" data-step="4">
+                    <ng-form name="step4">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatus.claimantDetails" ng-form="assuredDetailForm">
                                 <accordion-heading>
                                     Mandatory Document <i class="pull-right glyphicon"
-                                                        ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
+                                                          ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
@@ -822,11 +1008,11 @@
                                         </div>
                                     </div>
                                     <div class="btn btn-default" style="display:inline;float:right;clear:both"
-                                          ng-click="uploadDocumentFiles()"
+                                         ng-click="uploadDocumentFiles()"
                                          ng-disabled="!claimId" ng-hide="isViewMode">Upload All
                                     </div>
 
-                              </div>
+                                </div>
                             </accordion-group> <br />
                             <accordion-group>
                                 <accordion-heading>
@@ -905,29 +1091,29 @@
     <style>
 
         .fuelux .checkbox-custom:before {
-        font-family: "Glyphicons Halflings" !important;
-        font-style: normal !important;
-        font-weight: normal !important;
-        font-variant: normal !important;
-        text-transform: none !important;
-        line-height: 1;
-        speak: none;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        border: 1px solid #adadad;
-        border-radius: 4px;
-        color: #fff;
-        content: " ";
-        font-size: 12px;
-        height: 18px;
-        left: 0;
-        padding: 1px 0 0 1px;
-        position: absolute;
-        top: 3px;
-        width: 18px;
+            font-family: "Glyphicons Halflings" !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border: 1px solid #adadad;
+            border-radius: 4px;
+            color: #fff;
+            content: " ";
+            font-size: 12px;
+            height: 18px;
+            left: 0;
+            padding: 1px 0 0 1px;
+            position: absolute;
+            top: 3px;
+            width: 18px;
         }
         .btn {
-        font-size: 12px;
+            font-size: 12px;
         }
     </style>
 </script>
