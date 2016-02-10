@@ -401,7 +401,10 @@ public class GLClaimService implements Serializable{
                 String claimTypeString=(String)map.get("claimType");
                 ClaimType claimType=(ClaimType)ClaimType.valueOf(claimTypeString);
                 glClaimIntimationDto.setClaimType(claimType);
-
+                String claimStatusInString=(String)map.get("claimStatus");
+                ClaimStatus claimStatus=(ClaimStatus)ClaimStatus.valueOf(claimStatusInString);
+                String claimStatusResult=claimStatus.getDescription();
+                glClaimIntimationDto.setClaimStatus(claimStatusResult);
                 return glClaimIntimationDto;
             }
         }).collect(Collectors.toList());

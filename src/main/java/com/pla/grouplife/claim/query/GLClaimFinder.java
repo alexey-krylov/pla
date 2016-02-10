@@ -197,8 +197,11 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
     public List<Map> getClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber) {
 
         Criteria criteria = null;
+        String[] statuses = new String[]{"EVALUATION"};
+        criteria = Criteria.where("claimStatus").in(statuses);
+
         if (isNotEmpty(claimNumber)) {
-            criteria = Criteria.where("claimNumber.claimNumber").is(claimNumber);
+            criteria = criteria.and("claimNumber.claimNumber").is(claimNumber);
         }
         if (isNotEmpty(policyNumber)) {
             criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);

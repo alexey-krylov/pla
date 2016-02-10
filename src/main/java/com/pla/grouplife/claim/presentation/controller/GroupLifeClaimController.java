@@ -202,14 +202,33 @@ public class GroupLifeClaimController {
         }
         return new ResponseEntity(Result.success("Disability Claim registered successfully"), HttpStatus.OK);
     }
-    @RequestMapping(value = "/getclaimdetail", method = RequestMethod.POST)
+
+    /*
+     @RequestMapping(value = "/openclaimsearchpage", method = RequestMethod.GET)
+    public ModelAndView searchClaim() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/searchClaim");
+        modelAndView.addObject("searchCriteria", new SearchClaimDto());
+        return modelAndView;
+    }
+    @RequestMapping(value = "/searchclaim", method = RequestMethod.POST)
+    public ModelAndView getClaimDetail(SearchClaimDto searchClaimDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/searchClaim");
+        modelAndView.addObject("searchResult", glClaimService.getClaimDetail(searchClaimDto));
+        modelAndView.addObject("searchCriteria", searchClaimDto);
+        return modelAndView;
+
+    }
+     */
+    @RequestMapping(value = "/searchclaim", method = RequestMethod.POST)
     @ResponseBody
     public List<GLClaimIntimationDto> claimSearch(@RequestBody SearchClaimDto searchClaimDto) {
         return glClaimService.getClaimDetail(searchClaimDto);
     }
 
 
-    @RequestMapping(value = "/claimregistration/updateclaim", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateclaim", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity updateClaim(@RequestBody GLClaimUpdateCommand glClaimUpdateCommand, HttpServletRequest request) {
         glClaimUpdateCommand.setUserDetails(getLoggedInUserDetail(request));
