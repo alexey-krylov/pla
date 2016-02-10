@@ -1866,14 +1866,15 @@
                                     <table class="table table-striped table-bordered" id="assured-table" cellspacing="0" width="100%">
                                         <thead>
                                         <tr>
-
                                             <th >Covarage</th>
                                             <th>Benifit</th>
-
+                                            <th>Maximum Entitlement  Amount</th>
+                                            <th>Total Amount Paid Till Now</th>
                                             <th >Balance Amount</th>
-
+                                            <th>Pre-Auth Approved Amount</th>
                                             <th >Probabel Claim Amount </th>
-
+                                            <th>Deductabel Amount</th>
+                                            <th>Eligibel Amount</th>
                                         </tr>
                                         </thead>
 
@@ -1881,11 +1882,13 @@
                                         <tr ng-repeat="benefit in coverageDetailDto.benefitDetails">
                                             <td ng-bind="coverageDetailDto.coverageName"></td>
                                             <td ng-bind="benefit.benefitName"></td>
-
+                                            <td ng-bind="coverageDetailDto.sumAssured"></td>
+                                            <td ng-bind="coverageDetailDto.totalAmountPaid"></td>
                                             <td ng-bind="coverageDetailDto.balanceAmount"></td>
-
+                                            <td ng-bind="coverageDetailDto.approvedAmount"></td>
                                             <td ng-bind="benefit.probableClaimAmount"></td>
-
+                                            <td ng-bind="coverageDetailDto.reserveAmount"></td>
+                                            <td ng-bind="coverageDetailDto.eligibleAmount"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -1895,6 +1898,84 @@
                             </accordion-group>
                         </accordion>
 
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.mainAssuredDetails" ng-form="mainAssuredDetailForm">
+                                <accordion-heading>Matching Pre-authorization Records
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right':             !accordionStatus.mainAssuredDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+                                    <table class="table table-striped table-bordered" id="assured-tab" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th >PreAuthorizationNumber</th>
+                                            <th>Member Name</th>
+                                            <th>PreAuthorization Date</th>
+                                            <th>Approved Amount</th>
+                                            <th >Balance Amount</th>
+
+                                        </tr>
+                                        </thead>
+
+                                        <tbody ng-repeat= "coverageDetailDto in createUpdateDto.preAuthorizationDetails">
+                                        <tr ng-repeat="coverageDetail in coverageDetailDto.coverageDetails">
+                                            <td ng-bind="coverageDetailDto.preAuthorizationRequestId"></td>
+                                            <td ng-bind="createUpdateDto.groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName"></td>
+                                            <td ng-bind="coverageDetailDto.preAuthorizationDate"></td>
+                                            <td ng-bind="coverageDetail.approvedAmount"></td>
+                                            <td ng-bind="coverageDetail.balanceAmount"></td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatus.mainAssuredDetails" ng-form="mainAssuredDetailForm">
+                                <accordion-heading>Matching Reimbursement Claim
+                                    <i class="pull-right glyphicon"
+                                       ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right':             !accordionStatus.mainAssuredDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                     disable-all-fields="isViewMode">
+                                    <table class="table table-striped table-bordered" id="assured-tabl" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th >Covarage</th>
+                                            <th>Benifit</th>
+                                            <th>Maximum Entitlement  Amount</th>
+                                            <th>Total Amount Paid Till Now</th>
+                                            <th >Balance Amount</th>
+                                            <th>Pre-Auth Approved Amount</th>
+                                            <th >Probabel Claim Amount </th>
+                                            <th>Deductabel Amount</th>
+                                            <th>Eligibel Amount</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody ng-repeat= "coverageDetailDto in createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails">
+                                        <tr ng-repeat="benefit in coverageDetailDto.benefitDetails">
+                                            <td ng-bind="coverageDetailDto.coverageName"></td>
+                                            <td ng-bind="benefit.benefitName"></td>
+                                            <td ng-bind="coverageDetailDto.sumAssured"></td>
+                                            <td ng-bind="coverageDetailDto.totalAmountPaid"></td>
+                                            <td ng-bind="coverageDetailDto.balanceAmount"></td>
+                                            <td ng-bind="coverageDetailDto.approvedAmount"></td>
+                                            <td ng-bind="benefit.probableClaimAmount"></td>
+                                            <td ng-bind="coverageDetailDto.reserveAmount"></td>
+                                            <td ng-bind="coverageDetailDto.eligibleAmount"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
 
                         <div id="myModal" class="modal fade">
                             <div class="modal-dialog">
