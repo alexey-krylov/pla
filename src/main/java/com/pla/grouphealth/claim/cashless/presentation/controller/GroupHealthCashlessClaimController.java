@@ -198,7 +198,7 @@ public class GroupHealthCashlessClaimController {
             FutureCallback callback = new FutureCallback();
             commandGateway.send(updateGroupHealthCashlessClaimCommand, callback);
             callback.onSuccess(callback.get());
-            return Result.success("Group Health cashless claim successfully submitted");
+            return Result.success(callback.get().toString());
         } catch (Exception e){
             return Result.failure(e.getMessage());
         }

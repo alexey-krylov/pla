@@ -897,7 +897,7 @@ public enum PreAuthorizationExcelHeader {
             String errorMessage = "";
             try {
                 if(isEmpty(value)) {
-                    errorMessage = errorMessage + "Diagnosis/Treatment -  Date of Discharge cannot be empty.";
+                    errorMessage = errorMessage + "Diagnosis/Treatment - If Surgery Please provide  Length of Stay cannot be empty.";
                     return errorMessage;
                 }
             } catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.pla.grouphealth.claim.cashless.application.service.preauthorization;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pla.core.hcp.domain.model.HCPCode;
 import com.pla.core.hcp.domain.model.HCPRate;
@@ -11,6 +12,8 @@ import com.pla.core.hcp.repository.HCPRateRepository;
 import com.pla.grouphealth.claim.cashless.application.command.preauthorization.UploadPreAuthorizationCommand;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimCoverageDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimPolicyDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorization;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationId;
@@ -34,10 +37,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status.*;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notEmpty;
 import static org.springframework.util.Assert.notNull;
@@ -143,7 +148,7 @@ public class PreAuthorizationService {
             @Override
             public PreAuthorization apply(List<ClaimUploadedExcelDataDto> preAuthorizationDetailDtos) {
                 Set<PreAuthorizationDetail> preAuthorizationDetails = transformToPreAuthorizationDetails(preAuthorizationDetailDtos);
-                Set<String> sameServicesPreviouslyAvailedPreAuth = checkAndFindIfServiceAvailedBefore(preAuthorizationDetails);
+                Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth = checkAndFindIfServiceAvailedBefore(preAuthorizationDetails);
                 PreAuthorization preAuthorization = new PreAuthorization()
                         .updateWithPreAuthorizationId(constructPreAuthorizationId(preAuthorizationDetails))
                         .updateWithPreAuthorizationDetail(preAuthorizationDetails)
@@ -166,20 +171,36 @@ public class PreAuthorizationService {
         return Integer.parseInt(runningSequence.trim());
     }
 
-    private Set<String> checkAndFindIfServiceAvailedBefore(Set<PreAuthorizationDetail> preAuthorizationDetails) {
+    private Set<Map<String, Object>> checkAndFindIfServiceAvailedBefore(Set<PreAuthorizationDetail> preAuthorizationDetails) {
         /*
         * getList of previously availed claim having same service
         * */
-        Set<String> sameServicesPreviouslyAvailedPreAuth = Sets.newLinkedHashSet();
+        Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth = Sets.newLinkedHashSet();
         if(isNotEmpty(preAuthorizationDetails)){
             PreAuthorizationDetail preAuthorizationDetail = preAuthorizationDetails.iterator().next();
             Set<String> services = preAuthorizationDetails.stream().map(PreAuthorizationDetail::getService).collect(Collectors.toSet());
-            List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndGroupHealthCashlessClaimDrugServicesServiceNameIn(preAuthorizationDetail.getClientId(), services);
+            List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndGroupHealthCashlessClaimDrugServicesServiceNameInAndStatus(preAuthorizationDetail.getClientId(), services, APPROVED);
             for(GroupHealthCashlessClaim groupHealthCashlessClaim : groupHealthCashlessClaims) {
-                sameServicesPreviouslyAvailedPreAuth.add(groupHealthCashlessClaim.getGroupHealthCashlessClaimId());
+                Map<String, Object> claim = Maps.newHashMap();
+                claim.put("claimId",groupHealthCashlessClaim.getGroupHealthCashlessClaimId());
+                claim.put("claimAmount",getAggregateClaimAmount(groupHealthCashlessClaim));
+                sameServicesPreviouslyAvailedPreAuth.add(claim);
             }
         }
         return sameServicesPreviouslyAvailedPreAuth;
+    }
+
+    private BigDecimal getAggregateClaimAmount(GroupHealthCashlessClaim groupHealthCashlessClaim) {
+        BigDecimal aggregateClaimAmount = BigDecimal.ZERO;
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
+            if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)){
+                for(GroupHealthCashlessClaimCoverageDetail coverage : groupHealthCashlessClaimPolicyDetail.getCoverageDetails()) {
+                    aggregateClaimAmount = aggregateClaimAmount.add(coverage.getApprovedAmount());
+                }
+            }
+        }
+        return aggregateClaimAmount;
     }
 
     private PreAuthorizationId constructPreAuthorizationId(Set<PreAuthorizationDetail> preAuthorizationDetails) {

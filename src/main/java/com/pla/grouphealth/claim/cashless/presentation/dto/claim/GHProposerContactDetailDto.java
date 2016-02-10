@@ -53,15 +53,7 @@ public class GHProposerContactDetailDto {
         return UtilValidator.isNotEmpty(contactPersonDetail) ? contactPersonDetail.stream().map(new Function<GHProposerContactDetail.ContactPersonDetail, ContactPersonDetailDto>() {
             @Override
             public ContactPersonDetailDto apply(GHProposerContactDetail.ContactPersonDetail contactPersonDetail) {
-                ContactPersonDetailDto contactPersonDetailDto = new ContactPersonDetailDto();
-                try {
-                    BeanUtils.copyProperties(contactPersonDetailDto, contactPersonDetail);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                return contactPersonDetailDto;
+                return new ContactPersonDetailDto().updateWithDetails(contactPersonDetail);
             }
         }).collect(Collectors.toList()) : Lists.newArrayList();
     }

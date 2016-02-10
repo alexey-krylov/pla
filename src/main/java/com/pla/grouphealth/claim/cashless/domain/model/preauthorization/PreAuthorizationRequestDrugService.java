@@ -26,4 +26,5 @@ public class PreAuthorizationRequestDrugService {
     private String duration;
     private int lengthOfStay;
     private String strength;
+    private String drugDosage;
 }

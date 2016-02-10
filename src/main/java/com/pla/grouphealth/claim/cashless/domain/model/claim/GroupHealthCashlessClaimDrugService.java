@@ -30,6 +30,7 @@ public class GroupHealthCashlessClaimDrugService {
     private String serviceName;
     private String drugName;
     private String drugType;
+    private String drugDosage;
     private String accommodationType;
     private String duration;
     private int lengthOfStay;
@@ -48,6 +49,7 @@ public class GroupHealthCashlessClaimDrugService {
             this.lengthOfStay = claimUploadedExcelDataDto.getDiagnosisTreatmentSurgeryLengthOStay();
             this.strength = claimUploadedExcelDataDto.getDiagnosisTreatmentDrugStrength();
             this.billAmount = claimUploadedExcelDataDto.getBillAmount();
+            this.drugDosage = claimUploadedExcelDataDto.getDiagnosisTreatmentDrugDosage();
             this.status = isNotEmpty(claimUploadedExcelDataDto.getStatus()) ? Status.valueOf(claimUploadedExcelDataDto.getStatus()) : Status.PROCESS;
         }
         return this;
@@ -59,6 +61,7 @@ public class GroupHealthCashlessClaimDrugService {
             this.serviceName = drugServiceDto.getServiceName();
             this.drugName = drugServiceDto.getDrugName();
             this.drugType = drugServiceDto.getDrugType();
+            this.drugDosage = drugServiceDto.getDrugDosage();
             this.accommodationType = drugServiceDto.getAccommodationType();
             this.duration = drugServiceDto.getDuration();
             this.lengthOfStay = drugServiceDto.getLengthOfStay();

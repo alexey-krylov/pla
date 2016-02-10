@@ -65,8 +65,8 @@
                 <li data-step="1"><span class="badge badge-info">1</span>Claim Details<span class="chevron"></span></li>
                 <li data-step="2"><span class="badge">2</span>Claimant Details<span class="chevron"></span></li>
                 <li data-step="3"><span class="badge">3</span>Assured Details<span class="chevron"></span></li>
-                <li data-step="4"><span class="badge">4</span>Treatement Details<span class="chevron"></span></li>
-                <li data-step="5"><span class="badge">5</span>Illiness Details<span class="chevron"></span></li>
+                <li data-step="4"><span class="badge">4</span>Treatment Details<span class="chevron"></span></li>
+                <li data-step="5"><span class="badge">5</span>Illness Details<span class="chevron"></span></li>
                 <li data-step="6"><span class="badge">6</span>Mandatory Details<span class="chevron"></span></li>
             </ul>
 
@@ -105,7 +105,8 @@
                                             <th>Service Name</th>
                                             <th> Drug Name</th>
                                             <th>Drug Type</th>
-                                            <th>Accomodation Type</th>
+                                            <th>Accommodation Type</th>
+                                            <th>Drug Dosage</th>
                                             <th>Duration </th>
                                             <th>length of Stay</th>
                                             <th >Strength</th>
@@ -118,6 +119,7 @@
                                             <td ng-bind="drugServicesDto.drugName"></td>
                                             <td ng-bind="drugServicesDto.drugType"></td>
                                             <td ng-bind="drugServicesDto.accommodationType"></td>
+                                            <td ng-bind="drugServicesDto.drugDosage"></td>
                                             <td ng-bind="drugServicesDto.duration"></td>
                                             <td ng-bind="drugServicesDto.lengthOfStay"></td>
                                             <td ng-bind="drugServicesDto.strength"></td>
@@ -156,7 +158,7 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Accomodation Type</label>
+                                                    <label class="control-label">Accommodation Type</label>
                                                     <select  class="form-control input-md" name="accommodationType"   ng-model="diagnosisTreatmentDtoToUpdate.accommodationType">
                                                         <option value="Normal">Normal</option>
                                                         <option value="Executive">Executive</option>
@@ -208,18 +210,21 @@
                                         </div>
 
                                         <div class="row">
-                                            <!--<div class="col-md-4">-->
-                                            <!--<div class="form-group">-->
-                                            <!--<label class="control-label"> Dosage</label>-->
-
-                                            <!--<input type="text"-->
-                                            <!--name="assuredFullName"-->
-
-                                            <!--ng-disabled="true"-->
-                                            <!--ng-model="diagnosisTreatmentDtoToUpdate.duration"-->
-                                            <!--class="form-control input-md"/>-->
-                                            <!--</div>-->
-                                            <!--</div>-->
+                                            <div class="col-md-4">
+                                                <div class="form-group required">
+                                                    <label class="control-label"> Dosage</label>
+                                                    <input type="text"
+                                                           name="drugDosage"
+                                                           ng-number="true"
+                                                           ng-maxlength="3"
+                                                           ng-required="true"
+                                                           ng-model="diagnosisTreatmentDtoToUpdate.drugDosage"
+                                                           class="form-control input-md"/>
+                                                    <div class="error" ng-messages="step5.drugDosage.$error" ng-if="step5.strength.$dirty">
+                                                        <small class="error" ng-message="required">Please enter drug dosage</small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-4 ">
                                                 <div class="form-group required ">
                                                     <label class="control-label">Strength</label>
@@ -281,14 +286,14 @@
                                         <thead>
                                         <tr>
 
-                                            <th >Covarage</th>
-                                            <th>Benifit</th>
-                                            <th>Entitle Amount</th>
-                                            <th>Total Amount</th>
+                                            <th>Coverage</th>
+                                            <th>Benefit</th>
+                                            <th>Maximum Entitlement Amount</th>
+                                            <th>Total Amount Paid Till Now</th>
                                             <th >Balance Amount</th>
                                             <th>Reserved Amount</th>
                                             <th>Eligible Amount</th>
-                                            <th >Probabel Claim Amount </th>
+                                            <th>Probable Claim Amount </th>
                                             <th> Approved Amount</th>
                                         </tr>
                                         </thead>
@@ -436,7 +441,7 @@
 
                                         <div class="col-md-4">
                                             <div class="form-group ">
-                                                <label class="control-label">Pre Authorization Date</label>
+                                                <label class="control-label">Pre-authorization Date</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
                                                            datepicker-popup=""
@@ -610,7 +615,7 @@
 
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                <label class="control-label">Mobiel Number</label>
+                                                <label class="control-label">Mobile Number</label>
                                                 <input type="text" class="form-control input-sm" ng-model="createUpdateDto.claimantPolicyDetailDto.preAuthorizationClaimantProposerDetail.contactPersonMobileNumber" name="contactPersonMobileNumber"/>
                                             </div>
 
@@ -647,7 +652,7 @@
                                                 <label class="control-label">Plan</label>
                                                 <input  type="text"
                                                         name="planCode"
-                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.planCode"
+                                                        ng-model="createUpdateDto.claimantPolicyDetailDto.planName"
 
                                                         class="form-control input-md" />
 
@@ -732,7 +737,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                <label class="control-label">Date OF Birth</label>
+                                                <label class="control-label">Date Of Birth</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
                                                            datepicker-popup=""
@@ -819,7 +824,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                <label class="control-label">Man Number</label>
+                                                <label class="control-label">MAN Number</label>
                                                 <input  class="form-control input-md"
                                                         name="manNumber"
                                                         ng-model="createUpdateDto.claimantPolicyDetailDto.assuredDetail.manNumber"
@@ -875,7 +880,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                <label class="control-label">Date OF Birth</label>
+                                                <label class="control-label">Date Of Birth</label>
                                                 <div class='input-group date'>
                                                     <input type="text" class="form-control input-sm"
                                                            datepicker-popup=""
@@ -963,7 +968,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                <label class="control-label">Man Number</label>
+                                                <label class="control-label">MAN Number</label>
                                                 <input  class="form-control input-md"
                                                         name="manNumber"
                                                         ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.manNumber"
@@ -1014,7 +1019,7 @@
 
                                         <div class="col-md-4">
                                             <div class="form-group ">
-                                                <label class="control-label">Reletionship With Main Assured</label>
+                                                <label class="control-label">Relationship With Main Assured</label>
                                                 <input  class="form-control input-md" type ="text"
                                                         ng-disabled="true"
                                                         ng-model="createUpdateDto.claimantPolicyDetailDto.dependentAssuredDetail.relationshipWithMainAssured"
@@ -1368,7 +1373,7 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
-                                                    <label class="control-label">Relevant Clinincal Finding</label>
+                                                    <label class="control-label">Relevant Clinical Finding</label>
                                                     <input  type="text"
                                                             name="relevantClinicalFinding"
                                                             ng-required="true"
@@ -1399,7 +1404,7 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
-                                                    <label class="control-label">Date of First Consultance</label>
+                                                    <label class="control-label">Date of First Consultation</label>
                                                     <div class='input-group date'>
                                                         <input type="text" class="form-control input-sm"
                                                                datepicker-popup=""
@@ -1418,7 +1423,7 @@
                                                     </div>
                                                     <div class="error" ng-messages="step4.dateOfConsultation.$error"
                                                          ng-if="step4.dateOfConsultation.$dirty">
-                                                        <small ng-message="pattern">Please Enter Date of First Consultance.
+                                                        <small ng-message="pattern">Please Enter Date of First Consultation.
                                                         </small>
                                                     </div>
                                                 </div>
@@ -1441,7 +1446,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
-                                                    <label class="control-label">Provisional Diagonisis</label>
+                                                    <label class="control-label">Provisional Diagnosis</label>
 
                                                     <input  type="text"
                                                             name="provisionalDiagnosis"
@@ -1469,7 +1474,7 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
-                                                    <label class="control-label">Proposed Line of Treatement</label>
+                                                    <label class="control-label">Proposed Line of Treatment</label>
                                                     <select  class="form-control input-md" name="lineOfTreatment" ng-required="true"  ng-model="diagnosisTreatmentDto.lineOfTreatment">
                                                         <option value="Medical">Medical</option>
                                                         <option value="Surgical">Surgical</option>
@@ -1554,7 +1559,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Type of Accomodation</label>
+                                                    <label class="control-label">Type of Accommodation</label>
                                                     <select  class="form-control input-md" name="typeOfAccommodation"
                                                              ng-model="diagnosisTreatmentDto.typeOfAccommodation">
                                                         <option value="Normal">Normal</option>
@@ -1605,7 +1610,7 @@
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatus.Details" >
                                 <accordion-heading>
-                                    Have you past  ever suffered from any of the following chronic illiness      <i class="pull-right glyphicon"
+                                    Have you past  ever suffered from any of the following chronic Illness      <i class="pull-right glyphicon"
                                                                                                                     ng-class="{'glyphicon-chevron-down': accordionStatus.Details, 'glyphicon-chevron-right': !accordionStatus.Details}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:1140px;">
@@ -1631,7 +1636,7 @@
                                                       style="width:950px;height:60px;left:30px" ng-init="checkCondition()"></textarea>
                                         </div>
                                         <div class="error" ng-messages="step5.textarea.$error" ng-if="step5.textarea.$dirty">
-                                            <small class="error" ng-message="required">Please enterProvide full Details</small>
+                                            <small class="error" ng-message="required">Please provide full Details</small>
                                         </div>
                                     </div>
 
@@ -1666,7 +1671,7 @@
 
                                     <div class="row">
                                         <div class="form-group required col-md-4">
-                                            <label class="control-label">  Dibetes</label>
+                                            <label class="control-label">  Diabetes</label>
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"  name="dibetes"  value="Yes"
                                                                                         ng-model="createUpdateDto.illnessDetailDto.diabetes"/>Yes</label>
@@ -1692,7 +1697,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group required col-md-4">
-                                            <label class="control-label">Asthma/COPO/TB</label>
+                                            <label class="control-label">Asthma/COPD/TB</label>
 
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"
@@ -1752,7 +1757,7 @@
 
                                     <div class="row">
                                         <div class="form-group required col-md-4">
-                                            <label class="control-label">Arthiritis</label>
+                                            <label class="control-label">Arthritis</label>
 
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"
@@ -1841,7 +1846,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group required col-md-4">
-                                            <label class="control-label">pshyciatric Condition</label>
+                                            <label class="control-label">Psychiatric Condition</label>
 
                                             <div class="radio" style="margin:0px">
                                                 <label style="margin-right:30px"><input type="radio"

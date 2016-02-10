@@ -94,7 +94,7 @@ public class PreAuthorizationController {
             }
             Set<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtoList = preAuthorizationService.transformToPreAuthorizationDetailDto(preAuthTemplateWorkbook, PreAuthorizationExcelHeader.class);
             int batchNumber = commandGateway.sendAndWait(new UploadPreAuthorizationCommand(claimRelatedFileUploadDto.getHcpCode(), claimUploadedExcelDataDtoList, claimRelatedFileUploadDto.getBatchDate(), userName));
-            return Result.success("Insured detail uploaded successfully - "+batchNumber);
+            return Result.success("Pre-Authorization successfully uploaded.");
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage(), Boolean.FALSE);

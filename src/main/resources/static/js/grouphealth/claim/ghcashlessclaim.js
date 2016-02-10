@@ -44,26 +44,23 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                     }],
                     groupHealthCashlessClaimId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
-                        var deferred = $q.defer();
                         var groupHealthCashlessClaimId = getQueryParameter('groupHealthCashlessClaimId');
-                        deferred.resolve(groupHealthCashlessClaimId)
+                        deferred.resolve(groupHealthCashlessClaimId);
                         return deferred.promise;
                     }],
                     clientId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
-                        var deferred = $q.defer();
                         var clientId = getQueryParameter('clientId');
-                        deferred.resolve(clientId)
+                        deferred.resolve(clientId);
                         return deferred.promise;
                     }]
-
                 }
 
             }
         )}])
 
     .controller('cashLessClaimCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
-        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList,clientId, $upload,groupHealthCashlessClaimId) {
+        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId) {
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
             $scope.treatmentDiagnosis = {};
@@ -109,12 +106,11 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 return false;
             };
 
-            //$http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getadditionaldocuments/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
-            //    $scope.additionalDocumentList = data;
-            //    $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
-            //}).error(function (response, status, headers, config) {
-            //    deferred.reject();
-            //});
+            $http.get("/pla/grouphealth/claim/cashless/claim/getadditionaldocuments/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
+                $scope.additionalDocumentList = data;
+                $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
+            }).error(function (response, status, headers, config) {
+            });
 
             $scope.tratementdignosisnextbuttonfalse= function(){
                 $scope.provisionaldignosisdiv = true;
@@ -138,7 +134,6 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 if ($scope.isEditDiagnosisTriggered) {
                     console.log("update insd btn"+JSON.stringify(groupHealthCashlessClaimDiagnosisTreatmentDetails));
                     $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[$scope.treatmentDiagnosisIndex] = groupHealthCashlessClaimDiagnosisTreatmentDetails;
-                    alert($scope.treatmentDiagnosisIndex);
                     $scope.saveCashlessClaimRequest();
                     $scope.isEditDiagnosisTriggered = false;
                     $scope.provisionaldignosisdiv=false;
@@ -158,7 +153,6 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).success(function (response) {
-                    //alert($scope.createUpdateDto);
                     $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId='+groupHealthCashlessClaimId)
                         .success(function (response) {
                             $scope.createUpdateDto = response;
@@ -283,7 +277,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                             file: files,
                             fields: {
                                 documentId: document.documentId,
-                                preAuthorizationRequestId: $scope.createUpdateDto.preAuthorizationRequestId,
+                                groupHealthCashlessClaimId: $scope.createUpdateDto.groupHealthCashlessClaimId,
                                 mandatory: true
                             },
                             method: 'POST'
@@ -310,7 +304,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                             file: files,
                             fields: {
                                 documentId: document.documentId,
-                                preAuthorizationRequestId: $scope.createUpdateDto.preAuthorizationRequestId,
+                                groupHealthCashlessClaimId: $scope.createUpdateDto.groupHealthCashlessClaimId,
                                 mandatory: false
                             },
                             method: 'POST'
@@ -349,8 +343,6 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
                     var document = $scope.additionalDocumentList[i];
                     var files = document.documentAttached;
-                    //alert(i+"--"+files)
-                    //alert(i+"--"+document.content);
                     if (!(files || document.content)) {
                         enableAdditionalUploadButton = false;
                         break;

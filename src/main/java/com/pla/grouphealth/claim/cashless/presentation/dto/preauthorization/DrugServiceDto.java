@@ -20,6 +20,7 @@ public class DrugServiceDto {
     private String duration;
     private int lengthOfStay;
     private String strength;
+    private String drugDosage;
 
     public DrugServiceDto updateWithDetails(PreAuthorizationDetail preAuthorizationDetail) {
         this.type = preAuthorizationDetail.getType();
@@ -30,6 +31,7 @@ public class DrugServiceDto {
         this.duration = preAuthorizationDetail.getDiagnosisTreatmentMedicalDuration();
         this.lengthOfStay = preAuthorizationDetail.getDiagnosisTreatmentSurgeryLengthOStay();
         this.strength = preAuthorizationDetail.getDiagnosisTreatmentDrugStrength();
+        this.drugDosage = preAuthorizationDetail.getDiagnosisTreatmentDrugDosage();
         return this;
     }
 }

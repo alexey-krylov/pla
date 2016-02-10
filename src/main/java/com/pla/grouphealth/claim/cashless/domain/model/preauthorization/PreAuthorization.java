@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
@@ -24,7 +25,7 @@ public class PreAuthorization {
     private String batchNumber;
     private DateTime batchDate;
     private Set<PreAuthorizationDetail> preAuthorizationDetails;
-    private Set<String> sameServicesPreviouslyAvailedPreAuth;
+    private Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth;
     private String batchUploaderUserId;
 
     public PreAuthorization updateWithPreAuthorizationDetail(Set<PreAuthorizationDetail> preAuthorizationDetails) {
@@ -52,7 +53,7 @@ public class PreAuthorization {
         return this;
     }
 
-    public PreAuthorization updateWithSameServicesPreviouslyAvailedPreAuth(Set<String> sameServicesPreviouslyAvailedPreAuth) {
+    public PreAuthorization updateWithSameServicesPreviouslyAvailedPreAuth(Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth) {
         if(isNotEmpty(sameServicesPreviouslyAvailedPreAuth)){
             this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
         }

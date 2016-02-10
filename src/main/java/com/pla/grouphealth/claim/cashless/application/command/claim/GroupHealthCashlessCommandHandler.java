@@ -83,7 +83,7 @@ public class GroupHealthCashlessCommandHandler {
     }
 
     @CommandHandler
-    public boolean updateGroupHealthCashlessClaim(UpdateGroupHealthCashlessClaimCommand updateGroupHealthCashlessClaimCommand){
+    public String updateGroupHealthCashlessClaim(UpdateGroupHealthCashlessClaimCommand updateGroupHealthCashlessClaimCommand){
         GroupHealthCashlessClaimDto groupHealthCashlessClaimDto = updateGroupHealthCashlessClaimCommand.getGroupHealthCashlessClaimDto();
         String groupHealthCashlessClaimId = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId();
         notNull(groupHealthCashlessClaimId ,"GroupHealthCashlessClaimId is empty for the record");
@@ -92,13 +92,13 @@ public class GroupHealthCashlessCommandHandler {
         groupHealthCashlessClaim.updateStatus(EVALUATION)
                 .updateWithClaimProcessorUserId(updateGroupHealthCashlessClaimCommand.getUserName());
         if(groupHealthCashlessClaimDto.isSubmitEventFired()) {
-            if(groupHealthCashlessClaimService.checkIfServiceMismatched(groupHealthCashlessClaim)){
+            if(!groupHealthCashlessClaimService.checkIfServiceMismatched(groupHealthCashlessClaim)){
                 markSubmittedAndChangeStatus(groupHealthCashlessClaim, SERVICE_MISMATCHED);
-                return Boolean.TRUE;
+                return "Service Mismatched redirecting to Service Mismatch pool.";
             }
-            if(groupHealthCashlessClaimService.checkIfBillMismatched(groupHealthCashlessClaim)){
+            if(!groupHealthCashlessClaimService.checkIfBillMismatched(groupHealthCashlessClaim)){
                 markSubmittedAndChangeStatus(groupHealthCashlessClaim, BILL_MISMATCHED);
-                return Boolean.TRUE;
+                return "Bill Mismatched redirecting to Bill Mismatch pool.";
             }
             RoutingLevel routingLevel = updateGroupHealthCashlessClaimCommand.getRoutingLevel();
             if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_ONE)) {
@@ -107,8 +107,9 @@ public class GroupHealthCashlessCommandHandler {
             if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_TWO)) {
                 markSubmittedAndChangeStatus(groupHealthCashlessClaim, UNDERWRITING_LEVEL2);
             }
+            return "Group Health cashless claim successfully submitted";
         }
-        return Boolean.TRUE;
+        return "Group Health cashless claim successfully updated";
     }
 
     @CommandHandler

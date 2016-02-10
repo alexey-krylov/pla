@@ -20,6 +20,7 @@ public class GroupHealthCashlessClaimDrugServiceDto {
     private String serviceName;
     private String drugName;
     private String drugType;
+    private String drugDosage;
     private String accommodationType;
     private String duration;
     private int lengthOfStay;
@@ -33,6 +34,7 @@ public class GroupHealthCashlessClaimDrugServiceDto {
             this.serviceName = groupHealthCashlessClaimDrugService.getServiceName();
             this.drugName = groupHealthCashlessClaimDrugService.getDrugName();
             this.drugType = groupHealthCashlessClaimDrugService.getDrugType();
+            this.drugDosage = groupHealthCashlessClaimDrugService.getDrugDosage();
             this.accommodationType = groupHealthCashlessClaimDrugService.getAccommodationType();
             this.duration = groupHealthCashlessClaimDrugService.getDuration();
             this.lengthOfStay = groupHealthCashlessClaimDrugService.getLengthOfStay();

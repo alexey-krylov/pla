@@ -15,6 +15,7 @@ import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class PreAuthorizationClaimantDetailCommand {
     private Set<CommentDetail> commentDetails;
     private String batchUploaderUserId;
     private Set<ClientDocumentDto> additionalRequiredDocuments;
-    private Set<String> sameServicesPreviouslyAvailedPreAuth;
+    private Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth;
 
     public static PreAuthorizationClaimantDetailCommand getInstance() {
         return new PreAuthorizationClaimantDetailCommand();
@@ -187,7 +188,7 @@ public class PreAuthorizationClaimantDetailCommand {
         return this;
     }
 
-    public PreAuthorizationClaimantDetailCommand updateWithSameServicesPreviouslyAvailedPreAuth(Set<String> sameServicesPreviouslyAvailedPreAuth) {
+    public PreAuthorizationClaimantDetailCommand updateWithSameServicesPreviouslyAvailedPreAuth(Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth) {
         this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
         return this;
     }

@@ -308,8 +308,8 @@
 
                                         <div class="col-md-4">
                                             <div class="form-group  ">
-                                                <label class="control-label">Mobiel Number</label>
-                                                <input type="text" class="form-control input-sm" ng-model="createUpdateDto.ghProposer.contactDetail.contactPersonDetail[0].mobileNumber" name="contactPersonMobileNumber"/>
+                                                <label class="control-label">Mobile Number</label>
+                                                <input type="text" class="form-control input-sm" ng-model="createUpdateDto.ghProposer.contactDetail.contactPersonDetail[0].contactPersonMobileNumber" name="contactPersonMobileNumber"/>
                                             </div>
 
                                         </div>
@@ -326,7 +326,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group  ">
                                                 <label class="control-label">Work Phone</label>
-                                                <input type="text" class="form-control input-sm"   ng-model="createUpdateDto.ghProposer.contactDetail.contactPersonDetail[0].workPhoneNumber" name="contactPersonWorkPhone"/>
+                                                <input type="text" class="form-control input-sm"   ng-model="createUpdateDto.ghProposer.contactDetail.contactPersonDetail[0].contactPersonWorkPhoneNumber" name="contactPersonWorkPhone"/>
                                             </div>
                                         </div>
                                     </div>
@@ -2032,7 +2032,7 @@
                                                    readonly="true"/>
                                         </div>
                                     </div>
-                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"  ng-disabled="step6.$invalid || isViewMode"
+                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"  ng-disabled="isViewMode"
                                          ng-click="uploadDocumentFiles()">Upload All
 
                                     </div>

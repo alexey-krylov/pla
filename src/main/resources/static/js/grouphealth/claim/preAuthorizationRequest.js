@@ -46,13 +46,11 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
                     }],
                     preAuthorizationId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
-                        var deferred = $q.defer();
                         var preAuthorizationId = getQueryParameter('preAuthorizationId');
                         deferred.resolve(preAuthorizationId)
                         return deferred.promise;
                     }],
                     clientId : ['$q', '$http','getQueryParameter', function ($q, $http, getQueryParameter) {
-                        var deferred = $q.defer();
                         var deferred = $q.defer();
                         var clientId = getQueryParameter('clientId');
                         deferred.resolve(clientId)
