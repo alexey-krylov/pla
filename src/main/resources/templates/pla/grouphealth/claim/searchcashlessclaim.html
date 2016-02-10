@@ -53,8 +53,8 @@
 <div class="container container-fluid" style="padding-top:10px">
     <p class="lead">
     <ol class="breadcrumb">
-        <li>GH/Claim</li>
-        <li>PreAuthorisation Request</li>
+    <li>GROUP HEALTH / </li>
+    <li>CASHLESS CLAIM</li>
     </ol>
     </p>
     <form method="post" action="searchCashLessClaim" novalidate="true" name="searchAuthorizationForm"
@@ -127,6 +127,7 @@
                         <thead>
                         <tr>
                             <th style="width: 1%"></th>
+                            <th th:text="#{groupHealthCashlessClaimId}">GH Cashless Claim ID</th>
                             <th th:text="#{clientId}">Client ID</th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyName}">Policy Name</th>
@@ -141,6 +142,7 @@
                                     <td>
 
                                         <input type="radio" name="ClaimId" th:value="${CashlessSearchResult.groupHealthCashlessClaimId}" th:attr="clientId=${CashlessSearchResult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"/></td>
+                                    <td th:text="${CashlessSearchResult.groupHealthCashlessClaimId}"></td>
                                     <td th:text="${CashlessSearchResult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"></td>
                                     <td th:text="${CashlessSearchResult.groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber}"></td>
                                     <td th:text="${CashlessSearchResult.groupHealthCashlessClaimPolicyDetail.policyName}"></td>

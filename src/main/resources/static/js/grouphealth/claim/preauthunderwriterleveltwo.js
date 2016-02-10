@@ -802,30 +802,35 @@
                     }
                 });
 */
+                $scope.createUpdateDto.illnessDetailDto.htndetail=$scope.createUpdateDto.illnessDetailDto.htndetails;
                 $scope.disableHtn = true;
                 $scope.$watch(
                     function(){
-                        return {htn: $scope.createUpdateDto.illnessDetailDto.htn, htnDetails: $scope.createUpdateDto.illnessDetailDto.htndetails};
+                        return {htn: $scope.createUpdateDto.illnessDetailDto.htn, htnDetails: $scope.createUpdateDto.illnessDetailDto.htndetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.htn === 'No'){
-                            $scope.disableHtn = true;
                             $scope.isrequire = false;
+                            $scope.disableHtn = true;
                             $scope.createUpdateDto.illnessDetailDto.htndetails='';
+
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.htndetails){
-                                 $scope.isrequire = true;
+                                $scope.isrequire = true;
+
                             }
-                                $scope.disableHtn = false;
+                            $scope.disableHtn = false;
+                            $scope.createUpdateDto.illnessDetailDto.htndetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
                         }
                     },
                     true
                 );
+                $scope.createUpdateDto.illnessDetailDto.ihdhoddetail=$scope.createUpdateDto.illnessDetailDto.ihdhoddetails;
                 $scope.disableIhd = true;
                 $scope.$watch(
                     function(){
-                        return {idh: $scope.createUpdateDto.illnessDetailDto.idhHOD, htnDetails: $scope.createUpdateDto.illnessDetailDto.ihdhoddetails};
+                        return {idh: $scope.createUpdateDto.illnessDetailDto.idhHOD, htnDetails: $scope.createUpdateDto.illnessDetailDto.ihdhoddetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.idh === 'No'){
@@ -835,77 +840,89 @@
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.ihdhoddetails){
-                                $scope.isrequireIhd = true;
-                            }
+                                $scope.isrequireIhd = true;}
                             $scope.disableIhd = false;
+                            $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=$scope.createUpdateDto.illnessDetailDto.ihdhoddetail;
+
                         }
                     },
                     true
                 );
                 $scope.disdibetes= true;
+                $scope.createUpdateDto.illnessDetailDto.diabetesDetail=$scope.createUpdateDto.illnessDetailDto.diabetesDetails;
+
                 $scope.$watch(
                     function(){
-                        return {Dibetes: $scope.createUpdateDto.illnessDetailDto.diabetes, diabetesDetails: $scope.createUpdateDto.illnessDetailDto.diabetesDetails};
+                        return {Dibetes: $scope.createUpdateDto.illnessDetailDto.diabetes, diabetesDetails: $scope.createUpdateDto.illnessDetailDto.diabetesDetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.Dibetes === 'No'){
-                            $scope.disdibetes = true;
                             $scope.isrequireDibetes = false;
+                            $scope.disdibetes = true;
                             $scope.createUpdateDto.illnessDetailDto.diabetesDetails='';
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.diabetesDetails){
-                                $scope.isrequireDibetes = true;
-                            }
-                                $scope.disdibetes = false;
+                                $scope.isrequireDibetes = true;}
+                            $scope.disdibetes = false;
+                            $scope.createUpdateDto.illnessDetailDto.diabetesDetails=$scope.createUpdateDto.illnessDetailDto.diabetesDetail;
+
                         }
                     },
                     true
                 );
                 $scope.disAsthma= true;
+                $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails;
+
                 $scope.$watch(
                     function(){
-                        return {Asthma: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails};
+                        return {Asthma: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.Asthma === 'No'){
-                            $scope.disAsthma = true;
                             $scope.isrequireAsthma = false;
+                            $scope.disAsthma = true;
                             $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails='';
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails){
-                                $scope.isrequireAsthma = true;
-                            }
+                                $scope.isrequireAsthma = true;}
                             $scope.disAsthma = false;
+                            $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail;
+
                         }
                     },
                     true
                 );
                 $scope.disStd= true;
+                $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails;
+
                 $scope.$watch(
                     function(){
-                        return {Std: $scope.createUpdateDto.illnessDetailDto.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails};
+                        return {Std: $scope.createUpdateDto.illnessDetailDto.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.Std === 'No'){
-                            $scope.disStd = true;
                             $scope.isrequireStd = false;
+                            $scope.disStd = true;
                             $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails='';
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails){
-                                $scope.isrequireStd = true;
-                            }
+                                $scope.isrequireStd = true;}
                             $scope.disStd = false;
+                            $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail;
+
                         }
                     },
                     true
                 );
                 $scope.disArthiritis= true;
+                $scope.createUpdateDto.illnessDetailDto.arthritisDetail=$scope.createUpdateDto.illnessDetailDto.arthritisDetails;
+
                 $scope.$watch(
                     function(){
-                        return {Arthiritis: $scope.createUpdateDto.illnessDetailDto.arthritis, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.arthritisDetails};
+                        return {Arthiritis: $scope.createUpdateDto.illnessDetailDto.arthritis, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.arthritisDetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.Arthiritis === 'No'){
@@ -915,14 +932,17 @@
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.arthritisDetails){
-                                $scope.isrequireArthiritis = true;
-                            }
+                                $scope.isrequireArthiritis = true;}
                             $scope.disArthiritis = false;
+                            $scope.createUpdateDto.illnessDetailDto.arthritisDetail=$scope.createUpdateDto.illnessDetailDto.arthritisDetail;
+
                         }
                     },
                     true
                 );
                 $scope.disCancer= true;
+                $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails;
+
                 $scope.$watch(
                     function(){
                         return {Cancer: $scope.createUpdateDto.illnessDetailDto.cancerTumorCyst, cancerTumorCystDetail: $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail};
@@ -935,17 +955,20 @@
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails){
-                                $scope.isrequireCancer = true;
-                            }
+                                $scope.isrequireCancer = true;}
                             $scope.disCancer = false;
+                            $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail;
+
                         }
                     },
                     true
                 );
                 $scope.dispshyciatric= true;
+                $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails;
+
                 $scope.$watch(
                     function(){
-                        return {pshyciatric: $scope.createUpdateDto.illnessDetailDto.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails};
+                        return {pshyciatric: $scope.createUpdateDto.illnessDetailDto.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.pshyciatric === 'No'){
@@ -955,8 +978,9 @@
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails){
-                                $scope.isrequirepshyciatric= true;
-                            }
+                                $scope.isrequirepshyciatric= true;}
+                            $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail;
+
                             $scope.dispshyciatric = false;
                         }
                     },
@@ -966,25 +990,31 @@
 
 
                 $scope.disAlcohol= true;
+                $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails;
+
                 $scope.$watch(
                     function(){
-                        return {Alcohol: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails};
+                        return {Alcohol: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail};
                     },
                     function(newVal, oldVal) {
                         if(newVal.Alcohol === 'No'){
-                            $scope.isrequireAlcohol= false;
                             $scope.disAlcohol = true;
+                            $scope.isrequireAlcohol= false;
                             $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails='';
                         }
                         else {
                             if( !$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails){
-                                $scope.isrequireAlcohol= true;
-                            }
+                                $scope.isrequireAlcohol= true;}
+                            $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail;
+
                             $scope.disAlcohol = false;
                         }
                     },
                     true
                 );
+
+
+
 
 
 
