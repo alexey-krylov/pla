@@ -252,6 +252,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     $scope.bankDetails=response.bankDetails;
                     $scope.assuredDetails=response.claimAssuredDetail;
                     $scope.coverageList=response.coverageDetails;
+                    $scope.incidenceDetails=response.claimRegistrationDetails;
                 }).error(function (response, status, headers, config) {
                 });
 
@@ -268,6 +269,11 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     "claimId":$scope.claimId
                 }
                 console.log(JSON.stringify(createRegistration));
+
+                $http.post('/pla/grouplife/claim/claimregistration',createRegistration).success(function (response, status, headers, config) {
+
+                }).error(function (response, status, headers, config) {
+                });
             }
 
             /***
