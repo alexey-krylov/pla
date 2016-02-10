@@ -20,19 +20,15 @@ public class ClaimRegistration {
     private String durationOfIllness;
     private String  nameOfDoctorAndHospitalAddress;
     private String contactNumber;
-    private DateTime firstConsultation;
+    private DateTime dateOfFirstConsultation;
     private String treatmentTaken;
-    private CauseOfDeathAccidental causeOfDeathAccidental;
-    private AccidentTypes typeOfAccident;
+    private Boolean isCauseOfDeathAccidental;
+    private String typeOfAccident;
     private String placeOfAccident;
     private DateTime dateOfAccident;
     private DateTime  timeOfAccident;
-    private PostMortemAutopsyDone postMortemAutopsyDone;
-    private PoliceReportRegistered policeReportRegistered;
+    private Boolean isPostMortemAutopsyDone;
+    private Boolean isPoliceReportRegistered;
     private String registrationNumber;
     private String policeStationName;
-    //private String routingLevel;
-  // private Set<GLClaimDocument> claimDocuments;
-
-
 }

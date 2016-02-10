@@ -6,9 +6,7 @@ import com.pla.grouplife.claim.domain.model.*;
 import com.pla.grouplife.claim.domain.service.GLClaimFactory;
 import com.pla.grouplife.claim.domain.service.GLClaimSettlementFactory;
 import com.pla.grouplife.claim.domain.service.GroupLifeClaimRoleAdapter;
-import com.pla.grouplife.claim.presentation.dto.ClaimApproverCoverageDetailDto;
-import com.pla.grouplife.claim.presentation.dto.ClaimApproverPlanDto;
-import com.pla.grouplife.claim.presentation.dto.ClaimReviewDto;
+import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.domain.model.ClaimId;
 import com.pla.sharedkernel.domain.model.ClaimType;
@@ -108,12 +106,13 @@ public class GLClaimIntimationCommandHandler {
 
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimRegistrationCommand.getClaimId()));
         RoutingLevel definedRoutingLevel=null;
-        ClaimRegistration claimRegistration = new ClaimRegistration(glClaimRegistrationCommand.getCauseOfDeath(), glClaimRegistrationCommand.getPlaceOfDeath()
-                , glClaimRegistrationCommand.getDateOfDeath(), glClaimRegistrationCommand.getTimeOfDeath(), glClaimRegistrationCommand.getDurationOfIllness(), glClaimRegistrationCommand.getNameOfDoctorAndHospitalAddress()
-                , glClaimRegistrationCommand.getContactNumber(), glClaimRegistrationCommand.getFirstConsultation(), glClaimRegistrationCommand.getTreatmentTaken(),
-                glClaimRegistrationCommand.getCauseOfDeathAccidental(), glClaimRegistrationCommand.getTypeOfAccident(), glClaimRegistrationCommand.getPlaceOfAccident(), glClaimRegistrationCommand.getDateOfAccident()
-                , glClaimRegistrationCommand.getTimeOfAccident(), glClaimRegistrationCommand.getPostMortemAutopsyDone(), glClaimRegistrationCommand.getPoliceReportRegistered(),
-                glClaimRegistrationCommand.getRegistrationNumber(), glClaimRegistrationCommand.getPoliceStationName());
+        ClaimRegistrationDto claimRegistrationDetail=glClaimRegistrationCommand.getIncidentDetails();
+        ClaimRegistration claimRegistration = new ClaimRegistration(claimRegistrationDetail.getCauseOfDeath(), claimRegistrationDetail.getPlaceOfDeath()
+                , claimRegistrationDetail.getDateOfDeath(), claimRegistrationDetail.getTimeOfDeath(),claimRegistrationDetail.getDurationOfIllness(),claimRegistrationDetail.getNameOfDoctorAndHospitalAddress()
+                , claimRegistrationDetail.getContactNumber(), claimRegistrationDetail.getFirstConsultation(),claimRegistrationDetail.getTreatmentTaken(),
+                claimRegistrationDetail.getIsCauseOfDeathAccidental(),claimRegistrationDetail.getTypeOfAccident(), claimRegistrationDetail.getPlaceOfAccident(),claimRegistrationDetail.getDateOfAccident()
+                , claimRegistrationDetail.getTimeOfAccident(),claimRegistrationDetail.getIsPostMortemAutopsyDone(),claimRegistrationDetail.getIsPoliceReportRegistered(),
+                claimRegistrationDetail.getRegistrationNumber(),claimRegistrationDetail.getPoliceStationName());
         Set<GLClaimDocument> uploadedDocuments = groupLifeClaim.getClaimDocuments();
 
         if (isEmpty(uploadedDocuments)) {
@@ -177,11 +176,13 @@ public class GLClaimIntimationCommandHandler {
     @CommandHandler
     public String registerDisabilityClaim(GLDisabilityClaimRegistrationCommand glClaimCommand) throws IOException {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimCommand.getClaimId()));
-        DisabilityClaimRegistration claimRegistration = new DisabilityClaimRegistration(glClaimCommand.getDateOfDisability(), glClaimCommand.getNatureOfDisability(), glClaimCommand.getExtendOfDisability(),
-                glClaimCommand.getDateOfDiagnosis(), glClaimCommand.getExactDiagnosis(), glClaimCommand.getNameOfDoctorAndHospitalAddress(), glClaimCommand.getContactNumberOfHospital(),
-                glClaimCommand.getDateOfFirstConsultation(), glClaimCommand.getTreatmentTaken(), glClaimCommand.getCapabilityOfAssuredDailyLiving(), glClaimCommand.getAssuredGainfulActivities(), glClaimCommand.getDetailsOfWorkActivities(),
-                glClaimCommand.getFromActivitiesDate(), glClaimCommand.getAssuredConfinedToIndoor(), glClaimCommand.getFromIndoorDate(), glClaimCommand.getAssuredIndoorDetails(), glClaimCommand.getAssuredAbleToGetOutdoor(),
-                glClaimCommand.getFromOutdoorDate(), glClaimCommand.getAssuredOutdoorDetails(), glClaimCommand.getVisitingMedicalOfficerDetails());
+        RoutingLevel definedRoutingLevel=null;
+        ClaimDisabilityRegistrationDto claimDisabilityDetails=glClaimCommand.getDisabilityIncidentDetails();
+        DisabilityClaimRegistration claimRegistration = new DisabilityClaimRegistration(claimDisabilityDetails.getDateOfDisability(), claimDisabilityDetails.getNatureOfDisability(), claimDisabilityDetails.getExtendOfDisability(),
+                claimDisabilityDetails.getDateOfDiagnosis(), claimDisabilityDetails.getExactDiagnosis(), claimDisabilityDetails.getNameOfDoctorAndHospitalAddress(), claimDisabilityDetails.getContactNumberOfHospital(),
+                claimDisabilityDetails.getDateOfFirstConsultation(),claimDisabilityDetails.getTreatmentTaken(),claimDisabilityDetails.getCapabilityOfAssuredDailyLiving(),claimDisabilityDetails.getAssuredGainfulActivities(),claimDisabilityDetails.getDetailsOfWorkActivities(),
+                claimDisabilityDetails.getFromActivitiesDate(),claimDisabilityDetails.getIsAssuredConfinedToIndoor(),claimDisabilityDetails.getFromIndoorDate(), claimDisabilityDetails.getAssuredIndoorDetails(),claimDisabilityDetails.getIsAssuredAbleToGetOutdoor(),
+                claimDisabilityDetails.getFromOutdoorDate(),claimDisabilityDetails.getAssuredOutdoorDetails(),claimDisabilityDetails.getVisitingMedicalOfficerDetails());
 
         Set<GLClaimDocument> uploadedDocuments = groupLifeClaim.getClaimDocuments();
 
@@ -202,6 +203,29 @@ public class GLClaimIntimationCommandHandler {
             return;
         }
        */
+        String planId=groupLifeClaim.getPlanDetail().getPlanId().getPlanId();
+        UnderWriterRoutingLevel underWriterRoutingLevel=glClaimService.configuredForSelectedPlan(planId);
+        BigDecimal sumAssured=groupLifeClaim.getReserveAmount();
+
+        if(underWriterRoutingLevel!=null){
+            Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems=underWriterRoutingLevel.getUnderWritingRoutingLevelItems();
+            for(UnderWritingRoutingLevelItem underWritingRoutingLevelItem :underWritingRoutingLevelItems){
+                Set<UnderWriterLineItem> underWriterLineItems=underWritingRoutingLevelItem.getUnderWriterLineItems();
+                for(UnderWriterLineItem underWriterLineItem:underWriterLineItems){
+                    BigDecimal desValue=new BigDecimal(underWriterLineItem.getInfluencingItemTo());
+                    if ( desValue.compareTo(sumAssured)<0){
+                        definedRoutingLevel=underWritingRoutingLevelItem.getRoutingLevel();
+                    }
+                }
+
+            }
+
+        }
+
+
+
+        groupLifeClaim.taggedWithRoutingLevel(definedRoutingLevel);
+
         GLClaimRegistrationProcessor glClaimRegistrationProcessor = groupLifeClaimRoleAdapter.userToGLClaimRegistrationProcessor(glClaimCommand.getUserDetails());
         groupLifeClaim=glClaimRegistrationProcessor.submitClaimRegistration(DateTime.now(), groupLifeClaim,glClaimCommand.getComments()) ;
         glClaimMongoRepository.add(groupLifeClaim);

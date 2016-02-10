@@ -1,5 +1,7 @@
 package com.pla.grouplife.claim.application.command;
 
+import com.pla.grouplife.claim.presentation.dto.ClaimDisabilityRegistrationDto;
+import com.pla.grouplife.claim.presentation.dto.ClaimRegistrationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,8 +19,8 @@ import java.util.Set;
 public class GLClaimUpdateCommand {
 
     private String claimId;
-    private GLClaimRegistrationCommand claimCommand;
-    private GLDisabilityClaimRegistrationCommand disableCommand;
+    private ClaimRegistrationDto incidentDetails;
+    private ClaimDisabilityRegistrationDto disabilityIncidentDetails;
     private Set<GLClaimDocumentCommand> uploadedDocuments;
     private UserDetails userDetails;
 }

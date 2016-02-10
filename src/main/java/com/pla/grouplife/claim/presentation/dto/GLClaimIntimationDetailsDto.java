@@ -20,6 +20,7 @@ import java.util.Set;
 public class GLClaimIntimationDetailsDto {
     private String claimNumber;
     private String claimId;
+    private String policyId;
     private String policyNumber;
     private String schemeName;
     private Relationship relationship;
@@ -39,7 +40,10 @@ public class GLClaimIntimationDetailsDto {
         this. claimantDetail  =  claimantDetail;
         return this;
     }
-
+    public GLClaimIntimationDetailsDto withPolicyId(String policyId){
+        this.policyId  =  policyId;
+        return this;
+    }
     public GLClaimIntimationDetailsDto withAssuredDetail(ClaimAssuredDetailDto claimAssuredDetail){
         this.claimAssuredDetail = claimAssuredDetail;
         return this;

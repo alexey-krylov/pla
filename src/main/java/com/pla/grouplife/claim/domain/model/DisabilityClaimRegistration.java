@@ -24,14 +24,14 @@ public class DisabilityClaimRegistration {
     private String contactNumberOfHospital;
     private DateTime  dateOfFirstConsultation;
     private String treatmentTaken;
-    private List<AssuredTaskOfDailyLiving> capabilityOfAssuredDailyLiving;
+    private List<String> capabilityOfAssuredDailyLiving;
     private String assuredGainfulActivities;
     private String detailsOfWorkActivities;
     private DateTime fromActivitiesDate;
-    private AssuredConfinedToHouse assuredConfinedToIndoor;
+    private Boolean IsAssuredConfinedToIndoor;
     private DateTime fromIndoorDate;
     private String assuredIndoorDetails;
-    private AssuredOutdoorActive  assuredAbleToGetOutdoor;
+    private Boolean  isAssuredAbleToGetOutdoor;
     private DateTime fromOutdoorDate;
     private String assuredOutdoorDetails;
     private String visitingMedicalOfficerDetails;

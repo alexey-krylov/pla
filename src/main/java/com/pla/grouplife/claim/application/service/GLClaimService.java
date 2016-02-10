@@ -238,7 +238,10 @@ public class GLClaimService implements Serializable{
                 String claimTypeString=(String)map.get("claimType");
                 ClaimType claimType=(ClaimType)ClaimType.valueOf(claimTypeString);
                 glClaimIntimationDto.setClaimType(claimType);
-
+                String claimStatusInString=(String)map.get("claimStatus");
+                ClaimStatus claimStatus=(ClaimStatus)ClaimStatus.valueOf(claimStatusInString);
+                String claimStatusResult=claimStatus.getDescription();
+                glClaimIntimationDto.setClaimStatus(claimStatusResult);
                 return glClaimIntimationDto;
             }
         }).collect(Collectors.toList());
@@ -257,6 +260,9 @@ public class GLClaimService implements Serializable{
             Policy policy=(Policy)claimRecordMap.get("policy");
             PolicyNumber policyNumber=policy.getPolicyNumber();
             claimIntimationDetailDto.setPolicyNumber(policyNumber.getPolicyNumber());
+            PolicyId policyId=policy.getPolicyId();
+            String policyIdInString=policyId.getPolicyId();
+            claimIntimationDetailDto.setPolicyId(policyIdInString);
             claimIntimationDetailDto.setSchemeName((String) claimRecordMap.get("schemeName"));
             // claimIntimationDetailDto.setPlanDetail(claimRecordMap.get(""));
             //claimIntimationDetailDto.setCategory(claimRecordMap.get(""));
@@ -293,7 +299,7 @@ public class GLClaimService implements Serializable{
             }
             claimIntimationDetailDto.setCoverageDetails(coverageDetailsSet);
             BankDetails bankDetails=(BankDetails)claimRecordMap.get("bankDetails");
-            BankDetailsDto bankDetailsDto=new BankDetailsDto(bankDetails.getBankName(),bankDetails.getBankBranchName(),bankDetails.getBankAccountNumber(),bankDetails.getBankAccountType());
+            BankDetailsDto bankDetailsDto=new BankDetailsDto(bankDetails.getBankName(),bankDetails.getBankBranchName(),bankDetails.getBankAccountType(),bankDetails.getBankAccountNumber());
             claimIntimationDetailDto.withBankDetails(bankDetailsDto);
             ClaimAssuredDetail assuredDetail=(ClaimAssuredDetail)claimRecordMap.get("assuredDetail");
             ClaimMainAssuredDetail claimMainAssuredDetail=assuredDetail.getClaimMainAssuredDetail();
@@ -326,17 +332,17 @@ public class GLClaimService implements Serializable{
               claimRegistrationDetails.setDateOfDeath(claimRegistration.getDateOfDeath());
               claimRegistrationDetails.setTimeOfDeath(claimRegistration.getTimeOfDeath());
               claimRegistrationDetails.setDurationOfIllness(claimRegistration.getDurationOfIllness());
-              claimRegistrationDetails.setNameOfDocterAndHospialAddress(claimRegistration.getNameOfDoctorAndHospitalAddress());
+              claimRegistrationDetails.setNameOfDoctorAndHospitalAddress(claimRegistration.getNameOfDoctorAndHospitalAddress());
               claimRegistrationDetails.setContactNumber(claimRegistration.getContactNumber());
-              claimRegistrationDetails.setFirstConsultation(claimRegistration.getFirstConsultation());
-              claimRegistrationDetails.setTreatementTaken(claimRegistration.getTreatmentTaken());
-              claimRegistrationDetails.setCauseOfDeathAccidental(claimRegistration.getCauseOfDeathAccidental());
+              claimRegistrationDetails.setFirstConsultation(claimRegistration.getDateOfFirstConsultation());
+              claimRegistrationDetails.setTreatmentTaken(claimRegistration.getTreatmentTaken());
+              claimRegistrationDetails.setIsCauseOfDeathAccidental(claimRegistration.getIsCauseOfDeathAccidental());
               claimRegistrationDetails.setTypeOfAccident(claimRegistration.getTypeOfAccident());
               claimRegistrationDetails.setPlaceOfAccident(claimRegistration.getPlaceOfAccident());
               claimRegistrationDetails.setDateOfAccident(claimRegistration.getDateOfAccident());
               claimRegistrationDetails.setTimeOfAccident(claimRegistration.getTimeOfAccident());
-              claimRegistrationDetails.setPostMortemAutopsyDone(claimRegistration.getPostMortemAutopsyDone());
-              claimRegistrationDetails.setPoliceReportRegistered(claimRegistration.getPoliceReportRegistered());
+              claimRegistrationDetails.setIsPostMortemAutopsyDone(claimRegistration.getIsPostMortemAutopsyDone());
+              claimRegistrationDetails.setIsPoliceReportRegistered(claimRegistration.getIsPoliceReportRegistered());
               claimRegistrationDetails.setRegistrationNumber(claimRegistration.getRegistrationNumber());
               claimRegistrationDetails.setPoliceStationName(claimRegistration.getPoliceStationName());
            }
@@ -356,10 +362,10 @@ public class GLClaimService implements Serializable{
             disabilityRegistrationDetails.setAssuredGainfulActivities(disabilityClaimRegistration.getAssuredGainfulActivities());
             disabilityRegistrationDetails.setDetailsOfWorkActivities(disabilityClaimRegistration.getDetailsOfWorkActivities());
             disabilityRegistrationDetails.setFromActivitiesDate(disabilityClaimRegistration.getFromActivitiesDate());
-            disabilityRegistrationDetails.setAssuredConfinedToIndoor(disabilityClaimRegistration.getAssuredConfinedToIndoor());
+            disabilityRegistrationDetails.setIsAssuredConfinedToIndoor(disabilityClaimRegistration.getIsAssuredConfinedToIndoor());
             disabilityRegistrationDetails.setFromIndoorDate(disabilityClaimRegistration.getFromIndoorDate());
             disabilityRegistrationDetails.setAssuredIndoorDetails(disabilityClaimRegistration.getAssuredIndoorDetails());
-            disabilityRegistrationDetails.setAssuredAbleToGetOutdoor(disabilityClaimRegistration.getAssuredAbleToGetOutdoor());
+            disabilityRegistrationDetails.setIsAssuredAbleToGetOutdoor(disabilityClaimRegistration.getIsAssuredAbleToGetOutdoor());
             disabilityRegistrationDetails.setFromOutdoorDate(disabilityClaimRegistration.getFromOutdoorDate());
             disabilityRegistrationDetails.setAssuredOutdoorDetails(disabilityClaimRegistration.getAssuredOutdoorDetails());
             disabilityRegistrationDetails.setVisitingMedicalOfficerDetails(disabilityClaimRegistration.getVisitingMedicalOfficerDetails());

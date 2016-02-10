@@ -155,8 +155,10 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
 
         Criteria criteria = null;
+        String[] statuses = new String[]{"INTIMATION"};
+         criteria = Criteria.where("claimStatus").in(statuses);
         if (isNotEmpty(claimNumber)) {
-            criteria = Criteria.where("claimNumber.claimNumber").is(claimNumber);
+            criteria = criteria.and("claimNumber.claimNumber").is(claimNumber);
         }
         if (isNotEmpty(policyNumber)) {
             criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * Created by nthdimensioncompany on 30/12/2015.
  */
@@ -22,5 +24,5 @@ public class ClaimMainAssuredDetailDto {
 
     private String manNumber;
 
-    private String lastSalary;
+    private BigDecimal lastSalary;
 }

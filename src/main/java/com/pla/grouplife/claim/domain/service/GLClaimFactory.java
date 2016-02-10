@@ -5,10 +5,7 @@ import com.pla.core.query.PlanFinder;
 import com.pla.grouplife.claim.application.command.*;
 import com.pla.grouplife.claim.application.service.GLClaimService;
 import com.pla.grouplife.claim.domain.model.*;
-import com.pla.grouplife.claim.presentation.dto.ClaimAssuredDetailDto;
-import com.pla.grouplife.claim.presentation.dto.ClaimMainAssuredDetailDto;
-import com.pla.grouplife.claim.presentation.dto.CoverageDetailDto;
-import com.pla.grouplife.claim.presentation.dto.PlanDetailDto;
+import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.grouplife.claim.query.GLClaimFinder;
 import com.pla.grouplife.sharedresource.dto.ContactPersonDetailDto;
 import com.pla.grouplife.sharedresource.model.vo.Proposer;
@@ -167,11 +164,14 @@ public class GLClaimFactory {
                createCommand.getBankDetails().getBankAccountType(),createCommand.getBankDetails().getBankAccountNumber());
 
        //get sum assured amount
-       reserveSum=planDetail.getSumAssured().add(tempSumAssured);
+       BigDecimal tempReserveSum=planDetail.getSumAssured();
+
+
+       tempReserveSum= tempReserveSum.add(tempSumAssured);
 
 
        if(claimType == ClaimType.DEATH ||claimType== ClaimType.FUNERAL){
-           reserveSum=planDetail.getSumAssured().add(tempSumAssured);
+           reserveSum=tempReserveSum;
        }
 
 
@@ -211,39 +211,39 @@ public class GLClaimFactory {
 
     public GroupLifeClaim updateClaimDetails(GroupLifeClaim groupLifeClaim,GLClaimUpdateCommand glClaimUpdateCommand){
         ClaimRegistration claimRegistration=null;
-        GLClaimRegistrationCommand claimCommand=glClaimUpdateCommand.getClaimCommand();
-         if(claimCommand!=null){
-               claimRegistration=new ClaimRegistration(claimCommand.getCauseOfDeath(),claimCommand.getPlaceOfDeath(),claimCommand.getDateOfDeath(), claimCommand.getTimeOfDeath(), claimCommand.getDurationOfIllness(), claimCommand.getNameOfDoctorAndHospitalAddress(), claimCommand.getContactNumber(),
-             claimCommand.getFirstConsultation(), claimCommand.getTreatmentTaken(), claimCommand.getCauseOfDeathAccidental(), claimCommand.getTypeOfAccident(),
-             claimCommand.getPlaceOfAccident(), claimCommand.getDateOfAccident(), claimCommand.getTimeOfAccident(), claimCommand.getPostMortemAutopsyDone(),
-             claimCommand.getPoliceReportRegistered(), claimCommand.getRegistrationNumber(), claimCommand.getPoliceStationName());
+        ClaimRegistrationDto incidentDetails=glClaimUpdateCommand.getIncidentDetails();
+         if(incidentDetails!=null){
+               claimRegistration=new ClaimRegistration(incidentDetails.getCauseOfDeath(),incidentDetails.getPlaceOfDeath(),incidentDetails.getDateOfDeath(), incidentDetails.getTimeOfDeath(), incidentDetails.getDurationOfIllness(),incidentDetails.getNameOfDoctorAndHospitalAddress(),incidentDetails.getContactNumber(),
+                       incidentDetails.getFirstConsultation(),incidentDetails.getTreatmentTaken(), incidentDetails.getIsCauseOfDeathAccidental(),incidentDetails.getTypeOfAccident(),
+                       incidentDetails.getPlaceOfAccident(), incidentDetails.getDateOfAccident(),incidentDetails.getTimeOfAccident(), incidentDetails.getIsPostMortemAutopsyDone(),
+                       incidentDetails.getIsPoliceReportRegistered(), incidentDetails.getRegistrationNumber(),incidentDetails.getPoliceStationName());
            }
         groupLifeClaim.withClaimRegistration(claimRegistration);
 
         DisabilityClaimRegistration disabilityClaimRegistration=null;
-        GLDisabilityClaimRegistrationCommand disableCommand=glClaimUpdateCommand.getDisableCommand();
-        if(disableCommand!=null){
+        ClaimDisabilityRegistrationDto disabilityIncidentDetails=glClaimUpdateCommand.getDisabilityIncidentDetails();
+        if(disabilityIncidentDetails!=null){
             disabilityClaimRegistration=new  DisabilityClaimRegistration(
-                    disableCommand.getDateOfDisability(),
-            disableCommand.getNatureOfDisability(),
-            disableCommand.getExtendOfDisability(),
-            disableCommand.getDateOfDiagnosis(),
-            disableCommand.getExactDiagnosis(),
-            disableCommand.getNameOfDoctorAndHospitalAddress(),
-            disableCommand.getContactNumberOfHospital(),
-            disableCommand.getDateOfFirstConsultation(),
-            disableCommand.getTreatmentTaken(),
-            disableCommand.getCapabilityOfAssuredDailyLiving(),
-            disableCommand.getAssuredGainfulActivities(),
-            disableCommand.getDetailsOfWorkActivities(),
-            disableCommand.getFromActivitiesDate(),
-            disableCommand.getAssuredConfinedToIndoor(),
-            disableCommand.getFromIndoorDate(),
-            disableCommand.getAssuredIndoorDetails(),
-            disableCommand.getAssuredAbleToGetOutdoor(),
-            disableCommand.getFromOutdoorDate(),
-            disableCommand.getAssuredOutdoorDetails(),
-            disableCommand.getVisitingMedicalOfficerDetails());
+                    disabilityIncidentDetails.getDateOfDisability(),
+                    disabilityIncidentDetails.getNatureOfDisability(),
+                    disabilityIncidentDetails.getExtendOfDisability(),
+                    disabilityIncidentDetails.getDateOfDiagnosis(),
+                    disabilityIncidentDetails.getExactDiagnosis(),
+                    disabilityIncidentDetails.getNameOfDoctorAndHospitalAddress(),
+                    disabilityIncidentDetails.getContactNumberOfHospital(),
+                    disabilityIncidentDetails.getDateOfFirstConsultation(),
+                    disabilityIncidentDetails.getTreatmentTaken(),
+                    disabilityIncidentDetails.getCapabilityOfAssuredDailyLiving(),
+                    disabilityIncidentDetails.getAssuredGainfulActivities(),
+                    disabilityIncidentDetails.getDetailsOfWorkActivities(),
+                    disabilityIncidentDetails.getFromActivitiesDate(),
+                    disabilityIncidentDetails.getIsAssuredConfinedToIndoor(),
+                    disabilityIncidentDetails.getFromIndoorDate(),
+                    disabilityIncidentDetails.getAssuredIndoorDetails(),
+                    disabilityIncidentDetails.getIsAssuredAbleToGetOutdoor(),
+                    disabilityIncidentDetails.getFromOutdoorDate(),
+                    disabilityIncidentDetails.getAssuredOutdoorDetails(),
+                    disabilityIncidentDetails.getVisitingMedicalOfficerDetails());
         }
         groupLifeClaim.withDisabilityClaimRegistration(disabilityClaimRegistration);
          return   groupLifeClaim;

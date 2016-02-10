@@ -140,16 +140,6 @@ public class GroupLifeClaimController {
         modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
         return modelAndView;
     }
-   /*
-   @RequestMapping(value = "/openclaimintimationsearchpage", method = RequestMethod.GET)
-    public ModelAndView searchClaimIntimation() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/searchClaimIntimation");
-        modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
-        return modelAndView;
-    }
-
-
     @RequestMapping(value = "/searchclaimintimation", method = RequestMethod.POST)
     public ModelAndView getClaimIntimationDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
@@ -158,15 +148,6 @@ public class GroupLifeClaimController {
         modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
         return modelAndView;
 
-    }
-
-    */
-
-    @RequestMapping(value = "/searchclaimintimation", method = RequestMethod.POST)
-    @ResponseBody
-    public List<GLClaimIntimationDto> getClaimIntimationDetail(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
-
-        return glClaimService.getClaimIntimationRecord(searchClaimIntimationDto);
     }
 
     @RequestMapping(value = "/getclaimdetail/{claimId}", method = RequestMethod.GET)

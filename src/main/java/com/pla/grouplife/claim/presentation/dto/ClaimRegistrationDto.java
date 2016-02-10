@@ -1,9 +1,5 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.grouplife.claim.domain.model.AccidentTypes;
-import com.pla.grouplife.claim.domain.model.CauseOfDeathAccidental;
-import com.pla.grouplife.claim.domain.model.PoliceReportRegistered;
-import com.pla.grouplife.claim.domain.model.PostMortemAutopsyDone;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,17 +16,17 @@ public class ClaimRegistrationDto {
     private DateTime dateOfDeath;
     private DateTime timeOfDeath;
     private String durationOfIllness;
-    private String  nameOfDocterAndHospialAddress;
+    private String  nameOfDoctorAndHospitalAddress;
     private String contactNumber;
     private DateTime firstConsultation;
-    private String treatementTaken;
-    private CauseOfDeathAccidental causeOfDeathAccidental;
-    private AccidentTypes typeOfAccident;
+    private String treatmentTaken;
+    private Boolean isCauseOfDeathAccidental;
+    private String typeOfAccident;
     private String placeOfAccident;
     private DateTime dateOfAccident;
     private DateTime  timeOfAccident;
-    private PostMortemAutopsyDone postMortemAutopsyDone;
-    private PoliceReportRegistered policeReportRegistered;
+    private Boolean isPostMortemAutopsyDone;
+    private Boolean IsPoliceReportRegistered;
     private String registrationNumber;
     private String policeStationName;
 

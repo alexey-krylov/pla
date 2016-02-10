@@ -1,12 +1,12 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.grouplife.claim.domain.model.*;
+import com.pla.grouplife.claim.domain.model.DisabilityExtent;
+import com.pla.grouplife.claim.domain.model.DisabilityNature;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.util.List;
 
@@ -28,14 +28,14 @@ public class ClaimDisabilityRegistrationDto {
     private String contactNumberOfHospital;
     private DateTime  dateOfFirstConsultation;
     private String treatmentTaken;
-    private List<AssuredTaskOfDailyLiving> capabilityOfAssuredDailyLiving;
+    private List<String> capabilityOfAssuredDailyLiving;
     private String assuredGainfulActivities;
     private String detailsOfWorkActivities;
     private DateTime fromActivitiesDate;
-    private AssuredConfinedToHouse assuredConfinedToIndoor;
+    private Boolean isAssuredConfinedToIndoor;
     private DateTime fromIndoorDate;
     private String assuredIndoorDetails;
-    private AssuredOutdoorActive assuredAbleToGetOutdoor;
+    private Boolean isAssuredAbleToGetOutdoor;
     private DateTime fromOutdoorDate;
     private String assuredOutdoorDetails;
     private String visitingMedicalOfficerDetails;

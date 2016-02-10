@@ -25,4 +25,5 @@ public class GLClaimIntimationDto {
     private String assuredNrcNumber;
     private String assuredClientId;
     private ClaimType claimType;
+    private String claimStatus;
 }
