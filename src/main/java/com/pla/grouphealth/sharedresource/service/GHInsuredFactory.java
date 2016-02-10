@@ -128,21 +128,27 @@ public class GHInsuredFactory {
         for (GHInsured insured : insureds) {
             List<ComputedPremiumDto> computedPremiumDtos = Lists.newArrayList();
             GHPlanPremiumDetail planPremiumDetail = insured.getPlanPremiumDetail();
-            BigDecimal netAnnualPre = getNetAnnualPremiumPaymentAmount(premiumDetailDto,insureds);
+            BigDecimal netAnnualPre = getNetAnnualPremiumPaymentAmount(premiumDetailDto, insureds);
             String occupationClass = ghFinder.getOccupationClass(insured.getOccupationClass());
 
-            BigDecimal insuredPlanProratePremium = insured.getNoOfAssured() != null ? insured.getPlanPremiumDetail().getPremiumAmount() :
-                    premiumDetailDto.getPolicyTermValue() != 365 ?
-                            computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
-                                    getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null) : computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
-                            getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null,computedPremiumDtos);
+            BigDecimal insuredPlanProratePremium = BigDecimal.ZERO;
+            try {
+                insuredPlanProratePremium = insured.getNoOfAssured() != null ? insured.getPlanPremiumDetail().getPremiumAmount() :
+                        premiumDetailDto.getPolicyTermValue() != 365 ?
+                                computeBasicProratePremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
+                                        getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null) : computePlanBasicAnnualPremium(planPremiumDetail.getPlanId().getPlanId(), planPremiumDetail.getSumAssured().toPlainString(),
+                                getAgeOnNextBirthDate(insured.getDateOfBirth()).toString(), occupationClass, insured.getGender().name(), premiumDetailDto.getPolicyTermValue(), null, computedPremiumDtos);
+            }catch (Exception e) {
+                insuredPlanProratePremium = insured.getPlanPremiumDetail().getPremiumAmount();
+            }
+
             if (insured.getNoOfAssured() == null && insured.getDateOfBirth() != null && insured.getPlanPremiumDetail().getPremiumAmount() == null) {
                 insuredPlanProratePremium = computePremiumByApplyingAgeLoadingFactor(getAgeOnNextBirthDate(insured.getDateOfBirth()), insuredPlanProratePremium);
             }
             if (premiumDetailDto.getPolicyTermValue() != 365 && insured.getNoOfAssured() != null){
                 insuredPlanProratePremium = insuredPlanProratePremium.divide(new BigDecimal(365),2, AppConstants.roundingMode).multiply(new BigDecimal(premiumDetailDto.getPolicyTermValue()));
             }
-            if (insured.getNoOfAssured() != null && isEmpty(computedPremiumDtos)){
+            if (isEmpty(computedPremiumDtos)){
                 Set<ModelFactorOrganizationInformation> modelFactorItems =  getModalFactor();
                 ComputedPremiumDto semiAnnualPremium = new ComputedPremiumDto(PremiumFrequency.SEMI_ANNUALLY,netAnnualPre.multiply(ModelFactorOrganizationInformation.getSemiAnnualModalFactor(modelFactorItems)));
                 ComputedPremiumDto quarterlyPremium = new ComputedPremiumDto(PremiumFrequency.QUARTERLY,netAnnualPre.multiply(ModelFactorOrganizationInformation.getQuarterlyModalFactor(modelFactorItems)));
