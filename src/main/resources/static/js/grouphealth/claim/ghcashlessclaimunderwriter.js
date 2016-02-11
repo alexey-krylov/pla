@@ -414,9 +414,18 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 $event.stopPropagation();
                 $scope.datepickeradmission = {'opened': true};
             };
-
+            $scope.launchdateOfDischarge =   function ($event){
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datepickerdateOfDischarge = {'opened': true};
+            };
             $scope.changeProbAdmissionDate=function(probAdmissionDate) {
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission = formatDate(probAdmissionDate);
+                //console.log("qwqe############"+$scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission);
+            };
+
+            $scope.changedateOfDischarge=function(dateOfDischarge) {
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfDischarge = formatDate(dateOfDischarge);
                 //console.log("qwqe############"+$scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission);
             };
 

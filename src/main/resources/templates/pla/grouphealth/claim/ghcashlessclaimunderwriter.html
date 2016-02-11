@@ -575,7 +575,7 @@
                                                 <label class="control-label">Policy Number</label>
                                                 <input
                                                         name="policyNumber"
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.policyNumber"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber"
                                                         type="text"
 
                                                         class="form-control input-md" />
@@ -586,7 +586,7 @@
                                                 <label class="control-label">Scheme Name</label>
                                                 <input
                                                         name="policyNumber"
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.policyNumber.policyName"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.policyName"
                                                         type="text"
 
                                                         class="form-control input-md" />
@@ -848,6 +848,76 @@
                                 </div>
                             </accordion-group>
                         </accordion>
+
+
+
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatusDocuments.claimantDetails">
+                                <accordion-heading>
+                                   Bank  Details <i class="pull-right glyphicon"
+                                                        ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimantDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.claimantDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
+                                     disable-all-fields="true">
+                                   <div class = "row">
+                                     <div class="col-md-6">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Bank Name</label>
+                                            <input  type="text"
+                                                    name="sumAssured"
+                                                    class="form-control input-md"
+
+                                                    ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
+
+
+                                        </div>
+                                    </div>
+                                       <div class="col-md-6">
+                                           <div class="form-group  ">
+                                               <label class="control-label">Bank Branch Code</label>
+                                               <input  type="text"
+                                                       name="sumAssured"
+                                                       class="form-control input-md"
+
+                                                       ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
+
+
+                                           </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <div class="form-group  ">
+                                               <label class="control-label">Bank Account Type</label>
+                                               <input  type="text"
+                                                       name="sumAssured"
+                                                       class="form-control input-md"
+
+                                                       ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
+
+
+                                           </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <div class="form-group  ">
+                                               <label class="control-label">Bank Account Number</label>
+                                               <input  type="text"
+                                                       name="sumAssured"
+                                                       class="form-control input-md"
+
+                                                       ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
+
+
+                                           </div>
+                                       </div>
+                                    </div>
+
+
+
+
+                                 </div>
+                            </accordion-group>
+                        </accordion>
+
+
 
                     </ng-form>
                 </div>
@@ -1779,15 +1849,15 @@
                                                         <input type="text" class="form-control input-sm"
                                                                datepicker-popup=""
                                                                view-enabled=""
-                                                               ng-change="changeProbAdmissionDate(groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfDischarge)"
-                                                               is-open="datepickeradmission.opened"
+                                                               ng-change="changedateOfDischargeDate(groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfDischarge)"
+                                                               is-open="datepickerdateOfDischarge.opened"
 
                                                                ng-disabled="mode =='view' "
                                                                name="dateOfAdmission"
                                                                ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfDischarge"/>
                                                               <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
-                                                            ng-click="launchProbAdmissionDate($event)">
+                                                            ng-click="launchdateOfDischarge($event)">
                                                         <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
                                                     </div>
