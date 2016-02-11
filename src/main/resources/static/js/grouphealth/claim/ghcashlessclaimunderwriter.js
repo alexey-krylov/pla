@@ -114,12 +114,10 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
 
             $scope.tratementdignosisnextbuttonfalse= function(){
                 $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["3"] = true;
+                $scope.stepsSaved["4"] = true;
             };
 
             $scope.viewTreatmentDiagnosis = function (treatmentDiagnosis, treatmentDiagnosisIndex) {
-                console.log($scope.treatmentDiagnosis);
-                console.log($scope.treatmentDiagnosisIndex);
                 $scope.tratementdignosisnextbuttonfalse();
                 $scope.isEditDiagnosisTriggered = true;
                 $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;
@@ -144,12 +142,12 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
 
                 }
                 $scope.provisionaldignosisdiv = false;
-                $scope.stepsSaved["3"] = false;
+                $scope.stepsSaved["4"] = false;
             };
             $scope.saveCashlessClaimRequest = function () {
                 console.log(JSON.stringify($scope.createUpdateDto));
                 $http({
-                    url: '/pla/grouphealth/claim/cashless/claim/updategrouphealthcashlessclaim',
+                    url: '/pla/grouphealth/claim/cashless/claim/underwriter/update',
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).success(function (response) {
@@ -160,27 +158,22 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                         });
                 }).error();
             };
-            $scope.create= function(){
-                $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["3"] = true;
-            };
+            /*$scope.create= function(){
+                $scope.showservicedrugdiv = true;
+                $scope.stepsSaved["1"] = true;
+            };*/
             $scope.activenextbuttonforprovisional = function(){
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = {};
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfConsultation = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].dateOfConsultation;
                 $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["3"] = true;
+                $scope.stepsSaved["4"] = true;
             };
-            $scope.activenextbuttonforprovisionalclickon= function(){
-                $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["3"] = true;
-            };
-
 //for add sevice drug availed section start
             //create function detect Add Service/Drug button
             $scope.create = function(){
                 $scope.showservicedrugdiv = true;
                 $scope.diagnosisTreatmentDtoToUpdate='';
-                $scope.stepsSaved["5"] = true;
+                $scope.stepsSaved["1"] = true;
             };
             //updateDrugServicesDto function detect update button
             $scope.updateDrugServicesDto = function (drugServicesDto, index) {
@@ -203,17 +196,17 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                     $scope.saveCashlessClaimRequest();
                 }
                 $scope.showservicedrugdiv = false;
-                $scope.stepsSaved["5"] = false;
+                $scope.stepsSaved["1"] = false;
             };
 //cancel button
             $scope.activenextbuttonfordrugservice= function(){
                 $scope.showservicedrugdiv = false;
-                $scope.stepsSaved["5"] = false;
+                $scope.stepsSaved["1"] = false;
             };
 
             $scope.nextBtnActiveOnCancelButton= function(){
                 $scope.provisionaldignosisdiv = false;
-                $scope.stepsSaved["3"] = false;
+                $scope.stepsSaved["4"] = false;
             };
             $scope.deleteTreatmentDiagnosis = function (index) {
                 $scope.createUpdateDto.groupHealthCashlessClaimDrugServices.splice(index, 1);
@@ -453,13 +446,12 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 function(newVal, oldVal) {
                     if(newVal.htn === 'No'){
                         $scope.isrequire = false;
-                        $scope.disableHtn = true; $scope.stepsSaved["4"] = false;
+                        $scope.disableHtn = true;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails='';
 
                     }
                     else {
                         if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail){
-                            $scope.stepsSaved["4"] = true;
                             $scope.isrequire = true;
 
                         }

@@ -85,7 +85,7 @@
                 <div class="step-pane" data-step="1"   disable-all-fields="isViewMode">
                     <ng-form name="step1">
                         <accordion close-others="true">
-                            <accordion-group is-open="accordionStatus.serviceavailed" ng-form="step4">
+                            <accordion-group is-open="accordionStatus.serviceavailed" ng-form="step1">
                                 <accordion-heading>Services/Drugs to be availed
                                     <i class="pull-right glyphicon"
                                        ng-class="{'glyphicon-chevron-down': accordionStatus.serviceavailed, 'glyphicon-chevron-right': !accordionStatus.serviceavailed}"></i>
@@ -104,7 +104,7 @@
                                             <th>Service Name</th>
                                             <th> Drug Name</th>
                                             <th>Drug Type</th>
-                                            <th>Accomodation Type</th>
+                                            <th>Accommodation Type</th>
                                             <th>Duration </th>
                                             <th>length of Stay</th>
                                             <th>Dosage/Day</th>
@@ -119,8 +119,8 @@
                                             <td ng-bind="drugServicesDto.drugType"></td>
                                             <td ng-bind="drugServicesDto.accommodationType"></td>
                                             <td ng-bind="drugServicesDto.duration"></td>
-                                            <td ng-bind="drugServicesDto.dosage"></td>
                                             <td ng-bind="drugServicesDto.lengthOfStay"></td>
+                                            <td ng-bind="drugServicesDto.drugDosage"></td>
                                             <td ng-bind="drugServicesDto.strength"></td>
                                             <th><button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode" ng-click="updateDrugServicesDto(drugServicesDto,$index)">Update</button>
                                                 <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode" ng-click="deleteTreatmentDiagnosis($index)">Delete</button></th>
@@ -136,7 +136,7 @@
                                                         <option value="Normal">Normal</option>
                                                         <option value="services">services</option>
                                                     </select>
-                                                    <div class="error" ng-messages="step5.type.$error" ng-if="step5.type.$dirty">
+                                                    <div class="error" ng-messages="step1.type.$error" ng-if="step1.type.$dirty">
                                                         <small class="error" ng-message="required">Please enter Type</small>
                                                     </div>
                                                 </div>
@@ -162,7 +162,7 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Accomodation Type</label>
+                                                    <label class="control-label">Accommodation Type</label>
                                                     <select  class="form-control input-md" name="accommodationType"   ng-model="diagnosisTreatmentDtoToUpdate.accommodationType">
                                                         <option value="Normal">Normal</option>
                                                         <option value="Executive">Executive</option>
@@ -217,8 +217,7 @@
                                                     <label class="control-label"> Dosage/Day</label>
                                                     <input type="text"
                                                            name="duration"
-                                                           ng-disabled="true"
-                                                           ng-model="diagnosisTreatmentDtoToUpdate.duration"
+                                                           ng-model="diagnosisTreatmentDtoToUpdate.drugDosage"
                                                            class="form-control input-md"/>
                                                 </div>
                                             </div>
@@ -260,32 +259,15 @@
                                                     <input  type="text"
                                                             ng-number="true"
                                                             ng-required="true"
-                                                            name="duration"
+                                                            name="billAmount"
                                                             ng-model="diagnosisTreatmentDtoToUpdate.billAmount"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step1.duration.$error" ng-if="step1.duration.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Duration</small>
+                                                    <div class="error" ng-messages="step1.billAmount.$error" ng-if="step1.billAmount.$dirty">
+                                                        <small class="error" ng-message="required">Please enter Bill Amount</small>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group  required">
-                                                    <label class="control-label">Bill Amount</label>
-                                                    <input  type="text"
-                                                            ng-number="true"
-                                                            ng-required="true"
-                                                            name="duration"
-                                                            ng-model="diagnosisTreatmentDtoToUpdate.billAmount"
-                                                            class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step1.duration.$error" ng-if="step1.duration.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Duration</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <button type="button" class="btn btn-default btn-sm" ng-click="activenextbuttonfordrugservice()">Cancel</button>
@@ -371,19 +353,17 @@
                                             <th>Member Name</th>
                                             <th>Pre-authorization Date</th>
                                             <th>Approved Amount</th>
-                                            <th >Balance Amount</th>
+                                            <th>Tag To Claim</th>
 
                                         </tr>
                                         </thead>
-
-                                        <tbody ng-repeat= "coverageDetailDto in createUpdateDto.preAuthorizationDetails">
-                                        <tr ng-repeat="coverageDetail in coverageDetailDto.coverageDetails">
-                                            <td ng-bind="coverageDetailDto.preAuthorizationRequestId"></td>
-                                            <td ng-bind="createUpdateDto.groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName"></td>
-                                            <td ng-bind="coverageDetailDto.preAuthorizationDate"></td>
-                                            <td ng-bind="coverageDetail.approvedAmount"></td>
-                                            <td ng-bind="coverageDetail.balanceAmount"></td>
-
+                                        <tbody>
+                                        <tr ng-repeat="preAuth in createUpdateDto.preAuthorizationDetails">
+                                            <td ng-bind="preAuth.preAuthorizationRequestId"></td>
+                                            <td ng-bind="preAuth.assuredDetail.salutation+' '+preAuth.assuredDetail.firstName+' '+preAuth.assuredDetail.surname"></td>
+                                            <td ng-bind="preAuth.preAuthorizationDate"></td>
+                                            <td ng-bind="preAuth.totalApprovedAmount"></td>
+                                            <td><input type="checkbox" name="tagToClaim"/></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -601,7 +581,7 @@
                                     </div> <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group  ">
-                                            <label class="control-label">Reletionship</label>
+                                            <label class="control-label">Relationship</label>
                                             <input  class="form-control input-sm"    ng-model="createUpdateDto.relationship" name="relationship" />
                                         </div>
                                     </div>
@@ -614,11 +594,11 @@
                                                 <input type="text" class="form-control input-sm"
                                                        datepicker-popup=""
                                                        view-enabled=""
-                                                       ng-change="changeClaimDate(createUpdateDto.claimIntimationDate)"
-                                                       max-date="todayDate"
+                                                       ng-change="changeclaimdate(createupdatedto.claimintimationdate)"
+                                                       max-date="todaydate"
                                                        is-open="datepicker.opened"
                                                        ng-disabled="mode =='view' || mode=='edit'"
-                                                       ng-model="createUpdateDto.claimIntimationDate" name="claimIntimationDate"/>
+                                                       ng-model="createupdatedto.claimintimationdate" name="claimintimationdate"/>
                                      <span class="input-group-btn">
                                       <button type="button" class="btn btn-default btn-sm" view-enabled=""  ng-disabled="true"
                                               ng-click="launchClaimDate($event)">
@@ -1891,18 +1871,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <button type="button" class="btn btn-default btn-sm" ng-disabled="isViewMode" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <button type="button" class="btn btn-primary btn-sm"  style="float: right" ng-disabled="isViewMode || step4.$invalid"
-                                                    ng-click="updateTreatmentAndDiagnosis(groupHealthCashlessClaimDiagnosisTreatmentDetails)"
-                                                    >Save
-                                            </button>
-                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-default btn-sm" ng-disabled="isViewMode" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-primary btn-sm"  style="float: right" ng-disabled="isViewMode || step4.$invalid"
+                                                        ng-click="updateTreatmentAndDiagnosis(groupHealthCashlessClaimDiagnosisTreatmentDetails)"
+                                                >Save
+                                                </button>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
                                 <!--=====================ending a section(trtmntDtls)==================== -->
