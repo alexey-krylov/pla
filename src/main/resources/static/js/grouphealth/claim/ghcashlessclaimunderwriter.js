@@ -437,212 +437,155 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 $scope.isViewMode=true;
             }
             $scope.disableHtn = true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails;
-
+            //$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails;
             $scope.$watch(
                 function(){
-                    return {htn: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail};
+                    return {htn: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.htn === 'No'){
-                        $scope.isrequire = false;
                         $scope.disableHtn = true;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails='';
 
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail){
-                            $scope.isrequire = true;
-
-                        }
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail;
-
+                        //$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail;
                         $scope.disableHtn = false;
                     }
                 },
                 true
             );
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails;
+
             $scope.disableIhd = true;
             $scope.$watch(
                 function(){
-                    return {idh: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.idhHOD, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetail};
+                    return {idh: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.idhHOD, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.idh === 'No'){
-                        $scope.isrequireIhd = false;
                         $scope.disableIhd = true;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails){
-                            $scope.isrequireIhd = true;}
                         $scope.disableIhd = false;
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetail;
-
                     }
                 },
                 true
             );
-            $scope.disdibetes= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails;
 
+            $scope.disdibetes= true;
             $scope.$watch(
                 function(){
-                    return {Dibetes: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetes, diabetesDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetail};
+                    return {Dibetes: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetes, diabetesDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Dibetes === 'No'){
-                        $scope.isrequireDibetes = false;
                         $scope.disdibetes = true;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails){
-                            $scope.isrequireDibetes = true;}
                         $scope.disdibetes = false;
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetail;
-
                     }
                 },
                 true
             );
-            $scope.disAsthma= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails;
 
+            $scope.disAsthma= true;
             $scope.$watch(
                 function(){
-                    return {Asthma: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetail};
+                    return {Asthma: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Asthma === 'No'){
-                        $scope.isrequireAsthma = false;
                         $scope.disAsthma = true;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails){
-                            $scope.isrequireAsthma = true;}
                         $scope.disAsthma = false;
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetail;
-
                     }
                 },
                 true
             );
-            $scope.disStd= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails;
 
+            $scope.disStd= true;
             $scope.$watch(
                 function(){
-                    return {Std: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetail};
+                    return {Std: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Std === 'No'){
-                        $scope.isrequireStd = false;
                         $scope.disStd = true;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails){
-                            $scope.isrequireStd = true;}
                         $scope.disStd = false;
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetail;
-
                     }
                 },
                 true
             );
-            $scope.disArthiritis= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails;
 
+            $scope.disArthiritis= true;
             $scope.$watch(
                 function(){
-                    return {Arthiritis: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritis, stdhivaidsdetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetail};
+                    return {Arthiritis: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritis, stdhivaidsdetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Arthiritis === 'No'){
                         $scope.disArthiritis = true;
-                        $scope.isrequireArthiritis = false;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails){
-                            $scope.isrequireArthiritis = true;}
                         $scope.disArthiritis = false;
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetail;
-
                     }
                 },
                 true
             );
-            $scope.disCancer= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails;
 
+            $scope.disCancer= true;
             $scope.$watch(
                 function(){
-                    return {Cancer: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCyst, cancerTumorCystDetail: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetail};
+                    return {Cancer: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCyst, cancerTumorCystDetail: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Cancer === 'No'){
                         $scope.disCancer = true;
-                        $scope.isrequireCancer = false;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails){
-                            $scope.isrequireCancer = true;}
                         $scope.disCancer = false;
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetail;
-
                     }
                 },
                 true
             );
-            $scope.dispshyciatric= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails;
 
+            $scope.dispshyciatric= true;
             $scope.$watch(
                 function(){
-                    return {pshyciatric: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetail};
+                    return {pshyciatric: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.pshyciatric === 'No'){
                         $scope.dispshyciatric = true;
-                        $scope.isrequirepshyciatric= false;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails){
-                            $scope.isrequirepshyciatric= true;}
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetail;
-
                         $scope.dispshyciatric = false;
                     }
                 },
                 true
             );
 
-
-
             $scope.disAlcohol= true;
-            $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails;
-
             $scope.$watch(
                 function(){
-                    return {Alcohol: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetail};
+                    return {Alcohol: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Alcohol === 'No'){
                         $scope.disAlcohol = true;
-                        $scope.isrequireAlcohol= false;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails){
-                            $scope.isrequireAlcohol= true;}
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetail;
-
                         $scope.disAlcohol = false;
                     }
                 },
