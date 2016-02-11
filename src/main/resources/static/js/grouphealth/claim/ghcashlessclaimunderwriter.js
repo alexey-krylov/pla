@@ -694,11 +694,14 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             };
 
             $scope.underwriterApprove = function () {
-                if (!$scope.createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails[0].approvedAmount) {
+
+
+                if (!$scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails[0].approvedAmount) {
                     $scope.approvepopupModal();
 
                 }
                 else {
+                    alert("");
                     $.when($scope.constructCommentDetails()).done(function () {
                         $http({
                             url: '/pla/grouphealth/claim/cashless/claim/underwriter/approve',
