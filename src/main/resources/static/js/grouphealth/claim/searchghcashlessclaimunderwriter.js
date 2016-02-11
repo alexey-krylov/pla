@@ -1,6 +1,5 @@
 
 var searchPreAuthorizationModule = (function(){
-    alert("");
     var PreAuthorizationServices = {};
     PreAuthorizationServices.PreAuthorizationSelected = undefined;
     this.PreAuthorizationName = null;
@@ -13,11 +12,8 @@ var searchPreAuthorizationModule = (function(){
         this.PreAuthorizationName = $(ele).parent().find('input[type=hidden]').val();
     };
     PreAuthorizationServices.updatePreAuthorization = function () {
-        alert("");
         var  clientId =this.clientId;
-        alert(clientId);
         var  groupHealthCashlessClaimId =this.groupHealthCashlessClaimId;
-        alert(groupHealthCashlessClaimId);
         window.location.href = "/pla/grouphealth/claim/cashless/claim/loadunderwriterviewforupdate?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId;
     };
 

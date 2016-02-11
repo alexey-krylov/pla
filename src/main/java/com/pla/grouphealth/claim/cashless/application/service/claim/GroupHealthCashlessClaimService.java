@@ -19,6 +19,7 @@ import com.pla.core.query.BenefitFinder;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.repository.PlanRepository;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
+import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
@@ -929,6 +930,17 @@ public class GroupHealthCashlessClaimService {
         if(agreedAmount.compareTo(billAmount) == 0)
             return Boolean.TRUE;
         return Boolean.FALSE;
+    }
+
+    public void populateGroupHeathCashlessClaimWithUnderWriterUserId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            if(isNotEmpty(groupHealthCashlessClaim.getClaimUnderWriterUserId()) && !groupHealthCashlessClaim.getClaimUnderWriterUserId().equals(userName)){
+                throw new PreAuthorizationInProcessingException("The record is already under processing.");
+            }
+        }
+        groupHealthCashlessClaim.updateWithClaimUnderWriterUserId(userName);
+        groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
     }
 }
 

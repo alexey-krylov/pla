@@ -8,6 +8,7 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessCl
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
+import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHCashlessClaimMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
@@ -352,6 +353,16 @@ public class GroupHealthCashlessClaimController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
+        ModelAndView modelAndView = new ModelAndView();
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderWriterUserId(groupHealthCashlessClaimId, userName);
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimunderwriter");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/underwriter/update", method = RequestMethod.POST)
     public Result updatedByUnderwriter(@Valid @RequestBody GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, BindingResult bindingResult, ModelMap modelMap, HttpServletResponse response, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
@@ -558,12 +569,5 @@ public class GroupHealthCashlessClaimController {
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
-    }
-    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
-    @ResponseBody
-    public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimunderwriter");
-        return modelAndView;
     }
 }

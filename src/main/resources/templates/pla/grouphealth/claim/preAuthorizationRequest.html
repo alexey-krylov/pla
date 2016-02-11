@@ -1324,7 +1324,7 @@
                     </ng-form>
                 </div>
                 <!--=====================endeing of new tab(trtmntDtls)==================== -->
-                <div class="step-pane" data-step="4"   >
+                <div class="step-pane" data-step="4" disable-all-fields="isViewMode">
                     <ng-form name="step4">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatus.Details" ng-form="step4">
@@ -1351,10 +1351,10 @@
                                     <div class="row">
                                         <div class="form-group required col-md-4">
                                             <textarea name="textarea" ng-model="createUpdateDto.illnessDetailDto.htndetails"
-                                                      ng-disabled="disableHtn"  ng-required="isrequire"
+                                                      ng-disabled="disableHtn || isViewMode"  ng-required="isrequire"
                                                       style="width:950px;height:60px;left:30px" ng-init="checkCondition()"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.textarea.$error" ng-if="step5.textarea.$dirty">
+                                        <div class="error" ng-messages="step4.textarea.$error" ng-if="step4.textarea.$dirty">
                                             <small class="error" ng-message="required">Please enterProvide full Details</small>
                                         </div>
                                     </div>
@@ -1380,10 +1380,10 @@
                                         <div class="form-group required col-md-4">
 
                                             <textarea name="idh" ng-model="createUpdateDto.illnessDetailDto.ihdhoddetails"
-                                                      ng-required="isrequireIhd"  ng-disabled="disableIhd"
+                                                      ng-required="isrequireIhd"  ng-disabled="disableIhd || isViewMode"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.idh.$error" ng-if="step5.idh.$dirty">
+                                        <div class="error" ng-messages="step4.idh.$error" ng-if="step4.idh.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1407,10 +1407,10 @@
 
                                         <div class="form-group  col-md-4">
 
-                                            <textarea name="dibetes"  ng-disabled="disdibetes" ng-model="createUpdateDto.illnessDetailDto.diabetesDetails"
+                                            <textarea name="dibetes"  ng-disabled="disdibetes || isViewMode" ng-model="createUpdateDto.illnessDetailDto.diabetesDetails"
                                                       ng-required="isrequireDibetes"   style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.dibetes.$error" ng-if="step5.dibetes.$dirty">
+                                        <div class="error" ng-messages="step4.dibetes.$error" ng-if="step4.dibetes.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1435,9 +1435,9 @@
                                         <div class="form-group required col-md-4">
 
                                             <textarea name="asthma"  ng-model="createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails"
-                                                      ng-required="isrequireAsthma" ng-disabled="disAsthma"  style="width:950px;height:60px;left:30px"></textarea>
+                                                      ng-required="isrequireAsthma" ng-disabled="disAsthma || isViewMode"  style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.asthma.$error" ng-if="step5.asthma.$dirty">
+                                        <div class="error" ng-messages="step4.asthma.$error" ng-if="step4.asthma.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1466,10 +1466,10 @@
 
                                         <div class="form-group required  col-md-4">
 
-                                            <textarea name="std" ng-disabled="disStd"   ng-model="createUpdateDto.illnessDetailDto.stdhivaidsdetails"
+                                            <textarea name="std" ng-disabled="disStd || isViewMode"   ng-model="createUpdateDto.illnessDetailDto.stdhivaidsdetails"
                                                       ng-required="isrequireStd"        style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.std.$error" ng-if="step5.std.$dirty">
+                                        <div class="error" ng-messages="step4.std.$error" ng-if="step4.std.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1496,10 +1496,10 @@
 
                                         <div class="form-group required  col-md-4">
 
-                                            <textarea name="Arthiritis"  ng-disabled="disArthiritis"  ng-model="createUpdateDto.illnessDetailDto.arthritisDetails"
+                                            <textarea name="Arthiritis"  ng-disabled="disArthiritis || isViewMode"  ng-model="createUpdateDto.illnessDetailDto.arthritisDetails"
                                                       ng-required="isrequireArthiritis"       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.Arthiritis.$error" ng-if="step5.Arthiritis.$dirty">
+                                        <div class="error" ng-messages="step4.Arthiritis.$error" ng-if="step4.Arthiritis.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1526,10 +1526,10 @@
 
                                         <div class="form-group required col-md-4">
 
-                                            <textarea name="cancer"  ng-disabled="disCancer" ng-model="createUpdateDto.illnessDetailDto.cancerTumorCystDetails"
+                                            <textarea name="cancer"  ng-disabled="disCancer || isViewMode" ng-model="createUpdateDto.illnessDetailDto.cancerTumorCystDetails"
                                                       ng-required="isrequireCancer"         style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.cancer.$error" ng-if="step5.cancer.$dirty">
+                                        <div class="error" ng-messages="step4.cancer.$error" ng-if="step4.cancer.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1556,10 +1556,10 @@
 
                                         <div class="form-group required col-md-4">
 
-                                            <textarea name="alcohol"  ng-disabled="disAlcohol" ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails"
+                                            <textarea name="alcohol"  ng-disabled="disAlcohol || isViewMode" ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails"
                                                       ng-required="isrequireAlcohol"     style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.alcohol.$error" ng-if="step5.alcohol.$dirty">
+                                        <div class="error" ng-messages="step4.alcohol.$error" ng-if="step4.alcohol.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1583,9 +1583,9 @@
                                         <div class="form-group col-md-4">
 
                                             <textarea name="pshyciatric"   ng-model="createUpdateDto.illnessDetailDto.psychiatricConditionDetails"
-                                                      ng-required="isrequirepshyciatric"   ng-disabled="dispshyciatric"  style="width:950px;height:60px;left:30px"></textarea>
+                                                      ng-required="isrequirepshyciatric"   ng-disabled="dispshyciatric || isViewMode"  style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step5.pshyciatric.$error" ng-if="step5.pshyciatric.$dirty">
+                                        <div class="error" ng-messages="step4.pshyciatric.$error" ng-if="step4.pshyciatric.$dirty">
                                             <small class="error" ng-message="required">Please enter Drug Name</small>
                                         </div>
                                     </div>
@@ -1593,7 +1593,7 @@
                                 <div class="row">
                                     <div class="col-sm-6" style="float: right">
                                         <button type="button" class="btn btn-primary btn-sm" style="float: right"
-                                                ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode"
+                                                ng-click="savePreAuthorizationRequest()" ng-disabled="step4.$invalid || isViewMode"
                                         >Save
                                         </button>
                                     </div>

@@ -80,7 +80,7 @@
 
             <div class="col-md-2">
                 <div class="form-group">
-                    <label th:text="#{groupHealthCashlessClaimId}">GH CashLess ID</label>
+                    <label th:text="#{claimId}">GH CashLess ID</label>
                     <input type="text" class="form-control input-sm" name="groupHealthCashlessClaimId"
                            th:value="${searchCriteria.groupHealthCashlessClaimId}"/>
                 </div>
@@ -136,7 +136,7 @@
                         <thead>
                         <tr>
                             <th style="width: 1%"></th>
-                            <th th:text="#{groupHealthCashlessClaimId}">Cashless Claim ID</th>
+                            <th th:text="#{groupHealthCashlessClaimId}">Group Health Cashless Claim Id</th>
                             <th th:text="#{clientId}">Client ID</th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyName}">Policy Name</th>
@@ -150,7 +150,8 @@
                                 <tr th:each="cashlessClaimresult : ${claimResult}">
                                     <td>
 
-                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.groupHealthCashlessClaimId}" th:attr="clientId=${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"/></td>
+                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.groupHealthCashlessClaimId}" th:attr="clientId=${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"/>
+                                    </td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimId}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber}"></td>
