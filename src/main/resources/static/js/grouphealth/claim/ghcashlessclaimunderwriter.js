@@ -910,6 +910,45 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 });
             };
 
+            $scope.bankDetailsResponse=[];
+
+            $http.get('/pla/individuallife/endorsement/getAllBankNames').success(function (response, status, headers, config) {
+                $scope.bankDetailsResponse = response;
+                //console.log("Bank Details :"+JSON.stringify(response));
+            }).error(function (response, status, headers, config) {
+            });
+
+
+            $scope.bankBranchDetails=[];// Collecting Branch Details
+
+            $scope.$watch('ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                    // //alert("Bank Details.."+JSON.stringify(bankCode));
+                    if (bankCode) {
+                        $http.get('/pla/individuallife/endorsement/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetails = response;
+                            //console.log("Bank Details :"+JSON.stringify(response));
+                        }).error(function (response, status, headers, config) {
+                        });
+                    }
+                }
+            });
+
+            $scope.$watch('ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode = newvalue;
+                }
+            });
+
+            /**
+             * Clearing The Detail Related to Basnk Name
+             */
+            $scope.clearBankBranchName=function(){
+                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName = null;
+                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode=null;
+            }
+
         }]);
 
 function formatDate(date) {
