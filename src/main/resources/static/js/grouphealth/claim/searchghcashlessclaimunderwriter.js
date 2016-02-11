@@ -1,10 +1,11 @@
 
 var searchPreAuthorizationModule = (function(){
+    alert("");
     var PreAuthorizationServices = {};
     PreAuthorizationServices.PreAuthorizationSelected = undefined;
     this.PreAuthorizationName = null;
     PreAuthorizationServices.getTheItemSelected = function(ele){
-        this.preAuthorizationId=$(ele).val();
+        this.groupHealthCashlessClaimId=$(ele).val();
         this.clientId=$(ele).attr("clientId");
         $("#PreAuthorization-view").prop("disabled","");
         $("#PreAuthorization-create").prop("disabled","");
@@ -12,18 +13,21 @@ var searchPreAuthorizationModule = (function(){
         this.PreAuthorizationName = $(ele).parent().find('input[type=hidden]').val();
     };
     PreAuthorizationServices.updatePreAuthorization = function () {
+        alert("");
         var  clientId =this.clientId;
-        var  preAuthorizationId =this.preAuthorizationId;
-        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadunderwriterviewforupdateview?preAuthorizationId=" + preAuthorizationId +"&clientId="+ clientId;
+        alert(clientId);
+        var  groupHealthCashlessClaimId =this.groupHealthCashlessClaimId;
+        alert(groupHealthCashlessClaimId);
+        window.location.href = "/pla/grouphealth/claim/cashless/claim/loadunderwriterviewforupdate?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId;
     };
 
     PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button
         if (this.PreAuthorizationSelected) {
             if ('PreAuthorization' === this.PreAuthorizationName) {
                 var  preAuthorizationId =this.PreAuthorizationSelected;
-                window.location.href = "/pla/grouphealth/claim/cashless/preauthorization/loadpreauthorizationrequest?PreAuthorizationId=" + preAuthorizationId +"&mode=view";
+                window.location.href = "/pla/grouphealth/claim/cashless/preauthorization/loadpreauthorizationrequest?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&mode=view";
             } else {var  preAuthorizationId =this.PreAuthorizationSelected;
-                window.location.href = "/pla/grouphealth/claim/cashless/preauthorization/loadpreauthorizationrequest?PreAuthorizationId=" + preAuthorizationId + "&mode=view";
+                window.location.href = "/pla/grouphealth/claim/cashless/preauthorization/loadpreauthorizationrequest?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId + "&mode=view";
 
             }
         }

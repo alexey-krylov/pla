@@ -15,7 +15,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-    <script src="../../../../../static/js/grouphealth/claim/searchPreAuthorizationRecord.js"></script>
+    <script src="../../../../../static/js/grouphealth/claim/searchghcashlessclaimunderwriter.js"></script>
     <!--*/-->
 </head>
 <body>
@@ -23,7 +23,7 @@
 <script>
     var interval = setInterval(function () {
         if (require.defined("basic")) {
-            requirejs(['/pla/js/grouphealth/claim/searchcashlessclaimunderwriter.js'], function () {
+            requirejs(['/pla/js/grouphealth/claim/searchghcashlessclaimunderwriter.js'], function () {
                 $(document).ready(function () {
                     $("input[type='text']").keyup(function () {
                         var isDisabled = true;
@@ -53,7 +53,7 @@
 <div class="container container-fluid" style="padding-top:10px">
     <p class="lead">
     <ol class="breadcrumb">
-        <li>GROUP HEALTH / CASHLESS CLAIM / </li>
+        <li>GROUP HEALTH / CASHLESS CLAIM  </li>
         <li>UNDERWRITER <text th:text="${searchCriteria.underwriterLevel}"></text></li>
     </ol>
     </p>
@@ -120,7 +120,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="col-lg-6">
-                                <span>List Of PreAuthorization Request</span>
+                                <span>List Of Cashless Claim Underwriter</span>
                             </div>
                             <div class="col-lg-6" style="text-align: right">
                                 <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()">Update </a>
@@ -136,6 +136,7 @@
                         <thead>
                         <tr>
                             <th style="width: 1%"></th>
+                            <th th:text="#{groupHealthCashlessClaimId}">Cashless Claim ID</th>
                             <th th:text="#{clientId}">Client ID</th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyName}">Policy Name</th>
@@ -150,15 +151,16 @@
                                     <td>
 
                                         <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.groupHealthCashlessClaimId}" th:attr="clientId=${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"/></td>
+                                    <td th:text="${cashlessClaimresult.groupHealthCashlessClaimId}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.policyName}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimHCPDetail.hcpCode.hcpCode}"></td>
                                     <td th:text="${cashlessClaimresult.batchNumber}"></td>
+
                                 </tr>
                             </th:block>
-
-                        </form>
+                                                   </form>
                         </tbody>
                     </table>
                 </div>

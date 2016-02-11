@@ -559,4 +559,11 @@ public class GroupHealthCashlessClaimController {
             return Result.failure(e.getMessage());
         }
     }
+    @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimunderwriter");
+        return modelAndView;
+    }
 }
