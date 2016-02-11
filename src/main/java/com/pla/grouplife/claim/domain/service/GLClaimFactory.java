@@ -64,7 +64,9 @@ public class GLClaimFactory {
        //getting claimNumber
        ClaimNumber claimNumber= new ClaimNumber(claimNumberInString);
        ClaimType claimType=createCommand.getClaimType();
-
+       //getting category and relationship
+       String category=createCommand.getCategory();
+       String relationship=createCommand.getRelationship();
        //creating policy
        Map policyMap=glClaimFinder.findPolicyByPolicyNumber(createCommand.getPolicyNumber());
        String policyIdStr=policyMap.get("_id").toString();
@@ -154,7 +156,8 @@ public class GLClaimFactory {
                CoverageDetail coverageDetail=new CoverageDetail(coverageDetailDto.getCoverageCode(),coverageId,
                        coverageDetailDto.getCoverageName(),coverageDetailDto.getPremium(),coverageDetailDto.getSumAssured());
                if(coverageDetailDto.getSumAssured()!=null){
-               tempSumAssured.add(coverageDetailDto.getSumAssured());}
+                   tempSumAssured=tempSumAssured.add(coverageDetailDto.getSumAssured());
+               }
                coverages.add(coverageDetail);
 
            }
@@ -193,6 +196,7 @@ public class GLClaimFactory {
        //creating groupLife Claim
        GroupLifeClaim groupLifeClaim=new GroupLifeClaim(claimId,claimNumber,claimType,claimIntimationDate);
        groupLifeClaim.withIncidenceDate(claimIncidenceDate);
+       groupLifeClaim.withCategoryAndRelationship(category,relationship);
        groupLifeClaim.withProposerAndPolicy(proposer, policy);
        groupLifeClaim.withAssuredDetail(assuredDetail);
        groupLifeClaim.withPlanDetail(planDetail);
