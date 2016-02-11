@@ -30,10 +30,10 @@ public class ClaimDisabilityRegistrationDto {
     private String assuredGainfulActivities;
     private String detailsOfWorkActivities;
     private DateTime fromActivitiesDate;
-    private Boolean isAssuredConfinedToIndoor;
+    private String assuredConfinedToIndoor;
     private DateTime fromIndoorDate;
     private String assuredIndoorDetails;
-    private Boolean isAssuredAbleToGetOutdoor;
+    private String assuredAbleToGetOutdoor;
     private DateTime fromOutdoorDate;
     private String assuredOutdoorDetails;
     private String visitingMedicalOfficerDetails;

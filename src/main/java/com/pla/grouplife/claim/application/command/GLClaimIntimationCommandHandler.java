@@ -181,7 +181,7 @@ public class GLClaimIntimationCommandHandler {
         DisabilityClaimRegistration claimRegistration = new DisabilityClaimRegistration(claimDisabilityDetails.getDateOfDisability(), claimDisabilityDetails.getNatureOfDisability(), claimDisabilityDetails.getExtendOfDisability(),
                 claimDisabilityDetails.getDateOfDiagnosis(), claimDisabilityDetails.getExactDiagnosis(), claimDisabilityDetails.getNameOfDoctorAndHospitalAddress(), claimDisabilityDetails.getContactNumberOfHospital(),
                 claimDisabilityDetails.getDateOfFirstConsultation(),claimDisabilityDetails.getTreatmentTaken(),claimDisabilityDetails.getCapabilityOfAssuredDailyLiving(),claimDisabilityDetails.getAssuredGainfulActivities(),claimDisabilityDetails.getDetailsOfWorkActivities(),
-                claimDisabilityDetails.getFromActivitiesDate(),claimDisabilityDetails.getIsAssuredConfinedToIndoor(),claimDisabilityDetails.getFromIndoorDate(), claimDisabilityDetails.getAssuredIndoorDetails(),claimDisabilityDetails.getIsAssuredAbleToGetOutdoor(),
+                claimDisabilityDetails.getFromActivitiesDate(),claimDisabilityDetails.getAssuredConfinedToIndoor(),claimDisabilityDetails.getFromIndoorDate(), claimDisabilityDetails.getAssuredIndoorDetails(),claimDisabilityDetails.getAssuredAbleToGetOutdoor(),
                 claimDisabilityDetails.getFromOutdoorDate(),claimDisabilityDetails.getAssuredOutdoorDetails(),claimDisabilityDetails.getVisitingMedicalOfficerDetails());
 
         Set<GLClaimDocument> uploadedDocuments = groupLifeClaim.getClaimDocuments();

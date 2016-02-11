@@ -366,10 +366,10 @@ public class GLClaimService implements Serializable{
             disabilityRegistrationDetails.setAssuredGainfulActivities(disabilityClaimRegistration.getAssuredGainfulActivities());
             disabilityRegistrationDetails.setDetailsOfWorkActivities(disabilityClaimRegistration.getDetailsOfWorkActivities());
             disabilityRegistrationDetails.setFromActivitiesDate(disabilityClaimRegistration.getFromActivitiesDate());
-            disabilityRegistrationDetails.setIsAssuredConfinedToIndoor(disabilityClaimRegistration.getIsAssuredConfinedToIndoor());
+            disabilityRegistrationDetails.setAssuredConfinedToIndoor(disabilityClaimRegistration.getAssuredConfinedToIndoor());
             disabilityRegistrationDetails.setFromIndoorDate(disabilityClaimRegistration.getFromIndoorDate());
             disabilityRegistrationDetails.setAssuredIndoorDetails(disabilityClaimRegistration.getAssuredIndoorDetails());
-            disabilityRegistrationDetails.setIsAssuredAbleToGetOutdoor(disabilityClaimRegistration.getIsAssuredAbleToGetOutdoor());
+            disabilityRegistrationDetails.setAssuredAbleToGetOutdoor(disabilityClaimRegistration.getAssuredAbleToGetOutdoor());
             disabilityRegistrationDetails.setFromOutdoorDate(disabilityClaimRegistration.getFromOutdoorDate());
             disabilityRegistrationDetails.setAssuredOutdoorDetails(disabilityClaimRegistration.getAssuredOutdoorDetails());
             disabilityRegistrationDetails.setVisitingMedicalOfficerDetails(disabilityClaimRegistration.getVisitingMedicalOfficerDetails());

@@ -241,10 +241,10 @@ public class GLClaimFactory {
                     disabilityIncidentDetails.getAssuredGainfulActivities(),
                     disabilityIncidentDetails.getDetailsOfWorkActivities(),
                     disabilityIncidentDetails.getFromActivitiesDate(),
-                    disabilityIncidentDetails.getIsAssuredConfinedToIndoor(),
+                    disabilityIncidentDetails.getAssuredConfinedToIndoor(),
                     disabilityIncidentDetails.getFromIndoorDate(),
                     disabilityIncidentDetails.getAssuredIndoorDetails(),
-                    disabilityIncidentDetails.getIsAssuredAbleToGetOutdoor(),
+                    disabilityIncidentDetails.getAssuredAbleToGetOutdoor(),
                     disabilityIncidentDetails.getFromOutdoorDate(),
                     disabilityIncidentDetails.getAssuredOutdoorDetails(),
                     disabilityIncidentDetails.getVisitingMedicalOfficerDetails());
