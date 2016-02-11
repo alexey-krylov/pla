@@ -648,6 +648,321 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 true
             );
 
+            $scope.underwriterRouteSenior = function () {
+                if (!$scope.comment.comments) {
+                    $scope.message = "Comment is mandatory to route Cashless Claim Underwriter to senior Underwriter.";
+                    $scope.toggleModal();
+                } else {
+                    $.when($scope.constructCommentDetails()).done(function () {
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/claim/underwriter/routetoseniorunderwriter',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function (response, status, headers, config) {
+                            if (status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
+                                    .success(function (response, status, headers, config) {
+                                        $scope.createUpdateDto = response;
+                                        if (status == 200) {
+                                            setTimeout(function () {
+                                                window.location.href = '/pla/grouphealth/claim/cashless/claim/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                                            }, 1000);
+                                        }
+                                    }).error(function (response, status, headers, config) {
+                                    });
+                            }
+                        }).error(
+                            function (status) {
+                                //console.log(status);
+                            }
+                        );
+                    });
+                }
+            };
+
+            $scope.underwriterReturn = function () {
+                if (!$scope.comment.comments) {
+                    $scope.message = "Comment is mandatory to return Cashless Claim.";
+                    $scope.toggleModal();
+                } else{
+                    var requirementAdded = $scope.isRequirementAdded($scope.documentList);
+                    if(requirementAdded) {
+                        $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrequirementemailsent/' + groupHealthCashlessClaimId)
+                            .success(function(response){
+                                if(response.data === true){
+                                    $scope.returnCashlessClaim();
+                                } else{
+                                    var win = window.open('/pla/grouphealth/claim/cashless/claim/underwriter/getgrouphealthcashlessclaimaddrequirementrequestletter/'+groupHealthCashlessClaimId,"_blank","toolbar=no,resizable=no," +
+                                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                                    var timer = setInterval(function(){
+                                        if(win.closed){
+                                            clearInterval(timer);
+                                            $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrequirementemailsent/' + groupHealthCashlessClaimId)
+                                                .success(function(response){
+                                                    if(response.data === true){
+                                                        $scope.returnCashlessClaim();
+                                                    } else{
+                                                        $scope.message = " Please email the requirement letter.";
+                                                        $scope.toggleModal();
+                                                    }
+                                                }).error();
+                                        }
+                                    }, 500);
+                                }
+                            }).error();
+                    } else {
+                        $scope.returnCashlessClaim();
+                    }
+                }
+            };
+
+            $scope.underwriterReject = function () {
+                if (!$scope.comment.comments) {
+                    $scope.message = "Comment is mandatory to reject Cashless Claim.";
+                    $scope.toggleModal();
+                } else {
+                    $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/' + groupHealthCashlessClaimId)
+                        .success(function (response) {
+                            if (response.data === true) {
+                                $scope.rejectPreAuthorization();
+                            }
+                            else{
+                                var win = window.open('/pla/grouphealth/claim/cashless/claim/underwriter/getgrouphealthcashlessclaimrejectionletter/' + groupHealthCashlessClaimId, "_blank", "toolbar=no,resizable=no," +
+                                "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                                var timer = setInterval(function () {
+                                    if (win.closed) {
+                                        clearInterval(timer);
+                                        $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/' + groupHealthCashlessClaimId)
+                                            .success(function (response) {
+                                                if (response.data === true) {
+                                                    $scope.rejectPreAuthorization();
+                                                } else{
+                                                    $scope.message = " Please email the rejection letter.";
+                                                    $scope.toggleModal();
+                                                }
+                                            }).error(function (response) {
+                                            });
+                                    }
+                                }, 500);
+                            }
+                        }).error()
+                }
+            };
+
+            $scope.underwriterApprove = function () {
+                if (!$scope.createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails[0].approvedAmount) {
+                    $scope.approvepopupModal();
+
+                }
+                else {
+                    $.when($scope.constructCommentDetails()).done(function () {
+                        $http({
+                            url: '/pla/grouphealth/claim/cashless/claim/underwriter/approve',
+                            method: 'POST',
+                            data: $scope.createUpdateDto
+                        }).success(function (response, status, headers, config) {
+                            if (status === 200) {
+                                $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
+                                    .success(function (response, status, headers, config) {
+                                        $scope.createUpdateDto = response;
+                                        if (status == "200") {
+                                            setTimeout(function () {
+                                                window.location.reload();
+                                            }, 2000);
+                                        }
+                                    }).error(function (response, status, headers, config) {
+                                    });
+                            }
+                        }).error(
+                            function (status) {
+                                //console.log(status);
+                            }
+                        );
+                    });
+                }
+                ;
+            }
+
+            $scope.myModal = false;
+            $scope.toggleModal = function(){
+                $("#myModal").modal('show');
+            };
+            $scope.approveModal = false;
+            $scope.approvepopupModal = function(){
+                $("#approveModal").modal('show');
+            };
+            $scope.addRequirement = function () {
+                $.when($scope.constructCommentDetails()).done(function(){
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/claim/underwriter/addrequirement',
+                        method: 'POST',
+                        data: $scope.createUpdateDto
+                    }).success(function(response, status, headers, config) {
+                        if(status === 200) {
+                            $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
+                                .success(function (response, status, headers, config) {
+                                    $scope.createUpdateDto = response;
+                                    $http.get("/pla/grouphealth/claim/cashless/claim/getmandatorydocuments/" + clientId + "/" + groupHealthCashlessClaimId).success(function (response, status, headers, config) {
+                                        $scope.documentList = response;
+                                        $scope.getAllDocuments();
+                                    });
+                                }).error(function (response, status, headers, config) {
+                                });
+                        }
+                    }).error(
+                        function(status){
+                            //console.log(status);
+                        }
+                    );
+                    //console.log($scope.createUpdateDto);
+                });
+                /*var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getaddrequirementrequestletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
+                 "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                 var timer = setInterval(function(){
+                 if(win.closed){
+                 clearInterval(timer);
+                 $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrequirementemailsent/' + preAuthorizationId)
+                 .success(function(response){
+                 if(response.data === true){
+                 $.when($scope.constructCommentDetails()).done(function(){
+                 $http({
+                 url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
+                 method: 'POST',
+                 data: $scope.createUpdateDto
+                 }).success(function(response, status, headers, config) {
+                 if(status === 200) {
+                 $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
+                 .success(function (response, status, headers, config) {
+                 $scope.createUpdateDto = response;
+                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
+                 $scope.documentList = response;
+                 $scope.getAllDocuments();
+                 });
+                 }).error(function (response, status, headers, config) {
+                 });
+                 }
+                 }).error(
+                 function(status){
+                 //console.log(status);
+                 }
+                 );
+                 //console.log($scope.createUpdateDto);
+                 });
+                 } else{
+                 $scope.message = "Please email the requirements letter.";
+                 $scope.toggleModal();
+                 }
+                 }).error();
+                 }
+                 }, 500);*/
+            };
+            $scope.constructCommentDetails = function() {
+                if ($scope.comment) {
+                    if ($scope.createUpdateDto.commentDetails) {
+                        $scope.createUpdateDto.commentDetails.push($scope.comment);
+                    } else {
+                        $scope.createUpdateDto.commentDetails = new Array($scope.comment);
+                    }
+                }
+            };
+
+            $scope.populateDocumentSelected = function(data){
+                $scope.additionalDocumentAskedFor = {};
+                if (data.originalObject) {
+                    if ($scope.createUpdateDto.additionalRequiredDocuments.length > 0) {
+                        $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
+                        $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
+                        $scope.createUpdateDto.additionalRequiredDocuments.push($scope.additionalDocumentAskedFor);
+                    } else {
+                        $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
+                        $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
+                        $scope.createUpdateDto.additionalRequiredDocuments = new Array($scope.additionalDocumentAskedFor);
+                    }
+                }
+            };
+            $scope.returnCashlessClaim = function(){
+                $.when($scope.constructCommentDetails()).done(function () {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/claim/underwriter/return',
+                        method: 'POST',
+                        data: $scope.createUpdateDto
+                    }).success(function (response, status, headers, config) {
+                        if (status === 200) {
+                            $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
+                                .success(function (response, status, headers, config) {
+                                    $scope.createUpdateDto = response;
+                                    if (status == 200) {
+                                        setTimeout(function () {
+                                            window.location.reload();
+                                        }, 2000);
+                                    }
+                                }).error(function (response, status, headers, config) {
+                                });
+                        }
+                    }).error(
+                        function (status) {
+                            //console.log(status);
+                        }
+                    );
+                });
+            };
+            $scope.rejectPreAuthorization = function(){
+                $.when($scope.constructCommentDetails()).done(function () {
+                    $http({
+                        url: '/pla/grouphealth/claim/cashless/claim/underwriter/reject',
+                        method: 'POST',
+                        data: $scope.createUpdateDto
+                    }).success(function (response, status, headers, config) {
+                        if (status === 200) {
+                            $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
+                                .success(function (response, status, headers, config) {
+                                    $scope.createUpdateDto = response;
+                                    if (status == 200) {
+                                        setTimeout(function () {
+                                            window.location.reload();
+                                        }, 2000);
+                                    }
+                                }).error(function (response, status, headers, config) {
+                                });
+                        }
+                    }).error(
+                        function (status) {
+                            //console.log(status);
+                        }
+                    );
+                });
+            };
+
+            $scope.rejectionEmailSent = false;
+            $scope.checkRejectionEmailSent = function(){
+                $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/' + groupHealthCashlessClaimId)
+                    .success(function(response) {
+                        if(response.data === true){
+                            $scope.rejectionEmailSent = true;
+                        }
+                    }).error(function(response){
+                        $scope.rejectionEmailSent = false;
+                    });
+            };
+
+            $scope.getAllDocuments = function(){
+                $http.get('/pla/core/master/getdocument').success(function(data){
+                    $scope.documentmaster = data;
+                    for(var documentIndex in $scope.documentmaster){
+                        var document = $scope.documentmaster[documentIndex];
+                        for(var uploadedDocIndex in $scope.documentList){
+                            var uploadedDoc = $scope.documentList[uploadedDocIndex];
+                            if(document.documentCode.trim() === uploadedDoc.documentId.trim()){
+                                console.log(document.documentCode.trim()+" - "+uploadedDoc.documentId.trim());
+                                delete $scope.documentmaster[documentIndex];
+                            }
+                        }
+                    }
+                    $scope.documentmaster = $scope.documentmaster.filter(function(n){ return n != undefined });
+                    console.log($scope.documentmaster);
+                });
+            };
+
         }]);
 
 function formatDate(date) {
