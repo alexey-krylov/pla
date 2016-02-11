@@ -150,6 +150,7 @@
                             <th th:text="#{policyHolderName}">Policy HolderName</th>
                             <th th:text="#{assuredName}">Assured Name</th>
                             <th th:text="#{claimType}">Claim Type</th>
+                            <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -163,6 +164,7 @@
                                     <td th:text="${intimation.policyHolderName}"></td>
                                     <td th:text="${intimation.assuredName}"></td>
                                     <td th:text="${intimation.claimType}"></td>
+                                    <td th:text="${intimation.claimStatus}"></td>
                                 </tr>
                             </th:block>
                             <!--<tr>

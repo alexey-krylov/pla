@@ -82,6 +82,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.documentList = [];
         $scope.additionalDocumentList = [{}];
         $scope.rcvClaimIdForRegistration = getQueryParameter('claimId');
+        $scope.dailyTaskList=["Dressing","Using the Toilet","Walking","Feeding Him/Herself","Using Telephone","Bathing","Taking Medication"];
             /***
              *
              * @param $event for Claim intimation Date
@@ -185,6 +186,45 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }
             }
+            $scope.openFromDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForFromDate.isOpened = true;
+            };
+            $scope.datePickerSettingsForFromDate = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+            $scope.openFromDate2 = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForFromDate2.isOpened = true;
+            };
+            $scope.datePickerSettingsForFromDate2 = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+            $scope.openFromDate3 = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForFromDate3.isOpened = true;
+            };
+            $scope.datePickerSettingsForFromDate3 = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
             /**
              * Date of Accident Date Setting
              */
@@ -201,6 +241,45 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }
             }
+
+            /**
+             * Disability Date Setting
+             * @param $event
+             */
+
+            $scope.disabilityIncidentDetails={}; //Initialisation of disabiltyIncidentDetails
+
+            $scope.openDisabilityDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForDisabilityDate.isOpened = true;
+            };
+            $scope.datePickerSettingsForDisabilityDate = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+            /**
+             * Date Of Diagnosis
+             * @param $event
+             */
+            $scope.openDiagnosisDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForDiagnosisDate.isOpened = true;
+            };
+            $scope.datePickerSettingsForDiagnosisDate = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
             /**
              *
              * @param province
@@ -242,9 +321,11 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
              * Retrival All Claim For Registraton
              */
             //$scope.incidenceDetails.timeOfDeath=moment("1969-12-31T18:42:00.000Z").format('YYYY-MM-DDTHH:mm:ss:00.000');
+            $scope.dEATHFUNERAL=false;
             if($scope.rcvClaimIdForRegistration){
                 $http.get('/pla/grouplife/claim/getclaimdetail/' + $scope.rcvClaimIdForRegistration).success(function (response, status, headers, config) {
                     console.log(JSON.stringify(response));
+                    $scope.retrivalPolicyId=response.policyId;
                     $scope.claimId=response.claimId;
                     $scope.claimDetails=response;
                     $scope.claimantDetail=response.claimantDetail;
@@ -252,7 +333,19 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     $scope.bankDetails=response.bankDetails;
                     $scope.assuredDetails=response.claimAssuredDetail;
                     $scope.coverageList=response.coverageDetails;
-                    $scope.incidenceDetails=response.claimRegistrationDetails;
+
+                    if($scope.claimDetails.claimType == 'DEATH' || $scope.claimDetails.claimType == 'FUNERAL'){
+                        $scope.dEATHFUNERAL=true;
+                    }
+                    else if($scope.claimDetails.claimType != 'DEATH' || $scope.claimDetails.claimType != 'FUNERAL'){
+                        $scope.dEATHFUNERAL=false;
+                    }
+                    if(response.claimRegistrationDetails !=null){
+                        $scope.incidenceDetails=response.claimRegistrationDetails;
+                    }
+                    if(response.disabilityRegistrationDetails != null){
+                        $scope.disabilityIncidentDetails=response.disabilityRegistrationDetails;
+                    }
                 }).error(function (response, status, headers, config) {
                 });
 
@@ -264,13 +357,46 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             $scope.saveIncidenceDetails=function(){
                 console.log('*****************');
                 //console.log(JSON.stringify($scope.incidenceDetails));
-                var createRegistration={
-                    "incidentDetails":$scope.incidenceDetails,
+                if(($scope.dEATHFUNERAL)){
+                    console.log('DeathFunearl...');
+                    var createRegistration={
+                        "incidentDetails":$scope.incidenceDetails,
+                        "claimId":$scope.claimId
+                    }
+                    console.log(JSON.stringify(createRegistration));
+                }else{
+                    console.log('DISABILITY...');
+                    var createdisabilityIncidentDetails={
+                        "disabilityIncidentDetails":$scope.disabilityIncidentDetails,
+                        "claimId":$scope.claimId
+                    }
+                    console.log(JSON.stringify(createdisabilityIncidentDetails));
+                }
+
+                if($scope.dEATHFUNERAL){
+                    // Saving the Death and Funeral Calim Type
+                    $http.post('/pla/grouplife/claim/claimregistration',createRegistration).success(function (response, status, headers, config) {
+
+                    }).error(function (response, status, headers, config) {
+                    });
+                }else{
+                    // Saving the DISABILITY Calim Type
+                    $http.post('/pla/grouplife/claim/disabilityclaimregistration',createdisabilityIncidentDetails).success(function (response, status, headers, config) {
+
+                    }).error(function (response, status, headers, config) {
+                    });
+                }
+            }
+
+            /**
+             * Claim Registration
+             */
+            $scope.createRegistration=function(){
+                var submitRegistration={
                     "claimId":$scope.claimId
                 }
-                console.log(JSON.stringify(createRegistration));
 
-                $http.post('/pla/grouplife/claim/claimregistration',createRegistration).success(function (response, status, headers, config) {
+                $http.post('/pla/grouplife/claim/submit',submitRegistration).success(function (response, status, headers, config) {
 
                 }).error(function (response, status, headers, config) {
                 });
@@ -659,11 +785,11 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             };
 
 
-            $scope.showDisabilityDate= function ($event){
+           /* $scope.showDisabilityDate= function ($event){
             $event.preventDefault();
             $event.stopPropagation();
            $scope.openDisabilityDate=true;
-       };
+       };*/
        $scope.showDob=function($event){
        $event.preventDefault();
        $event.stopPropagation();
@@ -707,11 +833,11 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             $event.stopPropagation();
             $scope.openFromDate=true;
         };
-  $scope.showDisabilityDate= function ($event){
+ /* $scope.showDisabilityDate= function ($event){
              $event.preventDefault();
              $event.stopPropagation();
              $scope.openDisabilityDate=true;
-         };
+         };*/
   $scope.showDignosisDate= function ($event){
              $event.preventDefault();
              $event.stopPropagation();

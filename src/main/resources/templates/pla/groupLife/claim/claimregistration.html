@@ -176,9 +176,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Category</label>
-                                            <select  class="form-control input-sm" ng-model="claimDetails.category" name="category"
+                                            <!--<select  class="form-control input-sm" ng-model="claimDetails.category" name="category"
                                                      ng-options="category for category in categorySet" ng-change="getRelationShipList()">
-                                            </select>
+                                            </select>-->
+                                            <input class="form-control input-md"
+                                                   name="category"
+                                                   ng-model="claimDetails.category"
+                                                   type="text" ng-disabled="true"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -191,9 +195,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Relationship</label>
-                                            <select  class="form-control input-sm" ng-model="claimDetails.relationship" name="relationship"
+                                           <!-- <select  class="form-control input-sm" ng-model="claimDetails.relationship" name="relationship"
                                                      ng-options="relationship for relationship in reltaionShipList" ng-change="getPlanDetailWithClaimTypeList()">
-                                            </select>
+                                            </select>-->
+                                            <input class="form-control input-md"
+                                                   name="relationship"
+                                                   ng-model="claimDetails.relationship"
+                                                   type="text" ng-disabled="true"/>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 10px;">
@@ -277,10 +285,13 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Claim Type</label>
-                                                <select  class="form-control input-sm" ng-model="claimDetails.claimType" name="claimType"
+                                                <!--<select  class="form-control input-sm" ng-model="claimDetails.claimType" name="claimType"
                                                          ng-options="claimType for claimType in claimTypes">
-
-                                                </select>
+                                                </select>-->
+                                                <input class="form-control input-md"
+                                                       name="claimType"
+                                                       ng-model="claimDetails.claimType"
+                                                       type="text" ng-disabled="true"/>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -813,7 +824,7 @@
                                     Incidence Details <i class="pull-right glyphicon"
                                                           ng-class="{'glyphicon-chevron-down': accordionStatus.incidenceDetails, 'glyphicon-chevron-right': !accordionStatus.incidenceDetails}"></i>
                                 </accordion-heading>
-                                <div class="row">
+                                <div class="row" ng-if="dEATHFUNERAL">
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label class="control-label">Cause of Death</label>
@@ -892,7 +903,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row bs-callout  bs-callout-info" style="margin: 4px;padding:10px">
+                                <div class="row bs-callout  bs-callout-info" style="margin: 4px;padding:10px" ng-if="dEATHFUNERAL">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Type Of Accident</label>
@@ -944,8 +955,6 @@
                                         </div>
                                         <div class="form-group ">
                                             <label class="control-label">Time Of Accident</label>
-                                            <!--<input type="time" class="form-control input-sm" name="deathTime" ng-model="incidenceDetails.timeOfAccident"/>-->
-                                            <!--<input class="form-control input-sm" ui-timepicker="" ng-model="incidenceDetails.timeOfAccident" />-->
                                             <input type="text" class="form-control" size="8" ng-model="incidenceDetails.timeOfAccident" data-time-format="HH:mm:ss"
                                                    data-time-type="date" data-min-time="00:00:00" data-max-time="23:59:59" data-autoclose="1" name="time2" bs-timepicker="" data-length="3"/>
                                         </div>
@@ -963,6 +972,213 @@
                                             <label class="control-label">Police Station</label>
                                             <input type="text" class="form-control input-sm" name="policeStation" ng-maxlength="100" maxlength="100" ng-model="incidenceDetails.policeStationName"/>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-if="!dEATHFUNERAL">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label">Date Of Disability</label>
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-click="openDisabilityDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                       ng-model="disabilityIncidentDetails.dateOfDisability"
+                                                       datepicker-options="datePickerSettingsForDisabilityDate.dateOptions"
+                                                       is-open="datePickerSettingsForDisabilityDate.isOpened" close-text="Close"
+                                                       show-button-bar="false"
+                                                       onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openDisabilityDate($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Extent Of Disability</label>
+                                            <select class="form-control input-sm" ng-model="disabilityIncidentDetails.extendOfDisability">
+                                                <option value="">-- Select Extent Of Disability Type --</option>
+                                                <option value="PARTIAL">Partial</option>
+                                                <option value="TOTAL">Total</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Exact Diagnosis</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.exactDiagnosis"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Name of Doctor and Hospital Address</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.nameOfDoctorAndHospitalAddress"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Number of Hospital</label>
+                                            <input type="text" class="form-control input-sm" ng-minlength="10" maxlength="10" ng-maxLength="10" name="contactNumber" ng-pattern="/^\d+$/" ng-model="disabilityIncidentDetails.contactNumberOfHospital" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Treatment taken</label>
+                                            <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.treatmentTaken"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Nature Of Disability</label>
+                                            <select class="form-control input-sm" ng-model="disabilityIncidentDetails.natureOfDisability">
+                                                <option value="">-- Select Nature Of Disability Type --</option>
+                                                <option value="TEMPORARY">Temporary</option>
+                                                <option value="PERMANENT">Permanent</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Date Of Diagnosis</label>
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-click="openDiagnosisDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                       ng-model="disabilityIncidentDetails.dateOfDiagnosis"
+                                                       datepicker-options="datePickerSettingsForDiagnosisDate.dateOptions"
+                                                       is-open="datePickerSettingsForDiagnosisDate.isOpened" close-text="Close"
+                                                       show-button-bar="false"
+                                                       onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openDiagnosisDate($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="control-label">Date of First Consultation</label>
+                                            <div class='input-group date'>
+                                                <input type="text" class="form-control input-sm"
+                                                       ng-click="openDeathConsult($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                       ng-model="disabilityIncidentDetails.dateOfFirstConsultation"
+                                                       datepicker-options="datePickerSettingsForDeathConsult.dateOptions"
+                                                       is-open="datePickerSettingsForDeathConsult.isOpened" close-text="Close"
+                                                       show-button-bar="false"
+                                                       onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openDeathConsult($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <strong ng-if="!dEATHFUNERAL">Additional Details</strong>
+                                <div class="row bs-callout  bs-callout-info" style="margin: 4px;padding:10px" ng-if="!dEATHFUNERAL">
+                                    <div class="form-group col-md-9">
+                                        <strong class="control-label">Is the Life Assured capable of performing the following Tasks of Daily Living?</strong>
+                                    </div>
+                                    <div class="form-group col-md-3" style="right: 10px;padding:10px">
+                                        <button style="display:inline-block" type="button" class="btn btn-default btn-sm bs-select" data-all-none-buttons="true"
+                                                ng-model="disabilityIncidentDetails.capabilityOfAssuredDailyLiving"  data-multiple="1"
+                                                ng-options="task as task for task in dailyTaskList" placeholder="Select one or more Daily Task">
+                                            Action <span class="caret"></span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <strong class="control-label">Is the Life Assured capable of engaging in any gainful activity or carrying out any work, occupation, or
+                                            profession to earn or obtain any wages, compensation, remuneration or profit ?</strong>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <select class="form-control input-sm"  name="gainFulActivites" ng-model="disabilityIncidentDetails.assuredGainfulActivities">
+                                            <option value="">--Select One--</option>
+                                            <option value="true" ng-value="true">Yes</option>
+                                            <option value="false" ng-value="false">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="row form-group col-md-12">
+                                        <label class="control-label">Please provide Details</label>
+                                        <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.detailsOfWorkActivities"/>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label class="control-label">From Date</label>
+                                                <div class='input-group date'>
+                                                    <input type="text" class="form-control input-sm"
+                                                           ng-click="openFromDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                           ng-model="disabilityIncidentDetails.fromActivitiesDate"
+                                                           datepicker-options="datePickerSettingsForFromDate.dateOptions"
+                                                           is-open="datePickerSettingsForFromDate.isOpened" close-text="Close"
+                                                           show-button-bar="false"
+                                                           onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openFromDate($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Is the Life Assured confined to House?</label>
+                                                <select class="form-control input-sm" ng-model="disabilityIncidentDetails.assuredConfinedToIndoor">
+                                                    <option value="">-- Select able to get outdoors --</option>
+                                                    <option value="true" ng-value="true">Yes</option>
+                                                    <option value="false" ng-value="false">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label class="control-label">From Date</label>
+                                                <div class='input-group date'>
+                                                    <input type="text" class="form-control input-sm"
+                                                           ng-click="openFromDate2($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                           ng-model="disabilityIncidentDetails.fromIndoorDate"
+                                                           datepicker-options="datePickerSettingsForFromDate2.dateOptions"
+                                                           is-open="datePickerSettingsForFromDate2.isOpened" close-text="Close"
+                                                           show-button-bar="false"
+                                                           onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openFromDate2($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group col-md-12">
+                                        <label class="control-label">Please provide Details</label>
+                                        <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.assuredIndoorDetails"/>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Is the Life Assured able to get outdoors?</label>
+                                                <select class="form-control input-sm" ng-model="disabilityIncidentDetails.assuredAbleToGetOutdoor">
+                                                    <option value="">-- Select able to get outdoors --</option>
+                                                    <option value="true" ng-value="true">Yes</option>
+                                                    <option value="false" ng-value="false">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label class="control-label">From Date</label>
+                                                <div class='input-group date'>
+                                                    <input type="text" class="form-control input-sm"
+                                                           ng-click="openFromDate3($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                           ng-model="disabilityIncidentDetails.fromOutdoorDate"
+                                                           datepicker-options="datePickerSettingsForFromDate3.dateOptions"
+                                                           is-open="datePickerSettingsForFromDate3.isOpened" close-text="Close"
+                                                           show-button-bar="false"
+                                                           onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                          <button type="button" class="btn btn-default btn-sm" ng-click="openFromDate3($event)"><i
+                                                                  class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                         </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group col-md-12">
+                                        <label class="control-label">Please provide Details</label>
+                                        <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.assuredOutdoorDetails"/>
+                                    </div>
+                                    <div class="row form-group col-md-12">
+                                        <label class="control-label">When and where can Life Assured be visited by our Medical or other Officers?</label>
+                                        <input type="text" class="form-control input-sm" name="deathCause" ng-maxlength="100" maxlength="100" ng-model="disabilityIncidentDetails.visitingMedicalOfficerDetails"/>
                                     </div>
                                 </div>
                             </accordion-group>
@@ -1075,7 +1291,7 @@
                                 <button type="button" class="btn btn-default btn-sm">Cancel</button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="createClimIntimation()">Submit</button>
+                                <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="createRegistration()">Submit</button>
                             </div>
                         </div>
                     </ng-form>
