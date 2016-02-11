@@ -439,27 +439,31 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
 
             $scope.$watch(
                 function(){
-                    return {htn: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail};
+                    return {htn: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn, htnDetails: $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.htn === 'No'){
                         $scope.isrequire = false;
                         $scope.disableHtn = true;
+                        $scope.stepsSaved["4"] = false;
                         $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails='';
 
                     }
                     else {
-                        if( !$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails){
+                        if(!$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails){
                             $scope.isrequire = true;
-
+                            $scope.stepsSaved["4"] = true;
+                        } else {
+                            $scope.stepsSaved["4"] = false;
                         }
-                        $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail;
+                        //$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail;
 
                         $scope.disableHtn = false;
                     }
                 },
                 true
             );
+
             $scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails;
             $scope.disableIhd = true;
             $scope.$watch(

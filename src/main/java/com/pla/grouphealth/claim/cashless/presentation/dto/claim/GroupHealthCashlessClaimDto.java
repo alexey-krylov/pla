@@ -44,6 +44,9 @@ public class GroupHealthCashlessClaimDto {
     private LocalDate submissionDate;
     private String claimProcessorUserId;
     private String claimUnderWriterUserId;
+    private String billMismatchProcessorId;
+    private String serviceMismatchProcessorId;
+    private String claimRejectedBy;
     private String underWriterRoutedToSeniorUnderWriterUserId;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
@@ -196,6 +199,21 @@ public class GroupHealthCashlessClaimDto {
 
     public GroupHealthCashlessClaimDto updateWithPreAuthorizationDetails(Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
         this.preAuthorizationDetails = preAuthorizationDetails;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithBillMismatchProcessorId(String billMismatchProcessorId) {
+        this.billMismatchProcessorId = billMismatchProcessorId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithServiceMismatchProcessorId(String serviceMismatchProcessorId) {
+        this.serviceMismatchProcessorId = serviceMismatchProcessorId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateClaimRejectedBy(String claimRejectedBy) {
+        this.claimRejectedBy = claimRejectedBy;
         return this;
     }
 

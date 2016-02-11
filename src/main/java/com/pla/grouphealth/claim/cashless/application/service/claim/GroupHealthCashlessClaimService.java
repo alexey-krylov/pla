@@ -735,7 +735,7 @@ public class GroupHealthCashlessClaimService {
 
     public List<GroupHealthCashlessClaimDto> getCashlessClaimByDefaultList(String claimUserId) {
         List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
-        PageRequest pageRequest = new PageRequest(0, 300, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
+        PageRequest pageRequest = new PageRequest(0, 500, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
         Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(Status.INTIMATION, Status.EVALUATION, Status.RETURNED), pageRequest);
         if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
             result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(pages.getContent());

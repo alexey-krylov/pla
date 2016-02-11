@@ -63,13 +63,17 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private LocalDate submissionDate;
     private String claimProcessorUserId;
     private String claimUnderWriterUserId;
+    private String billMismatchProcessorId;
+    private String serviceMismatchProcessorId;
     private String underWriterRoutedToSeniorUnderWriterUserId;
+    private String claimRejectedBy;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
     private boolean rejectionEmailSent;
     private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
     private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
+    private LocalDate claimRejectionDate;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -344,6 +348,25 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
 
     public GroupHealthCashlessClaim updateWithPreAuthorizationDetails(Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
         this.preAuthorizationDetails = preAuthorizationDetails;
+        return this;
+    }
+    public GroupHealthCashlessClaim updateWithBillMismatchProcessorId(String billMismatchProcessorId) {
+        this.billMismatchProcessorId = billMismatchProcessorId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithServiceMismatchProcessorId(String serviceMismatchProcessorId) {
+        this.serviceMismatchProcessorId = serviceMismatchProcessorId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateClaimRejectedBy(String claimRejectedBy) {
+        this.claimRejectedBy = claimRejectedBy;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithRejectionDate(LocalDate claimRejectionDate) {
+        this.claimRejectionDate = claimRejectionDate;
         return this;
     }
 
