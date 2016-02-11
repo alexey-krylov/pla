@@ -278,11 +278,11 @@ public class GLClaimIntimationCommandHandler {
     @CommandHandler
     public String submitClaim(SubmitGLClaimCommand submitGLClaimCommand) {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(submitGLClaimCommand.getClaimId()));
-        groupLifeClaim = groupLifeClaim.submitForApproval(DateTime.now(), submitGLClaimCommand.getUserDetails().getUsername(), submitGLClaimCommand.getComment());
+        GLClaimRegistrationProcessor glClaimRegistrationProcessor = groupLifeClaimRoleAdapter.userToGLClaimRegistrationProcessor(submitGLClaimCommand.getUserDetails());
+        groupLifeClaim=glClaimRegistrationProcessor.submitClaimRegistrationToUnderWriter(DateTime.now(), groupLifeClaim,submitGLClaimCommand.getComment()) ;
+        glClaimMongoRepository.add(groupLifeClaim);
         return groupLifeClaim.getIdentifier().getClaimId();
     }
-
-
 
     @CommandHandler
     public String returnClaim(ReturnGLClaimCommand returnGLClaimCommand) {

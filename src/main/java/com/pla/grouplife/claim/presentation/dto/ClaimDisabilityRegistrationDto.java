@@ -1,7 +1,5 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.grouplife.claim.domain.model.DisabilityExtent;
-import com.pla.grouplife.claim.domain.model.DisabilityNature;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +18,8 @@ import java.util.List;
 
 public class ClaimDisabilityRegistrationDto {
     private DateTime dateOfDisability;
-    private DisabilityNature natureOfDisability;
-    private DisabilityExtent extendOfDisability;
+    private String natureOfDisability;
+    private String extendOfDisability;
     private DateTime dateOfDiagnosis;
     private String  exactDiagnosis;
     private String nameOfDoctorAndHospitalAddress;

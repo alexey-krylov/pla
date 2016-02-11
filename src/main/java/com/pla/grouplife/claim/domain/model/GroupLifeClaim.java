@@ -34,6 +34,10 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
 
     private ClaimNumber amendedNewClaimNumber;
 
+    private String relationship;
+
+    private String category;
+
     private ClaimType claimType;
 
     private Policy policy;
@@ -111,6 +115,11 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
     }
     public GroupLifeClaim withEarlyClaim(boolean isEarlyDeathClaim){
         this.isEarlyDeathClaim=isEarlyDeathClaim;
+        return this;
+    }
+    public GroupLifeClaim withCategoryAndRelationship(String category,String relationship){
+        this.category=category;
+        this.relationship=relationship;
         return this;
     }
     public GroupLifeClaim withLateClaim(boolean isLateClaim){
@@ -221,7 +230,7 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
         this.submittedOn = now;
         this.claimStatus = ClaimStatus.UNDERWRITING;
         registerEvent(new GLClaimSubmitEvent(this.getClaimId()));
-        if (isNotEmpty(comment)) {
+        if (isNotEmpty(submittedBy)) {
             registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(), ClaimStatus.UNDERWRITING, submittedBy, comment, submittedOn));
         }
         return this;

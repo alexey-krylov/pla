@@ -2,7 +2,6 @@ package com.pla.grouplife.claim.presentation.dto;
 
 import com.pla.grouplife.claim.domain.model.ClaimantDetail;
 import com.pla.sharedkernel.domain.model.ClaimType;
-import com.pla.sharedkernel.domain.model.Relationship;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +22,7 @@ public class GLClaimIntimationDetailsDto {
     private String policyId;
     private String policyNumber;
     private String schemeName;
-    private Relationship relationship;
+    private String relationship;
     private String category;
     private ClaimType claimType;
     private DateTime claimIntimationDate;

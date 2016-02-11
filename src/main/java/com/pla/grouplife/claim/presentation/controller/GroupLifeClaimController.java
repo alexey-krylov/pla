@@ -164,7 +164,6 @@ public class GroupLifeClaimController {
         return modelAndView;
     }
 
-
     @RequestMapping(value = "/claimregistration", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity registerClaim(@RequestBody GLClaimRegistrationCommand glClaimRegistrationCommand,BindingResult bindingResult, HttpServletRequest request) {
@@ -203,24 +202,7 @@ public class GroupLifeClaimController {
         return new ResponseEntity(Result.success("Disability Claim registered successfully"), HttpStatus.OK);
     }
 
-    /*
-     @RequestMapping(value = "/openclaimsearchpage", method = RequestMethod.GET)
-    public ModelAndView searchClaim() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/searchClaim");
-        modelAndView.addObject("searchCriteria", new SearchClaimDto());
-        return modelAndView;
-    }
-    @RequestMapping(value = "/searchclaim", method = RequestMethod.POST)
-    public ModelAndView getClaimDetail(SearchClaimDto searchClaimDto) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/searchClaim");
-        modelAndView.addObject("searchResult", glClaimService.getClaimDetail(searchClaimDto));
-        modelAndView.addObject("searchCriteria", searchClaimDto);
-        return modelAndView;
 
-    }
-     */
     @RequestMapping(value = "/searchclaim", method = RequestMethod.POST)
     @ResponseBody
     public List<GLClaimIntimationDto> claimSearch(@RequestBody SearchClaimDto searchClaimDto) {

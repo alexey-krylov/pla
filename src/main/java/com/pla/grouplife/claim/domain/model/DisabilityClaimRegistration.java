@@ -16,8 +16,8 @@ import java.util.List;
 public class DisabilityClaimRegistration {
 
     private DateTime dateOfDisability;
-    private DisabilityNature natureOfDisability;
-    private DisabilityExtent  extendOfDisability;
+    private String natureOfDisability;
+    private String  extendOfDisability;
     private DateTime dateOfDiagnosis;
     private String  exactDiagnosis;
     private String nameOfDoctorAndHospitalAddress;

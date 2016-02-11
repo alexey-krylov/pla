@@ -257,6 +257,10 @@ public class GLClaimService implements Serializable{
             claimIntimationDetailDto.setClaimId(claimIdFromDb);
             String claimNumber=((ClaimNumber)claimRecordMap.get("claimNumber")).getClaimNumber();
             claimIntimationDetailDto.setClaimNumber(claimNumber);
+            String category=(String)claimRecordMap.get("category");
+            String relationship=(String)claimRecordMap.get("relationship");
+            claimIntimationDetailDto.setCategory(category);
+            claimIntimationDetailDto.setRelationship(relationship);
             Policy policy=(Policy)claimRecordMap.get("policy");
             PolicyNumber policyNumber=policy.getPolicyNumber();
             claimIntimationDetailDto.setPolicyNumber(policyNumber.getPolicyNumber());

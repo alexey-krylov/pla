@@ -19,6 +19,13 @@ public class GLClaimRegistrationProcessor {
         groupLifeClaim = groupLifeClaim.createClaimRegistrationRecord(approvalOn,this.userName,comment);
         return groupLifeClaim;
     }
+
+
+    public GroupLifeClaim submitClaimRegistrationToUnderWriter(DateTime approvalOn,  GroupLifeClaim groupLifeClaim,String comment) {
+        groupLifeClaim = groupLifeClaim.submitForApproval(approvalOn,this.userName,comment);
+        return groupLifeClaim;
+    }
+
     public GroupLifeClaim createClaim(String claimIdInString, String claimNumberInString, String policyId, String policyNumber, String policyHolderName, ClaimType claimType) {
         ClaimId claimId = new ClaimId(claimIdInString);
         ClaimNumber claimNumber = new ClaimNumber(claimNumberInString);

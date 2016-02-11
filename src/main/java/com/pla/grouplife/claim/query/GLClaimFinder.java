@@ -153,12 +153,18 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
 
     public List<Map> getClaimIntimationDetail(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String assuredClientId, String nrcNumber) {
 
-
+     /*
         Criteria criteria = null;
         String[] statuses = new String[]{"INTIMATION"};
-         criteria = Criteria.where("claimStatus").in(statuses);
+        criteria = Criteria.where("claimStatus").in(statuses);
         if (isNotEmpty(claimNumber)) {
             criteria = criteria.and("claimNumber.claimNumber").is(claimNumber);
+        }
+        */
+
+        Criteria criteria = null;
+        if (isNotEmpty(claimNumber)) {
+            criteria = Criteria.where("claimNumber.claimNumber").is(claimNumber);
         }
         if (isNotEmpty(policyNumber)) {
             criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);
