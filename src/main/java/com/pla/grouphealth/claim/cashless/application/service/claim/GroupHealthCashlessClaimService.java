@@ -24,10 +24,7 @@ import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundE
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimPolicyDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
 import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
@@ -39,6 +36,7 @@ import com.pla.grouphealth.sharedresource.model.vo.*;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.publishedlanguage.dto.ClientDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import org.apache.velocity.app.VelocityEngine;
 import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.publishedlanguage.underwriter.contract.IUnderWriterAdapter;
 import com.pla.sharedkernel.domain.model.*;
@@ -63,6 +61,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -110,6 +109,8 @@ public class GroupHealthCashlessClaimService {
     PreAuthorizationRequestService preAuthorizationRequestService;
     @Autowired
     private IUnderWriterAdapter underWriterAdapter;
+    @Autowired
+    private  VelocityEngine velocityEngine;
     @Autowired
     private GHCashlessClaimFinder GHCashlessClaimFinder;
     @Autowired
@@ -942,5 +943,58 @@ public class GroupHealthCashlessClaimService {
         groupHealthCashlessClaim.updateWithClaimUnderWriterUserId(userName);
         groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
     }
-}
 
+    public GHCashlessClaimMailDto getPreScriptedEmail(String groupHealthCashlessClaimId){
+     GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+    String subject ="GH Cashless Claim Rejection::" +groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString();
+    String emailAddress = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getEmailAddress(): null;
+    Map emailContent = getEmaildata(groupHealthCashlessClaim);
+    Map<String, Object> emailContentMap = Maps.newHashMap();
+    emailContentMap.put("emailContent", emailContent);
+    String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthcashlessclaimrejectiontemplate.vm", emailContentMap);
+    GHCashlessClaimMailDto ghCashlessClaimMailDto = new GHCashlessClaimMailDto(subject,emailBody,emailAddress);
+    ghCashlessClaimMailDto.setGroupHealthCashlessClaimId(groupHealthCashlessClaimId);
+    return ghCashlessClaimMailDto;
+}
+    public GHCashlessClaimMailDto getAddRequirementRequestLetter(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        String subject = " Claim  Rejection :: " + groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString();
+        String mailAddress =  isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getEmailAddress(): null;
+        Map emailContent = getEmaildata(groupHealthCashlessClaim);
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthPreAuthorizationRequestLetter.vm", emailContentMap);
+        GHCashlessClaimMailDto ghPreAuthorizationMailDto = new GHCashlessClaimMailDto(subject, emailBody, mailAddress);
+        ghPreAuthorizationMailDto.setGroupHealthCashlessClaimId(groupHealthCashlessClaimId);
+        return ghPreAuthorizationMailDto;
+    }
+
+    public Map getEmaildata(GroupHealthCashlessClaim groupHealthCashlessClaim ){
+        GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail=  groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
+        String plan = isNotEmpty(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())? groupHealthCashlessClaimPolicyDetail.getPlanName():null;
+        String salutation =isNotEmpty(groupHealthCashlessClaimPolicyDetail.getAssuredDetail())? groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getSalutation():null;
+        String firstName = isNotEmpty(groupHealthCashlessClaimPolicyDetail.getAssuredDetail())? groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getFirstName():null;
+        String surName = isNotEmpty(groupHealthCashlessClaimPolicyDetail.getAssuredDetail())? groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getSurname():null;
+        String province = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail() )?groupHealthCashlessClaim.getGhProposer().getContactDetail().getProvince(): null;
+        String town = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getTown(): null;
+        LocalDate claimIntimationDate = groupHealthCashlessClaim.getClaimIntimationDate();
+        String groupHealthCashlessClaimId=groupHealthCashlessClaim.getGroupHealthCashlessClaimId().toString();
+        String address1 =  isNotEmpty(groupHealthCashlessClaim.getGhProposer())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getAddressLine1(): null;
+        String address2 = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getAddressLine2(): null;
+
+        Map<String, Object> emailContent = Maps.newHashMap();
+        emailContent.put("currentDateTime", LocalDate.now());
+        emailContent.put("plan",plan);
+        emailContent.put("town",town);
+        emailContent.put("policyNumber",groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString());
+        emailContent.put("province",province);
+        emailContent.put("surName",surName);
+        emailContent.put("firstName",firstName);
+        emailContent.put("groupHealthCashlessClaimId",groupHealthCashlessClaimId);
+        emailContent.put("claimIntimationDate",claimIntimationDate);
+        emailContent.put("salutation",salutation);
+        emailContent.put("address1",address1);
+        emailContent.put("address2",address2);
+        return emailContent;
+    }
+}

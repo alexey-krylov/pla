@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet"
+          href="http://cdn.jsdelivr.net/webjars/org.webjars/bootstrap-tagsinput/0.3.9/bootstrap-tagsinput.css">
+    <script data-main="../../../../static/js/requireConfig"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.min.js"></script>
+    <!--*/-->
+</head>
+<script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/jquery/dist/jquery.min.js"></script>
+<script src="/pla/js/grouphealth/claim/emailghcashlessclaimrejectionletter.js"></script>
+<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+<script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+<script language="javascript" type="text/javascript">
+    $(window).load(function () {
+        $('#loading').hide();
+    });
+</script>
+<style>
+    #loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1100;
+        background-color: white;
+        opacity: .6;
+
+    }
+
+    #loading-image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -32px; /* -1 * image width / 2 */
+        margin-top: -32px; /* -1 * image height / 2 */
+        display: block;
+    }
+
+</style>
+
+<body onload="javascript:bodyOnLoad();">
+<div class="container">
+    <div id="loading"><img id="loading-image" src="/pla/images/ajax-loader.gif"/></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span th:text="#{emailPolicy}">Email Policy</span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-success btn-xs"
+                                    onclick="javascript:sendEmail('false')">Send Email
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <table class="table table-bordered" style="margin-bottom: 0px">
+                                <tbody>
+                                <tr>
+                                    <td>To:</td>
+                                    <td>
+                                        <input type="text" name="recipientMailAddress"
+                                               id="to" class="form-control input-md" ng-required="true"
+                                               th:value="${mailContent.recipientMailAddress}"/>
+                                        <!--<input type="text" id="to"  class="form-control input-md"/>-->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 3px">
+                        <div class="col-md-12">
+                            <table class="table table-bordered" style="margin-bottom: 0px">
+                                <tbody>
+                                <tr>
+                                    <td>Subject:</td>
+                                    <td><strong>
+                                        <!--<input type="hidden" id="groupHealthCashlessClaimId" th:value="${mailContent.groupHealthCashlessClaimId}"/>-->
+                                        <input type="hidden" id="policyNumber" th:value="${mailContent.policyNumber}"/>
+                                        <input type="hidden" id="plan" th:value="${mailContent.plan}"/>
+                                        <input type="text" class="form-control input-md" name="subject"
+                                               id="subject"
+                                               th:value="${mailContent.subject}"/></strong></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 3px">
+                        <div class="col-md-12">
+                            <textarea id="mailContent" style="width:100%" th:utext="${mailContent.mailContent}"
+                                      name="mailContent">
+                            </textarea>
+                        </div>
+                    </div>
+                    <!--<div class="row">
+                        <div class="col-md-12">
+                            <a th:href="@{/quotation/grouplife/printquotation/{quotationId}(quotationId=${mailContent.quotationId})}">
+                                <span class="glyphicon glyphicon-file" style="font-size: 18px"></span>
+                                <label th:utext="${mailContent.subject}+'.PDF'"></label>
+                            </a>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .bootstrap-tagsinput {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+
+    .table > tbody > tr > td {
+        padding: 3px;
+    !important;
+    }
+
+    .table tr td:nth-child(1) {
+        width: 7%;
+        background-color: rgba(189, 186, 179, 0.32);
+        color: #a19ba1;
+        font-weight: bold;
+    }
+
+    .table tr td:nth-child(2) {
+        width: 95%;
+    }
+</style>
+
+<div class="modal fade" id="alert-modal-success" tabindex="-1" role="dialog" aria-labelledby="alert-modal-success"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true"></div>
+                <div>Email sent successfully</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alert-modal-error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" hidden="true"></div>
+                <div>Mail not sent successfully.</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="changeToOk" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>

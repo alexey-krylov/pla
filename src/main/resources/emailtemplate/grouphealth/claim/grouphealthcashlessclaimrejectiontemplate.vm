@@ -23,6 +23,33 @@
 ##            style='mso-bidi-font-weight:normal'><u><span lang=EN-GB style='font-size:11.0pt;
 ##font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Attention: ${emailContent.contactPersonName}
 ##        <o:p></o:p></span></u></b></p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><h2>  ${emailContent.currentDateTime}</h2>
+<span style='mso-spacerun:yes'> </span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><h2>  ${emailContent.salutation}  ${emailContent.firstName}  ${emailContent.surName}</h2>
+<span style='mso-spacerun:yes'> </span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><h2> ${emailContent.address1} ${emailContent.address2}</h2>
+<span style='mso-spacerun:yes'> </span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><h2> ${emailContent.town} ${emailContent.province}</h2>
+<span style='mso-spacerun:yes'> </span></p>
+
+
+
+
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
@@ -37,7 +64,7 @@ mso-ansi-language:EN-GB'><h2> Plan :  ${emailContent.plan}</h2>
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
             lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><h2>GH Cashless Claim  Number :  ${emailContent.groupHealthCashlessClaimId}</h2>
+mso-ansi-language:EN-GB'><h2>Cashless Claim Number :  ${emailContent.groupHealthCashlessClaimId}</h2>
 <span style='mso-spacerun:yes'> </span></p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
@@ -63,11 +90,11 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
     </div>
 
 
-          <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-                  lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'>This communication is with reference to the Claim dated dd/mm/yyyy for ${emailContent.preAuthorizationDate} ${emailContent.surName}
-<br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'>This communication is with reference to the Claim dated dd/mm/yyyy  ${emailContent.claimIntimationDate} for ${emailContent.firstName} ${emailContent.surName}
+        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
 
 
 

@@ -27,8 +27,8 @@ public class GHCashlessClaimMailDto {
     @NotNull(message = "recipientMailAddress cannot be empty")
     @NotEmpty(message = "recipientMailAddress cannot be empty")
     private String recipientMailAddress;
-    private LocalDate  preAuthorizationDate;
-    private String groupHealthCashlessClaimid;
+    private LocalDate  claimIntimationDate;
+    private String groupHealthCashlessClaimId;
     private String policyNumber;
 
     public GHCashlessClaimMailDto(String subject, String mailContent, String recipientMailAddress) {

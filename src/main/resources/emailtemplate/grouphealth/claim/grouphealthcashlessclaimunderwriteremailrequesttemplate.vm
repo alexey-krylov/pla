@@ -9,9 +9,24 @@
 ##        <span style='mso-no-proof:yes'>${emailContent.mailSentDate}</span></span>
 ##    </h3>
 ##
-##    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
-##font-family:"Tahoma","sans-serif"'>The Account Executive<o:p></o:p></span></p>
-##
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'> ${emailContent.preAuthorizationDate} ${emailContent.surName}
+        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'> ${emailContent.province} ${emailContent.town}
+        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+
+
+
+
+    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
+font-family:"Tahoma","sans-serif"'>Date:${emailContent.currentDateTime}<o:p></o:p></span></p>
+
 ##    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
 ##font-family:"Tahoma","sans-serif"'>Marsh Zambia ltd<o:p></o:p></span></p>
 ##
@@ -23,6 +38,7 @@
 ##            style='mso-bidi-font-weight:normal'><u><span lang=EN-GB style='font-size:11.0pt;
 ##font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Attention: ${emailContent.contactPersonName}
 ##        <o:p></o:p></span></u></b></p>
+
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
@@ -37,7 +53,7 @@ mso-ansi-language:EN-GB'><h2> Plan :  ${emailContent.plan}</h2>
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
             lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><h2>GH Cashless Claim  Number :  ${emailContent.groupHealthCashlessClaimId}</h2>
+mso-ansi-language:EN-GB'><h2>Pre-authorization Number :  ${emailContent.surName}</h2>
 <span style='mso-spacerun:yes'> </span></p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
@@ -63,21 +79,35 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
     </div>
 
 
-          <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-                  lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
 mso-ansi-language:EN-GB'>This communication is with reference to the Claim dated dd/mm/yyyy for ${emailContent.preAuthorizationDate} ${emailContent.surName}
-<br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
 
 
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
             lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'> On scrutiny of the documents submitted by you, it has been observed that xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.<br/>
-<span style='mso-spacerun:yes'> <br/></span>In view of the above, we regret to inform you that the claim is not payable under the Policy Exclusion.<br/></span></p>
+mso-ansi-language:EN-GB'> We wish to inform you that the following mandatory documents are required to enable us <br/>
+<span style='mso-spacerun:yes'> <br/></span>proceed with the processing of the claim.
+
+.<br/></span></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+ 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+  mso-ansi-language:EN-GB'><br/>1. xxxxxxxxxxxxxxxxxxxxxxxx<br/>
+ <span style='mso-spacerun:yes'>
+        </span><br/>2. xxxxxxxxxxxxxxxxxxxxxxxx.<br/></span></p>
 
 
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
+            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><br/>to us at xxxxx@xxxxx.co.zm<br/>
+<span style='mso-spacerun:yes'> </span></span></p></br></br>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
  0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span

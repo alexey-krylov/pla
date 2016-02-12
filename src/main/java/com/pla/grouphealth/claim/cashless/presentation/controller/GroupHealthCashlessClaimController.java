@@ -499,14 +499,16 @@ public class GroupHealthCashlessClaimController {
     @RequestMapping(value = "/underwriter/getgrouphealthcashlessclaimrejectionletter/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
     public ModelAndView openEmailPage(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrejectionletter");
-        //modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getPreScriptedEmail(preAuthorizationId));
+        modelAndView.setViewName("pla/grouphealth/claim/emailghcashlessclaimrejectionletter");
+        modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getPreScriptedEmail(groupHealthCashlessClaimId));
         return modelAndView;
     }
 
     @RequestMapping(value = "/underwriter/getgrouphealthcashlessclaimaddrequirementrequestletter/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
     public ModelAndView getAddRequirementRequestLetter(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/emailghcashlessclaimrequirementletter");
+        modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
         modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrequirementletter");
         //modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
         return modelAndView;
@@ -520,7 +522,7 @@ public class GroupHealthCashlessClaimController {
         }
         try {
             mailService.sendMailWithAttachment(ghCashlessClaimMailDto.getSubject(), ghCashlessClaimMailDto.getMailContent(), Lists.newArrayList(), ghCashlessClaimMailDto.getRecipientMailAddress().split(";"));
-            groupHealthCashlessClaimService.updateRejectionEmailSentFlag(ghCashlessClaimMailDto.getGroupHealthCashlessClaimid());
+            groupHealthCashlessClaimService.updateRejectionEmailSentFlag(ghCashlessClaimMailDto.getGroupHealthCashlessClaimId());
             return Result.success("Email sent successfully");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
@@ -535,7 +537,7 @@ public class GroupHealthCashlessClaimController {
         }
         try {
             mailService.sendMailWithAttachment(ghCashlessClaimMailDto.getSubject(), ghCashlessClaimMailDto.getMailContent(), Lists.newArrayList(), ghCashlessClaimMailDto.getRecipientMailAddress().split(";"));
-            groupHealthCashlessClaimService.updateRequirementEmailSentFlag(ghCashlessClaimMailDto.getGroupHealthCashlessClaimid());
+            groupHealthCashlessClaimService.updateRequirementEmailSentFlag(ghCashlessClaimMailDto.getGroupHealthCashlessClaimId());
             return Result.success("Email sent successfully");
         } catch (Exception e) {
             return Result.failure(e.getMessage());
