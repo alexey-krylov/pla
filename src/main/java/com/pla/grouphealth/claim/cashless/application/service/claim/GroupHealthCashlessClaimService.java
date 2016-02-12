@@ -973,6 +973,7 @@ public class GroupHealthCashlessClaimService {
     ghCashlessClaimMailDto.setGroupHealthCashlessClaimId(groupHealthCashlessClaimId);
     return ghCashlessClaimMailDto;
 }
+
     public GHCashlessClaimMailDto getAddRequirementRequestLetter(String groupHealthCashlessClaimId) {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
         String subject = " Claim  Rejection :: " + groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString();
@@ -995,11 +996,15 @@ public class GroupHealthCashlessClaimService {
         String province = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail() )?groupHealthCashlessClaim.getGhProposer().getContactDetail().getProvince(): null;
         String town = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getTown(): null;
         LocalDate claimIntimationDate = groupHealthCashlessClaim.getClaimIntimationDate();
-        String groupHealthCashlessClaimId=groupHealthCashlessClaim.getGroupHealthCashlessClaimId().toString();
+        String groupHealthCashlessClaimId = groupHealthCashlessClaim.getGroupHealthCashlessClaimId().toString();
         String address1 =  isNotEmpty(groupHealthCashlessClaim.getGhProposer())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getAddressLine1(): null;
         String address2 = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getAddressLine2(): null;
+        Set<String> pendingDocumentSet = getPendingDocumentSet(groupHealthCashlessClaim);
+        return constructDataMapWithGivenData(groupHealthCashlessClaim, plan, salutation, firstName, surName, province, town, claimIntimationDate, groupHealthCashlessClaimId, address1, address2, pendingDocumentSet);
+    }
 
-        Map<String, Object> emailContent = Maps.newHashMap();
+    private Map constructDataMapWithGivenData(GroupHealthCashlessClaim groupHealthCashlessClaim, String plan, String salutation, String firstName, String surName, String province, String town, LocalDate claimIntimationDate, String groupHealthCashlessClaimId, String address1, String address2, Set<String> pendingDocumentSet) {
+        Map <String, Object> emailContent = Maps.newHashMap();
         emailContent.put("currentDateTime", LocalDate.now());
         emailContent.put("plan",plan);
         emailContent.put("town",town);
@@ -1012,6 +1017,14 @@ public class GroupHealthCashlessClaimService {
         emailContent.put("salutation",salutation);
         emailContent.put("address1",address1);
         emailContent.put("address2",address2);
+        emailContent.put("listofDocument",pendingDocumentSet);
         return emailContent;
+    }
+
+    private Set<String> getPendingDocumentSet(GroupHealthCashlessClaim groupHealthCashlessClaim) {
+        return isNotEmpty(groupHealthCashlessClaim.getAdditionalRequiredDocumentsByUnderwriter()) ?
+                groupHealthCashlessClaim.getAdditionalRequiredDocumentsByUnderwriter().stream()
+                        .filter(doc -> !doc.isHasSubmitted()).map(AdditionalDocument::getDocumentName)
+                        .collect(Collectors.toSet()): Sets.newHashSet();
     }
 }
