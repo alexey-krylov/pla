@@ -20,7 +20,7 @@ public interface GroupHealthCashlessClaimRepository extends MongoRepository<Grou
 
     Page<GroupHealthCashlessClaim> findAllByClaimProcessorUserIdInAndStatusIn(List<String> users, List<Status> statusList, Pageable p);
 
-    List<GroupHealthCashlessClaim> findAllByStatusAndClaimUnderWriterUserIdIn(PreAuthorizationRequest.Status status, List<String> users);
+    List<GroupHealthCashlessClaim> findAllByStatusAndClaimUnderWriterUserIdIn(Status status, List<String> users);
 
     List<GroupHealthCashlessClaim> findAllByGroupHealthCashlessClaimPolicyDetailPolicyNumberAndGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndStatus(PolicyNumber policyNumber, String clientId, Status status);
 

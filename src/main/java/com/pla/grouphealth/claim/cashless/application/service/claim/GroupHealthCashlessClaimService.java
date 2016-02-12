@@ -72,6 +72,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status;
+import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status.*;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 import static org.springframework.util.Assert.notEmpty;
@@ -126,7 +127,7 @@ public class GroupHealthCashlessClaimService {
         notEmpty(claimUploadedExcelDataDtos, "No uploaded details found.");
         ClaimUploadedExcelDataDto claimUploadedExcelDataDto = claimUploadedExcelDataDtos.iterator().next();
         notNull(claimUploadedExcelDataDto, "No uploaded details found.");
-        GroupHealthCashlessClaim groupHealthCashlessClaim = new GroupHealthCashlessClaim(Status.INTIMATION);
+        GroupHealthCashlessClaim groupHealthCashlessClaim = new GroupHealthCashlessClaim(INTIMATION);
         groupHealthCashlessClaim
                 .updateWithGroupHealthCashlessClaimId(constructGroupHealthCashlessClaimId(claimUploadedExcelDataDto))
                 .updateWithCreationDate(batchDate)
@@ -425,7 +426,7 @@ public class GroupHealthCashlessClaimService {
 
     public BigDecimal getTotalAmountPaidTillNow(String clientId, PolicyNumber policyNumber, String coverageId) {
         BigDecimal amountPaidTillDate = BigDecimal.ZERO;
-        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailPolicyNumberAndGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndStatus(policyNumber, clientId, Status.DISBURSED);
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByGroupHealthCashlessClaimPolicyDetailPolicyNumberAndGroupHealthCashlessClaimPolicyDetailAssuredDetailClientIdAndStatus(policyNumber, clientId, DISBURSED);
         if(isNotEmpty(groupHealthCashlessClaims)){
             for(GroupHealthCashlessClaim groupHealthCashlessClaim : groupHealthCashlessClaims){
                 GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
@@ -738,7 +739,7 @@ public class GroupHealthCashlessClaimService {
     public List<GroupHealthCashlessClaimDto> getCashlessClaimByDefaultList(String claimUserId) {
         List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
         PageRequest pageRequest = new PageRequest(0, 500, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
-        Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(Status.INTIMATION, Status.EVALUATION, Status.RETURNED), pageRequest);
+        Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimProcessorUserIdInAndStatusIn(Lists.newArrayList(claimUserId, null), Lists.newArrayList(INTIMATION, EVALUATION, RETURNED), pageRequest);
         if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
             result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(pages.getContent());
         return result;
@@ -802,9 +803,9 @@ public class GroupHealthCashlessClaimService {
         List<GroupHealthCashlessClaim> groupHealthCashlessClaims =Lists.newArrayList();
         List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
         if(level.equalsIgnoreCase("LEVEL1"))
-            groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByStatusAndClaimUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1, Lists.newArrayList(username,null));
+            groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByStatusAndClaimUnderWriterUserIdIn(UNDERWRITING_LEVEL1, Lists.newArrayList(username,null));
         if(level.equalsIgnoreCase("LEVEL2"))
-            groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByStatusAndClaimUnderWriterUserIdIn(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2, Lists.newArrayList(username,null));
+            groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByStatusAndClaimUnderWriterUserIdIn(UNDERWRITING_LEVEL2, Lists.newArrayList(username,null));
         if (isNotEmpty(groupHealthCashlessClaims))
             result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
         return result;

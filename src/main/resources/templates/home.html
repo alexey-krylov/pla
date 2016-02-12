@@ -27,6 +27,14 @@
 <body style="font-size: 9px;">
 <div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
 <script>
+    requirejs(['main'],function(){
+        require(['/pla/js/home.js?t=7'], function () {
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['homeModule']);
+            });
+        });
+
+    });
     var interval = setInterval(function(){
         if(require.defined("basic")){
 
@@ -163,7 +171,7 @@
 </footer>
 <script>
 
-    requirejs(['main'], function () {
+/*    requirejs(['main'], function () {
         require(['angular', 'jquery'], function (app, $) {
             var module = angular.module('NotificationPortlet', ['common','commonServices','ngRoute','ui.bootstrap','ngSanitize','mgcrea.ngStrap']);
 
@@ -199,7 +207,7 @@
              }]);
             angular.bootstrap(document, ['NotificationPortlet']);
         });
-    });
+    });*/
     </script>
 
 </body>
