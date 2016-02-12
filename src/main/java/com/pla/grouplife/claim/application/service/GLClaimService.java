@@ -311,7 +311,7 @@ public class GLClaimService implements Serializable{
             ClaimAssuredDetailDto claimAssuredDetail=new ClaimAssuredDetailDto();
         claimAssuredDetail.setTitle(assuredDetail.getTitle());
         claimAssuredDetail.setFirstName(assuredDetail.getFirstName());
-        claimAssuredDetail.setSurName(claimAssuredDetail.getSurName());
+        claimAssuredDetail.setSurName(assuredDetail.getSurName());
                 claimAssuredDetail. setDateOfBirth(assuredDetail.getDateOfBirth());
         claimAssuredDetail.setAgeOnNextBirthDate(assuredDetail.getAgeOnNextBirthDate());
         claimAssuredDetail.setNrcNumber(assuredDetail.getNrcNumber());
@@ -1242,7 +1242,7 @@ public class GLClaimService implements Serializable{
                 claimDataDto.setAssuredName(assuredName);
                 claimDataDto.setClaimStatus(claimStatus.toString());
                 claimDataDto.setPolicyNumber(policyNumber);
-                claimDataDto.setPolicyHolderName(policyHolderName);
+
 
                 //claimDataDto.setModifiedOn();
                 return claimDataDto;
@@ -1275,7 +1275,7 @@ public class GLClaimService implements Serializable{
                 claimDataDto.setAssuredName(assuredName);
                 claimDataDto.setClaimStatus(claimStatus.toString());
                 claimDataDto.setPolicyNumber(policyNumber);
-                claimDataDto.setPolicyHolderName(policyHolderName);
+
 
                 //claimDataDto.setModifiedOn();
                 return claimDataDto;
@@ -1317,7 +1317,7 @@ public class GLClaimService implements Serializable{
                 */
                 claimDataDto.setClaimStatus(claimStatus.toString());
                 claimDataDto.setPolicyNumber(policyNumber);
-                claimDataDto.setPolicyHolderName(policyHolderName);
+
                 //claimDataDto.setModifiedOn();
                 return claimDataDto;
             }
