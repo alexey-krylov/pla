@@ -404,6 +404,73 @@
                             </accordion-group>
                         </accordion>
 
+                        <accordion close-others="true">
+                            <accordion-group is-open="accordionStatusDocuments.claimantDetails">
+                                <accordion-heading>
+                                    Bank  Details <i class="pull-right glyphicon"
+                                                     ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimantDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.claimantDetails}"></i>
+                                </accordion-heading>
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
+                                        >
+                                    <div class = "row">
+                                        <div class="col-md-6">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Bank Name</label>
+                                                <select
+                                                        name="sumAssured"
+                                                        class="form-control input-md"
+                                                        ng-options="bankDetails.bankName as bankDetails.bankName for bankDetails in bankDetailsResponse"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankName"/>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Bank Branch Code</label>
+                                                <select
+                                                        name="bankCode"
+                                                        class="form-control input-md"
+                                                        ng-options="bankBranchDetail.bankCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankBranchDetail.bankCode"/>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Bank Account Type</label>
+
+
+
+                                                <select   ng-model="createUpdateDto.accountType"
+                                                          name="accountType"
+                                                          class="form-control input-md">
+                                                    <option value="Saving">Saving</option>
+                                                    <option value="Current">Current</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Bank Account Number</label>
+                                                <input  type="text"
+                                                        name="sumAssured"
+                                                        class="form-control input-md"
+
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </accordion-group>
+                        </accordion>
                     </ng-form>
                 </div>
 
@@ -1425,6 +1492,7 @@
                                     Have you  in the past  ever suffered from any of the following chronic Illnesses      <i class="pull-right glyphicon"
                                                                                                                               ng-class="{'glyphicon-chevron-down': accordionStatus.Details, 'glyphicon-chevron-right': !accordionStatus.Details}"></i>
                                 </accordion-heading>
+
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:1140px;">
                                     <div class="row">
                                         <div class="form-group required col-md-4">
@@ -1440,7 +1508,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group required col-md-4">
-                                            <label class="control-label">Please provide full details</label>{{createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails == '' || createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails == undefined)}}
+                                            <label class="control-label">Please provide full details</label>
                                             <textarea name="htn" ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails"
                                                       ng-disabled="disableHtn || isViewMode"  ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails == '' || createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails == undefined)"
                                                       style="width:950px;height:60px;left:30px"></textarea>
@@ -1678,6 +1746,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="row">
                                     <div class="col-sm-6" style="float: right">

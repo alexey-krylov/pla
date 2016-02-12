@@ -323,7 +323,7 @@
                                                 <div class="form-group required ">
                                                     <input   type="number"
                                                              ng-number="true"
-                                                             ng-required="true"
+
                                                              name="Approved"
                                                              ng-model="coverageDetailDto.approvedAmount"
                                                              class="form-control input-sm"/>
@@ -346,7 +346,7 @@
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
                                      disable-all-fields="isViewMode">
-                                    <table class="table table-striped table-bordered" id="assured-tab" cellspacing="0" width="100%">
+                                    <table class="table table-striped table-bordered" id="assuredtab" cellspacing="0" width="100%">
                                         <thead>
                                         <tr>
                                             <th >Preauthorization Number</th>
@@ -838,16 +838,16 @@
                                                      ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimantDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.claimantDetails}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                     disable-all-fields="true">
+                                    >
                                     <div class = "row">
                                         <div class="col-md-6">
                                             <div class="form-group  ">
                                                 <label class="control-label">Bank Name</label>
-                                                <input  type="text"
+                                                <select
                                                         name="sumAssured"
                                                         class="form-control input-md"
-
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
+                                                        ng-options="bankDetails.bankName as bankDetails.bankName for bankDetails in bankDetailsResponse"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankName"/>
 
 
                                             </div>
@@ -855,24 +855,26 @@
                                         <div class="col-md-6">
                                             <div class="form-group  ">
                                                 <label class="control-label">Bank Branch Code</label>
-                                                <input  type="text"
-                                                        name="sumAssured"
+                                                <select
+                                                        name="bankCode"
                                                         class="form-control input-md"
-
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
-
+                                                      ng-options="bankBranchDetail.bankCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankBranchDetail.bankCode"/>
 
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group  ">
                                                 <label class="control-label">Bank Account Type</label>
-                                                <input  type="text"
-                                                        name="sumAssured"
-                                                        class="form-control input-md"
 
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimPolicyDetail.sumAssured"/>
 
+
+                                                <select   ng-model="createUpdateDto.accountType"
+                                                        name="accountType"
+                                                        class="form-control input-md">
+                                                <option value="Saving">Saving</option>
+                                                 <option value="Current">Current</option>
+                                                       </select>
 
                                             </div>
                                         </div>
@@ -905,7 +907,7 @@
                 <div class="step-pane" data-step="3"   disable-all-fields="isViewMode">
                     <ng-form name="step3">
                         <accordion close-others="true">
-                            <accordion-group is-open="accordionStatus.claimantDetails"  ng-if="!createUpdateDto.groupHealthCashlessClaimPolicyDetail.assuredDetail.dependentAssuredDetailPresent">
+                            <accordion-group is-open="accordionStatus.claimantDetails"  ng-if="!createUpdateDto.groupHealthCashlessClaimPolicyDetail.assuredDetail.dependentAssuredDetailPresent" ng-form="step3">
                                 <accordion-heading>
                                     Assured Detail <i class="pull-right glyphicon"
                                                       ng-class="{'glyphicon-chevron-down': accordionStatus.claimantDetails, 'glyphicon-chevron-right': !accordionStatus.claimantDetails}"></i>
@@ -1484,7 +1486,7 @@
                         </accordion>
                         <!--=====================started a section(trtmntDtls)==================== -->
                         <accordion close-others="true">
-                            <accordion-group is-open="accordionStatus.mainAssuredDetails" ng-form="mainAssuredDetailForm" >
+                            <accordion-group is-open="accordionStatus.mainAssuredDetails" ng-form="step4" >
                                 <accordion-heading>
                                     Provisional Dignosis and Treatement <i class="pull-right glyphicon"
                                                                            ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
@@ -1940,7 +1942,7 @@
                                                       ng-disabled="disableHtn || isViewMode"  ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.htn === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails == '' || createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails == undefined)"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.htn.$error" ng-if="step4.htn.$dirty">
+                                        <div class="error" ng-messages="step5.htn.$error" ng-if="step5.htn.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1966,7 +1968,7 @@
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.idhHOD === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails == '' || createUpdateDto.groupHealthCashlessClaimIllnessDetail.ihdhoddetails==undefined)"  ng-disabled="disableIhd || isViewMode"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.idhdetail.$error" ng-if="step4.idhdetail.$dirty">
+                                        <div class="error" ng-messages="step5.idhdetail.$error" ng-if="step5.idhdetail.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1993,7 +1995,7 @@
                                             <textarea name="dibetes"  ng-disabled="disdibetes || isViewMode" ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetes === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.diabetesDetails)"   style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.dibetes.$error" ng-if="step4.dibetes.$dirty">
+                                        <div class="error" ng-messages="step5.dibetes.$error" ng-if="step5.dibetes.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2020,7 +2022,7 @@
                                             <textarea name="asthma"  ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTB === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.asthmaCOPDTBDetails)" ng-disabled="disAsthma || isViewMode"  style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.asthma.$error" ng-if="step4.asthma.$dirty">
+                                        <div class="error" ng-messages="step5.asthma.$error" ng-if="step5.asthma.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2052,7 +2054,7 @@
                                             <textarea name="std" ng-disabled="disStd || isViewMode"   ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaids === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.stdhivaidsdetails)"        style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.std.$error" ng-if="step4.std.$dirty">
+                                        <div class="error" ng-messages="step5.std.$error" ng-if="step5.std.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2082,7 +2084,7 @@
                                             <textarea name="Arthiritis"  ng-disabled="disArthiritis || isViewMode"  ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritis === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.arthritisDetails)"       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.Arthiritis.$error" ng-if="step4.Arthiritis.$dirty">
+                                        <div class="error" ng-messages="step5.Arthiritis.$error" ng-if="step5.Arthiritis.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2112,7 +2114,7 @@
                                             <textarea name="cancer"  ng-disabled="disCancer || isViewMode" ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCyst === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.cancerTumorCystDetails)"         style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.cancer.$error" ng-if="step4.cancer.$dirty">
+                                        <div class="error" ng-messages="step5.cancer.$error" ng-if="step5.cancer.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2142,7 +2144,7 @@
                                             <textarea name="alcohol"  ng-disabled="disAlcohol || isViewMode" ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuse === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.alcoholDrugAbuseDetails)"     style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.alcohol.$error" ng-if="step4.alcohol.$dirty">
+                                        <div class="error" ng-messages="step5.alcohol.$error" ng-if="step5.alcohol.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2168,7 +2170,7 @@
                                             <textarea name="pshyciatric"   ng-model="createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails"
                                                       ng-required="createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricCondition === 'Yes' &amp;&amp; (createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails == '' || !createUpdateDto.groupHealthCashlessClaimIllnessDetail.psychiatricConditionDetails)"   ng-disabled="dispshyciatric || isViewMode"  style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.pshyciatric.$error" ng-if="step4.pshyciatric.$dirty">
+                                        <div class="error" ng-messages="step5.pshyciatric.$error" ng-if="step5.pshyciatric.$dirty">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -2177,7 +2179,7 @@
                                 <div class="row">
                                     <div class="col-sm-6" style="float: right">
                                         <button type="button" class="btn btn-primary btn-sm" style="float: right"
-                                                ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step4.$invalid"
+                                                ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step5.$invalid"
                                         >Save
                                         </button>
                                     </div>

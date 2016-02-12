@@ -437,212 +437,156 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             }
 
-
-            $scope.createUpdateDto.illnessDetailDto.htndetail=$scope.createUpdateDto.illnessDetailDto.htndetails;
             $scope.disableHtn = true;
+            //$scope.createUpdateDto.illnessDetailDto.htndetail=$scope.createUpdateDto.illnessDetailDto.htndetails;
             $scope.$watch(
                 function(){
-                    return {htn: $scope.createUpdateDto.illnessDetailDto.htn, htnDetails: $scope.createUpdateDto.illnessDetailDto.htndetail};
+                    return {htn: $scope.createUpdateDto.illnessDetailDto.htn, htnDetails: $scope.createUpdateDto.illnessDetailDto.htndetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.htn === 'No'){
-                        $scope.isrequire = false;
                         $scope.disableHtn = true;
                         $scope.createUpdateDto.illnessDetailDto.htndetails='';
 
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.htndetails){
-                            $scope.isrequire = true;
-
-                        }
+                        //$scope.createUpdateDto.illnessDetailDto.htndetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
                         $scope.disableHtn = false;
-                        $scope.createUpdateDto.illnessDetailDto.htndetails=$scope.createUpdateDto.illnessDetailDto.htndetail;
                     }
                 },
                 true
             );
-            $scope.createUpdateDto.illnessDetailDto.ihdhoddetail=$scope.createUpdateDto.illnessDetailDto.ihdhoddetails;
+
             $scope.disableIhd = true;
             $scope.$watch(
                 function(){
-                    return {idh: $scope.createUpdateDto.illnessDetailDto.idhHOD, htnDetails: $scope.createUpdateDto.illnessDetailDto.ihdhoddetail};
+                    return {idh: $scope.createUpdateDto.illnessDetailDto.idhHOD, htnDetails: $scope.createUpdateDto.illnessDetailDto.ihdhoddetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.idh === 'No'){
-                        $scope.isrequireIhd = false;
                         $scope.disableIhd = true;
                         $scope.createUpdateDto.illnessDetailDto.ihdhoddetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.ihdhoddetails){
-                            $scope.isrequireIhd = true;}
                         $scope.disableIhd = false;
-                        $scope.createUpdateDto.illnessDetailDto.ihdhoddetails=$scope.createUpdateDto.illnessDetailDto.ihdhoddetail;
-
                     }
                 },
                 true
             );
-            $scope.disdibetes= true;
-            $scope.createUpdateDto.illnessDetailDto.diabetesDetail=$scope.createUpdateDto.illnessDetailDto.diabetesDetails;
 
+            $scope.disdibetes= true;
             $scope.$watch(
                 function(){
-                    return {Dibetes: $scope.createUpdateDto.illnessDetailDto.diabetes, diabetesDetails: $scope.createUpdateDto.illnessDetailDto.diabetesDetail};
+                    return {Dibetes: $scope.createUpdateDto.illnessDetailDto.diabetes, diabetesDetails: $scope.createUpdateDto.illnessDetailDto.diabetesDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Dibetes === 'No'){
-                        $scope.isrequireDibetes = false;
                         $scope.disdibetes = true;
                         $scope.createUpdateDto.illnessDetailDto.diabetesDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.diabetesDetails){
-                            $scope.isrequireDibetes = true;}
                         $scope.disdibetes = false;
-                        $scope.createUpdateDto.illnessDetailDto.diabetesDetails=$scope.createUpdateDto.illnessDetailDto.diabetesDetail;
-
                     }
                 },
                 true
             );
-            $scope.disAsthma= true;
-            $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails;
 
+            $scope.disAsthma= true;
             $scope.$watch(
                 function(){
-                    return {Asthma: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail};
+                    return {Asthma: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTB, asthmaCOPDTBDetails: $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Asthma === 'No'){
-                        $scope.isrequireAsthma = false;
                         $scope.disAsthma = true;
                         $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails){
-                            $scope.isrequireAsthma = true;}
                         $scope.disAsthma = false;
-                        $scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails=$scope.createUpdateDto.illnessDetailDto.asthmaCOPDTBDetail;
-
                     }
                 },
                 true
             );
-            $scope.disStd= true;
-            $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails;
 
+            $scope.disStd= true;
             $scope.$watch(
                 function(){
-                    return {Std: $scope.createUpdateDto.illnessDetailDto.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail};
+                    return {Std: $scope.createUpdateDto.illnessDetailDto.stdhivaids, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Std === 'No'){
-                        $scope.isrequireStd = false;
                         $scope.disStd = true;
                         $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails){
-                            $scope.isrequireStd = true;}
                         $scope.disStd = false;
-                        $scope.createUpdateDto.illnessDetailDto.stdhivaidsdetails=$scope.createUpdateDto.illnessDetailDto.stdhivaidsdetail;
-
                     }
                 },
                 true
             );
-            $scope.disArthiritis= true;
-            $scope.createUpdateDto.illnessDetailDto.arthritisDetail=$scope.createUpdateDto.illnessDetailDto.arthritisDetails;
 
+            $scope.disArthiritis= true;
             $scope.$watch(
                 function(){
-                    return {Arthiritis: $scope.createUpdateDto.illnessDetailDto.arthritis, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.arthritisDetail};
+                    return {Arthiritis: $scope.createUpdateDto.illnessDetailDto.arthritis, stdhivaidsdetails: $scope.createUpdateDto.illnessDetailDto.arthritisDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Arthiritis === 'No'){
                         $scope.disArthiritis = true;
-                        $scope.isrequireArthiritis = false;
                         $scope.createUpdateDto.illnessDetailDto.arthritisDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.arthritisDetails){
-                            $scope.isrequireArthiritis = true;}
                         $scope.disArthiritis = false;
-                        $scope.createUpdateDto.illnessDetailDto.arthritisDetail=$scope.createUpdateDto.illnessDetailDto.arthritisDetail;
-
                     }
                 },
                 true
             );
-            $scope.disCancer= true;
-            $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails;
 
+            $scope.disCancer= true;
             $scope.$watch(
                 function(){
-                    return {Cancer: $scope.createUpdateDto.illnessDetailDto.cancerTumorCyst, cancerTumorCystDetail: $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail};
+                    return {Cancer: $scope.createUpdateDto.illnessDetailDto.cancerTumorCyst, cancerTumorCystDetail: $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Cancer === 'No'){
                         $scope.disCancer = true;
-                        $scope.isrequireCancer = false;
                         $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails){
-                            $scope.isrequireCancer = true;}
                         $scope.disCancer = false;
-                        $scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetails=$scope.createUpdateDto.illnessDetailDto.cancerTumorCystDetail;
-
                     }
                 },
                 true
             );
-            $scope.dispshyciatric= true;
-            $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails;
 
+            $scope.dispshyciatric= true;
             $scope.$watch(
                 function(){
-                    return {pshyciatric: $scope.createUpdateDto.illnessDetailDto.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail};
+                    return {pshyciatric: $scope.createUpdateDto.illnessDetailDto.psychiatricCondition, psychiatricConditionDetails: $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.pshyciatric === 'No'){
                         $scope.dispshyciatric = true;
-                        $scope.isrequirepshyciatric= false;
                         $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails){
-                            $scope.isrequirepshyciatric= true;}
-                        $scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetails=$scope.createUpdateDto.illnessDetailDto.psychiatricConditionDetail;
-
                         $scope.dispshyciatric = false;
                     }
                 },
                 true
             );
 
-
-
             $scope.disAlcohol= true;
-            $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails;
-
             $scope.$watch(
                 function(){
-                    return {Alcohol: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail};
+                    return {Alcohol: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuse, alcoholDrugAbuseDetails: $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails};
                 },
                 function(newVal, oldVal) {
                     if(newVal.Alcohol === 'No'){
                         $scope.disAlcohol = true;
-                        $scope.isrequireAlcohol= false;
                         $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails='';
                     }
                     else {
-                        if( !$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails){
-                            $scope.isrequireAlcohol= true;}
-                        $scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails=$scope.createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetail;
-
                         $scope.disAlcohol = false;
                     }
                 },
@@ -652,6 +596,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
 
 
+$scope.createUpdateDto.claimType='Cashless';
 
 
         }]);

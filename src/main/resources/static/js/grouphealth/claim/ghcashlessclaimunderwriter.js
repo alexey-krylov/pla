@@ -701,7 +701,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
 
                 }
                 else {
-                    alert("");
+
                     $.when($scope.constructCommentDetails()).done(function () {
                         $http({
                             url: '/pla/grouphealth/claim/cashless/claim/underwriter/approve',
@@ -906,7 +906,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                         }
                     }
                     $scope.documentmaster = $scope.documentmaster.filter(function(n){ return n != undefined });
-                    console.log($scope.documentmaster);
+                    //console.log($scope.documentmaster);
                 });
             };
 
@@ -919,35 +919,29 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             });
 
 
-            $scope.bankBranchDetails=[];// Collecting Branch Details
+            $scope.bankBranchDetails=[];
 
-            $scope.$watch('ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankName', function (newvalue, oldvalue) {
+            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankName', function (newvalue, oldvalue) {
                 if (newvalue) {
                     var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
-                    // //alert("Bank Details.."+JSON.stringify(bankCode));
+                    //alert("Bank Details.."+JSON.stringify(bankCode));
                     if (bankCode) {
                         $http.get('/pla/individuallife/endorsement/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
                             $scope.bankBranchDetails = response;
-                            //console.log("Bank Details :"+JSON.stringify(response));
+                            //alert("Bank branch Details :"+JSON.stringify(response));
                         }).error(function (response, status, headers, config) {
                         });
                     }
                 }
             });
+//$scope.bankBranchDetails=[];
+//            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchName', function (newvalue, oldvalue) {
+//                if (newvalue) {
+//                    $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchSortCode = newvalue;
+//                }
+//            });
 
-            $scope.$watch('ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName', function (newvalue, oldvalue) {
-                if (newvalue) {
-                    $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode = newvalue;
-                }
-            });
 
-            /**
-             * Clearing The Detail Related to Basnk Name
-             */
-            $scope.clearBankBranchName=function(){
-                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName = null;
-                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode=null;
-            }
 
         }]);
 

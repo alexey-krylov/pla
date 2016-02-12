@@ -590,6 +590,42 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 },
                 true
             );
+            $scope.bankDetailsResponse=[];
+
+            $http.get('/pla/individuallife/endorsement/getAllBankNames').success(function (response, status, headers, config) {
+                $scope.bankDetailsResponse = response;
+                //console.log("Bank Details :"+JSON.stringify(response));
+            }).error(function (response, status, headers, config) {
+            });
+
+
+            $scope.bankBranchDetails=[];
+
+            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                    //alert("Bank Details.."+JSON.stringify(bankCode));
+                    if (bankCode) {
+                        $http.get('/pla/individuallife/endorsement/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetails = response;
+                            //alert("Bank branch Details :"+JSON.stringify(response));
+                        }).error(function (response, status, headers, config) {
+                        });
+                    }
+                }
+            });
+//$scope.bankBranchDetails=[];
+//            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchName', function (newvalue, oldvalue) {
+//                if (newvalue) {
+//                    $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchSortCode = newvalue;
+//                }
+//            });
+
+            /**
+             * Clearing The Detail Related to Basnk Name
+             */
+
+
 
         }]);
 
