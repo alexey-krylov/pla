@@ -667,8 +667,8 @@ public class PreAuthorizationRequestService {
         return isNotEmpty(groupHealthInsured) ? groupHealthInsured.getPlanPremiumDetail() : ghInsuredDependent.getPlanPremiumDetail();
     }
 
-    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
-        List<PreAuthorizationRequest> preAuthorizationRequests = GHCashlessClaimFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
+    public List<PreAuthorizationClaimantDetailCommand> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, String username) {
+        List<PreAuthorizationRequest> preAuthorizationRequests = GHCashlessClaimFinder.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto, Lists.newArrayList(username, null));
         return convertPreAuthorizationListToPreAuthorizationClaimantDetailCommand(preAuthorizationRequests);
     }
 

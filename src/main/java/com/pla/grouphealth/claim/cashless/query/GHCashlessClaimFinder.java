@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
@@ -44,6 +45,12 @@ public class GHCashlessClaimFinder {
         }
         Query query = new Query();
         query.addCriteria(new Criteria().and("preAuthorizationUnderWriterUserId").is(username));
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getUnderwriterLevel()) && searchPreAuthorizationRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL1")){
+            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1));
+        }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getUnderwriterLevel()) && searchPreAuthorizationRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL2")){
+            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2));
+        }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
         }
@@ -57,14 +64,14 @@ public class GHCashlessClaimFinder {
             query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.assuredDetail.clientId").is(searchPreAuthorizationRecordDto.getClientId()));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())){
-            query.addCriteria(new Criteria().and("preAuthorizationRequestId.preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
+            query.addCriteria(new Criteria().and("preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
         }
-        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationRequestId.preAuthorizationRequestId"));
+        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationRequestId"));
         return mongoTemplate.find(query, PreAuthorizationRequest.class, "PRE_AUTHORIZATION_REQUEST");
 
     }
 
-    public List<PreAuthorizationRequest> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
+    public List<PreAuthorizationRequest> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, List usernames) {
         if(isEmpty(searchPreAuthorizationRecordDto.getBatchNumber())&& isEmpty(searchPreAuthorizationRecordDto.getClientId()) &&
                 isEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())&&isEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())&&
                 isEmpty(searchPreAuthorizationRecordDto.getHcpCode())) {
@@ -72,6 +79,7 @@ public class GHCashlessClaimFinder {
             return Lists.newArrayList();
         }
         Query query = new Query();
+        query.addCriteria(new Criteria().and("preAuthorizationProcessorUserId").in(usernames));
         if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
         }
@@ -85,22 +93,21 @@ public class GHCashlessClaimFinder {
             query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.assuredDetail.clientId").is(searchPreAuthorizationRecordDto.getClientId()));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())){
-            query.addCriteria(new Criteria().and("preAuthorizationRequestId.preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
+            query.addCriteria(new Criteria().and("preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
         }
-        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationRequestId.preAuthorizationRequestId"));
+        query.with(new Sort(Sort.Direction.ASC, "preAuthorizationRequestId"));
         return mongoTemplate.find(query, PreAuthorizationRequest.class, "PRE_AUTHORIZATION_REQUEST");
     }
 
-    public List<GroupHealthCashlessClaim> getCashlessClaimByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto){
-
+    public List<GroupHealthCashlessClaim> getCashlessClaimByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, ArrayList<String> usernames){
         if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
                 isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
                 && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())
                 &&isEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel())){
-
-        return Lists.newArrayList();
-    }
-      Query query = new Query();
+            return Lists.newArrayList();
+        }
+        Query query = new Query();
+        query.addCriteria(new Criteria().and("claimProcessorUserId").in(usernames));
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
         }
@@ -114,10 +121,45 @@ public class GHCashlessClaimFinder {
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchGroupHealthCashlessClaimRecordDto.getClientId()));
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId())){
-            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId.groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
         }
-        query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId.groupHealthCashlessClaimId"));
+        query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
         return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
+    }
+
+    public List<GroupHealthCashlessClaim> searchGroupHealthCashlessClaimForUnderwriterByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, List username){
+        if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
+                isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())
+                &&isEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel())){
+            return Lists.newArrayList();
+        }
+        Query query = new Query();
+        query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel()) && searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL1")){
+            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel()) && searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL2")){
+            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
+            query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimHCPDetail.hcpCode.hcpCode").is(searchGroupHealthCashlessClaimRecordDto.getHcpCode()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber").is(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchGroupHealthCashlessClaimRecordDto.getClientId()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
+        }
+        query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
+        return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
+
     }
 
 }

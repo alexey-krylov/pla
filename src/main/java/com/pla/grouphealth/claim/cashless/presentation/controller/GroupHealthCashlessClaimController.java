@@ -230,9 +230,10 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/getghcashlessclaimbycriteria", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView getCashlessClaimByCriteria(@RequestBody @Valid SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto) {
+    public ModelAndView getCashlessClaimByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto) {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchcashlessclaim");
-        List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto);
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto, userName);
         modelAndView.addObject("CashlessResult", searchResult);
         modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
         return modelAndView;
@@ -340,16 +341,14 @@ public class GroupHealthCashlessClaimController {
         return modelAndView;
     }
 
-    @RequestMapping (value= "/searchghcashlessclaimunderwriterbycriteria" , method = RequestMethod.GET)
+    @RequestMapping (value= "/searchghcashlessclaimunderwriterbycriteria" , method = RequestMethod.POST)
     @ResponseBody
-    public  ModelAndView searchCashlessClaimUnderwriterByCriteria(@RequestBody @Valid SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, HttpServletRequest request){
+    public  ModelAndView searchCashlessClaimUnderwriterByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimunderwriter");
         String userName = groupHealthCashlessClaimService.getLoggedInUsername();
-        if (isNotEmpty(userName)){
-            List<GroupHealthCashlessClaimDto> ghCashlessClaimMailDtos = groupHealthCashlessClaimService.searchCashlessClaimUnderwriterCriteria(searchGroupHealthCashlessClaimRecordDto);
-            modelAndView.addObject("searchResult", ghCashlessClaimMailDtos);
-        }
-        modelAndView.addObject("searchResult", searchGroupHealthCashlessClaimRecordDto);
+        List<GroupHealthCashlessClaimDto> ghCashlessClaimMailDtos = groupHealthCashlessClaimService.searchCashlessClaimUnderwriterCriteria(searchGroupHealthCashlessClaimRecordDto, userName);
+        modelAndView.addObject("claimResult", ghCashlessClaimMailDtos);
+        modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
         return modelAndView;
     }
 

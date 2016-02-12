@@ -57,7 +57,7 @@
     <li>CASHLESS CLAIM</li>
     </ol>
     </p>
-    <form method="post" action="searchCashLessClaim" novalidate="true" name="searchAuthorizationForm"
+    <form method="post" action="getghcashlessclaimbycriteria" novalidate="true" name="searchAuthorizationForm"
           id="searchAuthorizationForm">
         <div class="row well well-sm" style="margin: 0;">
             <!--&lt;!&ndash;<div class="col-md-2">&ndash;&gt;-->
@@ -80,7 +80,7 @@
 
             <div class="col-md-2">
                 <div class="form-group">
-                    <label th:text="#{claimId}">Claim ID</label>
+                    <label th:text="#{groupHealthCashlessClaimId}">Claim ID</label>
                     <input type="text" class="form-control input-sm" name="preAuthorizationId"
                            th:value="${searchCriteria.groupHealthCashlessClaimId}"/>
                 </div>
