@@ -611,6 +611,11 @@ public class GLClaimService implements Serializable{
         }
         return claimAssuredDetailDto;
     }
+    public GLClaimSettlementDataDto getClaimRecordForSettlement(String claimId){
+        return  null;
+    }
+
+
 
     public Map<String, Object> getConfiguredRelationShipAndCategory(String policyId) {
         Set<String> categoryList = Sets.newLinkedHashSet();
