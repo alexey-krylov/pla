@@ -136,7 +136,11 @@
                         <div class="col-md-8">
                             <span th:text="#{listOfClaimIntimations}">List of Claim Intimation</span>
                         </div>
-                        <a type="button" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
+                        <a type="button" id="view" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
+                           onclick="viewPolicyModule.viewClaim()">View</a>
+                        <a type="button" id="modify" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
+                           onclick="viewPolicyModule.modifyRegistration()">Modify</a>
+                        <a type="button" id="register" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
                            onclick="viewPolicyModule.createRegistration()">Registration</a>
                     </div>
                 </div>
@@ -158,7 +162,10 @@
                             <!--/*/ <th:block th:each="policy : ${searchResult}"> /*/-->
                             <th:block th:each="intimation : ${searchResult}">
                                 <tr>
-                                    <td><input type="radio" name="claimId" th:value="${intimation.claimId}" value="5100000010315"/></td>
+                                    <td><input type="radio" name="claimId" th:value="${intimation.claimId}" value="5100000010315"/>
+                                        <input type="hidden" class="claimStatus"
+                                               th:value="${intimation.claimStatus}"/>
+                                    </td>
                                     <td th:text="${intimation.claimNumber}">5100000010315</td>
                                     <td th:text="${intimation.policyNumber}">5100000010315</td>
                                     <td th:text="${intimation.policyHolderName}"></td>

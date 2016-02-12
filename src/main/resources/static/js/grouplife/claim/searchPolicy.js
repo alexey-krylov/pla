@@ -4,9 +4,24 @@ var viewPolicyModule = (function () {
     services.status = '';
     services.getTheItemSelected = function (ele) {
         this.selectedItem = $(ele).val();
+        this.status = $(ele).parent().find('.claimStatus').val();
+        //$(".btn-disabled").attr("disabled", false);
 
-        $(".btn-disabled").attr("disabled", false);
-
+        if(this.status == 'Claim Registered'){
+            $('#modify').attr('disabled', false);
+            $('#view').attr('disabled', false);
+            $('#register').attr('disabled', true);
+        }else if(this.status == 'Claim Intimated'){
+            $('#register').attr('disabled', false);
+            $('#view').attr('disabled', false);
+            $('#modify').attr('disabled', true);
+        }else{
+            $('#create').attr('disabled', false);
+            $('#view').attr('disabled', false);
+            $('#register').attr('disabled', true);
+            $('#modify').attr('disabled', true);
+            //$(".btn-disabled").attr("disabled", false);
+        }
     };
 
     services.reload = function () {
@@ -38,6 +53,23 @@ var viewPolicyModule = (function () {
         var claimId = this.selectedItem;
         window.location.href ="/pla/grouplife/claim/openclaimregistrationpage/?claimId=" + claimId + "&mode=edit";
     };
+
+    services.modifyRegistration = function () {
+        var claimId = this.selectedItem;
+        window.location.href ="/pla/grouplife/claim/openclaimregistrationpage/?claimId=" + claimId + "&mode=edit";
+    };
+
+    services.viewClaim = function () {
+        //alert(this.selectedItem);
+        var claimId = this.selectedItem;
+        var claimStatus=this.status;
+        if(claimStatus == 'Claim Intimated'){
+            window.location.href ="/pla/grouplife/claim/openclaimintimationpage/?claimId=" + claimId + "&mode=view";
+        }else{
+            window.location.href ="/pla/grouplife/claim/openclaimregistrationpage/?claimId=" + claimId + "&mode=view";
+        }
+    };
+
 
     return services;
 })();
