@@ -329,6 +329,30 @@ public class GroupHealthCashlessClaimController {
         }
     }
 
+    @RequestMapping(value = "/getallservicemismatchedgrouphealthcashlessclaims", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllServiceMismatchedGroupHealthCashlessClaims() {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllServiceMismatchedGroupHealthCashlessClaims(userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.setViewName("pla/grouphealth/claim/searchservicemismatchedghcashlessclaims");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallbillmismatchedgrouphealthcashlessclaims", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllBillMismatchedGroupHealthCashlessClaims() {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllBillMismatchedGroupHealthCashlessClaims(userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.setViewName("pla/grouphealth/claim/searchbillmismatchedghcashlessclaims");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/underwriter/getdefaultlistofunderwriterlevels/{level}", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getDefaultListOfUnderwriterLevels(@PathVariable("level") String level, HttpServletResponse response) {

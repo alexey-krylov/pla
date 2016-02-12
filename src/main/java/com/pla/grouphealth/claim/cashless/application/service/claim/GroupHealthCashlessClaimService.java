@@ -886,6 +886,22 @@ public class GroupHealthCashlessClaimService {
         return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
     }
 
+    public List<GroupHealthCashlessClaimDto> getAllServiceMismatchedGroupHealthCashlessClaims(String userName) {
+        List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
+        List<GroupHealthCashlessClaim> claims = groupHealthCashlessClaimRepository.findAllByStatusAndServiceMismatchProcessorIdIn(SERVICE_MISMATCHED,Lists.newArrayList(userName, null));
+        if (isNotEmpty(claims))
+            result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(claims);
+        return result;
+    }
+
+    public List<GroupHealthCashlessClaimDto> getAllBillMismatchedGroupHealthCashlessClaims(String userName) {
+        List<GroupHealthCashlessClaimDto> result = Lists.newArrayList();
+        List<GroupHealthCashlessClaim> claims = groupHealthCashlessClaimRepository.findAllByStatusAndBillMismatchProcessorIdIn(BILL_MISMATCHED,Lists.newArrayList(userName, null));
+        if (isNotEmpty(claims))
+            result = convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(claims);
+        return result;
+    }
+
     public boolean checkIfServiceMismatched(GroupHealthCashlessClaim groupHealthCashlessClaim) {
         Assert.notNull(groupHealthCashlessClaim, "Submission failed Claim record cannot be null");
         GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail= groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
