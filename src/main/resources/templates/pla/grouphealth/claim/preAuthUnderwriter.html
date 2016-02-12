@@ -57,7 +57,7 @@
         <li>UNDERWRITER <text th:text="${searchCriteria.underwriterLevel}"></text></li>
     </ol>
     </p>
-    <form method="post" action="searchpreAuthorizationrecord" novalidate="true" name="searchAuthorizationForm"
+    <form method="post" action="/pla/grouphealth/claim/cashless/preauthorizationrequest/searchpreauthorizationforunderwriterbycriteria" novalidate="true" name="searchAuthorizationForm"
           id="searchAuthorizationForm">
         <div class="row well well-sm" style="margin: 0;">
             <!--&lt;!&ndash;<div class="col-md-2">&ndash;&gt;-->
@@ -68,6 +68,8 @@
                     <label th:text="#{policyNumber}">Policy Number</label>
                     <input type="text" class="form-control input-sm" name="policyNumber"
                            th:value="${searchCriteria.policyNumber}"/>
+                    <input type="hidden" class="form-control input-sm" name="underwriterLevel"
+                           th:value="${searchCriteria.underwriterLevel}"/>
                 </div>
             </div>
             <div class="col-md-2">
@@ -101,7 +103,7 @@
             </div>
             <div class="col-md-2">
                 <button type="submit" style="margin-left: 44%;margin-top: 20px" class="btn btn-default btn-sm"
-                        id="searchpreauthorizationrecord">Search
+                        id="searchpreauthorizationrecord">sadfs
                 </button>
             </div>
         </div>

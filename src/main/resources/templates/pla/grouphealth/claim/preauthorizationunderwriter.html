@@ -317,7 +317,7 @@
                                                              ng-model="coverageDetailDto.approvedAmount"
                                                              class="form-control input-sm"/>
                                                 </div>
-                                               </td>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -1459,17 +1459,17 @@
                                                 </div>
                                             </div>
                                             <!--<div class="col-md-4">-->
-                                                <!--<div class="form-group required ">-->
-                                                    <!--<label class="control-label">Name of Illness</label>-->
-                                                    <!--<input  type="text"-->
-                                                            <!--name="nameOfIllnessDisease"-->
-                                                            <!--ng-required="true"-->
-                                                            <!--ng-model="diagnosisTreatmentDto.nameOfIllnessDisease"-->
-                                                            <!--class="form-control input-md"/>-->
-                                                    <!--<div class="error" ng-messages="step4.nameOfIllnessDisease.$error" ng-if="step4.nameOfIllnessDisease.$dirty">-->
-                                                        <!--<small class="error" ng-message="required">Please enter Drug Name</small>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
+                                            <!--<div class="form-group required ">-->
+                                            <!--<label class="control-label">Name of Illness</label>-->
+                                            <!--<input  type="text"-->
+                                            <!--name="nameOfIllnessDisease"-->
+                                            <!--ng-required="true"-->
+                                            <!--ng-model="diagnosisTreatmentDto.nameOfIllnessDisease"-->
+                                            <!--class="form-control input-md"/>-->
+                                            <!--<div class="error" ng-messages="step4.nameOfIllnessDisease.$error" ng-if="step4.nameOfIllnessDisease.$dirty">-->
+                                            <!--<small class="error" ng-message="required">Please enter Drug Name</small>-->
+                                            <!--</div>-->
+                                            <!--</div>-->
                                             <!--</div>-->
                                             <div class="col-md-4">
                                                 <div class="form-group ">
@@ -1577,32 +1577,32 @@
                                                         <option value="Executive">Executive</option>
                                                     </select>
 
-                                            <!--<div class="col-md-4">-->
-                                                <!--<div class="form-group ">-->
+                                                    <!--<div class="col-md-4">-->
+                                                    <!--<div class="form-group ">-->
                                                     <!--<label class="control-label">Type of Accomodation</label>-->
                                                     <!--<select  class="form-control input-md" name="typeOfAccommodation"-->
-                                                             <!--ng-model="diagnosisTreatmentDto.typeOfAccommodation">-->
-                                                        <!--<option value="Normal">Normal</option>-->
-                                                        <!--<option value="Executive">Executive</option>-->
+                                                    <!--ng-model="diagnosisTreatmentDto.typeOfAccommodation">-->
+                                                    <!--<option value="Normal">Normal</option>-->
+                                                    <!--<option value="Executive">Executive</option>-->
                                                     <!--</select>-->
 
 
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3" style="float:right">
-                                                <button type="button" class="btn btn-danger btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)"  ng-disabled="step4.$invalid">Update</button>
+                                                    <!--</div>-->
+                                                    <!--</div>-->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3" style="float:right">
+                                                        <button type="button" class="btn btn-danger btn-sm" ng-click="updateTreatmentAndDiagnosis(diagnosisTreatmentDto)"  ng-disabled="step4.$invalid">Update</button>
+                                                    </div>
+                                                    <div class="col-sm-3" style="float:right">
+                                                        <button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-sm-3" style="float:right">
-                                                <button type="button" class="btn btn-danger btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
-                                            </div>
+                                            <!--=====================ending a section(trtmntDtls)==================== -->
                                         </div>
                                     </div>
-                                    <!--=====================ending a section(trtmntDtls)==================== -->
                                 </div>
-                              </div>
-                          </div>
                             </accordion-group>
                         </accordion>
 
@@ -1633,7 +1633,7 @@
                             <accordion-group is-open="accordionStatus.Details" ng-form="step5">
                                 <accordion-heading>
                                     Have you past  ever suffered from any of the following chronic Illness      <i class="pull-right glyphicon"
-                                                                                                                    ng-class="{'glyphicon-chevron-down': accordionStatus.Details, 'glyphicon-chevron-right': !accordionStatus.Details}"></i>
+                                                                                                                   ng-class="{'glyphicon-chevron-down': accordionStatus.Details, 'glyphicon-chevron-right': !accordionStatus.Details}"></i>
                                 </accordion-heading>
                                 <div class="bs-callout  bs-callout-info" style="overflow:auto;height:1140px;">
 
@@ -1891,12 +1891,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                <div class="row">
-                                    <div class="col-sm-6" style="float: right">
-                                        <button type="button" class="btn btn-primary btn-sm" style="float: right"
-                                                ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode || step5.$invalid"
-                                        >Save
-                                        </button>
+                                    <div class="row">
+                                        <div class="col-sm-6" style="float: right">
+                                            <button type="button" class="btn btn-primary btn-sm" style="float: right"
+                                                    ng-click="savePreAuthorizationRequest()" ng-disabled="isViewMode || step5.$invalid"
+                                            >Save
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </accordion-group>

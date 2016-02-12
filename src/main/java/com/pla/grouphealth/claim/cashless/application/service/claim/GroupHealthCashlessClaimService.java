@@ -873,14 +873,14 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaim;
     }
 
-    public  List<GroupHealthCashlessClaimDto> getCashlessClaimByCriteria (SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto){
-        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto);
+    public  List<GroupHealthCashlessClaimDto> getCashlessClaimByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, String userName){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto, Lists.newArrayList(userName, null));
         return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
 
     }
 
-    public List<GroupHealthCashlessClaimDto> searchCashlessClaimUnderwriterCriteria (SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto){
-        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.getCashlessClaimByCriteria(searchGroupHealthCashlessClaimRecordDto);
+    public List<GroupHealthCashlessClaimDto> searchCashlessClaimUnderwriterCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, String userName){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchGroupHealthCashlessClaimForUnderwriterByCriteria(searchGroupHealthCashlessClaimRecordDto, Lists.newArrayList(userName, null));
         return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
     }
 

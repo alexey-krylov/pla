@@ -145,10 +145,11 @@ public class PreAuthorizationRequestController {
     @RequestMapping(value = "/getpreauthorizationrequestbycriteria", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto) {
-        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
-        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto);
-        modelAndView.addObject("searchResult", searchResult);
-        modelAndView.addObject("searchResult", searchPreAuthorizationRecordDto);
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRecord");
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationRequestByCriteria(searchPreAuthorizationRecordDto, userName);
+        modelAndView.addObject("preAuthorizationResult", searchResult);
+        modelAndView.addObject("searchCriteria", searchPreAuthorizationRecordDto);
         return modelAndView;
     }
 
@@ -224,26 +225,14 @@ public class PreAuthorizationRequestController {
         return ghProposalMandatoryDocumentDtos;
     }
 
-    @RequestMapping(value = "/underwriter/getlistofpreauthorizationassigned", method = RequestMethod.POST)
-    public ModelAndView getDefaultListOfPreAuthorizationAssignedToUnderwriter(HttpServletResponse response, HttpServletRequest request){
-        String userName = preAuthorizationRequestService.getLoggedInUsername();
-        List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListOfPreAuthorizationAssignedToUnderwriter(userName);
-        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthUnderwriter");
-        modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
-        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/searchpreauthorizationforunderwriterbycriteria", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView searchPreAuthorizationForUnderWriterByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRequestRecord");
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/preAuthUnderwriter");
         String userName = preAuthorizationRequestService.getLoggedInUsername();
-        if(isNotEmpty(userName)) {
-            List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto, userName);
-            modelAndView.addObject("searchResult", searchResult);
-        }
-        modelAndView.addObject("searchResult", searchPreAuthorizationRecordDto);
+        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.searchPreAuthorizationForUnderWriterByCriteria(searchPreAuthorizationRecordDto, userName);
+        modelAndView.addObject("preAuthorizationResult", searchResult);
+        modelAndView.addObject("searchCriteria", searchPreAuthorizationRecordDto);
         return modelAndView;
     }
 
