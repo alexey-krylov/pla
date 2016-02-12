@@ -8,6 +8,9 @@ import com.pla.core.domain.model.notification.NotificationBuilder;
 import com.pla.core.domain.model.notification.NotificationHistory;
 import com.pla.core.query.NotificationFinder;
 import com.pla.core.repository.NotificationHistoryRepository;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimHCPDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimPolicyDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestHCPDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestPolicyDetail;
@@ -358,5 +361,39 @@ public class NotificationTemplateService {
             }
         }
         return documentNameBuilder;
+    }
+
+    public HashMap<String, String> getGroupHealthCashlessClaimNotificationTemplateData(String groupHealthCashlessClaimId, List<String> pendingDocumentList) throws ProcessInfoException {
+        Criteria proposalCriteria = Criteria.where("groupHealthCashlessClaimId").is(groupHealthCashlessClaimId);
+        Query query = new Query(proposalCriteria);
+        GroupHealthCashlessClaim groupHealthCashlessClaim = mongoTemplate.findOne(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
+        int noOfDaysToClosure = iProcessInfoAdapter.getClosureTimePeriod(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
+        int firstReminderDay = iProcessInfoAdapter.getDaysForFirstReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
+        int secondReminderDay = iProcessInfoAdapter.getDaysForSecondReminder(LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM);
+        DateTime ghCashlessClaimCreatedDate = groupHealthCashlessClaim.getCreatedOn();
+        DateTime closureScheduleDateTime = ghCashlessClaimCreatedDate.plusDays(firstReminderDay + secondReminderDay + noOfDaysToClosure);
+        GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
+        GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail();
+        GHProposer ghProposer = groupHealthCashlessClaim.getGhProposer();
+        notNull(groupHealthCashlessClaim, "Error sending reminder no PreAuthorizationRequest found with given Id.");
+        HashMap<String, String> dataMap = Maps.newLinkedHashMap();
+        dataMap.put("firstName", isNotEmpty(groupHealthCashlessClaimPolicyDetail) ? isNotEmpty(groupHealthCashlessClaimPolicyDetail.getAssuredDetail()) ? groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getFirstName() : StringUtils.EMPTY :StringUtils.EMPTY);
+        dataMap.put("surname", isNotEmpty(groupHealthCashlessClaimPolicyDetail) ? isNotEmpty(groupHealthCashlessClaimPolicyDetail.getAssuredDetail()) ? groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getSurname() : StringUtils.EMPTY :StringUtils.EMPTY);
+        dataMap.put("salutation", isNotEmpty(groupHealthCashlessClaimPolicyDetail) ? isNotEmpty(groupHealthCashlessClaimPolicyDetail.getAssuredDetail()) ? groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getSalutation() : StringUtils.EMPTY :StringUtils.EMPTY);
+        dataMap.put("category", groupHealthCashlessClaim.getCategory());
+        dataMap.put("relationship", isNotEmpty(groupHealthCashlessClaim) ? isNotEmpty(groupHealthCashlessClaim.getRelationship()) ? groupHealthCashlessClaim.getRelationship().description : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyNumber", isNotEmpty(groupHealthCashlessClaimPolicyDetail) ? isNotEmpty(groupHealthCashlessClaimPolicyDetail.getPolicyNumber()) ? groupHealthCashlessClaimPolicyDetail.getPolicyNumber().getPolicyNumber() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderName", isNotEmpty(ghProposer) ? ghProposer.getProposerName() : StringUtils.EMPTY);
+        dataMap.put("policyHolderAddressLine1", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getAddressLine1() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderAddressLine2",isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getAddressLine2() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderProvince", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getProvince() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("policyHolderTown", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? ghProposer.getContactDetail().getTown() : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("contactPersonName", isNotEmpty(ghProposer) ? isNotEmpty(ghProposer.getContactDetail()) ? isNotEmpty(ghProposer.getContactDetail().getContactPersonDetail()) ? ghProposer.getContactDetail().getContactPersonDetail().iterator().next().getContactPersonName() : StringUtils.EMPTY : StringUtils.EMPTY : StringUtils.EMPTY);
+        dataMap.put("submittedDate", isNotEmpty(groupHealthCashlessClaim.getCreatedOn()) ? groupHealthCashlessClaim.getCreatedOn().toString() : StringUtils.EMPTY);
+        dataMap.put("closureDate", closureScheduleDateTime.toString());
+        dataMap.put("hcpName", isNotEmpty(groupHealthCashlessClaimHCPDetail) ? groupHealthCashlessClaimHCPDetail.getHcpName() : StringUtils.EMPTY);
+        StringBuilder documentNameBuilder = genericMethodToGetDocumentsRequiredSubmission(pendingDocumentList);
+        dataMap.put("documentName",documentNameBuilder.toString());
+        return dataMap;
     }
 }

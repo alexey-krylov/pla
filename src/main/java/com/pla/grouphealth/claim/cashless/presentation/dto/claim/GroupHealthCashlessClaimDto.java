@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
@@ -178,6 +179,9 @@ public class GroupHealthCashlessClaimDto {
     }
 
     public GroupHealthCashlessClaimDto updateWithAdditionalRequiredDocumentsByUnderwriter(Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter) {
+        if(isEmpty(additionalRequiredDocumentsByUnderwriter)){
+            additionalRequiredDocumentsByUnderwriter = Sets.newHashSet();
+        }
         this.additionalRequiredDocumentsByUnderwriter = additionalRequiredDocumentsByUnderwriter;
         return this;
     }

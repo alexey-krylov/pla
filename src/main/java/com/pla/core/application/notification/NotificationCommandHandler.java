@@ -4,6 +4,7 @@ import com.pla.core.application.service.notification.NotificationTemplateService
 import com.pla.core.domain.model.notification.*;
 import com.pla.core.repository.NotificationHistoryRepository;
 import com.pla.core.repository.NotificationTemplateRepository;
+import com.pla.grouphealth.claim.cashless.application.command.claim.CreateGroupHealthCashlessClaimNotificationCommand;
 import com.pla.grouphealth.claim.cashless.application.command.preauthorization.CreatePreAuthorizationNotificationCommand;
 import com.pla.sharedkernel.application.CreateClaimNotificationCommand;
 import com.pla.sharedkernel.application.CreateNotificationHistoryCommand;
@@ -75,9 +76,15 @@ public class NotificationCommandHandler {
     }
 
     @CommandHandler
-    public void createClaimNotification(CreatePreAuthorizationNotificationCommand createPreAuthorizationNotificationCommand) throws Exception {
+    public void createPreAuthorizationNotification(CreatePreAuthorizationNotificationCommand createPreAuthorizationNotificationCommand) throws Exception {
         HashMap<String,String> dataMap = notificationTemplateService.getPreAuthorizationNotificationTemplateData(createPreAuthorizationNotificationCommand.getPreAuthorizationRequestId(), createPreAuthorizationNotificationCommand.getPendingDocumentList());
         buildAndSendNotification(dataMap, createPreAuthorizationNotificationCommand.getPreAuthorizationRequestId(), createPreAuthorizationNotificationCommand.getRoleType(), createPreAuthorizationNotificationCommand.getLineOfBusiness(), createPreAuthorizationNotificationCommand.getProcessType(), createPreAuthorizationNotificationCommand.getWaitingFor(), createPreAuthorizationNotificationCommand.getReminderType());
+    }
+
+    @CommandHandler
+    public void createClaimNotification(CreateGroupHealthCashlessClaimNotificationCommand createGroupHealthCashlessClaimCommand) throws Exception {
+        HashMap<String,String> dataMap = notificationTemplateService.getGroupHealthCashlessClaimNotificationTemplateData(createGroupHealthCashlessClaimCommand.getGroupHealthCashlessClaimId(), createGroupHealthCashlessClaimCommand.getPendingDocumentList());
+        buildAndSendNotification(dataMap, createGroupHealthCashlessClaimCommand.getGroupHealthCashlessClaimId(), createGroupHealthCashlessClaimCommand.getRoleType(), createGroupHealthCashlessClaimCommand.getLineOfBusiness(), createGroupHealthCashlessClaimCommand.getProcessType(), createGroupHealthCashlessClaimCommand.getWaitingFor(), createGroupHealthCashlessClaimCommand.getReminderType());
     }
 
     @Synchronized

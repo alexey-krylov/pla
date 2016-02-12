@@ -509,7 +509,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView getAddRequirementRequestLetter(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrequirementletter");
-        modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
+        //modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
         return modelAndView;
     }
 

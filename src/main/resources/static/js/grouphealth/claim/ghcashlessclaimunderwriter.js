@@ -660,6 +660,16 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 }
             };
 
+            $scope.isRequirementAdded = function (documentList) {
+                for (var i = 0; i < documentList.length; i++) {
+                    var document = documentList[i];
+                    if (document.fileName == null || document.content == null) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
             $scope.underwriterReject = function () {
                 if (!$scope.comment.comments) {
                     $scope.message = "Comment is mandatory to reject Cashless Claim.";
@@ -694,14 +704,10 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             };
 
             $scope.underwriterApprove = function () {
-
-
                 if (!$scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails[0].approvedAmount) {
                     $scope.approvepopupModal();
-
                 }
                 else {
-
                     $.when($scope.constructCommentDetails()).done(function () {
                         $http({
                             url: '/pla/grouphealth/claim/cashless/claim/underwriter/approve',
@@ -728,7 +734,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                     });
                 }
                 ;
-            }
+            };
 
             $scope.myModal = false;
             $scope.toggleModal = function(){
@@ -763,45 +769,6 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                     );
                     //console.log($scope.createUpdateDto);
                 });
-                /*var win = window.open('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getaddrequirementrequestletter/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
-                 "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-                 var timer = setInterval(function(){
-                 if(win.closed){
-                 clearInterval(timer);
-                 $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/checkifpreauthorizationrequirementemailsent/' + preAuthorizationId)
-                 .success(function(response){
-                 if(response.data === true){
-                 $.when($scope.constructCommentDetails()).done(function(){
-                 $http({
-                 url: '/pla/grouphealth/claim/cashless/preauthorizationrequest/underwriter/addrequirement',
-                 method: 'POST',
-                 data: $scope.createUpdateDto
-                 }).success(function(response, status, headers, config) {
-                 if(status === 200) {
-                 $http.get('/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationclaimantdetailcommandfrompreauthorizationrequestid?preAuthorizationId=' + preAuthorizationId)
-                 .success(function (response, status, headers, config) {
-                 $scope.createUpdateDto = response;
-                 $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getmandatorydocuments/" + clientId + "/" + preAuthorizationId).success(function (response, status, headers, config) {
-                 $scope.documentList = response;
-                 $scope.getAllDocuments();
-                 });
-                 }).error(function (response, status, headers, config) {
-                 });
-                 }
-                 }).error(
-                 function(status){
-                 //console.log(status);
-                 }
-                 );
-                 //console.log($scope.createUpdateDto);
-                 });
-                 } else{
-                 $scope.message = "Please email the requirements letter.";
-                 $scope.toggleModal();
-                 }
-                 }).error();
-                 }
-                 }, 500);*/
             };
             $scope.constructCommentDetails = function() {
                 if ($scope.comment) {
@@ -816,14 +783,14 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.populateDocumentSelected = function(data){
                 $scope.additionalDocumentAskedFor = {};
                 if (data.originalObject) {
-                    if ($scope.createUpdateDto.additionalRequiredDocuments.length > 0) {
+                    if ($scope.createUpdateDto.additionalRequiredDocumentsByUnderwriter.length > 0) {
                         $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
                         $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
-                        $scope.createUpdateDto.additionalRequiredDocuments.push($scope.additionalDocumentAskedFor);
+                        $scope.createUpdateDto.additionalRequiredDocumentsByUnderwriter.push($scope.additionalDocumentAskedFor);
                     } else {
                         $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;
                         $scope.additionalDocumentAskedFor.documentName = data.originalObject.documentName;
-                        $scope.createUpdateDto.additionalRequiredDocuments = new Array($scope.additionalDocumentAskedFor);
+                        $scope.createUpdateDto.additionalRequiredDocumentsByUnderwriter = new Array($scope.additionalDocumentAskedFor);
                     }
                 }
             };

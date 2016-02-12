@@ -502,9 +502,8 @@
                                 }
                             );
                         });
-                    }
-                    ;
-                }
+                    };
+                };
 
                 $scope.myModal = false;
                 $scope.toggleModal = function(){
@@ -771,6 +770,7 @@
 
                 $scope.populateDocumentSelected = function(data){
                     $scope.additionalDocumentAskedFor = {};
+                    console.log(data);
                     if (data.originalObject) {
                         if ($scope.createUpdateDto.additionalRequiredDocuments.length > 0) {
                             $scope.additionalDocumentAskedFor.documentCode = data.originalObject.documentCode;

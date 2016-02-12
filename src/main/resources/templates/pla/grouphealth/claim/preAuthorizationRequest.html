@@ -1352,7 +1352,7 @@
                                                       ng-disabled="disableHtn || isViewMode"  ng-required="createUpdateDto.illnessDetailDto.htn === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.htndetails == '' || createUpdateDto.illnessDetailDto.htndetails == undefined)"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.htn.$error" ng-if="step4.htn.$dirty">
+                                        <div class="error" ng-messages="step4.htn.$error" ng-if="step4.htn.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1378,7 +1378,7 @@
                                                       ng-required="createUpdateDto.illnessDetailDto.idhHOD === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.ihdhoddetails == '' || createUpdateDto.illnessDetailDto.ihdhoddetails==undefined)"  ng-disabled="disableIhd || isViewMode"
                                                       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.idhdetail.$error" ng-if="step4.idhdetail.$dirty">
+                                        <div class="error" ng-messages="step4.idhdetail.$error" ng-if="step4.idhdetail.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1405,7 +1405,7 @@
                                             <textarea name="dibetes"  ng-disabled="disdibetes || isViewMode" ng-model="createUpdateDto.illnessDetailDto.diabetesDetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.diabetes === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.diabetesDetails == '' || !createUpdateDto.illnessDetailDto.diabetesDetails)"   style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.dibetes.$error" ng-if="step4.dibetes.$dirty">
+                                        <div class="error" ng-messages="step4.dibetes.$error" ng-if="step4.dibetes.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1432,7 +1432,7 @@
                                             <textarea name="asthma"  ng-model="createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.asthmaCOPDTB === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails == '' || !createUpdateDto.illnessDetailDto.asthmaCOPDTBDetails)" ng-disabled="disAsthma || isViewMode"  style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.asthma.$error" ng-if="step4.asthma.$dirty">
+                                        <div class="error" ng-messages="step4.asthma.$error" ng-if="step4.asthma.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1464,7 +1464,7 @@
                                             <textarea name="std" ng-disabled="disStd || isViewMode"   ng-model="createUpdateDto.illnessDetailDto.stdhivaidsdetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.stdhivaids === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.stdhivaidsdetails == '' || !createUpdateDto.illnessDetailDto.stdhivaidsdetails)"        style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.std.$error" ng-if="step4.std.$dirty">
+                                        <div class="error" ng-messages="step4.std.$error" ng-if="step4.std.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1494,7 +1494,7 @@
                                             <textarea name="Arthiritis"  ng-disabled="disArthiritis || isViewMode"  ng-model="createUpdateDto.illnessDetailDto.arthritisDetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.arthritis === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.arthritisDetails == '' || !createUpdateDto.illnessDetailDto.arthritisDetails)"       style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.Arthiritis.$error" ng-if="step4.Arthiritis.$dirty">
+                                        <div class="error" ng-messages="step4.Arthiritis.$error" ng-if="step4.Arthiritis.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1524,7 +1524,7 @@
                                             <textarea name="cancer"  ng-disabled="disCancer || isViewMode" ng-model="createUpdateDto.illnessDetailDto.cancerTumorCystDetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.cancerTumorCyst === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.cancerTumorCystDetails == '' || !createUpdateDto.illnessDetailDto.cancerTumorCystDetails)"         style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.cancer.$error" ng-if="step4.cancer.$dirty">
+                                        <div class="error" ng-messages="step4.cancer.$error" ng-if="step4.cancer.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1554,7 +1554,7 @@
                                             <textarea name="alcohol"  ng-disabled="disAlcohol || isViewMode" ng-model="createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.alcoholDrugAbuse === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails == '' || !createUpdateDto.illnessDetailDto.alcoholDrugAbuseDetails)"     style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.alcohol.$error" ng-if="step4.alcohol.$dirty">
+                                        <div class="error" ng-messages="step4.alcohol.$error" ng-if="step4.alcohol.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>
@@ -1580,7 +1580,7 @@
                                             <textarea name="pshyciatric"   ng-model="createUpdateDto.illnessDetailDto.psychiatricConditionDetails"
                                                       ng-required="createUpdateDto.illnessDetailDto.psychiatricCondition === 'Yes' &amp;&amp; (createUpdateDto.illnessDetailDto.psychiatricConditionDetails == '' || !createUpdateDto.illnessDetailDto.psychiatricConditionDetails)"   ng-disabled="dispshyciatric || isViewMode"  style="width:950px;height:60px;left:30px"></textarea>
                                         </div>
-                                        <div class="error" ng-messages="step4.pshyciatric.$error" ng-if="step4.pshyciatric.$dirty">
+                                        <div class="error" ng-messages="step4.pshyciatric.$error" ng-if="step4.pshyciatric.$error">
                                             <small class="error" ng-message="required">Please enter details</small>
                                         </div>
                                     </div>

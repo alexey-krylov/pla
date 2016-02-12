@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.domain.event.claim;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.pla.grouphealth.claim.cashless.application.command.claim.CreateGroupHealthCashlessClaimNotificationCommand;
 import com.pla.grouphealth.claim.cashless.application.command.preauthorization.CreatePreAuthorizationNotificationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
@@ -90,7 +91,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         if(!groupHealthCashlessClaim.isFirstReminderSent() && !groupHealthCashlessClaim.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(groupHealthCashlessClaim);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreatePreAuthorizationNotificationCommand(event.getGroupHealthCashlessClaimId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
+                commandGateway.send(new CreateGroupHealthCashlessClaimNotificationCommand(event.getGroupHealthCashlessClaimId(), RolesUtil.GROUP_HEALTH_CASHLESS_CLAIM_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
                 groupHealthCashlessClaim.updateFlagForFirstReminderSent(Boolean.TRUE);
             }
         }
@@ -116,7 +117,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         if(groupHealthCashlessClaim.isFirstReminderSent() && !groupHealthCashlessClaim.isSecondReminderSent()) {
             List<String> pendingDocumentList = getPendingDocumentList(groupHealthCashlessClaim);
             if(pendingDocumentList.size() > 0) {
-                commandGateway.send(new CreatePreAuthorizationNotificationCommand(event.getGroupHealthCashlessClaimId(), RolesUtil.GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
+                commandGateway.send(new CreateGroupHealthCashlessClaimNotificationCommand(event.getGroupHealthCashlessClaimId(), RolesUtil.GROUP_HEALTH_CASHLESS_CLAIM_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
                 groupHealthCashlessClaim.updateFlagForSecondReminderSent(Boolean.TRUE);
             }
         }
