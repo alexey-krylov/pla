@@ -116,7 +116,13 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
 
             $scope.tratementdignosisnextbuttonfalse= function(){
                 $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["4"] = true;
+                if (mode == 'view'){
+                    $scope.stepsSaved["4"] = false;
+
+                }
+                else {
+                    $scope.stepsSaved["4"] = true;
+                }
             };
 
             $scope.viewTreatmentDiagnosis = function (treatmentDiagnosis, treatmentDiagnosisIndex) {
