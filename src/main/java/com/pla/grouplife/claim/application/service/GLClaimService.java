@@ -1312,14 +1312,19 @@ public class GLClaimService implements Serializable{
                 claimDataDto.setPolicyNumber(policyNumber);
                 String policyHolderName = policy.getPolicyHolderName();
                 claimDataDto.setPolicyHolderName(policyHolderName);
+                PlanDetail planDetail=(PlanDetail)map.get("planDetail");
+                if(planDetail!=null){
+                  String planName=planDetail.getPlanName();
+                    claimDataDto.setPlanName(planName);
+                }
+
                 ClaimAssuredDetail assuredDetail = (ClaimAssuredDetail) map.get("assuredDetail");
                 if (assuredDetail != null) {
                     String title = assuredDetail.getTitle();
                     String assuredFirstName = assuredDetail.getFirstName();
                     String assuredSurName = assuredDetail.getSurName();
-                    claimDataDto.setTitle(title);
-                    claimDataDto.setFirstName(assuredFirstName);
-                    claimDataDto.setSurName(assuredSurName);
+                    claimDataDto.setAssuredName(title + "" + assuredFirstName+""+assuredSurName);
+
                 }
 
                 GlClaimUnderWriterApprovalDetail underWriterApprovalDetail = (GlClaimUnderWriterApprovalDetail) map.get("underWriterReviewDetail");
@@ -1327,8 +1332,23 @@ public class GLClaimService implements Serializable{
                     BigDecimal underWriterApprovedAmount=underWriterApprovalDetail.getTotalApprovedAmount();
                     claimDataDto.setApprovedAmount(underWriterApprovedAmount);
                 }
+                DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
+                claimDataDto.setClaimIntimationDate(intimationDate);
+
                 DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
                 claimDataDto.setApprovedOn(approvalDate);
+
+                DateTime today = new DateTime();
+                Duration duration = new Duration(intimationDate, today);
+                Long gapInDays=duration.getStandardDays();
+                int gapInDaysInInteger= Integer.valueOf(gapInDays.toString());
+                claimDataDto.setRecordCreationInDays(gapInDaysInInteger);
+                BigDecimal claimAmount=(BigDecimal)map.get("claimAmount");
+                BigDecimal  resultantClaimAmount=BigDecimal.ZERO;
+                if (claimAmount!=null){
+                    resultantClaimAmount=claimAmount;
+                }
+                claimDataDto.setClaimAmount(resultantClaimAmount);
                 return claimDataDto;
             }
         }).collect(Collectors.toList());
@@ -1356,7 +1376,7 @@ public class GLClaimService implements Serializable{
                 String policyHolderName = policy.getPolicyHolderName();
                 ClaimAssuredDetail assuredDetail = ( ClaimAssuredDetail) map.get("assuredDetail");
                 String assuredName = assuredDetail.getFirstName();
-                claimDataDto.setFirstName(assuredName);
+                claimDataDto.setAssuredName(assuredName);
                 claimDataDto.setClaimStatus(claimStatus.toString());
                 claimDataDto.setPolicyNumber(policyNumber);
             DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
@@ -1394,7 +1414,7 @@ public class GLClaimService implements Serializable{
                 String policyHolderName = policy.getPolicyHolderName();
                 ClaimAssuredDetail assuredDetail = (ClaimAssuredDetail) map.get("assuredDetail");
                 String assuredName = assuredDetail.getFirstName();
-                claimDataDto.setFirstName(assuredName);
+                claimDataDto.setAssuredName(assuredName);
               /*  AssuredDetail assuredDetail = (AssuredDetail) map.get("assuredDetail");
                 String assuredName=assuredDetail.getFirstName();
                 claimDataDto.setAssuredName(assuredName);

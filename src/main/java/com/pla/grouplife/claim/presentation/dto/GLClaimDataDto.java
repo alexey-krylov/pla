@@ -24,16 +24,16 @@ public class GLClaimDataDto {
     private String claimNumber;
     private String policyHolderName;
     private String policyHolderClientId;
-    private String title;
-    private String firstName;
-    private String surName;
     private String policyNumber;
-    private String assuredNrcNumber;
-    private String assuredClientId;
+    private String assuredName;
+    private String planName;
     private ClaimType claimType;
     private String claimStatus;
     private String routingLevel;
+    private BigDecimal claimAmount;
     private BigDecimal approvedAmount;
+    private DateTime claimIntimationDate;
+    private int recordCreationInDays;
     private DateTime approvedOn;
 
     public GLClaimDataDto withClaimNumberAndClaimId (String claimNumber, String claimId){
