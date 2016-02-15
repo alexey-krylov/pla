@@ -293,7 +293,7 @@ public class GLClaimService implements Serializable{
         claimantDetail.withContactPersonDetails(contactPersonDetailList);
         claimIntimationDetailDto.withClaimant(claimantDetail);
         PlanDetail planDetail = (PlanDetail) claimRecordMap.get("planDetail");
-        PlanDetailDto planDetailDto = new PlanDetailDto(planDetail.getPlanId().getPlanId(), planDetail.getPlanCode(), planDetail.getPlanName(), planDetail.getPremiumAmount(), planDetail.getSumAssured());
+        PlanDetailDto planDetailDto = new PlanDetailDto(planDetail.getPlanId().getPlanId(),  planDetail.getPlanName(),planDetail.getPlanCode(), planDetail.getPremiumAmount(), planDetail.getSumAssured());
         claimIntimationDetailDto.setPlanDetail(planDetailDto);
         List<CoverageDetail> coverageDetails = (List<CoverageDetail>) claimRecordMap.get("coverageDetails");
         Set<CoverageDetailDto> coverageDetailsSet = new LinkedHashSet<CoverageDetailDto>();
@@ -1299,8 +1299,11 @@ public class GLClaimService implements Serializable{
                 String claimStatusResult = claimStatus.getDescription();
                 claimDataDto.setClaimStatus(claimStatusResult);
                 String routingLevelInString = (String) map.get("taggedRoutingLevel");
-                RoutingLevel routingLevel = (RoutingLevel) RoutingLevel.valueOf(routingLevelInString);
-                String resultRoutingLevel = routingLevel.getDescription();
+                String resultRoutingLevel="";
+                if(routingLevelInString!=null){
+                    RoutingLevel routingLevel = (RoutingLevel) RoutingLevel.valueOf(routingLevelInString);
+                     resultRoutingLevel = routingLevel.getDescription();
+                }
                 claimDataDto.setRoutingLevel(resultRoutingLevel);
                 String claimNumberInString = claimNumber.getClaimNumber();
                 claimDataDto.withClaimNumberAndClaimId(claimNumberInString, claimId);
