@@ -83,6 +83,8 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.additionalDocumentList = [{}];
         $scope.rcvClaimIdForRegistration = getQueryParameter('claimId');
         $scope.dailyTaskList=["Dressing","Using the Toilet","Walking","Feeding Him/Herself","Using Telephone","Bathing","Taking Medication"];
+            $scope.comments={};
+            $scope.approvalCommentList=[];
             /***
              *
              * @param $event for Claim intimation Date
@@ -413,7 +415,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                $http.get('/pla/grouplife/claim/getclaimant/' + $scope.rcvPolicyId).success(function (response, status, headers, config) {
                     console.log(JSON.stringify(response));
-                   $scope.schemeName=response.schemeName;
+                   $scope.claimDetails.schemeName=response.schemeName;
                    $scope.claimDetails.policyNumber=response.policyNumber;
                    $scope.claimantDetail=response.claimantDetail;
                    $scope.categorySet=response.categorySet;
