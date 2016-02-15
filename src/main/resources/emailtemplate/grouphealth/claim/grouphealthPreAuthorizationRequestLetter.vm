@@ -5,161 +5,116 @@
       xmlns="http://www.w3.org/TR/REC-html40" xmlns="http://www.w3.org/1999/html">
 <body>
 <div>
-##    <h3 style='margin-right:-.25in;tab-stops:.5in'>
-##        <span style='mso-no-proof:yes'>${emailContent.mailSentDate}</span></span>
-##    </h3>
-##
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'> ${emailContent.preAuthorizationDate} ${emailContent.surName}
-        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>
+            Date : ${emailContent.currentDateTime}
+        </span>
+    </p>
+    <p></p>
+
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color: red'>
+            ${emailContent.salutation}  ${emailContent.firstName}  ${emailContent.surName}
+            <span style='mso-spacerun:yes'> </span>
+        </span>
+    </p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'> ${emailContent.province} ${emailContent.town}
-        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
-
-
-
-
-    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
-font-family:"Tahoma","sans-serif"'>Date:${emailContent.currentDateTime}<o:p></o:p></span></p>
-
-##    <p class=MsoNormal style='margin-left:.25in'><span style='font-size:11.0pt;
-##font-family:"Tahoma","sans-serif"'>Marsh Zambia ltd<o:p></o:p></span></p>
-##
-##    <h3 style='tab-stops:.5in;margin-left:.25in'><u><span lang=EN-GB style='font-size:11.0pt;
-##font-family:"Tahoma","sans-serif"'>LUSAKA<o:p></o:p></span></u></h3>
-##
-##    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-##0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify'><b
-##            style='mso-bidi-font-weight:normal'><u><span lang=EN-GB style='font-size:11.0pt;
-##font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Attention: ${emailContent.contactPersonName}
-##        <o:p></o:p></span></u></b></p>
-
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color: red'>
+             ${emailContent.address1} ${emailContent.address2}
+            <span style='mso-spacerun:yes'> </span>
+        </span>
+    </p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><h2> Policy Number:  ${emailContent.policyNumber}</h2>
-<span style='mso-spacerun:yes'> </span></p>
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><h2> Plan :  ${emailContent.plan}</h2>
-<span style='mso-spacerun:yes'> </span></p>
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><h2>Pre-authorization Number :  ${emailContent.surName}</h2>
-<span style='mso-spacerun:yes'> </span></p>
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color: red'> ${emailContent.town} ${emailContent.province}
+        <span style='mso-spacerun:yes'> </span>
+    </p>
+    <p></p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><h2> Dear Sir/Madam, ${emailContent.firstName} ${emailContent.surName}</h2>
-<span style='mso-spacerun:yes'> </span></p>
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB;'> Policy Number :  </span>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color: red'>${emailContent.policyNumber}
+            <span style='mso-spacerun:yes'> </span></p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB;'> Plan :  </span>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color: red'>${emailContent.plan}<span style='mso-spacerun:yes'> </span>
+    </p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB;'> Pre-authorization Number :  </span>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB; color: red'>${emailContent.preAuthorizationRequestId}
+            <span style='mso-spacerun:yes'></span>
+    </p>
 
-##    <h3><span lang=EN-GB
-##              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;font-size:11.0pt;font-family:"Tahoma","sans-serif"'>POLICY
-##FOR GROUP LIFE ASSURANCE - ${emailContent.proposerName}</span>
-##    </h3>
+    <span style='mso-spacerun:yes'> </span></p>
+    <p></p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; font-weight: bold'>Subject : Pre-authorization Requirements Intimation<br/><span style='mso-spacerun:yes'>
+        </span><br/></span>
+    </p>
 
-    <div style='mso-element:para-border-div;border:none;border-top:solid windowtext 1.0pt;
-mso-border-top-alt:solid windowtext .5pt;padding:1.0pt 0in 0in 0in;margin-left:
-.25in;margin-right:4.25in'>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Dear, </span>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color:red'>${emailContent.firstName} ${emailContent.surName}</span>
+    </p>
 
-        <p class=MsoNormal style='text-align:justify;tab-stops:-.5in 0in;border:none;
-mso-border-top-alt:solid windowtext .5pt;padding:0in;mso-padding-alt:1.0pt 0in 0in 0in'><span
-                lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
-
-    </div>
-
+    <p class=MsoNormal style='margin-top:.1in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>This communication is with reference to the Claim lodged under the above policy on
+            <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB; color: red'> ${emailContent.preAuthorizationDate}</span>
+        </span>
+    </p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'>This communication is with reference to the Claim dated dd/mm/yyyy for ${emailContent.preAuthorizationDate} ${emailContent.surName}
-        <br/><span style='mso-spacerun:yes'> </span><br/></span></p>
-
-
-
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'> We wish to inform you that the following mandatory documents are required to enable us <br/>
-<span style='mso-spacerun:yes'> <br/></span>proceed with the processing of the claim.
-
-.<br/></span></p>
+0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>
+            We wish to inform you that the following mandatory documents are required to enable us proceed with the processing of the claim.<br/>
+        </span>
+    </p>
 
     <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
- 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-  mso-ansi-language:EN-GB'><br/>1. xxxxxxxxxxxxxxxxxxxxxxxx<br/>
- <span style='mso-spacerun:yes'>
-        </span><br/>2. xxxxxxxxxxxxxxxxxxxxxxxx.<br/></span></p>
+ 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+  mso-ansi-language:EN-GB'><br/>
+        #foreach($doc in ${emailContent.listofDocument})
+            <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>$velocityCount.</span>
+            <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB;'>$doc</span><br/>
+        #end
+    </p>
 
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'><br/>
+            In case of any discrepancies in the information mentioned above or any other query, please feel free to contact us.<br/>
+            Our Customer Services Executive will be glad to assist you.<br/>
+            You can also write to us at xxxxx@xxxxx.co.zm<br>
+            <span style='mso-spacerun:yes'></span><br/><br/>
+        </span>
+    </p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><br/>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>We aim to serve you better.<br/><span style='mso-spacerun:yes'></span>
+        </span>
+    </p>
 
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><br/>to us at xxxxx@xxxxx.co.zm<br/>
-<span style='mso-spacerun:yes'> </span></span></p></br></br>
-
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
- 0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-  mso-ansi-language:EN-GB'><br/>In case of any discrepancies in the information mentioned above or any other query, please feel<br/>
- <span style='mso-spacerun:yes'>
-        </span><br/>free to contact us. Our Customer Services Executive will be glad to assist you. You can also write .<br/></span></p>
-
-
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><br/>to us at xxxxx@xxxxx.co.zm<br/>
-<span style='mso-spacerun:yes'> </span></span></p></br></br>
-
-
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><br/><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><br/>We aim to serve you better.
-<br/><span style='mso-spacerun:yes'> </span></span></p>
-
-
-
-
-
-
-#* <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-         lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'>We now look forward to hearing from you and will get
-in touch with you soon to make arrangements to conclude this business.<o:p></o:p></span></p>*#
-
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span>
+    </p>
 
     <h1 style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:
-.25in;margin-bottom:.0001pt'><span lang=EN-GB style='font-size:11.0pt;
-font-family:"Tahoma","sans-serif";font-weight:normal'>Yours Sincerely,
+.25in;margin-bottom:.0001pt'><span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";font-weight:normal'>Yours Sincerely,<o:p></o:p></span></h1>
 
-<o:p></o:p></span></h1>
-    <p class=MsoNormal style='margin-right:-.25in;text-align:justify;tab-stops:
--.5in'><b style='mso-bidi-font-weight:normal'>
-        <span lang=EN-GB
-              style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'></span></b><span
-            lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
-mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+    <p class=MsoNormal style='margin-right:-.25in;text-align:justify;tab-stops:-.5in'><b style='mso-bidi-font-weight:normal'>
+        <span lang=EN-GB style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'></span></b>
+        <span lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p></o:p></span>
+    </p>
 
-    <h1 style='margin-right:-.25in'><u><span
-            style='font-size:11.0pt;font-family:"Tahoma","sans-serif";margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>MANAGER - GROUP LIFE<o:p></o:p></span></u>
+    <h1 style='margin-right:-.25in'>
+        <span style='font-size:11.0pt;font-family:"Tahoma","sans-serif";margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>MANAGER - GROUP HEALTH<o:p></o:p></span>
     </h1>
 </div>
 </body>

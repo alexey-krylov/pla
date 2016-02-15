@@ -96,6 +96,12 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
             });
 
+            $scope.$watch('createUpdateDto.status', function(newVal, oldVal){
+                if ($scope.createUpdateDto.status !== 'Underwriting') {
+                    $scope.isViewMode = true;
+                }
+            });
+
             $scope.shouldSubmitBeDisabled = function (documentList) {
                 for (var i = 0; i < documentList.length; i++) {
                     var document = documentList[i];
@@ -247,7 +253,34 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
 
             $scope.back = function () {
                 //window.location.reload();
-                window.location.href = '/pla/grouphealth/claim/cashless/claim/getcashlessclaimfordefaultlist';
+                $http.get("/pla/grouphealth/claim/cashless/claim/getunderwriterlevelfromclaim/"+groupHealthCashlessClaimId)
+                    .success(function(response) {
+                        if (response) {
+                            //console.log(response.data);
+                            if (response.data === 'LEVEL1') {
+                                window.location.href = '/pla/grouphealth/claim/cashless/claim/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                            }
+                            if (response.data === 'LEVEL2') {
+                                window.location.href = '/pla/grouphealth/claim/cashless/claim/underwriter/getdefaultlistofunderwriterlevels/LEVEL2';
+                            }
+                            if(response.data === '' || angular.isUndefined(response.data)){
+                                window.location.reload();
+                            }
+                        }
+                    }).error(function (response) {
+                });
+            };
+
+            $scope.checkIfUnderwriterLevel2 = function(){
+                $http.get("/pla/grouphealth/claim/cashless/claim/getunderwriterlevelfromclaim/"+groupHealthCashlessClaimId)
+                    .success(function(response) {
+                        if (response) {
+                            if (response.data === 'LEVEL2') {
+                                $scope.isSeniorUnderwriter = true;
+                            }
+                        }
+                    }).error(function (response) {
+                });
             };
 
             $scope.isBrowseDisable = function (document) {
@@ -797,7 +830,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.returnCashlessClaim = function(){
                 $.when($scope.constructCommentDetails()).done(function () {
                     $http({
-                        url: '/pla/grouphealth/claim/cashless/claim/underwriter/return',
+                        url: '/pla/grouphealth/claim/cashless/claim/return',
                         method: 'POST',
                         data: $scope.createUpdateDto
                     }).success(function (response, status, headers, config) {

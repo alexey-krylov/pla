@@ -402,7 +402,7 @@
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-click="underwriterRouteSenior()">Refer To Senior UnderWriter</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode || isSeniorUnderwriter"  ng-click="underwriterRouteSenior()" ng-init="checkIfUnderwriterLevel2()">Refer To Senior UnderWriter</button>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-click="underwriterReturn()">Return</button>
@@ -1940,7 +1940,7 @@
                                                    readonly="true"/>
                                         </div>
                                     </div>
-                                    <div class="btn btn-default" ng-disabled="step6.$invalid" style="display:inline;float:right;clear:both"
+                                    <div class="btn btn-default" ng-disabled="isViewMode" style="display:inline;float:right;clear:both"
                                          ng-click="uploadDocumentFiles()">Upload All
                                     </div>
                                 </div>

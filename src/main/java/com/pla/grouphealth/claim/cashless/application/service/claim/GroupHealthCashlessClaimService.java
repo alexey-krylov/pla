@@ -844,9 +844,9 @@ public class GroupHealthCashlessClaimService {
     public String getUnderwriterLevelForPreAuthorization(String groupHealthCashlessClaimId) {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
         if(isNotEmpty(groupHealthCashlessClaim)){
-            if(groupHealthCashlessClaim.getStatus().equals(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1))
+            if(groupHealthCashlessClaim.getStatus().equals(UNDERWRITING_LEVEL1))
                 return "LEVEL1";
-            if(groupHealthCashlessClaim.getStatus().equals(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2))
+            if(groupHealthCashlessClaim.getStatus().equals(UNDERWRITING_LEVEL2))
                 return "LEVEL2";
         }
         return StringUtils.EMPTY;

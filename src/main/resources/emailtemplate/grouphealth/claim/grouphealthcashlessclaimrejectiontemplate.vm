@@ -65,8 +65,8 @@ mso-ansi-language:EN-GB; color: red'>${emailContent.groupHealthCashlessClaimId}
     </p>
 
     <p class=MsoNormal style='margin-top:.1in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
-        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>This communication is with reference to the Claim dated  ${emailContent.claimIntimationDate}</span>
-        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB;color:red;'> for ${emailContent.firstName} ${emailContent.surName}
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>This communication is with reference to the Claim dated  ${emailContent.claimIntimationDate} for</span>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB;color:red;'> ${emailContent.firstName} ${emailContent.surName}
         <br/><span style='mso-spacerun:yes'> </span><br/></span>
     </p>
 
@@ -90,23 +90,27 @@ mso-ansi-language:EN-GB; color: red'>${emailContent.groupHealthCashlessClaimId}
         </span>
     </p>
 
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><br/>
-        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'><br/>We aim to serve you better.<br/>
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><br/>
+        <span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>We aim to serve you better.<br/><span style='mso-spacerun:yes'></span>
         </span>
-        </span><br/><br/></span>
     </p>
 
-    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:
-0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'><span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";mso-ansi-language:EN-GB'>Yours Sincerely,<o:p>&nbsp;</o:p></span></p>
-    <p class=MsoNormal style='margin-right:-.25in;text-align:justify;tab-stops:
--.5in'><b style='mso-bidi-font-weight:normal'>
-        <span lang=EN-GB style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'></span></b><span lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+    <p class=MsoNormal style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:.25in;margin-bottom:.0001pt;text-align:justify;tab-stops:-.5in'>
+        <span lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span>
+    </p>
+
+    <h1 style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left:
+.25in;margin-bottom:.0001pt'><span lang=EN-GB style='font-size:10.0pt;font-family:"Tahoma","sans-serif";font-weight:normal'>Yours Sincerely,<o:p></o:p></span></h1>
+
+    <p class=MsoNormal style='margin-right:-.25in;text-align:justify;tab-stops:-.5in'><b style='mso-bidi-font-weight:normal'>
+        <span lang=EN-GB style='margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'></span></b>
+        <span lang=EN-GB style='font-size:11.0pt;font-family:"Tahoma","sans-serif";
 mso-ansi-language:EN-GB'><o:p></o:p></span>
     </p>
 
     <h1 style='margin-right:-.25in'>
-        <span style='font-size:11.0pt;font-family:"Tahoma","sans-serif";margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>Manager - Group Health<o:p></o:p></span>
+        <span style='font-size:11.0pt;font-family:"Tahoma","sans-serif";margin-top:0in;margin-right:-.25in;margin-bottom:0in;margin-left: .25in;margin-bottom:.0001pt'>MANAGER - GROUP HEALTH<o:p></o:p></span>
     </h1>
 </div>
 </body>

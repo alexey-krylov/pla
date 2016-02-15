@@ -484,7 +484,7 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/getunderwriterlevelfromclaim/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
     @ResponseBody
-    public Result getUnderwriterLevelForPreAuthorization(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
+    public Result getUnderwriterLevelForClaim(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
         if(isEmpty(groupHealthCashlessClaimId)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "groupHealthCashlessClaimId cannot be empty");
             return Result.failure();
@@ -511,8 +511,6 @@ public class GroupHealthCashlessClaimController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/emailghcashlessclaimrequirementletter");
         modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
-        modelAndView.setViewName("pla/grouphealth/claim/emailpreauthorizationrequirementletter");
-        //modelAndView.addObject("mailContent", preAuthorizationRequestService.getAddRequirementRequestLetter(groupHealthCashlessClaimId));
         return modelAndView;
     }
 

@@ -23,6 +23,7 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
 import com.pla.grouphealth.claim.cashless.domain.exception.RoutingLevelNotFoundException;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.*;
@@ -1129,7 +1130,7 @@ public class PreAuthorizationRequestService {
 
     public GHPreAuthorizationMailDto getPreScriptedEmail(String preAuthorizationId) {
         PreAuthorizationRequest preAuthorizationRequest= preAuthorizationRequestRepository.findOne(preAuthorizationId);
-        String subject = "Preauthorization  Rejection :: " + preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber();
+        String subject = "Preauthorization  Rejection :: " + preAuthorizationRequest.getPreAuthorizationRequestId();
         String mailAddress =  isNotEmpty(preAuthorizationRequest.getGhProposer())?preAuthorizationRequest.getGhProposer().getContactDetail().getEmailAddress(): null;
         Map emailContent = getEmaildata(preAuthorizationRequest);
         Map<String, Object> emailContentMap = Maps.newHashMap();
@@ -1141,7 +1142,7 @@ public class PreAuthorizationRequestService {
     }
     public GHPreAuthorizationMailDto getAddRequirementRequestLetter(String preAuthorizationId) {
         PreAuthorizationRequest preAuthorizationRequest= preAuthorizationRequestRepository.findOne(preAuthorizationId);
-        String subject = "Preauthorization  Rejection :: " + preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getPolicyNumber();
+        String subject = "Preauthorization  Requirements Intimation :: " + preAuthorizationRequest.getPreAuthorizationRequestId();
         String mailAddress =  isNotEmpty(preAuthorizationRequest.getGhProposer())?preAuthorizationRequest.getGhProposer().getContactDetail().getEmailAddress(): null;
         Map emailContent = getEmaildata(preAuthorizationRequest);
         Map<String, Object> emailContentMap = Maps.newHashMap();
@@ -1150,6 +1151,13 @@ public class PreAuthorizationRequestService {
         GHPreAuthorizationMailDto ghPreAuthorizationMailDto = new GHPreAuthorizationMailDto(subject, emailBody, mailAddress);
         ghPreAuthorizationMailDto.setPreAuthorizationId(preAuthorizationId);
         return ghPreAuthorizationMailDto;
+    }
+
+    private Set<String> getPendingDocumentSet(PreAuthorizationRequest preAuthorizationRequest) {
+        return isNotEmpty(preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter()) ?
+                preAuthorizationRequest.getAdditionalRequiredDocumentsByUnderwriter().stream()
+                        .filter(doc -> !doc.isHasSubmitted()).map(AdditionalDocument::getDocumentName)
+                        .collect(Collectors.toSet()): Sets.newHashSet();
     }
 
     public Map getEmaildata(PreAuthorizationRequest preAuthorizationRequest){
@@ -1163,6 +1171,7 @@ public class PreAuthorizationRequestService {
         LocalDate preAuthorizationDate = preAuthorizationRequest.getPreAuthorizationDate() ;
         String address1 =  isNotEmpty(preAuthorizationRequest.getGhProposer())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine1(): null;
         String address2 = isNotEmpty(preAuthorizationRequest.getGhProposer().getContactDetail())?preAuthorizationRequest.getGhProposer().getContactDetail().getAddressLine2(): null;
+        Set<String> pendingDocumentSet = getPendingDocumentSet(preAuthorizationRequest);
         Map<String, Object> emailContent = Maps.newHashMap();
         emailContent.put("currentDateTime", LocalDate.now());
         emailContent.put("plan",plan);
@@ -1175,6 +1184,8 @@ public class PreAuthorizationRequestService {
         emailContent.put("salutation",salutation);
         emailContent.put("address1",address1);
         emailContent.put("address2",address2);
+        emailContent.put("preAuthorizationRequestId",preAuthorizationRequest.getPreAuthorizationRequestId());
+        emailContent.put("listofDocument", pendingDocumentSet);
         return emailContent;
     }
 
