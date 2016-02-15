@@ -359,7 +359,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         ModelAndView modelAndView = new ModelAndView();
         String userName = preAuthorizationRequestService.getLoggedInUsername();
-        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderWriterUserId(groupHealthCashlessClaimId, userName);
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithServiceMismatchProcessorId(groupHealthCashlessClaimId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimunderwriter");
         return modelAndView;
     }
@@ -599,7 +599,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView getBillMismatch(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse)throws  IOException,PreAuthorizationInProcessingException{
         ModelAndView modelAndView = new ModelAndView();
         String userName = preAuthorizationRequestService.getLoggedInUsername();
-        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderWriterUserId(groupHealthCashlessClaimId, userName);
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithBillMismatchProcessorId(groupHealthCashlessClaimId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimbillmismatch");
         return modelAndView;
     }
@@ -609,7 +609,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView getServiceMismatch(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws  IOException, PreAuthorizationInProcessingException{
         ModelAndView modelAndView = new ModelAndView();
         String userName = preAuthorizationRequestService.getLoggedInUsername();
-        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderWriterUserId(groupHealthCashlessClaimId, userName);
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithServiceMismatchProcessorId(groupHealthCashlessClaimId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimservicemismatch");
         return modelAndView;
     }

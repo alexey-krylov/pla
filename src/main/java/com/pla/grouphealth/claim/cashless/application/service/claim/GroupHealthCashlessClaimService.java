@@ -614,7 +614,8 @@ public class GroupHealthCashlessClaimService {
                     .updateWithAdditionalRequirementEmailSent(groupHealthCashlessClaim.isAdditionalRequirementEmailSent())
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaim.getAdditionalRequiredDocumentsByUnderwriter())
                     .updateWithGroupHealthCashlessClaimPolicyDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
-                    .updateWithPreAuthorizationDetails(groupHealthCashlessClaim.getPreAuthorizationDetails());
+                    .updateWithPreAuthorizationDetails(groupHealthCashlessClaim.getPreAuthorizationDetails())
+                    .updateWithStatusName(groupHealthCashlessClaim.getStatus());
         }
         return groupHealthCashlessClaimDto;
     }
@@ -951,14 +952,26 @@ public class GroupHealthCashlessClaimService {
         return Boolean.FALSE;
     }
 
-    public void populateGroupHeathCashlessClaimWithUnderWriterUserId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
+    public void populateGroupHeathCashlessClaimWithServiceMismatchProcessorId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
         if(isNotEmpty(groupHealthCashlessClaim)){
-            if(isNotEmpty(groupHealthCashlessClaim.getClaimUnderWriterUserId()) && !groupHealthCashlessClaim.getClaimUnderWriterUserId().equals(userName)){
+            if(isNotEmpty(groupHealthCashlessClaim.getServiceMismatchProcessorId()) && !groupHealthCashlessClaim.getServiceMismatchProcessorId().equals(userName)){
                 throw new PreAuthorizationInProcessingException("The record is already under processing.");
             }
         }
-        groupHealthCashlessClaim.updateWithClaimUnderWriterUserId(userName);
+        groupHealthCashlessClaim.updateWithServiceMismatchProcessorId(userName);
+        groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
+    }
+
+
+    public void populateGroupHeathCashlessClaimWithBillMismatchProcessorId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            if(isNotEmpty(groupHealthCashlessClaim.getBillMismatchProcessorId()) && !groupHealthCashlessClaim.getBillMismatchProcessorId().equals(userName)){
+                throw new PreAuthorizationInProcessingException("The record is already under processing.");
+            }
+        }
+        groupHealthCashlessClaim.updateWithBillMismatchProcessorId(userName);
         groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
     }
 
@@ -1041,5 +1054,4 @@ public class GroupHealthCashlessClaimService {
         List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchCashlessClaimServiceMismatchCriteria(searchGroupHealthCashlessClaimRecordDto, Lists.newArrayList(userName, null));
         return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
     }
-
 }

@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.*;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -55,6 +56,7 @@ public class GroupHealthCashlessClaimDto {
     private boolean additionalRequirementEmailSent;
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
     private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
+    private String statusName;
 
     public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimId(String groupHealthCashlessClaimId) {
         this.groupHealthCashlessClaimId = groupHealthCashlessClaimId;
@@ -92,7 +94,7 @@ public class GroupHealthCashlessClaimDto {
         return this;
     }
 
-    public GroupHealthCashlessClaimDto updateWithStatus(GroupHealthCashlessClaim.Status status) {
+    public GroupHealthCashlessClaimDto updateWithStatus(Status status) {
         if(isNotEmpty(status))
             this.status = status.getDescription();
         return this;
@@ -218,6 +220,12 @@ public class GroupHealthCashlessClaimDto {
 
     public GroupHealthCashlessClaimDto updateClaimRejectedBy(String claimRejectedBy) {
         this.claimRejectedBy = claimRejectedBy;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithStatusName(Status status) {
+        if(isNotEmpty(status))
+            this.statusName = status.name();
         return this;
     }
 

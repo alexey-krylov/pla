@@ -856,7 +856,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.rejectPreAuthorization = function(){
                 $.when($scope.constructCommentDetails()).done(function () {
                     $http({
-                        url: '/pla/grouphealth/claim/cashless/claim/underwriter/reject',
+                        url: '/pla/grouphealth/claim/cashless/claim/reject',
                         method: 'POST',
                         data: $scope.createUpdateDto
                     }).success(function (response, status, headers, config) {

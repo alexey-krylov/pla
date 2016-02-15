@@ -1,10 +1,8 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.claim.GroupHealthCashlessClaimFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
-import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.CommentDetail;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
@@ -24,7 +22,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -261,8 +258,14 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public GroupHealthCashlessClaim updateWithCommentDetails(Set<CommentDetail> commentDetails) {
-        this.commentDetails = commentDetails;
+    public GroupHealthCashlessClaim updateWithCommentDetails(Set<CommentDetail> commentDetails, String userName) {
+        this.commentDetails = isNotEmpty(commentDetails) ? commentDetails.stream().map(comment -> {
+            if(isNotEmpty(comment.getComments()) && isEmpty(comment.getCommentDateTime())){
+                comment.updateWithCommentDateTime(DateTime.now());
+                comment.updateWithUserName(userName);
+            }
+            return comment;
+        }).collect(Collectors.toSet()) : Sets.newHashSet();
         return this;
     }
 
@@ -394,7 +397,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         }
     }
 
-    public GroupHealthCashlessClaim populateDetailsToGroupHealthCashlessClaim(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto){
+    public GroupHealthCashlessClaim populateDetailsToGroupHealthCashlessClaim(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto, String userName){
         if(isNotEmpty(this)){
             this.updateWithCategory(groupHealthCashlessClaimDto.getCategory())
                     .updateWithRelationship(Relationship.getRelationship(groupHealthCashlessClaimDto.getRelationship()))
@@ -408,7 +411,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
                     .updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetailsFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDiagnosisTreatmentDetails())
                     .updateWithGroupHealthCashlessClaimIllnessDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimIllnessDetail())
                     .updateWithGroupHealthCashlessClaimDrugServicesFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDrugServices())
-                    .updateWithCommentDetails(groupHealthCashlessClaimDto.getCommentDetails())
+                    .updateWithCommentDetails(groupHealthCashlessClaimDto.getCommentDetails(), userName)
                     .updateWithClaimProcessorUserId(groupHealthCashlessClaimDto.getClaimProcessorUserId())
                     .updateWithClaimUnderWriterUserId(groupHealthCashlessClaimDto.getClaimUnderWriterUserId())
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaimDto.getAdditionalRequiredDocumentsByUnderwriter())
