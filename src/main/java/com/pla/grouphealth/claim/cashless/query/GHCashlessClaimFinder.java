@@ -162,4 +162,60 @@ public class GHCashlessClaimFinder {
 
     }
 
+    public List<GroupHealthCashlessClaim> searchCashlessClaimBillMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, List username){
+        if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
+                isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+            return Lists.newArrayList();
+        }
+        Query query = new Query();
+        query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
+          if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
+            query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimHCPDetail.hcpCode.hcpCode").is(searchGroupHealthCashlessClaimRecordDto.getHcpCode()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber").is(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchGroupHealthCashlessClaimRecordDto.getClientId()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
+        }
+        query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
+        return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
+
+    }
+
+    public List<GroupHealthCashlessClaim> searchCashlessClaimServiceMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, List username){
+        if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
+                isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+            return Lists.newArrayList();
+        }
+        Query query = new Query();
+        query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
+            query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimHCPDetail.hcpCode.hcpCode").is(searchGroupHealthCashlessClaimRecordDto.getHcpCode()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber").is(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchGroupHealthCashlessClaimRecordDto.getClientId()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
+        }
+        query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
+        return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
+
+    }
+
 }

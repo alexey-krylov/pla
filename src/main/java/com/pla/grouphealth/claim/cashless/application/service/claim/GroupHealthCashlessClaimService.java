@@ -1027,4 +1027,17 @@ public class GroupHealthCashlessClaimService {
                         .filter(doc -> !doc.isHasSubmitted()).map(AdditionalDocument::getDocumentName)
                         .collect(Collectors.toSet()): Sets.newHashSet();
     }
+
+
+    public List<GroupHealthCashlessClaimDto> searchCashlessClaimBillMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, String userName){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchCashlessClaimBillMismatchCriteria(searchGroupHealthCashlessClaimRecordDto, Lists.newArrayList(userName, null));
+        return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
+    }
+
+
+    public List<GroupHealthCashlessClaimDto> searchCashlessClaimServiceMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, String userName){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchCashlessClaimServiceMismatchCriteria(searchGroupHealthCashlessClaimRecordDto, Lists.newArrayList(userName, null));
+        return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
+    }
+
 }

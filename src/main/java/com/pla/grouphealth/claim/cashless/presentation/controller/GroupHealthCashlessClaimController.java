@@ -329,29 +329,7 @@ public class GroupHealthCashlessClaimController {
         }
     }
 
-    @RequestMapping(value = "/getallservicemismatchedgrouphealthcashlessclaims", method = RequestMethod.GET)
-    @ResponseBody
-    public ModelAndView getAllServiceMismatchedGroupHealthCashlessClaims() {
-        String userName = preAuthorizationRequestService.getLoggedInUsername();
-        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllServiceMismatchedGroupHealthCashlessClaims(userName);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
-        modelAndView.setViewName("pla/grouphealth/claim/searchservicemismatchedghcashlessclaims");
-        return modelAndView;
-    }
 
-    @RequestMapping(value = "/getallbillmismatchedgrouphealthcashlessclaims", method = RequestMethod.GET)
-    @ResponseBody
-    public ModelAndView getAllBillMismatchedGroupHealthCashlessClaims() {
-        String userName = preAuthorizationRequestService.getLoggedInUsername();
-        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllBillMismatchedGroupHealthCashlessClaims(userName);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
-        modelAndView.setViewName("pla/grouphealth/claim/searchbillmismatchedghcashlessclaims");
-        return modelAndView;
-    }
 
     @RequestMapping(value = "/underwriter/getdefaultlistofunderwriterlevels/{level}", method = RequestMethod.GET)
     @ResponseBody
@@ -595,4 +573,74 @@ public class GroupHealthCashlessClaimController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/getallservicemismatchedgrouphealthcashlessclaims", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllServiceMismatchedGroupHealthCashlessClaims() {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllServiceMismatchedGroupHealthCashlessClaims(userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.setViewName("pla/grouphealth/claim/searchghcashlessclaimservicemismatch");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallbillmismatchedgrouphealthcashlessclaims", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllBillMismatchedGroupHealthCashlessClaims() {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllBillMismatchedGroupHealthCashlessClaims(userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.setViewName("pla/grouphealth/claim/searchghcashlessclaimbillmismatch");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/updateviewbillmismatch", method = RequestMethod.GET)
+    public ModelAndView getBillMismatch(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse)throws  IOException,PreAuthorizationInProcessingException{
+        ModelAndView modelAndView = new ModelAndView();
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderWriterUserId(groupHealthCashlessClaimId, userName);
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimbillmismatch");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/updateviewservicemismatch", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getServiceMismatch(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws  IOException, PreAuthorizationInProcessingException{
+        ModelAndView modelAndView = new ModelAndView();
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderWriterUserId(groupHealthCashlessClaimId, userName);
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimservicemismatch");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getbillmismatchrecordbysearchcriteria", method = RequestMethod.POST)
+        @ResponseBody
+        public ModelAndView getBillMismatchRecordBySearchCriteria (SearchGroupHealthCashlessClaimRecordDto
+        searchGroupHealthCashlessClaimRecordDto, HttpServletRequest request){
+            ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimbillmismatch");
+            String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+            List<GroupHealthCashlessClaimDto> ghCashlessClaimMailDtos = groupHealthCashlessClaimService.searchCashlessClaimBillMismatchCriteria(searchGroupHealthCashlessClaimRecordDto, userName);
+            modelAndView.addObject("claimResult", ghCashlessClaimMailDtos);
+            modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
+            return modelAndView;
+        }
+
+    @RequestMapping(value = "/getservicemismatchrecordbysearchcriteria", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView getServiceMismatchRecordBySearchCriteria (SearchGroupHealthCashlessClaimRecordDto
+                                                                       searchGroupHealthCashlessClaimRecordDto, HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimservicemismatch");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        List<GroupHealthCashlessClaimDto> ghCashlessClaimMailDtos = groupHealthCashlessClaimService.searchCashlessClaimServiceMismatchCriteria(searchGroupHealthCashlessClaimRecordDto, userName);
+        modelAndView.addObject("claimResult", ghCashlessClaimMailDtos);
+        modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
+        return modelAndView;
+    }
+
+
 }
+
+

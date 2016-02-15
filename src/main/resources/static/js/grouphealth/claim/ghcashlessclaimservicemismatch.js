@@ -59,7 +59,7 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
             }
         )}])
 
-    .controller('CashLessClaimUnderwriterCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
+    .controller('CashLessClaimServiceCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
         function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId) {
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
@@ -704,7 +704,7 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
 
                     $.when($scope.constructCommentDetails()).done(function () {
                         $http({
-                            url: '/pla/grouphealth/claim/cashless/claim/underwriter/approve',
+                            url: '/pla/grouphealth/claim/cashless/claim/approve',
                             method: 'POST',
                             data: $scope.createUpdateDto
                         }).success(function (response, status, headers, config) {
@@ -856,7 +856,7 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
             $scope.rejectPreAuthorization = function(){
                 $.when($scope.constructCommentDetails()).done(function () {
                     $http({
-                        url: '/pla/grouphealth/claim/cashless/claim/underwriter/reject',
+                        url: '/pla/grouphealth/claim/cashless/claim/reject',
                         method: 'POST',
                         data: $scope.createUpdateDto
                     }).success(function (response, status, headers, config) {
