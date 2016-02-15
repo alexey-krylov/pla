@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -34,6 +35,8 @@ public class GLClaimIntimationDetailsDto {
     private ClaimAssuredDetailDto claimAssuredDetail;
     private ClaimRegistrationDto claimRegistrationDetails;
     private ClaimDisabilityRegistrationDto disabilityRegistrationDetails;
+    private ClaimApproverPlanDto claimApprovalPlanDetail;
+    private List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails;
     private ApprovalDetailsDto approvalDetails;
     private GLClaimSettlementDataDto claimSettlementDetails;
     public GLClaimIntimationDetailsDto withClaimant(ClaimantDetail claimantDetail){
@@ -70,6 +73,14 @@ public class GLClaimIntimationDetailsDto {
     }
     public GLClaimIntimationDetailsDto withApprovalDetail(ApprovalDetailsDto approvalDetails){
         this.approvalDetails = approvalDetails;
+        return this;
+    }
+    public GLClaimIntimationDetailsDto withApprovalPlanDetailDetail(ClaimApproverPlanDto claimApprovalPlanDetail){
+        this.claimApprovalPlanDetail = claimApprovalPlanDetail;
+        return this;
+    }
+    public GLClaimIntimationDetailsDto withApprovalCoverageDetail(List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails){
+        this.claimApprovalCoverageDetails = claimApprovalCoverageDetails;
         return this;
     }
 }

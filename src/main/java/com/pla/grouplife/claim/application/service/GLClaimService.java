@@ -1323,7 +1323,7 @@ public class GLClaimService implements Serializable{
                     String title = assuredDetail.getTitle();
                     String assuredFirstName = assuredDetail.getFirstName();
                     String assuredSurName = assuredDetail.getSurName();
-                    claimDataDto.setAssuredName(title + "" + assuredFirstName+""+assuredSurName);
+                    claimDataDto.setAssuredName(title + "\t" + assuredFirstName+"\t"+assuredSurName);
 
                 }
 
@@ -1343,7 +1343,7 @@ public class GLClaimService implements Serializable{
                 Long gapInDays=duration.getStandardDays();
                 int gapInDaysInInteger= Integer.valueOf(gapInDays.toString());
                 claimDataDto.setRecordCreationInDays(gapInDaysInInteger);
-                BigDecimal claimAmount=(BigDecimal)map.get("claimAmount");
+                BigDecimal claimAmount=new BigDecimal((String)map.get("claimAmount"));
                 BigDecimal  resultantClaimAmount=BigDecimal.ZERO;
                 if (claimAmount!=null){
                     resultantClaimAmount=claimAmount;

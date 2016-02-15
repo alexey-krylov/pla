@@ -21,8 +21,8 @@ import java.util.List;
 public class GLClaimApprovalCommand {
 
     private String claimId;
-    private ClaimApproverPlanDto planDetail;
-    private List<ClaimApproverCoverageDetailDto> coverageDetails;
+    private ClaimApproverPlanDto claimApprovalPlanDetail;
+    private List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails;
     private BigDecimal totalApprovedAmount;
     private BigDecimal totalRecoveredAmount;
     private List<ClaimReviewDto> reviewDetails;
