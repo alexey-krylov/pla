@@ -249,70 +249,70 @@ public class GLClaimService implements Serializable{
 
     }
 
-    public GLClaimIntimationDetailsDto  getClaimIntimationDetails(String claimId){
+    public GLClaimIntimationDetailsDto  getClaimIntimationDetails(String claimId) {
         Map claimRecordMap = glClaimFinder.findClaimById(claimId);
 
-        GLClaimIntimationDetailsDto claimIntimationDetailDto=new GLClaimIntimationDetailsDto();
-            String claimIdFromDb = claimRecordMap.get("_id").toString();
-            claimIntimationDetailDto.setClaimId(claimIdFromDb);
-            String claimNumber=((ClaimNumber)claimRecordMap.get("claimNumber")).getClaimNumber();
-            claimIntimationDetailDto.setClaimNumber(claimNumber);
-            String category=(String)claimRecordMap.get("category");
-            String relationship=(String)claimRecordMap.get("relationship");
-            claimIntimationDetailDto.setCategory(category);
-            claimIntimationDetailDto.setRelationship(relationship);
-            Policy policy=(Policy)claimRecordMap.get("policy");
-            PolicyNumber policyNumber=policy.getPolicyNumber();
-            claimIntimationDetailDto.setPolicyNumber(policyNumber.getPolicyNumber());
-            PolicyId policyId=policy.getPolicyId();
-            String policyIdInString=policyId.getPolicyId();
-            claimIntimationDetailDto.setPolicyId(policyIdInString);
-            claimIntimationDetailDto.setSchemeName((String) claimRecordMap.get("schemeName"));
-            // claimIntimationDetailDto.setPlanDetail(claimRecordMap.get(""));
-            //claimIntimationDetailDto.setCategory(claimRecordMap.get(""));
-            String claimTypeString=(String)claimRecordMap.get("claimType");
-            ClaimType claimType=(ClaimType)ClaimType.valueOf(claimTypeString);
-            claimIntimationDetailDto.setClaimType(claimType);
-            DateTime intimationDate = claimRecordMap.get("intimationDate") != null ? new DateTime(claimRecordMap.get("intimationDate")) : null;
-            DateTime incidenceDate = claimRecordMap.get("incidenceDate") != null ? new DateTime(claimRecordMap.get("incidenceDate")) : null;
-            java.util.Date date = ((Date)claimRecordMap.get("intimationDate"));
-            DateTimeZone dtz = DateTimeZone.getDefault();// Gets the default time zone.
-            DateTime dateTime = new DateTime(date.getTime(), dtz);
-            claimIntimationDetailDto.setClaimIntimationDate(intimationDate);
-            claimIntimationDetailDto.setClaimIncidenceDate(incidenceDate);
-            Proposer proposer=(Proposer) claimRecordMap.get("proposer");
-            ProposerContactDetail proposerContactDetail=proposer.getContactDetail();
-            List<ProposerContactDetail.ContactPersonDetail>contactPersonDetails=proposerContactDetail.getContactPersonDetail();
-            List<ContactPersonDetail> contactPersonDetailList=new ArrayList<ContactPersonDetail>();
-            for(ProposerContactDetail.ContactPersonDetail contactPersonDetail:contactPersonDetails){
-                ContactPersonDetail contactPerson=new ContactPersonDetail(contactPersonDetail.getContactPersonName(), contactPersonDetail.getContactPersonEmail(),contactPersonDetail.getMobileNumber(),contactPersonDetail.getWorkPhoneNumber());
-                contactPersonDetailList.add( contactPerson);
-            }
-            ClaimantDetail claimantDetail=new ClaimantDetail(proposer.getProposerName(),proposerContactDetail.getAddressLine1(),proposerContactDetail.getAddressLine2(),
-                    proposerContactDetail.getPostalCode(),proposerContactDetail.getProvince(),proposerContactDetail.getTown(),proposerContactDetail.getEmailAddress(),null);
-            claimantDetail.withContactPersonDetails(contactPersonDetailList);
-            claimIntimationDetailDto.withClaimant(claimantDetail);
-            PlanDetail planDetail=(PlanDetail)claimRecordMap.get("planDetail");
-            PlanDetailDto planDetailDto=new PlanDetailDto(planDetail.getPlanId().getPlanId(),planDetail.getPlanCode(),planDetail.getPlanName(),planDetail.getPremiumAmount(),planDetail.getSumAssured());
-            claimIntimationDetailDto.setPlanDetail(planDetailDto);
-            List<CoverageDetail> coverageDetails=( List<CoverageDetail>)claimRecordMap.get("coverageDetails");
-            Set<CoverageDetailDto> coverageDetailsSet=new LinkedHashSet<CoverageDetailDto>();
-            for(CoverageDetail coverageDetail:coverageDetails){
-                CoverageDetailDto coverageDetailDto=new CoverageDetailDto(coverageDetail.getCoverageCode(),coverageDetail.getCoverageId().getCoverageId(),coverageDetail.getCoverageName(),coverageDetail.getSumAssured(),coverageDetail.getPremium()) ;
-                coverageDetailsSet.add(coverageDetailDto);
-            }
-            claimIntimationDetailDto.setCoverageDetails(coverageDetailsSet);
-            BankDetails bankDetails=(BankDetails)claimRecordMap.get("bankDetails");
-            BankDetailsDto bankDetailsDto=new BankDetailsDto(bankDetails.getBankName(),bankDetails.getBankBranchName(),bankDetails.getBankAccountType(),bankDetails.getBankAccountNumber());
-            claimIntimationDetailDto.withBankDetails(bankDetailsDto);
-            ClaimAssuredDetail assuredDetail=(ClaimAssuredDetail)claimRecordMap.get("assuredDetail");
-            ClaimMainAssuredDetail claimMainAssuredDetail=assuredDetail.getClaimMainAssuredDetail();
-        ClaimMainAssuredDetailDto claimMainAssuredDetailDto=new ClaimMainAssuredDetailDto(claimMainAssuredDetail.getFullName(),claimMainAssuredDetail.getRelationship(),claimMainAssuredDetail.getNrcNumber(),claimMainAssuredDetail.getManNumber(),claimMainAssuredDetail.getLastSalary());
-            ClaimAssuredDetailDto claimAssuredDetail=new ClaimAssuredDetailDto();
+        GLClaimIntimationDetailsDto claimIntimationDetailDto = new GLClaimIntimationDetailsDto();
+        String claimIdFromDb = claimRecordMap.get("_id").toString();
+        claimIntimationDetailDto.setClaimId(claimIdFromDb);
+        String claimNumber = ((ClaimNumber) claimRecordMap.get("claimNumber")).getClaimNumber();
+        claimIntimationDetailDto.setClaimNumber(claimNumber);
+        String category = (String) claimRecordMap.get("category");
+        String relationship = (String) claimRecordMap.get("relationship");
+        claimIntimationDetailDto.setCategory(category);
+        claimIntimationDetailDto.setRelationship(relationship);
+        Policy policy = (Policy) claimRecordMap.get("policy");
+        PolicyNumber policyNumber = policy.getPolicyNumber();
+        claimIntimationDetailDto.setPolicyNumber(policyNumber.getPolicyNumber());
+        PolicyId policyId = policy.getPolicyId();
+        String policyIdInString = policyId.getPolicyId();
+        claimIntimationDetailDto.setPolicyId(policyIdInString);
+        claimIntimationDetailDto.setSchemeName((String) claimRecordMap.get("schemeName"));
+        // claimIntimationDetailDto.setPlanDetail(claimRecordMap.get(""));
+        //claimIntimationDetailDto.setCategory(claimRecordMap.get(""));
+        String claimTypeString = (String) claimRecordMap.get("claimType");
+        ClaimType claimType = (ClaimType) ClaimType.valueOf(claimTypeString);
+        claimIntimationDetailDto.setClaimType(claimType);
+        DateTime intimationDate = claimRecordMap.get("intimationDate") != null ? new DateTime(claimRecordMap.get("intimationDate")) : null;
+        DateTime incidenceDate = claimRecordMap.get("incidenceDate") != null ? new DateTime(claimRecordMap.get("incidenceDate")) : null;
+        java.util.Date date = ((Date) claimRecordMap.get("intimationDate"));
+        DateTimeZone dtz = DateTimeZone.getDefault();// Gets the default time zone.
+        DateTime dateTime = new DateTime(date.getTime(), dtz);
+        claimIntimationDetailDto.setClaimIntimationDate(intimationDate);
+        claimIntimationDetailDto.setClaimIncidenceDate(incidenceDate);
+        Proposer proposer = (Proposer) claimRecordMap.get("proposer");
+        ProposerContactDetail proposerContactDetail = proposer.getContactDetail();
+        List<ProposerContactDetail.ContactPersonDetail> contactPersonDetails = proposerContactDetail.getContactPersonDetail();
+        List<ContactPersonDetail> contactPersonDetailList = new ArrayList<ContactPersonDetail>();
+        for (ProposerContactDetail.ContactPersonDetail contactPersonDetail : contactPersonDetails) {
+            ContactPersonDetail contactPerson = new ContactPersonDetail(contactPersonDetail.getContactPersonName(), contactPersonDetail.getContactPersonEmail(), contactPersonDetail.getMobileNumber(), contactPersonDetail.getWorkPhoneNumber());
+            contactPersonDetailList.add(contactPerson);
+        }
+        ClaimantDetail claimantDetail = new ClaimantDetail(proposer.getProposerName(), proposerContactDetail.getAddressLine1(), proposerContactDetail.getAddressLine2(),
+                proposerContactDetail.getPostalCode(), proposerContactDetail.getProvince(), proposerContactDetail.getTown(), proposerContactDetail.getEmailAddress(), null);
+        claimantDetail.withContactPersonDetails(contactPersonDetailList);
+        claimIntimationDetailDto.withClaimant(claimantDetail);
+        PlanDetail planDetail = (PlanDetail) claimRecordMap.get("planDetail");
+        PlanDetailDto planDetailDto = new PlanDetailDto(planDetail.getPlanId().getPlanId(), planDetail.getPlanCode(), planDetail.getPlanName(), planDetail.getPremiumAmount(), planDetail.getSumAssured());
+        claimIntimationDetailDto.setPlanDetail(planDetailDto);
+        List<CoverageDetail> coverageDetails = (List<CoverageDetail>) claimRecordMap.get("coverageDetails");
+        Set<CoverageDetailDto> coverageDetailsSet = new LinkedHashSet<CoverageDetailDto>();
+        for (CoverageDetail coverageDetail : coverageDetails) {
+            CoverageDetailDto coverageDetailDto = new CoverageDetailDto(coverageDetail.getCoverageCode(), coverageDetail.getCoverageId().getCoverageId(), coverageDetail.getCoverageName(), coverageDetail.getSumAssured(), coverageDetail.getPremium());
+            coverageDetailsSet.add(coverageDetailDto);
+        }
+        claimIntimationDetailDto.setCoverageDetails(coverageDetailsSet);
+        BankDetails bankDetails = (BankDetails) claimRecordMap.get("bankDetails");
+        BankDetailsDto bankDetailsDto = new BankDetailsDto(bankDetails.getBankName(), bankDetails.getBankBranchName(), bankDetails.getBankAccountType(), bankDetails.getBankAccountNumber());
+        claimIntimationDetailDto.withBankDetails(bankDetailsDto);
+        ClaimAssuredDetail assuredDetail = (ClaimAssuredDetail) claimRecordMap.get("assuredDetail");
+        ClaimMainAssuredDetail claimMainAssuredDetail = assuredDetail.getClaimMainAssuredDetail();
+        ClaimMainAssuredDetailDto claimMainAssuredDetailDto = new ClaimMainAssuredDetailDto(claimMainAssuredDetail.getFullName(), claimMainAssuredDetail.getRelationship(), claimMainAssuredDetail.getNrcNumber(), claimMainAssuredDetail.getManNumber(), claimMainAssuredDetail.getLastSalary());
+        ClaimAssuredDetailDto claimAssuredDetail = new ClaimAssuredDetailDto();
         claimAssuredDetail.setTitle(assuredDetail.getTitle());
         claimAssuredDetail.setFirstName(assuredDetail.getFirstName());
         claimAssuredDetail.setSurName(assuredDetail.getSurName());
-                claimAssuredDetail. setDateOfBirth(assuredDetail.getDateOfBirth());
+        claimAssuredDetail.setDateOfBirth(assuredDetail.getDateOfBirth());
         claimAssuredDetail.setAgeOnNextBirthDate(assuredDetail.getAgeOnNextBirthDate());
         claimAssuredDetail.setNrcNumber(assuredDetail.getNrcNumber());
         claimAssuredDetail.setGender(assuredDetail.getGender());
@@ -323,36 +323,36 @@ public class GLClaimService implements Serializable{
         claimAssuredDetail.setLastSalary(assuredDetail.getLastSalary());
         claimAssuredDetail.setOccupation(assuredDetail.getOccupation());
         claimAssuredDetail.updateWithMainAssured(claimMainAssuredDetailDto);
-            claimIntimationDetailDto.withAssuredDetail(claimAssuredDetail);
-            ClaimDisabilityRegistrationDto disabilityRegistrationDetails=null;
-            ClaimRegistrationDto claimRegistrationDetails=null;
-            ClaimRegistration claimRegistration=( ClaimRegistration )claimRecordMap.get("claimRegistration");
-            DisabilityClaimRegistration disabilityClaimRegistration=(DisabilityClaimRegistration)claimRecordMap.get("disabilityClaimRegistration");
+        claimIntimationDetailDto.withAssuredDetail(claimAssuredDetail);
+        ClaimDisabilityRegistrationDto disabilityRegistrationDetails = null;
+        ClaimRegistrationDto claimRegistrationDetails = null;
+        ClaimRegistration claimRegistration = (ClaimRegistration) claimRecordMap.get("claimRegistration");
+        DisabilityClaimRegistration disabilityClaimRegistration = (DisabilityClaimRegistration) claimRecordMap.get("disabilityClaimRegistration");
 
-          if(claimRegistration!=null){
-              claimRegistrationDetails=new ClaimRegistrationDto() ;
-              claimRegistrationDetails.setCauseOfDeath(claimRegistration.getCauseOfDeath());
-              claimRegistrationDetails.setPlaceOfDeath(claimRegistration.getPlaceOfDeath());
-              claimRegistrationDetails.setDateOfDeath(claimRegistration.getDateOfDeath());
-              claimRegistrationDetails.setTimeOfDeath(claimRegistration.getTimeOfDeath());
-              claimRegistrationDetails.setDurationOfIllness(claimRegistration.getDurationOfIllness());
-              claimRegistrationDetails.setNameOfDoctorAndHospitalAddress(claimRegistration.getNameOfDoctorAndHospitalAddress());
-              claimRegistrationDetails.setContactNumber(claimRegistration.getContactNumber());
-              claimRegistrationDetails.setFirstConsultation(claimRegistration.getDateOfFirstConsultation());
-              claimRegistrationDetails.setTreatmentTaken(claimRegistration.getTreatmentTaken());
-              claimRegistrationDetails.setIsCauseOfDeathAccidental(claimRegistration.getIsCauseOfDeathAccidental());
-              claimRegistrationDetails.setTypeOfAccident(claimRegistration.getTypeOfAccident());
-              claimRegistrationDetails.setPlaceOfAccident(claimRegistration.getPlaceOfAccident());
-              claimRegistrationDetails.setDateOfAccident(claimRegistration.getDateOfAccident());
-              claimRegistrationDetails.setTimeOfAccident(claimRegistration.getTimeOfAccident());
-              claimRegistrationDetails.setIsPostMortemAutopsyDone(claimRegistration.getIsPostMortemAutopsyDone());
-              claimRegistrationDetails.setIsPoliceReportRegistered(claimRegistration.getIsPoliceReportRegistered());
-              claimRegistrationDetails.setRegistrationNumber(claimRegistration.getRegistrationNumber());
-              claimRegistrationDetails.setPoliceStationName(claimRegistration.getPoliceStationName());
-           }
-           claimIntimationDetailDto.withClaimRegistration(claimRegistrationDetails);
-        if(disabilityClaimRegistration!=null){
-            disabilityRegistrationDetails=new  ClaimDisabilityRegistrationDto();
+        if (claimRegistration != null) {
+            claimRegistrationDetails = new ClaimRegistrationDto();
+            claimRegistrationDetails.setCauseOfDeath(claimRegistration.getCauseOfDeath());
+            claimRegistrationDetails.setPlaceOfDeath(claimRegistration.getPlaceOfDeath());
+            claimRegistrationDetails.setDateOfDeath(claimRegistration.getDateOfDeath());
+            claimRegistrationDetails.setTimeOfDeath(claimRegistration.getTimeOfDeath());
+            claimRegistrationDetails.setDurationOfIllness(claimRegistration.getDurationOfIllness());
+            claimRegistrationDetails.setNameOfDoctorAndHospitalAddress(claimRegistration.getNameOfDoctorAndHospitalAddress());
+            claimRegistrationDetails.setContactNumber(claimRegistration.getContactNumber());
+            claimRegistrationDetails.setFirstConsultation(claimRegistration.getDateOfFirstConsultation());
+            claimRegistrationDetails.setTreatmentTaken(claimRegistration.getTreatmentTaken());
+            claimRegistrationDetails.setIsCauseOfDeathAccidental(claimRegistration.getIsCauseOfDeathAccidental());
+            claimRegistrationDetails.setTypeOfAccident(claimRegistration.getTypeOfAccident());
+            claimRegistrationDetails.setPlaceOfAccident(claimRegistration.getPlaceOfAccident());
+            claimRegistrationDetails.setDateOfAccident(claimRegistration.getDateOfAccident());
+            claimRegistrationDetails.setTimeOfAccident(claimRegistration.getTimeOfAccident());
+            claimRegistrationDetails.setIsPostMortemAutopsyDone(claimRegistration.getIsPostMortemAutopsyDone());
+            claimRegistrationDetails.setIsPoliceReportRegistered(claimRegistration.getIsPoliceReportRegistered());
+            claimRegistrationDetails.setRegistrationNumber(claimRegistration.getRegistrationNumber());
+            claimRegistrationDetails.setPoliceStationName(claimRegistration.getPoliceStationName());
+        }
+        claimIntimationDetailDto.withClaimRegistration(claimRegistrationDetails);
+        if (disabilityClaimRegistration != null) {
+            disabilityRegistrationDetails = new ClaimDisabilityRegistrationDto();
             disabilityRegistrationDetails.setDateOfDisability(disabilityClaimRegistration.getDateOfDisability());
             disabilityRegistrationDetails.setNatureOfDisability(disabilityClaimRegistration.getNatureOfDisability());
             disabilityRegistrationDetails.setExtendOfDisability(disabilityClaimRegistration.getExtendOfDisability());
@@ -374,7 +374,63 @@ public class GLClaimService implements Serializable{
             disabilityRegistrationDetails.setAssuredOutdoorDetails(disabilityClaimRegistration.getAssuredOutdoorDetails());
             disabilityRegistrationDetails.setVisitingMedicalOfficerDetails(disabilityClaimRegistration.getVisitingMedicalOfficerDetails());
         }
-           claimIntimationDetailDto.withDisabilityRegistration(disabilityRegistrationDetails);
+        claimIntimationDetailDto.withDisabilityRegistration(disabilityRegistrationDetails);
+        GlClaimUnderWriterApprovalDetail underWriterApprovalDetail = (GlClaimUnderWriterApprovalDetail) claimRecordMap.get("underWriterReviewDetail");
+        if(underWriterApprovalDetail!=null){
+        //creating approver plan detail
+        ApprovalDetailsDto approvalDetails = new ApprovalDetailsDto();
+        ClaimApproverPlanDto planDetails = new ClaimApproverPlanDto();
+        GLClaimApproverPlanDetail approverPlanDetail = underWriterApprovalDetail.getPlanDetail();
+        if (approverPlanDetail != null) {
+            planDetails.setPlanName(approverPlanDetail.getPlanName());
+            planDetails.setPlanSumAssured(approverPlanDetail.getPlanSumAssured());
+            planDetails.setApprovedAmount(approverPlanDetail.getApprovedAmount());
+            planDetails.setAmendedAmount(approverPlanDetail.getAmendedAmount());
+            //Adding plan details
+            approvalDetails.setPlanDetails(planDetails);
+        }
+        //getting and adding coverage details
+        BigDecimal tempTotalApprovedAmount = underWriterApprovalDetail.getTotalApprovedAmount();
+        approvalDetails.setTotalApprovedAmount(tempTotalApprovedAmount);
+        BigDecimal totalRecoveredAmout = underWriterApprovalDetail.getTotalRecoveredAmount();
+        approvalDetails.setTotalRecoveredOrAdditionalAmount(totalRecoveredAmout);
+        BigDecimal additionalAmountPaid = underWriterApprovalDetail.getAdditionalAmountPaid();
+        List<ApproverCoverageDetail> coverageDetailList = underWriterApprovalDetail.getCoverageDetails();
+        List<ClaimApproverCoverageDetailDto> approverCoverageList = new ArrayList<ClaimApproverCoverageDetailDto>();
+        if (coverageDetailList != null) {
+            for (ApproverCoverageDetail approverCoverageDetail : coverageDetailList) {
+                ClaimApproverCoverageDetailDto coverageDetailDto = new ClaimApproverCoverageDetailDto();
+                coverageDetailDto.setCoverageName(approverCoverageDetail.getCoverageName());
+                coverageDetailDto.setSumAssured(approverCoverageDetail.getSumAssured());
+                coverageDetailDto.setApprovedAmount(approverCoverageDetail.getApprovedAmount());
+                coverageDetailDto.setAmendedAmount(approverCoverageDetail.getAmendedAmount());
+                //if(coverageDetailDto.getSumAssured()!=null){
+                //   tempSumAssured=tempSumAssured.add(coverageDetailDto.getSumAssured());
+                //}
+                approverCoverageList.add(coverageDetailDto);
+            }
+        }
+        approvalDetails.setCoverageDetails(approverCoverageList);
+        //getting and adding review deails
+        List<ClaimReviewDetail> reviewDetailsList = underWriterApprovalDetail.getReviewDetails();
+        List<ClaimReviewDto> reviewDetails = new ArrayList<ClaimReviewDto>();
+        if (reviewDetailsList != null) {
+            for (ClaimReviewDetail claimReviewDetail : reviewDetailsList) {
+                ClaimReviewDto claimReviewDto = new ClaimReviewDto(claimReviewDetail.getComments(), claimReviewDetail.getTimings(), claimReviewDetail.getUserName());
+                reviewDetails.add(claimReviewDto);
+            }
+        }
+        approvalDetails.setReviewDetails(reviewDetails);
+        String comments = underWriterApprovalDetail.getComment();
+        approvalDetails.setComments(comments);
+        DateTime referredToReassuredOn = underWriterApprovalDetail.getReferredToReassuredOn();
+        approvalDetails.setReferredToReassuredOn(referredToReassuredOn);
+        DateTime responseReceivedOn = underWriterApprovalDetail.getResponseReceivedOn();
+        approvalDetails.setReferredToReassuredOn(responseReceivedOn);
+
+        claimIntimationDetailDto.withApprovalDetail(approvalDetails);
+
+    }
             return claimIntimationDetailDto;
         }
 
@@ -1222,10 +1278,10 @@ public class GLClaimService implements Serializable{
      */
 
 
-    public List<GLClaimDataDto> getApprovedClaimDetail (SearchClaimDto searchClaimDto,String[] statuses){
+    public List<GLClaimDataDto> getApprovedClaimDetail (SearchClaimIntimationDto  searchClaimDto,String[] statuses){
         List<Map> searchedClaimRecords = glClaimFinder.getApprovedClaimDetails(searchClaimDto.getClaimNumber(), searchClaimDto.getPolicyNumber(),
                 searchClaimDto.getPolicyHolderName(), searchClaimDto.getAssuredName(),
-                searchClaimDto.getAssuredClientId(), searchClaimDto.getAssuredNrcNumber(),statuses);
+                searchClaimDto.getPolicyHolderClientId(), searchClaimDto.getAssuredNrcNumber(),statuses);
         if (isEmpty(searchedClaimRecords)) {
             return Lists.newArrayList();
         }
@@ -1235,21 +1291,41 @@ public class GLClaimService implements Serializable{
                 GLClaimDataDto claimDataDto = new GLClaimDataDto();
                 String claimId = map.get("_id").toString();
                 ClaimNumber claimNumber = (ClaimNumber) map.get("claimNumber");
-                //ClaimType.valueOf((String)map.get("claimType"));
-                ClaimStatus claimStatus = ClaimStatus.valueOf((String) map.get("claimStatus"));
+                String claimTypeString = (String) map.get("claimType");
+                ClaimType claimType = (ClaimType) ClaimType.valueOf(claimTypeString);
+                claimDataDto.setClaimType(claimType);
+                String claimStatusInString = (String) map.get("claimStatus");
+                ClaimStatus claimStatus = (ClaimStatus) ClaimStatus.valueOf(claimStatusInString);
+                String claimStatusResult = claimStatus.getDescription();
+                claimDataDto.setClaimStatus(claimStatusResult);
+                String routingLevelInString = (String) map.get("taggedRoutingLevel");
+                RoutingLevel routingLevel = (RoutingLevel) RoutingLevel.valueOf(routingLevelInString);
+                String resultRoutingLevel = routingLevel.getDescription();
+                claimDataDto.setRoutingLevel(resultRoutingLevel);
                 String claimNumberInString = claimNumber.getClaimNumber();
                 claimDataDto.withClaimNumberAndClaimId(claimNumberInString, claimId);
                 Policy policy = (Policy) map.get("policy");
                 String policyNumber = policy.getPolicyNumber().getPolicyNumber();
-                String policyHolderName = policy.getPolicyHolderName();
-                ClaimAssuredDetail assuredDetail = ( ClaimAssuredDetail) map.get("assuredDetail");
-                String assuredName = assuredDetail.getFirstName();
-                claimDataDto.setAssuredName(assuredName);
-                claimDataDto.setClaimStatus(claimStatus.toString());
                 claimDataDto.setPolicyNumber(policyNumber);
+                String policyHolderName = policy.getPolicyHolderName();
+                claimDataDto.setPolicyHolderName(policyHolderName);
+                ClaimAssuredDetail assuredDetail = (ClaimAssuredDetail) map.get("assuredDetail");
+                if (assuredDetail != null) {
+                    String title = assuredDetail.getTitle();
+                    String assuredFirstName = assuredDetail.getFirstName();
+                    String assuredSurName = assuredDetail.getSurName();
+                    claimDataDto.setTitle(title);
+                    claimDataDto.setFirstName(assuredFirstName);
+                    claimDataDto.setSurName(assuredSurName);
+                }
 
-
-                //claimDataDto.setModifiedOn();
+                GlClaimUnderWriterApprovalDetail underWriterApprovalDetail = (GlClaimUnderWriterApprovalDetail) map.get("underWriterReviewDetail");
+                if (underWriterApprovalDetail!=null){
+                    BigDecimal underWriterApprovedAmount=underWriterApprovalDetail.getTotalApprovedAmount();
+                    claimDataDto.setApprovedAmount(underWriterApprovedAmount);
+                }
+                DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
+                claimDataDto.setApprovedOn(approvalDate);
                 return claimDataDto;
             }
         }).collect(Collectors.toList());
@@ -1277,12 +1353,12 @@ public class GLClaimService implements Serializable{
                 String policyHolderName = policy.getPolicyHolderName();
                 ClaimAssuredDetail assuredDetail = ( ClaimAssuredDetail) map.get("assuredDetail");
                 String assuredName = assuredDetail.getFirstName();
-                claimDataDto.setAssuredName(assuredName);
+                claimDataDto.setFirstName(assuredName);
                 claimDataDto.setClaimStatus(claimStatus.toString());
                 claimDataDto.setPolicyNumber(policyNumber);
+            DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
 
-
-                //claimDataDto.setModifiedOn();
+                claimDataDto.setApprovedOn(approvalDate);
                 return claimDataDto;
             }
         }).collect(Collectors.toList());
@@ -1315,7 +1391,7 @@ public class GLClaimService implements Serializable{
                 String policyHolderName = policy.getPolicyHolderName();
                 ClaimAssuredDetail assuredDetail = (ClaimAssuredDetail) map.get("assuredDetail");
                 String assuredName = assuredDetail.getFirstName();
-                claimDataDto.setAssuredName(assuredName);
+                claimDataDto.setFirstName(assuredName);
               /*  AssuredDetail assuredDetail = (AssuredDetail) map.get("assuredDetail");
                 String assuredName=assuredDetail.getFirstName();
                 claimDataDto.setAssuredName(assuredName);

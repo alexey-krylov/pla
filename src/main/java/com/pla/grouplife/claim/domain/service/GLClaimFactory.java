@@ -252,7 +252,7 @@ public class GLClaimFactory {
         groupLifeClaim.withDisabilityClaimRegistration(disabilityClaimRegistration);
          return   groupLifeClaim;
         }
-      public GroupLifeClaim createAmendment(GLClaimApprovalCommand glClaimApprovalCommand,GroupLifeClaim groupLifeClaim){
+      public GroupLifeClaim createAmendment(GLClaimAmendmentCommand glClaimApprovalCommand,GroupLifeClaim groupLifeClaim){
           LocalDate now=LocalDate.now();
           String claimNumberInString=claimNumberGenerator.getClaimNumber(GroupLifeClaim.class,now);
           //getting claimNumber

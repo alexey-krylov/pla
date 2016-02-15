@@ -236,10 +236,11 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
         return this;
 
     }
-    public GroupLifeClaim markApproverApproval(String approvedBy, DateTime approvedOn, String comment, ClaimStatus status) {
-        this.claimStatus = status;
+    public GroupLifeClaim markApproverApproval( DateTime now, String approvedBy,String comment) {
+        this.submittedOn = now;
+        this.claimStatus = ClaimStatus.APPROVED;
         if (isNotEmpty(comment)) {
-            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(), status, approvedBy, comment, approvedOn));
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.APPROVED, approvedBy, comment, submittedOn));
         }
         /*
         if (ClaimStatus.APPROVED.equals(this.claimStatus)) {

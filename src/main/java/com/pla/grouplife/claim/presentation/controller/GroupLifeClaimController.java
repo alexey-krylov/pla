@@ -241,20 +241,21 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/searchclaimforapproval", method = RequestMethod.POST)
     public ModelAndView getClaimDetailForApproval(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/searchClaimIntimation");
-        modelAndView.addObject("searchResult", glClaimService.getClaimIntimationRecord(searchClaimIntimationDto));
+        modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
+        modelAndView.addObject("searchResult", glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"UNDERWRITING"}));
         modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
         return modelAndView;
 
     }
-   /*
+
      @RequestMapping(value = "/getclaimsforapproval", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
     public List<GLClaimDataDto> getRoutedClaim(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
-         return glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"ROUTED"});
+         return glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"UNDERWRITING"});
 
     }
+    /*
     @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
@@ -296,7 +297,7 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/getapprovedclaim", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are approved")
-    public List<GLClaimDataDto> getApprovedClaim(@RequestBody SearchClaimDto searchClaimDto) {
+    public List<GLClaimDataDto> getApprovedClaim(@RequestBody SearchClaimIntimationDto   searchClaimDto) {
         return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"APPROVED"});
 
     }
@@ -312,7 +313,7 @@ public class GroupLifeClaimController {
 
     @RequestMapping(value = "/getclaimforamendment", method = RequestMethod.POST)
     @ResponseBody
-    public List<GLClaimDataDto> amendmentClaimDetail(@RequestBody SearchClaimDto searchClaimDto) {
+    public List<GLClaimDataDto> amendmentClaimDetail(@RequestBody SearchClaimIntimationDto  searchClaimDto) {
 
         return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"APPROVED", "PAID"});
 

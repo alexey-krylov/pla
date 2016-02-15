@@ -15,8 +15,8 @@ public class GLClaimApprover {
             this.userName = userName;
         }
 
-        public GroupLifeClaim submitApproval(DateTime approvalOn, String approvalComment, GroupLifeClaim groupLifeClaim, ClaimStatus status) {
-            groupLifeClaim = groupLifeClaim.markApproverApproval(this.userName, approvalOn, approvalComment, status);
+        public GroupLifeClaim submitApproval(DateTime approvalOn, String approvalComment, GroupLifeClaim groupLifeClaim) {
+            groupLifeClaim = groupLifeClaim.markApproverApproval(approvalOn,this.userName,  approvalComment);
             return groupLifeClaim;
         }
 
