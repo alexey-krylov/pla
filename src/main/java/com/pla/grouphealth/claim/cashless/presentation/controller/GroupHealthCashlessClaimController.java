@@ -502,7 +502,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView openEmailPage(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/emailghcashlessclaimrejectionletter");
-        modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getPreScriptedEmail(groupHealthCashlessClaimId));
+        modelAndView.addObject("mailContent", groupHealthCashlessClaimService.getGroupHealthCashlessClaimRejectionLetter(groupHealthCashlessClaimId));
         return modelAndView;
     }
 

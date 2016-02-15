@@ -75,6 +75,7 @@ import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthC
 import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status.*;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
+import static org.springframework.util.Assert.*;
 import static org.springframework.util.Assert.notEmpty;
 import static org.springframework.util.Assert.notNull;
 
@@ -903,11 +904,11 @@ public class GroupHealthCashlessClaimService {
     }
 
     public boolean checkIfServiceMismatched(GroupHealthCashlessClaim groupHealthCashlessClaim) {
-        Assert.notNull(groupHealthCashlessClaim, "Submission failed Claim record cannot be null");
+        notNull(groupHealthCashlessClaim, "Submission failed Claim record cannot be null");
         GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail= groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
-        Assert.notNull(groupHealthCashlessClaimPolicyDetail, "Submission failed policy details cannot be null");
+        notNull(groupHealthCashlessClaimPolicyDetail, "Submission failed policy details cannot be null");
         GroupHealthCashlessClaimAssuredDetail groupHealthCashlessClaimAssuredDetail = groupHealthCashlessClaimPolicyDetail.getAssuredDetail();
-        Assert.notNull(groupHealthCashlessClaimAssuredDetail, "Submission failed assured details cannot be null");
+        notNull(groupHealthCashlessClaimAssuredDetail, "Submission failed assured details cannot be null");
         List<PreAuthorizationRequest> preAuthorizationRequests = preAuthorizationRequestRepository.findAllByPreAuthorizationRequestPolicyDetailPolicyNumberAndPreAuthorizationRequestPolicyDetailAssuredDetailClientIdAndStatus(groupHealthCashlessClaimPolicyDetail.getPolicyNumber().getPolicyNumber(), groupHealthCashlessClaimAssuredDetail.getClientId(), PreAuthorizationRequest.Status.APPROVED);
         if(isNotEmpty(preAuthorizationRequests)){
             Set<String> servicesAvailedInPreAuth = preAuthorizationRequests.stream().map(preAuth -> preAuth.getPreAuthorizationRequestDrugServices().stream().map(PreAuthorizationRequestDrugService::getServiceName).collect(Collectors.toSet())).flatMap(Collection::stream).collect(Collectors.toSet());
@@ -918,16 +919,16 @@ public class GroupHealthCashlessClaimService {
     }
 
     public boolean checkIfBillMismatched(GroupHealthCashlessClaim groupHealthCashlessClaim) {
-        Assert.notNull(groupHealthCashlessClaim, "Submission failed Claim record cannot be null");
+        notNull(groupHealthCashlessClaim, "Submission failed Claim record cannot be null");
         Set<GroupHealthCashlessClaimDrugService> groupHealthCashlessClaimDrugServices = groupHealthCashlessClaim.getGroupHealthCashlessClaimDrugServices();
         GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
-        Assert.notNull(groupHealthCashlessClaimPolicyDetail, "Submission failed policy details cannot be null");
+        notNull(groupHealthCashlessClaimPolicyDetail, "Submission failed policy details cannot be null");
         GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail();
-        Assert.notNull(groupHealthCashlessClaimHCPDetail, "Submission failed HCP Details cannot be null");
+        notNull(groupHealthCashlessClaimHCPDetail, "Submission failed HCP Details cannot be null");
         HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(groupHealthCashlessClaimHCPDetail.getHcpCode().getHcpCode());
-        Assert.notNull(hcpRate, "Submission failed HCP Rate cannot be null for HCP Code : "+groupHealthCashlessClaimHCPDetail.getHcpCode().getHcpCode());
+        notNull(hcpRate, "Submission failed HCP Rate cannot be null for HCP Code : "+groupHealthCashlessClaimHCPDetail.getHcpCode().getHcpCode());
         Set<HCPServiceDetail> hcpServiceDetails = hcpRate.getHcpServiceDetails();
-        Assert.notNull(hcpRate, "Submission failed HCP Details cannot be null");
+        notNull(hcpRate, "Submission failed HCP Details cannot be null");
         if(isNotEmpty(groupHealthCashlessClaimDrugServices)){
             for(GroupHealthCashlessClaimDrugService drug : groupHealthCashlessClaimDrugServices){
                 if(!checkIfRateMatchesWithBillAmountForGivenService(hcpServiceDetails, drug.getServiceName(), drug.getBillAmount())){
@@ -961,18 +962,19 @@ public class GroupHealthCashlessClaimService {
         groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
     }
 
-    public GHCashlessClaimMailDto getPreScriptedEmail(String groupHealthCashlessClaimId){
-     GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
-    String subject ="GH Cashless Claim Rejection::" +groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString();
-    String emailAddress = isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getEmailAddress(): null;
-    Map emailContent = getEmaildata(groupHealthCashlessClaim);
-    Map<String, Object> emailContentMap = Maps.newHashMap();
-    emailContentMap.put("emailContent", emailContent);
-    String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthcashlessclaimrejectiontemplate.vm", emailContentMap);
-    GHCashlessClaimMailDto ghCashlessClaimMailDto = new GHCashlessClaimMailDto(subject,emailBody,emailAddress);
-    ghCashlessClaimMailDto.setGroupHealthCashlessClaimId(groupHealthCashlessClaimId);
-    return ghCashlessClaimMailDto;
-}
+    public GHCashlessClaimMailDto getGroupHealthCashlessClaimRejectionLetter(String groupHealthCashlessClaimId){
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        notNull(groupHealthCashlessClaim, "No GroupHealthCashlessClaim found with given id : "+groupHealthCashlessClaimId);
+        String subject ="GH Cashless Claim Rejection :: " + (isNotEmpty(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail()) ? groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber() : StringUtils.EMPTY);
+        String emailAddress = isNotEmpty(groupHealthCashlessClaim.getGhProposer()) ? isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail()) ? groupHealthCashlessClaim.getGhProposer().getContactDetail().getEmailAddress(): StringUtils.EMPTY :StringUtils.EMPTY;
+        Map emailContent = getEmaildata(groupHealthCashlessClaim);
+        Map<String, Object> emailContentMap = Maps.newHashMap();
+        emailContentMap.put("emailContent", emailContent);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthcashlessclaimrejectiontemplate.vm", emailContentMap);
+        GHCashlessClaimMailDto ghCashlessClaimMailDto = new GHCashlessClaimMailDto(subject,emailBody,emailAddress);
+        ghCashlessClaimMailDto.setGroupHealthCashlessClaimId(groupHealthCashlessClaimId);
+        return ghCashlessClaimMailDto;
+    }
 
     public GHCashlessClaimMailDto getAddRequirementRequestLetter(String groupHealthCashlessClaimId) {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
@@ -1005,7 +1007,7 @@ public class GroupHealthCashlessClaimService {
 
     private Map constructDataMapWithGivenData(GroupHealthCashlessClaim groupHealthCashlessClaim, String plan, String salutation, String firstName, String surName, String province, String town, LocalDate claimIntimationDate, String groupHealthCashlessClaimId, String address1, String address2, Set<String> pendingDocumentSet) {
         Map <String, Object> emailContent = Maps.newHashMap();
-        emailContent.put("currentDateTime", LocalDate.now());
+        emailContent.put("currentDateTime", LocalDate.now().toString("dd/MM/yyyy"));
         emailContent.put("plan",plan);
         emailContent.put("town",town);
         emailContent.put("policyNumber",groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString());
