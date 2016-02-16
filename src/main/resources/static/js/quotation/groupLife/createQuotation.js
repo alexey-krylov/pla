@@ -260,7 +260,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
             $scope.$watch('quotationDetails.premium.policyTermValue', function (newVal, oldVal) {
                 /*TODO check for the minimum amd maximum value for the policy term value*/
                 console.log(' 1 ' + newVal);
-                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 9999) {
+                if (newVal && newVal != 365 && newVal >= 30 && newVal <= 999) {
                     /*used to toggle controls between dropdown and text*/
                     $scope.isPolicyTermNot365 = true;
                     /*used to show the error message when inappropriate value is entered*/
@@ -268,7 +268,7 @@ angular.module('createQuotation', ['common', 'ngRoute', 'mgcrea.ngStrap.select',
 
                 } else {
                     console.log(' 2 ' + newVal);
-                    if (newVal < 30 || newVal > 9999) {
+                    if (newVal < 30 || newVal > 999) {
                         $scope.inappropriatePolicyTerm = true;
                     } else {
                         $scope.inappropriatePolicyTerm = false;
