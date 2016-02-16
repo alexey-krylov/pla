@@ -1,6 +1,5 @@
 package com.pla.grouplife.claim.presentation.dto;
 
-import com.pla.grouplife.claim.domain.model.PaymentMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class GLClaimSettlementDataDto {
 
     private DateTime claimApprovedOn;
     private BigDecimal approvedAmount;
-    private PaymentMode paymentMode;
+    private String paymentMode;
     private DateTime paymentDate;
     private BigDecimal paidAmount;
     private String bankName;

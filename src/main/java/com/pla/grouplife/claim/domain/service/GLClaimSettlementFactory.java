@@ -4,7 +4,7 @@ import com.pla.grouplife.claim.application.command.GLClaimSettlementCommand;
 import com.pla.grouplife.claim.application.service.GLClaimService;
 import com.pla.grouplife.claim.domain.model.ClaimStatus;
 import com.pla.grouplife.claim.domain.model.GLClaimSettlement;
-import com.pla.grouplife.claim.domain.model.PaymentMode;
+import com.pla.grouplife.claim.presentation.dto.GLClaimSettlementDataDto;
 import com.pla.grouplife.claim.query.GLClaimFinder;
 import com.pla.grouplife.sharedresource.query.GLFinder;
 import com.pla.sharedkernel.domain.model.ClaimId;
@@ -43,22 +43,24 @@ public class GLClaimSettlementFactory {
     }
 
 
-    public GLClaimSettlement createSettlement(GLClaimSettlementCommand glClaimSettlementCommand){
+    public GLClaimSettlement createSettlement(GLClaimSettlementCommand glClaimSettlementCommand,ClaimNumber claimNumber){
           ClaimSettlementId claimSettlementId  = new ClaimSettlementId(ObjectId.get().toString());
-          ClaimNumber claimNumber=new ClaimNumber(glClaimSettlementCommand.getClaimNumber());
-          ClaimId claimId=new ClaimId(glClaimSettlementCommand.getClaimId());
-          BigDecimal approvedAmount=glClaimSettlementCommand.getApprovedAmount();
-          BigDecimal paidAmount=glClaimSettlementCommand.getPaidAmount();
-          DateTime approvedDate=glClaimSettlementCommand.getClaimApprovedOn();
-          PaymentMode paymentMode=glClaimSettlementCommand.getPaymentMode();
-          DateTime paymentDate=glClaimSettlementCommand.getPaymentDate();
-          String bankName=glClaimSettlementCommand.getBankName();
-          String bankBranchName=glClaimSettlementCommand.getBankBranchName();
-          String accountType=glClaimSettlementCommand.getAccountType();
-          String accountNumber=glClaimSettlementCommand.getAccountNumber();
-          String instrumentNumber=glClaimSettlementCommand.getInstrumentNumber();
-           DateTime instrumentDate=glClaimSettlementCommand.getInstrumentDate();
-          BigDecimal debitAmount=glClaimSettlementCommand.getApprovedAmount();
+        GLClaimSettlementDataDto claimSettlementDetails=glClaimSettlementCommand.getClaimSettlementDetails();
+            ClaimId claimId=new ClaimId(glClaimSettlementCommand.getClaimId());
+            BigDecimal approvedAmount=claimSettlementDetails.getApprovedAmount();
+            BigDecimal paidAmount=claimSettlementDetails.getPaidAmount();
+            DateTime approvedDate=claimSettlementDetails.getClaimApprovedOn();
+            String paymentMode=claimSettlementDetails.getPaymentMode();
+            DateTime paymentDate=claimSettlementDetails.getPaymentDate();
+            String bankName=claimSettlementDetails.getBankName();
+            String bankBranchName=claimSettlementDetails.getBankBranchName();
+            String accountType=claimSettlementDetails.getAccountType();
+            String accountNumber=claimSettlementDetails.getAccountNumber();
+            String instrumentNumber=claimSettlementDetails.getInstrumentNumber();
+            DateTime instrumentDate=claimSettlementDetails.getInstrumentDate();
+            BigDecimal debitAmount=claimSettlementDetails.getApprovedAmount();
+
+
           ClaimStatus claimStatus=glClaimSettlementCommand.getClaimStatus();
           GLClaimSettlement glClaimSettlement=new GLClaimSettlement(claimSettlementId,claimId,claimNumber);
           glClaimSettlement.withClaimStatus(claimStatus);
@@ -67,7 +69,8 @@ public class GLClaimSettlementFactory {
           glClaimSettlement. withBankDetail(bankName,bankBranchName,accountType,accountNumber);
           glClaimSettlement.withInstrumentNumberAndDate(instrumentNumber,instrumentDate);
           glClaimSettlement.withClaimPaidAmount(paidAmount);
-
+          glClaimSettlement.withPaymentDate(paymentDate);
+          glClaimSettlement.withPaymentMode(paymentMode);
         return glClaimSettlement;
     }
 }

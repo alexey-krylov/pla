@@ -283,7 +283,7 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
     public GroupLifeClaim markAsSettledClaim(String approvedBy, DateTime approvedOn, String comment) {
         this.claimStatus = claimStatus.PAID_DISBURSED;
         if (isNotEmpty(comment)) {
-            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(), claimStatus.CANCELLED, approvedBy, comment, approvedOn));
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(), claimStatus.PAID_DISBURSED, approvedBy, comment, approvedOn));
         }
 
         return this;

@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 
 public class ApprovalDetailsDto {
+
     private ClaimApproverPlanDto planDetails;
     private List<ClaimApproverCoverageDetailDto> coverageDetails;
     private BigDecimal totalApprovedAmount;

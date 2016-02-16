@@ -19,7 +19,7 @@ public class GLClaimSettlementData {
     private ClaimSettlementId claimSettlementId;
     private DateTime claimApprovedOn;
     private BigDecimal approvedAmount;
-    private PaymentMode paymentMode;
+    private String paymentMode;
     private DateTime paymentDate;
     private BigDecimal paidAmount;
     private String bankName;

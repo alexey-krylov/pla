@@ -39,6 +39,7 @@ public class GLClaimIntimationDetailsDto {
     private List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails;
     private ApprovalDetailsDto approvalDetails;
     private GLClaimSettlementDataDto claimSettlementDetails;
+
     public GLClaimIntimationDetailsDto withClaimant(ClaimantDetail claimantDetail){
         this. claimantDetail  =  claimantDetail;
         return this;
@@ -81,6 +82,10 @@ public class GLClaimIntimationDetailsDto {
     }
     public GLClaimIntimationDetailsDto withApprovalCoverageDetail(List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails){
         this.claimApprovalCoverageDetails = claimApprovalCoverageDetails;
+        return this;
+    }
+    public GLClaimIntimationDetailsDto withClaimSettlementDetail(GLClaimSettlementDataDto claimSettlementDetails){
+        this.claimSettlementDetails=claimSettlementDetails;
         return this;
     }
 }

@@ -9,6 +9,7 @@ import com.pla.grouplife.claim.domain.service.GroupLifeClaimRoleAdapter;
 import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.grouplife.proposal.presentation.dto.GLProposalMandatoryDocumentDto;
 import com.pla.sharedkernel.domain.model.ClaimId;
+import com.pla.sharedkernel.domain.model.ClaimNumber;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
 import com.pla.underwriter.domain.model.UnderWriterLineItem;
@@ -341,11 +342,11 @@ public class GLClaimIntimationCommandHandler {
    @CommandHandler
     public String settleClaim(GLClaimSettlementCommand glClaimSettlementCommand) {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimSettlementCommand.getClaimId()));
-        //GLClaimSettlementProcessor glClaimProcessor=groupLifeClaimRoleAdapter.userToGLClaimSettlementProcessor(glClaimSettlementCommand.getUserDetails());
-       // groupLifeClaim = glClaimProcessor.submitClaimSettlement(DateTime.now(), glClaimSettlementCommand.getComment(), groupLifeClaim, glClaimSettlementCommand.getStatus());
+
         //claim settlement to be created
       //
-         GLClaimSettlement glClaimSettlement=glClaimSettlementFactory.createSettlement(glClaimSettlementCommand);
+        ClaimNumber claimNumber=groupLifeClaim.getClaimNumber();
+         GLClaimSettlement glClaimSettlement=glClaimSettlementFactory.createSettlement(glClaimSettlementCommand,claimNumber);
         glClaimSettlementMongoRepository.add(glClaimSettlement);
          GLClaimSettlementData glClaimSettlementData=new GLClaimSettlementData();
          glClaimSettlementData.setClaimSettlementId(glClaimSettlement.getClaimSettlementId());
@@ -362,7 +363,8 @@ public class GLClaimIntimationCommandHandler {
         glClaimSettlementData.setInstrumentNumber(glClaimSettlement.getInstrumentNumber());
         glClaimSettlementData.setDebitAmount(glClaimSettlement.getDebitAmount());
         groupLifeClaim.withClaimSettlementData(glClaimSettlementData);
-
+       GLClaimSettlementProcessor glClaimProcessor=groupLifeClaimRoleAdapter.userToGLClaimSettlementProcessor(glClaimSettlementCommand.getUserDetails());
+       groupLifeClaim = glClaimProcessor.submitForClaimSettlement(DateTime.now(), glClaimSettlementCommand.getComment(), groupLifeClaim);
         return groupLifeClaim.getIdentifier().getClaimId();
     }
 

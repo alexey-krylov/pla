@@ -412,6 +412,12 @@ public class GLClaimService implements Serializable{
         }
         approvalDetails.setCoverageDetails(approverCoverageList);
         //getting and adding review deails
+        List<ClaimReviewDto> reviewList=null;
+            ApproverReviewDetailDto  approverReviewDetail= getApproverReviewByClaimId(claimId);
+            if(approverReviewDetail!=null){
+                 reviewList=approverReviewDetail.getClaimReviewList();
+            }
+
         List<ClaimReviewDetail> reviewDetailsList = underWriterApprovalDetail.getReviewDetails();
         List<ClaimReviewDto> reviewDetails = new ArrayList<ClaimReviewDto>();
         if (reviewDetailsList != null) {
@@ -420,17 +426,63 @@ public class GLClaimService implements Serializable{
                 reviewDetails.add(claimReviewDto);
             }
         }
+
         approvalDetails.setReviewDetails(reviewDetails);
+            if(reviewList!=null){
+                approvalDetails.setReviewDetails(reviewDetails);
+            }
         String comments = underWriterApprovalDetail.getComment();
         approvalDetails.setComments(comments);
         DateTime referredToReassuredOn = underWriterApprovalDetail.getReferredToReassuredOn();
         approvalDetails.setReferredToReassuredOn(referredToReassuredOn);
         DateTime responseReceivedOn = underWriterApprovalDetail.getResponseReceivedOn();
-        approvalDetails.setReferredToReassuredOn(responseReceivedOn);
+            approvalDetails.setReferredToReassuredOn(responseReceivedOn);
 
         claimIntimationDetailDto.withApprovalDetail(approvalDetails);
+             ClaimApproverPlanDto claimApprovalPlanDetail=new ClaimApproverPlanDto();
+            if (approverPlanDetail != null) {
+                claimApprovalPlanDetail.setPlanName(approverPlanDetail.getPlanName());
+                claimApprovalPlanDetail.setPlanSumAssured(approverPlanDetail.getPlanSumAssured());
+                claimApprovalPlanDetail.setApprovedAmount(approverPlanDetail.getApprovedAmount());
+                claimApprovalPlanDetail.setAmendedAmount(approverPlanDetail.getAmendedAmount());
+
+            }
+            claimIntimationDetailDto.withApprovalPlanDetailDetail(claimApprovalPlanDetail);
+             List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails=new ArrayList<ClaimApproverCoverageDetailDto>();
+            if (coverageDetailList != null) {
+                for (ApproverCoverageDetail approverCoverageDetail : coverageDetailList) {
+                    ClaimApproverCoverageDetailDto coverageDetailDto = new ClaimApproverCoverageDetailDto();
+                    coverageDetailDto.setCoverageName(approverCoverageDetail.getCoverageName());
+                    coverageDetailDto.setSumAssured(approverCoverageDetail.getSumAssured());
+                    coverageDetailDto.setApprovedAmount(approverCoverageDetail.getApprovedAmount());
+                    coverageDetailDto.setAmendedAmount(approverCoverageDetail.getAmendedAmount());
+                    claimApprovalCoverageDetails.add(coverageDetailDto);
+                }
+            }
+            claimIntimationDetailDto.withApprovalCoverageDetail(claimApprovalCoverageDetails);
 
     }
+       //get Settlement data
+        GLClaimSettlementData claimSettlementData=(GLClaimSettlementData) claimRecordMap.get("claimSettlementData");
+
+        GLClaimSettlementDataDto claimSettlementDetails=new GLClaimSettlementDataDto();
+
+        if(underWriterApprovalDetail!=null){
+            DateTime approvalDate = underWriterApprovalDetail.getClaimApprovedOn() != null ? new DateTime(underWriterApprovalDetail.getClaimApprovedOn()) : null;
+            claimSettlementDetails.setClaimApprovedOn(approvalDate);
+            BigDecimal tempTotalApprovedAmount = underWriterApprovalDetail.getTotalApprovedAmount();
+            claimSettlementDetails.setApprovedAmount(tempTotalApprovedAmount);
+            claimSettlementDetails.setPaidAmount(tempTotalApprovedAmount);
+        }
+        if(bankDetails!=null){
+            claimSettlementDetails.setAccountNumber(bankDetails.getBankAccountNumber());
+            claimSettlementDetails.setAccountType(bankDetails.getBankAccountType());
+            claimSettlementDetails.setBankName(bankDetails.getBankName());
+            claimSettlementDetails.setBankBranchName(bankDetails.getBankBranchName());
+
+        }
+
+        claimIntimationDetailDto.withClaimSettlementDetail(claimSettlementDetails);
             return claimIntimationDetailDto;
         }
 
@@ -1276,7 +1328,25 @@ public class GLClaimService implements Serializable{
 
     }
      */
+   public  ApproverReviewDetailDto  getApproverReviewByClaimId(String claimId){
+       Map  searchedClaimRecords =glClaimFinder.getClaimStatusReviewDetail(claimId);
+       ApproverReviewDetailDto approverReviewDetail=new ApproverReviewDetailDto();
+       List<ClaimReviewDto> claimReviewDtoList=new ArrayList<ClaimReviewDto>();
+       ClaimReviewDto claimReviewDto=new ClaimReviewDto();
+       if(searchedClaimRecords!=null){
+           String comment=(String)searchedClaimRecords.get("comment");
+           String user=(String)searchedClaimRecords.get("modifiedBy");
+           DateTime reviewDate = searchedClaimRecords.get("performedOn") != null ? new DateTime(searchedClaimRecords.get("performedOn")) : null;
+           claimReviewDto.setComments(comment);
+           claimReviewDto.setTimings(reviewDate);
+           claimReviewDto.setUserNames(user);
+           claimReviewDtoList.add(claimReviewDto);
+           approverReviewDetail.setClaimReviewList(claimReviewDtoList);
+           approverReviewDetail.setClaimId(claimId);
+       }
+       return approverReviewDetail;
 
+   }
 
     public List<GLClaimDataDto> getApprovedClaimDetail (SearchClaimIntimationDto  searchClaimDto,String[] statuses){
         List<Map> searchedClaimRecords = glClaimFinder.getApprovedClaimDetails(searchClaimDto.getClaimNumber(), searchClaimDto.getPolicyNumber(),
@@ -1406,13 +1476,15 @@ public class GLClaimService implements Serializable{
                 if (underWriterApprovalDetail!=null){
                     BigDecimal underWriterApprovedAmount=underWriterApprovalDetail.getTotalApprovedAmount();
                     claimDataDto.setApprovedAmount(underWriterApprovedAmount);
+                    DateTime claimApprovedOn=underWriterApprovalDetail.getClaimApprovedOn()!=null?new DateTime(underWriterApprovalDetail.getClaimApprovedOn()):null;
+                    claimDataDto.setApprovedOn(claimApprovedOn);
                 }
 
                 DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
                 claimDataDto.setClaimIntimationDate(intimationDate);
 
                 DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
-                claimDataDto.setApprovedOn(approvalDate);
+               // claimDataDto.setApprovedOn(approvalDate);
 
                 DateTime today = new DateTime();
                 Duration duration = new Duration(intimationDate, today);

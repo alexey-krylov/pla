@@ -295,6 +295,8 @@ public class GroupLifeClaimController {
         }
     }
 
+
+
     @RequestMapping(value = "/listapprovedclaims", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are approved")
@@ -302,6 +304,19 @@ public class GroupLifeClaimController {
         return glClaimService.getAllApprovedClaimDetail();
 
     }
+
+@RequestMapping(value = "/searchclaimforsettlement", method = RequestMethod.POST)
+    public ModelAndView getApprovedClaimDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
+        modelAndView.addObject("searchResult",glClaimService.getClaimDetailForSettlement(searchClaimIntimationDto, new String[]{"APPROVED"}));
+        modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
+        return modelAndView;
+
+    }
+
+
+/*
 
  @RequestMapping(value = "/searchclaimforsettlement", method = RequestMethod.POST)
     @ResponseBody
@@ -311,7 +326,7 @@ public class GroupLifeClaimController {
 
     }
 
-
+ */
 
 
     @RequestMapping(value = "/createclaimsettlement", method = RequestMethod.POST)

@@ -35,7 +35,7 @@ public class GLClaimSettlement  extends AbstractAggregateRoot<ClaimSettlementId>
 
     private DateTime claimApprovedOn;
     private BigDecimal approvedAmount;
-    private PaymentMode paymentMode;
+    private String paymentMode;
     private DateTime paymentDate;
     private BigDecimal paidAmount;
     private String bankName;
@@ -86,6 +86,14 @@ public class GLClaimSettlement  extends AbstractAggregateRoot<ClaimSettlementId>
 
     public GLClaimSettlement withClaimPaidAmount(BigDecimal paidAmount){
         this.paidAmount=paidAmount;
+        return this;
+    }
+    public GLClaimSettlement withPaymentDate(DateTime paymentDate){
+        this.paymentDate=paymentDate;
+        return this;
+    }
+    public GLClaimSettlement withPaymentMode(String paymentMode){
+        this.paymentMode=paymentMode;
         return this;
     }
 

@@ -198,6 +198,19 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         return mongoTemplate.findOne(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
 
+    public Map getClaimStatusReviewDetail(String claimId){
+        Criteria criteria = null;
+        String[] statuses = new String[]{"APPROVED"};
+        criteria = Criteria.where("claimStatus").in(statuses);
+
+        if (isNotEmpty(claimId)) {
+            criteria = criteria.and("_id").is(claimId);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.findOne(query, Map.class,GL_LIFE_CLAIM_STATUS_COLLECTION_NAME);
+    }
+
+
 
 
     public List<Map> getClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber) {
