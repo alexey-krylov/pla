@@ -305,14 +305,14 @@ public class GLClaimIntimationCommandHandler {
                claimReviewDetails.add(claimReviewDetail) ;
            }
         }
-        ClaimApproverPlanDto planDetail=glClaimApprovalCommand.getPlanDetail();
+        ClaimApproverPlanDto planDetail=glClaimApprovalCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
              glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),
                     planDetail.getAssuredAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount());
         }
 
-        List<ClaimApproverCoverageDetailDto> coverageDetails=glClaimApprovalCommand.getCoverageDetails();
+        List<ClaimApproverCoverageDetailDto> coverageDetails=glClaimApprovalCommand.getClaimApprovalCoverageDetails();
         List<ApproverCoverageDetail> coverageDetailList= new ArrayList<ApproverCoverageDetail>();
         if(coverageDetails!=null){
             for(ClaimApproverCoverageDetailDto claimApproverCoverageDetailDto:coverageDetails){
@@ -322,13 +322,15 @@ public class GLClaimIntimationCommandHandler {
             }
         }
 
-
         BigDecimal totalApprovedAmount=glClaimApprovalCommand.getTotalApprovedAmount();
-        BigDecimal totalRecoveredAmount=glClaimApprovalCommand.getTotalRecoveredAmount();
-        String comments=glClaimApprovalCommand.getComments();
-        DateTime refer=glClaimApprovalCommand.getReferredToReassureOn();
-        DateTime response =glClaimApprovalCommand.getResponseReceivedOn();
+
+        BigDecimal totalRecoveredAmount=glClaimApprovalCommand.getTotalRecoveredAmount()!= null ? glClaimApprovalCommand.getTotalRecoveredAmount() : null;
+        String comments=glClaimApprovalCommand.getComments()!= null ? glClaimApprovalCommand.getComments() : null;
+        DateTime response=glClaimApprovalCommand.getResponseReceivedOn() != null ? new DateTime(glClaimApprovalCommand.getResponseReceivedOn()) : null;
+        DateTime refer=glClaimApprovalCommand.getReferredToReassureOn() != null ? new DateTime(glClaimApprovalCommand.getReferredToReassureOn()) : null;
+        DateTime claimApprovalDate=new DateTime();
         GlClaimUnderWriterApprovalDetail approvalDetail=new GlClaimUnderWriterApprovalDetail(glClaimApproverPlanDetail, coverageDetailList, totalApprovedAmount,  comments, refer, response);
+        approvalDetail.withClaimApprovedOn(claimApprovalDate);
         groupLifeClaim.withUnderWriterData(approvalDetail);
          GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
         groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), groupLifeClaim);

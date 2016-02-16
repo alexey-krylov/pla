@@ -27,6 +27,7 @@ public class GlClaimUnderWriterApprovalDetail {
     private String comment;
     private DateTime referredToReassuredOn;
     private DateTime responseReceivedOn;
+    private DateTime claimApprovedOn;
 
     public GlClaimUnderWriterApprovalDetail(GLClaimApproverPlanDetail planDetail,List<ApproverCoverageDetail> coverageDetails,BigDecimal totalApprovedAmount,
                                             String comment,DateTime referredToReassuredOn,DateTime responseReceivedOn){
@@ -49,6 +50,9 @@ public class GlClaimUnderWriterApprovalDetail {
       this.reviewDetails=reviewDetails;
         return this;
     }
-
+    public GlClaimUnderWriterApprovalDetail withClaimApprovedOn(DateTime claimApprovedOn){
+        this.claimApprovedOn=claimApprovedOn;
+        return this;
+    }
 }
 

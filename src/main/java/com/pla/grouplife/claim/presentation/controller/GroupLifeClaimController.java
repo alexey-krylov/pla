@@ -237,6 +237,13 @@ public class GroupLifeClaimController {
         }
     }
 
+    @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
+    public List<GLClaimDataDto> getRoutedClaimForLevel1(@RequestBody SearchClaimDto searchClaimDto) {
+        return glClaimService.getApprovedClaimDetailLevelOne(searchClaimDto, new String[]{"ROUTED"});
+
+    }
 
     @RequestMapping(value = "/searchclaimforapproval", method = RequestMethod.POST)
     public ModelAndView getClaimDetailForApproval(SearchClaimIntimationDto searchClaimIntimationDto) {
@@ -255,15 +262,9 @@ public class GroupLifeClaimController {
          return glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"UNDERWRITING"});
 
     }
-    /*
-    @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
-    public List<GLClaimDataDto> getRoutedClaimForLevel1(@RequestBody SearchClaimDto searchClaimDto) {
-        return glClaimService.getApprovedClaimDetailLevelOne(searchClaimDto, new String[]{"ROUTED"});
 
-    }
-    */
+
+
     @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To approve claim")
@@ -294,11 +295,41 @@ public class GroupLifeClaimController {
         }
     }
 
-    @RequestMapping(value = "/getapprovedclaim", method = RequestMethod.POST)
+    @RequestMapping(value = "/listapprovedclaims", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are approved")
-    public List<GLClaimDataDto> getApprovedClaim(@RequestBody SearchClaimIntimationDto   searchClaimDto) {
-        return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"APPROVED"});
+    public List<GLClaimDataDto> getApprovedClaims() {
+        return glClaimService.getAllApprovedClaimDetail();
+
+    }
+
+ @RequestMapping(value = "/searchclaimforsettlement", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
+    public List<GLClaimDataDto> getApprovedClaim(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
+         return glClaimService.getClaimDetailForSettlement(searchClaimIntimationDto, new String[]{"APPROVED"});
+
+    }
+
+
+
+
+    @RequestMapping(value = "/createclaimsettlement", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> createClaimSettlement(@RequestBody GLClaimSettlementCommand glClaimSettlementCommand, BindingResult bindingResult, HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(Result.failure("Error in creating  Claim Settlement Record", bindingResult.getAllErrors()), HttpStatus.OK);
+        }
+        try {
+            UserDetails userDetails = getLoggedInUserDetail(request);
+            glClaimSettlementCommand.setUserDetails(userDetails);
+            commandGateway.sendAndWait(glClaimSettlementCommand);
+        } catch (GLClaimException e) {
+            LOGGER.error("Error in creating  Claim  Settlement", e);
+            return new ResponseEntity(Result.failure("Error in creating  Claim Settlement"), HttpStatus.OK);
+        }
+        return new ResponseEntity(Result.success(" Claim Settlement created successfully"), HttpStatus.OK);
 
     }
 
@@ -341,27 +372,7 @@ public class GroupLifeClaimController {
         return null;
     }
 
-
-    @RequestMapping(value = "/createclaimsettlement", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<Result> createClaimSettlement(@RequestBody GLClaimSettlementCommand glClaimSettlementCommand, BindingResult bindingResult, HttpServletRequest request) {
-
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity(Result.failure("Error in creating  Claim Settlement Record", bindingResult.getAllErrors()), HttpStatus.OK);
-        }
-        try {
-            UserDetails userDetails = getLoggedInUserDetail(request);
-            glClaimSettlementCommand.setUserDetails(userDetails);
-            commandGateway.sendAndWait(glClaimSettlementCommand);
-        } catch (GLClaimException e) {
-            LOGGER.error("Error in creating  Claim  Settlement", e);
-            return new ResponseEntity(Result.failure("Error in creating  Claim Settlement"), HttpStatus.OK);
-        }
-        return new ResponseEntity(Result.success(" Claim Settlement created successfully"), HttpStatus.OK);
-
-    }
-
-/*
+    /*
 
 
     @RequestMapping(value = "/settelment", method = RequestMethod.POST)

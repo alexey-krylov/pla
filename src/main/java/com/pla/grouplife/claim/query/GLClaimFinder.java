@@ -228,6 +228,52 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
 
+    public List<Map> getAllApprovedClaimRecords(String[] statuses) {
+        if (isEmpty(statuses)) {
+            return Lists.newArrayList();
+        }
+        Criteria criteria = null;
+        criteria = Criteria.where("claimStatus").in(statuses);
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
+    //get searched  approved claim records
+
+
+     public List<Map> getRequiredApprovedClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber,String[] statuses) {
+        if (isEmpty(claimNumber) && isEmpty(policyNumber) && isEmpty(policyHolderName)&& isEmpty(clientId)&& isEmpty(assuredName)&& isEmpty(nrcNumber)) {
+            return Lists.newArrayList();
+        }
+
+        Criteria criteria = null;
+
+        criteria = Criteria.where("claimStatus").in(statuses);
+
+        if (isNotEmpty(claimNumber)) {
+            criteria = criteria.and("claimNumber.claimNumber").is(claimNumber);
+        }
+        if (isNotEmpty(policyNumber)) {
+            criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);
+        }
+        if (isNotEmpty(policyHolderName)) {
+            criteria = criteria.and("policy.policyHolderName").is(policyHolderName);
+        }
+        if (isNotEmpty(clientId)) {
+            criteria = criteria.and("familyId.familyId").is(clientId);
+        }
+        if (isNotEmpty(assuredName)) {
+            criteria = criteria.and("assuredDetail.firstName").is(assuredName);
+        }
+        if (isNotEmpty(nrcNumber)) {
+            criteria = criteria.and("assuredDetail.nrcNumber").is(nrcNumber);
+        }
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
+
+
+
+
     public List<Map> getApprovedClaimDetails(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber,String[] statuses) {
         if (isEmpty(claimNumber) && isEmpty(policyNumber) && isEmpty(policyHolderName)&& isEmpty(clientId)&& isEmpty(assuredName)&& isEmpty(nrcNumber)) {
             return Lists.newArrayList();
@@ -258,6 +304,8 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
+
+
 
     public List<Map> getApprovedClaimDetailsLevelOne(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber,String[] statuses) {
         if (isEmpty(claimNumber) && isEmpty(policyNumber) && isEmpty(policyHolderName)&& isEmpty(clientId)&& isEmpty(assuredName)&& isEmpty(nrcNumber)) {
