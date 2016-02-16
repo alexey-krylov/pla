@@ -334,7 +334,6 @@ public class GLClaimIntimationCommandHandler {
         groupLifeClaim.withUnderWriterData(approvalDetail);
          GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
         groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), groupLifeClaim);
-        System.out.println("***********************" +groupLifeClaim );
         //groupLifeClaim = groupLifeClaim.markApproverApproval(glClaimApprovalCommand.getUserDetails().getUsername(), DateTime.now(), glClaimApprovalCommand.getComments(), ClaimStatus.APPROVED);
         return groupLifeClaim.getIdentifier().getClaimId();
     }

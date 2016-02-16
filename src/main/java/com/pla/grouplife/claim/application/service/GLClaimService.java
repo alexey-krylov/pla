@@ -1407,6 +1407,7 @@ public class GLClaimService implements Serializable{
                     BigDecimal underWriterApprovedAmount=underWriterApprovalDetail.getTotalApprovedAmount();
                     claimDataDto.setApprovedAmount(underWriterApprovedAmount);
                 }
+
                 DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
                 claimDataDto.setClaimIntimationDate(intimationDate);
 
