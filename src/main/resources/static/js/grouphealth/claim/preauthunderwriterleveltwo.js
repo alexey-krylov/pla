@@ -958,6 +958,13 @@
                     true
                 );
 
+                if(false){
+                    $('#plaModal').modal({backdrop: 'static', keyboard: false})
+
+                }
+                $scope.ok = function(){
+                    window.location.href = '/pla/grouphealth/claim/cashless/claim/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+                }
 
 
 

@@ -88,7 +88,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
             $scope.fileSaved = null;
             $scope.isViewMode = false;
             $scope.stepsSaved = [];
-
+console.log( $scope.createUpdateDto );
             if ($scope.createUpdateDto.submitted) {
                 $scope.isViewMode = true;
             }
@@ -151,6 +151,7 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
                 $scope.provisionaldignosisdiv = false;
                 $scope.stepsSaved["3"] = false;
             };
+            console.log(JSON.stringify($scope.createUpdateDto));
 
             $scope.create= function(){
                 $scope.provisionaldignosisdiv = true;
@@ -599,12 +600,16 @@ var  app = angular.module('CreatePreAuthorizationRequest', ['common', 'ngRoute',
                 true
             );
 
+            $scope.createUpdateDto.claimType='Cashless';
 
+     if(false){
+         $('#myModal').modal({backdrop: 'static', keyboard: false})
 
+     }
+     $scope.ok = function(){
+        window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationfordefaultlist';
 
-$scope.createUpdateDto.claimType='Cashless';
-
-
+       }
         }]);
 
 function formatDate(date) {

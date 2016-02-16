@@ -934,14 +934,14 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                     }
                 }
             });
-//$scope.bankBranchDetails=[];
-//            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchName', function (newvalue, oldvalue) {
-//                if (newvalue) {
-//                    $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchSortCode = newvalue;
-//                }
-//            });
 
+            if(false){
+                $('#plaModal').modal({backdrop: 'static', keyboard: false})
 
+            }
+            $scope.ok = function(){
+                window.location.href = '/pla/grouphealth/claim/cashless/claim/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
+            }
 
         }]);
 
