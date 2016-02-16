@@ -28,7 +28,9 @@ public class RolesUtil {
     public static final String GROUP_LIFE_ENDORSEMENT_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_ENDORSEMENT_PROCESSOR";
     public static final String GROUP_LIFE_CLAIM_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_CLAIM_PROCESSOR";
     public static final String GROUP_LIFE_CLAIM_REGISTRATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_CLAIM_REGISTRATION_PROCESSOR";
+    public static final String GROUP_LIFE_CLAIM_SETTLEMENT_PROCESSOR = "ROLE_GROUP_LIFE_CLAIM_SETTLEMENT_PROCESSOR";
     public static final String INDIVIDUAL_LIFE_CLAIM_INTIMATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_CLAIM_INTIMATION_PROCESSOR";
+
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
     public static final String GROUP_HEALTH_PROPOSAL_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_PROCESSOR";
     public static final String GROUP_HEALTH_PROPOSAL_APPROVER_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_APPROVER";
@@ -120,6 +122,11 @@ public class RolesUtil {
     }
     public static boolean hasGroupLifeClaimProcessorRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_LIFE_CLAIM_PROCESSOR_ROLE, authorities);
+        return count == 1;
+    }
+
+    public static boolean hasGroupLifeClaimSettlementProcessor(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_LIFE_CLAIM_SETTLEMENT_PROCESSOR, authorities);
         return count == 1;
     }
     public static boolean hasGroupLifeClaimRegistrationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
