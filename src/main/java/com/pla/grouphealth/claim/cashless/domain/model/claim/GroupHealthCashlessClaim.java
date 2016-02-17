@@ -56,6 +56,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private Set<GHProposerDocument> proposerDocuments;
     private Map<String, ScheduleToken> scheduledTokens;
     private Set<CommentDetail> commentDetails;
+    private GroupHealthCashlessClaimBankDetail groupHealthCashlessClaimBankDetail;
     private boolean submitted;
     private LocalDate submissionDate;
     private String claimProcessorUserId;

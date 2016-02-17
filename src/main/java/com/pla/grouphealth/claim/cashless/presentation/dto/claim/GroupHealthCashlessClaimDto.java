@@ -41,6 +41,7 @@ public class GroupHealthCashlessClaimDto {
     private GroupHealthCashlessClaimIllnessDetailDto groupHealthCashlessClaimIllnessDetail;
     private Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices;
     private Set<CommentDetail> commentDetails;
+    private GroupHealthCashlessClaimBankDetailDto groupHealthCashlessClaimBankDetailDto;
     private boolean submitted;
     private boolean submitEventFired;
     private LocalDate submissionDate;
