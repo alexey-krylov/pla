@@ -204,7 +204,7 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         criteria = Criteria.where("claimStatus").in(statuses);
 
         if (isNotEmpty(claimId)) {
-            criteria = criteria.and("_id").is(claimId);
+            criteria = criteria.and("claimId").is(claimId);
         }
         Query query = new Query(criteria);
         return mongoTemplate.findOne(query, Map.class,GL_LIFE_CLAIM_STATUS_COLLECTION_NAME);
