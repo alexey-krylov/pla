@@ -44,12 +44,33 @@
                             });
                         }
                     });
+                    var modalOpen = $('#showModal').val();
+                    if(modalOpen == 'true'){
+                        $('#myModal').modal({backdrop: 'static', keyboard: false});
+                    }
+                    $('#modalButton').on("click", function () {
+                        window.location.href = '/pla/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims';
+                    });
                 });
             });
             clearInterval(interval);
         }
     }, 300);
 </script>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Record Under Processing</h3>
+            </div>
+            <div class="modal-footer">
+                <button data-target="#myModal" type="button" id="modalButton" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                    Ok
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container container-fluid" style="padding-top:10px">
     <p class="lead">
     <ol class="breadcrumb">
@@ -63,6 +84,8 @@
             <!--&lt;!&ndash;<div class="col-md-2">&ndash;&gt;-->
             <!--<h5 th:text="#{searchpolicy}" class="pull-left">Search policy</h5>-->
             <!--</div>-->
+            <input type="hidden" class="form-control input-sm" id="showModal"
+                   th:value="${searchCriteria.showModalWin}"/>
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{policyNumber}">Policy Number</label>
