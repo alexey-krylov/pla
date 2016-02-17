@@ -416,7 +416,23 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
                     .updateWithClaimProcessorUserId(groupHealthCashlessClaimDto.getClaimProcessorUserId())
                     .updateWithClaimUnderWriterUserId(groupHealthCashlessClaimDto.getClaimUnderWriterUserId())
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaimDto.getAdditionalRequiredDocumentsByUnderwriter())
-                    .updateWithGroupHealthCashlessClaimPolicyDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail());
+                    .updateWithGroupHealthCashlessClaimPolicyDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail())
+                    .updateWithBankDetails(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimBankDetailDto());
+        }
+        return this;
+    }
+
+    private GroupHealthCashlessClaim updateWithBankDetails(GroupHealthCashlessClaimBankDetailDto groupHealthCashlessClaimBankDetailDto) {
+        if(isNotEmpty(groupHealthCashlessClaimBankDetailDto)) {
+            GroupHealthCashlessClaimBankDetail groupHealthCashlessClaimBankDetail = isNotEmpty(this.getGroupHealthCashlessClaimBankDetail()) ? this.getGroupHealthCashlessClaimBankDetail() : getInstance(GroupHealthCashlessClaimBankDetail.class);
+            try {
+                BeanUtils.copyProperties(groupHealthCashlessClaimBankDetail, groupHealthCashlessClaimBankDetailDto);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            this.groupHealthCashlessClaimBankDetail = groupHealthCashlessClaimBankDetail;
         }
         return this;
     }

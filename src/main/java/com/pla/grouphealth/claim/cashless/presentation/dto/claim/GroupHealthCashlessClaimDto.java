@@ -260,4 +260,9 @@ public class GroupHealthCashlessClaimDto {
     public int getAgeOfTheClient() {
         return isNotEmpty(this.groupHealthCashlessClaimPolicyDetail) ? isNotEmpty(this.groupHealthCashlessClaimPolicyDetail.getAssuredDetail()) ?  this.groupHealthCashlessClaimPolicyDetail.getAssuredDetail().getAgeNextBirthday()  : 0 : 0;
     }
+
+    public GroupHealthCashlessClaimDto updateWithBankDetails(GroupHealthCashlessClaimBankDetail groupHealthCashlessClaimBankDetail) {
+        this.groupHealthCashlessClaimBankDetailDto = new GroupHealthCashlessClaimBankDetailDto().updateWithDetails(groupHealthCashlessClaimBankDetail);
+        return this;
+    }
 }

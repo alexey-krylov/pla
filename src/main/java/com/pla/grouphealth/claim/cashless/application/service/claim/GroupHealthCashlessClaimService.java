@@ -614,7 +614,8 @@ public class GroupHealthCashlessClaimService {
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaim.getAdditionalRequiredDocumentsByUnderwriter())
                     .updateWithGroupHealthCashlessClaimPolicyDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
                     .updateWithPreAuthorizationDetails(groupHealthCashlessClaim.getPreAuthorizationDetails())
-                    .updateWithStatusName(groupHealthCashlessClaim.getStatus());
+                    .updateWithStatusName(groupHealthCashlessClaim.getStatus())
+                    .updateWithBankDetails(groupHealthCashlessClaim.getGroupHealthCashlessClaimBankDetail());
         }
         return groupHealthCashlessClaimDto;
     }
