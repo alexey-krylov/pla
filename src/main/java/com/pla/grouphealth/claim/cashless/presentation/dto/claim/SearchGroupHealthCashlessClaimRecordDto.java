@@ -19,9 +19,16 @@ public class SearchGroupHealthCashlessClaimRecordDto {
     private String hcpCode;
     private String groupHealthCashlessClaimId;
     private String underwriterLevel;
+    private boolean showModalWin;
 
     public SearchGroupHealthCashlessClaimRecordDto updateWithUnderwriterLevel(String level) {
         this.underwriterLevel = level;
         return this;
     }
+
+    public SearchGroupHealthCashlessClaimRecordDto updateWithShowModalWin() {
+        this.showModalWin = Boolean.TRUE;
+        return this;
+    }
+
 }

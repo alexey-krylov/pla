@@ -110,7 +110,7 @@ public class GroupHealthCashlessClaimController {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchcashlessclaim");
         List<GroupHealthCashlessClaimDto> searchResult = groupHealthCashlessClaimService.getCashlessClaimByDefaultList(userName);
         modelAndView.addObject("CashlessResult", searchResult);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithShowModalWin());
         return modelAndView;
     }
 
@@ -365,7 +365,7 @@ public class GroupHealthCashlessClaimController {
         List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getDefaultListByUnderwriterLevel(ex.getUnderwriterLevel(), userName);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithUnderwriterLevel(ex.getUnderwriterLevel()));
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithUnderwriterLevel(ex.getUnderwriterLevel()).updateWithShowModalWin());
         modelAndView.setViewName("pla/grouphealth/claim/searchghcashlessclaimunderwriter");
         return modelAndView;
     }
@@ -637,7 +637,7 @@ public class GroupHealthCashlessClaimController {
         List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllBillMismatchedGroupHealthCashlessClaims(userName);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithShowModalWin());
         modelAndView.setViewName("pla/grouphealth/claim/searchghcashlessclaimbillmismatch");
         return modelAndView;
     }
@@ -658,7 +658,7 @@ public class GroupHealthCashlessClaimController {
         List<GroupHealthCashlessClaimDto> groupHealthCashlessClaimDtos = groupHealthCashlessClaimService.getAllServiceMismatchedGroupHealthCashlessClaims(userName);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("claimResult", groupHealthCashlessClaimDtos);
-        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto());
+        modelAndView.addObject("searchCriteria", new SearchGroupHealthCashlessClaimRecordDto().updateWithShowModalWin());
         modelAndView.setViewName("pla/grouphealth/claim/searchghcashlessclaimservicemismatch");
         return modelAndView;
     }
