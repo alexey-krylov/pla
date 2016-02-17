@@ -96,6 +96,12 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
             });
 
+            $scope.$watch('createUpdateDto.statusName', function(newVal, oldVal){
+                if (newVal !== 'EVALUATION' && newVal !== 'INTIMATION' && newVal !== 'RETURNED') {
+                    $scope.isViewMode = true;
+                }
+            });
+
             $scope.shouldSubmitBeDisabled = function (documentList) {
                 for (var i = 0; i < documentList.length; i++) {
                     var document = documentList[i];
