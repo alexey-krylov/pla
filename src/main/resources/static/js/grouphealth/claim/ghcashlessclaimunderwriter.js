@@ -88,10 +88,6 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.isViewMode = false;
             $scope.stepsSaved = [];
 
-            if ($scope.createUpdateDto.submitted) {
-                $scope.isViewMode = true;
-            }
-
             $scope.$watch('documentList', function (newCollection, oldCollection) {
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
             });
@@ -142,16 +138,13 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                     $scope.isEditDiagnosisTriggered = false;
                     $scope.provisionaldignosisdiv=false;
                 } else {
-                    groupHealthCashlessClaimDiagnosisTreatmentDetails
                     $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails.push(groupHealthCashlessClaimDiagnosisTreatmentDetails);
-                    console.log("new btn crt insd btn####"+JSON.stringify($scope.createUpdateDto));
-
+                    $scope.saveCashlessClaimRequest();
                 }
                 $scope.provisionaldignosisdiv = false;
                 $scope.stepsSaved["4"] = false;
             };
             $scope.saveCashlessClaimRequest = function () {
-                console.log(JSON.stringify($scope.createUpdateDto));
                 $http({
                     url: '/pla/grouphealth/claim/cashless/claim/underwriter/update',
                     method: 'POST',
@@ -164,24 +157,20 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                         });
                 }).error();
             };
-            /*$scope.create= function(){
-                $scope.showservicedrugdiv = true;
-                $scope.stepsSaved["1"] = true;
-            };*/
+
             $scope.activenextbuttonforprovisional = function(){
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = {};
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfConsultation = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].dateOfConsultation;
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.doctorName = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].doctorName;
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["4"] = true;
             };
-//for add sevice drug availed section start
-            //create function detect Add Service/Drug button
+
             $scope.create = function(){
                 $scope.showservicedrugdiv = true;
                 $scope.diagnosisTreatmentDtoToUpdate='';
                 $scope.stepsSaved["1"] = true;
             };
-            //updateDrugServicesDto function detect update button
             $scope.updateDrugServicesDto = function (drugServicesDto, index) {
                 $scope.create();
                 $scope.index = index;
@@ -204,7 +193,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 $scope.showservicedrugdiv = false;
                 $scope.stepsSaved["1"] = false;
             };
-//cancel button
+
             $scope.activenextbuttonfordrugservice= function(){
                 $scope.showservicedrugdiv = false;
                 $scope.stepsSaved["1"] = false;
@@ -219,10 +208,6 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 $scope.saveCashlessClaimRequest();
 
             };
-
-            /*Holds the indicator for steps in which save button is clicked*/
-
-//end service drug availed section
 
             var saveStep = function () {
                 $scope.stepsSaved[$scope.selectedItem] = true;
@@ -921,10 +906,9 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
 
             $scope.bankBranchDetails=[];
 
-            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankName', function (newvalue, oldvalue) {
+            $scope.$watch('createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName', function (newvalue, oldvalue) {
                 if (newvalue) {
                     var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
-                    //alert("Bank Details.."+JSON.stringify(bankCode));
                     if (bankCode) {
                         $http.get('/pla/individuallife/endorsement/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
                             $scope.bankBranchDetails = response;

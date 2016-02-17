@@ -7,6 +7,8 @@ import com.pla.grouphealth.claim.cashless.application.service.preauthorization.P
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatch;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.PreAuthorizationDetailTaggedToClaim;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
@@ -218,7 +220,18 @@ public class GroupHealthCashlessClaimCommandHandler {
         groupHealthCashlessClaim = groupHealthCashlessClaim
                 .populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, approveGroupHealthCashlessClaimCommand.getUserName())
                 .updateStatus(APPROVED);
+        closePreAuthorizations(groupHealthCashlessClaim.getPreAuthorizationDetails());
         return Boolean.TRUE;
+    }
+
+    private void closePreAuthorizations(Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
+        for(PreAuthorizationDetailTaggedToClaim preAuthorizationDetailTaggedToClaim : preAuthorizationDetails) {
+            if(preAuthorizationDetailTaggedToClaim.isTagToClaim()){
+                PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationDetailTaggedToClaim.getPreAuthorizationRequestId());
+                preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.CLOSED);
+                preAuthorizationRequestRepository.save(preAuthorizationRequest);
+            }
+        }
     }
 
     @CommandHandler

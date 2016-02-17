@@ -138,10 +138,8 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                     $scope.isEditDiagnosisTriggered = false;
                     $scope.provisionaldignosisdiv=false;
                 } else {
-                    groupHealthCashlessClaimDiagnosisTreatmentDetails
                     $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails.push(groupHealthCashlessClaimDiagnosisTreatmentDetails);
-                    console.log("new btn crt insd btn####"+JSON.stringify($scope.createUpdateDto));
-
+                    $scope.saveCashlessClaimRequest();
                 }
                 $scope.provisionaldignosisdiv = false;
                 $scope.stepsSaved["3"] = false;
@@ -167,6 +165,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             $scope.activenextbuttonforprovisional = function(){
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = {};
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfConsultation = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].dateOfConsultation;
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.doctorName = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].doctorName;
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };
@@ -434,7 +433,6 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
             if (mode == 'view'){
                 $scope.isViewMode=true;
             }
-
             $scope.disableHtn = true;
             //$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetail=$scope.createUpdateDto.groupHealthCashlessClaimIllnessDetail.htndetails;
             $scope.$watch(

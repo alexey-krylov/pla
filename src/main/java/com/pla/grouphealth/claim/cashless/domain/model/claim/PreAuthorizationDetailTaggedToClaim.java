@@ -27,6 +27,7 @@ public class PreAuthorizationDetailTaggedToClaim {
     private Set<PreAuthorizationRequestCoverageDetail> coverageDetails;
     private PreAuthorizationRequestAssuredDetail assuredDetail;
     private BigDecimal totalApprovedAmount;
+    private boolean tagToClaim;
 
     public PreAuthorizationDetailTaggedToClaim updateWithPreAuthorizationId(String preAuthorizationRequestId) {
         this.preAuthorizationRequestId = preAuthorizationRequestId;

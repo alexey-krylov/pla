@@ -1000,7 +1000,7 @@ public class GroupHealthCashlessClaimService {
     public GHCashlessClaimMailDto getGroupHealthCashlessClaimRejectionLetter(String groupHealthCashlessClaimId){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
         notNull(groupHealthCashlessClaim, "No GroupHealthCashlessClaim found with given id : "+groupHealthCashlessClaimId);
-        String subject ="GH Cashless Claim Rejection :: " + (isNotEmpty(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail()) ? groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber() : StringUtils.EMPTY);
+        String subject ="Claim  Rejection :: " + groupHealthCashlessClaim.getGroupHealthCashlessClaimId();
         String emailAddress = isNotEmpty(groupHealthCashlessClaim.getGhProposer()) ? isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail()) ? groupHealthCashlessClaim.getGhProposer().getContactDetail().getEmailAddress(): StringUtils.EMPTY :StringUtils.EMPTY;
         Map emailContent = getEmaildata(groupHealthCashlessClaim);
         Map<String, Object> emailContentMap = Maps.newHashMap();
@@ -1013,12 +1013,12 @@ public class GroupHealthCashlessClaimService {
 
     public GHCashlessClaimMailDto getAddRequirementRequestLetter(String groupHealthCashlessClaimId) {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
-        String subject = " Claim  Rejection :: " + groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getPolicyNumber().getPolicyNumber().toString();
+        String subject = " Group Health Cashless Claim Requirements Intimation :: " + groupHealthCashlessClaim.getGroupHealthCashlessClaimId();
         String mailAddress =  isNotEmpty(groupHealthCashlessClaim.getGhProposer().getContactDetail())?groupHealthCashlessClaim.getGhProposer().getContactDetail().getEmailAddress(): null;
         Map emailContent = getEmaildata(groupHealthCashlessClaim);
         Map<String, Object> emailContentMap = Maps.newHashMap();
         emailContentMap.put("emailContent", emailContent);
-        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthPreAuthorizationRequestLetter.vm", emailContentMap);
+        String emailBody = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "emailtemplate/grouphealth/claim/grouphealthcashlessclaimunderwriteremailrequesttemplate.vm", emailContentMap);
         GHCashlessClaimMailDto ghPreAuthorizationMailDto = new GHCashlessClaimMailDto(subject, emailBody, mailAddress);
         ghPreAuthorizationMailDto.setGroupHealthCashlessClaimId(groupHealthCashlessClaimId);
         return ghPreAuthorizationMailDto;

@@ -924,15 +924,15 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  ">
+                                            <div class="form-group  required">
                                                 <label class="control-label"> Hospitalization Event</label>
 
                                                 <select  class="form-control input-md" name="groupHealthCashlessClaimHCPDetail" ng-required="true"  ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hospitalizationEvent">
                                                     <option value="Planned">Planned</option>
                                                     <option value="Emergency">Emergency</option>
                                                 </select>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Hospitalization Event</small>
                                                 </div>
 
                                             </div>
@@ -946,8 +946,8 @@
                                                        ng-required="true"
                                                        ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpName"
                                                        name="reletionship"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Hospital/Clinic Name</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -959,20 +959,19 @@
                                                         name="address" ng-required="true"
                                                         ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpAddress.addressLine1"
                                                         class="form-control input-md"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Hospital/Clinic Address</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group  required">
+                                            <div class="form-group">
                                                 <label class="control-label">Hospital/Clinic Address2</label>
                                                 <input  type="text"
                                                         name="address"
                                                         ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpAddress.addressLine2"
-                                                        ng-required="true"
                                                         class="form-control input-md"/>
                                                 <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
                                                     <small class="error" ng-message="required">Please enter Drug Name</small>
@@ -987,8 +986,8 @@
                                                         ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpAddress.postalCode"
                                                         ng-required="true"
                                                         class="form-control input-md"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Hospital/Clinic PostalCode</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -999,8 +998,8 @@
                                                         name="address" ng-required="true"
                                                         ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpAddress.province"
                                                         class="form-control input-md"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Hospital/Clinic Province</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -1014,8 +1013,8 @@
                                                         name="address" ng-required="true"
                                                         ng-model="createUpdateDto.groupHealthCashlessClaimHCPDetail.hcpAddress.town"
                                                         class="form-control input-md"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Hospital/Clinic Town</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -1026,8 +1025,8 @@
                                                        name="assuredFullName" ng-required="true"
                                                        ng-model="createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].doctorName"
                                                        class="form-control input-md"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter name of the Treating Doctor</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -1039,15 +1038,15 @@
                                                        ng-required="true"
                                                        ng-model="createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].doctorContactNumber"
                                                        class="form-control input-md"/>
-                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$dirty">
-                                                    <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="error" ng-messages="step3.drugName.$error" ng-if="step3.drugName.$error">
+                                                    <small class="error" ng-message="required">Please enter Doctor's Contact no</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6" style="float: right">
                                         <button type="button" class="btn btn-primary btn-sm" style="float: right"
-                                                ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step3.$dirty"
+                                                ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step3.$invalid"
                                         >Save
                                         </button>
                                     </div>
@@ -1058,7 +1057,7 @@
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatus.mainAssuredDetails" ng-form="mainAssuredDetailForm" >
                                 <accordion-heading>
-                                    Provisional Dignosis and Treatement <i class="pull-right glyphicon"
+                                    Dignosis and Treatement <i class="pull-right glyphicon"
                                                                            ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
                                 <div class="row">
@@ -1073,7 +1072,7 @@
                                         <table  class="table table-bordered table-hover">
                                             <thead ng-repeat="treatmentDiagnosis in createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails">
                                             <tr>
-                                                <th>Provisional Diagnosis and  Treatment - {{$index+1}}</th>
+                                                <th>Diagnosis and  Treatment - {{$index+1}}</th>
                                                 <th><button type="button" class="btn btn-primary btn-sm"    ng-disabled="isViewMode"  ng-click="viewTreatmentDiagnosis(treatmentDiagnosis, $index)">View Diagnosis and Treatment</button></th>
                                             </tr>
                                             </thead>
@@ -1092,7 +1091,7 @@
 
                                                     </select>
 
-                                                    <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$dirty">
+                                                    <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$error">
                                                         <small class="error" ng-message="required">Please enter Drug Name</small>
                                                     </div>
                                                 </div>
@@ -1105,9 +1104,6 @@
                                                             name="pregnancyG"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.pregnancyG"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.pregnancyG.$error" ng-if="step3.pregnancyG.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -1115,12 +1111,8 @@
                                                     <label class="control-label"> P</label>
                                                     <input type="text"
                                                            name="pregnancyP"
-
                                                            ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.pregnancyP"
                                                            class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.pregnancyP.$error" ng-if="step3.pregnancyP.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1133,9 +1125,6 @@
                                                             name="assuredFullName"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.pregnancyL"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -1145,9 +1134,6 @@
                                                              name="assuredFullName"
                                                              ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.pregnancyA"
                                                              class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -1170,8 +1156,8 @@
                                                              <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
                                                     </div>
-                                                    <div class="error" ng-messages="step3.pregnancyDateOfDelivery.$error" ng-if="step3.pregnancyDateOfDelivery.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.pregnancyDateOfDelivery.$error" ng-if="step3.pregnancyDateOfDelivery.$error">
+                                                        <small class="error" ng-message="required">Please enter Date of Delivery</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1181,12 +1167,12 @@
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
                                                     <label class="control-label">Mode of Delivery</label>
-                                                    <select  class="form-control input-md" name="modeOdDelivery" ng-required="true"     ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.modeOdDelivery">
+                                                    <select  class="form-control input-md" name="modeOdDelivery" ng-required="true" ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.modeOdDelivery">
                                                         <option value="Caesarean">Caesarean</option>
                                                         <option value="Normal">Normal</option>
                                                         <option value="Terminal">Terminal</option>
                                                     </select>
-                                                    <div class="error" ng-messages="step3.modeOdDelivery.$error" ng-if="step3.modeOdDelivery.$dirty">
+                                                    <div class="error" ng-messages="step3.modeOdDelivery.$error" ng-if="step3.modeOdDelivery.$error">
                                                         <small class="error" ng-message="required">Please enter Drug Name</small>
                                                     </div>
                                                 </div>
@@ -1199,8 +1185,8 @@
                                                             ng-required="true"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.nameOfIllnessDisease"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$error">
+                                                        <small class="error" ng-message="required">Please enter Name of Illness / disease with presenting complaints</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1213,8 +1199,8 @@
                                                             ng-required="true"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.relevantClinicalFinding"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.relevantClinicalFinding.$error" ng-if="step3.relevantClinicalFinding.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.relevantClinicalFinding.$error" ng-if="step3.relevantClinicalFinding.$error">
+                                                        <small class="error" ng-message="required">Please enter Relevant Clinical Finding</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1230,8 +1216,8 @@
                                                             ng-required="true"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.durationOfPresentAilment"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.durationOfPresentAilment.$error" ng-if="step3.durationOfPresentAilment.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.durationOfPresentAilment.$error" ng-if="step3.durationOfPresentAilment.$error">
+                                                        <small class="error" ng-message="required">Please enter Duration of the Present ailment in Days</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1256,7 +1242,7 @@
                                                     </span>
                                                     </div>
                                                     <div class="error" ng-messages="step3.dateOfConsultation.$error"
-                                                         ng-if="step3.dateOfConsultation.$dirty">
+                                                         ng-if="step3.dateOfConsultation.$error">
                                                         <small ng-message="pattern">Please Enter Date of First Consultation.
                                                         </small>
                                                     </div>
@@ -1271,8 +1257,8 @@
                                                             ng-required="true"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.pastHistoryOfPresentAilment"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.pastHistoryOfPresentAilment.$error" ng-if="step3.pastHistoryOfPresentAilment.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.pastHistoryOfPresentAilment.$error" ng-if="step3.pastHistoryOfPresentAilment.$error">
+                                                        <small class="error" ng-message="required">Please enter Past History Present ailment if any</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1280,15 +1266,15 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
-                                                    <label class="control-label"> Diagnosis</label>
+                                                    <label class="control-label">Diagnosis</label>
 
                                                     <input  type="text"
                                                             name="provisionalDiagnosis"
                                                             ng-required="true"
                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.provisionalDiagnosis"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.provisionalDiagnosis.$error" ng-if="step3.provisionalDiagnosis.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.provisionalDiagnosis.$error" ng-if="step3.provisionalDiagnosis.$error">
+                                                        <small class="error" ng-message="required">Please enter Diagnosis</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1301,38 +1287,23 @@
                                                         <option value="IntensiveCare">Intensive Care</option>
                                                         <option value="Investigation">Investigation</option>
                                                     </select>
-                                                    <div class="error" ng-messages="step3.lineOfTreatment.$error" ng-if="step3.lineOfTreatment.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.lineOfTreatment.$error" ng-if="step3.lineOfTreatment.$error">
+                                                        <small class="error" ng-message="required">Please enter Proposed Line of Treatment</small>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--<div class="col-md-4">-->
-                                            <!--<div class="form-group required ">-->
-                                            <!--<label class="control-label">Name of Illness</label>-->
-                                            <!--<input  type="text"-->
-                                            <!--name="nameOfIllnessDisease"-->
-                                            <!--ng-required="true"-->
-                                            <!--ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.nameOfIllnessDisease"-->
-                                            <!--class="form-control input-md"/>-->
-                                            <!--<div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$dirty">-->
-                                            <!--<small class="error" ng-message="required">Please enter Drug Name</small>-->
-                                            <!--</div>-->
-                                            <!--</div>-->
-                                            <!--</div>-->
-
                                             <div class="col-md-4">
                                                 <div class="form-group required">
                                                     <label class="control-label">Indicate Test</label>
-                                                    <select  class="form-control input-md" name="indicateTest"  ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.indicateTest">
+                                                    <select  class="form-control input-md" name="indicateTest"  ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.indicateTest" ng-required="true">
                                                         <option value="Blood Tests">Blood Tests</option>
                                                         <option value="Other Lab Tests">Other Lab Tests</option>
                                                         <option value="X-Rays">X-Rays</option>
                                                         <option value="MRI's">MRI's</option>
                                                         <option value="CT's">CT's</option>
                                                     </select>
-
-                                                    <div class="error" ng-messages="step3.indicateTest.$error" ng-if="step3.indicateTest.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                    <div class="error" ng-messages="step3.indicateTest.$error" ng-if="step3.indicateTest.$error">
+                                                        <small class="error" ng-message="required">Please Indicate Test</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1340,15 +1311,15 @@
 
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="form-group required ">
-                                                    <label class="control-label">Name of Surgery</label>
-                                                    <input  type="text"
-                                                            name="nameOfSurgery"
-                                                            ng-required="true"
-                                                            ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.nameOfSurgery"
-                                                            class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.nameOfSurgery.$error" ng-if="step3.nameOfSurgery.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Drug Name</small>
+                                                <div class="form-group  required">
+                                                    <label class="control-label">Name of the Treating Doctor</label>
+                                                    <input type="text"
+                                                           name="doctorName" ng-required="true"
+                                                           ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.doctorName"
+                                                           ng-disabled="true"
+                                                           class="form-control input-md"/>
+                                                    <div class="error" ng-messages="step3.doctorName.$error" ng-if="step3.doctorName.$error">
+                                                        <small class="error" ng-message="required">Please enter Name of the Treating Doctor</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1372,8 +1343,8 @@
                                                     </span>
                                                     </div>
                                                     <div class="error" ng-messages="step4.dateOfAdmission.$error"
-                                                         ng-if="step4.dateOfAdmission.$dirty">
-                                                        <small ng-message="pattern">Please Enter Probable Date of Admission..
+                                                         ng-if="step4.dateOfAdmission.$error">
+                                                        <small ng-message="pattern">Please Enter Date of Admission.
                                                         </small>
                                                     </div>
                                                 </div>
@@ -1430,16 +1401,13 @@
                                                             class="form-control input-md"/>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-4">
-                                                <div class="form-group ">
-                                                    <label class="control-label">Type of Accommodation</label>
-                                                    <select  class="form-control input-md" name="typeOfAccommodation"
-                                                             ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.typeOfAccommodation">
-                                                        <option value="Normal">Normal</option>
-                                                        <option value="Executive">Executive</option>
-                                                    </select>
-
+                                                <div class="form-group">
+                                                    <label class="control-label">Doctor Contact Number</label>
+                                                    <input type="text"
+                                                           name="assuredFullName"
+                                                           ng-model="groupHealthCashlessClaimDiagnosisTreatmentDetails.doctorContactNumber"
+                                                           class="form-control input-md"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -2034,7 +2002,7 @@
                                             <td ng-bind="preAuth.assuredDetail.salutation+' '+preAuth.assuredDetail.firstName+' '+preAuth.assuredDetail.surname"></td>
                                             <td ng-bind="preAuth.preAuthorizationDate"></td>
                                             <td ng-bind="preAuth.totalApprovedAmount"></td>
-                                            <td><input type="checkbox" name="tagToClaim"/></td>
+                                            <td><input type="checkbox" ng-checked="preAuth.tagToClaim"/></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -2054,7 +2022,6 @@
                                     <table class="table table-striped table-bordered" id="assured-tabl" cellspacing="0" width="100%">
                                         <thead>
                                         <tr>
-
                                             <th>Claim Number</th>
                                             <th >Member Name </th>
                                             <th>Claim Date</th>
@@ -2064,15 +2031,10 @@
 
                                         <tbody ng-repeat= "coverageDetailDto in createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails">
                                         <tr ng-repeat="benefit in coverageDetailDto.benefitDetails">
-                                            <td ng-bind="coverageDetailDto.coverageName"></td>
+                                            <!--<td ng-bind="coverageDetailDto.coverageName"></td>
                                             <td ng-bind="benefit.benefitName"></td>
                                             <td ng-bind="coverageDetailDto.sumAssured"></td>
-                                            <td ng-bind="coverageDetailDto.totalAmountPaid"></td>
-                                            <td ng-bind="coverageDetailDto.balanceAmount"></td>
-                                            <td ng-bind="coverageDetailDto.approvedAmount"></td>
-                                            <td ng-bind="benefit.probableClaimAmount"></td>
-                                            <td ng-bind="coverageDetailDto.reserveAmount"></td>
-                                            <td ng-bind="coverageDetailDto.eligibleAmount"></td>
+                                            <td ng-bind="coverageDetailDto.totalAmountPaid"></td>-->
                                         </tr>
                                         </tbody>
                                     </table>
@@ -2170,7 +2132,8 @@
                                                         <input type="text" class="form-control input-sm"
                                                                name="documentTitle"
                                                                onkeypress="return isEnterKey(event)"
-                                                               ng-model="additionalDocument.documentId"/>
+                                                               ng-model="additionalDocument.documentId"
+                                                               ng-disabled="isViewMode"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3" ng-hide="">

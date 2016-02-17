@@ -417,7 +417,8 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
                     .updateWithClaimUnderWriterUserId(groupHealthCashlessClaimDto.getClaimUnderWriterUserId())
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaimDto.getAdditionalRequiredDocumentsByUnderwriter())
                     .updateWithGroupHealthCashlessClaimPolicyDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail())
-                    .updateWithBankDetails(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimBankDetailDto());
+                    .updateWithBankDetails(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimBankDetailDto())
+                    .updateWithPreAuthorizationDetails(groupHealthCashlessClaimDto.getPreAuthorizationDetails());
         }
         return this;
     }
