@@ -309,7 +309,7 @@ public class GroupLifeClaimController {
     public ModelAndView getApprovedClaimDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
-        modelAndView.addObject("searchResult",glClaimService.getClaimDetailForSettlement(searchClaimIntimationDto, new String[]{"APPROVED"}));
+        modelAndView.addObject("searchResult",glClaimService.getClaimDetailForSettlement(searchClaimIntimationDto, new String[]{"APPROVED","PAID_DISBURSED"}));
         modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
         return modelAndView;
 
@@ -357,11 +357,32 @@ public class GroupLifeClaimController {
 
     }
 
-    @RequestMapping(value = "/getclaimforamendment", method = RequestMethod.POST)
-    @ResponseBody
-    public List<GLClaimDataDto> amendmentClaimDetail(@RequestBody SearchClaimIntimationDto  searchClaimDto) {
 
-        return glClaimService.getApprovedClaimDetail(searchClaimDto, new String[]{"APPROVED", "PAID"});
+    @RequestMapping(value = "/listclaimsforamendment", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are for amendment")
+    public List<GLClaimDataDto> getApprovedOrPaidClaims() {
+        return glClaimService.getAllApprovedOrPaidClaimDetail();
+
+    }
+/*
+@RequestMapping(value = "/searchclaimforamendment", method = RequestMethod.POST)
+    public ModelAndView getAmendmentClaimDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
+        modelAndView.addObject("searchResult",glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"APPROVED","PAID_DISBURSED"}));
+        modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
+        return modelAndView;
+
+    }
+
+ */
+
+    @RequestMapping(value = "/searchclaimforamendment", method = RequestMethod.POST)
+    @ResponseBody
+    public List<GLClaimDataDto> amendmentClaimDetail(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
+
+        return glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"APPROVED","PAID_DISBURSED"});
 
     }
     @RequestMapping(value = "/claimamendment", method = RequestMethod.POST)

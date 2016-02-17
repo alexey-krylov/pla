@@ -298,14 +298,7 @@ public class GLClaimIntimationCommandHandler {
        // GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
         //groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComment(), groupLifeClaim, glClaimApprovalCommand.getStatus());
         //ClaimReviewDto reviewDetail=glClaimService.getClaimReviewDetails(glClaimApprovalCommand.getClaimId());
-        List<ClaimReviewDetail> claimReviewDetails=new ArrayList<ClaimReviewDetail>();
-        List<ClaimReviewDto> reviewDetails=glClaimApprovalCommand.getReviewDetails();
-        if (reviewDetails!=null) {
-           for( ClaimReviewDto claimReviewDto:reviewDetails){
-               ClaimReviewDetail claimReviewDetail=new ClaimReviewDetail(claimReviewDto.getComments(),claimReviewDto.getTimings(),claimReviewDto.getUserNames());
-               claimReviewDetails.add(claimReviewDetail) ;
-           }
-        }
+
         ClaimApproverPlanDto planDetail=glClaimApprovalCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
@@ -332,7 +325,30 @@ public class GLClaimIntimationCommandHandler {
         DateTime claimApprovalDate=new DateTime();
         GlClaimUnderWriterApprovalDetail approvalDetail=new GlClaimUnderWriterApprovalDetail(glClaimApproverPlanDetail, coverageDetailList, totalApprovedAmount,  comments, refer, response);
         approvalDetail.withClaimApprovedOn(claimApprovalDate);
+
+        //adding review table
+        List<ClaimReviewDetail> claimReviewDetails=new ArrayList<ClaimReviewDetail>();
+        List<ClaimReviewDto> reviewDetails=glClaimApprovalCommand.getReviewDetails();
+        String userName=glClaimApprovalCommand.getUserDetails().getUsername();
+        //creating review table first time
+       // List<ClaimReviewDetail>   reviewWithClaimRecord=groupLifeClaim.getUnderWriterReviewDetail().getReviewDetails();
+       /* if (reviewWithClaimRecord==null){
+            ClaimReviewDetail claimReviewDetail=new ClaimReviewDetail(glClaimApprovalCommand.getComments(),claimApprovalDate,userName);
+            reviewWithClaimRecord.add(claimReviewDetail);
+        }
+        */
+
+
+
+                ClaimReviewDetail claimReviewDetail=new ClaimReviewDetail(glClaimApprovalCommand.getComments(),claimApprovalDate,userName);
+        claimReviewDetails.add(claimReviewDetail) ;
+
+
+        approvalDetail.withClaimReviewDetails(claimReviewDetails);
         groupLifeClaim.withUnderWriterData(approvalDetail);
+
+
+
          GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
         groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), groupLifeClaim);
         //groupLifeClaim = groupLifeClaim.markApproverApproval(glClaimApprovalCommand.getUserDetails().getUsername(), DateTime.now(), glClaimApprovalCommand.getComments(), ClaimStatus.APPROVED);

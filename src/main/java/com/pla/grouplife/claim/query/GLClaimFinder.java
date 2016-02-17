@@ -250,6 +250,19 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
+
+    public List<Map> getAllApprovedOrPaidClaimRecords(String[] statuses) {
+        if (isEmpty(statuses)) {
+            return Lists.newArrayList();
+        }
+        Criteria criteria = null;
+        criteria = Criteria.where("claimStatus").in(statuses);
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
+
+
+
     //get searched  approved claim records
 
 

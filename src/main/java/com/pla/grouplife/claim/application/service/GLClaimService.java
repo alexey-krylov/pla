@@ -15,6 +15,7 @@ import com.pla.core.query.ProductClaimMapperFinder;
 import com.pla.grouplife.claim.domain.model.*;
 import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.grouplife.claim.query.GLClaimFinder;
+import com.pla.grouplife.claim.repository.GroupLifeClaimRepository;
 import com.pla.grouplife.policy.query.GLPolicyFinder;
 import com.pla.grouplife.sharedresource.dto.ContactPersonDetailDto;
 import com.pla.grouplife.sharedresource.dto.GLPolicyDetailDto;
@@ -90,6 +91,8 @@ public class GLClaimService implements Serializable{
 
     @Autowired
     IProcessInfoAdapter iProcessInfoAdapter;
+    @Autowired
+    GroupLifeClaimRepository groupLifeClaimRepository;
 
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(), searchGLPolicyDto.getClientId(), new String[]{"IN_FORCE"}, searchGLPolicyDto.getProposalNumber());
@@ -428,9 +431,11 @@ public class GLClaimService implements Serializable{
         }
 
         approvalDetails.setReviewDetails(reviewDetails);
+            /*
             if(reviewList!=null){
                 approvalDetails.setReviewDetails(reviewDetails);
             }
+            */
         String comments = underWriterApprovalDetail.getComment();
         approvalDetails.setComments(comments);
         DateTime referredToReassuredOn = underWriterApprovalDetail.getReferredToReassuredOn();
@@ -1426,7 +1431,7 @@ public class GLClaimService implements Serializable{
 
     }
     public  List<GLClaimDataDto>  getAllApprovedClaimDetail(){
-        List<Map> searchedClaimRecords = glClaimFinder.getAllApprovedClaimRecords(new String[]{"APPROVED"});
+        List<Map> searchedClaimRecords = glClaimFinder.getAllApprovedClaimRecords(new String[]{"APPROVED","PAID_DISBURSED"});
         if (isEmpty(searchedClaimRecords)) {
             return Lists.newArrayList();
         }
@@ -1503,6 +1508,88 @@ public class GLClaimService implements Serializable{
         }).collect(Collectors.toList());
 
     }
+
+    public  List<GLClaimDataDto> getAllApprovedOrPaidClaimDetail(){
+        List<GroupLifeClaim> searchedClaimRecords = groupLifeClaimRepository.findAllByClaimStatusIn(Lists.newArrayList(ClaimStatus.APPROVED, ClaimStatus.PAID_DISBURSED));
+        if (isEmpty(searchedClaimRecords)) {
+            return Lists.newArrayList();
+        }
+        return null;
+        /*return searchedClaimRecords.parallelStream().map(new Function<GroupLifeClaim, GLClaimDataDto>() {
+            @Override
+            public GLClaimDataDto apply(GroupLifeClaim glClaim) {
+                GLClaimDataDto claimDataDto = new GLClaimDataDto();
+                String claimId = map.get("_id").toString();
+                ClaimNumber claimNumber = (ClaimNumber) map.get("claimNumber");
+                String claimTypeString = (String) map.get("claimType");
+                ClaimType claimType = (ClaimType) ClaimType.valueOf(claimTypeString);
+                claimDataDto.setClaimType(claimType);
+                String claimStatusInString = (String) map.get("claimStatus");
+                ClaimStatus claimStatus = (ClaimStatus) ClaimStatus.valueOf(claimStatusInString);
+                String claimStatusResult = claimStatus.getDescription();
+                claimDataDto.setClaimStatus(claimStatusResult);
+                String routingLevelInString = (String) map.get("taggedRoutingLevel");
+                String resultRoutingLevel="";
+                if(routingLevelInString!=null){
+                    RoutingLevel routingLevel = (RoutingLevel) RoutingLevel.valueOf(routingLevelInString);
+                    resultRoutingLevel = routingLevel.getDescription();
+                }
+                claimDataDto.setRoutingLevel(resultRoutingLevel);
+                String claimNumberInString = claimNumber.getClaimNumber();
+                claimDataDto.withClaimNumberAndClaimId(claimNumberInString, claimId);
+                Policy policy = (Policy) map.get("policy");
+                String policyNumber = policy.getPolicyNumber().getPolicyNumber();
+                claimDataDto.setPolicyNumber(policyNumber);
+                String policyHolderName = policy.getPolicyHolderName();
+                claimDataDto.setPolicyHolderName(policyHolderName);
+                PlanDetail planDetail=(PlanDetail)map.get("planDetail");
+                if(planDetail!=null){
+                    String planName=planDetail.getPlanName();
+                    claimDataDto.setPlanName(planName);
+                }
+
+                ClaimAssuredDetail assuredDetail = (ClaimAssuredDetail) map.get("assuredDetail");
+                if (assuredDetail != null) {
+                    String title = assuredDetail.getTitle();
+                    String assuredFirstName = assuredDetail.getFirstName();
+                    String assuredSurName = assuredDetail.getSurName();
+                    claimDataDto.setAssuredName(title + "  " + assuredFirstName+"  "+assuredSurName);
+
+                }
+
+                GlClaimUnderWriterApprovalDetail underWriterApprovalDetail = (GlClaimUnderWriterApprovalDetail) map.get("underWriterReviewDetail");
+                if (underWriterApprovalDetail!=null){
+                    BigDecimal underWriterApprovedAmount=underWriterApprovalDetail.getTotalApprovedAmount();
+                    claimDataDto.setApprovedAmount(underWriterApprovedAmount);
+                    DateTime claimApprovedOn=underWriterApprovalDetail.getClaimApprovedOn()!=null?new DateTime(underWriterApprovalDetail.getClaimApprovedOn()):null;
+                    claimDataDto.setApprovedOn(claimApprovedOn);
+                }
+
+                DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
+                claimDataDto.setClaimIntimationDate(intimationDate);
+
+                DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
+                // claimDataDto.setApprovedOn(approvalDate);
+                DateTime today = new DateTime();
+                Duration duration = new Duration(intimationDate, today);
+                Long gapInDays=duration.getStandardDays();
+                int gapInDaysInInteger= Integer.valueOf(gapInDays.toString());
+                claimDataDto.setRecordCreationInDays(gapInDaysInInteger);
+                String claimAmountInString=(String)map.get("claimAmount");
+                // BigDecimal claimAmount=new BigDecimal((String)map.get("claimAmount"));
+                BigDecimal  resultantClaimAmount=BigDecimal.ZERO;
+                if (claimAmountInString!=null){
+                    resultantClaimAmount=new BigDecimal(claimAmountInString);
+                }
+                claimDataDto.setClaimAmount(resultantClaimAmount);
+                return claimDataDto;
+            }
+        }).collect(Collectors.toList());*/
+
+    }
+
+
+
 
 public List<GLClaimDataDto> getClaimDetailForSettlement (SearchClaimIntimationDto  searchClaimDto,String[] statuses){
         List<Map> searchedClaimRecords = glClaimFinder.getRequiredApprovedClaimDetails(searchClaimDto.getClaimNumber(), searchClaimDto.getPolicyNumber(),

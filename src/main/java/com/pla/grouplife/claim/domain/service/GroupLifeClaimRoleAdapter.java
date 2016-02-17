@@ -50,7 +50,7 @@ public GLClaimRegistrationProcessor userToGLClaimRegistrationProcessor(UserDetai
 
         boolean hasClaimApproverRole = hasGroupLifeClaimApproverRole(userDetails.getAuthorities());
         if (!hasClaimApproverRole) {
-            throw new AuthorizationServiceException("User does not have Claim approver(ROLE_GROUP_LIFE_CLAIM_APPROVER) authority");
+            throw new AuthorizationServiceException("User does not have Claim approver(GROUP_LIFE_CLAIM_APPROVER_ROLE ) authority");
         }
         return new GLClaimApprover(userDetails.getUsername());
     }
