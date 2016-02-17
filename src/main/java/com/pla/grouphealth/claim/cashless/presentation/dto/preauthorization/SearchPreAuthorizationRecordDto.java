@@ -18,9 +18,15 @@ public class SearchPreAuthorizationRecordDto {
     private String hcpCode;
     private String preAuthorizationId;
     private String underwriterLevel;
+    private boolean showModalWin;
 
     public SearchPreAuthorizationRecordDto updateWithUnderwriterLevel(String level) {
         this.underwriterLevel = level;
+        return this;
+    }
+
+    public SearchPreAuthorizationRecordDto updateWithShowModalWin() {
+        this.showModalWin = Boolean.TRUE;
         return this;
     }
 }

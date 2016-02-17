@@ -223,7 +223,7 @@ public class PreAuthorizationRequestController {
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRecord");
         List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList(userName);
         modelAndView.addObject("preAuthorizationResult", searchResult);
-        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto().updateWithShowModalWin());
         return modelAndView;
     }
 
@@ -363,7 +363,7 @@ public class PreAuthorizationRequestController {
         List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListByUnderwriterLevel(ex.getUnderwriterLevel(), userName);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
-        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto().updateWithUnderwriterLevel(ex.getUnderwriterLevel()));
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto().updateWithUnderwriterLevel(ex.getUnderwriterLevel()).updateWithShowModalWin());
         modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
         return modelAndView;
     }
