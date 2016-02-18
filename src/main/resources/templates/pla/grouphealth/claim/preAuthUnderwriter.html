@@ -144,7 +144,7 @@
                             <th:block>
                                 <tr th:each="preauthorizationsSearchResult : ${preAuthorizationResult}">
                                     <td>
-                                        <input type="radio" name="policyNumber" th:value="${preauthorizationsSearchResult.preAuthorizationRequestId}" th:attr="underwriterLevel=${searchCriteria.underwriterLevel}"/>
+                                        <input type="radio" name="policyNumber" th:value="${preauthorizationsSearchResult.preAuthorizationRequestId}" th:attr="underwriterLevel=${searchCriteria.underwriterLevel}, clientId=${preauthorizationsSearchResult.claimantPolicyDetailDto.assuredDetail.clientId}"/>
                                     </td>
                                     <td th:text="${preauthorizationsSearchResult.preAuthorizationRequestId}"></td>
                                     <td th:text="${preauthorizationsSearchResult.claimantPolicyDetailDto.assuredDetail.clientId}"></td>

@@ -84,6 +84,7 @@
                 $scope.createUpdateCommand.illnessDetailDto = {};
                 $scope.createUpdateCommand.drugServicesDtos = [];
                 $scope.documentList = documentList;
+                console.log("-"+documentList);
                 $scope.additionalDocumentList = [{}];
                 $scope.disableSubmit = false;
                 $scope.documentmaster = [];
@@ -161,7 +162,7 @@
                         $scope.provisionaldignosisdiv=false;
                     } else {
                         $scope.createUpdateDto.diagnosisTreatmentDtos.push(diagnosisTreatmentDto);
-                        //console.log(JSON.stringify($scope.createUpdateDto));
+                        $scope.savePreAuthorizationRequest();
 
                     }
                     $scope.provisionaldignosisdiv = false;
@@ -172,12 +173,15 @@
                     $scope.provisionaldignosisdiv = true;
                     $scope.stepsSaved["4"] = true;
                 };
+
                 $scope.activenextbuttonforprovisional = function(){
                     $scope.diagnosisTreatmentDto = {};
                     $scope.diagnosisTreatmentDto.dateOfConsultation = $scope.createUpdateDto.diagnosisTreatmentDtos[0].dateOfConsultation;
+                    $scope.diagnosisTreatmentDto.doctorName = $scope.createUpdateDto.diagnosisTreatmentDtos[0].doctorName;
                     $scope.provisionaldignosisdiv = true;
-                    $scope.stepsSaved["3"] = true;
+                    $scope.stepsSaved["4"] = true;
                 };
+
                 $scope.activenextbuttonforprovisionalclickon= function(){
                     $scope.provisionaldignosisdiv = true;
                     $scope.stepsSaved["4"] = true;
@@ -206,7 +210,7 @@
                         $scope.isEditDrugTriggered = false;
 
                     } else {
-                        $scope.drugServicesDtoList.push(diagnosisTreatmentDtoToUpdate);
+                        $scope.createUpdateDto.drugServicesDtos.push(diagnosisTreatmentDtoToUpdate);
                         $scope.savePreAuthorizationRequest();
                     }
                     $scope.showservicedrugdiv = false;

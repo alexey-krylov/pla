@@ -383,7 +383,7 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String underwriterLevel, HttpServletResponse response) throws IOException, GroupHealthCashlessClaimUnderWriterProcessingException {
+    public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String underwriterLevel, @RequestParam String clientId, HttpServletResponse response) throws IOException, GroupHealthCashlessClaimUnderWriterProcessingException {
         ModelAndView modelAndView = new ModelAndView();
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderwriterId(groupHealthCashlessClaimId, userName, underwriterLevel);

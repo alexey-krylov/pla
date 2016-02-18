@@ -152,7 +152,7 @@
                                 <tr th:each="cashlessClaimresult : ${claimResult}">
                                     <td>
 
-                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.groupHealthCashlessClaimId}" th:attr="clientId=${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"/>
+                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.groupHealthCashlessClaimId}" th:attr="clientId=${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}, underwriterLevel=${searchCriteria.underwriterLevel}"/>
                                     </td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimId}"></td>
                                     <td th:text="${cashlessClaimresult.groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId}"></td>

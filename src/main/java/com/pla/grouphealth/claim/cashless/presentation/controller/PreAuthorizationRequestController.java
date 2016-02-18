@@ -349,7 +349,7 @@ public class PreAuthorizationRequestController {
     @Synchronized
     @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String underwriterLevel, HttpServletResponse response) throws IOException, PreAuthorizationInUnderWriterProcessingException {
+    public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String underwriterLevel, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInUnderWriterProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         ModelAndView modelAndView = new ModelAndView();
         preAuthorizationRequestService.populatePreAuthorizationWithPreAuthorizationUnderWriterUserId(preAuthorizationId, userName, underwriterLevel);
