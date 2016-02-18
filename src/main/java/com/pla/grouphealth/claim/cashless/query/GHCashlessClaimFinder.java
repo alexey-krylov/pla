@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.query;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.SearchPreAuthorizationRecordDto;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
@@ -170,7 +171,7 @@ public class GHCashlessClaimFinder {
         }
         Query query = new Query();
         query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
-          if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())){
@@ -218,4 +219,36 @@ public class GHCashlessClaimFinder {
 
     }
 
+    public List<GroupHealthCashlessClaim> searchReopenedGroupHealthCashlessClaimByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, List<String> usernames) {
+        if(isEmpty(searchReopenedClaimDetailDto.getAssuredName())&& isEmpty(searchReopenedClaimDetailDto.getClientId())&&
+                isEmpty(searchReopenedClaimDetailDto.getAssuredNRCNumber()) && isEmpty(searchReopenedClaimDetailDto.getClaimNumber())
+                && isEmpty(searchReopenedClaimDetailDto.getPolicyHolderName()) && isEmpty(searchReopenedClaimDetailDto.getPolicyNumber())){
+            return Lists.newArrayList();
+        }
+        Query query = new Query();
+        query.addCriteria(new Criteria().and("claimReopenProcessorUserId").in(usernames));
+        if(isNotEmpty(searchReopenedClaimDetailDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").is(searchReopenedClaimDetailDto.getPolicyHolderName()));
+        }
+        if(isNotEmpty(searchReopenedClaimDetailDto.getClaimNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchReopenedClaimDetailDto.getClaimNumber()));
+        }
+        if(isNotEmpty(searchReopenedClaimDetailDto.getPolicyNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber").is(searchReopenedClaimDetailDto.getPolicyNumber()));
+        }
+        if(isNotEmpty(searchReopenedClaimDetailDto.getClientId())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchReopenedClaimDetailDto.getClientId()));
+        }
+        if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredName())){
+            query.addCriteria(new Criteria()
+                    .and("groupHealthCashlessClaimId.assuredDetail.firstName")
+                    .regex(searchReopenedClaimDetailDto.getAssuredName())
+                    .orOperator(Criteria.where("groupHealthCashlessClaimId.assuredDetail.surname").regex(searchReopenedClaimDetailDto.getAssuredName())));
+        }
+        if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredNRCNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimId.assuredDetail.nrcNumber").is(searchReopenedClaimDetailDto.getAssuredNRCNumber()));
+        }
+        query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
+        return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
+    }
 }

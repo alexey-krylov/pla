@@ -64,6 +64,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private String billMismatchProcessorId;
     private String serviceMismatchProcessorId;
     private String underWriterRoutedToSeniorUnderWriterUserId;
+    private String claimReopenProcessorUserId;
     private String claimRejectedBy;
     private boolean firstReminderSent;
     private boolean secondReminderSent;

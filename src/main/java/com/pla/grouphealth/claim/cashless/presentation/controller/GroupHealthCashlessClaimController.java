@@ -10,6 +10,7 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.exception.*;
+import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHCashlessClaimMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
@@ -685,15 +686,27 @@ public class GroupHealthCashlessClaimController {
         modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
         return modelAndView;
     }
-    @RequestMapping(value = "/getallclaimreopendefaultlist", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/getallreopenedclaimdefaultlist", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getAllClaimReopenDefaultList (){
-     ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
-     return modelAndView;
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
+        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto());
+        return modelAndView;
     }
 
-
-
+    @RequestMapping (value= "/searchreopenedghcashlessclaimbycriteria" , method = RequestMethod.POST)
+    @ResponseBody
+    public  ModelAndView searchCashlessClaimUnderwriterByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        List<SearchReopenedClaimDetailDto> searchReopenedClaimDetailDtos = groupHealthCashlessClaimService.searchReopenedCashlessClaimByCriteria(searchReopenedClaimDetailDto, userName);
+        modelAndView.addObject("claimResult", searchReopenedClaimDetailDtos);
+        modelAndView.addObject("searchCriteria", searchReopenedClaimDetailDto);
+        return modelAndView;
+    }
 }
 
 

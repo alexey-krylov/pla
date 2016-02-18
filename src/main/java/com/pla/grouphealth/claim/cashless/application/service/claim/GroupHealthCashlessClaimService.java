@@ -23,6 +23,7 @@ import com.pla.grouphealth.claim.cashless.domain.exception.*;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
+import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
@@ -1075,5 +1076,23 @@ public class GroupHealthCashlessClaimService {
     public List<GroupHealthCashlessClaimDto> searchCashlessClaimServiceMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, String userName){
         List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchCashlessClaimServiceMismatchCriteria(searchGroupHealthCashlessClaimRecordDto, Lists.newArrayList(userName, null));
         return convertGroupHealthCashlessClaimToGroupHealthCashlessClaimDto(groupHealthCashlessClaims);
+    }
+
+    public List<SearchReopenedClaimDetailDto> getAllReopenedClaimForDefaultDisplay(String claimReopenProcessorUserId) {
+        List<SearchReopenedClaimDetailDto> result = Lists.newArrayList();
+        PageRequest pageRequest = new PageRequest(0, 500, new Sort(new Sort.Order(Sort.Direction.DESC, "createdOn")));
+        Page<GroupHealthCashlessClaim> pages = groupHealthCashlessClaimRepository.findAllByClaimReopenProcessorUserIdInAndStatusIn(Lists.newArrayList(claimReopenProcessorUserId, null), Lists.newArrayList(REPUDIATED, CANCELLED), pageRequest);
+        if (isNotEmpty(pages) && isNotEmpty(pages.getContent()))
+            result = convertGroupHealthCashlessClaimToListOfSearchReopenedClaimDetailDto(pages.getContent());
+        return result;
+    }
+
+    private List<SearchReopenedClaimDetailDto> convertGroupHealthCashlessClaimToListOfSearchReopenedClaimDetailDto(List<GroupHealthCashlessClaim> claims) {
+        return claims.stream().map(claim -> new SearchReopenedClaimDetailDto().updateWithDetails(claim)).collect(Collectors.toList());
+    }
+
+    public List<SearchReopenedClaimDetailDto> searchReopenedCashlessClaimByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, String userName){
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchReopenedGroupHealthCashlessClaimByCriteria(searchReopenedClaimDetailDto, Lists.newArrayList(userName, null));
+        return isNotEmpty(groupHealthCashlessClaims) ? groupHealthCashlessClaims.stream().map(claim -> new SearchReopenedClaimDetailDto().updateWithDetails(claim)).collect(Collectors.toList()) : Lists.newArrayList();
     }
 }

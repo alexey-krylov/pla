@@ -4,6 +4,7 @@ import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashless
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -29,4 +30,6 @@ public interface GroupHealthCashlessClaimRepository extends MongoRepository<Grou
     List<GroupHealthCashlessClaim> findAllByStatusAndServiceMismatchProcessorIdIn(Status status, List<String> userNames);
 
     List<GroupHealthCashlessClaim> findAllByStatusAndBillMismatchProcessorIdIn(Status status, List<String> userNames);
+
+    Page<GroupHealthCashlessClaim> findAllByClaimReopenProcessorUserIdInAndStatusIn(List<String> users, List<Status> statusList, Pageable p);
 }
