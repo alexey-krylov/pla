@@ -220,7 +220,7 @@ public class GHCashlessClaimFinder {
     }
 
     public List<GroupHealthCashlessClaim> searchReopenedGroupHealthCashlessClaimByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, List<String> usernames) {
-        if(isEmpty(searchReopenedClaimDetailDto.getAssuredName())&& isEmpty(searchReopenedClaimDetailDto.getClientId())&&
+        if(isEmpty(searchReopenedClaimDetailDto.getAssuredFirstName())&& isEmpty(searchReopenedClaimDetailDto.getAssuredLastName())&& isEmpty(searchReopenedClaimDetailDto.getClientId())&&
                 isEmpty(searchReopenedClaimDetailDto.getAssuredNRCNumber()) && isEmpty(searchReopenedClaimDetailDto.getClaimNumber())
                 && isEmpty(searchReopenedClaimDetailDto.getPolicyHolderName()) && isEmpty(searchReopenedClaimDetailDto.getPolicyNumber())){
             return Lists.newArrayList();
@@ -240,10 +240,14 @@ public class GHCashlessClaimFinder {
         if(isNotEmpty(searchReopenedClaimDetailDto.getClientId())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchReopenedClaimDetailDto.getClientId()));
         }
-        if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredName())){
-            query.addCriteria(new Criteria().orOperator(
+        if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredFirstName())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchReopenedClaimDetailDto.getAssuredFirstName(), "i"));
+            /*query.addCriteria(new Criteria().orOperator(
                     Criteria.where("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchReopenedClaimDetailDto.getAssuredName(), "i"),
-                    Criteria.where("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchReopenedClaimDetailDto.getAssuredName(), "i")));
+                    Criteria.where("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchReopenedClaimDetailDto.getAssuredName(), "i")));*/
+        }
+        if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredLastName())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchReopenedClaimDetailDto.getAssuredLastName(), "i"));
         }
         if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredNRCNumber())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimId.assuredDetail.nrcNumber").is(searchReopenedClaimDetailDto.getAssuredNRCNumber()));

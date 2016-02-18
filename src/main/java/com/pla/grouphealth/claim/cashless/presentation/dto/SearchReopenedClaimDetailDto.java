@@ -19,7 +19,9 @@ public class SearchReopenedClaimDetailDto {
     private String policyHolderName;
     private String claimNumber;
     private String clientId;
-    private String assuredName;
+    private String salutation;
+    private String assuredFirstName;
+    private String assuredLastName;
     private String policyNumber;
     private String assuredNRCNumber;
     private String status;
@@ -38,7 +40,9 @@ public class SearchReopenedClaimDetailDto {
                 GroupHealthCashlessClaimAssuredDetail assuredDetail = groupHealthCashlessClaimPolicyDetail.getAssuredDetail();
                 if(isNotEmpty(assuredDetail)){
                     this.clientId = assuredDetail.getClientId();
-                    this.assuredName = assuredDetail.getSalutation()+" "+assuredDetail.getFirstName()+" "+assuredDetail.getSurname();
+                    this.salutation = assuredDetail.getSalutation();
+                    this.assuredFirstName = assuredDetail.getFirstName();
+                    this.assuredLastName = assuredDetail.getSurname();
                     this.assuredNRCNumber = assuredDetail.getNrcNumber();
                 }
             }
