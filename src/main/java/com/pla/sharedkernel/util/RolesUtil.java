@@ -30,6 +30,7 @@ public class RolesUtil {
     public static final String GROUP_LIFE_CLAIM_REGISTRATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_CLAIM_REGISTRATION_PROCESSOR";
     public static final String GROUP_LIFE_CLAIM_SETTLEMENT_PROCESSOR = "ROLE_GROUP_LIFE_CLAIM_SETTLEMENT_PROCESSOR";
     public static final String INDIVIDUAL_LIFE_CLAIM_INTIMATION_PROCESSOR_ROLE = "ROLE_GROUP_LIFE_CLAIM_INTIMATION_PROCESSOR";
+    public static final String GROUP_LIFE_CLAIM_AMENDMENT_PROCESSOR_ROLE="GROUP_LIFE_CLAIM_AMENDMENT_PROCESSOR_ROLE";
 
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
     public static final String GROUP_HEALTH_PROPOSAL_PROCESSOR_ROLE = "ROLE_GROUP_HEALTH_PROPOSAL_PROCESSOR";
@@ -137,6 +138,11 @@ public class RolesUtil {
         long count = hasRole(GROUP_LIFE_CLAIM_APPROVER_ROLE, authorities);
         return count == 1;
     }
+    public static boolean hasGroupLifeClaimAmendmentProcessorRole(Collection<? extends GrantedAuthority> authorities) {
+        long count = hasRole(GROUP_LIFE_CLAIM_AMENDMENT_PROCESSOR_ROLE, authorities);
+        return count == 1;
+    }
+
 
     public static boolean hasGroupHealthPreAuthorizationProcessorRole(Collection<? extends GrantedAuthority> authorities) {
         long count = hasRole(GROUP_HEALTH_PRE_AUTHORIZATION_PROCESSOR_ROLE, authorities);

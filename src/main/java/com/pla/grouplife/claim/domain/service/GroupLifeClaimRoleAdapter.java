@@ -1,9 +1,6 @@
 package com.pla.grouplife.claim.domain.service;
 
-import com.pla.grouplife.claim.domain.model.GLClaimApprover;
-import com.pla.grouplife.claim.domain.model.GLClaimProcessor;
-import com.pla.grouplife.claim.domain.model.GLClaimRegistrationProcessor;
-import com.pla.grouplife.claim.domain.model.GLClaimSettlementProcessor;
+import com.pla.grouplife.claim.domain.model.*;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -12,6 +9,7 @@ import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimApproverRole;
 import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimProcessorRole;
 import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimRegistrationProcessorRole;
 import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimSettlementProcessor;
+import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimAmendmentProcessorRole;
 /**
  * Created by ak
  */
@@ -53,6 +51,15 @@ public GLClaimRegistrationProcessor userToGLClaimRegistrationProcessor(UserDetai
             throw new AuthorizationServiceException("User does not have Claim approver(GROUP_LIFE_CLAIM_APPROVER_ROLE ) authority");
         }
         return new GLClaimApprover(userDetails.getUsername());
+    }
+
+ public ClaimAmendmentProcessor userToClaimAmendmentProcessor(UserDetails userDetails) {
+
+        boolean hasClaimAmendmentProcessorRole = hasGroupLifeClaimAmendmentProcessorRole(userDetails.getAuthorities());
+        if (!hasClaimAmendmentProcessorRole) {
+            throw new AuthorizationServiceException("User does not have Claim Amendment Processor(GROUP_LIFE_CLAIM_AMENDMENT_PROCESSOR_ROLE ) authority");
+        }
+        return new ClaimAmendmentProcessor(userDetails.getUsername());
     }
 
 }

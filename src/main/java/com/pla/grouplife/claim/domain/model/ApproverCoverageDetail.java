@@ -21,4 +21,7 @@ public class ApproverCoverageDetail {
     private BigDecimal sumAssured;
     private BigDecimal approvedAmount;
     private BigDecimal amendedAmount;
+    private BigDecimal additionalAmount;
+    private String recoveryOrAdditional;
+    private String remarks;
 }

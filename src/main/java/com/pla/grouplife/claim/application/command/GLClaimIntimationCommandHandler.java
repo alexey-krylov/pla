@@ -295,15 +295,19 @@ public class GLClaimIntimationCommandHandler {
     @CommandHandler
     public String claimApproval(GLClaimApprovalCommand glClaimApprovalCommand) {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimApprovalCommand.getClaimId()));
-       // GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
-        //groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComment(), groupLifeClaim, glClaimApprovalCommand.getStatus());
-        //ClaimReviewDto reviewDetail=glClaimService.getClaimReviewDetails(glClaimApprovalCommand.getClaimId());
+        GroupLifeClaim newGroupLifeClaim=null;
+        if(glClaimApprovalCommand.getCriteria()!=null && glClaimApprovalCommand.getCriteria().equals("amendment")){
+
+             newGroupLifeClaim=glClaimFactory.makeAmendment(glClaimApprovalCommand,groupLifeClaim);
+            glClaimMongoRepository.add(newGroupLifeClaim);
+        }
+
 
         ClaimApproverPlanDto planDetail=glClaimApprovalCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
-             glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),
-                    planDetail.getAssuredAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount());
+             glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getPlanSumAssured(),
+                    planDetail.getAdditionalAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount(),planDetail.getRecoveryOrAdditional(),planDetail.getRemarks());
         }
 
         List<ClaimApproverCoverageDetailDto> coverageDetails=glClaimApprovalCommand.getClaimApprovalCoverageDetails();
@@ -311,7 +315,8 @@ public class GLClaimIntimationCommandHandler {
         if(coverageDetails!=null){
             for(ClaimApproverCoverageDetailDto claimApproverCoverageDetailDto:coverageDetails){
                 ApproverCoverageDetail approverCoverageDetail=new ApproverCoverageDetail(claimApproverCoverageDetailDto.getCoverageName(),
-                        claimApproverCoverageDetailDto.getSumAssured(),claimApproverCoverageDetailDto.getApprovedAmount(),claimApproverCoverageDetailDto.getApprovedAmount()) ;
+                        claimApproverCoverageDetailDto.getSumAssured(),claimApproverCoverageDetailDto.getApprovedAmount(),claimApproverCoverageDetailDto.getAmendedAmount(),claimApproverCoverageDetailDto.getAdditionalAmount(),
+                        claimApproverCoverageDetailDto.getRecoveryOrAdditional(),claimApproverCoverageDetailDto.getRemarks() ) ;
                 coverageDetailList.add(approverCoverageDetail);
             }
         }
@@ -324,35 +329,48 @@ public class GLClaimIntimationCommandHandler {
         DateTime refer=glClaimApprovalCommand.getReferredToReassureOn() != null ? new DateTime(glClaimApprovalCommand.getReferredToReassureOn()) : null;
         DateTime claimApprovalDate=new DateTime();
         GlClaimUnderWriterApprovalDetail approvalDetail=new GlClaimUnderWriterApprovalDetail(glClaimApproverPlanDetail, coverageDetailList, totalApprovedAmount,  comments, refer, response);
+
         approvalDetail.withClaimApprovedOn(claimApprovalDate);
 
         //adding review table
         List<ClaimReviewDetail> claimReviewDetails=new ArrayList<ClaimReviewDetail>();
         List<ClaimReviewDto> reviewDetails=glClaimApprovalCommand.getReviewDetails();
         String userName=glClaimApprovalCommand.getUserDetails().getUsername();
-        //creating review table first time
-       // List<ClaimReviewDetail>   reviewWithClaimRecord=groupLifeClaim.getUnderWriterReviewDetail().getReviewDetails();
-       /* if (reviewWithClaimRecord==null){
-            ClaimReviewDetail claimReviewDetail=new ClaimReviewDetail(glClaimApprovalCommand.getComments(),claimApprovalDate,userName);
-            reviewWithClaimRecord.add(claimReviewDetail);
-        }
-        */
-
-
 
                 ClaimReviewDetail claimReviewDetail=new ClaimReviewDetail(glClaimApprovalCommand.getComments(),claimApprovalDate,userName);
         claimReviewDetails.add(claimReviewDetail) ;
 
-
         approvalDetail.withClaimReviewDetails(claimReviewDetails);
-        groupLifeClaim.withUnderWriterData(approvalDetail);
 
 
+        if(glClaimApprovalCommand.getCriteria()!=null && glClaimApprovalCommand.getCriteria().equals("amendment")){
 
+            newGroupLifeClaim.withUnderWriterData(approvalDetail);
+        }
+        else{
+            groupLifeClaim.withUnderWriterData(approvalDetail);
+        }
+
+
+        if(glClaimApprovalCommand.getCriteria()!=null && glClaimApprovalCommand.getCriteria().equals("amendment")){
+
+            GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
+            newGroupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), newGroupLifeClaim);
+            //groupLifeClaim = groupLifeClaim.markApproverApproval(glClaimApprovalCommand.getUserDetails().getUsername(), DateTime.now(), glClaimApprovalCommand.getComments(), ClaimStatus.APPROVED);
+            return groupLifeClaim.getIdentifier().getClaimId();
+        }
+        else{
+            GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
+            groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), groupLifeClaim);
+            //groupLifeClaim = groupLifeClaim.markApproverApproval(glClaimApprovalCommand.getUserDetails().getUsername(), DateTime.now(), glClaimApprovalCommand.getComments(), ClaimStatus.APPROVED);
+            return groupLifeClaim.getIdentifier().getClaimId();
+        }
+/*
          GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
         groupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), groupLifeClaim);
         //groupLifeClaim = groupLifeClaim.markApproverApproval(glClaimApprovalCommand.getUserDetails().getUsername(), DateTime.now(), glClaimApprovalCommand.getComments(), ClaimStatus.APPROVED);
         return groupLifeClaim.getIdentifier().getClaimId();
+        */
     }
 
    @CommandHandler
@@ -385,10 +403,12 @@ public class GLClaimIntimationCommandHandler {
     }
 
     @CommandHandler
-    public String amendClaim(GLClaimAmendmentCommand glClaimApprovalCommand){
-        GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimApprovalCommand.getClaimId()));
-
-        groupLifeClaim =glClaimFactory.createAmendment(glClaimApprovalCommand, groupLifeClaim);
+    public String amendClaim(GLClaimAmendmentCommand glClaimAmendmentCommand){
+        GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimAmendmentCommand.getClaimId()));
+        groupLifeClaim =glClaimFactory.createAmendment(glClaimAmendmentCommand, groupLifeClaim);
+        ClaimAmendmentProcessor glClaimAmendmentProcessor = groupLifeClaimRoleAdapter.userToClaimAmendmentProcessor(glClaimAmendmentCommand.getUserDetails());
+         groupLifeClaim=glClaimAmendmentProcessor.submitForClaimAmendment(DateTime.now(),  glClaimAmendmentCommand.getComments(),groupLifeClaim) ;
+         glClaimMongoRepository.add(groupLifeClaim);
         return groupLifeClaim.getIdentifier().getClaimId();
     }
     @CommandHandler

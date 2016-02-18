@@ -28,6 +28,7 @@ public class GLClaimApprovalCommand {
     private List<ClaimReviewDto> reviewDetails;
     private DateTime referredToReassureOn;
     private DateTime responseReceivedOn;
+    private String criteria;
     private UserDetails userDetails;
     private ClaimStatus status;
     private String comments;

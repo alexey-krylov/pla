@@ -20,4 +20,7 @@ public class ClaimApproverCoverageDetailDto {
     private BigDecimal sumAssured;
     private BigDecimal approvedAmount;
     private BigDecimal amendedAmount;
+    private BigDecimal additionalAmount;
+    private String recoveryOrAdditional;
+    private String remarks;
 }

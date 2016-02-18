@@ -236,7 +236,7 @@ public class GroupLifeClaimController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+/*
     @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
@@ -244,7 +244,7 @@ public class GroupLifeClaimController {
         return glClaimService.getApprovedClaimDetailLevelOne(searchClaimDto, new String[]{"ROUTED"});
 
     }
-
+   */
     @RequestMapping(value = "/searchclaimforapproval", method = RequestMethod.POST)
     public ModelAndView getClaimDetailForApproval(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
@@ -607,6 +607,22 @@ public class GroupLifeClaimController {
     @ResponseBody
     public Map<String, Object> getConfiguredCategoryForPolicy(@PathVariable("policyId") String policyId) {
         return glClaimService.getConfiguredCategory(policyId);
+    }
+
+    @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
+    public List<GLClaimDataDto> getClaimDetailForUnderWriterOne(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
+        return glClaimService.getClaimDetailForLevelOne(searchClaimIntimationDto, new String[]{"UNDERWRITING"});
+
+    }
+
+    @RequestMapping(value = "/listclaimsforunderwriterone", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed  to approver one")
+    public List<GLClaimDataDto> getClaimsForUnderWriterOne() {
+        return glClaimService.getAllClaimDetailForApproverOne();
+
     }
 
     @RequestMapping(value = "/openapprovalclaim", method = RequestMethod.GET)

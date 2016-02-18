@@ -500,6 +500,51 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_STATUS_COLLECTION_NAME);
 
     }
+   //search record for approver one
+   public List<Map> getClaimRecordForApproverOne(String claimNumber, String policyNumber, String policyHolderName, String clientId, String assuredName, String nrcNumber,String[] statuses) {
+       if (isEmpty(claimNumber) && isEmpty(policyNumber) && isEmpty(policyHolderName)&& isEmpty(clientId)&& isEmpty(assuredName)&& isEmpty(nrcNumber)) {
+           return Lists.newArrayList();
+       }
+       String routing="UNDERWRITING_LEVEL_ONE";
+       Criteria criteria = null;
+
+       criteria = Criteria.where("claimStatus").in(statuses);
+
+       if (isNotEmpty(claimNumber)) {
+           criteria = criteria.and("claimNumber.claimNumber").is(claimNumber);
+       }
+       if (isNotEmpty(policyNumber)) {
+           criteria = criteria.and("policy.policyNumber.policyNumber").is(policyNumber);
+       }
+       if (isNotEmpty(policyHolderName)) {
+           criteria = criteria.and("policy.policyHolderName").is(policyHolderName);
+       }
+       if (isNotEmpty(clientId)) {
+           criteria = criteria.and("familyId.familyId").is(clientId);
+       }
+       if (isNotEmpty(assuredName)) {
+           criteria = criteria.and("assuredDetail.firstName").is(assuredName);
+       }
+       if (isNotEmpty(nrcNumber)) {
+           criteria = criteria.and("assuredDetail.nrcNumber").is(nrcNumber);
+       }
+       criteria=criteria.and("taggedRoutingLevel").is(routing);
+       Query query = new Query(criteria);
+       return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+   }
+   //get all records for approver one
+
+   public List<Map> getAllClaimRecordsForApproverOne(String[] statuses) {
+       if (isEmpty(statuses)) {
+           return Lists.newArrayList();
+       }
+       String routing="UNDERWRITING_LEVEL_ONE";
+       Criteria criteria = null;
+       criteria = Criteria.where("claimStatus").in(statuses);
+       criteria=criteria.and("taggedRoutingLevel").is(routing);
+       Query query = new Query(criteria);
+       return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+   }
 
 
 }

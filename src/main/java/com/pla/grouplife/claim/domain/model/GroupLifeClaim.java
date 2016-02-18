@@ -32,7 +32,7 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
 
     private ClaimNumber claimNumber;
 
-    private ClaimNumber amendedNewClaimNumber;
+    private ClaimNumber oldClaimNumber;
 
     private String relationship;
 
@@ -156,6 +156,11 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
         this.claimStatus= claimStatus;
         return this;
     }
+    public GroupLifeClaim withSubmittedOn(DateTime submittedOn) {
+
+        this.submittedOn= submittedOn;
+        return this;
+    }
     public GroupLifeClaim withClaimDocuments(Set<GLClaimDocument> claimDocuments) {
         this.claimDocuments = claimDocuments;
         return this;
@@ -192,8 +197,8 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
     public void updateWithRecoveredAmount(BigDecimal recoveredAmount){
         this.recoveredAmount=recoveredAmount;
     }
-    public void updateWithNewClaimNumberForAmendment(ClaimNumber amendedNewClaimNumber){
-        this.amendedNewClaimNumber=amendedNewClaimNumber;
+    public void updateWithOldClaimNumberForAmendment(ClaimNumber oldClaimNumber){
+        this.oldClaimNumber=oldClaimNumber;
 
     }
     public GroupLifeClaim withClaimSettlementData(GLClaimSettlementData claimSettlementData){
@@ -288,6 +293,17 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
 
         return this;
     }
+
+    public GroupLifeClaim markAsAmendedClaim(String approvedBy, DateTime approvedOn, String comment) {
+        this.claimStatus = ClaimStatus.UNDERWRITING;;
+        if (isNotEmpty(approvedBy)) {
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.UNDERWRITING, approvedBy, comment, approvedOn));
+        }
+
+        return this;
+    }
+
+
     public GroupLifeClaim submit(DateTime effectiveDate, ClaimStatus status, String submittedBy) {
         this.claimStatus = status;
        // this.effectiveDate = effectiveDate;

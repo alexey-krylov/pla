@@ -19,8 +19,10 @@ public class ClaimApproverPlanDto {
 
     private String  planName;
     private BigDecimal planSumAssured;
-    private BigDecimal assuredAmount;
+    private BigDecimal additionalAmount;
     private BigDecimal approvedAmount;
     private BigDecimal  amendedAmount;
+    private String recoveryOrAdditional;
+    private String remarks;
 }
 

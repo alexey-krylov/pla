@@ -18,7 +18,10 @@ public class GLClaimApproverPlanDetail {
 
     private String  planName;
     private BigDecimal planSumAssured;
+    private BigDecimal additionalAmount;
     private BigDecimal approvedAmount;
     private BigDecimal  amendedAmount;
+    private String recoveryOrAdditional;
+    private String remarks;
 
 }
