@@ -952,6 +952,28 @@ public class GroupHealthCashlessClaimService {
         return Boolean.FALSE;
     }
 
+    public void populateGroupHeathCashlessClaimWithProcessorId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            if(isNotEmpty(groupHealthCashlessClaim.getClaimProcessorUserId()) && !groupHealthCashlessClaim.getClaimProcessorUserId().equals(userName)){
+                throw new PreAuthorizationInProcessingException("The record is already under processing.");
+            }
+        }
+        groupHealthCashlessClaim.updateWithClaimProcessorUserId(userName);
+        groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
+    }
+
+    public void populateGroupHeathCashlessClaimWithUnderwriterId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            if(isNotEmpty(groupHealthCashlessClaim.getClaimUnderWriterUserId()) && !groupHealthCashlessClaim.getClaimUnderWriterUserId().equals(userName)){
+                throw new PreAuthorizationInProcessingException("The record is already under processing.");
+            }
+        }
+        groupHealthCashlessClaim.updateWithClaimUnderWriterUserId(userName);
+        groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
+    }
+
     public void populateGroupHeathCashlessClaimWithServiceMismatchProcessorId(String groupHealthCashlessClaimId, String userName) throws PreAuthorizationInProcessingException {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
         if(isNotEmpty(groupHealthCashlessClaim)){

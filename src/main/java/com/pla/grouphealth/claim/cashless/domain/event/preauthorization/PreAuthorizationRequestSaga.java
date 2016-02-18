@@ -105,7 +105,7 @@ public class PreAuthorizationRequestSaga extends AbstractAnnotatedSaga implement
         List<GHProposalMandatoryDocumentDto> mandatoryDocuments = null;
         try {
             String familyId = isNotEmpty(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail()) ? isNotEmpty(preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getAssuredDetail()) ? preAuthorizationRequest.getPreAuthorizationRequestPolicyDetail().getAssuredDetail().getClientId() : null : null;
-            String preAuthorizationId = isNotEmpty(preAuthorizationRequest.getPreAuthorizationRequestId()) ? preAuthorizationRequest.getPreAuthorizationRequestId() : StringUtils.EMPTY;
+            String preAuthorizationId = preAuthorizationRequest.getPreAuthorizationRequestId();
             Assert.notNull(familyId, "Error sending Pre-Auth reminder");
             Assert.notNull(preAuthorizationId, "Error sending Pre-Auth reminder");
             mandatoryDocuments = preAuthorizationRequestService.findMandatoryDocuments(new FamilyId(familyId), preAuthorizationRequest.getPreAuthorizationRequestId());

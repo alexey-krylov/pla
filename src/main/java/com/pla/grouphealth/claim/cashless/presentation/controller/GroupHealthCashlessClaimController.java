@@ -94,8 +94,10 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/loadpageforghcashlessclaimupdateview" ,method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadPageforghCashlessClaimupdateview(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException{
+    public ModelAndView loadPageforghCashlessClaimupdateview(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         ModelAndView modelAndView=new ModelAndView();
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithProcessorId(groupHealthCashlessClaimId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaim");
         return modelAndView;
     }
@@ -359,7 +361,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView loadUnderwriterViewForView(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         ModelAndView modelAndView = new ModelAndView();
         String userName = preAuthorizationRequestService.getLoggedInUsername();
-        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithServiceMismatchProcessorId(groupHealthCashlessClaimId, userName);
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithUnderwriterId(groupHealthCashlessClaimId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimunderwriter");
         return modelAndView;
     }

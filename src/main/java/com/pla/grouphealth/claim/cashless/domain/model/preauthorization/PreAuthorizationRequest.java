@@ -197,7 +197,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     }
 
     public PreAuthorizationRequest updateWithPreAuthorizationId(String preAuthorizationIdString) {
-        if(isEmpty(preAuthorizationIdString)) {
+        if(isNotEmpty(preAuthorizationIdString)) {
             this.preAuthorizationId = new PreAuthorizationId(preAuthorizationIdString);
         }
         return this;
@@ -308,6 +308,11 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
 
     public PreAuthorizationRequest updateWithSameServicesPreviouslyAvailedPreAuth(Set<Map<String, Object>> sameServicesPreviouslyAvailedPreAuth) {
         this.sameServicesPreviouslyAvailedPreAuth = sameServicesPreviouslyAvailedPreAuth;
+        return this;
+    }
+
+    public PreAuthorizationRequest updateWithPreAuthorizationProcessorUserId(String preAuthorizationProcessorUserId) {
+        this.preAuthorizationProcessorUserId = preAuthorizationProcessorUserId;
         return this;
     }
 

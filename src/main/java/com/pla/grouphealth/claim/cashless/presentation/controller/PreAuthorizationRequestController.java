@@ -205,11 +205,24 @@ public class PreAuthorizationRequestController {
         return preAuthorizationRequestService.getPreAuthorizationClaimantDetailCommandFromPreAuthorizationRequestId(preAuthorizationId);
     }
 
+    @Synchronized
     @RequestMapping(value = "/loadpreauthorizationviewforupdateview", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadpreauthorizationviewforupdateview(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException {
+    public ModelAndView loadpreauthorizationviewforupdateview(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
         ModelAndView modelAndView = new ModelAndView();
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        preAuthorizationRequestService.populatePreAuthorizationWithPreAuthorizationProcessorUserId(preAuthorizationId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/preAuthorizationRequest");
+        return modelAndView;
+    }
+
+    @ExceptionHandler(PreAuthorizationInProcessingException.class)
+    public ModelAndView loadpreauthorizationviewforupdateview(PreAuthorizationInProcessingException ex){
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchPreAuthorizationRecord");
+        List<PreAuthorizationClaimantDetailCommand> searchResult = preAuthorizationRequestService.getPreAuthorizationForDefaultList(userName);
+        modelAndView.addObject("preAuthorizationResult", searchResult);
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto());
         return modelAndView;
     }
 
@@ -345,7 +358,7 @@ public class PreAuthorizationRequestController {
 
     @RequestMapping(value = "/loadunderwriterviewforview", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadUnderwriterViewForView(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
+    public ModelAndView loadUnderwriterViewForView(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/preauthorizationunderwriter");
         return modelAndView;

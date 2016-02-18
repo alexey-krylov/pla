@@ -1085,6 +1085,18 @@ public class PreAuthorizationRequestService {
         preAuthorizationRequestRepository.save(preAuthorizationRequest);
     }
 
+    public void populatePreAuthorizationWithPreAuthorizationProcessorUserId(String preAuthorizationId, String userName) throws PreAuthorizationInProcessingException {
+        PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
+        if(isNotEmpty(preAuthorizationRequest)){
+            if(isNotEmpty(preAuthorizationRequest.getPreAuthorizationProcessorUserId()) && !preAuthorizationRequest.getPreAuthorizationProcessorUserId().equals(userName)){
+                throw new PreAuthorizationInProcessingException("The record is already under processing.");
+            }
+        }
+        preAuthorizationRequest.updateWithPreAuthorizationProcessorUserId(userName);
+        preAuthorizationRequestRepository.save(preAuthorizationRequest);
+    }
+
+
     public Set<String> getAllRelevantServices(String preAuthorizationId) {
         PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findOne(preAuthorizationId);
         notNull(preAuthorizationRequest, "No preauth found with given preAuthId");
