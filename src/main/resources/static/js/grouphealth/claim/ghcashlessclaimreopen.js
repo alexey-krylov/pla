@@ -1,6 +1,6 @@
 
-var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessages', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
-        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','angularFileUpload', 'angucomplete-alt'])
+var  app = angular.module('CashLessClaimReopen', ['common', 'ngRoute','ngMessages', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
+    'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','angularFileUpload', 'angucomplete-alt'])
     .config(['datepickerPopupConfig', function (datepickerPopupConfig) {
         datepickerPopupConfig.datepickerPopup = 'MM/dd/yyyy';
         datepickerPopupConfig.currentText = 'Today';
@@ -10,8 +10,8 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
     }])
     .config(["$routeProvider", function ($routeProvider) {
         $routeProvider.when('/', {
-                templateUrl: 'ghcashlessclaimservicemismatch.html',
-                controller: 'CashLessClaimServiceCtrl',
+                templateUrl: 'ghcashlessclaimreopen.html',
+                controller: 'cashLessClaimReopenCtrl',
                 resolve:{
                     createUpdateDto: ['$q', '$http', 'getQueryParameter', function ($q, $http, getQueryParameter) {
                         var deferred = $q.defer();
@@ -68,7 +68,7 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
             }
         )}])
 
-    .controller('CashLessClaimServiceCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId','bankDetails',
+    .controller('cashLessClaimReopenCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId','bankDetails',
         function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId,bankDetails) {
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
@@ -87,8 +87,10 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
             $scope.createUpdateCommand.groupHealthCashlessClaimIllnessDetail = {};
             $scope.createUpdateCommand.groupHealthCashlessClaimDrugServices = [];
             $scope.documentList = documentList;
+            console.log(JSON.stringify($scope.createUpdateDto));
             $scope.additionalDocumentList = [{}];
             $scope.disableSubmit = false;
+            $scope.documentmaster = [];
             $scope.selectedItem = 1;
             $scope.comment = {};
             $scope.fileSaved = null;
@@ -99,18 +101,22 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
             $scope.bankBranchDetails=[];
             $scope.bankDetails={};
 
+
+
+
+            $scope.createUpdateCommand.groupHealthCashlessClaimBankDetailDto ={};
             if ($scope.createUpdateDto.submitted) {
                 $scope.isViewMode = true;
             }
 
-            $scope.$watch('createUpdateDto.statusName', function(newVal, oldVal){
-                if (newVal !== 'SERVICE_MISMATCHED') {
-                    $scope.isViewMode = true;
-                }
-            });
-
             $scope.$watch('documentList', function (newCollection, oldCollection) {
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
+            });
+
+            $scope.$watch('createUpdateDto.statusName', function(newVal, oldVal){
+                if (newVal !== 'EVALUATION' && newVal !== 'INTIMATION' && newVal !== 'RETURNED') {
+                    $scope.isViewMode = true;
+                }
             });
 
             $scope.shouldSubmitBeDisabled = function (documentList) {
@@ -123,12 +129,20 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                 return false;
             };
 
+            $http.get("/pla/grouphealth/claim/cashless/claim/getadditionaldocuments/" + groupHealthCashlessClaimId).success(function (data, status, headers, config) {
+                $scope.additionalDocumentList = data;
+                $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
+            }).error(function (response, status, headers, config) {
+            });
+
             $scope.tratementdignosisnextbuttonfalse= function(){
                 $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["4"] = true;
+                $scope.stepsSaved["3"] = true;
             };
 
             $scope.viewTreatmentDiagnosis = function (treatmentDiagnosis, treatmentDiagnosisIndex) {
+                console.log($scope.treatmentDiagnosis);
+                console.log($scope.treatmentDiagnosisIndex);
                 $scope.tratementdignosisnextbuttonfalse();
                 $scope.isEditDiagnosisTriggered = true;
                 $scope.treatmentDiagnosisIndex = treatmentDiagnosisIndex;
@@ -148,16 +162,15 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                     $scope.provisionaldignosisdiv=false;
                 } else {
                     $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails.push(groupHealthCashlessClaimDiagnosisTreatmentDetails);
-                    console.log("new btn crt insd btn####"+JSON.stringify($scope.createUpdateDto));
+                    $scope.saveCashlessClaimRequest();
                 }
                 $scope.provisionaldignosisdiv = false;
-                $scope.stepsSaved["4"] = false;
+                $scope.stepsSaved["3"] = false;
             };
-
             $scope.saveCashlessClaimRequest = function () {
                 console.log(JSON.stringify($scope.createUpdateDto));
                 $http({
-                    url: '/pla/grouphealth/claim/cashless/claim/underwriter/update',
+                    url: '/pla/grouphealth/claim/cashless/claim/updategrouphealthcashlessclaim',
                     method: 'POST',
                     data: $scope.createUpdateDto
                 }).success(function (response) {
@@ -165,23 +178,33 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                         .success(function (response) {
                             $scope.createUpdateDto = response;
                         }).error(function (response, status, headers, config) {
-                    });
+                        });
                 }).error();
             };
-
+            $scope.create= function(){
+                $scope.provisionaldignosisdiv = true;
+                $scope.stepsSaved["3"] = true;
+            };
             $scope.activenextbuttonforprovisional = function(){
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails = {};
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfConsultation = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].dateOfConsultation;
+                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.doctorName = $scope.createUpdateDto.groupHealthCashlessClaimDiagnosisTreatmentDetails[0].doctorName;
                 $scope.provisionaldignosisdiv = true;
-                $scope.stepsSaved["4"] = true;
+                $scope.stepsSaved["3"] = true;
+            };
+            $scope.activenextbuttonforprovisionalclickon= function(){
+                $scope.provisionaldignosisdiv = true;
+                $scope.stepsSaved["3"] = true;
             };
 
+//for add sevice drug availed section start
+            //create function detect Add Service/Drug button
             $scope.create = function(){
                 $scope.showservicedrugdiv = true;
                 $scope.diagnosisTreatmentDtoToUpdate='';
-                $scope.stepsSaved["1"] = true;
+                $scope.stepsSaved["5"] = true;
             };
-
+            //updateDrugServicesDto function detect update button
             $scope.updateDrugServicesDto = function (drugServicesDto, index) {
                 $scope.create();
                 $scope.index = index;
@@ -202,23 +225,27 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                     $scope.saveCashlessClaimRequest();
                 }
                 $scope.showservicedrugdiv = false;
-                $scope.stepsSaved["1"] = false;
+                $scope.stepsSaved["5"] = false;
             };
 //cancel button
             $scope.activenextbuttonfordrugservice= function(){
                 $scope.showservicedrugdiv = false;
-                $scope.stepsSaved["1"] = false;
+                $scope.stepsSaved["5"] = false;
             };
 
             $scope.nextBtnActiveOnCancelButton= function(){
                 $scope.provisionaldignosisdiv = false;
-                $scope.stepsSaved["4"] = false;
+                $scope.stepsSaved["3"] = false;
             };
             $scope.deleteTreatmentDiagnosis = function (index) {
                 $scope.createUpdateDto.groupHealthCashlessClaimDrugServices.splice(index, 1);
                 $scope.saveCashlessClaimRequest();
 
             };
+
+            /*Holds the indicator for steps in which save button is clicked*/
+
+//end service drug availed section
 
             var saveStep = function () {
                 $scope.stepsSaved[$scope.selectedItem] = true;
@@ -228,9 +255,28 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                 return formName.$invalid;
             };
 
+
+
+            $scope.submitPreAuthorizationRequest = function () {
+                $scope.createUpdateDto.submitEventFired = true;
+                $http({
+                    url: '/pla/grouphealth/claim/cashless/claim/submitgrouphealthcashlessclaim',
+                    method: 'POST',
+                    data: $scope.createUpdateDto
+                }).success(function (data) {
+                    if (data.status == "200") {
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    }
+
+                }).error();
+
+            };
+
             $scope.back = function () {
                 //window.location.reload();
-                window.location.href = '/pla/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims';
+                window.location.href = '/pla/grouphealth/claim/cashless/claim/getcashlessclaimfordefaultlist';
             };
 
             $scope.isBrowseDisable = function (document) {
@@ -314,7 +360,6 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
 
                 }
             };
-
             $scope.isUploadEnabledForAdditionalDocument = function () {
                 var enableAdditionalUploadButton = ($scope.additionalDocumentList != null);
                 for (var i = 0; i < $scope.additionalDocumentList.length; i++) {
@@ -391,18 +436,9 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                 $event.stopPropagation();
                 $scope.datepickeradmission = {'opened': true};
             };
-            $scope.launchdateOfDischarge =   function ($event){
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.datepickerdateOfDischarge = {'opened': true};
-            };
+
             $scope.changeProbAdmissionDate=function(probAdmissionDate) {
                 $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission = formatDate(probAdmissionDate);
-                //console.log("qwqe############"+$scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission);
-            };
-
-            $scope.changedateOfDischarge=function(dateOfDischarge) {
-                $scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfDischarge = formatDate(dateOfDischarge);
                 //console.log("qwqe############"+$scope.groupHealthCashlessClaimDiagnosisTreatmentDetails.dateOfAdmission);
             };
 
@@ -576,160 +612,6 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                 true
             );
 
-            $scope.returnGHCashlessClaim = function () {
-                if (!$scope.comment.comments) {
-                    $scope.message = "Comment is mandatory to return Cashless Claim.";
-                    $scope.toggleModal();
-                } else{
-                    $scope.returnCashlessClaim();
-                }
-            };
-
-            $scope.rejectGHCashlessClaim = function () {
-                if (!$scope.comment.comments) {
-                    $scope.message = "Comment is mandatory to reject Cashless Claim.";
-                    $scope.toggleModal();
-                } else {
-                    $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/' + groupHealthCashlessClaimId)
-                        .success(function (response) {
-                            if (response.data === true) {
-                                $scope.rejectPreAuthorization();
-                            }
-                            else{
-                                var win = window.open('/pla/grouphealth/claim/cashless/claim/underwriter/getgrouphealthcashlessclaimrejectionletter/' + groupHealthCashlessClaimId, "_blank", "toolbar=no,resizable=no," +
-                                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-                                var timer = setInterval(function () {
-                                    if (win.closed) {
-                                        clearInterval(timer);
-                                        $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/' + groupHealthCashlessClaimId)
-                                            .success(function (response) {
-                                                if (response.data === true) {
-                                                    $scope.rejectPreAuthorization();
-                                                } else{
-                                                    $scope.message = " Please email the rejection letter.";
-                                                    $scope.toggleModal();
-                                                }
-                                            }).error(function (response) {
-                                        });
-                                    }
-                                }, 500);
-                            }
-                        }).error()
-                }
-            };
-
-            $scope.approveGHCashlessClaim = function () {
-                $scope.createUpdateDto.submitEventFired = true;
-                $.when($scope.constructCommentDetails()).done(function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/claim/servicemismatch/approve',
-                        method: 'POST',
-                        data: $scope.createUpdateDto
-                    }).success(function (response, status, headers, config) {
-                        if (status === 200) {
-                            $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
-                                .success(function (response, status, headers, config) {
-                                    $scope.createUpdateDto = response;
-                                    if (status == "200") {
-                                        setTimeout(function () {
-                                            window.location.reload();
-                                        }, 2000);
-                                    }
-                                }).error(function (response, status, headers, config) {
-                            });
-                        }
-                    }).error(
-                        function (status) {
-                            //console.log(status);
-                        }
-                    );
-                });
-            };
-
-            $scope.myModal = false;
-            $scope.toggleModal = function(){
-                $("#myModal").modal('show');
-            };
-            $scope.approveModal = false;
-            $scope.approvepopupModal = function(){
-                $("#approveModal").modal('show');
-            };
-
-            $scope.constructCommentDetails = function() {
-                if ($scope.comment) {
-                    if ($scope.createUpdateDto.commentDetails) {
-                        $scope.createUpdateDto.commentDetails.push($scope.comment);
-                    } else {
-                        $scope.createUpdateDto.commentDetails = new Array($scope.comment);
-                    }
-                }
-            };
-
-            $scope.returnCashlessClaim = function(){
-                $.when($scope.constructCommentDetails()).done(function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/claim/return',
-                        method: 'POST',
-                        data: $scope.createUpdateDto
-                    }).success(function (response, status, headers, config) {
-                        if (status === 200) {
-                            $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
-                                .success(function (response, status, headers, config) {
-                                    $scope.createUpdateDto = response;
-                                    if (status == 200) {
-                                        setTimeout(function () {
-                                            window.location.reload();
-                                        }, 2000);
-                                    }
-                                }).error(function (response, status, headers, config) {
-                            });
-                        }
-                    }).error(
-                        function (status) {
-                            //console.log(status);
-                        }
-                    );
-                });
-            };
-
-            $scope.rejectPreAuthorization = function(){
-                $.when($scope.constructCommentDetails()).done(function () {
-                    $http({
-                        url: '/pla/grouphealth/claim/cashless/claim/reject',
-                        method: 'POST',
-                        data: $scope.createUpdateDto
-                    }).success(function (response, status, headers, config) {
-                        if (status === 200) {
-                            $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
-                                .success(function (response, status, headers, config) {
-                                    $scope.createUpdateDto = response;
-                                    if (status == 200) {
-                                        setTimeout(function () {
-                                            window.location.reload();
-                                        }, 2000);
-                                    }
-                                }).error(function (response, status, headers, config) {
-                            });
-                        }
-                    }).error(
-                        function (status) {
-                            //console.log(status);
-                        }
-                    );
-                });
-            };
-
-            $scope.rejectionEmailSent = false;
-            $scope.checkRejectionEmailSent = function(){
-                $http.get('/pla/grouphealth/claim/cashless/claim/underwriter/checkifgrouphealthcashlessclaimrejectionemailsent/' + groupHealthCashlessClaimId)
-                    .success(function(response) {
-                        if(response.data === true){
-                            $scope.rejectionEmailSent = true;
-                        }
-                    }).error(function(response){
-                    $scope.rejectionEmailSent = false;
-                });
-            };
 
             $scope.$watch('createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName', function (newvalue, oldvalue) {
                 if (newvalue) {
@@ -742,6 +624,8 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                     }
                 }
             });
+
+
         }]);
 
 function formatDate(date) {

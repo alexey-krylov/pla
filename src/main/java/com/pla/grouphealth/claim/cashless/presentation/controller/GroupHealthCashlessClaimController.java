@@ -707,6 +707,15 @@ public class GroupHealthCashlessClaimController {
         modelAndView.addObject("searchCriteria", searchReopenedClaimDetailDto);
         return modelAndView;
     }
+
+    @RequestMapping(value = "/updateviewcashlessclaimreopen", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getCashlessClaimReopen(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, GroupHealthCashlessClaimBillMismatchProcessingException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimreopen");
+        return modelAndView;
+    }
+
 }
 
 

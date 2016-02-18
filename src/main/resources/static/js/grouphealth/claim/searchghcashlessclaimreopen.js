@@ -14,13 +14,13 @@ var searchPreAuthorizationModule = (function(){
     PreAuthorizationServices.updatePreAuthorization = function () {
         var  clientId =this.clientId;
         var  groupHealthCashlessClaimId =this.groupHealthCashlessClaimId;
-        window.location.href = "/pla/grouphealth/claim/cashless/claim/updateviewservicemismatch?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId +"&mode=edit";
+        window.location.href = "/pla/grouphealth/claim/cashless/claim/updateviewcashlessclaimreopen?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId +"&mode=edit";
     };
 
     PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button
         var  clientId =this.clientId;
-        var  preAuthorizationId =this.PreAuthorizationSelected;
-        window.location.href = "/pla/grouphealth/claim/cashless/updateviewservicemismatch?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId+"&mode=view";
+        var  groupHealthCashlessClaimId =this.groupHealthCashlessClaimId;
+        window.location.href = "/pla/grouphealth/claim/cashless/updateviewcashlessclaimreopen?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId+"&mode=view";
 
 
     };

@@ -43,9 +43,9 @@
         }
     });
     requirejs(['main','angular-file-upload', 'angucomplete'],function(){
-        require(['/pla/js/grouphealth/claim/ghcashlessclaim.js?t=7'], function () {
+        require(['/pla/js/grouphealth/claim/ghcashlessclaimreopen.js?t=7'], function () {
             angular.element(document).ready(function() {
-                angular.bootstrap(document, ['CashLessClaim']);
+                angular.bootstrap(document, ['CashLessClaimReopen']);
             });
         });
 
@@ -55,7 +55,7 @@
 
 
 </script>
-<script type="text/ng-template" id="ghcashlessclaim.html">
+<script type="text/ng-template" id="ghcashlessclaimreopen.html">
     <nth-alert></nth-alert>
     <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
@@ -82,7 +82,7 @@
                 <!-- -->
             </div>
             <div class="step-content ng-cloak">
-                <div class="step-pane active" data-step="1"   disable-all-fields="isViewMode">
+                <div class="step-pane active" data-step="1"   >
                     <ng-form name="step1">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
@@ -201,7 +201,7 @@
                                 <div class="col-sm-6">
                                     <button type="button" class="btn btn-primary btn-sm"   style="float: right" ng-disabled="step1.$invalid  || isViewMode"
                                             ng-click=""
-                                    >Assured Search
+                                            >Assured Search
                                     </button>
 
                                 </div>
@@ -414,35 +414,35 @@
 
                                     <div class = "row">
                                         <div class="col-md-4">
-                                        <div class="form-group ">
-                                            <label class="control-label">Bank Name</label>
-                                            <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"   ng-disabled="mode=='new'||mode=='isViewMode'"
-                                                    ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName"  ng-change="clearBankBranchName()" >
-                                            </select>
-                                            <div class="error" ng-messages="step1.bankName.$error" ng-if="step1.bankName.$dirty">
-                                                <small class="error" ng-message="required">Please specify Bank Name.</small>
+                                            <div class="form-group ">
+                                                <label class="control-label">Bank Name</label>
+                                                <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"   ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName"  ng-change="clearBankBranchName()" >
+                                                </select>
+                                                <div class="error" ng-messages="step1.bankName.$error" ng-if="step1.bankName.$dirty">
+                                                    <small class="error" ng-message="required">Please specify Bank Name.</small>
+                                                </div>
                                             </div>
                                         </div>
-                                       </div>
                                         <div class="col-md-4">
-                                        <div class="form-group ">
-                                            <label class="control-label">Bank Branch Name</label>
-                                            <select class="form-control input-sm" name="branchname"  ng-disabled="mode=='new'||mode=='isViewMode'"
-                                                    ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
-                                                    ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankBranchCode" ng-selected="bankBranchDetail.branchName" >
-                                            </select>
-                                            <div class="error" ng-messages="step1.branchname.$error" ng-if="step1.branchname.$dirty">
-                                                <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                            <div class="form-group ">
+                                                <label class="control-label">Bank Branch Name</label>
+                                                <select class="form-control input-sm" name="branchname"
+                                                        ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankBranchCode" ng-selected="bankBranchDetail.branchName" >
+                                                </select>
+                                                <div class="error" ng-messages="step1.branchname.$error" ng-if="step1.branchname.$dirty">
+                                                    <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                                </div>
                                             </div>
-                                        </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group  ">
                                                 <label class="control-label">Bank Account Type</label>
                                                 <select
-                                                    ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankAccountType"
-                                                    name="accountType" ng-disabled="mode=='new'||mode=='isViewMode'"
-                                                    class="form-control input-md">
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankAccountType"
+                                                        name="accountType" ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                        class="form-control input-md">
 
                                                     <option value="Saving">Saving</option>
                                                     <option value="Current">Current</option>
@@ -452,7 +452,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group  ">
@@ -471,7 +471,7 @@
                                                 >Save
                                         </button>
                                     </div>
-                                  </div>
+                                </div>
                             </accordion-group>
                         </accordion>
                     </ng-form>
@@ -1050,7 +1050,7 @@
                                     <div class="col-sm-6" style="float: right">
                                         <button type="button" class="btn btn-primary btn-sm" style="float: right"
                                                 ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step3.$invalid"
-                                        >Save
+                                                >Save
                                         </button>
                                     </div>
                                 </div>
@@ -1061,7 +1061,7 @@
                             <accordion-group is-open="accordionStatus.mainAssuredDetails" ng-form="mainAssuredDetailForm" >
                                 <accordion-heading>
                                     Dignosis and Treatement <i class="pull-right glyphicon"
-                                                                           ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
+                                                               ng-class="{'glyphicon-chevron-down': accordionStatus.mainAssuredDetails, 'glyphicon-chevron-right': !accordionStatus.mainAssuredDetails}"></i>
                                 </accordion-heading>
                                 <div class="row">
                                     <div class="col-md-3">
@@ -1421,7 +1421,7 @@
                                             <div class="col-sm-6">
                                                 <button type="button" class="btn btn-primary btn-sm"  style="float: right" ng-disabled="isViewMode || step3.$invalid"
                                                         ng-click="updateTreatmentAndDiagnosis(groupHealthCashlessClaimDiagnosisTreatmentDetails)"
-                                                >Save
+                                                        >Save
                                                 </button>
                                             </div>
 
@@ -1723,7 +1723,7 @@
                                     <div class="col-sm-6" style="float: right">
                                         <button type="button" class="btn btn-primary btn-sm" style="float: right"
                                                 ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step4.$invalid"
-                                        >Save
+                                                >Save
                                         </button>
                                     </div>
                                 </div>
@@ -1927,7 +1927,7 @@
                                             <div class="col-sm-6">
                                                 <button type="button" class="btn btn-primary btn-sm"   style="float: right" ng-disabled="step5.$invalid  || isViewMode"
                                                         ng-click="saveDiagnosisTreatmentDto(diagnosisTreatmentDtoToUpdate)"
-                                                >Save
+                                                        >Save
                                                 </button>
 
                                             </div>
@@ -2178,7 +2178,7 @@
                                 <div class="col-sm-6" style="float: right">
                                     <button type="button" class="btn btn-primary btn-sm" style="float: right"
                                             ng-click="submitPreAuthorizationRequest()" ng-disabled="isViewMode || disableSubmit"
-                                    >Submit
+                                            >Submit
                                     </button>
                                 </div>
                             </div>
