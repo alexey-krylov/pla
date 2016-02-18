@@ -68,6 +68,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
         $scope.bankDetailsResponse=bankDetails;
         $scope.bankBranchDetails=[];
         $scope.rcvPolicyId = getQueryParameter('policyId');
+        $scope.rcvCriteria=getQueryParameter('criteria');
         $scope.minIntimationDate=moment().add(0,'days').format("YYYY-MM-DD");
         $scope.isAdvanceSearchEnable=false;
         //$scope.minIntimationDate=moment().add(1,'days').format("YYYY-MM-DD");
@@ -118,6 +119,38 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }
             }
+            /**
+             * Claim Approve On Date setting
+             * @param $event
+             */
+            $scope.openClaimApproveDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForClaimApproveDate.isOpened = true;
+            };
+            $scope.datePickerSettingsForClaimApproveDate = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
+            $scope.openInstrumentDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForInstrument.isOpened = true;
+            };
+            $scope.datePickerSettingsForInstrument = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
             /**
              *
              * @param $event for Advance Search Assured DOB
@@ -283,6 +316,41 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             }
 
             /**
+             * Referred to Re-Assurer on Date Setting
+             * @param $event
+             */
+            $scope.openReassureDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForReassureDate.isOpened = true;
+            };
+            $scope.datePickerSettingsForReassureDate = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+            /**
+             * Response received on Date Setting
+             * @param $event
+             */
+            $scope.openResponseDate = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.datePickerSettingsForResponseDate.isOpened = true;
+            };
+            $scope.datePickerSettingsForResponseDate = {
+                isOpened:false,
+                dateOptions:{
+                    formatYear:'yyyy' ,
+                    startingDay:1
+
+                }
+            }
+
+            /**
              *
              * @param province
              * Getting List of Related Cities
@@ -318,11 +386,30 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     }
                 }
             });
+            $scope.bankBranchDetailsForClaimSettlement={}; //bankBranch Detail Contatiner for Settlement Tab
+            $scope.claimSettlementDetails={};
+            /**
+             * Getting List of Related Branch Name
+             */
+            $scope.$watch('claimSettlementDetails.bankName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                    if (bankCode) {
+                        $http.get('/pla/grouplife/claim/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetailsForClaimSettlement = response;
+                        }).error(function (response, status, headers, config) {
+                        });
+                    }
+                }
+            });
+
 
             /**
              * Retrival All Claim For Registraton
              */
             //$scope.incidenceDetails.timeOfDeath=moment("1969-12-31T18:42:00.000Z").format('YYYY-MM-DDTHH:mm:ss:00.000');
+            $scope.claimApprovalPlanDetail={}; // To Store Claim Approval PlanDetails
+            $scope.claimApprovalCoverageDetails=[];
             $scope.dEATHFUNERAL=false;
             if($scope.rcvClaimIdForRegistration){
                 $http.get('/pla/grouplife/claim/getclaimdetail/' + $scope.rcvClaimIdForRegistration).success(function (response, status, headers, config) {
@@ -335,6 +422,18 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     $scope.bankDetails=response.bankDetails;
                     $scope.assuredDetails=response.claimAssuredDetail;
                     $scope.coverageList=response.coverageDetails;
+                    if(response.claimApprovalPlanDetail != null){
+                        angular.copy(response.claimApprovalPlanDetail,$scope.claimApprovalPlanDetail);
+                    }else{
+                        angular.copy(response.planDetail,$scope.claimApprovalPlanDetail);
+                        //$scope.claimApprovalPlanDetail=response.planDetail;
+                    }
+                    if(response.claimApprovalCoverageDetails != null){
+                        angular.copy(response.claimApprovalCoverageDetails,$scope.claimApprovalCoverageDetails);
+                    }else{
+                        angular.copy(response.coverageDetails,$scope.claimApprovalCoverageDetails);
+                        //$scope.claimApprovalCoverageDetails=response.coverageDetails;
+                    }
 
                     if($scope.claimDetails.claimType == 'DEATH' || $scope.claimDetails.claimType == 'FUNERAL'){
                         $scope.dEATHFUNERAL=true;
@@ -347,6 +446,20 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     }
                     if(response.disabilityRegistrationDetails != null){
                         $scope.disabilityIncidentDetails=response.disabilityRegistrationDetails;
+                    }
+                    if(response.claimSettlementDetails != null){
+                        $scope.claimSettlementDetails=response.claimSettlementDetails;
+                    }
+                    if(response.approvalDetails !=null && response.approvalDetails.referredToReassuredOn !=null){
+                        $scope.comments.reAssuredOn=response.approvalDetails.referredToReassuredOn;
+                    }
+                    if(response.approvalDetails !=null && response.approvalDetails.responseReceivedOn != null){
+                        $scope.comments.reponseReceivedOn=response.approvalDetails.responseReceivedOn;
+                    }
+                    if(response.approvalDetails !=null && response.approvalDetails.reviewDetails != null){
+                        $scope.approvalCommentList=response.approvalDetails.reviewDetails;
+                        console.log('**** Test');
+                        console.log(JSON.stringify($scope.approvalCommentList));
                     }
                 }).error(function (response, status, headers, config) {
                 });
@@ -785,6 +898,38 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
 
                 }*/
             };
+
+            $scope.approveClaim=function(){
+                var requestForApproveClaim={
+                    "claimApprovalPlanDetail":$scope.claimApprovalPlanDetail,
+                    "claimApprovalCoverageDetails":$scope.claimApprovalCoverageDetails,
+                    "comments":$scope.comments.comment,
+                    "referredToReassureOn":$scope.comments.reAssuredOn,
+                    "responseReceivedOn":$scope.comments.reponseReceivedOn,
+                    "claimId":$scope.claimId,
+                    "criteria":$scope.rcvCriteria
+                }
+                console.log('Approval Request *********');
+                console.log(JSON.stringify(requestForApproveClaim));
+                $http.post('/pla/grouplife/claim/approve',requestForApproveClaim).success(function (response, status, headers, config) {
+
+                }).error(function (response, status, headers, config) {
+                });
+            }
+
+            $scope.createClaimSettlement=function(){
+                var requestForClaimSettlement={
+                    "claimSettlementDetails":$scope.claimSettlementDetails,
+                    "claimId":$scope.claimId
+                }
+                console.log('****** ClaimSettlement JSON ***');
+                console.log(JSON.stringify(requestForClaimSettlement));
+
+                $http.post('/pla/grouplife/claim/createclaimsettlement',requestForClaimSettlement).success(function (response, status, headers, config) {
+
+                }).error(function (response, status, headers, config) {
+                })
+            }
 
 
            /* $scope.showDisabilityDate= function ($event){

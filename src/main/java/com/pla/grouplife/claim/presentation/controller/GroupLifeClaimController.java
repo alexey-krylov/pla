@@ -308,7 +308,7 @@ public class GroupLifeClaimController {
 @RequestMapping(value = "/searchclaimforsettlement", method = RequestMethod.POST)
     public ModelAndView getApprovedClaimDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
+        modelAndView.setViewName("pla/groupLife/claim/viewClaimSettlement");
         modelAndView.addObject("searchResult",glClaimService.getClaimDetailForSettlement(searchClaimIntimationDto, new String[]{"APPROVED","PAID_DISBURSED"}));
         modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
         return modelAndView;
@@ -607,6 +607,40 @@ public class GroupLifeClaimController {
     @ResponseBody
     public Map<String, Object> getConfiguredCategoryForPolicy(@PathVariable("policyId") String policyId) {
         return glClaimService.getConfiguredCategory(policyId);
+    }
+
+    @RequestMapping(value = "/openapprovalclaim", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval proposal page")
+    public ModelAndView gotoApprovalClaimPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
+        modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
+        return modelAndView;
+    }
+    @RequestMapping(value = "/openclaimsettlement", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open ClaimSearchPage")
+    public ModelAndView gotoClaimSettlementPage(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/viewClaimSettlement");
+        modelAndView.addObject("searchResult",glClaimService.getAllApprovedClaimDetail());
+        modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/viewapprovalclaim", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval Claim page in view Mode")
+    public ModelAndView gotoApprovalClaim() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/createApprovalClaim");
+        return modelAndView;
+    }
+    @RequestMapping(value = "/viewsettlement", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open Approval Claim page in view Mode")
+    public ModelAndView gotoCreateSettmentPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/createSettlement");
+        return modelAndView;
     }
 }
 

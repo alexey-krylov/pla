@@ -64,8 +64,8 @@
         <li>Group Life</li>
     </ol>
     </p>
-    <form method="post" action="searchclaimforapproval" novalidate="true" name="searchclaimforapproval"
-          id="searchclaimforapproval">
+    <form method="post" action="searchclaimforsettlement" novalidate="true" name="searchclaimforsettlement"
+          id="searchclaimforsettlement">
         <div class="row well well-sm" style="margin: 0;">
             <div class="row">
                 <div class="col-md-3">
@@ -136,8 +136,11 @@
                         <div class="col-md-8">
                             <span th:text="#{listOfClaimIntimations}">List of Claim Intimation</span>
                         </div>
-                        <a type="button" id="proceed" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
-                           onclick="viewPolicyModule.viewApprovalClaimRegistration()">Proceed</a>
+                        <a type="button" id="amend" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
+                           onclick="viewPolicyModule.viewAmendment()">Amend</a>
+
+                        <a type="button" id="proceedApproved" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
+                           onclick="viewPolicyModule.viewClaimSettlement()">Settlement</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -146,16 +149,15 @@
                         <tr>
                             <th style="width: 1%"></th>
                             <th th:text="#{claimNumber}">Claim Number</th>
+                            <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{assuredName}">Assured Name</th>
-                            <th th:text="#{productName}">Product Name</th>
-                            <th th:text="#{claimAmount}">Claim Amount</th>
-                            <th th:text="#{claimIntimationDate}">Claim Intimation Date</th>
-                            <th th:text="#{ageing}">Ageing</th>
+                            <th th:text="#{approvedAmount}">Approved Amount</th>
+                            <th th:text="#{approvedOn}">Approved On</th>
+                            <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         <form id="viewAgentsForm">
-                            <!--/*/ <th:block th:each="policy : ${searchResult}"> /*/-->
                             <th:block th:each="intimation : ${searchResult}">
                                 <tr>
                                     <td><input type="radio" name="claimId" th:value="${intimation.claimId}" value="5100000010315"/>
@@ -163,51 +165,13 @@
                                                th:value="${intimation.claimStatus}"/>
                                     </td>
                                     <td th:text="${intimation.claimNumber}">5100000010315</td>
+                                    <td th:text="${intimation.policyNumber}">5100000010315</td>
                                     <td th:text="${intimation.assuredName}">5100000010315</td>
-                                    <td th:text="${intimation.planName}"></td>
-                                    <td th:text="${intimation.claimAmount}"></td>
-                                    <td th:text="${intimation.claimIntimationDate}"></td>
-                                    <td th:text="${intimation.recordCreationInDays}"></td>
+                                    <td th:text="${intimation.approvedAmount}"></td>
+                                    <td th:text="${intimation.approvedOn}?${#dates.format(intimation.approvedOn,'dd/MM/yyyy')}"></td>
+                                    <td th:text="${intimation.claimStatus}"></td>
                                 </tr>
                             </th:block>
-                            <!--<tr>
-                                <td>
-                                    <input type="radio" name="policyId" th:value="${policy.policyId}"
-                                           value="5100000010315"/>
-
-                                    <input type="hidden" name="policyNumber1"
-                                           th:value="${policy.policyNumber}"/>
-
-
-                                </td>
-                                <td th:text="${policy.policyNumber}">5100000010315</td>
-                                <td th:text="${policy.policyHolderName}"></td>
-                                <td th:text="${#dates.format(policy.inceptionDate,'dd/MM/yyyy')}"></td>
-                                <td th:text="${#dates.format(policy.expiryDate,'dd/MM/yyyy')}"></td>
-                            </tr>
-                            &lt;!&ndash;/*&ndash;&gt;
-                            <tr>
-                                <td><input type="radio" name="proposalNumber" value="5100000020415"/></td>
-                                <td>5100000020415</td>
-                                <td>06/04/2015</td>
-                                <td>ZPC</td>
-                                <td>Death plan</td>
-                                <td>Agent Name 2</td>
-                                <td>A002</td>
-                                <td>002</td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="proposalNumber" value="5100000030515"/></td>
-                                <td>5100000030515</td>
-                                <td>06/05/2015</td>
-                                <td>Pla</td>
-                                <td>CI plan</td>
-                                <td>Agent Name 3</td>
-                                <td>A003</td>
-                                <td>003</td>
-                            </tr>-->
-                            <!--*/-->
-                            <!--/*/ </th:block> /*/-->
                         </form>
                         </tbody>
                     </table>

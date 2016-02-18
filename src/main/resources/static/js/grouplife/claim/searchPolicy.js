@@ -15,9 +15,14 @@ var viewPolicyModule = (function () {
             $('#register').attr('disabled', false);
             $('#view').attr('disabled', false);
             $('#modify').attr('disabled', true);
+        }else if(this.status == 'Approved'){
+            $('#proceedApproved').attr('disabled', false);
+            $('#amend').attr('disabled', false);
         }else{
+            $('#proceedApproved').attr('disabled', true);
             $('#create').attr('disabled', false);
             $('#proceed').attr('disabled', false);
+            $('#amend').attr('disabled', false);
             $('#view').attr('disabled', false);
             $('#register').attr('disabled', true);
             $('#modify').attr('disabled', true);
@@ -76,6 +81,17 @@ var viewPolicyModule = (function () {
         var claimStatus=this.status;
         window.location.href ="/pla/grouplife/claim/viewapprovalclaim/?claimId=" + claimId + "&mode=edit";
         //window.location.href = "/pla/individuallife/proposal/viewApprovalProposal?proposalId=" + proposalId + "&status=return" + "&mode=edit";
+    }
+    services.viewClaimSettlement=function(){
+        var claimId = this.selectedItem;
+        var claimStatus=this.status;
+        window.location.href ="/pla/grouplife/claim/viewsettlement/?claimId=" + claimId + "&mode=edit";
+        //window.location.href = "/pla/individuallife/proposal/viewApprovalProposal?proposalId=" + proposalId + "&status=return" + "&mode=edit";
+    }
+    services.viewAmendment=function(){
+        var claimId = this.selectedItem;
+        var claimStatus=this.status;
+        window.location.href ="/pla/grouplife/claim/viewapprovalclaim/?claimId=" + claimId + "&mode=edit" +"&criteria=amendment";
     }
     return services;
 })();
