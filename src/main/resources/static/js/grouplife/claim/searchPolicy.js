@@ -23,6 +23,7 @@ var viewPolicyModule = (function () {
             $('#create').attr('disabled', false);
             $('#proceed').attr('disabled', false);
             $('#amend').attr('disabled', false);
+            $('#reopen').attr('disabled', false);
             $('#view').attr('disabled', false);
             $('#register').attr('disabled', true);
             $('#modify').attr('disabled', true);
@@ -92,6 +93,12 @@ var viewPolicyModule = (function () {
         var claimId = this.selectedItem;
         var claimStatus=this.status;
         window.location.href ="/pla/grouplife/claim/viewapprovalclaim/?claimId=" + claimId + "&mode=edit" +"&criteria=amendment";
+    }
+
+    services.viewReopen=function(){
+        var claimId = this.selectedItem;
+        var claimStatus=this.status;
+        window.location.href ="/pla/grouplife/claim/viewapprovalclaim/?claimId=" + claimId + "&mode=edit";
     }
     return services;
 })();

@@ -658,6 +658,14 @@ public class GroupLifeClaimController {
         modelAndView.setViewName("pla/groupLife/claim/createSettlement");
         return modelAndView;
     }
+    @RequestMapping(value = "/reopenclaim", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "To open viewClaimReopen page")
+    public ModelAndView gotoReopenClaimViewPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/viewClaimReopen");
+        modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
+        return modelAndView;
+    }
 }
 
 

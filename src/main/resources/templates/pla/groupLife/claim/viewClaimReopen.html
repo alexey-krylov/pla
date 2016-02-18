@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head th:include="fragments/common :: headTag">
+    <title>Group Health</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--/*-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/css/jquery.dataTables.min.css"
+          rel="stylesheet"/>
+    <link href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css"
+          rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+
+    <script src="../../../../../static/js/assuredsearch.js"></script>
+
+    <script src="../../../../../static/js/grouplife/claim/searchPolicy.js"></script>
+    <!--*/-->
+</head>
+<body>
+<div th:include="fragments/common :: bodyHeader" th:remove="tag"/>
+
+<script>
+    var interval = setInterval(function () {
+        if (require.defined("basic")) {
+            requirejs(['/pla/js/grouplife/claim/searchPolicy.js'], function () {
+                $(document).ready(function () {
+                    $("input[type='text']").keyup(function () {
+                        var isDisabled = true;
+                        $('#searchpolicyforGLPolicy *').filter(':text').each(function (key, value) {
+                            if ($(value).val().trim().length != 0) {
+                                isDisabled = false;
+                            }
+                        });
+//                        $("#search").prop("disabled", isDisabled);
+                    });
+
+                    $('#policy-table').dataTable({
+                        "fnDrawCallback": function () {
+                            $("input[type=radio]").on("click", function () {
+                                viewPolicyModule.getTheItemSelected(this);
+                                //console.log($(".proposalStatus").val());
+
+                            });
+                        }
+                    });
+                });
+            });
+            clearInterval(interval);
+        }
+    }, 300);
+</script>
+
+<div class="container container-fluid" style="padding-top: 10px">
+    <p class="lead">
+    <ol class="breadcrumb">
+        <li>Claim</li>
+        <li>Group Life</li>
+    </ol>
+    </p>
+    <form method="post" action="searchclaimforsettlement" novalidate="true" name="searchclaimforsettlement"
+          id="searchclaimforsettlement">
+        <div class="row well well-sm" style="margin: 0;">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{policyHolderName}">Policy Holder Name</label>
+                        <input type="text" class="form-control input-sm" name="policyHolderName"
+                               th:value="${searchCriteria.policyHolderName}"  /><!---->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{policyHolderClientId}">Policy Holder ClaientId</label>
+                        <input type="text" class="form-control input-sm" name="policyHolderClientId"
+                               th:value="${searchCriteria.policyHolderClientId}"  /><!---->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{policyNumber}">Policy Number</label>
+                        <input type="text" class="form-control input-sm" name="policyNumber"
+                               th:value="${searchCriteria.policyNumber}"  /><!---->
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label th:text="#{assuredClientId}">Assured Client Id</label>
+                        <input type="text" class="form-control input-sm" name="assuredClientId"
+                               th:value="${searchCriteria.assuredClientId}"  /><!---->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{claimNumber}">Claim Number</label>
+                        <input type="text" class="form-control input-sm" name="claimNumber"
+                               th:value="${searchCriteria.claimNumber}"  /><!---->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{assuredName}">Assured Name</label>
+                        <input type="text" class="form-control input-sm" name="assuredName"
+                               th:value="${searchCriteria.assuredName}"  /><!---->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label th:text="#{assuredNrcNumber}">Assured Nrc</label>
+                        <input type="text" class="form-control input-sm" name="assuredNrcNumber"
+                               th:value="${searchCriteria.assuredNrcNumber}"  /><!---->
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" style="margin-left: 12%;margin-top: 20px" class="btn btn-default btn-sm"
+                            id="search">Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span th:text="#{listOfClaimIntimations}">List of Claim Intimation</span>
+                        </div>
+                        <a type="button" id="reopen" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
+                           onclick="viewPolicyModule.viewReopen()">Reopen</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered" id="policy-table" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th style="width: 1%"></th>
+                            <th th:text="#{claimNumber}">Claim Number</th>
+                            <th th:text="#{policyNumber}">Policy Number</th>
+                            <th th:text="#{assuredName}">Assured Name</th>
+                            <th th:text="#{approvedAmount}">Approved Amount</th>
+                            <th th:text="#{approvedOn}">Approved On</th>
+                            <th th:text="#{status}">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <form id="viewAgentsForm">
+                            <th:block th:each="intimation : ${searchResult}">
+                                <tr>
+                                    <td><input type="radio" name="claimId" th:value="${intimation.claimId}" value="5100000010315"/>
+                                        <input type="hidden" class="claimStatus"
+                                               th:value="${intimation.claimStatus}"/>
+                                    </td>
+                                    <td th:text="${intimation.claimNumber}">5100000010315</td>
+                                    <td th:text="${intimation.policyNumber}">5100000010315</td>
+                                    <td th:text="${intimation.assuredName}">5100000010315</td>
+                                    <td th:text="${intimation.approvedAmount}"></td>
+                                    <td th:text="${intimation.approvedOn}?${#dates.format(intimation.approvedOn,'dd/MM/yyyy')}"></td>
+                                    <td th:text="${intimation.claimStatus}"></td>
+                                </tr>
+                            </th:block>
+                        </form>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer" th:include="fragments/common :: footer">
+</footer>
+</body>
+</html>
