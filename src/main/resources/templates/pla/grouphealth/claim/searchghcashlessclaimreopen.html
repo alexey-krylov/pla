@@ -59,10 +59,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Record Under Processing</h3>
+                <h3 class="text-warning">Alert</h3>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger">Record is already under processing</p>
             </div>
             <div class="modal-footer">
-                <button data-target="#myModal" type="button" id="modalButton" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <button data-target="#myModal" type="button" id="modalButton" class="btn btn-danger btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                     Ok
                 </button>
             </div>
@@ -72,7 +75,7 @@
 <div class="container container-fluid" style="padding-top:10px">
     <p class="lead">
     <ol class="breadcrumb">
-        <li>GROUP HEALTH / RE-OPENED CASHLESS CLAIM  </li>
+        <li>GROUP HEALTH CASHLESS CLAIM</li>
         <li>SEARCH</li>
     </ol>
     </p>
@@ -157,8 +160,7 @@
                                 <span>List Of Cancelled/Rejected Group Health Cashless Claim</span>
                             </div>
                             <div class="col-lg-6" style="text-align: right">
-                                <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()">Update </a>
-                                <button type="button" class="btn btn-default btn-sm btn-disabled" id="PreAuthorization-view" disabled="disabled" onclick="searchPreAuthorizationModule.viewPreAuthorization()">View</button>
+                                <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()">Reopen </a>
                                 <!--<a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled" onclick="searchPreAuthorizationModule.emailPolicy()">Email</a>-->
 
                             </div>

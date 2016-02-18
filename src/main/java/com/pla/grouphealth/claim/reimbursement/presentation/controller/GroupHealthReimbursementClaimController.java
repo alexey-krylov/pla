@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/grouphealth/claim/cashless")
-public class GHReimbursementClaimController {
+public class GroupHealthReimbursementClaimController {
 }

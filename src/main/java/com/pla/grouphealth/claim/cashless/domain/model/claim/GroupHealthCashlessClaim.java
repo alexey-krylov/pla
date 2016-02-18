@@ -375,6 +375,11 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public GroupHealthCashlessClaim updateWithClaimReopenProcessorUserId(String claimReopenProcessorUserId) {
+        this.claimReopenProcessorUserId = claimReopenProcessorUserId;
+        return this;
+    }
+
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"),
         APPROVED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), SERVICE_MISMATCHED("Evaluation");

@@ -49,4 +49,9 @@ public class SearchReopenedClaimDetailDto {
         }
         return this;
     }
+
+    public SearchReopenedClaimDetailDto updateWithShowModalWin() {
+        this.showModalWin = Boolean.TRUE;
+        return this;
+    }
 }

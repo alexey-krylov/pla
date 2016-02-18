@@ -16,8 +16,6 @@ import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCash
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
-import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.SearchPreAuthorizationRecordDto;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
 import com.pla.publishedlanguage.contract.IAuthenticationFacade;
 import com.pla.sharedkernel.domain.model.FamilyId;
@@ -710,9 +708,20 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/updateviewcashlessclaimreopen", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getCashlessClaimReopen(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, GroupHealthCashlessClaimBillMismatchProcessingException {
+    public ModelAndView getCashlessClaimReopen(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException {
         ModelAndView modelAndView = new ModelAndView();
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithReopenProcessorUserId(groupHealthCashlessClaimId, userName);
         modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimreopen");
+        return modelAndView;
+    }
+
+    @ExceptionHandler(ReopenGroupHealthCashlessClaimProcessingException.class)
+    public ModelAndView handleException(ReopenGroupHealthCashlessClaimProcessingException ex){
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
+        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin());
         return modelAndView;
     }
 

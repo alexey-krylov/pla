@@ -62,7 +62,6 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.velocity.VelocityEngineUtils;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -71,11 +70,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status;
 import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status.*;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
-import static org.springframework.util.Assert.*;
 import static org.springframework.util.Assert.notEmpty;
 import static org.springframework.util.Assert.notNull;
 
@@ -1094,5 +1091,16 @@ public class GroupHealthCashlessClaimService {
     public List<SearchReopenedClaimDetailDto> searchReopenedCashlessClaimByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, String userName){
         List<GroupHealthCashlessClaim> groupHealthCashlessClaims = GHCashlessClaimFinder.searchReopenedGroupHealthCashlessClaimByCriteria(searchReopenedClaimDetailDto, Lists.newArrayList(userName, null));
         return isNotEmpty(groupHealthCashlessClaims) ? groupHealthCashlessClaims.stream().map(claim -> new SearchReopenedClaimDetailDto().updateWithDetails(claim)).collect(Collectors.toList()) : Lists.newArrayList();
+    }
+
+    public void populateGroupHeathCashlessClaimWithReopenProcessorUserId(String groupHealthCashlessClaimId, String userName) throws ReopenGroupHealthCashlessClaimProcessingException {
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        if(isNotEmpty(groupHealthCashlessClaim)){
+            if(isNotEmpty(groupHealthCashlessClaim.getClaimReopenProcessorUserId()) && !groupHealthCashlessClaim.getClaimReopenProcessorUserId().equals(userName)){
+                throw new ReopenGroupHealthCashlessClaimProcessingException("The record is already under processing.");
+            }
+        }
+        groupHealthCashlessClaim.updateWithClaimReopenProcessorUserId(userName);
+        groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
     }
 }
