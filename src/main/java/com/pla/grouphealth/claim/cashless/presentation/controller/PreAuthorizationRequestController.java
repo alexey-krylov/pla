@@ -6,6 +6,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.pla.grouphealth.claim.cashless.application.command.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInProcessingException;
+import com.pla.grouphealth.claim.cashless.domain.exception.PreAuthorizationInUnderWriterProcessingException;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHClaimDocumentCommand;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.GHPreAuthorizationMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.PreAuthorizationClaimantDetailCommand;
@@ -348,17 +349,28 @@ public class PreAuthorizationRequestController {
     @Synchronized
     @RequestMapping(value = "/loadunderwriterviewforupdate", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response) throws IOException, PreAuthorizationInProcessingException {
+    public ModelAndView loadUnderwriterViewForUpdate(@RequestParam String preAuthorizationId, @RequestParam String underwriterLevel, HttpServletResponse response) throws IOException, PreAuthorizationInUnderWriterProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         ModelAndView modelAndView = new ModelAndView();
-        preAuthorizationRequestService.populatePreAuthorizationWithPreAuthorizationUnderWriterUserId(preAuthorizationId, userName);
+        preAuthorizationRequestService.populatePreAuthorizationWithPreAuthorizationUnderWriterUserId(preAuthorizationId, userName, underwriterLevel);
         modelAndView.setViewName("pla/grouphealth/claim/preauthorizationunderwriter");
+        return modelAndView;
+    }
+
+    @ExceptionHandler(PreAuthorizationInUnderWriterProcessingException.class)
+    public ModelAndView handleException(PreAuthorizationInUnderWriterProcessingException ex){
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        List<PreAuthorizationClaimantDetailCommand> preAuthorizationClaimantDetailCommands = preAuthorizationRequestService.getDefaultListByUnderwriterLevel(ex.getUnderwriterLevel(), userName);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("preAuthorizationResult", preAuthorizationClaimantDetailCommands);
+        modelAndView.addObject("searchCriteria", new SearchPreAuthorizationRecordDto().updateWithUnderwriterLevel(ex.getUnderwriterLevel()));
+        modelAndView.setViewName("pla/grouphealth/claim/preAuthUnderwriter");
         return modelAndView;
     }
 
     @RequestMapping(value = "/loadunderwriterviewforview", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView loadUnderwriterViewForView(@RequestParam String preAuthorizationId, @RequestParam String clientId, HttpServletResponse response){
+    public ModelAndView loadUnderwriterViewForView(@RequestParam String preAuthorizationId, @RequestParam String underwriterLevel, HttpServletResponse response){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/grouphealth/claim/preauthorizationunderwriter");
         return modelAndView;

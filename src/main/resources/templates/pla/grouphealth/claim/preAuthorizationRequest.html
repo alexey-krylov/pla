@@ -972,7 +972,7 @@
 
                                                     </select>
 
-                                                    <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$dirty">
+                                                    <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$error">
                                                         <small class="error" ng-message="required">Please indicate whether it is a ?</small>
                                                     </div>
                                                 </div>
@@ -982,7 +982,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label"> G</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="pregnancyG"
+                                                            ng-disabled="isViewMode"  name="pregnancyG"
                                                             ng-model="diagnosisTreatmentDto.pregnancyG"
                                                             class="form-control input-md"/>
                                                     <div class="error" ng-messages="step3.pregnancyG.$error" ng-if="step3.pregnancyG.$dirty">
@@ -994,7 +994,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label"> P</label>
                                                     <input type="text"
-                                                              ng-disabled="isViewMode"  name="pregnancyP"
+                                                           ng-disabled="isViewMode"  name="pregnancyP"
 
                                                            ng-model="diagnosisTreatmentDto.pregnancyP"
                                                            class="form-control input-md"/>
@@ -1010,7 +1010,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label"> L</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="assuredFullName"
+                                                            ng-disabled="isViewMode"  name="assuredFullName"
                                                             ng-model="diagnosisTreatmentDto.pregnancyL"
                                                             class="form-control input-md"/>
                                                     <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$dirty">
@@ -1022,7 +1022,7 @@
                                                 <div class="form-group  ">
                                                     <label class="control-label">A</label>
                                                     <input   type="text"
-                                                                ng-disabled="isViewMode"  name="assuredFullName"
+                                                             ng-disabled="isViewMode"  name="assuredFullName"
                                                              ng-model="diagnosisTreatmentDto.pregnancyA"
                                                              class="form-control input-md"/>
                                                     <div class="error" ng-messages="step3.assuredFullName.$error" ng-if="step3.assuredFullName.$dirty">
@@ -1042,7 +1042,7 @@
                                                                ng-change="changeProbableDate(diagnosisTreatmentDto.pregnancyDateOfDelivery)"
                                                                is-open="datepickerprobable.opened"
                                                                ng-required="true"
-                                                                  ng-disabled="isViewMode"  name="pregnancyDateOfDelivery"
+                                                               ng-disabled="isViewMode"  name="pregnancyDateOfDelivery"
                                                                ng-model="diagnosisTreatmentDto.pregnancyDateOfDelivery"/>
                                                       <span class="input-group-btn">
                                                          <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
@@ -1050,7 +1050,7 @@
                                                              <i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
                                                     </div>
-                                                    <div class="error" ng-messages="step3.pregnancyDateOfDelivery.$error" ng-if="step3.pregnancyDateOfDelivery.$dirty">
+                                                    <div class="error" ng-messages="step3.pregnancyDateOfDelivery.$error" ng-if="step3.pregnancyDateOfDelivery.$error">
                                                         <small class="error" ng-message="required">Please enter Probable Date of Delivery</small>
                                                     </div>
                                                 </div>
@@ -1075,11 +1075,11 @@
                                                 <div class="form-group  required">
                                                     <label class="control-label">Name of Illness</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="nameOfIllnessDisease"
+                                                            ng-disabled="isViewMode"  name="nameOfIllnessDisease"
                                                             ng-required="true"
                                                             ng-model="diagnosisTreatmentDto.nameOfIllnessDisease"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$dirty">
+                                                    <div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$error">
                                                         <small class="error" ng-message="required">Please enter Name of Illness</small>
                                                     </div>
                                                 </div>
@@ -1089,11 +1089,11 @@
                                                 <div class="form-group  required">
                                                     <label class="control-label">Relevant Clinical Finding</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="relevantClinicalFinding"
+                                                            ng-disabled="isViewMode"  name="relevantClinicalFinding"
                                                             ng-required="true"
                                                             ng-model="diagnosisTreatmentDto.relevantClinicalFinding"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.relevantClinicalFinding.$error" ng-if="step3.relevantClinicalFinding.$dirty">
+                                                    <div class="error" ng-messages="step3.relevantClinicalFinding.$error" ng-if="step3.relevantClinicalFinding.$error">
                                                         <small class="error" ng-message="required">Please enter Relevant Clinical Finding</small>
                                                     </div>
                                                 </div>
@@ -1106,11 +1106,11 @@
                                                     <label class="control-label">Duration of the Present Ailment in Days</label>
 
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="durationOfPresentAilment"
+                                                            ng-disabled="isViewMode"  name="durationOfPresentAilment"
                                                             ng-required="true"
                                                             ng-model="diagnosisTreatmentDto.durationOfPresentAilment"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.durationOfPresentAilment.$error" ng-if="step3.durationOfPresentAilment.$dirty">
+                                                    <div class="error" ng-messages="step3.durationOfPresentAilment.$error" ng-if="step3.durationOfPresentAilment.$error">
                                                         <small class="error" ng-message="required">Please enter Ailment in Days</small>
                                                     </div>
                                                 </div>
@@ -1125,9 +1125,7 @@
                                                                view-enabled=""
                                                                ng-change="changelaunchFirstConsultanceDate(diagnosisTreatmentDto.dateOfConsultation)"
                                                                is-open="datepickerconsultance.opened"
-                                                               ng-required="true"
-
-                                                                  ng-disabled="isViewMode"  name="dateOfConsultation"
+                                                               ng-disabled="true"  name="dateOfConsultation"
                                                                ng-model="diagnosisTreatmentDto.dateOfConsultation"/>
                                                       <span class="input-group-btn">
                                                          <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="true"
@@ -1147,11 +1145,11 @@
                                                 <div class="form-group  required">
                                                     <label class="control-label">Past History Present ailment if any</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="pastHistoryOfPresentAilment"
+                                                            ng-disabled="isViewMode"  name="pastHistoryOfPresentAilment"
                                                             ng-required="true"
                                                             ng-model="diagnosisTreatmentDto.pastHistoryOfPresentAilment"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.pastHistoryOfPresentAilment.$error" ng-if="step3.pastHistoryOfPresentAilment.$dirty">
+                                                    <div class="error" ng-messages="step3.pastHistoryOfPresentAilment.$error" ng-if="step3.pastHistoryOfPresentAilment.$error">
                                                         <small class="error" ng-message="required">Please enter Present ailment if any</small>
                                                     </div>
                                                 </div>
@@ -1163,11 +1161,11 @@
                                                     <label class="control-label">Provisional Diagnosis</label>
 
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="provisionalDiagnosis"
+                                                            ng-disabled="isViewMode"  name="provisionalDiagnosis"
                                                             ng-required="true"
                                                             ng-model="diagnosisTreatmentDto.provisionalDiagnosis"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.provisionalDiagnosis.$error" ng-if="step3.provisionalDiagnosis.$dirty">
+                                                    <div class="error" ng-messages="step3.provisionalDiagnosis.$error" ng-if="step3.provisionalDiagnosis.$error">
                                                         <small class="error" ng-message="required">Please enter Provisional Diagnosis</small>
                                                     </div>
                                                 </div>
@@ -1176,11 +1174,11 @@
                                                 <div class="form-group required ">
                                                     <label class="control-label">Name of Illness</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="nameOfIllnessDisease"
+                                                            ng-disabled="isViewMode"  name="nameOfIllnessDisease"
                                                             ng-required="true"
                                                             ng-model="diagnosisTreatmentDto.nameOfIllnessDisease"
                                                             class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$dirty">
+                                                    <div class="error" ng-messages="step3.nameOfIllnessDisease.$error" ng-if="step3.nameOfIllnessDisease.$error">
                                                         <small class="error" ng-message="required">Please enter Name of Illness</small>
                                                     </div>
                                                 </div>
@@ -1195,7 +1193,7 @@
                                                         <option value="IntensiveCare">Intensive Care</option>
                                                         <option value="Investigation">Investigation</option>
                                                     </select>
-                                                    <div class="error" ng-messages="step3.lineOfTreatment.$error" ng-if="step3.lineOfTreatment.$dirty">
+                                                    <div class="error" ng-messages="step3.lineOfTreatment.$error" ng-if="step3.lineOfTreatment.$error">
                                                         <small class="error" ng-message="required">Please enter Proposed Line of Treatment</small>
                                                     </div>
                                                 </div>
@@ -1214,25 +1212,24 @@
                                                         <option value="CT's">CT's</option>
                                                     </select>
 
-                                                    <div class="error" ng-messages="step3.indicateTest.$error" ng-if="step3.indicateTest.$dirty">
+                                                    <div class="error" ng-messages="step3.indicateTest.$error" ng-if="step3.indicateTest.$error">
                                                         <small class="error" ng-message="required">Please enter Indicate Test</small>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group required ">
-                                                    <label class="control-label">Name of Surgery</label>
-                                                    <input  type="text"
-                                                               ng-disabled="isViewMode"  name="nameOfSurgery"
-                                                            ng-required="true"
-                                                            ng-model="diagnosisTreatmentDto.nameOfSurgery"
-                                                            class="form-control input-md"/>
-                                                    <div class="error" ng-messages="step3.nameOfSurgery.$error" ng-if="step3.nameOfSurgery.$dirty">
-                                                        <small class="error" ng-message="required">Please enter Name of Surgery</small>
+                                                <div class="form-group  required">
+                                                    <label class="control-label">Name of the Treating Doctor</label>
+                                                    <input type="text"
+                                                           name="doctorName" ng-required="true"
+                                                           ng-model="diagnosisTreatmentDto.doctorName"
+                                                           ng-disabled="true"
+                                                           class="form-control input-md"/>
+                                                    <div class="error" ng-messages="step3.doctorName.$error" ng-if="step3.doctorName.$error">
+                                                        <small class="error" ng-message="required">Please enter Name of the Treating Doctor</small>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-4">
                                                 <div class="form-group  required">
                                                     <label class="control-label">Probable Date of Admission</label>
@@ -1244,7 +1241,7 @@
                                                                is-open="datepickeradmission.opened"
 
 
-                                                                  ng-disabled="isViewMode"  name="dateOfAdmission"
+                                                               ng-disabled="isViewMode"  name="dateOfAdmission"
                                                                ng-model="diagnosisTreatmentDto.dateOfAdmission"/>
                                                               <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default btn-sm" view-enabled="" ng-disabled="isViewMode"
@@ -1253,7 +1250,7 @@
                                                     </span>
                                                     </div>
                                                     <div class="error" ng-messages="step4.dateOfAdmission.$error"
-                                                         ng-if="step4.dateOfAdmission.$dirty">
+                                                         ng-if="step4.dateOfAdmission.$error">
                                                         <small ng-message="pattern">Please Enter Probable Date of Admission..
                                                         </small>
                                                     </div>
@@ -1266,7 +1263,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Length of Stay</label>
                                                     <input  type="text"
-                                                               ng-disabled="isViewMode"  name="lengthOfStay"
+                                                            ng-disabled="isViewMode"  name="lengthOfStay"
                                                             ng-model="diagnosisTreatmentDto.lengthOfStay"
                                                             class="form-control input-md"/>
                                                     <div class="error" ng-messages="step4.lengthOfStay.$error"
@@ -1291,11 +1288,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Doctor Contact Number</label>
+                                                    <input type="text"
+                                                           name="assuredFullName"
+                                                           ng-model="diagnosisTreatmentDto.doctorContactNumber"
+                                                           class="form-control input-md"/>
+                                                </div>
+                                            </div>
                                         </div>
-
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <button type="button" class="btn btn-default btn-sm" ng-disabled="isViewMode" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
+                                                <button type="button" class="btn btn-default btn-sm" ng-click="nextBtnActiveOnCancelButton()">Cancel</button>
                                             </div>
                                             <div class="col-sm-6">
                                                 <button type="button" class="btn btn-primary btn-sm"  style="float: right" ng-disabled="isViewMode || step3.$invalid"
@@ -1935,6 +1940,7 @@
                                                         <input type="text" class="form-control input-sm"
                                                                name="documentTitle"
                                                                onkeypress="return isEnterKey(event)"
+                                                               ng-disabled="isViewMode"
                                                                ng-model="additionalDocument.documentId"/>
                                                     </div>
                                                 </div>

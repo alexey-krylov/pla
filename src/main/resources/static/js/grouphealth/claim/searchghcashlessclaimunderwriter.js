@@ -5,16 +5,16 @@ var searchPreAuthorizationModule = (function(){
     this.PreAuthorizationName = null;
     PreAuthorizationServices.getTheItemSelected = function(ele){
         this.groupHealthCashlessClaimId=$(ele).val();
-        this.clientId=$(ele).attr("clientId");
+        this.underwriterLevel=$(ele).attr("underwriterLevel");
         $("#PreAuthorization-view").prop("disabled","");
         $("#PreAuthorization-create").prop("disabled","");
         $(".btn-disabled").attr("disabled", false);
         this.PreAuthorizationName = $(ele).parent().find('input[type=hidden]').val();
     };
     PreAuthorizationServices.updatePreAuthorization = function () {
-        var  clientId =this.clientId;
+        var  underwriterLevel =this.underwriterLevel;
         var  groupHealthCashlessClaimId =this.groupHealthCashlessClaimId;
-        window.location.href = "/pla/grouphealth/claim/cashless/claim/loadunderwriterviewforupdate?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&clientId="+ clientId;
+        window.location.href = "/pla/grouphealth/claim/cashless/claim/loadunderwriterviewforupdate?groupHealthCashlessClaimId=" + groupHealthCashlessClaimId +"&underwriterLevel="+ underwriterLevel;
     };
 
     PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button

@@ -117,11 +117,10 @@ console.log( $scope.createUpdateDto );
             $scope.tratementdignosisnextbuttonfalse= function(){
                 $scope.provisionaldignosisdiv = true;
                 if (mode == 'view'){
-                    $scope.stepsSaved["4"] = false;
-
+                    $scope.stepsSaved["3"] = false;
                 }
                 else {
-                    $scope.stepsSaved["4"] = true;
+                    $scope.stepsSaved["3"] = true;
                 }
             };
 
@@ -136,7 +135,7 @@ console.log( $scope.createUpdateDto );
                 $scope.provisionaldignosisdiv=true;
             };
 
-            $scope.updateTreatmentAndDiagnosis = function (diagnosisTreatmentDto) {  alert("");
+            $scope.updateTreatmentAndDiagnosis = function (diagnosisTreatmentDto) {
                 if ($scope.isEditDiagnosisTriggered) {
                     $scope.createUpdateDto.diagnosisTreatmentDtos[$scope.treatmentDiagnosisIndex] = diagnosisTreatmentDto;
 
@@ -145,6 +144,7 @@ console.log( $scope.createUpdateDto );
                     $scope.provisionaldignosisdiv=false;
                 } else {
                     $scope.createUpdateDto.diagnosisTreatmentDtos.push(diagnosisTreatmentDto);
+                    $scope.savePreAuthorizationRequest();
                     //console.log(JSON.stringify($scope.createUpdateDto));
 
                 }
@@ -160,6 +160,7 @@ console.log( $scope.createUpdateDto );
             $scope.activenextbuttonforprovisional = function(){
                 $scope.diagnosisTreatmentDto = {};
                 $scope.diagnosisTreatmentDto.dateOfConsultation = $scope.createUpdateDto.diagnosisTreatmentDtos[0].dateOfConsultation;
+                $scope.diagnosisTreatmentDto.doctorName = $scope.createUpdateDto.diagnosisTreatmentDtos[0].doctorName;
                 $scope.provisionaldignosisdiv = true;
                 $scope.stepsSaved["3"] = true;
             };

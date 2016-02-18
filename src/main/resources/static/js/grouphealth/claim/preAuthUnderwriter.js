@@ -5,7 +5,7 @@ var searchPreAuthorizationModule = (function(){
     this.PreAuthorizationName = null;
     PreAuthorizationServices.getTheItemSelected = function(ele){
         this.preAuthorizationId=$(ele).val();
-        this.clientId=$(ele).attr("clientId");
+        this.underwriterLevel=$(ele).attr("underwriterLevel");
         $("#PreAuthorization-view").prop("disabled","");
         $("#PreAuthorization-create").prop("disabled","");
         $(".btn-disabled").attr("disabled", false);
@@ -13,16 +13,16 @@ var searchPreAuthorizationModule = (function(){
     };
 
     PreAuthorizationServices.updatePreAuthorization = function () {
-        var  clientId =this.clientId;
+        var  underwriterLevel =this.underwriterLevel;
         var  preAuthorizationId =this.preAuthorizationId;
-        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadunderwriterviewforupdate?preAuthorizationId=" + preAuthorizationId +"&clientId="+ clientId+"&mode=edit";
+        window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadunderwriterviewforupdate?preAuthorizationId=" + preAuthorizationId +"&underwriterLevel="+ underwriterLevel+"&mode=edit";
     };
 
     PreAuthorizationServices.viewPreAuthorization =  function(){
     //activate deactive when click radio button
          var preAuthorizationId = this.preAuthorizationId;
-         var clientId=this.clientId;
-         window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadunderwriterviewforview?preAuthorizationId=" + preAuthorizationId +"&clientId="+ clientId+ "&mode=view";
+         var underwriterLevel=this.underwriterLevel;
+         window.location.href = "/pla/grouphealth/claim/cashless/preauthorizationrequest/loadunderwriterviewforview?preAuthorizationId=" + preAuthorizationId +"&underwriterLevel="+ underwriterLevel+ "&mode=view";
 
 
     };
