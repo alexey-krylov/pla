@@ -53,14 +53,23 @@ var  app = angular.module('CashLessClaimBill', ['common', 'ngRoute','ngMessages'
                         var clientId = getQueryParameter('clientId');
                         deferred.resolve(clientId);
                         return deferred.promise;
+                    }],
+                    bankDetails: ['$q', '$http', function ($q, $http) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouplife/claim/getAllBankNames').success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
                     }]
                 }
 
             }
         )}])
 
-    .controller('CashLessClaimBillCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
-        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId) {
+    .controller('CashLessClaimBillCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId','bankDetails',
+        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId,bankDetails) {
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
             $scope.treatmentDiagnosis = {};
@@ -85,6 +94,10 @@ var  app = angular.module('CashLessClaimBill', ['common', 'ngRoute','ngMessages'
             $scope.fileSaved = null;
             $scope.isViewMode = false;
             $scope.stepsSaved = [];
+            $scope.bankDetailsResponse=[];
+            $scope.bankDetailsResponse=bankDetails;
+            $scope.bankBranchDetails=[];
+            $scope.bankDetails={};
 
             if ($scope.createUpdateDto.submitted) {
                 $scope.isViewMode = true;
@@ -718,44 +731,17 @@ var  app = angular.module('CashLessClaimBill', ['common', 'ngRoute','ngMessages'
                 });
             };
 
-            $scope.bankDetailsResponse=[];
-
-            $http.get('/pla/individuallife/endorsement/getAllBankNames').success(function (response, status, headers, config) {
-                $scope.bankDetailsResponse = response;
-                console.log("Bank Details :"+JSON.stringify(response));
-            }).error(function (response, status, headers, config) {
-            });
-
-
-            $scope.bankBranchDetails=[];
-
-            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankName', function (newvalue, oldvalue) {
+            $scope.$watch('createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName', function (newvalue, oldvalue) {
                 if (newvalue) {
                     var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
-                    alert("Bank Details.."+JSON.stringify(bankCode));
                     if (bankCode) {
-                        $http.get('/pla/individuallife/endorsement/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                        $http.get('/pla/grouplife/claim/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
                             $scope.bankBranchDetails = response;
-                            alert("Bank branch Details :"+JSON.stringify(response));
                         }).error(function (response, status, headers, config) {
                         });
                     }
                 }
             });
-//$scope.bankBranchDetails=[];
-//            $scope.$watch('createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchName', function (newvalue, oldvalue) {
-//                if (newvalue) {
-//                    $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.bankDetails.bankBranchSortCode = newvalue;
-//                }
-//            });
-
-            /**
-             * Clearing The Detail Related to Basnk Name
-             */
-            $scope.clearBankBranchName=function(){
-                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchName = null;
-                $scope.ilEndrosementDetils.premiumPaymentDetailsNew.bankDetails.bankBranchSortCode=null;
-            }
 
         }]);
 

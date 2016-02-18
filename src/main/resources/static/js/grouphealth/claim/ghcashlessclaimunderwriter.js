@@ -53,14 +53,23 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                         var clientId = getQueryParameter('clientId');
                         deferred.resolve(clientId);
                         return deferred.promise;
+                    }],
+                    bankDetails: ['$q', '$http', function ($q, $http) {
+                        var deferred = $q.defer();
+                        $http.get('/pla/grouplife/claim/getAllBankNames').success(function (response, status, headers, config) {
+                            deferred.resolve(response)
+                        }).error(function (response, status, headers, config) {
+                            deferred.reject();
+                        });
+                        return deferred.promise;
                     }]
                 }
 
             }
         )}])
 
-    .controller('CashLessClaimUnderwriterCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId',
-        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId) {
+    .controller('CashLessClaimUnderwriterCtrl', ['$scope', '$http','createUpdateDto','getQueryParameter','$window','documentList','$upload','clientId','groupHealthCashlessClaimId','bankDetails',
+        function ($scope, $http, createUpdateDto, getQueryParameter, $window, documentList, $upload, clientId,groupHealthCashlessClaimId,bankDetails) {
             $scope.createUpdateDto = createUpdateDto;
             $scope.drugServicesDtoList = $scope.createUpdateDto.groupHealthCashlessClaimDrugServices;
             $scope.treatmentDiagnosis = {};
@@ -87,6 +96,11 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.fileSaved = null;
             $scope.isViewMode = false;
             $scope.stepsSaved = [];
+            $scope.bankDetailsResponse=[];
+            $scope.bankDetailsResponse=bankDetails;
+            $scope.bankBranchDetails=[];
+            $scope.bankDetails={};
+
 
             $scope.$watch('documentList', function (newCollection, oldCollection) {
                 $scope.disableSubmit = $scope.shouldSubmitBeDisabled(newCollection);
@@ -926,6 +940,19 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.ok = function(){
                 window.location.href = '/pla/grouphealth/claim/cashless/claim/underwriter/getdefaultlistofunderwriterlevels/LEVEL1';
             }
+
+
+            $scope.$watch('createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName', function (newvalue, oldvalue) {
+                if (newvalue) {
+                    var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                    if (bankCode) {
+                        $http.get('/pla/grouplife/claim/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                            $scope.bankBranchDetails = response;
+                        }).error(function (response, status, headers, config) {
+                        });
+                    }
+                }
+            });
 
         }]);
 

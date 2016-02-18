@@ -837,70 +837,70 @@
                                     Bank  Details <i class="pull-right glyphicon"
                                                      ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimantDetails, 'glyphicon-chevron-right': !accordionStatusDocuments.claimantDetails}"></i>
                                 </accordion-heading>
-                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;"
-                                >
+                                <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;">
+
                                     <div class = "row">
-                                        <div class="col-md-6">
-                                            <div class="form-group  ">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
                                                 <label class="control-label">Bank Name</label>
-                                                <select
-                                                        name="sumAssured"
-                                                        class="form-control input-md"
-                                                        ng-options="bankDetails.bankName as bankDetails.bankName for bankDetails in bankDetailsResponse"
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName"/>
-
-
+                                                <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"   ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankName"  ng-change="clearBankBranchName()" >
+                                                </select>
+                                                <div class="error" ng-messages="step1.bankName.$error" ng-if="step1.bankName.$dirty">
+                                                    <small class="error" ng-message="required">Please specify Bank Name.</small>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group  ">
-                                                <label class="control-label">Bank Branch Code</label>
-                                                <select
-                                                        name="bankCode"
-                                                        class="form-control input-md"
-                                                        ng-options="bankDetails.bankCode as bankDetails.bankCode for bankDetails in bankBranchDetails"
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankBranchCode"/>
-
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <label class="control-label">Bank Branch Name</label>
+                                                <select class="form-control input-sm" name="branchname"  ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                        ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankBranchCode" ng-selected="bankBranchDetail.branchName" >
+                                                </select>
+                                                <div class="error" ng-messages="step1.branchname.$error" ng-if="step1.branchname.$dirty">
+                                                    <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group  ">
                                                 <label class="control-label">Bank Account Type</label>
+                                                <select
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankAccountType"
+                                                        name="accountType"  ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                        class="form-control input-md">
 
-
-
-                                                <select   ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankAccountType"
-                                                          name="accountType"
-                                                          class="form-control input-md">
                                                     <option value="Saving">Saving</option>
                                                     <option value="Current">Current</option>
                                                 </select>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group  ">
-                                                <label class="control-label">Bank Account Number</label>
-                                                <input  type="text"
-                                                        name="sumAssured"
-                                                        class="form-control input-md"
-
-                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankAccountNumber"/>
-
-
+                                                <div class="error" ng-messages="step1.accountType.$error" ng-if="step1.accountType.$dirty">
+                                                    <small class="error" ng-message="required">Please specify Bank Account Type.</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group  ">
+                                                <label class="control-label">Bank Account Number</label>
+                                                <input  type="text"
+                                                        name="sumAssured"  ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                        class="form-control input-md"
+                                                        ng-model="createUpdateDto.groupHealthCashlessClaimBankDetailDto.bankAccountNumber"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-6" style="float: right">
-                                        <button type="button" class="btn btn-primary btn-sm" style="float: right" ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode || step4.$invalid">Save
+                                        <button type="button" class="btn btn-primary btn-sm" style="float: right"
+                                                ng-click="saveCashlessClaimRequest()" ng-disabled="isViewMode"
+                                                >Save
                                         </button>
                                     </div>
                                 </div>
                             </accordion-group>
                         </accordion>
-
-
-
                     </ng-form>
                 </div>
 

@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import com.pla.grouphealth.claim.cashless.application.command.claim.*;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
@@ -684,6 +685,13 @@ public class GroupHealthCashlessClaimController {
         modelAndView.addObject("searchCriteria", searchGroupHealthCashlessClaimRecordDto);
         return modelAndView;
     }
+    @RequestMapping(value = "/getallclaimreopendefaultlist", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllClaimReopenDefaultList (){
+     ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
+     return modelAndView;
+    }
+
 
 
 }
