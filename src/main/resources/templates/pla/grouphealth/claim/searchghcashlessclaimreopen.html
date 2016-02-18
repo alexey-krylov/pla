@@ -39,8 +39,6 @@
                         "fnDrawCallback": function () {
                             $("input[type=radio]").on("click", function () {
                                 searchPreAuthorizationModule.getTheItemSelected(this);
-
-
                             });
                         }
                     });
@@ -49,7 +47,7 @@
                         $('#myModal').modal({backdrop: 'static', keyboard: false});
                     }
                     $('#modalButton').on("click", function () {
-                        window.location.href = '/pla/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims';
+                        window.location.href = '/pla/grouphealth/claim/cashless/claim/getallreopenedclaimdefaultlist';
                     });
                 });
             });
@@ -63,11 +61,11 @@
             <div class="modal-header">
                 <h3>Record Under Processing</h3>
             </div>
-            <!--<div class="modal-footer">
+            <div class="modal-footer">
                 <button data-target="#myModal" type="button" id="modalButton" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                     Ok
                 </button>
-            </div>-->
+            </div>
         </div>
     </div>
 </div>
@@ -75,7 +73,7 @@
     <p class="lead">
     <ol class="breadcrumb">
         <li>GROUP HEALTH / RE-OPENED CASHLESS CLAIM  </li>
-        <li>SEARCH<</li>
+        <li>SEARCH</li>
     </ol>
     </p>
     <form method="post" action="/pla/grouphealth/claim/cashless/claim/searchreopenedghcashlessclaimbycriteria" novalidate="true" name="searchAuthorizationForm"
@@ -136,7 +134,7 @@
             <!--</div>-->
             <!--</div>-->
             <div class="col-md-2">
-                <button type="submit" style="margin-left: 44%;margin-top: 20px" class="btn btn-default btn-sm"
+                <button type="submit" style="float: inherit" class="btn btn-default btn-sm"
                         id="searchpreauthorizationrecord">Search
                 </button>
             </div>
@@ -178,7 +176,7 @@
                             <th:block>
                                 <tr th:each="cashlessClaimresult : ${claimResult}">
                                     <td>
-                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.groupHealthCashlessClaimId}" th:attr="clientId=${cashlessClaimresult.clientId}"/>
+                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.claimNumber}" th:attr="clientId=${cashlessClaimresult.clientId}"/>
                                     </td>
                                     <td th:text="${cashlessClaimresult.claimNumber}"></td>
                                     <td th:text="${cashlessClaimresult.status}"></td>

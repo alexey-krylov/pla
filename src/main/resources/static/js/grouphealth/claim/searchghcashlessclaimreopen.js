@@ -24,19 +24,5 @@ var searchPreAuthorizationModule = (function(){
 
 
     };
-
-    PreAuthorizationServices.emailPolicy = function () {
-        var  preAuthorizationId =this.PreAuthorizationSelected;
-        //  window.location.href = "/pla/grouplife/policy/viewpolicy?policyId=" + policyId  + "&mode=view";
-
-        window.open('/pla/grouplife/policy/openemailpolicy/'+preAuthorizationId,"_blank","toolbar=no,resizable=no," +
-        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
-
-    };
-
-    PreAuthorizationServices.reload = function(){
-        window.location.reload();
-    };
-
     return PreAuthorizationServices;
 })();

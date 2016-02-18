@@ -227,8 +227,9 @@ public class GHCashlessClaimFinder {
         }
         Query query = new Query();
         query.addCriteria(new Criteria().and("claimReopenProcessorUserId").in(usernames));
+        query.addCriteria(new Criteria().and("status").in(GroupHealthCashlessClaim.Status.CANCELLED, GroupHealthCashlessClaim.Status.REPUDIATED));
         if(isNotEmpty(searchReopenedClaimDetailDto.getPolicyHolderName())){
-            query.addCriteria(new Criteria().and("ghProposer.proposerName").is(searchReopenedClaimDetailDto.getPolicyHolderName()));
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").regex("^"+searchReopenedClaimDetailDto.getPolicyHolderName(), "i"));
         }
         if(isNotEmpty(searchReopenedClaimDetailDto.getClaimNumber())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchReopenedClaimDetailDto.getClaimNumber()));
@@ -240,10 +241,9 @@ public class GHCashlessClaimFinder {
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchReopenedClaimDetailDto.getClientId()));
         }
         if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredName())){
-            query.addCriteria(new Criteria()
-                    .and("groupHealthCashlessClaimId.assuredDetail.firstName")
-                    .regex(searchReopenedClaimDetailDto.getAssuredName())
-                    .orOperator(Criteria.where("groupHealthCashlessClaimId.assuredDetail.surname").regex(searchReopenedClaimDetailDto.getAssuredName())));
+            query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchReopenedClaimDetailDto.getAssuredName(), "i"),
+                    Criteria.where("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchReopenedClaimDetailDto.getAssuredName(), "i")));
         }
         if(isNotEmpty(searchReopenedClaimDetailDto.getAssuredNRCNumber())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimId.assuredDetail.nrcNumber").is(searchReopenedClaimDetailDto.getAssuredNRCNumber()));
