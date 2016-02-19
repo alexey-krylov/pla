@@ -2015,7 +2015,7 @@ public  List<GLClaimDataDto>  getAllRejectedOrClosedClaimDetail(){
                 DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
                 claimDataDto.setClaimIntimationDate(intimationDate);
 
-                DateTime closedOrRejectedOn = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
+                DateTime closedOrRejectedOn = map.get("submittedOn") != null ? new DateTime( map.get("submittedOn")) : null;
                claimDataDto.setClosedOrRejectedOn(closedOrRejectedOn);
 
                 DateTime today = new DateTime();
@@ -2058,8 +2058,8 @@ public  List<GLClaimDataDto>  getAllRejectedOrClosedClaimDetail(){
                 String claimStatusResult = claimStatus.getDescription();
                 claimDataDto.setClaimStatus(claimStatusResult);
                 String routingLevelInString = (String) map.get("taggedRoutingLevel");
-                String resultRoutingLevel="";
-                if(routingLevelInString!=null){
+                String resultRoutingLevel = "";
+                if (routingLevelInString != null) {
                     RoutingLevel routingLevel = (RoutingLevel) RoutingLevel.valueOf(routingLevelInString);
                     resultRoutingLevel = routingLevel.getDescription();
                 }
@@ -2071,9 +2071,9 @@ public  List<GLClaimDataDto>  getAllRejectedOrClosedClaimDetail(){
                 claimDataDto.setPolicyNumber(policyNumber);
                 String policyHolderName = policy.getPolicyHolderName();
                 claimDataDto.setPolicyHolderName(policyHolderName);
-                PlanDetail planDetail=(PlanDetail)map.get("planDetail");
-                if(planDetail!=null){
-                    String planName=planDetail.getPlanName();
+                PlanDetail planDetail = (PlanDetail) map.get("planDetail");
+                if (planDetail != null) {
+                    String planName = planDetail.getPlanName();
                     claimDataDto.setPlanName(planName);
                 }
 
@@ -2082,31 +2082,38 @@ public  List<GLClaimDataDto>  getAllRejectedOrClosedClaimDetail(){
                     String title = assuredDetail.getTitle();
                     String assuredFirstName = assuredDetail.getFirstName();
                     String assuredSurName = assuredDetail.getSurName();
-                    claimDataDto.setAssuredName(title + "  " + assuredFirstName+"  "+assuredSurName);
+                    claimDataDto.setAssuredName(title + "  " + assuredFirstName + "  " + assuredSurName);
 
                 }
 
                 GlClaimUnderWriterApprovalDetail underWriterApprovalDetail = (GlClaimUnderWriterApprovalDetail) map.get("underWriterReviewDetail");
-                if (underWriterApprovalDetail!=null){
-                    BigDecimal underWriterApprovedAmount=underWriterApprovalDetail.getTotalApprovedAmount();
+                if (underWriterApprovalDetail != null) {
+                    BigDecimal underWriterApprovedAmount = underWriterApprovalDetail.getTotalApprovedAmount();
                     claimDataDto.setApprovedAmount(underWriterApprovedAmount);
                 }
+                /*DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
+                claimDataDto.setClaimIntimationDate(intimationDate);
+
+                DateTime approvalDate = map.get("submittedOn") != null ? new DateTime( map.get("submittedOn")) : null;
+                //claimDataDto.setApprovedOn(approvalDate);
+                claimDataDto.setClosedOrRejectedOn(approvalDate);
+                */
                 DateTime intimationDate = map.get("intimationDate") != null ? new DateTime(map.get("intimationDate")) : null;
                 claimDataDto.setClaimIntimationDate(intimationDate);
 
-                DateTime approvalDate = map.get("submittedOn") != null ? new DateTime((Date) map.get("submittedOn")) : null;
-                //claimDataDto.setApprovedOn(approvalDate);
-                claimDataDto.setClosedOrRejectedOn(approvalDate);
+                DateTime closedOrRejectedOn = map.get("submittedOn") != null ? new DateTime(map.get("submittedOn")) : null;
+                claimDataDto.setClosedOrRejectedOn(closedOrRejectedOn);
+
                 DateTime today = new DateTime();
                 Duration duration = new Duration(intimationDate, today);
-                Long gapInDays=duration.getStandardDays();
-                int gapInDaysInInteger= Integer.valueOf(gapInDays.toString());
+                Long gapInDays = duration.getStandardDays();
+                int gapInDaysInInteger = Integer.valueOf(gapInDays.toString());
                 claimDataDto.setRecordCreationInDays(gapInDaysInInteger);
-                String claimAmountInString=(String)map.get("claimAmount");
+                String claimAmountInString = (String) map.get("claimAmount");
                 // BigDecimal claimAmount=new BigDecimal((String)map.get("claimAmount"));
-                BigDecimal  resultantClaimAmount=BigDecimal.ZERO;
-                if (claimAmountInString!=null){
-                    resultantClaimAmount=new BigDecimal(claimAmountInString);
+                BigDecimal resultantClaimAmount = BigDecimal.ZERO;
+                if (claimAmountInString != null) {
+                    resultantClaimAmount = new BigDecimal(claimAmountInString);
                 }
                 claimDataDto.setClaimAmount(resultantClaimAmount);
                 return claimDataDto;
