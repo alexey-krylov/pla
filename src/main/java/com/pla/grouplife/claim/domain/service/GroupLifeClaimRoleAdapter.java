@@ -10,6 +10,7 @@ import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimProcessorRole
 import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimRegistrationProcessorRole;
 import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimSettlementProcessor;
 import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimAmendmentProcessorRole;
+import static com.pla.sharedkernel.util.RolesUtil.hasGroupLifeClaimReopenProcessorRole;
 /**
  * Created by ak
  */
@@ -62,4 +63,12 @@ public GLClaimRegistrationProcessor userToGLClaimRegistrationProcessor(UserDetai
         return new ClaimAmendmentProcessor(userDetails.getUsername());
     }
 
+    public ClaimReopenProcessor userToClaimReopenProcessor(UserDetails userDetails) {
+
+        boolean hasClaimReopenProcessorRole = hasGroupLifeClaimReopenProcessorRole(userDetails.getAuthorities());
+        if (!hasClaimReopenProcessorRole) {
+            throw new AuthorizationServiceException("User does not have Claim Amendment Processor(GROUP_LIFE_CLAIM_REOPEN_PROCESSOR_ROLE ) authority");
+        }
+        return new ClaimReopenProcessor(userDetails.getUsername());
+    }
 }

@@ -303,7 +303,14 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
         return this;
     }
 
+    public GroupLifeClaim markAsReopenClaim(String approvedBy, DateTime approvedOn, String comment) {
+        this.claimStatus = ClaimStatus.UNDERWRITING;;
+        if (isNotEmpty(approvedBy)) {
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.UNDERWRITING, approvedBy, comment, approvedOn));
+        }
 
+        return this;
+    }
     public GroupLifeClaim submit(DateTime effectiveDate, ClaimStatus status, String submittedBy) {
         this.claimStatus = status;
        // this.effectiveDate = effectiveDate;

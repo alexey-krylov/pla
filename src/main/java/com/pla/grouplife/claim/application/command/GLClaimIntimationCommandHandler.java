@@ -286,6 +286,14 @@ public class GLClaimIntimationCommandHandler {
     }
 
     @CommandHandler
+    public String reopenClaim(GLClaimReopenCommand glClaimReopenCommand) {
+        GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimReopenCommand.getClaimId()));
+        ClaimReopenProcessor reopenProcessor = groupLifeClaimRoleAdapter.userToClaimReopenProcessor(glClaimReopenCommand.getUserDetails());
+        groupLifeClaim=reopenProcessor .submitForReopen(DateTime.now(), glClaimReopenCommand.getComment(), groupLifeClaim) ;
+        glClaimMongoRepository.add(groupLifeClaim);
+        return groupLifeClaim.getIdentifier().getClaimId();
+    }
+    @CommandHandler
     public String returnClaim(ReturnGLClaimCommand returnGLClaimCommand) {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(returnGLClaimCommand.getClaimId()));
         groupLifeClaim = groupLifeClaim.returnClaim(returnGLClaimCommand.getStatus(), returnGLClaimCommand.getUserDetails().getUsername(), returnGLClaimCommand.getComment());
@@ -297,12 +305,13 @@ public class GLClaimIntimationCommandHandler {
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimApprovalCommand.getClaimId()));
         GroupLifeClaim newGroupLifeClaim=null;
         if(glClaimApprovalCommand.getCriteria()!=null && glClaimApprovalCommand.getCriteria().equals("amendment")){
-
              newGroupLifeClaim=glClaimFactory.makeAmendment(glClaimApprovalCommand,groupLifeClaim);
             glClaimMongoRepository.add(newGroupLifeClaim);
         }
-
-
+        /*else if(glClaimApprovalCommand.getCriteria()!=null && glClaimApprovalCommand.getCriteria().equals("reopen")){
+            // Logic for ReOpen
+        }
+         */
         ClaimApproverPlanDto planDetail=glClaimApprovalCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){

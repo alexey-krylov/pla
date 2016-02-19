@@ -408,24 +408,21 @@ public class GroupLifeClaimController {
         return null;
     }
 
-    /*
-
-
-    @RequestMapping(value = "/settelment", method = RequestMethod.POST)
+    @RequestMapping(value = "/reopen", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(httpMethod = "POST", value = "To submit claim for settlement")
-    public ResponseEntity submitClaim(@RequestBody GLClaimSettlementCommand glClaimSettlementCommand, HttpServletRequest request) {
+    @ApiOperation(httpMethod = "POST", value = "To submit claim for reopen")
+    public ResponseEntity submitClaim(@RequestBody GLClaimReopenCommand glClaimOpenCommand, HttpServletRequest request) {
         try {
-            glClaimSettlementCommand.setUserDetails(getLoggedInUserDetail(request));
-            commandGateway.sendAndWait(glClaimSettlementCommand);
-            return new ResponseEntity(Result.success("Claim submitted for settlement successfully"), HttpStatus.OK);
+            glClaimOpenCommand.setUserDetails(getLoggedInUserDetail(request));
+            commandGateway.sendAndWait(glClaimOpenCommand);
+            return new ResponseEntity(Result.success("Claim submitted for reopen successfully"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-   */
+
     @RequestMapping(value = "/waivedocument", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(httpMethod = "POST", value = "To waive mandatory document by Approver")
@@ -666,6 +663,25 @@ public class GroupLifeClaimController {
         modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
         return modelAndView;
     }
+
+     @RequestMapping(value = "/listallclaimsforreopen", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are approved")
+    public List<GLClaimDataDto> getClosedClaims() {
+        return glClaimService.getAllRejectedOrClosedClaimDetail();
+
+    }
+
+    @RequestMapping(value = "/searchclaimforreopen", method = RequestMethod.POST)
+    public ModelAndView getClosedClaimToReopen(SearchClaimIntimationDto searchClaimIntimationDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/groupLife/claim/viewClaimSettlement");
+        modelAndView.addObject("searchResult",glClaimService.getClaimDetailForReopen(searchClaimIntimationDto, new String[]{"CANCELLED","REPUDIATED"}));
+        modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
+        return modelAndView;
+
+    }
+
 }
 
 

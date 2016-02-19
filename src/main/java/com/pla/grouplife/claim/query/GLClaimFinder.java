@@ -546,6 +546,16 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
    }
 
-
+    public List<Map> getAllClaimRecordsForApproverTwo(String[] statuses) {
+        if (isEmpty(statuses)) {
+            return Lists.newArrayList();
+        }
+        String routing="UNDERWRITING_LEVEL_TWO";
+        Criteria criteria = null;
+        criteria = Criteria.where("claimStatus").in(statuses);
+        criteria=criteria.and("taggedRoutingLevel").is(routing);
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+    }
 }
 

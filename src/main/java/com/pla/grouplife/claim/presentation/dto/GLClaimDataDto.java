@@ -35,6 +35,7 @@ public class GLClaimDataDto {
     private DateTime claimIntimationDate;
     private int recordCreationInDays;
     private DateTime approvedOn;
+    private DateTime closedOrRejectedOn;
 
     public GLClaimDataDto withClaimNumberAndClaimId (String claimNumber, String claimId){
         this.claimNumber=claimNumber;
