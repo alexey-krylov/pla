@@ -33,6 +33,9 @@ public class GroupHealthCashlessClaimCoverageDetail {
     private BigDecimal reserveAmount;
     private BigDecimal eligibleAmount;
     private BigDecimal approvedAmount;
+    private BigDecimal deductibleAmount;
+    private BigDecimal deductiblePercentage;
+    private String deductibleType;
 
     public GroupHealthCashlessClaimCoverageDetail updateWithCoverageName(String coverageName) {
         this.coverageName = coverageName;
@@ -71,9 +74,14 @@ public class GroupHealthCashlessClaimCoverageDetail {
         if(sumAssured.compareTo(totalAmountPaid) == 1){
             BigDecimal balanceAmount = sumAssured.subtract(totalAmountPaid);
             this.balanceAmount = balanceAmount;
-            if(balanceAmount.compareTo(reservedAmount) == 1) {
-                this.eligibleAmount = balanceAmount.subtract(reservedAmount);
+            this.eligibleAmount = balanceAmount;
+
+           /* if(balanceAmount.compareTo(deductibleAmount) == 1) {
+                this.eligibleAmount = deductibleAmount;
             }
+            if(balanceAmount.compareTo(deductibleAmount) == -1){
+                this.eligibleAmount = balanceAmount;
+            }*/
         }
         if(sumAssured.compareTo(totalAmountPaid) == 0){
             this.balanceAmount = BigDecimal.ZERO;
@@ -92,9 +100,20 @@ public class GroupHealthCashlessClaimCoverageDetail {
             benefitDetails.stream().forEach(benefitDto -> {
                 BigDecimal probableClaimAmount = getProbableClaimAmount(benefitDto.getBenefitCode(), coverageId, finalRefurbishedList);
                 benefitDto.setProbableClaimAmount(probableClaimAmount);
+                if(isNotEmpty(this.deductibleType) && this.deductibleType.equals("PERCENTAGE")){
+                    BigDecimal deductiblePercentage = this.deductiblePercentage;
+                    BigDecimal deductibleAmount = getPercentageValue(probableClaimAmount, deductiblePercentage);
+                    this.deductibleAmount = deductibleAmount;
+                }
             });
         }
         return this;
+    }
+
+    public BigDecimal getPercentageValue(BigDecimal base, BigDecimal pct){
+        if(isNotEmpty(base))
+            return base.multiply(pct).divide(new BigDecimal(100));
+        return BigDecimal.ZERO;
     }
 
     private BigDecimal getProbableClaimAmount(String benefitCode, String coverageId, List<Map<String, Object>> finalRefurbishedList) {
@@ -107,5 +126,20 @@ public class GroupHealthCashlessClaimCoverageDetail {
             }
         }
         return probableClaimAmount;
+    }
+
+    public GroupHealthCashlessClaimCoverageDetail updateWithDeductibleAmount(BigDecimal deductibleAmount) {
+        this.deductibleAmount = deductibleAmount;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimCoverageDetail updateWithDeductiblePercentage(BigDecimal deductiblePercentage) {
+        this.deductiblePercentage = deductiblePercentage;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimCoverageDetail updateWithDeductibleType(String deductibleType) {
+        this.deductibleType = deductibleType;
+        return this;
     }
 }

@@ -32,4 +32,6 @@ public interface GroupHealthCashlessClaimRepository extends MongoRepository<Grou
     List<GroupHealthCashlessClaim> findAllByStatusAndBillMismatchProcessorIdIn(Status status, List<String> userNames);
 
     Page<GroupHealthCashlessClaim> findAllByClaimReopenProcessorUserIdInAndStatusIn(List<String> users, List<Status> statusList, Pageable p);
+
+    Page<GroupHealthCashlessClaim> findAllByClaimAmendmentProcessorUserIdInAndStatusIn(List<String> users, List<Status> statusList, Pageable p);
 }

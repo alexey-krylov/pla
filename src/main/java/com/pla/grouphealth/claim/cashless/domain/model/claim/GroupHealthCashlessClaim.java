@@ -65,6 +65,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private String serviceMismatchProcessorId;
     private String underWriterRoutedToSeniorUnderWriterUserId;
     private String claimReopenProcessorUserId;
+    private String claimAmendmentProcessorUserId;
     private String claimRejectedBy;
     private boolean firstReminderSent;
     private boolean secondReminderSent;
@@ -73,6 +74,8 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
     private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
     private LocalDate claimRejectionDate;
+    private String closedAtLevel;
+    private LocalDate approvedOnDate;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -173,12 +176,13 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public void savedRegisterFollowUpReminders() throws GenerateReminderFollowupException {
+    public GroupHealthCashlessClaim savedRegisterFollowUpReminders() throws GenerateReminderFollowupException {
         try {
             registerEvent(new GroupHealthCashlessClaimFollowUpReminderEvent(this.getGroupHealthCashlessClaimId()));
         } catch (Exception e){
             throw new GenerateReminderFollowupException(e.getMessage());
         }
+        return this;
     }
 
     public GroupHealthCashlessClaim updateWithGhProposerDto(GHProposerDto ghProposerDto) {
@@ -377,6 +381,16 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
 
     public GroupHealthCashlessClaim updateWithClaimReopenProcessorUserId(String claimReopenProcessorUserId) {
         this.claimReopenProcessorUserId = claimReopenProcessorUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithClosedAtLevel(String rejectedAtLevel) {
+        this.closedAtLevel = rejectedAtLevel;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithApprovedOnDate(LocalDate approvedOnDate) {
+        this.approvedOnDate = approvedOnDate;
         return this;
     }
 

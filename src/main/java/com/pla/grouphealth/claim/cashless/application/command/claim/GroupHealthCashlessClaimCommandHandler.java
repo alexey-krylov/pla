@@ -106,14 +106,6 @@ public class GroupHealthCashlessClaimCommandHandler {
         notNull(groupHealthCashlessClaimId ,"GroupHealthCashlessClaimId is empty for the record");
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
         groupHealthCashlessClaim = groupHealthCashlessClaim.populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, groupHealthCashlessClaimBillMismatchedApprovedCommand.getUserName()).updateWithBillMismatchProcessorId(groupHealthCashlessClaimDto.getBillMismatchProcessorId());
-        /*if(!groupHealthCashlessClaimService.checkIfServiceMismatched(groupHealthCashlessClaim)){
-            markSubmittedAndChangeStatus(groupHealthCashlessClaim, SERVICE_MISMATCHED, Boolean.FALSE);
-            return "Service Mismatched redirecting to Service Mismatch pool.";
-        }
-        if(!groupHealthCashlessClaimService.checkIfBillMismatched(groupHealthCashlessClaim)){
-            markSubmittedAndChangeStatus(groupHealthCashlessClaim, BILL_MISMATCHED, Boolean.FALSE);
-            return "Bill Mismatched redirecting to Bill Mismatch pool.";
-        }
         RoutingLevel routingLevel = groupHealthCashlessClaimBillMismatchedApprovedCommand.getRoutingLevel();
         if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_ONE)) {
             markSubmittedAndChangeStatus(groupHealthCashlessClaim, UNDERWRITING_LEVEL1, Boolean.TRUE);
@@ -121,8 +113,7 @@ public class GroupHealthCashlessClaimCommandHandler {
         if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_TWO)) {
             markSubmittedAndChangeStatus(groupHealthCashlessClaim, UNDERWRITING_LEVEL2, Boolean.TRUE);
         }
-        return "Group Health cashless claim successfully submitted";*/
-        return actionOnSubmission(groupHealthCashlessClaimBillMismatchedApprovedCommand.getRoutingLevel(), groupHealthCashlessClaim);
+        return "Group Health cashless claim successfully submitted";
     }
 
     @CommandHandler
@@ -132,14 +123,6 @@ public class GroupHealthCashlessClaimCommandHandler {
         notNull(groupHealthCashlessClaimId ,"GroupHealthCashlessClaimId is empty for the record");
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
         groupHealthCashlessClaim = groupHealthCashlessClaim.populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, groupHealthCashlessClaimServiceMismatchedApprovedCommand.getUserName()).updateWithServiceMismatchProcessorId(groupHealthCashlessClaimDto.getServiceMismatchProcessorId());
-        /*if(!groupHealthCashlessClaimService.checkIfServiceMismatched(groupHealthCashlessClaim)){
-            markSubmittedAndChangeStatus(groupHealthCashlessClaim, SERVICE_MISMATCHED, Boolean.FALSE);
-            return "Service Mismatched redirecting to Service Mismatch pool.";
-        }
-        if(!groupHealthCashlessClaimService.checkIfBillMismatched(groupHealthCashlessClaim)){
-            markSubmittedAndChangeStatus(groupHealthCashlessClaim, BILL_MISMATCHED, Boolean.FALSE);
-            return "Bill Mismatched redirecting to Bill Mismatch pool.";
-        }
         RoutingLevel routingLevel = groupHealthCashlessClaimServiceMismatchedApprovedCommand.getRoutingLevel();
         if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_ONE)) {
             markSubmittedAndChangeStatus(groupHealthCashlessClaim, UNDERWRITING_LEVEL1, Boolean.TRUE);
@@ -147,8 +130,7 @@ public class GroupHealthCashlessClaimCommandHandler {
         if(routingLevel.equals(RoutingLevel.UNDERWRITING_LEVEL_TWO)) {
             markSubmittedAndChangeStatus(groupHealthCashlessClaim, UNDERWRITING_LEVEL2, Boolean.TRUE);
         }
-        return "Group Health cashless claim successfully submitted";*/
-        return actionOnSubmission(groupHealthCashlessClaimServiceMismatchedApprovedCommand.getRoutingLevel(), groupHealthCashlessClaim);
+        return "Group Health cashless claim successfully submitted";
     }
 
     private String actionOnSubmission(RoutingLevel routingLevel, GroupHealthCashlessClaim groupHealthCashlessClaim) {
@@ -219,7 +201,8 @@ public class GroupHealthCashlessClaimCommandHandler {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
         groupHealthCashlessClaim = groupHealthCashlessClaim
                 .populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, approveGroupHealthCashlessClaimCommand.getUserName())
-                .updateStatus(APPROVED);
+                .updateStatus(APPROVED)
+        .updateWithApprovedOnDate(LocalDate.now());
         closePreAuthorizations(groupHealthCashlessClaim.getPreAuthorizationDetails());
         return Boolean.TRUE;
     }
@@ -243,6 +226,7 @@ public class GroupHealthCashlessClaimCommandHandler {
         groupHealthCashlessClaim = groupHealthCashlessClaim
                 .populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, rejectGroupHealthCashlessClaimCommand.getUserName())
                 .updateClaimRejectedBy(groupHealthCashlessClaimDto.getClaimRejectedBy())
+                .updateWithClosedAtLevel(groupHealthCashlessClaimDto.getStatusName())
                 .updateWithRejectionDate(LocalDate.now())
                 .updateStatus(REPUDIATED);
         return Boolean.TRUE;

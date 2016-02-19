@@ -2,20 +2,22 @@ package com.pla.grouphealth.claim.cashless.presentation.dto;
 
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimAssuredDetail;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimCoverageDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimPolicyDetail;
 import lombok.Data;
-import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
 
-import static org.nthdimenzion.utils.UtilValidator.*;
+import java.math.BigDecimal;
+import java.util.Set;
+
+import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
- * Author - Mohan Sharma Created on 2/18/2016.
+ * Author - Mohan Sharma Created on 2/19/2016.
  */
 @Data
-public class SearchReopenedClaimDetailDto {
+public class SearchClaimAmendDetailDto {
     private String policyHolderName;
     private String claimNumber;
     private String clientId;
@@ -25,18 +27,20 @@ public class SearchReopenedClaimDetailDto {
     private String policyNumber;
     private String assuredNRCNumber;
     private String status;
-    private LocalDate rejectionDate;
+    private LocalDate approvedOn;
+    private BigDecimal approvedAmount;
     private boolean showModalWin;
     private String errorMessage;
 
-    public SearchReopenedClaimDetailDto updateWithDetails(GroupHealthCashlessClaim claim) {
+    public SearchClaimAmendDetailDto updateWithDetails(GroupHealthCashlessClaim claim) {
         if(isNotEmpty(claim)){
             this.policyHolderName = isNotEmpty(claim.getGhProposer()) ? claim.getGhProposer().getProposerName() : StringUtils.EMPTY;
             this.claimNumber = claim.getGroupHealthCashlessClaimId();
             this.status = claim.getStatus().getDescription();
-            this.rejectionDate = claim.getClaimRejectionDate();
+            this.approvedOn = claim.getApprovedOnDate();
             GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = claim.getGroupHealthCashlessClaimPolicyDetail();
             if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)){
+                this.approvedAmount = getSumOfAllApprovedAmount(groupHealthCashlessClaimPolicyDetail.getCoverageDetails());
                 this.policyNumber = isNotEmpty(groupHealthCashlessClaimPolicyDetail.getPolicyNumber()) ? groupHealthCashlessClaimPolicyDetail.getPolicyNumber().getPolicyNumber() : StringUtils.EMPTY;
                 GroupHealthCashlessClaimAssuredDetail assuredDetail = groupHealthCashlessClaimPolicyDetail.getAssuredDetail();
                 if(isNotEmpty(assuredDetail)){
@@ -51,12 +55,22 @@ public class SearchReopenedClaimDetailDto {
         return this;
     }
 
-    public SearchReopenedClaimDetailDto updateWithShowModalWin() {
+    private BigDecimal getSumOfAllApprovedAmount(Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails) {
+        BigDecimal totalApprovedAmount = BigDecimal.ZERO;
+        if(isNotEmpty(coverageDetails)){
+            for(GroupHealthCashlessClaimCoverageDetail coverageDetail : coverageDetails){
+                totalApprovedAmount = totalApprovedAmount.add(coverageDetail.getApprovedAmount());
+            }
+        }
+        return totalApprovedAmount;
+    }
+
+    public SearchClaimAmendDetailDto updateWithShowModalWin() {
         this.showModalWin = Boolean.TRUE;
         return this;
     }
 
-    public SearchReopenedClaimDetailDto updateWithErrorMessage(String errorMessage) {
+    public SearchClaimAmendDetailDto updateWithErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
         return this;
     }

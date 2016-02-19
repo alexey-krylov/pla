@@ -3,7 +3,6 @@ package com.pla.grouphealth.claim.cashless.domain.event.claim;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pla.grouphealth.claim.cashless.application.command.claim.CreateGroupHealthCashlessClaimNotificationCommand;
-import com.pla.grouphealth.claim.cashless.application.command.preauthorization.CreatePreAuthorizationNotificationCommand;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
@@ -37,6 +36,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim.Status.*;
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -89,7 +89,7 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
     public void handle(GroupHealthCashlessClaimFirstReminderEvent event){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
         if(!groupHealthCashlessClaim.isFirstReminderSent() && !groupHealthCashlessClaim.isSecondReminderSent()) {
-            List<String> pendingDocumentList = getPendingDocumentList(groupHealthCashlessClaim);
+            List<String> pendingDocumentList = groupHealthCashlessClaimService.getPendingDocumentList(groupHealthCashlessClaim);
             if(pendingDocumentList.size() > 0) {
                 commandGateway.send(new CreateGroupHealthCashlessClaimNotificationCommand(event.getGroupHealthCashlessClaimId(), RolesUtil.GROUP_HEALTH_CASHLESS_CLAIM_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_1, pendingDocumentList));
                 groupHealthCashlessClaim.updateFlagForFirstReminderSent(Boolean.TRUE);
@@ -97,25 +97,11 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
         }
     }
 
-    private List<String> getPendingDocumentList(GroupHealthCashlessClaim groupHealthCashlessClaim) {
-        List<GHProposalMandatoryDocumentDto> mandatoryDocuments = null;
-        try {
-            String familyId = isNotEmpty(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail()) ? isNotEmpty(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getAssuredDetail()) ? groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail().getAssuredDetail().getClientId() : null : null;
-            String groupHealthCashlessClaimId = groupHealthCashlessClaim.getGroupHealthCashlessClaimId();
-            Assert.notNull(familyId, "Error sending Pre-Auth reminder");
-            Assert.notNull(groupHealthCashlessClaimId, "Error sending Pre-Auth reminder");
-            mandatoryDocuments = groupHealthCashlessClaimService.findMandatoryDocuments(new FamilyId(familyId), groupHealthCashlessClaimId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return getNameListOfPendingMandatoryDocument(mandatoryDocuments, groupHealthCashlessClaim.getProposerDocuments());
-    }
-
     @SagaEventHandler(associationProperty = "groupHealthCashlessClaimId")
     public void handle(GroupHealthCashlessClaimSecondReminderEvent event){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
         if(groupHealthCashlessClaim.isFirstReminderSent() && !groupHealthCashlessClaim.isSecondReminderSent()) {
-            List<String> pendingDocumentList = getPendingDocumentList(groupHealthCashlessClaim);
+            List<String> pendingDocumentList = groupHealthCashlessClaimService.getPendingDocumentList(groupHealthCashlessClaim);
             if(pendingDocumentList.size() > 0) {
                 commandGateway.send(new CreateGroupHealthCashlessClaimNotificationCommand(event.getGroupHealthCashlessClaimId(), RolesUtil.GROUP_HEALTH_CASHLESS_CLAIM_PROCESSOR_ROLE, LineOfBusinessEnum.GROUP_HEALTH, ProcessType.CLAIM, WaitingForEnum.MANDATORY_DOCUMENTS, ReminderTypeEnum.REMINDER_2, pendingDocumentList));
                 groupHealthCashlessClaim.updateFlagForSecondReminderSent(Boolean.TRUE);
@@ -126,29 +112,11 @@ public class GroupHealthCashlessClaimSaga extends AbstractAnnotatedSaga implemen
     @SagaEventHandler(associationProperty = "groupHealthCashlessClaimId")
     public void handle(GroupHealthCashlessClaimClosureEvent event){
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(event.getGroupHealthCashlessClaimId());
-        List<String> pendingDocumentList = getPendingDocumentList(groupHealthCashlessClaim);
+        List<String> pendingDocumentList = groupHealthCashlessClaimService.getPendingDocumentList(groupHealthCashlessClaim);
         if(groupHealthCashlessClaim.isFirstReminderSent() && groupHealthCashlessClaim.isSecondReminderSent() && pendingDocumentList.size() > 0) {
-            groupHealthCashlessClaim.updateStatus(GroupHealthCashlessClaim.Status.CANCELLED);
+            groupHealthCashlessClaim
+                    .updateWithClosedAtLevel(groupHealthCashlessClaim.getStatus().name())
+                    .updateStatus(CANCELLED);
         }
-    }
-
-
-    private List<String> getNameListOfPendingMandatoryDocument(List<GHProposalMandatoryDocumentDto> mandatoryDocuments, Set<GHProposerDocument> proposerDocuments) {
-        List<String> documents = getDocumentNameList(mandatoryDocuments);
-        Assert.notEmpty(documents, "Error sending Pre-Auth first reminder, no document set up found for the given client.");
-        if(isEmpty(proposerDocuments)){
-            return documents;
-        }
-        return checkAndFindDocumentNotSubmitted(proposerDocuments, documents);
-    }
-
-    private List<String> checkAndFindDocumentNotSubmitted(Set<GHProposerDocument> proposerDocuments, List<String> documents) {
-        List<String> uploadedDocuments = proposerDocuments.parallelStream().map(GHProposerDocument::getDocumentName).collect(Collectors.toList())
-                .parallelStream().map(String::trim).collect(Collectors.toList());
-        return documents.parallelStream().filter(s -> !uploadedDocuments.contains(s.trim())).collect(Collectors.toList());
-    }
-
-    private List<String> getDocumentNameList(List<GHProposalMandatoryDocumentDto> mandatoryDocuments) {
-        return isNotEmpty(mandatoryDocuments) ? mandatoryDocuments.parallelStream().map(GHProposalMandatoryDocumentDto::getDocumentId).collect(Collectors.toList()) : Lists.newArrayList();
     }
 }

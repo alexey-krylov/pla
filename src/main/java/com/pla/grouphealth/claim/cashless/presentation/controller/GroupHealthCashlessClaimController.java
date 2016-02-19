@@ -10,6 +10,7 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.exception.*;
+import com.pla.grouphealth.claim.cashless.presentation.dto.SearchClaimAmendDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHCashlessClaimMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
@@ -687,7 +688,7 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/getallreopenedclaimdefaultlist", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getAllClaimReopenDefaultList (){
+    public ModelAndView getAllClaimReopenDefaultList(){
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
         String userName = groupHealthCashlessClaimService.getLoggedInUsername();
         modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
@@ -697,7 +698,7 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping (value= "/searchreopenedghcashlessclaimbycriteria" , method = RequestMethod.POST)
     @ResponseBody
-    public  ModelAndView searchCashlessClaimUnderwriterByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, HttpServletRequest request){
+    public  ModelAndView searchCashlessClaimTOBeReopendByCriteria(SearchReopenedClaimDetailDto searchReopenedClaimDetailDto, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
         String userName = groupHealthCashlessClaimService.getLoggedInUsername();
         List<SearchReopenedClaimDetailDto> searchReopenedClaimDetailDtos = groupHealthCashlessClaimService.searchReopenedCashlessClaimByCriteria(searchReopenedClaimDetailDto, userName);
@@ -706,13 +707,14 @@ public class GroupHealthCashlessClaimController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/updateviewcashlessclaimreopen", method = RequestMethod.GET)
+    @RequestMapping(value = "/reopenclaim", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getCashlessClaimReopen(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException {
-        ModelAndView modelAndView = new ModelAndView();
+    public ModelAndView getCashlessClaimReopen(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException, GenerateReminderFollowupException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
-        groupHealthCashlessClaimService.populateGroupHeathCashlessClaimWithReopenProcessorUserId(groupHealthCashlessClaimId, userName);
-        modelAndView.setViewName("pla/grouphealth/claim/ghcashlessclaimreopen");
+        groupHealthCashlessClaimService.reopenClaim(groupHealthCashlessClaimId, userName);
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
+        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin().updateWithErrorMessage("Claim successfully reopened."));
         return modelAndView;
     }
 
@@ -721,7 +723,28 @@ public class GroupHealthCashlessClaimController {
         String userName = groupHealthCashlessClaimService.getLoggedInUsername();
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimreopen");
         modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
-        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin());
+        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin().updateWithErrorMessage(ex.getMessage()));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallclaimswhichcanbeamendeddefaultlist", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllClaimsWhichCanBeAmended(){
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimtobeamended");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllClaimsWhichCanBeAmended(userName));
+        modelAndView.addObject("searchCriteria", new SearchClaimAmendDetailDto());
+        return modelAndView;
+    }
+
+    @RequestMapping (value= "/searchghcashlessclaimwhichcanbeamendedbycriteria" , method = RequestMethod.POST)
+    @ResponseBody
+    public  ModelAndView searchCashlessClaimWhichCanBeAmendedByCriteria(SearchClaimAmendDetailDto searchClaimAmendDetailDto, HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimtobeamended");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        List<SearchClaimAmendDetailDto> searchClaimAmendDetailDtos = groupHealthCashlessClaimService.searchCashlessClaimWhichCanBeAmendedByCriteria(searchClaimAmendDetailDto, userName);
+        modelAndView.addObject("claimResult", searchClaimAmendDetailDtos);
+        modelAndView.addObject("searchCriteria", searchClaimAmendDetailDto);
         return modelAndView;
     }
 
