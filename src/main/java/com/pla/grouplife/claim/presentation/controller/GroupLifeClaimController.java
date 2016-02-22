@@ -660,6 +660,7 @@ public class GroupLifeClaimController {
     public ModelAndView gotoReopenClaimViewPage(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("pla/groupLife/claim/viewClaimReopen");
+        modelAndView.addObject("searchResult",glClaimService.getAllRejectedOrClosedClaimDetail());
         modelAndView.addObject("searchCriteria", new SearchClaimIntimationDto());
         return modelAndView;
     }
@@ -675,7 +676,7 @@ public class GroupLifeClaimController {
     @RequestMapping(value = "/searchclaimforreopen", method = RequestMethod.POST)
     public ModelAndView getClosedClaimToReopen(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/viewClaimSettlement");
+        modelAndView.setViewName("pla/groupLife/claim/viewClaimReopen");
         modelAndView.addObject("searchResult",glClaimService.getClaimDetailForReopen(searchClaimIntimationDto, new String[]{"CANCELLED","REPUDIATED"}));
         modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
         return modelAndView;

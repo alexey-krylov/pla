@@ -177,9 +177,9 @@
                                                     <th >Details</th>
                                                     <th >Sum Assured</th>
                                                     <th>Approved Amount</th>
-                                                    <th if="rcvCriteria == 'amendment' ">Amount to be recovered</th>
-                                                    <th if="rcvCriteria == 'amendment' ">Additional Approved Amount</th>
-                                                    <th if="rcvCriteria == 'amendment' ">Remarks</th>
+                                                    <th ng-if="rcvCriteria == 'amendment' ">Amount to be recovered</th>
+                                                    <th ng-if="rcvCriteria == 'amendment' ">Additional Approved Amount</th>
+                                                    <th ng-if="rcvCriteria == 'amendment' ">Remarks</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody >
@@ -190,14 +190,13 @@
                                                     <td>
                                                         <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.approvedAmount" value="{{claimApprovalPlanDetail.approvedAmount}}" />
                                                     </td>
-                                                    <td if="rcvCriteria == 'amendment' ">
+                                                    <td ng-if="rcvCriteria == 'amendment' ">
                                                         <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.amendedAmount" value="{{claimApprovalPlanDetail.amendedAmount}}" />
                                                     </td>
-                                                    <td if="rcvCriteria == 'amendment' ">
+                                                    <td ng-if="rcvCriteria == 'amendment' ">
                                                         <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.additionalAmount" value="{{claimApprovalPlanDetail.additionalAmount}}" />
                                                     </td>
-                                                    <td if="rcvCriteria == 'amendment' ">
-                                                        {{claimApprovalPlanDetail.remarks}}
+                                                    <td ng-if="rcvCriteria =='amendment'">
                                                         <textarea rows="4" cols="50"
                                                                   name="comments"
                                                                   ng-model="claimApprovalPlanDetail.remarks" />
@@ -218,9 +217,9 @@
                                                <th >Details</th>
                                                <th >Sum Assured</th>
                                                <th>Approved Amount</th>
-                                               <th if="rcvCriteria == 'amendment' ">Amount to be recovered</th>
-                                               <th if="rcvCriteria == 'amendment' ">Additional Approved Amount</th>
-                                               <th if="rcvCriteria == 'amendment' ">Remarks</th>
+                                               <th ng-if="rcvCriteria == 'amendment' ">Amount to be recovered</th>
+                                               <th ng-if="rcvCriteria == 'amendment' ">Additional Approved Amount</th>
+                                               <th ng-if="rcvCriteria == 'amendment' ">Remarks</th>
                                            </tr>
                                            </thead>
                                            <tbody >
@@ -230,13 +229,13 @@
                                                <td>
                                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="coverage.approvedAmount" value="{{coverage.approvedAmount}}" />
                                                </td>
-                                               <td if="rcvCriteria == 'amendment' ">
+                                               <td ng-if="rcvCriteria == 'amendment' ">
                                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="coverage.amendedAmount" value="{{coverage.amendedAmount}}" />
                                                </td>
-                                               <td if="rcvCriteria == 'amendment' ">
+                                               <td ng-if="rcvCriteria == 'amendment' ">
                                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="coverage.additionalAmount" value="{{coverage.additionalAmount}}" />
                                                </td>
-                                               <td if="rcvCriteria == 'amendment' ">
+                                               <td ng-if="rcvCriteria == 'amendment' ">
                                                    <textarea rows="4" cols="50"
                                                              name="comments"
                                                              ng-model="coverage.remarks" />

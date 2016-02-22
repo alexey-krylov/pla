@@ -64,8 +64,12 @@
         <li>Group Life</li>
     </ol>
     </p>
-    <form method="post" action="searchclaimforsettlement" novalidate="true" name="searchclaimforsettlement"
-          id="searchclaimforsettlement">
+
+    <div th:if="${sucess != null}">
+        <p th:text="${sucess.message}"></p>
+    </div>
+    <form method="post" action="searchclaimforreopen" novalidate="true" name="searchclaimforreopen"
+          id="searchclaimforreopen">
         <div class="row well well-sm" style="margin: 0;">
             <div class="row">
                 <div class="col-md-3">
@@ -148,8 +152,8 @@
                             <th th:text="#{claimNumber}">Claim Number</th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{assuredName}">Assured Name</th>
-                            <th th:text="#{approvedAmount}">Approved Amount</th>
-                            <th th:text="#{approvedOn}">Approved On</th>
+                            <th th:text="#{policyHolderName}">Policy Holder Name</th>
+                            <th th:text="#{rejectClose}">Rejected/Closed On</th>
                             <th th:text="#{status}">Status</th>
                         </tr>
                         </thead>
@@ -164,8 +168,8 @@
                                     <td th:text="${intimation.claimNumber}">5100000010315</td>
                                     <td th:text="${intimation.policyNumber}">5100000010315</td>
                                     <td th:text="${intimation.assuredName}">5100000010315</td>
-                                    <td th:text="${intimation.approvedAmount}"></td>
-                                    <td th:text="${intimation.approvedOn}?${#dates.format(intimation.approvedOn,'dd/MM/yyyy')}"></td>
+                                    <td th:text="${intimation.policyHolderName}"></td>
+                                    <td th:text="${intimation.closedOrRejectedOn}?${#dates.format(intimation.closedOrRejectedOn,'dd/MM/yyyy')}"></td>
                                     <td th:text="${intimation.claimStatus}"></td>
                                 </tr>
                             </th:block>

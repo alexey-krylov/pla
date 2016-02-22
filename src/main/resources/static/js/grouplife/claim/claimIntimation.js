@@ -533,6 +533,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                    $scope.claimantDetail=response.claimantDetail;
                    $scope.categorySet=response.categorySet;
                    $scope.isAssuredDetailsShared=response.isAssuredDetailsShared;
+
                 }).error(function (response, status, headers, config) {
                 });
 
@@ -604,13 +605,17 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     $scope.planDetail=response.planDetailDto;  //planDetailDto
                     $scope.coverageList=response.coverageDetailDtos;
 
+                    if(!$scope.isAssuredDetailsShared){
+                        $scope.assuredDetails.sumAssured=$scope.planDetail.sumAssured;
+                    }
+
                     //Retriving the DocumentList
                      $http.get('/pla/grouplife/claim/getallrequiredmandatorydocuments/'+$scope.planDetail.planId).success(function (response, status, headers, config) {
                                         console.log('Document List...******');
                                         console.log(JSON.stringify(response));
-                                        //$scope.documentList=response;
+                                        $scope.documentList=response;
 
-                                       $scope.documentList=[
+                                       /*$scope.documentList=[
                                           {
                                             "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
                                             "documentName": "Active At Work Declaration Form",
@@ -633,7 +638,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                                             "gridFsDocId": null,
                                             "requireForSubmission": false
                                           }
-                                        ]
+                                        ]*/
                                     }).error(function (response, status, headers, config) {
                                     });
 

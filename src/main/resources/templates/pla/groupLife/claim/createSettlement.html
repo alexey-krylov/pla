@@ -158,8 +158,118 @@
                 <!-- -->
             </div>
             <div class="step-content ng-cloak">
-                <div class="step-pane active" data-step="1">
+                <div class="step-pane" data-step="1">
                     <ng-form name="step1">
+                        <accordion close-others="true">
+                            <accordion-group is-open="true">
+                                <accordion-heading>
+                                    Claim Settlement Details <i class="pull-right glyphicon"
+                                                                ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimSettlementDetails,
+                                                            'glyphicon-chevron-right': !accordionStatusDocuments.claimSettlementDetails}"></i>
+                                </accordion-heading>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Claim Approved On </label>
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   ng-click="openClaimApproveDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                   ng-model="claimSettlementDetails.claimApprovedOn"
+                                                   datepicker-options="datePickerSettingsForClaimApproveDate.dateOptions"
+                                                   is-open="datePickerSettingsForClaimApproveDate.isOpened" close-text="Close"
+                                                   show-button-bar="false"
+                                                   ng-disabled="true"
+                                                   onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                         <button type="button" ng-disabled="true" class="btn btn-default btn-sm" ng-click="openClaimApproveDate($event)"><i
+                                                                 class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                     </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Payment Mode</label>
+                                        <select class="form-control input-sm"  name="paymentMode" ng-disabled="mode=='new'||mode=='view'" ng-model="claimSettlementDetails.paymentMode">
+                                            <option  value="">--- Select Payment Mode ---</option>
+                                            <option  value="CHEQUE">Cheque</option>
+                                            <option  value="TRANSFER">Transfer</option>
+                                            <option  value="CASH">Cash</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label">Paid Amount</label>
+                                        <input type="text" ng-disabled="true" class="form-control input-sm" name="paidAMount" ng-model="claimSettlementDetails.paidAmount"/>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label">Bank Name</label>
+                                        <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
+                                                ng-model="claimSettlementDetails.bankName">
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label">Bank Account Type</label>
+                                        <select class="form-control input-sm" name="accountType" ng-model="claimSettlementDetails.accountType">
+                                            <option  value="">Select Account Type</option>
+                                            <option  value="SAVING">Saving</option>
+                                            <option  value="CURRENT">Current</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label class="control-label">Instrument Number</label>
+                                        <input type="text" class="form-control input-sm" name="instrumentNumber" ng-model="claimSettlementDetails.instrumentNumber"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Instrument  Date </label>
+                                        <div class='input-group date'>
+                                            <input type="text" class="form-control input-sm"
+                                                   ng-click="openInstrumentDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
+                                                   ng-model="claimSettlementDetails.instrumentDate"
+                                                   datepicker-options="datePickerSettingsForInstrument.dateOptions"
+                                                   is-open="datePickerSettingsForInstrument.isOpened" close-text="Close"
+                                                   show-button-bar="false"
+                                                   onkeypress="return isNumeric(event)"/>
+                                                        <span class="input-group-btn">
+                                                         <button type="button" class="btn btn-default btn-sm" ng-click="openInstrumentDate($event)"><i
+                                                                 class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
+                                                     </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label">Approved Amount</label>
+                                        <input type="text" ng-disabled="true" class="form-control input-sm" name="approvedAmount" ng-model="claimSettlementDetails.approvedAmount"/>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label">Bank Branch Name</label>
+                                        <select class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetailsForClaimSettlement"
+                                                ng-model="claimSettlementDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" >
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label">Bank Account Number</label>
+                                        <input type="text" class="form-control input-sm"  ng-model="claimSettlementDetails.accountNumber" maxlength="17" ng-maxlength="17" name="bankAccountNumber"/>
+
+                                        <div class="error" ng-messages="step6.bankAccountNumber.$error" ng-if="step6.bankAccountNumber.$dirty">
+                                            <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                            <small class="error" ng-message="maxlength">Upto 17 Character Allow.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-default btn-sm">Cancel</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="createClaimSettlement()">Submit</button>
+                            </div>
+                        </div>
+                    </ng-form>
+                </div>
+
+                <div class="step-pane active" data-step="2">
+                    <ng-form name="step2">
                         <accordion close-others="true">
                             <accordion-group is-open="true">
                                 <accordion-heading>
@@ -305,8 +415,8 @@
                         </div>
                     </ng-form>
                 </div>
-                <div class="step-pane active" data-step="2">
-                    <ng-form name="step2">
+                <div class="step-pane active" data-step="3">
+                    <ng-form name="step3">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
@@ -788,8 +898,8 @@
 
                 </div>
 
-                <div class="step-pane" data-step="3">
-                    <ng-form name="step3">
+                <div class="step-pane" data-step="4">
+                    <ng-form name="step4">
                         <accordion close-others="true">
                             <accordion-group>
                                 <accordion-heading>
@@ -964,8 +1074,8 @@
                         </div>
                     </ng-form>
                 </div>
-                <div class="step-pane" data-step="4">
-                    <ng-form name="step4">
+                <div class="step-pane" data-step="5">
+                    <ng-form name="step5">
                         <accordion close-others="true">
                             <accordion-group is-open="true" ng-form="incidenceDetailsForm">
                                 <accordion-heading>
@@ -1337,8 +1447,8 @@
                     </ng-form>
 
                 </div>
-                <div class="step-pane" data-step="5">
-                    <ng-form name="step5">
+                <div class="step-pane" data-step="6">
+                    <ng-form name="step6">
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatus.claimantDetails" ng-form="assuredDetailForm">
                                 <accordion-heading>
@@ -1436,115 +1546,6 @@
                         </div>
                     </ng-form>
                 </div><!--ending point of one panel-->
-                <div class="step-pane" data-step="6">
-                    <ng-form name="step6">
-                        <accordion close-others="true">
-                            <accordion-group is-open="true">
-                                <accordion-heading>
-                                    Claim Settlement Details <i class="pull-right glyphicon"
-                                                        ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.claimSettlementDetails,
-                                                            'glyphicon-chevron-right': !accordionStatusDocuments.claimSettlementDetails}"></i>
-                                </accordion-heading>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Claim Approved On </label>
-                                        <div class='input-group date'>
-                                            <input type="text" class="form-control input-sm"
-                                                   ng-click="openClaimApproveDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
-                                                   ng-model="claimSettlementDetails.claimApprovedOn"
-                                                   datepicker-options="datePickerSettingsForClaimApproveDate.dateOptions"
-                                                   is-open="datePickerSettingsForClaimApproveDate.isOpened" close-text="Close"
-                                                   show-button-bar="false"
-                                                   ng-disabled="true"
-                                                   onkeypress="return isNumeric(event)"/>
-                                                        <span class="input-group-btn">
-                                                         <button type="button" ng-disabled="true" class="btn btn-default btn-sm" ng-click="openClaimApproveDate($event)"><i
-                                                              class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
-                                                     </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Payment Mode</label>
-                                        <select class="form-control input-sm"  name="paymentMode" ng-disabled="mode=='new'||mode=='view'" ng-model="claimSettlementDetails.paymentMode">
-                                            <option  value="">--- Select Payment Mode ---</option>
-                                            <option  value="CHEQUE">Cheque</option>
-                                            <option  value="TRANSFER">Transfer</option>
-                                            <option  value="CASH">Cash</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label class="control-label">Paid Amount</label>
-                                        <input type="text" ng-disabled="true" class="form-control input-sm" name="paidAMount" ng-model="claimSettlementDetails.paidAmount"/>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label class="control-label">Bank Name</label>
-                                        <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
-                                                ng-model="claimSettlementDetails.bankName">
-                                        </select>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label class="control-label">Bank Account Type</label>
-                                        <select class="form-control input-sm" name="accountType" ng-model="claimSettlementDetails.accountType">
-                                            <option  value="">Select Account Type</option>
-                                            <option  value="SAVING">Saving</option>
-                                            <option  value="CURRENT">Current</option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label class="control-label">Instrument Number</label>
-                                        <input type="text" class="form-control input-sm" name="instrumentNumber" ng-model="claimSettlementDetails.instrumentNumber"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Instrument  Date </label>
-                                        <div class='input-group date'>
-                                            <input type="text" class="form-control input-sm"
-                                                   ng-click="openInstrumentDate($event)" max-date="minIntimationDate" datepicker-popup="dd/MM/yyyy"
-                                                   ng-model="claimSettlementDetails.instrumentDate"
-                                                   datepicker-options="datePickerSettingsForInstrument.dateOptions"
-                                                   is-open="datePickerSettingsForInstrument.isOpened" close-text="Close"
-                                                   show-button-bar="false"
-                                                   onkeypress="return isNumeric(event)"/>
-                                                        <span class="input-group-btn">
-                                                         <button type="button" class="btn btn-default btn-sm" ng-click="openInstrumentDate($event)"><i
-                                                                 class="glyphicon glyphicon-calendar"></i></button>&nbsp;&nbsp;
-                                                     </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label class="control-label">Approved Amount</label>
-                                        <input type="text" ng-disabled="true" class="form-control input-sm" name="approvedAmount" ng-model="claimSettlementDetails.approvedAmount"/>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label class="control-label">Bank Branch Name</label>
-                                        <select class="form-control input-sm" name="branchname" ng-disabled="mode=='new'||mode=='view'" ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetailsForClaimSettlement"
-                                                ng-model="claimSettlementDetails.bankBranchName" ng-selected="bankBranchDetail.branchName" >
-                                        </select>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label class="control-label">Bank Account Number</label>
-                                        <input type="text" class="form-control input-sm"  ng-model="claimSettlementDetails.accountNumber" maxlength="17" ng-maxlength="17" name="bankAccountNumber"/>
-
-                                        <div class="error" ng-messages="step6.bankAccountNumber.$error" ng-if="step6.bankAccountNumber.$dirty">
-                                            <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
-                                            <small class="error" ng-message="maxlength">Upto 17 Character Allow.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </accordion-group>
-                        </accordion>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm">Cancel</button>
-                            </div>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="createClaimSettlement()">Submit</button>
-                            </div>
-                        </div>
-                    </ng-form>
-                </div>
             </div>
         </div>
     </form>
