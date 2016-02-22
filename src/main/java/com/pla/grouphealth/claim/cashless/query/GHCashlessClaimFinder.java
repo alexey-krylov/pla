@@ -3,6 +3,7 @@ package com.pla.grouphealth.claim.cashless.query;
 import com.google.common.collect.Lists;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest.Status;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchClaimAmendDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
@@ -49,10 +50,10 @@ public class GHCashlessClaimFinder {
         Query query = new Query();
         query.addCriteria(new Criteria().and("preAuthorizationUnderWriterUserId").is(username));
         if(isNotEmpty(searchPreAuthorizationRecordDto.getUnderwriterLevel()) && searchPreAuthorizationRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL1")){
-            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1));
+            query.addCriteria(new Criteria().and("status").is(Status.UNDERWRITING_LEVEL1));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getUnderwriterLevel()) && searchPreAuthorizationRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL2")){
-            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2));
+            query.addCriteria(new Criteria().and("status").is(Status.UNDERWRITING_LEVEL2));
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
@@ -83,6 +84,7 @@ public class GHCashlessClaimFinder {
         }
         Query query = new Query();
         query.addCriteria(new Criteria().and("preAuthorizationProcessorUserId").in(usernames));
+        query.addCriteria(new Criteria().and("status").in(Lists.newArrayList(Status.INTIMATION, Status.EVALUATION, Status.RETURNED)));
         if(isNotEmpty(searchPreAuthorizationRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchPreAuthorizationRecordDto.getBatchNumber()));
         }
@@ -111,6 +113,7 @@ public class GHCashlessClaimFinder {
         }
         Query query = new Query();
         query.addCriteria(new Criteria().and("claimProcessorUserId").in(usernames));
+        query.addCriteria(new Criteria().and("status").in(INTIMATION, EVALUATION, RETURNED));
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
         }
@@ -140,10 +143,10 @@ public class GHCashlessClaimFinder {
         Query query = new Query();
         query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel()) && searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL1")){
-            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL1));
+            query.addCriteria(new Criteria().and("status").is(Status.UNDERWRITING_LEVEL1));
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel()) && searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel().equalsIgnoreCase("LEVEL2")){
-            query.addCriteria(new Criteria().and("status").is(PreAuthorizationRequest.Status.UNDERWRITING_LEVEL2));
+            query.addCriteria(new Criteria().and("status").is(Status.UNDERWRITING_LEVEL2));
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
@@ -172,7 +175,8 @@ public class GHCashlessClaimFinder {
             return Lists.newArrayList();
         }
         Query query = new Query();
-        query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
+        query.addCriteria(new Criteria().and("billMismatchProcessorId").in(username));
+        query.addCriteria(new Criteria().and("status").in(BILL_MISMATCHED));
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
         }
@@ -200,7 +204,8 @@ public class GHCashlessClaimFinder {
             return Lists.newArrayList();
         }
         Query query = new Query();
-        query.addCriteria(new Criteria().and("claimUnderWriterUserId").in(username));
+        query.addCriteria(new Criteria().and("serviceMismatchProcessorId").in(username));
+        query.addCriteria(new Criteria().and("status").in(SERVICE_MISMATCHED));
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())){
             query.addCriteria(new Criteria().and("batchNumber").is(searchGroupHealthCashlessClaimRecordDto.getBatchNumber()));
         }
