@@ -884,7 +884,9 @@ public class GroupHealthCashlessClaimService {
                         .updateWithClaimType(groupHealthCashlessClaim.getClaimType())
                         .updateWithClaimIntimationDate(groupHealthCashlessClaim.getClaimIntimationDate())
                         .updateWithGroupHealthCashlessClaimPolicyNumber(groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail())
-                        .updateWithGroupHealthCashlessClaimHCPDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail());
+                        .updateWithGroupHealthCashlessClaimHCPDetail(groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail())
+                        .updateWithGroupHealthCashlessClaimProposerName(groupHealthCashlessClaim.getGhProposer());
+
             }
         }).collect(Collectors.toList()) : Lists.newArrayList();
     }

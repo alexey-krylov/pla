@@ -83,4 +83,6 @@ public class GroupHealthCashlessClaimAssuredDetail {
         this.clientId = clientId;
         return this;
     }
+
+
 }

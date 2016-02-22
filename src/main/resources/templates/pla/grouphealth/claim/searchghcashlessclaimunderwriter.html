@@ -125,6 +125,7 @@
                            th:value="${searchCriteria.clientId}"/>
                 </div>
             </div>
+
             <div class="col-md-2">
                 <div class="form-group">
                     <label th:text="#{batchNumber}">Batch Number</label>
@@ -132,15 +133,36 @@
                            th:value="${searchCriteria.batchNumber}"/>
                 </div>
             </div>
-            <!--<div class="col-md-2">-->
-                <!--<div class="form-group">-->
-                    <!--<label th:text="#{policyHolderName}">Batch Number</label>-->
-                    <!--<input type="text" class="form-control input-sm" name="policyHolderName"-->
-                           <!--th:value="${searchCriteria.policyHolderName}"/>-->
-                <!--</div>-->
-            <!--</div>-->
             <div class="col-md-2">
-                <button type="submit" style="margin-left: 44%;margin-top: 20px" class="btn btn-default btn-sm"
+                <div class="form-group">
+                    <label th:text="#{assuredFirstName}">Assured First Name</label>
+                    <input type="text" class="form-control input-sm" name="assuredFirstName"
+                           th:value="${searchCriteria.assuredFirstName}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label th:text="#{assuredLastName}">Assured Last Name</label>
+                    <input type="text" class="form-control input-sm" name="assuredLastName"
+                           th:value="${searchCriteria.assuredLastName}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label th:text="#{policyHolderName}">Policy Holder Name</label>
+                    <input type="text" class="form-control input-sm" name="policyHolderName"
+                           th:value="${searchCriteria.policyHolderName}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label th:text="#{assuredNRCNumber}">Assured NRC</label>
+                    <input type="text" class="form-control input-sm" name="assuredNRCNumber"
+                           th:value="${searchCriteria.assuredNRCNumber}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" style="margin-left: 304%;margin-top: 20px" class="btn btn-default btn-sm"
                         id="searchpreauthorizationrecord">Search
                 </button>
             </div>

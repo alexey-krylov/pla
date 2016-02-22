@@ -59,17 +59,6 @@ public class GroupHealthCashlessClaimPolicyDetailDto {
         return this;
     }
 
-    public GroupHealthCashlessClaimPolicyDetailDto updateWithClientId(GroupHealthCashlessClaimAssuredDetail assuredDetail) {
-        if(isNotEmpty(assuredDetail)){
-            this.assuredDetail = constructClientIdFromGroupHealthCashlessClaimAssuredDetail(assuredDetail);
-        }
-        return this;
-    }
-
-    private GroupHealthCashlessClaimAssuredDetail constructClientIdFromGroupHealthCashlessClaimAssuredDetail(GroupHealthCashlessClaimAssuredDetail assuredDetail) {
-        return new GroupHealthCashlessClaimAssuredDetail().updateWithCLientId(assuredDetail.getClientId());
-    }
-
     public GroupHealthCashlessClaimPolicyDetailDto updateWithPlanName(String planName) {
         this.planName = planName;
         return this;
@@ -77,6 +66,11 @@ public class GroupHealthCashlessClaimPolicyDetailDto {
 
     public GroupHealthCashlessClaimPolicyDetailDto updateWithPlanCode(String planCode) {
         this.planCode = planCode;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithAssuredDetails(GroupHealthCashlessClaimAssuredDetail assuredDetail) {
+        this.assuredDetail = assuredDetail;
         return this;
     }
 }

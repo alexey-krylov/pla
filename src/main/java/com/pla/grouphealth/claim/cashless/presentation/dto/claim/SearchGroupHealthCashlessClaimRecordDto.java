@@ -16,6 +16,9 @@ public class SearchGroupHealthCashlessClaimRecordDto {
     private String policyNumber;
     private String policyHolderName;
     private String clientId;
+    private String assuredFirstName;
+    private String assuredLastName;
+    private String assuredNRCNumber;
     private String hcpCode;
     private String groupHealthCashlessClaimId;
     private String underwriterLevel;

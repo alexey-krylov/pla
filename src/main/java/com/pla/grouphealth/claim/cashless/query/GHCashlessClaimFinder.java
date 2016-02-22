@@ -43,7 +43,7 @@ public class GHCashlessClaimFinder {
     public List<PreAuthorizationRequest> searchPreAuthorizationRecord(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, String username){
         if(isEmpty(searchPreAuthorizationRecordDto.getBatchNumber())&& isEmpty(searchPreAuthorizationRecordDto.getClientId()) &&
                 isEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())&&isEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())&&
-                isEmpty(searchPreAuthorizationRecordDto.getHcpCode())) {
+                isEmpty(searchPreAuthorizationRecordDto.getHcpCode()) && isEmpty(searchPreAuthorizationRecordDto.getPolicyHolderName()) ) {
 
             return Lists.newArrayList();
         }
@@ -60,6 +60,10 @@ public class GHCashlessClaimFinder {
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getHcpCode())){
             query.addCriteria(new Criteria().and("preAuthorizationRequestHCPDetail.hcpCode").is(searchPreAuthorizationRecordDto.getHcpCode()));
+        }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").regex("^" + searchPreAuthorizationRecordDto.getPolicyHolderName(), "i"));
+
         }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())){
             query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.policyNumber").is(searchPreAuthorizationRecordDto.getPolicyNumber()));
@@ -78,7 +82,7 @@ public class GHCashlessClaimFinder {
     public List<PreAuthorizationRequest> getPreAuthorizationRequestByCriteria(SearchPreAuthorizationRecordDto searchPreAuthorizationRecordDto, List usernames) {
         if(isEmpty(searchPreAuthorizationRecordDto.getBatchNumber())&& isEmpty(searchPreAuthorizationRecordDto.getClientId()) &&
                 isEmpty(searchPreAuthorizationRecordDto.getPolicyNumber())&&isEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())&&
-                isEmpty(searchPreAuthorizationRecordDto.getHcpCode())) {
+                isEmpty(searchPreAuthorizationRecordDto.getHcpCode()) && isEmpty(searchPreAuthorizationRecordDto.getPolicyHolderName())) {
 
             return Lists.newArrayList();
         }
@@ -97,6 +101,9 @@ public class GHCashlessClaimFinder {
         if(isNotEmpty(searchPreAuthorizationRecordDto.getClientId())){
             query.addCriteria(new Criteria().and("preAuthorizationRequestPolicyDetail.assuredDetail.clientId").is(searchPreAuthorizationRecordDto.getClientId()));
         }
+        if(isNotEmpty(searchPreAuthorizationRecordDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").regex("^" + searchPreAuthorizationRecordDto.getPolicyHolderName(), "i"));;
+        }
         if(isNotEmpty(searchPreAuthorizationRecordDto.getPreAuthorizationId())){
             query.addCriteria(new Criteria().and("preAuthorizationRequestId").is(searchPreAuthorizationRecordDto.getPreAuthorizationId()));
         }
@@ -108,7 +115,9 @@ public class GHCashlessClaimFinder {
         if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
                 isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
                 && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())
-                &&isEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel())){
+                &&isEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())){
             return Lists.newArrayList();
         }
         Query query = new Query();
@@ -123,6 +132,20 @@ public class GHCashlessClaimFinder {
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber").is(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber()));
         }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.nrcNumber").is(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").is(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())) {
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredLastName(),"i"));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())){
+           query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName(),"i"));
+        }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.clientId").is(searchGroupHealthCashlessClaimRecordDto.getClientId()));
         }
@@ -136,8 +159,10 @@ public class GHCashlessClaimFinder {
     public List<GroupHealthCashlessClaim> searchGroupHealthCashlessClaimForUnderwriterByCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, List username){
         if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
                 isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
-                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())
-                &&isEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel())){
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())
+                &&isEmpty(searchGroupHealthCashlessClaimRecordDto.getUnderwriterLevel())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())){
             return Lists.newArrayList();
         }
         Query query = new Query();
@@ -153,6 +178,20 @@ public class GHCashlessClaimFinder {
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimHCPDetail.hcpCode.hcpCode").is(searchGroupHealthCashlessClaimRecordDto.getHcpCode()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.nrcNumber").is(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").is(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())) {
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredLastName(),"i"));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName(),"i"));
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.policyNumber.policyNumber").is(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber()));
@@ -171,7 +210,9 @@ public class GHCashlessClaimFinder {
     public List<GroupHealthCashlessClaim> searchCashlessClaimBillMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, List username){
         if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
                 isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
-                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+               && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())){
             return Lists.newArrayList();
         }
         Query query = new Query();
@@ -192,6 +233,20 @@ public class GHCashlessClaimFinder {
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
         }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.nrcNumber").is(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").is(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())) {
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredLastName(),"i"));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName(),"i"));
+        }
         query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
         return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");
 
@@ -200,7 +255,9 @@ public class GHCashlessClaimFinder {
     public List<GroupHealthCashlessClaim> searchCashlessClaimServiceMismatchCriteria(SearchGroupHealthCashlessClaimRecordDto searchGroupHealthCashlessClaimRecordDto, List username){
         if(isEmpty(searchGroupHealthCashlessClaimRecordDto.getBatchNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getClientId())&&
                 isEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getHcpCode())
-                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())){
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyNumber())&& isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()) && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())
+                && isEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())){
             return Lists.newArrayList();
         }
         Query query = new Query();
@@ -220,6 +277,20 @@ public class GHCashlessClaimFinder {
         }
         if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId())){
             query.addCriteria(new Criteria().and("groupHealthCashlessClaimId").is(searchGroupHealthCashlessClaimRecordDto.getGroupHealthCashlessClaimId()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.nrcNumber").is(searchGroupHealthCashlessClaimRecordDto.getAssuredNRCNumber()));
+        }
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName())){
+            query.addCriteria(new Criteria().and("ghProposer.proposerName").is(searchGroupHealthCashlessClaimRecordDto.getPolicyHolderName()));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredLastName())) {
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.surname").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredLastName(),"i"));
+        }
+
+        if(isNotEmpty(searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName())){
+            query.addCriteria(new Criteria().and("groupHealthCashlessClaimPolicyDetail.assuredDetail.firstName").regex("^"+searchGroupHealthCashlessClaimRecordDto.getAssuredFirstName(),"i"));
         }
         query.with(new Sort(Sort.Direction.ASC, "groupHealthCashlessClaimId"));
         return mongoTemplate.find(query, GroupHealthCashlessClaim.class, "GROUP_HEALTH_CASHLESS_CLAIM");

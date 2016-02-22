@@ -237,7 +237,7 @@ public class GroupHealthCashlessClaimDto {
                 .updateWithPolicyName(groupHealthCashlessClaimPolicyDetail.getPolicyName())
                 .updateWithPlanName(groupHealthCashlessClaimPolicyDetail.getPlanName())
                 .updateWithPlanCode(groupHealthCashlessClaimPolicyDetail.getPlanCode())
-                .updateWithClientId(groupHealthCashlessClaimPolicyDetail.getAssuredDetail());
+                .updateWithAssuredDetails(groupHealthCashlessClaimPolicyDetail.getAssuredDetail());
     }
 
     public BigDecimal getSumOfAllProbableClaimAmount() {
@@ -270,5 +270,15 @@ public class GroupHealthCashlessClaimDto {
     public GroupHealthCashlessClaimDto updateWithClaimIdFromWhichAmended(String claimIdFromWhichAmended) {
         this.claimIdFromWhichAmended = claimIdFromWhichAmended;
         return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimProposerName(GHProposer ghProposer) {
+      this.ghProposer =  constructProposerDetail(ghProposer);
+        return  this;
+    }
+
+    private GHProposerDto constructProposerDetail(GHProposer ghProposer) {
+        return  new GHProposerDto()
+                .updateWithDetails(ghProposer);
     }
 }
