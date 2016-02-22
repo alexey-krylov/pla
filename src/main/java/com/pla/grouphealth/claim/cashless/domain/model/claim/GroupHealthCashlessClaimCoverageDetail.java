@@ -31,8 +31,6 @@ public class GroupHealthCashlessClaimCoverageDetail {
     private BigDecimal totalAmountPaid;
     private BigDecimal balanceAmount;
     private BigDecimal reserveAmount;
-    private BigDecimal eligibleAmount;
-    private BigDecimal approvedAmount;
     private BigDecimal deductibleAmount;
     private BigDecimal deductiblePercentage;
     private String deductibleType;
@@ -67,14 +65,14 @@ public class GroupHealthCashlessClaimCoverageDetail {
         return this;
     }
 
-    public GroupHealthCashlessClaimCoverageDetail updateWithBalanceAndEligibleAmount() {
+    public GroupHealthCashlessClaimCoverageDetail updateWithBalanceAmount() {
         BigDecimal sumAssured = this.sumAssured;
         BigDecimal totalAmountPaid = this.totalAmountPaid;
         BigDecimal reservedAmount = this.reserveAmount;
         if(sumAssured.compareTo(totalAmountPaid) == 1){
             BigDecimal balanceAmount = sumAssured.subtract(totalAmountPaid);
             this.balanceAmount = balanceAmount;
-            this.eligibleAmount = balanceAmount;
+            //this.eligibleAmount = balanceAmount;
 
            /* if(balanceAmount.compareTo(deductibleAmount) == 1) {
                 this.eligibleAmount = deductibleAmount;
@@ -83,11 +81,40 @@ public class GroupHealthCashlessClaimCoverageDetail {
                 this.eligibleAmount = balanceAmount;
             }*/
         }
-        if(sumAssured.compareTo(totalAmountPaid) == 0){
+        if(sumAssured.compareTo(totalAmountPaid) == 0 || sumAssured.compareTo(totalAmountPaid) == -1){
             this.balanceAmount = BigDecimal.ZERO;
-            this.eligibleAmount = BigDecimal.ZERO;
+            //this.eligibleAmount = BigDecimal.ZERO;
         }
         return this;
+    }
+
+    public GroupHealthCashlessClaimCoverageDetail updateWithEligibleAmount() {
+        BigDecimal totalProbableClaimAmount = getTotalProbableClaimAmount();
+        if(isNotEmpty(this.deductibleType) && this.deductibleType.equals("PERCENTAGE")){
+            BigDecimal deductibleAmount = getPercentageValue(totalProbableClaimAmount, this.deductiblePercentage);
+            this.deductibleAmount = deductibleAmount;
+        }
+        this.benefitDetails.stream().map(benefit -> benefit.updateWithEligibleAmount(this.balanceAmount)).collect(Collectors.toList());
+        return this;
+    }
+
+    public BigDecimal getTotalProbableClaimAmount() {
+        BigDecimal totalProbableClaimAmount = BigDecimal.ZERO;
+        for(GroupHealthCashlessClaimBenefitDetail benefit : this.getBenefitDetails()){
+            totalProbableClaimAmount = totalProbableClaimAmount.add(benefit.getProbableClaimAmount());
+        }
+        return totalProbableClaimAmount;
+    }
+
+
+    public BigDecimal getSumOfTotalApprovedAmount() {
+        BigDecimal totalAmountPaidWithoutCurrentApproveAmount = BigDecimal.ZERO;
+        for(GroupHealthCashlessClaimBenefitDetail benefit : this.getBenefitDetails()){
+            if(isNotEmpty(benefit.getApprovedAmount())){
+                totalAmountPaidWithoutCurrentApproveAmount = totalAmountPaidWithoutCurrentApproveAmount.add(benefit.getApprovedAmount());
+            }
+        }
+        return totalAmountPaidWithoutCurrentApproveAmount;
     }
 
     public GroupHealthCashlessClaimCoverageDetail updateWithBenefitDetails(Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails) {
@@ -100,11 +127,6 @@ public class GroupHealthCashlessClaimCoverageDetail {
             benefitDetails.stream().forEach(benefitDto -> {
                 BigDecimal probableClaimAmount = getProbableClaimAmount(benefitDto.getBenefitCode(), coverageId, finalRefurbishedList);
                 benefitDto.setProbableClaimAmount(probableClaimAmount);
-                if(isNotEmpty(this.deductibleType) && this.deductibleType.equals("PERCENTAGE")){
-                    BigDecimal deductiblePercentage = this.deductiblePercentage;
-                    BigDecimal deductibleAmount = getPercentageValue(probableClaimAmount, deductiblePercentage);
-                    this.deductibleAmount = deductibleAmount;
-                }
             });
         }
         return this;

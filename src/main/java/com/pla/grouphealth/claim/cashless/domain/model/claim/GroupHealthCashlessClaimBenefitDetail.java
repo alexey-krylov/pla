@@ -19,5 +19,17 @@ public class GroupHealthCashlessClaimBenefitDetail {
     private String benefitCode;
     private BigDecimal probableClaimAmount;
     private BigDecimal preAuthorizationAmount;
+    private BigDecimal eligibleAmount;
+    private BigDecimal approvedAmount;
+
+    public GroupHealthCashlessClaimBenefitDetail updateWithEligibleAmount(BigDecimal balanceAmount) {
+        if(balanceAmount.compareTo(this.probableClaimAmount) == 1 || balanceAmount.compareTo(this.probableClaimAmount) == 0){
+            this.eligibleAmount = this.probableClaimAmount;
+        }
+        if(balanceAmount.compareTo(this.probableClaimAmount) == -1){
+            this.eligibleAmount = balanceAmount;
+        }
+        return this;
+    }
     //private BigDecimal eligibleAmount;
 }

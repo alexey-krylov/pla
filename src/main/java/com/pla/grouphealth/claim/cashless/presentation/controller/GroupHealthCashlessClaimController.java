@@ -748,6 +748,25 @@ public class GroupHealthCashlessClaimController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/amendclaim", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView appendClaim(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException, GenerateReminderFollowupException, ClaimNotEligibleException, AmendGroupHealthCashlessClaimProcessingException {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        groupHealthCashlessClaimService.amendClaim(groupHealthCashlessClaimId, clientId, userName);
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimtobeamended");
+        //modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
+        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin().updateWithErrorMessage("Claim successfully amended."));
+        return modelAndView;
+    }
+
+    @ExceptionHandler(AmendGroupHealthCashlessClaimProcessingException.class)
+    public ModelAndView handleException(AmendGroupHealthCashlessClaimProcessingException ex){
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimtobeamended");
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
+        modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin().updateWithErrorMessage(ex.getMessage()));
+        return modelAndView;
+    }
 }
 
 

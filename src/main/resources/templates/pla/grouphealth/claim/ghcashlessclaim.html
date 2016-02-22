@@ -1950,11 +1950,11 @@
                                             <th >Coverage</th>
                                             <th>Benefit</th>
                                             <th>Maximum Entitlement  Amount</th>
-                                            <th>Total Amount Paid Till Now</th>
+                                            <th>Total Approved Amount Paid Till Now</th>
                                             <th >Balance Amount</th>
                                             <th>Pre-auth Approved Amount</th>
                                             <th>Claim Amount</th>
-                                            <th>Deductible Amount</th>
+                                            <!--<th>Deductible Amount</th>-->
                                             <th>Eligible Amount</th>
                                         </tr>
                                         </thead>
@@ -1968,8 +1968,8 @@
                                             <td ng-bind="coverageDetailDto.balanceAmount"></td>
                                             <td ng-bind="benefit.preAuthorizationAmount"></td>
                                             <td ng-bind="benefit.probableClaimAmount"></td>
-                                            <td ng-bind="coverageDetailDto.deductibleAmount"></td>
-                                            <td ng-bind="coverageDetailDto.eligibleAmount"></td>
+                                           <!-- <td ng-bind="coverageDetailDto.deductibleAmount"></td>-->
+                                            <td ng-bind="benefit.eligibleAmount"></td>
                                         </tr>
                                         </tbody>
                                     </table>

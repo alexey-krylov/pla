@@ -201,8 +201,9 @@ public class GroupHealthCashlessClaimCommandHandler {
         GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimAxonRepository.load(groupHealthCashlessClaimId);
         groupHealthCashlessClaim = groupHealthCashlessClaim
                 .populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, approveGroupHealthCashlessClaimCommand.getUserName())
+                .updateWithApprovedAtLevel(groupHealthCashlessClaim.getStatus())
                 .updateStatus(APPROVED)
-        .updateWithApprovedOnDate(LocalDate.now());
+                .updateWithApprovedOnDate(LocalDate.now());
         closePreAuthorizations(groupHealthCashlessClaim.getPreAuthorizationDetails());
         return Boolean.TRUE;
     }

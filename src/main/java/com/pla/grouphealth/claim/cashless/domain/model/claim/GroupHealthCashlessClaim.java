@@ -76,6 +76,8 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private LocalDate claimRejectionDate;
     private String closedAtLevel;
     private LocalDate approvedOnDate;
+    private String approvedAtLevel;
+    private String claimIdFromWhichAmended;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -391,6 +393,22 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
 
     public GroupHealthCashlessClaim updateWithApprovedOnDate(LocalDate approvedOnDate) {
         this.approvedOnDate = approvedOnDate;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithApprovedAtLevel(Status status) {
+        if(isNotEmpty(status))
+            this.approvedAtLevel = status.name();
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithClaimAmendmentProcessorUserId(String claimAmendmentProcessorUserId) {
+        this.claimAmendmentProcessorUserId = claimAmendmentProcessorUserId;
+        return this;
+    }
+
+    public GroupHealthCashlessClaim updateWithClaimIdFromWhichAmended(String groupHealthCashlessClaimId) {
+        this.claimIdFromWhichAmended = groupHealthCashlessClaimId;
         return this;
     }
 

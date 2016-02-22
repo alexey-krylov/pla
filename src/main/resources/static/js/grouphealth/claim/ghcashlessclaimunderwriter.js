@@ -1,6 +1,6 @@
 
 var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMessages', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.popover',
-    'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','angularFileUpload', 'angucomplete-alt'])
+        'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','angularFileUpload', 'angucomplete-alt'])
     .config(['datepickerPopupConfig', function (datepickerPopupConfig) {
         datepickerPopupConfig.datepickerPopup = 'MM/dd/yyyy';
         datepickerPopupConfig.currentText = 'Today';
@@ -168,7 +168,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                         .success(function (response) {
                             $scope.createUpdateDto = response;
                         }).error(function (response, status, headers, config) {
-                        });
+                    });
                 }).error();
             };
 
@@ -645,7 +645,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                             }, 1000);
                                         }
                                     }).error(function (response, status, headers, config) {
-                                    });
+                                });
                             }
                         }).error(
                             function (status) {
@@ -669,7 +669,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                     $scope.returnCashlessClaim();
                                 } else{
                                     var win = window.open('/pla/grouphealth/claim/cashless/claim/underwriter/getgrouphealthcashlessclaimaddrequirementrequestletter/'+groupHealthCashlessClaimId,"_blank","toolbar=no,resizable=no," +
-                                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                                        "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
                                     var timer = setInterval(function(){
                                         if(win.closed){
                                             clearInterval(timer);
@@ -714,7 +714,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                             }
                             else{
                                 var win = window.open('/pla/grouphealth/claim/cashless/claim/underwriter/getgrouphealthcashlessclaimrejectionletter/' + groupHealthCashlessClaimId, "_blank", "toolbar=no,resizable=no," +
-                                "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
+                                    "scrollable=no,menubar=no,personalbar=no,dependent=yes,dialog=yes,split=no,titlebar=no,resizable=no,location=no,left=100px");
                                 var timer = setInterval(function () {
                                     if (win.closed) {
                                         clearInterval(timer);
@@ -727,7 +727,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                                     $scope.toggleModal();
                                                 }
                                             }).error(function (response) {
-                                            });
+                                        });
                                     }
                                 }, 500);
                             }
@@ -735,8 +735,20 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                 }
             };
 
+            $scope.checkIfApprovedAmountEntered = function () {
+                for(var i=0; i < $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails.length ; i++){
+                    var coverage = $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails[i];
+                    for(var j = 0 ; j < coverage.benefitDetails.length; j++){
+                        var benefit = coverage.benefitDetails[j];
+                        if(benefit.approvedAmount == null || angular.isUndefined(benefit.approvedAmount) || benefit.approvedAmount == ''){
+                            return false;
+                        }
+                    }
+                }
+            };
+
             $scope.underwriterApprove = function () {
-                if (!$scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails[0].approvedAmount) {
+                if (!$scope.checkIfApprovedAmountEntered()) {
                     $scope.approvepopupModal();
                 }
                 else {
@@ -756,7 +768,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                             }, 2000);
                                         }
                                     }).error(function (response, status, headers, config) {
-                                    });
+                                });
                             }
                         }).error(
                             function (status) {
@@ -792,7 +804,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                         $scope.getAllDocuments();
                                     });
                                 }).error(function (response, status, headers, config) {
-                                });
+                            });
                         }
                     }).error(
                         function(status){
@@ -843,7 +855,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                         }, 2000);
                                     }
                                 }).error(function (response, status, headers, config) {
-                                });
+                            });
                         }
                     }).error(
                         function (status) {
@@ -869,7 +881,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                         }, 2000);
                                     }
                                 }).error(function (response, status, headers, config) {
-                                });
+                            });
                         }
                     }).error(
                         function (status) {
@@ -887,8 +899,8 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                             $scope.rejectionEmailSent = true;
                         }
                     }).error(function(response){
-                        $scope.rejectionEmailSent = false;
-                    });
+                    $scope.rejectionEmailSent = false;
+                });
             };
 
             $scope.getAllDocuments = function(){

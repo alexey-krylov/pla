@@ -196,7 +196,7 @@ public class PreAuthorizationService {
             GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimPolicyDetail();
             if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)){
                 for(GroupHealthCashlessClaimCoverageDetail coverage : groupHealthCashlessClaimPolicyDetail.getCoverageDetails()) {
-                    aggregateClaimAmount = aggregateClaimAmount.add(coverage.getApprovedAmount());
+                    aggregateClaimAmount = aggregateClaimAmount.add(coverage.getSumOfTotalApprovedAmount());
                 }
             }
         }

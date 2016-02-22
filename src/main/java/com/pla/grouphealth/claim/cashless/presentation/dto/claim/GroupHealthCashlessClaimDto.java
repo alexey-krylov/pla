@@ -58,6 +58,7 @@ public class GroupHealthCashlessClaimDto {
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
     private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
     private String statusName;
+    private String claimIdFromWhichAmended;
 
     public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimId(String groupHealthCashlessClaimId) {
         this.groupHealthCashlessClaimId = groupHealthCashlessClaimId;
@@ -263,6 +264,11 @@ public class GroupHealthCashlessClaimDto {
 
     public GroupHealthCashlessClaimDto updateWithBankDetails(GroupHealthCashlessClaimBankDetail groupHealthCashlessClaimBankDetail) {
         this.groupHealthCashlessClaimBankDetailDto = new GroupHealthCashlessClaimBankDetailDto().updateWithDetails(groupHealthCashlessClaimBankDetail);
+        return this;
+    }
+
+    public GroupHealthCashlessClaimDto updateWithClaimIdFromWhichAmended(String claimIdFromWhichAmended) {
+        this.claimIdFromWhichAmended = claimIdFromWhichAmended;
         return this;
     }
 }

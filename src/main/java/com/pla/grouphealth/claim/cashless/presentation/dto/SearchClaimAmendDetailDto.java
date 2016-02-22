@@ -59,7 +59,7 @@ public class SearchClaimAmendDetailDto {
         BigDecimal totalApprovedAmount = BigDecimal.ZERO;
         if(isNotEmpty(coverageDetails)){
             for(GroupHealthCashlessClaimCoverageDetail coverageDetail : coverageDetails){
-                totalApprovedAmount = totalApprovedAmount.add(coverageDetail.getApprovedAmount());
+                totalApprovedAmount = totalApprovedAmount.add(coverageDetail.getSumOfTotalApprovedAmount());
             }
         }
         return totalApprovedAmount;
