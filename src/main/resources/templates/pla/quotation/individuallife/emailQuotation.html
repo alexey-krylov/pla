@@ -16,6 +16,34 @@
 <script src="/pla/js/quotation/individualLife/emailQuotation.js"></script>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/examples/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+<script language="javascript" type="text/javascript">
+    $(window).load(function () {
+        $('#loading').hide();
+    });
+</script>
+<style>
+    #loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1100;
+        background-color: white;
+        opacity: .6;
+
+    }
+
+    #loading-image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -32px; /* -1 * image width / 2 */
+        margin-top: -32px; /* -1 * image height / 2 */
+        display: block;
+    }
+
+</style>
 <body onload="javascript:bodyOnLoad();">
 
 
@@ -24,6 +52,7 @@
         });
 </script>-->
 <div class="container">
+    <div id="loading"><img id="loading-image" src="/pla/images/ajax-loader.gif"/></div>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-primary">
