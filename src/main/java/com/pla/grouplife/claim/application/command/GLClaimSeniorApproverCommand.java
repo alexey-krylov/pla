@@ -13,11 +13,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Created by ak
+ * Created by ak on 23/2/2016.
  */
 @Getter
 @Setter
-public class ReturnGLClaimCommand {
+public class GLClaimSeniorApproverCommand {
 
     private String claimId;
     private ClaimApproverPlanDto claimApprovalPlanDetail;

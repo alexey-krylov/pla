@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * Created by ak
  */
-public interface GroupLifeClaimRepository extends MongoRepository<GroupLifeClaim,ClaimId> {
-
+public interface GroupLifeClaimRepository extends MongoRepository<GroupLifeClaim, ClaimId> {
     List<GroupLifeClaim> findAllByClaimStatusIn(List<ClaimStatus> statusList);
 }

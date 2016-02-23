@@ -22,9 +22,10 @@ import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 @Document(collection = "group_life_claim")
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @EqualsAndHashCode(of = "claimId")
 public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
+//public class GroupLifeClaim  extends AbstractAnnotatedAggregateRoot<ClaimId> {
 
     @Id
     @AggregateIdentifier
@@ -304,9 +305,9 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
     }
 
     public GroupLifeClaim markAsReopenClaim(String approvedBy, DateTime approvedOn, String comment) {
-        this.claimStatus = ClaimStatus.UNDERWRITING;;
+        this.claimStatus = ClaimStatus.EVALUATION;;
         if (isNotEmpty(approvedBy)) {
-            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.UNDERWRITING, approvedBy, comment, approvedOn));
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.EVALUATION, approvedBy, comment, approvedOn));
         }
 
         return this;
@@ -344,17 +345,38 @@ public class GroupLifeClaim  extends AbstractAggregateRoot<ClaimId> {
         return this;
     }
 
+    public GroupLifeClaim markAsReturnedFromApprover( DateTime now, String approvedBy,String comment) {
+        this.submittedOn = now;
+        this.claimStatus = ClaimStatus.EVALUATION;
+        if (isNotEmpty(approvedBy)) {
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.EVALUATION, approvedBy, comment, submittedOn));
+        }
+    return this;
+}
+    public GroupLifeClaim markAsRejectedByApprover( DateTime now, String approvedBy,String comment) {
+        this.submittedOn = now;
+        this.claimStatus = ClaimStatus.REPUDIATED;
+        if (isNotEmpty(approvedBy)) {
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.REPUDIATED, approvedBy, comment, submittedOn));
+        }
+        return this;
+    }
+
+
+  public GroupLifeClaim markAsRoutedToSeniorApprover( DateTime now, String approvedBy,String comment) {
+        this.submittedOn = now;
+        this.claimStatus = ClaimStatus.UNDERWRITING;
+        this.taggedRoutingLevel=RoutingLevel.UNDERWRITING_LEVEL_TWO;
+        if (isNotEmpty(approvedBy)) {
+            registerEvent(new GLClaimStatusAuditEvent(this.getClaimId(),ClaimStatus.UNDERWRITING, approvedBy, comment, submittedOn));
+        }
+        return this;
+    }
+
 
 }
 
-    /*
 
-
-   public GroupLifeClaim withClaimRegistration(ClaimRegistration claimRegistration){
-        //this.claimRegistration=claimRegistration;
-        return this;
-    }
-    */
 
 
 

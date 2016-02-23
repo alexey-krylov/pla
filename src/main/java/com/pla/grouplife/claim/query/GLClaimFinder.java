@@ -2,6 +2,7 @@ package com.pla.grouplife.claim.query;
 
 import com.google.common.collect.Lists;
 import com.pla.core.dto.MandatoryDocumentDto;
+import com.pla.grouplife.claim.domain.model.GroupLifeClaim;
 import com.pla.grouplife.claim.presentation.dto.ClaimMandatoryDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
@@ -557,5 +558,14 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, Map.class, GL_LIFE_CLAIM_COLLECTION_NAME);
     }
+    public GroupLifeClaim findClaimDetailByClaimId(String claimId) {
+        Criteria claimCriteria = Criteria.where("_id").is(claimId);
+        Query query = new Query(claimCriteria);
+        GroupLifeClaim glClaim = mongoTemplate.findOne(query, GroupLifeClaim.class, GL_LIFE_CLAIM_COLLECTION_NAME);
+        return glClaim;
+    }
+   public void saveClaim(GroupLifeClaim  glClaim){
+       mongoTemplate.save(glClaim, GL_LIFE_CLAIM_COLLECTION_NAME);
+   }
 }
 

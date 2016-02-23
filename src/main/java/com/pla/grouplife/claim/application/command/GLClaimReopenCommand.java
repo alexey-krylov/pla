@@ -1,6 +1,7 @@
 package com.pla.grouplife.claim.application.command;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Setter
 @Getter
-
+@NoArgsConstructor
 public class GLClaimReopenCommand {
 
     private String claimId;

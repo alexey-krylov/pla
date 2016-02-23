@@ -12,7 +12,9 @@ import com.pla.core.dto.ProductClaimTypeDto;
 import com.pla.core.query.CoverageFinder;
 import com.pla.core.query.PlanFinder;
 import com.pla.core.query.ProductClaimMapperFinder;
+import com.pla.grouplife.claim.application.command.GLClaimReopenCommand;
 import com.pla.grouplife.claim.domain.model.*;
+import com.pla.grouplife.claim.domain.service.GroupLifeClaimRoleAdapter;
 import com.pla.grouplife.claim.presentation.dto.*;
 import com.pla.grouplife.claim.query.GLClaimFinder;
 import com.pla.grouplife.claim.repository.GroupLifeClaimRepository;
@@ -36,6 +38,7 @@ import com.pla.sharedkernel.identifier.PolicyId;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.finder.UnderWriterFinder;
 import org.apache.commons.io.IOUtils;
+import org.axonframework.repository.Repository;
 import org.joda.time.*;
 import org.nthdimenzion.common.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +94,17 @@ public class GLClaimService implements Serializable{
 
     @Autowired
     IProcessInfoAdapter iProcessInfoAdapter;
+   // @Autowired
+   // GroupLifeClaimRepository groupLifeClaimRepository;
+
     @Autowired
-    GroupLifeClaimRepository groupLifeClaimRepository;
+    GroupLifeClaimRoleAdapter groupLifeClaimRoleAdapter;
+
+    @Autowired
+    Repository<GroupLifeClaim> glClaimMongoRepository;
+    @Autowired
+    private GroupLifeClaimRepository groupLifeClaimRepository;
+
 
     public List<GLPolicyDetailDto> searchPolicy(SearchGLPolicyDto searchGLPolicyDto) {
         List<Map> searchedPolices = glFinder.searchPolicy(searchGLPolicyDto.getPolicyNumber(), searchGLPolicyDto.getPolicyHolderName(), searchGLPolicyDto.getClientId(), new String[]{"IN_FORCE"}, searchGLPolicyDto.getProposalNumber());
@@ -1521,11 +1533,13 @@ public class GLClaimService implements Serializable{
     }
 
     public  List<GLClaimDataDto> getAllApprovedOrPaidClaimDetail(){
-        List<GroupLifeClaim> searchedClaimRecords = groupLifeClaimRepository.findAllByClaimStatusIn(Lists.newArrayList(ClaimStatus.APPROVED, ClaimStatus.PAID_DISBURSED));
+    /*    List<GroupLifeClaim> searchedClaimRecords = groupLifeClaimRepository.findAllByClaimStatusIn(Lists.newArrayList(ClaimStatus.APPROVED, ClaimStatus.PAID_DISBURSED));
         if (isEmpty(searchedClaimRecords)) {
             return Lists.newArrayList();
         }
+        */
         return null;
+
         /*return searchedClaimRecords.parallelStream().map(new Function<GroupLifeClaim, GLClaimDataDto>() {
             @Override
             public GLClaimDataDto apply(GroupLifeClaim glClaim) {
@@ -2121,10 +2135,26 @@ public  List<GLClaimDataDto>  getAllRejectedOrClosedClaimDetail(){
         }).collect(Collectors.toList());
 
     }
+   /* public String reopenClaim(GLClaimReopenCommand glClaimReopenCommand) {
+       // GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimReopenCommand.getClaimId()));
+        GroupLifeClaim groupLifeClaim = groupLifeClaimRepository.findOne(new ClaimId(glClaimReopenCommand.getClaimId()));
+        ClaimReopenProcessor reopenProcessor = groupLifeClaimRoleAdapter.userToClaimReopenProcessor(glClaimReopenCommand.getUserDetails());
+        groupLifeClaim=reopenProcessor .submitForReopen(DateTime.now(), glClaimReopenCommand.getComment(), groupLifeClaim) ;
+        glClaimMongoRepository.add(groupLifeClaim);
+        String claimNumber=groupLifeClaim.getClaimNumber().getClaimNumber();
+        //groupLifeClaimRepository.save(groupLifeClaim);
+        return claimNumber;
+    }*/
 
-
-
-
+    public String reopenClaim(GLClaimReopenCommand glClaimReopenCommand) {
+        GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimReopenCommand.getClaimId()));
+        ClaimReopenProcessor reopenProcessor = groupLifeClaimRoleAdapter.userToClaimReopenProcessor(glClaimReopenCommand.getUserDetails());
+        groupLifeClaim=reopenProcessor .submitForReopen(DateTime.now(), glClaimReopenCommand.getComment(), groupLifeClaim) ;
+//        glClaimMongoRepository.add(groupLifeClaim);
+        String claimNumber=groupLifeClaim.getClaimNumber().getClaimNumber();
+        //groupLifeClaimRepository.save(groupLifeClaim);
+        return claimNumber;
+    }
 }
 
 
