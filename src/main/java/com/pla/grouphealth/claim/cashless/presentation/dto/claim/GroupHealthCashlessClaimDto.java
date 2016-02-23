@@ -243,12 +243,12 @@ public class GroupHealthCashlessClaimDto {
     public BigDecimal getSumOfAllProbableClaimAmount() {
         BigDecimal sumOfAllProbableClaimAmount = BigDecimal.ZERO;
         if(isNotEmpty(this.groupHealthCashlessClaimPolicyDetail)) {
-            Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails = this.groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
+            Set<GroupHealthCashlessClaimCoverageDetailDto> coverageDetails = this.groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
             if(isNotEmpty(coverageDetails)){
-                for(GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail :  coverageDetails){
-                    Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
+                for(GroupHealthCashlessClaimCoverageDetailDto groupHealthCashlessClaimCoverageDetail :  coverageDetails){
+                    Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
                     if(isNotEmpty(benefitDetails)){
-                        for(GroupHealthCashlessClaimBenefitDetail benefitDetail : benefitDetails){
+                        for(GroupHealthCashlessClaimBenefitDetailDto benefitDetail : benefitDetails){
                             sumOfAllProbableClaimAmount = sumOfAllProbableClaimAmount.add(benefitDetail.getProbableClaimAmount());
                         }
                     }

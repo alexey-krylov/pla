@@ -761,10 +761,9 @@ public class PreAuthorizationRequestService {
                         .updateWithTotalAmountPaid(preAuthorizationRequestCoverageDetail.getTotalAmountPaid())
                         .updateWithBalanceAmount(preAuthorizationRequestCoverageDetail.getBalanceAmount())
                         .updateWithReserveAmount(preAuthorizationRequestCoverageDetail.getReserveAmount())
-                        .updateWithEligibleAmount(preAuthorizationRequestCoverageDetail.getEligibleAmount())
-                        .updateWithApprovedAmount(preAuthorizationRequestCoverageDetail.getApprovedAmount());
+                        .updateWithEligibleAmount(preAuthorizationRequestCoverageDetail.getEligibleAmount());
                 Set<BenefitDetailDto> benefitDetailDtos = isNotEmpty(preAuthorizationRequestCoverageDetail.getBenefitDetails()) ? preAuthorizationRequestCoverageDetail.getBenefitDetails().stream().map(benefit -> {
-                    BenefitDetailDto benefitDetailDto = new BenefitDetailDto(benefit.getBenefitName(), benefit.getBenefitCode(), benefit.getProbableClaimAmount());
+                    BenefitDetailDto benefitDetailDto = new BenefitDetailDto(benefit.getBenefitName(), benefit.getBenefitCode(), benefit.getProbableClaimAmount(), benefit.getApprovedAmount());
                     return benefitDetailDto;
                 }).collect(Collectors.toSet()) : Sets.newHashSet();
                 coverageBenefitDetailDto.updateWithBenefitDetails(benefitDetailDtos);

@@ -469,6 +469,20 @@
 
                 $scope.hcpServiceDetails = [];
 
+                $scope.checkIfAllApprovedAmountEntered = function () {
+                    for(var i=0; i < $scope.createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails.length ; i++){
+                        var coverage = $scope.createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails[i];
+                        for(var j = 0 ; j < coverage.benefitDetails.length; j++){
+                            var benefit = coverage.benefitDetails[j];
+                            console.log(benefit)
+                            if(benefit.approvedAmount == null || angular.isUndefined(benefit.approvedAmount) || benefit.approvedAmount == '' || benefit.approvedAmount == 0){
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                };
+
                 $scope.getHCPServiceDetails = function(){
                     $http.get("/pla/grouphealth/claim/cashless/preauthorizationrequest/getallrelevantservices/" + preAuthorizationId).success(function (data, status, headers, config) {
                         $scope.hcpServiceDetails = data;
@@ -477,7 +491,7 @@
                 };
                 //$scope.coverageDetailDto.approvedAmount='';
                 $scope.underwriterApprove = function () {
-                    if (!$scope.createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails[0].approvedAmount) {
+                    if (!$scope.checkIfAllApprovedAmountEntered()) {
                         $scope.approvepopupModal();
 
                     }

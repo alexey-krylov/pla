@@ -1,9 +1,6 @@
 package com.pla.sharedkernel.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Created by Samir on 7/8/2015.
@@ -11,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = "policyNumber")
 public class PolicyNumber {
 
     private String policyNumber;

@@ -330,14 +330,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimPolicyDetailFromDto(GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetailDto) {
         if(isNotEmpty(groupHealthCashlessClaimPolicyDetailDto)){
             GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = isNotEmpty(this.groupHealthCashlessClaimPolicyDetail) ? this.groupHealthCashlessClaimPolicyDetail : getInstance(GroupHealthCashlessClaimPolicyDetail.class);
-            try {
-                BeanUtils.copyProperties(groupHealthCashlessClaimPolicyDetail, groupHealthCashlessClaimPolicyDetailDto);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            this.groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaimPolicyDetail;
+            this.groupHealthCashlessClaimPolicyDetail = groupHealthCashlessClaimPolicyDetail.updateWithDetails(groupHealthCashlessClaimPolicyDetailDto);
         }
         return this;
     }

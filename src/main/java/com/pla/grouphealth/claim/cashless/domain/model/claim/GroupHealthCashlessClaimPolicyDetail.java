@@ -1,6 +1,9 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.google.common.collect.Sets;
 import com.pla.core.domain.model.plan.PlanDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimCoverageDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimPolicyDetailDto;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsured;
 import com.pla.grouphealth.sharedresource.model.vo.GHInsuredDependent;
 import com.pla.sharedkernel.domain.model.PolicyNumber;
@@ -12,6 +15,7 @@ import org.nthdimenzion.ddd.domain.annotations.ValueObject;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
@@ -71,5 +75,23 @@ public class GroupHealthCashlessClaimPolicyDetail {
     public GroupHealthCashlessClaimPolicyDetail updateWithDependentAssuredDetail(GHInsuredDependent ghInsuredDependent, GHInsured groupHealthInsured, String clientId) {
         this.assuredDetail = new GroupHealthCashlessClaimAssuredDetail().updateWithAssuredDetailsForDependent(ghInsuredDependent, groupHealthInsured, clientId);
         return this;
+    }
+
+    public GroupHealthCashlessClaimPolicyDetail updateWithDetails(GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetailDto) {
+        if(isNotEmpty(groupHealthCashlessClaimPolicyDetailDto)){
+            this.policyNumber = groupHealthCashlessClaimPolicyDetailDto.getPolicyNumber();
+            this.policyName = groupHealthCashlessClaimPolicyDetailDto.getPolicyName();
+            this.planCode = groupHealthCashlessClaimPolicyDetailDto.getPlanCode();
+            this.planName = groupHealthCashlessClaimPolicyDetailDto.getPlanName();
+            this.sumAssured = groupHealthCashlessClaimPolicyDetailDto.getSumAssured();
+            this.assuredDetail = groupHealthCashlessClaimPolicyDetailDto.getAssuredDetail();
+            this.planId = groupHealthCashlessClaimPolicyDetailDto.getPlanId();
+            this.coverageDetails = constructWIthCoverageDetails(groupHealthCashlessClaimPolicyDetailDto.getCoverageDetails());
+        }
+        return this;
+    }
+
+    private Set<GroupHealthCashlessClaimCoverageDetail> constructWIthCoverageDetails(Set<GroupHealthCashlessClaimCoverageDetailDto> coverageDetails) {
+        return isNotEmpty(coverageDetails) ? coverageDetails.stream().map(coverage -> new GroupHealthCashlessClaimCoverageDetail().updateWithDetails(coverage)).collect(Collectors.toSet()) : Sets.newHashSet();
     }
 }

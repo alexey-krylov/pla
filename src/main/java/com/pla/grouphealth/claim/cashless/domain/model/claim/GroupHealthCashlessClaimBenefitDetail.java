@@ -1,11 +1,15 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimBenefitDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.nthdimenzion.utils.UtilValidator;
 
 import java.math.BigDecimal;
+
+import static org.nthdimenzion.utils.UtilValidator.*;
 
 /**
  * Created by Mohan Sharma on 1/18/2016.
@@ -31,5 +35,16 @@ public class GroupHealthCashlessClaimBenefitDetail {
         }
         return this;
     }
-    //private BigDecimal eligibleAmount;
+
+    public GroupHealthCashlessClaimBenefitDetail updateWithDetails(GroupHealthCashlessClaimBenefitDetailDto benefit) {
+        if(isNotEmpty(benefit)){
+            this.benefitName = benefit.getBenefitName();
+            this.benefitCode = benefit.getBenefitCode();
+            this.probableClaimAmount = benefit.getProbableClaimAmount();
+            this.preAuthorizationAmount = benefit.getPreAuthorizationAmount();
+            this.eligibleAmount = benefit.getEligibleAmount();
+            this.approvedAmount = benefit.getApprovedAmount();
+        }
+        return this;
+    }
 }

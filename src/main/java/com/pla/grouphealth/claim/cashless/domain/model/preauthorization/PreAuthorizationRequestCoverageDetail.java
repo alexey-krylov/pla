@@ -28,7 +28,6 @@ public class PreAuthorizationRequestCoverageDetail {
     private BigDecimal balanceAmount;
     private BigDecimal reserveAmount;
     private BigDecimal eligibleAmount;
-    private BigDecimal approvedAmount;
     private String coverageId;
 
     public void updateWithCoverageDetails(CoverageBenefitDetailDto coverageBenefitDetailDto) {
@@ -41,14 +40,21 @@ public class PreAuthorizationRequestCoverageDetail {
             this.balanceAmount = coverageBenefitDetailDto.getBalanceAmount();
             this.reserveAmount = coverageBenefitDetailDto.getReserveAmount();
             this.eligibleAmount = coverageBenefitDetailDto.getEligibleAmount();
-            this.approvedAmount = coverageBenefitDetailDto.getApprovedAmount();
             this.benefitDetails = populateBenefitDetails(coverageBenefitDetailDto.getBenefitDetails());
         }
     }
 
     private Set<PreAuthorizationRequestBenefitDetail> populateBenefitDetails(Set<BenefitDetailDto> benefitDetails) {
         return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> {
-            return new PreAuthorizationRequestBenefitDetail(benefit.getBenefitName(), benefit.getBenefitCode(), benefit.getProbableClaimAmount());
+            return new PreAuthorizationRequestBenefitDetail(benefit.getBenefitName(), benefit.getBenefitCode(), benefit.getProbableClaimAmount(), benefit.getApprovedAmount());
         }).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
+
+    public BigDecimal getTotalApprovedAmount() {
+        BigDecimal totalApprovedAmount = BigDecimal.ZERO;
+        for(PreAuthorizationRequestBenefitDetail benefitDetail : this.benefitDetails){
+            totalApprovedAmount = totalApprovedAmount.add(benefitDetail.getApprovedAmount());
+        }
+        return totalApprovedAmount;
     }
 }

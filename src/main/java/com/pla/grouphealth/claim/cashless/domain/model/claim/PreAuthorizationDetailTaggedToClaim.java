@@ -61,7 +61,7 @@ public class PreAuthorizationDetailTaggedToClaim {
         BigDecimal totalApprovedAmount = BigDecimal.ZERO;
         if(isNotEmpty(coverageDetails)){
             for(PreAuthorizationRequestCoverageDetail preAuthorizationRequestCoverageDetail : coverageDetails){
-                totalApprovedAmount = totalApprovedAmount.add(preAuthorizationRequestCoverageDetail.getApprovedAmount());
+                totalApprovedAmount = totalApprovedAmount.add(preAuthorizationRequestCoverageDetail.getTotalApprovedAmount());
             }
         }
         return totalApprovedAmount;

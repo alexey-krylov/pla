@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization;
 
+import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestBenefitDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
 import lombok.*;
 
@@ -111,14 +112,22 @@ public class CoverageBenefitDetailDto {
             if(balanceAmount.compareTo(reservedAmount) == 1) {
                 this.eligibleAmount = balanceAmount.subtract(reservedAmount);
             }
-            if(balanceAmount.compareTo(reservedAmount) == 0) {
+            if(balanceAmount.compareTo(reservedAmount) == 0 || balanceAmount.compareTo(reservedAmount) == -1) {
                 this.eligibleAmount = BigDecimal.ZERO;
             }
         }
-        if(sumAssured.compareTo(totalAmountPaid) == 0){
+        if(sumAssured.compareTo(totalAmountPaid) == 0 || sumAssured.compareTo(totalAmountPaid) == -1){
             this.balanceAmount = BigDecimal.ZERO;
             this.eligibleAmount = BigDecimal.ZERO;
         }
         return this;
+    }
+
+    public BigDecimal getSumOfTotalApprovedAmount() {
+        BigDecimal totalApprovedAmount = BigDecimal.ZERO;
+        for(BenefitDetailDto benefitDetail : this.benefitDetails){
+            totalApprovedAmount = totalApprovedAmount.add(benefitDetail.getApprovedAmount());
+        }
+        return totalApprovedAmount;
     }
 }

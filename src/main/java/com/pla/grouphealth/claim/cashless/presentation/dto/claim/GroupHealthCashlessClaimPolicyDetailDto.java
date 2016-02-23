@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
 
+import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimAssuredDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimCoverageDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimPolicyDetail;
@@ -14,6 +15,8 @@ import org.nthdimenzion.utils.UtilValidator;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 
@@ -30,21 +33,28 @@ public class GroupHealthCashlessClaimPolicyDetailDto {
     private String planName;
     private BigDecimal sumAssured;
     private GroupHealthCashlessClaimAssuredDetail assuredDetail;
-    private Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails;
+    private Set<GroupHealthCashlessClaimCoverageDetailDto> coverageDetails;
     private PlanId planId;
 
     public GroupHealthCashlessClaimPolicyDetailDto updateWithDetails(GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail) {
-        try {
-            BeanUtils.copyProperties(this, groupHealthCashlessClaimPolicyDetail);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)) {
+            this.policyNumber = groupHealthCashlessClaimPolicyDetail.getPolicyNumber();
+            this.policyName = groupHealthCashlessClaimPolicyDetail.getPolicyName();
+            this.planCode = groupHealthCashlessClaimPolicyDetail.getPlanCode();
+            this.planName = groupHealthCashlessClaimPolicyDetail.getPlanName();
+            this.sumAssured = groupHealthCashlessClaimPolicyDetail.getSumAssured();
+            this.planId = groupHealthCashlessClaimPolicyDetail.getPlanId();
+            this.assuredDetail = groupHealthCashlessClaimPolicyDetail.getAssuredDetail();
+            this.coverageDetails = constructCoverageDetails(groupHealthCashlessClaimPolicyDetail.getCoverageDetails());
         }
         return this;
     }
 
-    public GroupHealthCashlessClaimPolicyDetailDto updateWithCoverages(Set<GroupHealthCashlessClaimCoverageDetail> coverageBenefitDetails) {
+    private Set<GroupHealthCashlessClaimCoverageDetailDto> constructCoverageDetails(Set<GroupHealthCashlessClaimCoverageDetail> coverageDetails) {
+        return isNotEmpty(coverageDetails) ? coverageDetails.stream().map(coverage ->  new GroupHealthCashlessClaimCoverageDetailDto().updateWithDetails(coverage)).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
+
+    public GroupHealthCashlessClaimPolicyDetailDto updateWithCoverages(Set<GroupHealthCashlessClaimCoverageDetailDto> coverageBenefitDetails) {
         this.coverageDetails = coverageBenefitDetails;
         return this;
     }

@@ -186,6 +186,7 @@ console.log( $scope.createUpdateDto );
             };
 
             $scope.saveDiagnosisTreatmentDto = function (diagnosisTreatmentDtoToUpdate) {
+                console.log($scope.createUpdateDto);
                 if ($scope.isEditDrugTriggered) {
                     $scope.createUpdateDto.drugServicesDtos[$scope.index] = diagnosisTreatmentDtoToUpdate;
                     $scope.savePreAuthorizationRequest();

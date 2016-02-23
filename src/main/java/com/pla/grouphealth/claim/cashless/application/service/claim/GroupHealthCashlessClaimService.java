@@ -448,7 +448,7 @@ public class GroupHealthCashlessClaimService {
                     if(isNotEmpty(coverageDetails)){
                         for(PreAuthorizationRequestCoverageDetail coverageDetail : coverageDetails){
                             if(coverageDetail.getCoverageId().equals(coverageId)){
-                                totalReservedAmount = totalReservedAmount.add(coverageDetail.getApprovedAmount());
+                                totalReservedAmount = totalReservedAmount.add(coverageDetail.getTotalApprovedAmount());
                             }
                         }
                     }
@@ -526,7 +526,7 @@ public class GroupHealthCashlessClaimService {
             if(isNotEmpty(benefitDetails)){
                 for(PreAuthorizationRequestBenefitDetail benefitDetail : benefitDetails){
                     if(benefitCode.equals(benefitDetail.getBenefitCode()) && coverageId.equals(coverageDetail.getCoverageId())){
-                        preAuthorizationAmount = preAuthorizationAmount.add(coverageDetail.getApprovedAmount());
+                        preAuthorizationAmount = preAuthorizationAmount.add(coverageDetail.getTotalApprovedAmount());
                     }
                 }
             }
@@ -660,7 +660,7 @@ public class GroupHealthCashlessClaimService {
     public GroupHealthCashlessClaimDto  reConstructProbableClaimAmountForServices(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) throws ClaimNotEligibleException {
         GroupHealthCashlessClaimPolicyDetailDto groupHealthCashlessClaimPolicyDetailDto = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail();
         if(isNotEmpty(groupHealthCashlessClaimPolicyDetailDto)) {
-            Set<GroupHealthCashlessClaimCoverageDetail> coverageBenefitDetails = groupHealthCashlessClaimPolicyDetailDto.getCoverageDetails();
+            Set<GroupHealthCashlessClaimCoverageDetailDto> coverageBenefitDetails = groupHealthCashlessClaimPolicyDetailDto.getCoverageDetails();
             GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimId());
             List<Map<String, Object>> refurbishedList = Lists.newArrayList();
             Set<GroupHealthCashlessClaimDrugServiceDto> groupHealthCashlessClaimDrugServices = groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDrugServices();
@@ -716,16 +716,16 @@ public class GroupHealthCashlessClaimService {
                 }
             });
             final List<Map<String, Object>> finalRefurbishedList = refurbishedList;
-            for(GroupHealthCashlessClaimCoverageDetail coverageBenefitDetailDto  : coverageBenefitDetails){
+            for(GroupHealthCashlessClaimCoverageDetailDto coverageBenefitDetailDto  : coverageBenefitDetails){
                 if(!checkIfSumOfApprovedAmountIsLessThanTotalClaimAmountReducedWithDeductible(coverageBenefitDetailDto)){
                     throw new ClaimNotEligibleException("Sum of approved amount cannot be greater than sum of eligible amount reduced by deductible");
                 }
             }
-            coverageBenefitDetails = coverageBenefitDetails.stream().map(new Function<GroupHealthCashlessClaimCoverageDetail, GroupHealthCashlessClaimCoverageDetail>() {
+            coverageBenefitDetails = coverageBenefitDetails.stream().map(new Function<GroupHealthCashlessClaimCoverageDetailDto, GroupHealthCashlessClaimCoverageDetailDto>() {
                 @Override
-                public GroupHealthCashlessClaimCoverageDetail apply(GroupHealthCashlessClaimCoverageDetail coverageBenefitDetailDto) {
+                public GroupHealthCashlessClaimCoverageDetailDto apply(GroupHealthCashlessClaimCoverageDetailDto coverageBenefitDetailDto) {
                     String coverageId = coverageBenefitDetailDto.getCoverageId();
-                    Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
+                    Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
                     coverageBenefitDetailDto
                             .updateWithProbableClaimAmount(coverageId, benefitDetails, finalRefurbishedList);
                     GroupHealthCashlessClaimAssuredDetail assuredDetail = groupHealthCashlessClaimPolicyDetailDto.getAssuredDetail();
@@ -748,7 +748,7 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaimDto;
     }
 
-    private boolean checkIfSumOfApprovedAmountIsLessThanTotalClaimAmountReducedWithDeductible(GroupHealthCashlessClaimCoverageDetail coverageBenefitDetailDto) {
+    private boolean checkIfSumOfApprovedAmountIsLessThanTotalClaimAmountReducedWithDeductible(GroupHealthCashlessClaimCoverageDetailDto coverageBenefitDetailDto) {
         BigDecimal sumOfAllClaimAmount = coverageBenefitDetailDto.getTotalProbableClaimAmount();
         BigDecimal sumOfTotalApprovedAmount = coverageBenefitDetailDto.getSumOfTotalApprovedAmount();
         BigDecimal sumOfAllClaimAmountWithoutDeductible = sumOfAllClaimAmount.subtract(coverageBenefitDetailDto.getDeductibleAmount());

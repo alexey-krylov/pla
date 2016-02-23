@@ -738,13 +738,15 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
             $scope.checkIfApprovedAmountEntered = function () {
                 for(var i=0; i < $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails.length ; i++){
                     var coverage = $scope.createUpdateDto.groupHealthCashlessClaimPolicyDetail.coverageDetails[i];
+                    console.log(coverage);
                     for(var j = 0 ; j < coverage.benefitDetails.length; j++){
                         var benefit = coverage.benefitDetails[j];
-                        if(benefit.approvedAmount == null || angular.isUndefined(benefit.approvedAmount) || benefit.approvedAmount == ''){
+                        if(benefit.approvedAmount == null || angular.isUndefined(benefit.approvedAmount) || benefit.approvedAmount == '' || benefit.approvedAmount == 0){
                             return false;
                         }
                     }
                 }
+                return true;
             };
 
             $scope.underwriterApprove = function () {
@@ -758,6 +760,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                             method: 'POST',
                             data: $scope.createUpdateDto
                         }).success(function (response, status, headers, config) {
+                            console.log(status);
                             if (status === 200) {
                                 $http.get('/pla/grouphealth/claim/cashless/claim/getgrouphealthcashlessclaimdtobygrouphealthcashlessclaimid?groupHealthCashlessClaimId=' + groupHealthCashlessClaimId)
                                     .success(function (response, status, headers, config) {
@@ -765,7 +768,7 @@ var  app = angular.module('CashLessClaimUnderwriter', ['common', 'ngRoute','ngMe
                                         if (status == "200") {
                                             setTimeout(function () {
                                                 window.location.reload();
-                                            }, 2000);
+                                            }, 5000);
                                         }
                                     }).error(function (response, status, headers, config) {
                                 });

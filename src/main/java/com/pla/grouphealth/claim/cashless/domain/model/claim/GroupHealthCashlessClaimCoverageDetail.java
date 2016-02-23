@@ -2,6 +2,8 @@ package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimBenefitDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimCoverageDetailDto;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -34,6 +36,27 @@ public class GroupHealthCashlessClaimCoverageDetail {
     private BigDecimal deductibleAmount;
     private BigDecimal deductiblePercentage;
     private String deductibleType;
+
+    public GroupHealthCashlessClaimCoverageDetail updateWithDetails(GroupHealthCashlessClaimCoverageDetailDto coverage) {
+        if(isNotEmpty(coverage)) {
+            this.coverageId = coverage.getCoverageId();
+            this.coverageCode = coverage.getCoverageCode();
+            this.coverageName = coverage.getCoverageName();
+            this.sumAssured = coverage.getSumAssured();
+            this.totalAmountPaid = coverage.getTotalAmountPaid();
+            this.balanceAmount = coverage.getBalanceAmount();
+            this.reserveAmount = coverage.getReserveAmount();
+            this.deductibleAmount = coverage.getDeductibleAmount();
+            this.deductiblePercentage = coverage.getDeductiblePercentage();
+            this.deductibleType = coverage.getDeductibleType();
+            this.benefitDetails = constructBenefitDetails(coverage.getBenefitDetails());
+        }
+        return this;
+    }
+
+    private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails) {
+        return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> new GroupHealthCashlessClaimBenefitDetail().updateWithDetails(benefit)).collect(Collectors.toSet()) : Sets.newHashSet();
+    }
 
     public GroupHealthCashlessClaimCoverageDetail updateWithCoverageName(String coverageName) {
         this.coverageName = coverageName;
