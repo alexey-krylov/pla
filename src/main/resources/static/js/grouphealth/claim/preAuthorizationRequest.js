@@ -251,7 +251,7 @@ console.log( $scope.createUpdateDto );
                 }).success(function (data) {
                     if (data.status == "200") {
                         setTimeout(function() {
-                            window.location.reload();
+                            window.location.href = '/pla/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationfordefaultlist';
                         }, 2000);
                     }
 

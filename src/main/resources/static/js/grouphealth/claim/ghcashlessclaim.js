@@ -266,7 +266,7 @@ var  app = angular.module('CashLessClaim', ['common', 'ngRoute','ngMessages', 'm
                 }).success(function (data) {
                     if (data.status == "200") {
                         setTimeout(function() {
-                            window.location.reload();
+                            window.location.href = '/pla/grouphealth/claim/cashless/claim/getcashlessclaimfordefaultlist';
                         }, 2000);
                     }
 

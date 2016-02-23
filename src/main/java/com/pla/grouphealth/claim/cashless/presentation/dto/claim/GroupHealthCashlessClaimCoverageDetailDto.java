@@ -1,6 +1,8 @@
 package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.pla.grouphealth.claim.cashless.domain.exception.ClaimNotEligibleException;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBenefitDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimCoverageDetail;
 import lombok.Getter;
@@ -27,7 +29,7 @@ public class GroupHealthCashlessClaimCoverageDetailDto {
     private String coverageCode;
     private String coverageName;
     private BigDecimal sumAssured;
-    private Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails;
+    private List<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails;
     private BigDecimal totalAmountPaid;
     private BigDecimal balanceAmount;
     private BigDecimal reserveAmount;
@@ -52,8 +54,8 @@ public class GroupHealthCashlessClaimCoverageDetailDto {
         return this;
     }
 
-    private Set<GroupHealthCashlessClaimBenefitDetailDto> constructBenefitDetails(Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails) {
-        return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> new GroupHealthCashlessClaimBenefitDetailDto().updateWithDetails(benefit)).collect(Collectors.toSet()) : Sets.newHashSet();
+    private List<GroupHealthCashlessClaimBenefitDetailDto> constructBenefitDetails(List<GroupHealthCashlessClaimBenefitDetail> benefitDetails) {
+        return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> new GroupHealthCashlessClaimBenefitDetailDto().updateWithDetails(benefit)).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
 
@@ -66,17 +68,35 @@ public class GroupHealthCashlessClaimCoverageDetailDto {
     }
 
 
-    public BigDecimal getSumOfTotalApprovedAmount() {
+    public BigDecimal getSumOfTotalApprovedAmount() throws ClaimNotEligibleException {
         BigDecimal totalAmountPaidWithoutCurrentApproveAmount = BigDecimal.ZERO;
         for(GroupHealthCashlessClaimBenefitDetailDto benefit : this.getBenefitDetails()){
             if(isNotEmpty(benefit.getApprovedAmount())){
-                totalAmountPaidWithoutCurrentApproveAmount = totalAmountPaidWithoutCurrentApproveAmount.add(benefit.getApprovedAmount());
+                totalAmountPaidWithoutCurrentApproveAmount = totalAmountPaidWithoutCurrentApproveAmount.add(getApprovedAmount(benefit));
             }
         }
         return totalAmountPaidWithoutCurrentApproveAmount;
     }
 
-    public GroupHealthCashlessClaimCoverageDetailDto updateWithProbableClaimAmount(String coverageId, Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails, List<Map<String, Object>> finalRefurbishedList) {
+    private BigDecimal getApprovedAmount(GroupHealthCashlessClaimBenefitDetailDto benefit) throws ClaimNotEligibleException {
+        BigDecimal approvedAmount = BigDecimal.ZERO;
+        if(isNotEmpty(benefit)){
+            approvedAmount = benefit.getApprovedAmount();
+            if(isNotEmpty(benefit.getAdditionalAmount())){
+                approvedAmount = approvedAmount.add(benefit.getAdditionalAmount());
+            }
+            if(isNotEmpty(benefit.getRecoveryAmount())){
+                if(approvedAmount.compareTo(benefit.getRecoveryAmount()) == 1 || approvedAmount.compareTo(benefit.getRecoveryAmount()) == 0)
+                    approvedAmount = approvedAmount.subtract(benefit.getRecoveryAmount());
+                else {
+                    throw new ClaimNotEligibleException("Recovery amount cannot be greater than approved amount");
+                }
+            }
+        }
+        return approvedAmount;
+    }
+
+    public GroupHealthCashlessClaimCoverageDetailDto updateWithProbableClaimAmount(String coverageId, List<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails, List<Map<String, Object>> finalRefurbishedList) {
         if(isNotEmpty(benefitDetails)){
             benefitDetails.stream().forEach(benefitDto -> {
                 BigDecimal probableClaimAmount = getProbableClaimAmount(benefitDto.getBenefitCode(), coverageId, finalRefurbishedList);
@@ -130,6 +150,17 @@ public class GroupHealthCashlessClaimCoverageDetailDto {
 
     public GroupHealthCashlessClaimCoverageDetailDto updateWithReserveAmount(BigDecimal reservedAmount) {
         this.reserveAmount = reservedAmount;
+        return this;
+    }
+
+    public GroupHealthCashlessClaimCoverageDetailDto updateWithApprovedAmount() {
+        this.benefitDetails = isNotEmpty(this.benefitDetails) ? benefitDetails.stream().map(benefit -> {
+            try {
+                return benefit.updateWithApprovedAmount();
+            } catch (ClaimNotEligibleException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList()) : Lists.newArrayList();
         return this;
     }
 }

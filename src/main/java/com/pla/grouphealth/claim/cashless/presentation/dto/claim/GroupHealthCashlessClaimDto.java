@@ -117,7 +117,7 @@ public class GroupHealthCashlessClaimDto {
         return this;
     }
 
-    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(Set<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails) {
+    public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(List<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails) {
         this.groupHealthCashlessClaimDiagnosisTreatmentDetails = isNotEmpty(groupHealthCashlessClaimDiagnosisTreatmentDetails) ? groupHealthCashlessClaimDiagnosisTreatmentDetails.stream().map(detail -> new GroupHealthCashlessClaimDiagnosisTreatmentDetailDto().updateWithDetails(detail)).collect(Collectors.toSet()) : Sets.newHashSet();
         return this;
     }
@@ -247,7 +247,7 @@ public class GroupHealthCashlessClaimDto {
             Set<GroupHealthCashlessClaimCoverageDetailDto> coverageDetails = this.groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
             if(isNotEmpty(coverageDetails)){
                 for(GroupHealthCashlessClaimCoverageDetailDto groupHealthCashlessClaimCoverageDetail :  coverageDetails){
-                    Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
+                    List<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
                     if(isNotEmpty(benefitDetails)){
                         for(GroupHealthCashlessClaimBenefitDetailDto benefitDetail : benefitDetails){
                             sumOfAllProbableClaimAmount = sumOfAllProbableClaimAmount.add(benefitDetail.getProbableClaimAmount());

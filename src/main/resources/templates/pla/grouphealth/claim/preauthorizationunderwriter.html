@@ -60,7 +60,7 @@
     <nth-alert></nth-alert>
     <form name="policyForm" novalidate="true" class="container css-form ng-cloak" method="post"
           enctype="multipart/form-data">
-        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem">
+        <div class="wizard fueluxWizard" style="overflow: visible" selected-item="selectedItem" ng-init="getUnderWriterLevel()">
             <ul class="steps" style="margin-left: 0">
                 <li data-step="1"><span class="badge badge-info">1</span>Claim Details<span class="chevron"></span></li>
                 <li data-step="2"><span class="badge">2</span>Claimant Details<span class="chevron"></span></li>
@@ -82,7 +82,7 @@
                         class="glyphicon glyphicon-arrow-right"></span></button>
                 <!-- -->
             </div>
-            <div class="step-content ng-cloak">
+            <div class="step-content ng-cloak" ng-init="checkIfUnderwriterLevel2()">
                 <div class="step-pane" data-step="1">
                     <ng-form name="step1">
                         <accordion close-others="true">
@@ -402,7 +402,7 @@
                                 <button type="button" class="btn btn-primary btn-sm" ng-click="back()">Cancel</button>
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode || isSeniorUnderwriter"  ng-click="underwriterRouteSenior()" ng-init="checkIfUnderwriterLevel2()">Refer To Senior UnderWriter</button>
+                                <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-if="!isSeniorUnderwriter" ng-click="underwriterRouteSenior()" >Refer To Senior UnderWriter</button>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary btn-sm" ng-disabled="isViewMode"  ng-click="underwriterReturn()">Return</button>

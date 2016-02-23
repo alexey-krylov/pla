@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model.preauthorization;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.preauthorization.PreAuthorizationFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
@@ -53,7 +54,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
     private LocalDate preAuthorizationDate;
     private PreAuthorizationRequestPolicyDetail preAuthorizationRequestPolicyDetail;
     private PreAuthorizationRequestHCPDetail preAuthorizationRequestHCPDetail;
-    private Set<PreAuthorizationRequestDiagnosisTreatmentDetail> preAuthorizationRequestDiagnosisTreatmentDetails;
+    private List<PreAuthorizationRequestDiagnosisTreatmentDetail> preAuthorizationRequestDiagnosisTreatmentDetails;
     private PreAuthorizationRequestIllnessDetail preAuthorizationRequestIllnessDetail;
     private Set<PreAuthorizationRequestDrugService> preAuthorizationRequestDrugServices;
     private Set<GHProposerDocument> proposerDocuments;
@@ -158,7 +159,7 @@ public class PreAuthorizationRequest extends AbstractAggregateRoot<String> {
                 }
                 return preAuthorizationRequestDiagnosisTreatmentDetail;
             }
-        }).collect(Collectors.toSet()) : Sets.newHashSet();
+        }).collect(Collectors.toList()) : Lists.newArrayList();
         return this;
     }
 

@@ -52,7 +52,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private GHProposer ghProposer;
     private GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail;
     private GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail;
-    private Set<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails;
+    private List<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails;
     private GroupHealthCashlessClaimIllnessDetail groupHealthCashlessClaimIllnessDetail;
     private Set<GroupHealthCashlessClaimDrugService> groupHealthCashlessClaimDrugServices;
     private Set<GHProposerDocument> proposerDocuments;
@@ -125,7 +125,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         return this;
     }
 
-    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(Set<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails) {
+    public GroupHealthCashlessClaim updateWithGroupHealthCashlessClaimDiagnosisTreatmentDetails(List<GroupHealthCashlessClaimDiagnosisTreatmentDetail> groupHealthCashlessClaimDiagnosisTreatmentDetails) {
         this.groupHealthCashlessClaimDiagnosisTreatmentDetails = groupHealthCashlessClaimDiagnosisTreatmentDetails;
         return this;
     }
@@ -240,7 +240,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
                     e.printStackTrace();
                 }
                 return groupHealthCashlessClaimDiagnosisTreatmentDetail;
-            }).collect(Collectors.toSet());
+            }).collect(Collectors.toList());
         }
         return this;
     }
@@ -412,7 +412,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
 
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"),
-        APPROVED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), SERVICE_MISMATCHED("Evaluation");
+        APPROVED("Approved"), AMENDED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), SERVICE_MISMATCHED("Evaluation");
 
         private String description;
 
@@ -454,8 +454,14 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
                     .updateWithAdditionalRequiredDocumentsByUnderwriter(groupHealthCashlessClaimDto.getAdditionalRequiredDocumentsByUnderwriter())
                     .updateWithGroupHealthCashlessClaimPolicyDetailFromDto(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimPolicyDetail())
                     .updateWithBankDetails(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimBankDetailDto())
-                    .updateWithPreAuthorizationDetails(groupHealthCashlessClaimDto.getPreAuthorizationDetails());
+                    .updateWithPreAuthorizationDetails(groupHealthCashlessClaimDto.getPreAuthorizationDetails())
+                    .updateWithListOfAmendedClaimId(groupHealthCashlessClaimDto.getListClaimIdFromWhichAmended());
         }
+        return this;
+    }
+
+    private GroupHealthCashlessClaim updateWithListOfAmendedClaimId(List<String> listClaimIdFromWhichAmended) {
+        this.listClaimIdFromWhichAmended = listClaimIdFromWhichAmended;
         return this;
     }
 

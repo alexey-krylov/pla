@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequestCoverageDetail;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimBenefitDetailDto;
@@ -29,7 +30,7 @@ public class GroupHealthCashlessClaimCoverageDetail {
     private String coverageCode;
     private String coverageName;
     private BigDecimal sumAssured;
-    private Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails;
+    private List<GroupHealthCashlessClaimBenefitDetail> benefitDetails;
     private BigDecimal totalAmountPaid;
     private BigDecimal balanceAmount;
     private BigDecimal reserveAmount;
@@ -54,8 +55,8 @@ public class GroupHealthCashlessClaimCoverageDetail {
         return this;
     }
 
-    private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails) {
-        return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> new GroupHealthCashlessClaimBenefitDetail().updateWithDetails(benefit)).collect(Collectors.toSet()) : Sets.newHashSet();
+    private List<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(List<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails) {
+        return isNotEmpty(benefitDetails) ? benefitDetails.stream().map(benefit -> new GroupHealthCashlessClaimBenefitDetail().updateWithDetails(benefit)).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
     public GroupHealthCashlessClaimCoverageDetail updateWithCoverageName(String coverageName) {
@@ -140,12 +141,12 @@ public class GroupHealthCashlessClaimCoverageDetail {
         return totalAmountPaidWithoutCurrentApproveAmount;
     }
 
-    public GroupHealthCashlessClaimCoverageDetail updateWithBenefitDetails(Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails) {
+    public GroupHealthCashlessClaimCoverageDetail updateWithBenefitDetails(List<GroupHealthCashlessClaimBenefitDetail> benefitDetails) {
         this.benefitDetails = benefitDetails;
         return this;
     }
 
-    public GroupHealthCashlessClaimCoverageDetail updateWithProbableClaimAmount(String coverageId, Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails, List<Map<String, Object>> finalRefurbishedList) {
+    public GroupHealthCashlessClaimCoverageDetail updateWithProbableClaimAmount(String coverageId, List<GroupHealthCashlessClaimBenefitDetail> benefitDetails, List<Map<String, Object>> finalRefurbishedList) {
         if(isNotEmpty(benefitDetails)){
             benefitDetails.stream().forEach(benefitDto -> {
                 BigDecimal probableClaimAmount = getProbableClaimAmount(benefitDto.getBenefitCode(), coverageId, finalRefurbishedList);

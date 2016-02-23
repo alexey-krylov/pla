@@ -298,7 +298,7 @@ public class GroupHealthCashlessClaimService {
             @Override
             public GroupHealthCashlessClaimCoverageDetail apply(GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail) {
                 String coverageId = groupHealthCashlessClaimCoverageDetail.getCoverageId();
-                Set<GroupHealthCashlessClaimBenefitDetail> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
+                List<GroupHealthCashlessClaimBenefitDetail> benefitDetails = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
                 groupHealthCashlessClaimCoverageDetail
                         .updateWithProbableClaimAmount(coverageId, benefitDetails, finalRefurbishedList)
                         .updateWithBalanceAmount()
@@ -411,8 +411,8 @@ public class GroupHealthCashlessClaimService {
         return new GroupHealthCashlessClaimIllnessDetail().updateWithDetails(claimUploadedExcelDataDto);
     }
 
-    private Set<GroupHealthCashlessClaimDiagnosisTreatmentDetail> constructGroupHealthCashlessClaimDiagnosisTreatmentDetails(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos) {
-        return isNotEmpty(claimUploadedExcelDataDtos) ? claimUploadedExcelDataDtos.parallelStream().map(detail -> new GroupHealthCashlessClaimDiagnosisTreatmentDetail().updateWithDeatils(detail)).collect(Collectors.toSet()) : Sets.newHashSet();
+    private List<GroupHealthCashlessClaimDiagnosisTreatmentDetail> constructGroupHealthCashlessClaimDiagnosisTreatmentDetails(List<ClaimUploadedExcelDataDto> claimUploadedExcelDataDtos) {
+        return isNotEmpty(claimUploadedExcelDataDtos) ? claimUploadedExcelDataDtos.parallelStream().map(detail -> new GroupHealthCashlessClaimDiagnosisTreatmentDetail().updateWithDeatils(detail)).collect(Collectors.toList()) : Lists.newArrayList();
     }
 
     private GroupHealthCashlessClaimHCPDetail constructHCPDetails(String hcpCode, String hospitalizationEvent) {
@@ -481,10 +481,10 @@ public class GroupHealthCashlessClaimService {
         return amountPaidTillDate;
     }
 
-    private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetailsFromBaseCoverage(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<PlanCoverageBenefit> planCoverageBenefits) {
-        Set<GroupHealthCashlessClaimBenefitDetail> benefits = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
+    private List<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetailsFromBaseCoverage(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<PlanCoverageBenefit> planCoverageBenefits) {
+        List<GroupHealthCashlessClaimBenefitDetail> benefits = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
         if (isEmpty(benefits))
-            benefits = Sets.newHashSet();
+            benefits = Lists.newArrayList();
         for (PlanCoverageBenefit planCoverageBenefit : planCoverageBenefits) {
             for (Map<String, Object> benefit : benefitDtos) {
                 String benefitId = planCoverageBenefit.getBenefitId().getBenefitId();
@@ -499,10 +499,10 @@ public class GroupHealthCashlessClaimService {
         return benefits;
     }
 
-    private Set<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<BenefitPremiumLimit> benefitPremiumLimits, Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
-        Set<GroupHealthCashlessClaimBenefitDetail> benefits = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
+    private List<GroupHealthCashlessClaimBenefitDetail> constructBenefitDetails(List<Map<String, Object>> benefitDtos, GroupHealthCashlessClaimCoverageDetail groupHealthCashlessClaimCoverageDetail, Set<BenefitPremiumLimit> benefitPremiumLimits, Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
+        List<GroupHealthCashlessClaimBenefitDetail> benefits = groupHealthCashlessClaimCoverageDetail.getBenefitDetails();
         if (isEmpty(benefits))
-            benefits = Sets.newHashSet();
+            benefits = Lists.newArrayList();
         for (BenefitPremiumLimit benefitPremiumLimit : benefitPremiumLimits) {
             for (Map<String, Object> benefit : benefitDtos) {
                 String benefitCode = String.valueOf(new BigDecimal(benefitPremiumLimit.getBenefitCode()).intValue());
@@ -725,18 +725,24 @@ public class GroupHealthCashlessClaimService {
                 @Override
                 public GroupHealthCashlessClaimCoverageDetailDto apply(GroupHealthCashlessClaimCoverageDetailDto coverageBenefitDetailDto) {
                     String coverageId = coverageBenefitDetailDto.getCoverageId();
-                    Set<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
+                    List<GroupHealthCashlessClaimBenefitDetailDto> benefitDetails = coverageBenefitDetailDto.getBenefitDetails();
                     coverageBenefitDetailDto
                             .updateWithProbableClaimAmount(coverageId, benefitDetails, finalRefurbishedList);
                     GroupHealthCashlessClaimAssuredDetail assuredDetail = groupHealthCashlessClaimPolicyDetailDto.getAssuredDetail();
                     notNull(assuredDetail, "Client detail not found while calculating approved amount");
                     BigDecimal totalAmountPaidWithoutCurrentApproveAmount = getTotalAmountPaidTillNow(assuredDetail.getClientId(), groupHealthCashlessClaimPolicyDetailDto.getPolicyNumber(), coverageId);
-                    BigDecimal sumOfTotalApprovedAmount = coverageBenefitDetailDto.getSumOfTotalApprovedAmount();
+                    BigDecimal sumOfTotalApprovedAmount = null;
+                    try {
+                        sumOfTotalApprovedAmount = coverageBenefitDetailDto.getSumOfTotalApprovedAmount();
+                    } catch (ClaimNotEligibleException e) {
+                        throw new RuntimeException(e);
+                    }
                     totalAmountPaidWithoutCurrentApproveAmount = totalAmountPaidWithoutCurrentApproveAmount.add(sumOfTotalApprovedAmount);
                     coverageBenefitDetailDto.setTotalAmountPaid(totalAmountPaidWithoutCurrentApproveAmount);
                     BigDecimal newBalanceAmount = coverageBenefitDetailDto.getSumAssured().subtract(coverageBenefitDetailDto.getTotalAmountPaid());
                     coverageBenefitDetailDto.setBalanceAmount(newBalanceAmount);
                     return coverageBenefitDetailDto
+                            .updateWithApprovedAmount()
                             .updateWithBalanceAmount()
                             .updateWithEligibleAmount()
                             .updateWithReserveAmount(getReservedAmountOfTheClient(assuredDetail.getClientId(), groupHealthCashlessClaimPolicyDetailDto.getPolicyNumber(), coverageBenefitDetailDto.getCoverageId()));
@@ -748,7 +754,7 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaimDto;
     }
 
-    private boolean checkIfSumOfApprovedAmountIsLessThanTotalClaimAmountReducedWithDeductible(GroupHealthCashlessClaimCoverageDetailDto coverageBenefitDetailDto) {
+    private boolean checkIfSumOfApprovedAmountIsLessThanTotalClaimAmountReducedWithDeductible(GroupHealthCashlessClaimCoverageDetailDto coverageBenefitDetailDto) throws ClaimNotEligibleException {
         BigDecimal sumOfAllClaimAmount = coverageBenefitDetailDto.getTotalProbableClaimAmount();
         BigDecimal sumOfTotalApprovedAmount = coverageBenefitDetailDto.getSumOfTotalApprovedAmount();
         BigDecimal sumOfAllClaimAmountWithoutDeductible = sumOfAllClaimAmount.subtract(coverageBenefitDetailDto.getDeductibleAmount());
@@ -1252,15 +1258,16 @@ public class GroupHealthCashlessClaimService {
         if(isNotEmpty(approvedAtLevel) ) {
             notNull(groupHealthCashlessClaimDto, "No Group Health Claim found with Id : " + groupHealthCashlessClaimId);
             groupHealthCashlessClaimDto = reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
-            groupHealthCashlessClaim = new GroupHealthCashlessClaim(Status.valueOf(approvedAtLevel))
+            GroupHealthCashlessClaim amendedGroupHealthCashlessClaim = new GroupHealthCashlessClaim(Status.valueOf(approvedAtLevel))
                     .updateWithGroupHealthCashlessClaimId(constructGroupHealthCashlessClaimId(getConsultationDate(groupHealthCashlessClaimDto)))
                     .populateDetailsToGroupHealthCashlessClaim(groupHealthCashlessClaimDto, userName)
                     .updateWithClaimAmendmentProcessorUserId(userName)
                     .updateWithClaimIdFromWhichAmended(groupHealthCashlessClaimId);
+            groupHealthCashlessClaim.updateStatus(AMENDED);
+            groupHealthCashlessClaimRepository.save(Lists.newArrayList(amendedGroupHealthCashlessClaim, groupHealthCashlessClaim));
         }  else {
             throw new AmendGroupHealthCashlessClaimProcessingException("Error while amending claim contact administrator");
         }
-        groupHealthCashlessClaimRepository.save(groupHealthCashlessClaim);
     }
 
     private LocalDate getConsultationDate(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) {
