@@ -474,8 +474,7 @@
                         var coverage = $scope.createUpdateDto.claimantPolicyDetailDto.coverageBenefitDetails[i];
                         for(var j = 0 ; j < coverage.benefitDetails.length; j++){
                             var benefit = coverage.benefitDetails[j];
-                            console.log(benefit)
-                            if(benefit.approvedAmount == null || angular.isUndefined(benefit.approvedAmount) || benefit.approvedAmount == '' || benefit.approvedAmount == 0){
+                            if(benefit.approvedAmount == null || angular.isUndefined(benefit.approvedAmount) || benefit.approvedAmount == '' || benefit.approvedAmount == 0 || (coverage.balanceAmount < benefit.approvedAmount)){
                                 return false;
                             }
                         }

@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class GroupHealthCashlessClaimDto {
     private Set<AdditionalDocument> additionalRequiredDocumentsByUnderwriter;
     private Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails;
     private String statusName;
-    private String claimIdFromWhichAmended;
+    private List<String> listClaimIdFromWhichAmended;
 
     public GroupHealthCashlessClaimDto updateWithGroupHealthCashlessClaimId(String groupHealthCashlessClaimId) {
         this.groupHealthCashlessClaimId = groupHealthCashlessClaimId;
@@ -267,8 +268,8 @@ public class GroupHealthCashlessClaimDto {
         return this;
     }
 
-    public GroupHealthCashlessClaimDto updateWithClaimIdFromWhichAmended(String claimIdFromWhichAmended) {
-        this.claimIdFromWhichAmended = claimIdFromWhichAmended;
+    public GroupHealthCashlessClaimDto updateWithClaimIdFromWhichAmended(List<String> listClaimIdFromWhichAmended) {
+        this.listClaimIdFromWhichAmended = listClaimIdFromWhichAmended;
         return this;
     }
 

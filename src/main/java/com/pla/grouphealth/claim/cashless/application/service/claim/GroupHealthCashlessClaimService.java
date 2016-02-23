@@ -652,7 +652,7 @@ public class GroupHealthCashlessClaimService {
                     .updateWithPreAuthorizationDetails(groupHealthCashlessClaim.getPreAuthorizationDetails())
                     .updateWithStatusName(groupHealthCashlessClaim.getStatus())
                     .updateWithBankDetails(groupHealthCashlessClaim.getGroupHealthCashlessClaimBankDetail())
-                    .updateWithClaimIdFromWhichAmended(groupHealthCashlessClaim.getClaimIdFromWhichAmended());
+                    .updateWithClaimIdFromWhichAmended(groupHealthCashlessClaim.getListClaimIdFromWhichAmended());
         }
         return groupHealthCashlessClaimDto;
     }

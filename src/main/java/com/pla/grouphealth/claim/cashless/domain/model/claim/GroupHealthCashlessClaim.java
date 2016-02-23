@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.pla.grouphealth.claim.cashless.domain.event.claim.GroupHealthCashlessClaimFollowUpReminderEvent;
 import com.pla.grouphealth.claim.cashless.domain.exception.GenerateReminderFollowupException;
@@ -22,6 +23,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,7 +79,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private String closedAtLevel;
     private LocalDate approvedOnDate;
     private String approvedAtLevel;
-    private String claimIdFromWhichAmended;
+    private List<String> listClaimIdFromWhichAmended;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -401,7 +403,10 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     }
 
     public GroupHealthCashlessClaim updateWithClaimIdFromWhichAmended(String groupHealthCashlessClaimId) {
-        this.claimIdFromWhichAmended = groupHealthCashlessClaimId;
+        if(isEmpty(this.listClaimIdFromWhichAmended)){
+            this.listClaimIdFromWhichAmended = Lists.newArrayList();
+        }
+        this.listClaimIdFromWhichAmended.add(groupHealthCashlessClaimId);
         return this;
     }
 
