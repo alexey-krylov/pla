@@ -922,6 +922,42 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 });
             }
 
+            $scope.rejectClaim=function(){
+                var requestForRejectClaim={
+                    "claimApprovalPlanDetail":$scope.claimApprovalPlanDetail,
+                    "claimApprovalCoverageDetails":$scope.claimApprovalCoverageDetails,
+                    "comments":$scope.comments.comment,
+                    "referredToReassureOn":$scope.comments.reAssuredOn,
+                    "responseReceivedOn":$scope.comments.reponseReceivedOn,
+                    "claimId":$scope.claimId,
+                    "criteria":$scope.rcvCriteria
+                }
+                console.log('Reject Request *********');
+                console.log(JSON.stringify(requestForApproveClaim));
+                $http.post('/pla/grouplife/claim/reject',requestForRejectClaim).success(function (response, status, headers, config) {
+
+                }).error(function (response, status, headers, config) {
+                });
+            }
+            $scope.returnClaim=function(){
+                var requestForReturnClaim={
+                    "claimApprovalPlanDetail":$scope.claimApprovalPlanDetail,
+                    "claimApprovalCoverageDetails":$scope.claimApprovalCoverageDetails,
+                    "comments":$scope.comments.comment,
+                    "referredToReassureOn":$scope.comments.reAssuredOn,
+                    "responseReceivedOn":$scope.comments.reponseReceivedOn,
+                    "claimId":$scope.claimId,
+                    "criteria":$scope.rcvCriteria
+                }
+                console.log('Return Request *********');
+                console.log(JSON.stringify(requestForApproveClaim));
+                $http.post('/pla/grouplife/claim/return',requestForReturnClaim).success(function (response, status, headers, config) {
+
+                }).error(function (response, status, headers, config) {
+                });
+            }
+
+
             $scope.createClaimSettlement=function(){
                 var requestForClaimSettlement={
                     "claimSettlementDetails":$scope.claimSettlementDetails,

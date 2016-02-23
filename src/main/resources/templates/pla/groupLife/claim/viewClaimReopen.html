@@ -50,6 +50,10 @@
                             });
                         }
                     });
+                    $('#closeButton').on("click",function(){
+//                        alert('Testing');
+                        window.location.href ="/pla/grouplife/claim/reopenclaim";
+                    });
                 });
             });
             clearInterval(interval);
@@ -65,9 +69,26 @@
     </ol>
     </p>
 
-    <div th:if="${sucess != null}">
-        <p th:text="${sucess.message}"></p>
+    <div class="modal fade" id="testModal" aria-labelledby="testModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-title" id="testLabel">
+                        Result
+                    </h4>
+                    <div class="alert alert-success" hidden="true" id="successMessage"></div>
+                    <div class="alert alert-danger" hidden="true" id="inactivate-alert-danger"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="closeButton" data-dismiss="modal" onclick="closeModal()">Ok</button>
+                </div>
+
+            </div>
+        </div>
     </div>
+
     <form method="post" action="searchclaimforreopen" novalidate="true" name="searchclaimforreopen"
           id="searchclaimforreopen">
         <div class="row well well-sm" style="margin: 0;">
@@ -141,7 +162,7 @@
                             <span th:text="#{listOfClaimIntimations}">List of Claim Intimation</span>
                         </div>
                         <a type="button" id="reopen" class="btn btn-default  btn-sm btn-disabled" disabled="disabled"
-                           onclick="viewPolicyModule.viewReopen()">Reopen</a>
+                           data-toggle="modal" data-target="#" onclick="viewPolicyModule.viewReopen()">Reopen</a>
                     </div>
                 </div>
                 <div class="panel-body">

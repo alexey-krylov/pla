@@ -333,8 +333,8 @@
                             <div class="col-lg-6">
                                 <div class="form-group required">
                                     <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="approveClaim()">Approve</button>
-                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-disabled="!comments.comment">Reject</button>
-                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-disabled="!comments.comment">Return</button>
+                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="rejectClaim()" ng-disabled="!comments.comment">Reject</button>
+                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="returnClaim()" ng-disabled="!comments.comment">Return</button>
                                     <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-disabled="!comments.comment">Refer to Senior Underwriter</button>
                                     <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-disabled="!comments.comment">Hold</button>
                                 </div>

@@ -3,7 +3,6 @@ package com.pla.individuallife.endorsement.presentation.dto;
 import com.pla.individuallife.endorsement.domain.model.ILEndorsement;
 import com.pla.individuallife.endorsement.domain.model.IndividualLifeEndorsement;
 import com.pla.individuallife.policy.presentation.dto.ILPolicyDto;
-import com.pla.individuallife.sharedresource.model.ILEndorsementType;
 import com.pla.individuallife.sharedresource.model.vo.ILProposerDocument;
 import com.pla.individuallife.sharedresource.model.vo.PremiumDetail;
 import com.pla.sharedkernel.domain.model.EndorsementStatus;
@@ -16,8 +15,6 @@ import lombok.Setter;
 import org.joda.time.DateTime;
 
 import java.util.Set;
-
-import static org.nthdimenzion.presentation.AppUtils.getIntervalInDays;
 
 /**
  * Created by Raghu Bandi on 8/27/2015.

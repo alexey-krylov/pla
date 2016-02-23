@@ -98,7 +98,35 @@ var viewPolicyModule = (function () {
     services.viewReopen=function(){
         var claimId = this.selectedItem;
         var claimStatus=this.status;
-        window.location.href ="/pla/grouplife/claim/viewapprovalclaim/?claimId=" + claimId + "&mode=edit";
+
+        $.ajax({
+            url: '/pla/grouplife/claim/reopen/',
+            type: 'POST',
+            data: JSON.stringify({'claimId': claimId}),
+            contentType: 'application/json; charset=utf-8',
+            success: function(msg) {
+                if(msg.status=='200'){
+                    $('#testModal').modal('toggle');
+                    //msg.message,id
+                    $("#successMessage").text(msg.message).show();
+
+
+                }else{
+                    $('#inactivate-alert-danger').text(msg.message).show();
+
+                }
+            }
+        });
+
+        //window.location.href ="/pla/grouplife/claim/getclaimforreopen/"+claimId;
+
+        //$('#testModal').modal('toggle');
+
     }
+
     return services;
+    var closeModal=function(value,flag){
+        alert('closeMOdal');
+        window.location.href ="/pla/grouplife/claim/reopenclaim/";
+    }
 })();
