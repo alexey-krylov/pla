@@ -131,7 +131,7 @@
             </ul>
             <div class="actions">
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
-                        style="font-size: 13px;color: #3a87ad;">{{claimId}}<span
+                        style="font-size: 13px;color: #3a87ad;">{{claimNumber}}<span
                         ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
@@ -821,10 +821,10 @@
                                                    readonly="true"/>
                                         </div>
                                     </div>
-                                    <div class="btn btn-default" style="display:inline;float:right;clear:both"
+                                    <!--<div class="btn btn-default" style="display:inline;float:right;clear:both"
                                           ng-click="uploadDocumentFiles()"
                                          ng-disabled="!claimId" ng-hide="isViewMode">Upload All
-                                    </div>
+                                    </div>-->
 
                               </div>
                             </accordion-group> <br />
@@ -877,9 +877,9 @@
                                         </div>
 
                                     </div>
-                                    <button class="btn btn-default"
+                                    <!--<button class="btn btn-default"
                                             style="display:inline;float:right;margin-right:5px;margin-top:20px;" ng-hide="mode=='new'||mode=='view'"  ng-disabled="!checkDocumentAttached || mode=='new'||mode=='view'||!claimId" ng-click="uploadAdditionalDocument()">Upload
-                                    </button>
+                                    </button>-->
 
                                 </div>
                             </accordion-group>

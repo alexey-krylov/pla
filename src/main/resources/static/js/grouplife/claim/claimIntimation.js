@@ -416,12 +416,25 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     console.log(JSON.stringify(response));
                     $scope.retrivalPolicyId=response.policyId;
                     $scope.claimId=response.claimId;
+                    $scope.claimNumber=response.claimNumber;
                     $scope.claimDetails=response;
                     $scope.claimantDetail=response.claimantDetail;
                     $scope.planDetail=response.planDetail;
                     $scope.bankDetails=response.bankDetails;
                     $scope.assuredDetails=response.claimAssuredDetail;
                     $scope.coverageList=response.coverageDetails;
+
+                    $http.get("/pla/grouplife/claim/getmandatorydocuments/" + $scope.claimId)
+                        .success(function (response) {
+                            $scope.documentList = response;
+                        });
+
+                    $http.get("/pla/grouplife/claim/getadditionaldocuments/" + $scope.claimId).success(function (data, status) {
+                        //console.log(data);
+                        $scope.additionalDocumentList = data;
+                        $scope.checkDocumentAttached = $scope.additionalDocumentList != null;
+                    });
+
                     if(response.claimApprovalPlanDetail != null){
                         angular.copy(response.claimApprovalPlanDetail,$scope.claimApprovalPlanDetail);
                     }else{
@@ -573,7 +586,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
              * Retrieving PlanDetailWithClaimTYpeList
              */
 
-            $scope.documentList=[
+           /* $scope.documentList=[
                 {
                     "documentId": "ACTIVE_AT_WORK_DECLARATION_FORM",
                     "documentName": "Active At Work Declaration Form",
@@ -596,7 +609,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     "gridFsDocId": null,
                     "requireForSubmission": false
                 }
-            ]
+            ]*/
 
             $scope.getPlanDetailWithClaimTypeList=function(){
                 $http.get('/pla/grouplife/claim/getplandetail/'+ $scope.rcvPolicyId +'/'+$scope.claimDetails.category+'/'+$scope.claimDetails.relationship).success(function (response, status, headers, config) {
@@ -672,9 +685,15 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             $http.post('/pla/grouplife/claim/createclaimintimation',claimSubmitObj).success(function (response, status, headers, config) {
                                 console.log('generate Claim Intimation Response..');
                                 console.log(JSON.stringify(response));
-                                $scope.claimId=response.id;
-                                $scope.showModal = true;
-                                $scope.errorMessage = 'Are You Want to Upload The Document?';
+                                //$scope.claimId=response.id;
+                                 $scope.claimId=response.data.claimId;
+                                $scope.claimNumber=response.data.claimNumber;
+                                 $scope.uploadDocumentFiles();  //Uplaoding Mandatory Documents
+                                 $scope.uploadAdditionalDocument(); // Uplaoding Additional Documents
+                                //$scope.showModal = true;
+                                //$scope.errorMessage = 'Are You Want to Upload The Document?';
+                                $window.location.href = '/pla/grouplife/claim/openpolicysearchpage';
+
                             }).error(function (response, status, headers, config) {
                             });
 
@@ -685,7 +704,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
             }
 
             $scope.backToSearchPolicy=function(){
-                $window.location.href = '/pla/grouplife/claim/openpolicysearchpage';
+                window.location.href = '/pla/grouplife/claim/openpolicysearchpage';
             }
 
             /**
@@ -917,6 +936,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 console.log('Approval Request *********');
                 console.log(JSON.stringify(requestForApproveClaim));
                 $http.post('/pla/grouplife/claim/approve',requestForApproveClaim).success(function (response, status, headers, config) {
+                    window.location.href ="/pla/grouplife/claim/openapprovalclaim";
 
                 }).error(function (response, status, headers, config) {
                 });
@@ -933,8 +953,9 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     "criteria":$scope.rcvCriteria
                 }
                 console.log('Reject Request *********');
-                console.log(JSON.stringify(requestForApproveClaim));
+                console.log(JSON.stringify(requestForRejectClaim));
                 $http.post('/pla/grouplife/claim/reject',requestForRejectClaim).success(function (response, status, headers, config) {
+                    window.location.href ="/pla/grouplife/claim/openapprovalclaim";
 
                 }).error(function (response, status, headers, config) {
                 });
@@ -950,8 +971,9 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     "criteria":$scope.rcvCriteria
                 }
                 console.log('Return Request *********');
-                console.log(JSON.stringify(requestForApproveClaim));
+                console.log(JSON.stringify(requestForReturnClaim));
                 $http.post('/pla/grouplife/claim/return',requestForReturnClaim).success(function (response, status, headers, config) {
+                    window.location.href ="/pla/grouplife/claim/openapprovalclaim";
 
                 }).error(function (response, status, headers, config) {
                 });
