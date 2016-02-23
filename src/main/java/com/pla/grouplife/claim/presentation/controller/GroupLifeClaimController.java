@@ -120,16 +120,17 @@ public class GroupLifeClaimController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(Result.failure("Error in creating  Claim Intimation Record", bindingResult.getAllErrors()), HttpStatus.OK);
         }
-        String claimId = "";
+
+        GLClaimIntimationDto claimData=null;
         try {
             UserDetails userDetails = getLoggedInUserDetail(request);
             glClaimIntimationCommand.setUserDetails(userDetails);
-            claimId = commandGateway.sendAndWait(glClaimIntimationCommand);
+            claimData = commandGateway.sendAndWait(glClaimIntimationCommand);
         } catch (GLClaimException e) {
             LOGGER.error("Error in creating  Claim Intimation", e);
             return new ResponseEntity(Result.failure("Error in creating  Claim Intimation"), HttpStatus.OK);
         }
-        return new ResponseEntity(Result.success(" Claim Intimation created successfully",claimId), HttpStatus.OK);
+        return new ResponseEntity(Result.success(" Claim Intimation created successfully",claimData), HttpStatus.OK);
 
     }
 

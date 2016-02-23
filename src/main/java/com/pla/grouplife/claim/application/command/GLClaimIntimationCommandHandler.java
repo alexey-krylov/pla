@@ -69,12 +69,16 @@ public class GLClaimIntimationCommandHandler {
     }
 
     @CommandHandler
-    public String createClaimIntimation(CreateGLClaimIntimationCommand createGLClaimIntimationCommand) {
+    public GLClaimIntimationDto createClaimIntimation(CreateGLClaimIntimationCommand createGLClaimIntimationCommand) {
           GroupLifeClaim groupLifeClaim = glClaimFactory.createClaim(createGLClaimIntimationCommand);
          GLClaimProcessor glClaimProcessor = groupLifeClaimRoleAdapter.userToGLClaimProcessor(createGLClaimIntimationCommand.getUserDetails());
          groupLifeClaim=glClaimProcessor. submitClaimIntimation(DateTime.now(), groupLifeClaim) ;
          glClaimMongoRepository.add(groupLifeClaim);
-        return groupLifeClaim.getClaimId().getClaimId();
+        GLClaimIntimationDto claimData=new GLClaimIntimationDto();
+        claimData.setClaimNumber(groupLifeClaim.getClaimNumber().getClaimNumber());
+        claimData.setClaimId(groupLifeClaim.getClaimId().getClaimId());
+        return claimData;
+        //return groupLifeClaim.getClaimId().getClaimId();
     }
 
     @CommandHandler
@@ -302,7 +306,6 @@ public class GLClaimIntimationCommandHandler {
             glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getPlanSumAssured(),
                     planDetail.getAdditionalAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount(),planDetail.getRecoveryOrAdditional(),planDetail.getRemarks());
         }
-
         List<ClaimApproverCoverageDetailDto> coverageDetails=returnGLClaimCommand.getClaimApprovalCoverageDetails();
         List<ApproverCoverageDetail> coverageDetailList= new ArrayList<ApproverCoverageDetail>();
         if(coverageDetails!=null){
