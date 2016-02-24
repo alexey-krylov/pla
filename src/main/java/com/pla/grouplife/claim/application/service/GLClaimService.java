@@ -1138,6 +1138,7 @@ public class GLClaimService implements Serializable{
         List<SearchDocumentDetailDto> documentDetailDtos = Lists.newArrayList();
         PlanDetail planDetail=(PlanDetail)claimMap.get("planDetail");
         PlanId planId=planDetail.getPlanId();
+        String planIdInString=planId.getPlanId();
         List<CoverageDetail> coverageDetailsList=(List<CoverageDetail>)claimMap.get("coverageDetails");
         List<CoverageId> coverageIdList=new ArrayList<CoverageId>();
 
@@ -1152,7 +1153,17 @@ public class GLClaimService implements Serializable{
         SearchDocumentDetailDto searchDocumentDetailDto = new SearchDocumentDetailDto(planId,coverageIdList);
         documentDetailDtos.add(searchDocumentDetailDto);
 
-        Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.CLAIM);
+        List<GLClaimMandatoryDocumentDto> glClaimMandatoryDocumentsForApprover = getAllMandatoryDocumentsForClaim(planIdInString);
+       // Set<ClientDocumentDto> mandatoryDocuments = underWriterAdapter.getMandatoryDocumentsForApproverApproval(documentDetailDtos, ProcessType.CLAIM);
+        Set<ClientDocumentDto> mandatoryDocuments=new LinkedHashSet<ClientDocumentDto>();
+        for(GLClaimMandatoryDocumentDto glClaimMandatoryDocumentDto: glClaimMandatoryDocumentsForApprover){
+            String documentCode=glClaimMandatoryDocumentDto.getDocumentId();
+            String documentName=glClaimMandatoryDocumentDto.getDocumentName();
+            ClientDocumentDto clientDocument=new  ClientDocumentDto(documentCode,documentName,false);
+            mandatoryDocuments.add(clientDocument);
+        }
+
+
         List<GLClaimMandatoryDocumentDto> mandatoryDocumentDtos = Lists.newArrayList();
         if (isNotEmpty(mandatoryDocuments)) {
             mandatoryDocumentDtos = mandatoryDocuments.stream().map(new Function<ClientDocumentDto, GLClaimMandatoryDocumentDto>() {
