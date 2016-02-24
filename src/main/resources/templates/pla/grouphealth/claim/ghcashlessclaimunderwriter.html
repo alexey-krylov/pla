@@ -322,7 +322,7 @@
                                             <td ng-bind="benefit.eligibleAmount"></td>
                                             <td>
                                                 <div class="form-group required ">
-                                                    <input type="number" ng-number="true" name="Approved" ng-model="benefit.approvedAmount" class="form-control input-sm"/>
+                                                    <input type="number" ng-number="true" name="Approved" ng-model="benefit.approvedAmount" class="form-control input-sm" ng-disabled="isClaimAmended"/>
                                                 </div>
                                             </td>
                                             <td ng-if="isClaimAmended">
