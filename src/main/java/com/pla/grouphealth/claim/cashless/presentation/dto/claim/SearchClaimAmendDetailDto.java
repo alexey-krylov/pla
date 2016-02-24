@@ -1,4 +1,4 @@
-package com.pla.grouphealth.claim.cashless.presentation.dto;
+package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
 
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimAssuredDetail;

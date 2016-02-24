@@ -344,8 +344,6 @@
                                         <ul style="display: none;" class="dropdown-menu sub-menu-level1 bold">
 
 
-                                            <li><a th:href="@{/grouphealth/claim/cashless/preauthorization/searchPreAuthorizationclaimAmendment}"> Claim Amendment  </a>
-                                            </li>
                                             <li class='dropdown'><a href="#">Cashless Claim</a>
                                                 <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">
                                                     <li><a th:href="@{/grouphealth/claim/cashless/preauthorization/preAuthUpload}">Pre-authorization Uplaod</a>
@@ -353,10 +351,10 @@
                                                     <li><a th:href="@{/grouphealth/claim/cashless/preauthorizationrequest/getpreauthorizationfordefaultlist}">Search Pre-authorization</a>
 
                                                     </li>
-                                                    <li><a th:href="@{/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1}">Pre-authorization Underwriting Level1 - Search </a>
+                                                    <li><a th:href="@{/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL1}">Pre-authorization Underwriting Level-1</a>
                                                     </li>
                                                     <li>
-                                                <a th:href="@{/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL2}">Pre-authorization Underwriting Level2 - Search </a>
+                                                <a th:href="@{/grouphealth/claim/cashless/preauthorizationrequest/underwriter/getdefaultlistofunderwriterlevels/LEVEL2}">Pre-authorization Underwriting Level-2</a>
                                                  </li>
                                                     <li>
                                                         <a th:href="@{/grouphealth/claim/cashless/claim/getghcashlessclaimuploadview}">CashLess Claim Upload </a>
@@ -376,16 +374,12 @@
                                                     <li>
                                                         <a th:href="@{/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims}">Service Mismatch</a>
                                                     </li>
-
-                                                    <li>
-                                                        <a th:href="@{/grouphealth/claim/cashless/claim/getallreopenedclaimdefaultlist}">Claim Reopen</a>
-                                                    </li>
-                                                    <li>
-                                                        <a th:href="@{/grouphealth/claim/cashless/claim/getallclaimswhichcanbeamendeddefaultlist}">Claim Amend</a>
-                                                    </li>
                                                 </ul>
 
                                             </li>
+                                            <li><a th:href="@{/grouphealth/claim/cashless/claim/getallbatchesforsettlement}">Cashless Claim Settlement</a></li>
+                                            <li><a th:href="@{/grouphealth/claim/cashless/claim/getallclaimswhichcanbeamendeddefaultlist}">Cashless Claim Amendment</a></li>
+                                            <li><a th:href="@{/grouphealth/claim/cashless/claim/getallreopenedclaimdefaultlist}">Cashless Claim Reopen</a></li>
                                             <li class='dropdown'><a href="#">Reimbursement Claim</a>
 
                                                 <ul style="display: none;" class="dropdown-menu sub-menu-level2 bold">

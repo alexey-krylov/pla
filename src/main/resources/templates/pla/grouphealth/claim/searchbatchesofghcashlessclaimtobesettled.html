@@ -15,7 +15,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.5/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-    <script src="../../../../../static/js/grouphealth/claim/searchghcashlessclaimreopen.js"></script>
+    <script src="../../../../../static/js/grouphealth/claim/searchghcashlessclaimtobeamended.js"></script>
     <!--*/-->
 </head>
 <body>
@@ -23,7 +23,7 @@
 <script>
     var interval = setInterval(function () {
         if (require.defined("basic")) {
-            requirejs(['/pla/js/grouphealth/claim/searchghcashlessclaimreopen.js'], function () {
+            requirejs(['/pla/js/grouphealth/claim/searchbatchesofghcashlessclaimtobesettled.js'], function () {
                 $(document).ready(function () {
                     $("input[type='text']").keyup(function () {
                         var isDisabled = true;
@@ -47,7 +47,7 @@
                         $('#myModal').modal({backdrop: 'static', keyboard: false});
                     }
                     $('#modalButton').on("click", function () {
-                        window.location.href = '/pla/grouphealth/claim/cashless/claim/getallreopenedclaimdefaultlist';
+                        window.location.href = '/pla/grouphealth/claim/cashless/claim/getallbatchesforsettlement';
                     });
                 });
             });
@@ -75,11 +75,10 @@
 <div class="container container-fluid" style="padding-top:10px">
     <p class="lead">
     <ol class="breadcrumb">
-        <li>GROUP HEALTH CASHLESS CLAIM</li>
-        <li>SEARCH</li>
+        <li>GROUP HEALTH CASHLESS CLAIM / BATCH / SEARCH</li>
     </ol>
     </p>
-    <form method="post" action="/pla/grouphealth/claim/cashless/claim/searchreopenedghcashlessclaimbycriteria" novalidate="true" name="searchAuthorizationForm"
+    <form method="post" action="/pla/grouphealth/claim/cashless/claim/searchghcashlessclaimwhichcanbeamendedbycriteria" novalidate="true" name="searchAuthorizationForm"
           id="searchAuthorizationForm">
         <div class="row well well-sm" style="margin: 0;">
             <!--&lt;!&ndash;<div class="col-md-2">&ndash;&gt;-->
@@ -89,60 +88,46 @@
                    th:value="${searchCriteria.showModalWin}"/>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label th:text="#{policyHolderName}">Policy Holder Name</label>
-                    <input type="text" class="form-control input-sm" name="policyHolderName"
-                           th:value="${searchCriteria.policyHolderName}"/>
+                    <label th:text="#{batchNumber}">Batch Number</label>
+                    <input type="text" class="form-control input-sm" name="batchNumber"
+                           th:value="${searchCriteria.batchNumber}"/>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label th:text="#{claimNumber}">Claim Number</label>
-                    <input type="text" class="form-control input-sm" name="claimNumber"
-                           th:value="${searchCriteria.claimNumber}"/>
+                    <label th:text="#{hcpCode}">HCP Code</label>
+                    <input type="text" class="form-control input-sm" name="hcpName"
+                           th:value="${searchCriteria.hcpName}"/>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label th:text="#{assuredFirstName}">Assured First Name</label>
-                    <input type="text" class="form-control input-sm" name="assuredFirstName"
-                           th:value="${searchCriteria.assuredFirstName}"/>
+                    <label th:text="#{hcpName}">HCP Name</label>
+                    <input type="text" class="form-control input-sm" name="hcpCode"
+                           th:value="${searchCriteria.hcpCode}"/>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label th:text="#{assuredLastName}">Assured Last Name</label>
-                    <input type="text" class="form-control input-sm" name="assuredLastName"
-                           th:value="${searchCriteria.assuredLastName}"/>
+                    <label th:text="#{batchDate}">Assured Last Name</label>
+                    <input type="text" class="form-control input-sm" name="batchDate"
+                           th:value="${searchCriteria.batchDate}"/>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label th:text="#{clientId}">Client ID</label>
-                    <input type="text" class="form-control input-sm" name="clientId"
-                           th:value="${searchCriteria.clientId}"/>
+                    <label th:text="#{batchClosedDate}">Batch Closed Date</label>
+                    <input type="text" class="form-control input-sm" name="batchClosedOnDate"
+                           th:value="${searchCriteria.batchClosedOnDate}"/>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label th:text="#{policyNumber}">Policy Number</label>
-                    <input type="text" class="form-control input-sm" name="policyNumber"
-                           th:value="${searchCriteria.policyNumber}"/>
+                    <label th:text="#{batchStatus}">Batch Status</label>
+                    <input type="text" class="form-control input-sm" name="batchStatus"
+                           th:value="${searchCriteria.batchStatus}"/>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label th:text="#{assuredNrcNumber}">Assured NRC</label>
-                    <input type="text" class="form-control input-sm" name="assuredNRCNumber"
-                           th:value="${searchCriteria.assuredNRCNumber}"/>
-                </div>
-            </div>
-            <!--<div class="col-md-2">-->
-            <!--<div class="form-group">-->
-            <!--<label th:text="#{policyHolderName}">Batch Number</label>-->
-            <!--<input type="text" class="form-control input-sm" name="policyHolderName"-->
-            <!--th:value="${searchCriteria.policyHolderName}"/>-->
-            <!--</div>-->
-            <!--</div>-->
             <div class="col-md-2">
                 <button type="submit" style="float: right; margin-top: 20px" class="btn btn-default btn-sm"
                         id="searchpreauthorizationrecord">Search
@@ -157,10 +142,10 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="col-lg-6">
-                                <span>List Of Cancelled/Rejected Group Health Cashless Claim</span>
+                                <span>List Of Group Health Cashless Claim</span>
                             </div>
                             <div class="col-lg-6" style="text-align: right">
-                                <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()">Reopen </a>
+                                <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()">Amend </a>
                                 <!--<a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled" onclick="searchPreAuthorizationModule.emailPolicy()">Email</a>-->
 
                             </div>
@@ -172,12 +157,12 @@
                         <thead>
                         <tr>
                             <th style="width: 1%"></th>
-                            <th th:text="#{claimNumber}">Claim Number</th>
-                            <th th:text="#{claimStatus}">Claim Status</th>
-                            <th th:text="#{assuredName}">Assured Name</th>
-                            <th th:text="#{rejectedDate}">Rejection Date</th>
-                            <th th:text="#{policyNumber}">Policy Number</th>
-                            <th th:text="#{policyHolderName}">Policy Holder Name</th>
+                            <th th:text="#{batchNumber}">Batch Number</th>
+                            <th th:text="#{hcpCode}">HCP Code</th>
+                            <th th:text="#{hcpName}">HCP Name</th>
+                            <th th:text="#{batchDate}">Batch Date</th>
+                            <th th:text="#{batchClosedDate}">Batch Closed Date</th>
+                            <th th:text="#{batchStatus}">Batch status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -185,14 +170,14 @@
                             <th:block>
                                 <tr th:each="cashlessClaimresult : ${claimResult}">
                                     <td>
-                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.claimNumber}" th:attr="clientId=${cashlessClaimresult.clientId}"/>
+                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.batchNumber}"/>
                                     </td>
-                                    <td th:text="${cashlessClaimresult.claimNumber}"></td>
-                                    <td th:text="${cashlessClaimresult.status}"></td>
-                                    <td th:text="${cashlessClaimresult.salutation}+' '+${cashlessClaimresult.assuredFirstName}+' '+${cashlessClaimresult.assuredLastName}"></td>
-                                    <td th:text="${cashlessClaimresult.rejectionDate} ? ${#dates.format(cashlessClaimresult.rejectionDate, 'dd/MM/yyyy')}"></td>
-                                    <td th:text="${cashlessClaimresult.policyNumber}"></td>
-                                    <td th:text="${cashlessClaimresult.policyHolderName}"></td>
+                                    <td th:text="${cashlessClaimresult.batchNumber}"></td>
+                                    <td th:text="${cashlessClaimresult.hcpCode}"></td>
+                                    <td th:text="${cashlessClaimresult.hcpName}"></td>
+                                    <td th:text="${#dates.format(cashlessClaimresult.batchDate, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${cashlessClaimresult.batchClosedOnDate} ? ${#dates.format(cashlessClaimresult.batchClosedOnDate, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${cashlessClaimresult.batchStatus}"></td>
 
                                 </tr>
                             </th:block>

@@ -1,13 +1,11 @@
-package com.pla.grouphealth.claim.cashless.presentation.dto;
+package com.pla.grouphealth.claim.cashless.presentation.dto.claim;
 
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimAssuredDetail;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimPolicyDetail;
 import lombok.Data;
-import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.nthdimenzion.utils.UtilValidator;
 
 import static org.nthdimenzion.utils.UtilValidator.*;
 

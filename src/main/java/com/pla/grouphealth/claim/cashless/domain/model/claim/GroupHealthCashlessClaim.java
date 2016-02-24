@@ -80,6 +80,7 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
     private LocalDate approvedOnDate;
     private String approvedAtLevel;
     private List<String> listClaimIdFromWhichAmended;
+    private LocalDate batchClosedOnDate;
 
     public GroupHealthCashlessClaim(Status status){
         this.status = status;
@@ -410,9 +411,14 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
         return this;
     }
 
+    public GroupHealthCashlessClaim updateWithBatchClosedOnDate(LocalDate batchClosedOnDate) {
+        this.batchClosedOnDate = batchClosedOnDate;
+        return this;
+    }
+
     public enum Status {
         INTIMATION("Intimation"), EVALUATION("Evaluation"), CANCELLED("Cancelled"), UNDERWRITING_LEVEL1("Underwriting"), UNDERWRITING_LEVEL2("Underwriting"),
-        APPROVED("Approved"), AMENDED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), SERVICE_MISMATCHED("Evaluation");
+        APPROVED("Approved"), AMENDED("Approved"), REPUDIATED("Repudiated"), RETURNED("Evaluation"), AWAITING_DISBURSEMENT("Awaiting Disbursement"), DISBURSED("Disbursed"), BILL_MISMATCHED("Evaluation"), SERVICE_MISMATCHED("Evaluation"), CLOSED("Closed"), OPEN("Open");
 
         private String description;
 

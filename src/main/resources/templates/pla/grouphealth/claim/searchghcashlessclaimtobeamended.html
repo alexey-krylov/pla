@@ -175,6 +175,7 @@
                             <th th:text="#{claimStatus}">Claim Status</th>
                             <th th:text="#{assuredName}">Assured Name</th>
                             <th th:text="#{approvedOn}">Approved On</th>
+                            <th th:text="#{approvedAmount}">Approved Amount</th>
                             <th th:text="#{policyNumber}">Policy Number</th>
                             <th th:text="#{policyHolderName}">Policy Holder Name</th>
                         </tr>
@@ -189,7 +190,8 @@
                                     <td th:text="${cashlessClaimresult.claimNumber}"></td>
                                     <td th:text="${cashlessClaimresult.status}"></td>
                                     <td th:text="${cashlessClaimresult.salutation}+' '+${cashlessClaimresult.assuredFirstName}+' '+${cashlessClaimresult.assuredLastName}"></td>
-                                    <td th:text="${#dates.format(cashlessClaimresult.approvedOn, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${cashlessClaimresult.approvedOn} ? ${#dates.format(cashlessClaimresult.approvedOn, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${cashlessClaimresult.approvedAmount}"></td>
                                     <td th:text="${cashlessClaimresult.policyNumber}"></td>
                                     <td th:text="${cashlessClaimresult.policyHolderName}"></td>
 

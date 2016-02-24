@@ -209,13 +209,11 @@ public class GroupHealthCashlessClaimCommandHandler {
     }
 
     private void closePreAuthorizations(Set<PreAuthorizationDetailTaggedToClaim> preAuthorizationDetails) {
-        for(PreAuthorizationDetailTaggedToClaim preAuthorizationDetailTaggedToClaim : preAuthorizationDetails) {
-            if(preAuthorizationDetailTaggedToClaim.isTagToClaim()){
-                PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationDetailTaggedToClaim.getPreAuthorizationRequestId());
-                preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.CLOSED);
-                preAuthorizationRequestRepository.save(preAuthorizationRequest);
-            }
-        }
+        preAuthorizationDetails.stream().filter(preAuthorizationDetailTaggedToClaim -> preAuthorizationDetailTaggedToClaim.isTagToClaim()).forEach(preAuthorizationDetailTaggedToClaim -> {
+            PreAuthorizationRequest preAuthorizationRequest = preAuthorizationRequestRepository.findByPreAuthorizationRequestId(preAuthorizationDetailTaggedToClaim.getPreAuthorizationRequestId());
+            preAuthorizationRequest.updateStatus(PreAuthorizationRequest.Status.CLOSED);
+            preAuthorizationRequestRepository.save(preAuthorizationRequest);
+        });
     }
 
     @CommandHandler

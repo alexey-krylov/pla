@@ -10,8 +10,10 @@ import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthC
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.exception.*;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchClaimAmendDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatchDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimAmendDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimSettlementDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHCashlessClaimMailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
@@ -421,6 +423,7 @@ public class GroupHealthCashlessClaimController {
             groupHealthCashlessClaimDto = groupHealthCashlessClaimService.reConstructProbableClaimAmountForServices(groupHealthCashlessClaimDto);
             FutureCallback callback = new FutureCallback();
             commandGateway.send(new ApproveGroupHealthCashlessClaimCommand(groupHealthCashlessClaimDto, userName),callback);
+            groupHealthCashlessClaimService.checkAndUpdateWithBatchClosedOnDate(groupHealthCashlessClaimDto.getBatchNumber());
             callback.onSuccess(callback.get());
             return Result.success("Group Health Cashless Claim successfully approved.");
         } catch (Exception e) {
@@ -753,6 +756,7 @@ public class GroupHealthCashlessClaimController {
     public ModelAndView appendClaim(@RequestParam String groupHealthCashlessClaimId, @RequestParam String clientId,HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException, GenerateReminderFollowupException, ClaimNotEligibleException, AmendGroupHealthCashlessClaimProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         groupHealthCashlessClaimService.amendClaim(groupHealthCashlessClaimId, clientId, userName);
+        groupHealthCashlessClaimService.checkAndUpdateWithBatchClosedOnDateOnAmend(groupHealthCashlessClaimId);
         ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchghcashlessclaimtobeamended");
         //modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
         modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin().updateWithErrorMessage("Claim successfully amended."));
@@ -766,6 +770,36 @@ public class GroupHealthCashlessClaimController {
         modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllReopenedClaimForDefaultDisplay(userName));
         modelAndView.addObject("searchCriteria", new SearchReopenedClaimDetailDto().updateWithShowModalWin().updateWithErrorMessage(ex.getMessage()));
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/getallbatchesforsettlement", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getAllBatchesForSettlement(){
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchbatchesofghcashlessclaimtobesettled");
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        modelAndView.addObject("claimResult", groupHealthCashlessClaimService.getAllBatchesForSettlement());
+        modelAndView.addObject("searchCriteria", new SearchClaimSettlementDetailDto());
+        return modelAndView;
+    }
+    /*
+
+        @RequestMapping (value= "/searchghcashlessclaimwhichcanbeamendedbycriteria" , method = RequestMethod.POST)
+        @ResponseBody
+        public  ModelAndView searchCashlessClaimWhichCanBeAmendedByCriteria(SearchClaimAmendDetailDto searchClaimAmendDetailDto, HttpServletRequest request){
+            ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/searchbatchesofghcashlessclaimtobesettled");
+            String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+            List<SearchClaimAmendDetailDto> searchClaimAmendDetailDtos = groupHealthCashlessClaimService.searchCashlessClaimWhichCanBeAmendedByCriteria(searchClaimAmendDetailDto, userName);
+            modelAndView.addObject("claimResult", searchClaimAmendDetailDtos);
+            modelAndView.addObject("searchCriteria", searchClaimAmendDetailDto);
+            return modelAndView;
+        }
+    */
+
+    @RequestMapping(value = "/getdataforbatchview", method = RequestMethod.GET)
+    @ResponseBody
+    public GroupHealthCashlessClaimBatchDetail getDataForBatchView(@RequestParam String batchNumber, HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException, GenerateReminderFollowupException, ClaimNotEligibleException, AmendGroupHealthCashlessClaimProcessingException {
+        String userName = preAuthorizationRequestService.getLoggedInUsername();
+        return groupHealthCashlessClaimService.getDataForBatchView(batchNumber);
     }
 }
 

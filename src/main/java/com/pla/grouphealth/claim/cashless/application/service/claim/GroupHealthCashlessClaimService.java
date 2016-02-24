@@ -23,8 +23,10 @@ import com.pla.grouphealth.claim.cashless.domain.exception.*;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchClaimAmendDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.SearchReopenedClaimDetailDto;
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatchDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimAmendDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimSettlementDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
@@ -1273,5 +1275,71 @@ public class GroupHealthCashlessClaimService {
     private LocalDate getConsultationDate(GroupHealthCashlessClaimDto groupHealthCashlessClaimDto) {
         notEmpty(groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDiagnosisTreatmentDetails(), "Error amending claim no diagnosis detail found");
         return groupHealthCashlessClaimDto.getGroupHealthCashlessClaimDiagnosisTreatmentDetails().iterator().next().getDateOfConsultation();
+    }
+
+    public void checkAndUpdateWithBatchClosedOnDate(String batchNumber) {
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByBatchNumber(batchNumber);
+        if(checkIfAllClaimApproved(groupHealthCashlessClaims)) {
+            groupHealthCashlessClaims.forEach(groupHealthCashlessClaim -> groupHealthCashlessClaim.updateWithBatchClosedOnDate(LocalDate.now()));
+            groupHealthCashlessClaimRepository.save(groupHealthCashlessClaims);
+        }
+    }
+
+    public void checkAndUpdateWithBatchClosedOnDateOnAmend(String groupHealthCashlessClaimId) {
+        GroupHealthCashlessClaim claim  = groupHealthCashlessClaimRepository.findOne(groupHealthCashlessClaimId);
+        notNull(claim, "No claim found while amending claim with Id - "+groupHealthCashlessClaimId);
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByBatchNumber(claim.getBatchNumber());
+        if(!checkIfAllClaimApproved(groupHealthCashlessClaims)) {
+            groupHealthCashlessClaims.forEach(groupHealthCashlessClaim -> groupHealthCashlessClaim.updateWithBatchClosedOnDate(null));
+            groupHealthCashlessClaimRepository.save(groupHealthCashlessClaims);
+        }
+    }
+
+
+
+    private boolean checkIfAllClaimApproved(List<GroupHealthCashlessClaim> groupHealthCashlessClaims) {
+        for(GroupHealthCashlessClaim claim  :  groupHealthCashlessClaims){
+            if(!claim.getStatus().equals(APPROVED) && !claim.getStatus().equals(CANCELLED) && !claim.getStatus().equals(REPUDIATED)  && !claim.getStatus().equals(AMENDED))
+                return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    public List<SearchClaimSettlementDetailDto> getAllBatchesForSettlement() {
+        List<SearchClaimSettlementDetailDto> searchClaimSettlementDetailDtos = Lists.newArrayList();
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAll();
+        if(isNotEmpty(groupHealthCashlessClaims)){
+            Map<String, List<GroupHealthCashlessClaim>> result = groupHealthCashlessClaims.stream().collect(Collectors.groupingBy(GroupHealthCashlessClaim::getBatchNumber));
+            for(List<GroupHealthCashlessClaim> groupHealthCashlessClaimList : result.values()){
+                SearchClaimSettlementDetailDto searchClaimSettlementDetailDto = new SearchClaimSettlementDetailDto();
+                if(isNotEmpty(groupHealthCashlessClaimList)) {
+                    GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaimList.iterator().next();
+                    searchClaimSettlementDetailDto.updateWithDetails(groupHealthCashlessClaim, getBatchStatusByClaimsStatus(groupHealthCashlessClaimList));
+                    searchClaimSettlementDetailDtos.add(searchClaimSettlementDetailDto);
+                }
+            }
+        }
+        return searchClaimSettlementDetailDtos;
+    }
+
+    private String getBatchStatusByClaimsStatus(List<GroupHealthCashlessClaim> groupHealthCashlessClaimList) {
+        String batchStatus = StringUtils.EMPTY;
+        List<Status> listOfStatusOfAllClaims = getListOfStatusOfAllClaims(groupHealthCashlessClaimList);
+        if(listOfStatusOfAllClaims.contains(INTIMATION) || listOfStatusOfAllClaims.contains(EVALUATION) || listOfStatusOfAllClaims.contains(RETURNED) || listOfStatusOfAllClaims.contains(UNDERWRITING_LEVEL1)  || listOfStatusOfAllClaims.contains(UNDERWRITING_LEVEL2) || listOfStatusOfAllClaims.contains(APPROVED))
+            batchStatus = OPEN.getDescription();
+        else if(listOfStatusOfAllClaims.contains(AWAITING_DISBURSEMENT) || listOfStatusOfAllClaims.contains(CANCELLED) || listOfStatusOfAllClaims.contains(REPUDIATED) || listOfStatusOfAllClaims.contains(AMENDED) || !listOfStatusOfAllClaims.contains(DISBURSED)){
+            batchStatus = AWAITING_DISBURSEMENT.getDescription();
+        } else if(listOfStatusOfAllClaims.contains(DISBURSED) || listOfStatusOfAllClaims.contains(CANCELLED) || listOfStatusOfAllClaims.contains(REPUDIATED) || listOfStatusOfAllClaims.contains(AMENDED) || !listOfStatusOfAllClaims.contains(AWAITING_DISBURSEMENT)){
+            batchStatus = CLOSED.getDescription();
+        }
+        return batchStatus;
+    }
+
+    private List<Status> getListOfStatusOfAllClaims(List<GroupHealthCashlessClaim> groupHealthCashlessClaimList) {
+        return groupHealthCashlessClaimList.stream().map(GroupHealthCashlessClaim::getStatus).collect(Collectors.toList());
+    }
+
+    public GroupHealthCashlessClaimBatchDetail getDataForBatchView(String batchNumber) {
+        return null;
     }
 }

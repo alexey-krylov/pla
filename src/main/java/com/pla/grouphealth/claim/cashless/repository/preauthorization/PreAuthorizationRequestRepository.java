@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.repository.preauthorization;
 
+import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaim;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.PreAuthorizationRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +28,6 @@ public interface PreAuthorizationRequestRepository extends MongoRepository<PreAu
     List<PreAuthorizationRequest> findAllByStatusAndPreAuthorizationUnderWriterUserIdIn(Status status, List<String> users);
 
     List<PreAuthorizationRequest> findAllByPreAuthorizationRequestPolicyDetailPolicyNumberAndPreAuthorizationRequestPolicyDetailAssuredDetailClientIdAndStatus(String policyNumber, String clientId, Status status);
+
+    List<GroupHealthCashlessClaim> findAllByBatchNumber(String batchNumber);
 }
