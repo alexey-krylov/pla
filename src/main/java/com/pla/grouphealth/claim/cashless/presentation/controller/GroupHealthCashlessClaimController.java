@@ -3,20 +3,14 @@ package com.pla.grouphealth.claim.cashless.presentation.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
 import com.pla.grouphealth.claim.cashless.application.command.claim.*;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GHCashlessClaimExcelHeader;
 import com.pla.grouphealth.claim.cashless.application.service.claim.GroupHealthCashlessClaimService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationRequestService;
 import com.pla.grouphealth.claim.cashless.application.service.preauthorization.PreAuthorizationService;
 import com.pla.grouphealth.claim.cashless.domain.exception.*;
-import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatchDetail;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimAmendDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimSettlementDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchReopenedClaimDetailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GHCashlessClaimMailDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDto;
-import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchGroupHealthCashlessClaimRecordDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.GroupHealthCashlessClaimBatchDetailDto;
+import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimRelatedFileUploadDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.proposal.presentation.dto.GHProposalMandatoryDocumentDto;
@@ -54,7 +48,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.nthdimenzion.utils.UtilValidator.isEmpty;
-import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
 
 /**
  * Author - Mohan Sharma Created on 2/03/2016.
@@ -797,7 +790,7 @@ public class GroupHealthCashlessClaimController {
 
     @RequestMapping(value = "/getdataforbatchview", method = RequestMethod.GET)
     @ResponseBody
-    public GroupHealthCashlessClaimBatchDetail getDataForBatchView(@RequestParam String batchNumber, HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException, GenerateReminderFollowupException, ClaimNotEligibleException, AmendGroupHealthCashlessClaimProcessingException {
+    public GroupHealthCashlessClaimBatchDetailDto getDataForBatchView(@RequestParam String batchNumber, HttpServletResponse httpServletResponse) throws IOException, ReopenGroupHealthCashlessClaimProcessingException, GenerateReminderFollowupException, ClaimNotEligibleException, AmendGroupHealthCashlessClaimProcessingException {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         return groupHealthCashlessClaimService.getDataForBatchView(batchNumber);
     }

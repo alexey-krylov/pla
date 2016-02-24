@@ -1,24 +1,14 @@
-package com.pla.grouphealth.claim.cashless.domain.model.claim;
+package com.pla.grouphealth.claim.cashless.presentation.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Immutable;
-import org.nthdimenzion.ddd.domain.annotations.ValueObject;
+import lombok.Data;
 
-import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
 /**
  * Author - Mohan Sharma Created on 2/24/2016.
  */
-@ValueObject
-@Immutable
-@Embeddable
-@EqualsAndHashCode
-@Getter
-@Setter
-public class GroupHealthCashlessClaimBatchAccountingDetail {
+@Data
+public class GroupHealthCashlessClaimBatchAccountingDetailDto {
     private BigDecimal totalInvoiceAmount;
     private BigDecimal totalBillAmount;
     private BigDecimal totalApprovedAmount;

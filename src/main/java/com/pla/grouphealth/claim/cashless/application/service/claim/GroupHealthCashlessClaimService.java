@@ -24,12 +24,14 @@ import com.pla.grouphealth.claim.cashless.domain.model.claim.*;
 import com.pla.grouphealth.claim.cashless.domain.model.preauthorization.*;
 import com.pla.grouphealth.claim.cashless.domain.model.sharedmodel.AdditionalDocument;
 import com.pla.grouphealth.claim.cashless.domain.model.claim.GroupHealthCashlessClaimBatchDetail;
+import com.pla.grouphealth.claim.cashless.presentation.dto.GroupHealthCashlessClaimBatchDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimAmendDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchClaimSettlementDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.SearchReopenedClaimDetailDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.*;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import com.pla.grouphealth.claim.cashless.query.GHCashlessClaimFinder;
+import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimBatchDetailRepository;
 import com.pla.grouphealth.claim.cashless.repository.claim.GroupHealthCashlessClaimRepository;
 import com.pla.grouphealth.claim.cashless.repository.preauthorization.PreAuthorizationRequestRepository;
 import com.pla.grouphealth.policy.domain.model.GroupHealthPolicy;
@@ -91,6 +93,8 @@ public class GroupHealthCashlessClaimService {
     private GroupHealthCashlessClaimRepository groupHealthCashlessClaimRepository;
     @Autowired
     private PreAuthorizationRequestRepository preAuthorizationRequestRepository;
+    @Autowired
+    private GroupHealthCashlessClaimBatchDetailRepository groupHealthCashlessClaimBatchDetailRepository;
     @Autowired
     private ExcelUtilityProvider excelUtilityProvider;
     @Autowired
@@ -1339,7 +1343,12 @@ public class GroupHealthCashlessClaimService {
         return groupHealthCashlessClaimList.stream().map(GroupHealthCashlessClaim::getStatus).collect(Collectors.toList());
     }
 
-    public GroupHealthCashlessClaimBatchDetail getDataForBatchView(String batchNumber) {
+    public GroupHealthCashlessClaimBatchDetailDto getDataForBatchView(String batchNumber) {
+        GroupHealthCashlessClaimBatchDetail groupHealthCashlessClaimBatchDetail = groupHealthCashlessClaimBatchDetailRepository.findOne(batchNumber);
+        GroupHealthCashlessClaimBatchDetailDto groupHealthCashlessClaimBatchDetailDto = new GroupHealthCashlessClaimBatchDetailDto();
+        if(isNotEmpty(groupHealthCashlessClaimBatchDetail)){
+            return groupHealthCashlessClaimBatchDetailDto.updateWithDetails(groupHealthCashlessClaimBatchDetail);
+        }
         return null;
     }
 }
