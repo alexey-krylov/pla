@@ -5,9 +5,12 @@ import com.pla.core.dto.MandatoryDocumentDto;
 import com.pla.grouplife.claim.domain.model.GroupLifeClaim;
 import com.pla.grouplife.claim.presentation.dto.ClaimMandatoryDocumentDto;
 import com.pla.publishedlanguage.dto.SearchDocumentDetailDto;
+import com.pla.publishedlanguage.dto.UnderWriterRoutingLevelDetailDto;
 import com.pla.sharedkernel.domain.model.Gender;
 import com.pla.sharedkernel.domain.model.ProcessType;
+import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.finder.UnderWriterFinder;
+import com.pla.underwriter.repository.UnderWriterRoutingLevelRepository;
 import org.nthdimenzion.ddd.domain.annotations.Finder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -45,7 +48,8 @@ public class GLClaimFinder{
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private MongoTemplate mongoTemplate;
-
+   @Autowired
+   private UnderWriterRoutingLevelRepository underWriterRoutingLevelRepository;
    @Autowired
    private UnderWriterFinder underWriterFinder;
     @Autowired
@@ -567,5 +571,17 @@ public Map findPolicyByPolicyNumber(String policyNumber) {
    public void saveClaim(GroupLifeClaim  glClaim){
        mongoTemplate.save(glClaim, GL_LIFE_CLAIM_COLLECTION_NAME);
    }
+
+    public UnderWriterRoutingLevel findConfiguredUnderWriterRoutingLevel(UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto) {
+        List<UnderWriterRoutingLevel> underWriterRoutingLevel = underWriterRoutingLevelRepository.findByPlanCodeAndCoverageIdAndValidTillAndProcessType(underWriterRoutingLevelDetailDto.getPlanId(), underWriterRoutingLevelDetailDto.getCoverageId(),
+                null, underWriterRoutingLevelDetailDto.getProcess());
+       // checkArgument(isNotEmpty(underWriterRoutingLevel), "Under Writer Router Level can not be null");
+        if((underWriterRoutingLevel.size() == 1)) {
+            return underWriterRoutingLevel.get(0);
+        }
+        return null;
+    }
+
+
 }
 

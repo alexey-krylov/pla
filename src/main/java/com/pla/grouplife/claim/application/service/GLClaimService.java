@@ -1267,7 +1267,7 @@ public class GLClaimService implements Serializable{
         String  processType="CLAIM";
         PlanId planId=new PlanId(planIdInString);
         UnderWriterRoutingLevelDetailDto underWriterRoutingLevelDetailDto=new UnderWriterRoutingLevelDetailDto(planId, LocalDate.now(),processType);
-        UnderWriterRoutingLevel underWriterRoutingLevel=underWriterFinder.findUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto);
+        UnderWriterRoutingLevel underWriterRoutingLevel=glClaimFinder.findConfiguredUnderWriterRoutingLevel(underWriterRoutingLevelDetailDto);
         return underWriterRoutingLevel;
     }
 
