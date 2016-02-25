@@ -1,5 +1,6 @@
 package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
+import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.grouphealth.claim.cashless.presentation.dto.claim.GroupHealthCashlessClaimDrugServiceDto;
 import com.pla.grouphealth.claim.cashless.presentation.dto.preauthorization.ClaimUploadedExcelDataDto;
 import lombok.EqualsAndHashCode;
@@ -12,6 +13,8 @@ import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.nthdimenzion.utils.UtilValidator.isNotEmpty;
@@ -70,6 +73,13 @@ public class GroupHealthCashlessClaimDrugService {
             this.status = isNotEmpty(drugServiceDto.getStatus()) ? Status.valueOf(drugServiceDto.getStatus()) : Status.PROCESS;
         }
         return this;
+    }
+
+    public BigDecimal getAgreedAmountForTheService(Set<HCPServiceDetail> serviceDetails) {
+        Optional<HCPServiceDetail> hcpServiceDetailOptional = serviceDetails.stream().filter(HCPServiceDetail -> HCPServiceDetail.getServiceAvailed().equals(this.serviceName)).findFirst();
+        if(hcpServiceDetailOptional.isPresent())
+            return hcpServiceDetailOptional.get().getNormalAmount();
+        return BigDecimal.ZERO;
     }
 
     public enum Status{
