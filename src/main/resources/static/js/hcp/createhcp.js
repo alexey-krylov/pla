@@ -138,6 +138,10 @@
                 $scope.createOrUpdateHCPCommand.bankBranchSortCode = newvalue;
             }
         });
+        $scope.viewmode=false;
+        if($scope.mode == 'view'){
+            $scope.viewmode=true;
+        }
         $scope.back = function () {
        window.location.reload();
 

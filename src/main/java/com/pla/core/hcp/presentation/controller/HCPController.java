@@ -122,4 +122,11 @@ public class HCPController {
         modelAndView.setViewName("pla/core/hcp/searchhcprate");
         return modelAndView;
     }
+    @RequestMapping(value="/viewupdatepage",method=RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView viewUpdatePage(@RequestParam String hcpCode){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("pla/core/hcp/createhcp");
+        return  modelAndView;
+    }
 }

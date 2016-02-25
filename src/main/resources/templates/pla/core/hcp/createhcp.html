@@ -47,10 +47,10 @@
                                            view-enabled=""
                                            ng-required="true"
                                            is-open="submissionActivatedDate"
-                                           max-date="todayDate" ng-disabled="mode =='view' || mode=='edit'"
+                                           max-date="todayDate" disabled="viewmode"
                                            ng-model="createOrUpdateHCPCommand.activatedOn" name="submissionDate"/>
                                      <span class="input-group-btn">
-                                      <button type="button" class="btn btn-default btn-sm" view-enabled=""
+                                      <button type="button" class="btn btn-default btn-sm"  disabled="viewmode" view-enabled=""
                                               ng-click="launchActivatedDate($event)">
                                           <i class="glyphicon glyphicon-calendar"></i></button>
                                      </span>
@@ -297,15 +297,15 @@
 
 
 
-                                Bank  Details
+                              <h3>Bank  Details</h3>
                             <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;">
 
                                 <div class = "row">
                                     <div class="col-md-4">
                                         <div class="form-group ">
                                             <label class="control-label">Bank Name</label>
-                                            <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"   ng-disabled="mode=='new'||mode=='isViewMode'"
-                                                    ng-model="createOrUpdateHCPCommand.bankName"  ng-change="clearBankBranchName()" >
+                                            <select class="form-control input-sm" name="bankName" disabled="viewmode" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"
+                                                    ng-model="createOrUpdateHCPCommand.bankName"  ng-change="clearBankBranchName()"  >
                                             </select>
                                             <div class="error" ng-messages="step1.bankName.$error" ng-if="step1.bankName.$dirty">
                                                 <small class="error" ng-message="required">Please specify Bank Name.</small>
@@ -315,8 +315,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group ">
                                             <label class="control-label">Bank Branch Name</label>
-                                            <select class="form-control input-sm" name="branchname"  ng-disabled="mode=='new'||mode=='isViewMode'"
-                                                    ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                            <select class="form-control input-sm" name="branchname"  disabled="viewmode"
+                                                  ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
                                                     ng-model="createOrUpdateHCPCommand.bankBranchCode" ng-selected="bankBranchDetail.branchName" >
                                             </select>
                                             <div class="error" ng-messages="step1.branchname.$error" ng-if="step1.branchname.$dirty">
@@ -329,7 +329,7 @@
                                             <label class="control-label">Bank Account Type</label>
                                             <select
                                                     ng-model="createOrUpdateHCPCommand.bankAccountType"
-                                                    name="accountType" ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                    name="accountType" disabled="viewmode"
                                                     class="form-control input-md">
 
                                                 <option value="Saving">Saving</option>
@@ -346,7 +346,7 @@
                                         <div class="form-group  ">
                                             <label class="control-label">Bank Account Number</label>
                                             <input  type="text"
-                                                    name="sumAssured"
+                                                    name="sumAssured" disabled="viewmode"
                                                     class="form-control input-md"
                                                     ng-model="createOrUpdateHCPCommand.bankAccountNumber"/>
                                         </div>

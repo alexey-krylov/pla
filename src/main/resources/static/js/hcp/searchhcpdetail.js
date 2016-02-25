@@ -1,47 +1,32 @@
 
-var searchhcpModule = (function(){
-    var hcpServices = {};
-    hcpServices.hcpSelected = undefined;
-    this.hcpName = null;
-    hcpServices.getTheItemSelected = function(ele){
-        this.hcpSelected=$(ele).val();
-        $("#hcp-update").prop("disabled","");
-        $("#hcp-view").prop("disabled","");
-
-        this.hcpName = $(ele).parent().find('input[type=hidden]').val();
-       // alert(this.hcpName);
+var searchPreAuthorizationModule = (function(){
+    var PreAuthorizationServices = {};
+    PreAuthorizationServices.PreAuthorizationSelected = undefined;
+    this.PreAuthorizationName = null;
+    PreAuthorizationServices.getTheItemSelected = function(ele){
+        this.hcpCode=$(ele).val();
+        $("#PreAuthorization-view").prop("disabled","");
+        $("#PreAuthorization-create").prop("disabled","");
+        $(".btn-disabled").attr("disabled", false);
+        this.PreAuthorizationName = $(ele).parent().find('input[type=hidden]').val();
     };
-    hcpServices.createhcp = function(){
-        window.location.href = "loadcreatepage";
-    };
+    PreAuthorizationServices.updatePreAuthorization = function () {
 
-//    hcpServices.createhcp = function () {
-//        window.location.href = "pla/core/hcp/create";
-//    };
+        var  hcpCode =this.hcpCode;
 
-    hcpServices.viewhcp =  function(){//activate deactive when click radio button
-        if (this.hcpSelected) {
-            if ('hcp' === this.hcpName) {
-               window.location.href = "/pla/core/hcp/loadcreatepage?hcpCode=" + this.hcpSelected +"&mode=view";
-           } else {
-                window.location.href = "/pla/core/hcp/loadcreatepage?hcpCode=" + this.hcpSelected + "&mode=view";
-
-            }
-        }
+      window.location.href = "/pla/core/hcp/viewupdatepage?hcpCode="+hcpCode +"&mode=edit";
     };
 
-    hcpServices.updatehcp = function(){
-        if(this.hcpSelected){
-            if ('hcp' === this.hcpName) {
-                window.location.href = "/pla/core/hcp/loadcreatepage?hcpCode=" + this.hcpSelected + "&mode=edit";
-            } else {
-                window.location.href = "/pla/core/hcp/loadcreatepage?hcpCode=" + this.hcpSelected +"&mode=edit";
-            }
-        }
-    };
-    hcpServices.reload = function(){
-        window.location.reload();
+    PreAuthorizationServices.viewPreAuthorization =  function(){//activate deactive when click radio button
+        var  hcpCode =this.hcpCode;
+
+        window.location.href = "/pla/core/hcp/viewupdatepage?hcpCode=" + hcpCode +"&mode=view";
+
+
     };
 
-    return hcpServices;
+
+
+
+    return PreAuthorizationServices;
 })();
