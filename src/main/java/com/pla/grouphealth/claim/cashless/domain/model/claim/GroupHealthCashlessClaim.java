@@ -23,6 +23,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -484,6 +485,30 @@ public class GroupHealthCashlessClaim extends AbstractAggregateRoot<String> {
             this.groupHealthCashlessClaimBankDetail = groupHealthCashlessClaimBankDetail;
         }
         return this;
+    }
+
+    public BigDecimal getTotalBilledAmount() {
+        BigDecimal totalBilledAmount = BigDecimal.ZERO;
+        GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = this.getGroupHealthCashlessClaimPolicyDetail();
+        if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)){
+            Set<GroupHealthCashlessClaimCoverageDetail> groupHealthCashlessClaimCoverageDetails = groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
+            if(isNotEmpty(groupHealthCashlessClaimCoverageDetails)){
+                totalBilledAmount = groupHealthCashlessClaimCoverageDetails.stream().map(GroupHealthCashlessClaimCoverageDetail::getTotalProbableClaimAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            }
+        }
+        return totalBilledAmount;
+    }
+
+    public BigDecimal getTotalApprovedAmount() {
+        BigDecimal totalApprovedAmount = BigDecimal.ZERO;
+        GroupHealthCashlessClaimPolicyDetail groupHealthCashlessClaimPolicyDetail = this.getGroupHealthCashlessClaimPolicyDetail();
+        if(isNotEmpty(groupHealthCashlessClaimPolicyDetail)) {
+            Set<GroupHealthCashlessClaimCoverageDetail> groupHealthCashlessClaimCoverageDetails = groupHealthCashlessClaimPolicyDetail.getCoverageDetails();
+            if(isNotEmpty(groupHealthCashlessClaimCoverageDetails)) {
+                totalApprovedAmount = groupHealthCashlessClaimCoverageDetails.stream().map(GroupHealthCashlessClaimCoverageDetail::getSumOfTotalApprovedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            }
+        }
+        return totalApprovedAmount;
     }
 
     private <T> T getInstance(Class<T> tClass) {

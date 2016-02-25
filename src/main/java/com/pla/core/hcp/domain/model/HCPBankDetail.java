@@ -17,18 +17,12 @@ import javax.persistence.Embeddable;
 @Immutable
 @Embeddable
 @EqualsAndHashCode
-
-
 public class HCPBankDetail {
 
     private String bankName;
-
     private String bankBranchCode;
-
     private String bankAccountType;
-
     private String bankAccountNumber;
-
     private String bankBranchSortCode;
 
 }

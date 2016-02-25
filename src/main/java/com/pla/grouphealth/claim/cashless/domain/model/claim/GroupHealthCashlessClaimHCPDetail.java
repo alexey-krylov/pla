@@ -2,6 +2,7 @@ package com.pla.grouphealth.claim.cashless.domain.model.claim;
 
 import com.pla.core.hcp.domain.model.HCP;
 import com.pla.core.hcp.domain.model.HCPAddress;
+import com.pla.core.hcp.domain.model.HCPBankDetail;
 import com.pla.core.hcp.domain.model.HCPCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class GroupHealthCashlessClaimHCPDetail {
     private HCPCode hcpCode;
     private String hcpName;
     private HCPAddress hcpAddress;
+    private GroupHealthCashlessClaimHCPBankDetail hcpBankDetail;
 
     public GroupHealthCashlessClaimHCPDetail updateWithHospitalizationEvent(String hospitalizationEvent) {
         this.hospitalizationEvent = hospitalizationEvent;
@@ -39,7 +41,13 @@ public class GroupHealthCashlessClaimHCPDetail {
             this.hcpCode = hcp.getHcpCode();
             this.hcpName = hcp.getHcpName();
             this.hcpAddress = hcp.getHcpAddress();
+            this.hcpBankDetail = contructGroupHealthCashlessClaimHCPDetail(hcp.getHcpBankDetail());
         }
         return this;
+    }
+
+    private GroupHealthCashlessClaimHCPBankDetail contructGroupHealthCashlessClaimHCPDetail(HCPBankDetail hcpBankDetail) {
+        GroupHealthCashlessClaimHCPBankDetail groupHealthCashlessClaimHCPBankDetail = isNotEmpty(this.hcpBankDetail) ? this.hcpBankDetail : new GroupHealthCashlessClaimHCPBankDetail();
+        return groupHealthCashlessClaimHCPBankDetail.updateWithDetails(hcpBankDetail);
     }
 }

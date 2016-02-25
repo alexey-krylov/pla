@@ -11,6 +11,7 @@ import com.pla.core.domain.model.plan.PlanCoverage;
 import com.pla.core.domain.model.plan.PlanCoverageBenefit;
 import com.pla.core.dto.CoverageDto;
 import com.pla.core.hcp.domain.model.HCP;
+import com.pla.core.hcp.domain.model.HCPCode;
 import com.pla.core.hcp.domain.model.HCPRate;
 import com.pla.core.hcp.domain.model.HCPServiceDetail;
 import com.pla.core.hcp.query.HCPFinder;
@@ -1303,7 +1304,7 @@ public class GroupHealthCashlessClaimService {
 
     private boolean checkIfAllClaimApproved(List<GroupHealthCashlessClaim> groupHealthCashlessClaims) {
         for(GroupHealthCashlessClaim claim  :  groupHealthCashlessClaims){
-            if(!claim.getStatus().equals(APPROVED) && !claim.getStatus().equals(CANCELLED) && !claim.getStatus().equals(REPUDIATED)  && !claim.getStatus().equals(AMENDED))
+            if(!claim.getStatus().equals(APPROVED) && !claim.getStatus().equals(CANCELLED) && !claim.getStatus().equals(REPUDIATED)  && !claim.getStatus().equals(AMENDED) && !claim.getStatus().equals(AWAITING_DISBURSEMENT)&& !claim.getStatus().equals(DISBURSED))
                 return Boolean.FALSE;
         }
         return Boolean.TRUE;
@@ -1344,11 +1345,46 @@ public class GroupHealthCashlessClaimService {
     }
 
     public GroupHealthCashlessClaimBatchDetailDto getDataForBatchView(String batchNumber) {
-        GroupHealthCashlessClaimBatchDetail groupHealthCashlessClaimBatchDetail = groupHealthCashlessClaimBatchDetailRepository.findOne(batchNumber);
+        GroupHealthCashlessClaimBatchDetailDto groupHealthCashlessClaimBatchDetailDto = new GroupHealthCashlessClaimBatchDetailDto();
+        /*GroupHealthCashlessClaimBatchDetail groupHealthCashlessClaimBatchDetail = groupHealthCashlessClaimBatchDetailRepository.findOne(batchNumber);
         GroupHealthCashlessClaimBatchDetailDto groupHealthCashlessClaimBatchDetailDto = new GroupHealthCashlessClaimBatchDetailDto();
         if(isNotEmpty(groupHealthCashlessClaimBatchDetail)){
             return groupHealthCashlessClaimBatchDetailDto.updateWithDetails(groupHealthCashlessClaimBatchDetail);
+        }*/
+        List<GroupHealthCashlessClaim> groupHealthCashlessClaims = groupHealthCashlessClaimRepository.findAllByBatchNumber(batchNumber);
+        notEmpty(groupHealthCashlessClaims, "No Claims found for batch having number - "+batchNumber);
+        GroupHealthCashlessClaim groupHealthCashlessClaim = groupHealthCashlessClaims.iterator().next();
+        GroupHealthCashlessClaimHCPDetail groupHealthCashlessClaimHCPDetail = groupHealthCashlessClaim.getGroupHealthCashlessClaimHCPDetail();
+        Set<HCPServiceDetail> serviceDetails = getHcpServiceDetails(groupHealthCashlessClaimHCPDetail.getHcpCode());
+        Map<String, BigDecimal> mapOfAgreedAmountForEachClaim = getAgreedAmountForEachClaimMap(groupHealthCashlessClaims, serviceDetails);
+        return groupHealthCashlessClaimBatchDetailDto
+                .updateWithBatchNumber(groupHealthCashlessClaim.getBatchNumber())
+                .updateWithBatchDate(groupHealthCashlessClaim.getClaimIntimationDate())
+                .updateWithBatchClosedOnDate(groupHealthCashlessClaim.getBatchClosedOnDate())
+                .updateWithListOfClaims(groupHealthCashlessClaims, mapOfAgreedAmountForEachClaim)
+                .updateWithHCPDetails(groupHealthCashlessClaimHCPDetail)
+                .updateWithAccountingDetails(groupHealthCashlessClaims, serviceDetails);
+    }
+
+    private Map<String, BigDecimal> getAgreedAmountForEachClaimMap(List<GroupHealthCashlessClaim> groupHealthCashlessClaims, Set<HCPServiceDetail> serviceDetails) {
+        return groupHealthCashlessClaims.stream().collect(Collectors.toMap(GroupHealthCashlessClaim::getGroupHealthCashlessClaimId, claim -> constructAgreedAmount(claim.getGroupHealthCashlessClaimDrugServices(), serviceDetails)));
+    }
+
+    private Set<HCPServiceDetail> getHcpServiceDetails(HCPCode hcpCode) {
+        notNull(hcpCode, "Agreed rate unable to calculate no hcp details found.");
+        HCPRate hcpRate = hcpRateRepository.findHCPRateByHCPCode(hcpCode.getHcpCode());
+        notNull(hcpRate, "Agreed rate unable to calculate no hcpRate details found for hcp : "+hcpCode.getHcpCode());
+        return hcpRate.getHcpServiceDetails();
+    }
+
+    private BigDecimal constructAgreedAmount(Set<GroupHealthCashlessClaimDrugService> groupHealthCashlessClaimDrugServices, Set<HCPServiceDetail> serviceDetails) {
+        BigDecimal sumOfAgreedAmountOfServicesOfClaim = BigDecimal.ZERO;
+        if(isNotEmpty(groupHealthCashlessClaimDrugServices)){
+            sumOfAgreedAmountOfServicesOfClaim = groupHealthCashlessClaimDrugServices.stream()
+                    .filter(groupHealthCashlessClaimDrugService -> GroupHealthCashlessClaimDrugService.Status.PROCESS.name().equals(groupHealthCashlessClaimDrugService.getStatus()))
+                    .map(groupHealthCashlessClaimDrugService -> groupHealthCashlessClaimDrugService.getAgreedAmountForTheService(serviceDetails))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
         }
-        return null;
+        return sumOfAgreedAmountOfServicesOfClaim;
     }
 }
