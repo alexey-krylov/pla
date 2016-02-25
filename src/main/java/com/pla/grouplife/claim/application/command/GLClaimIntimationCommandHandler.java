@@ -355,7 +355,7 @@ public class GLClaimIntimationCommandHandler {
         ClaimApproverPlanDto planDetail=returnGLClaimCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
-            glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getPlanSumAssured(),
+            glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getSumAssured(),
                     planDetail.getAdditionalAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount(),planDetail.getRecoveryOrAdditional(),planDetail.getRemarks());
         }
         List<ClaimApproverCoverageDetailDto> coverageDetails=returnGLClaimCommand.getClaimApprovalCoverageDetails();
@@ -412,7 +412,7 @@ public class GLClaimIntimationCommandHandler {
         ClaimApproverPlanDto planDetail=glClaimApprovalCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
-             glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getPlanSumAssured(),
+             glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getSumAssured(),
                     planDetail.getAdditionalAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount(),planDetail.getRecoveryOrAdditional(),planDetail.getRemarks());
         }
 
@@ -560,7 +560,7 @@ public class GLClaimIntimationCommandHandler {
         ClaimApproverPlanDto planDetail=rejectGLClaimCommand.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
-            glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getPlanSumAssured(),
+            glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getSumAssured(),
                     planDetail.getAdditionalAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount(),planDetail.getRecoveryOrAdditional(),planDetail.getRemarks());
         }
 
@@ -610,7 +610,7 @@ public class GLClaimIntimationCommandHandler {
         ClaimApproverPlanDto planDetail=command.getClaimApprovalPlanDetail();
         GLClaimApproverPlanDetail glClaimApproverPlanDetail=null;
         if(planDetail!=null){
-            glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getPlanSumAssured(),
+            glClaimApproverPlanDetail=new GLClaimApproverPlanDetail(planDetail.getPlanName(),planDetail.getSumAssured(),
                     planDetail.getAdditionalAmount(),planDetail.getApprovedAmount(),planDetail.getAmendedAmount(),planDetail.getRecoveryOrAdditional(),planDetail.getRemarks());
         }
 

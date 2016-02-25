@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class ClaimApproverPlanDto {
 
     private String  planName;
-    private BigDecimal planSumAssured;
+    private BigDecimal sumAssured;
     private BigDecimal additionalAmount;
     private BigDecimal approvedAmount;
     private BigDecimal  amendedAmount;

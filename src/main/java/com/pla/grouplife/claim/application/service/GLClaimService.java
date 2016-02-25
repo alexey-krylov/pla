@@ -409,7 +409,7 @@ public class GLClaimService implements Serializable{
         GLClaimApproverPlanDetail approverPlanDetail = underWriterApprovalDetail.getPlanDetail();
         if (approverPlanDetail != null) {
             planDetails.setPlanName(approverPlanDetail.getPlanName());
-            planDetails.setPlanSumAssured(approverPlanDetail.getPlanSumAssured());
+            planDetails.setSumAssured(approverPlanDetail.getPlanSumAssured());
             planDetails.setApprovedAmount(approverPlanDetail.getApprovedAmount());
             planDetails.setAmendedAmount(approverPlanDetail.getAmendedAmount());
             planDetails.setAdditionalAmount(approverPlanDetail.getAdditionalAmount());
@@ -486,7 +486,7 @@ public class GLClaimService implements Serializable{
              ClaimApproverPlanDto claimApprovalPlanDetail=new ClaimApproverPlanDto();
             if (approverPlanDetail != null) {
                 claimApprovalPlanDetail.setPlanName(approverPlanDetail.getPlanName());
-                claimApprovalPlanDetail.setPlanSumAssured(approverPlanDetail.getPlanSumAssured());
+                claimApprovalPlanDetail.setSumAssured(approverPlanDetail.getPlanSumAssured());
                 claimApprovalPlanDetail.setApprovedAmount(approverPlanDetail.getApprovedAmount());
                 claimApprovalPlanDetail.setAmendedAmount(approverPlanDetail.getAmendedAmount());
                 claimApprovalPlanDetail.setAdditionalAmount(approverPlanDetail.getAdditionalAmount());
