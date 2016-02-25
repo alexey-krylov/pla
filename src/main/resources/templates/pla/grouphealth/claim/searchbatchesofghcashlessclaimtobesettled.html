@@ -142,10 +142,10 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="col-lg-6">
-                                <span>List Of Group Health Cashless Claim</span>
+                                <span>Batch View</span>
                             </div>
                             <div class="col-lg-6" style="text-align: right">
-                                <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()">Amend </a>
+                                <a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled"  id="PreAuthorization-update"  onclick="searchPreAuthorizationModule.updatePreAuthorization()"> Batch View </a>
                                 <!--<a type="button" class="btn btn-default btn-sm btn-disabled"  disabled="disabled" onclick="searchPreAuthorizationModule.emailPolicy()">Email</a>-->
 
                             </div>
@@ -170,7 +170,7 @@
                             <th:block>
                                 <tr th:each="cashlessClaimresult : ${claimResult}">
                                     <td>
-                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.batchNumber}"/>
+                                        <input type="radio" name="ClaimId" th:value="${cashlessClaimresult.batchNumber}" th:attr="clientId=${cashlessClaimresult.hcpCode}"/>
                                     </td>
                                     <td th:text="${cashlessClaimresult.batchNumber}"></td>
                                     <td th:text="${cashlessClaimresult.hcpCode}"></td>

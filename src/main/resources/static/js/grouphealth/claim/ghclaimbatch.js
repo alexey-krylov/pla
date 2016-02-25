@@ -16,9 +16,10 @@
                     controller: 'createbatchCtrl',
                     resolve: {
 
-                        bankDetails: ['$q', '$http', function ($q, $http) {
+                        batchDetails: ['$q', '$http','getQueryParameter', function ($q, $http,getQueryParameter) {
+                            var batchNumber = getQueryParameter('batchNumber');
                             var deferred = $q.defer();
-                            $http.get('/pla/grouplife/claim/getAllBankNames').success(function (response, status, headers, config) {
+                            $http.get('/pla/grouphealth/claim/cashless/claim/getdataforbatchview?batchNumber='+ batchNumber ).success(function (response, status, headers, config) {
                                 deferred.resolve(response)
                             }).error(function (response, status, headers, config) {
                                 deferred.reject();
@@ -30,52 +31,53 @@
                     }
                 }
             )}]);
-    app.controller('createbatchCtrl', ['$scope','getQueryParameter','$http', 'bankDetails', function ($scope,getQueryParameter,$http, bankDetails) {
+    app.controller('createbatchCtrl', ['$scope','getQueryParameter','$http', 'batchDetails', function ($scope,getQueryParameter,$http, batchDetails) {
 
-        //$scope.mode=getQueryParameter('mode');
-        //$scope.hcpCode=getQueryParameter('hcpCode');
-        //
+        $scope.mode=getQueryParameter('mode');
+        $scope.hcpCode=getQueryParameter('hcpCode');
+
         //$scope.hcpStatus = hcpStatus;
         //
         //$scope.createOrUpdateHCPCommand={};
-        //
+      $scope.createUpdateCommand =batchDetails;
         //$scope.bankDetailsResponse=[];
         //$scope.bankDetailsResponse=bankDetails;
         //$scope.bankBranchDetails=[];
         //$scope.bankDetails={};
         //
-        //$scope.launchActivatedDate = function ($event) {
-        //    $event.preventDefault();
-        //    $event.stopPropagation();
-        //    $scope.submissionActivatedDate= true;
-        //};
-        //
-        //$scope.saveBatchDetail= function() {
-        //
-        //    $scope.hcpdata=$scope.createOrUpdateHCPCommand;
-        //    $scope.hcpdata.activatedOn = formatDate($scope.createOrUpdateHCPCommand.activatedOn);
-        //    $scope.hcpdata = JSON.stringify($scope.hcpdata);
-        //    console.log(JSON.stringify($scope.hcpdata ));
-        //    $http({
-        //        url : '/pla/core/hcp/createOrUpdateHCP',
-        //        method : 'POST',
-        //        data : $scope.hcpdata
-        //    })
-        //        .then(function(response) {
-        //            if(response.status=400){
-        //
-        //            }
-        //
-        //        },
-        //        function(response) {
-        //
-        //
-        //        });
-        //}
-        //
-        //
-        //
-        //
+        console.log(JSON.stringify($scope.createUpdateCommand));
+        $scope.launchActivatedDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.submissionActivatedDate= true;
+        };
+
+        $scope.saveBatchDetail= function() {
+
+            $scope.hcpdata=$scope.createOrUpdateHCPCommand;
+            $scope.hcpdata.activatedOn = formatDate($scope.createOrUpdateHCPCommand.activatedOn);
+            $scope.hcpdata = JSON.stringify($scope.hcpdata);
+            console.log(JSON.stringify($scope.hcpdata ));
+            $http({
+                url : '/pla/core/hcp/createOrUpdateHCP',
+                method : 'POST',
+                data : $scope.hcpdata
+            })
+                .then(function(response) {
+                    if(response.status=400){
+
+                    }
+
+                },
+                function(response) {
+
+
+                });
+        }
+
+
+
+
         //
         //$scope.$watch('createOrUpdateHCPCommand.bankName', function (newvalue, oldvalue) {
         //    if (newvalue) {
@@ -93,10 +95,10 @@
         //        $scope.createOrUpdateHCPCommand.bankBranchSortCode = newvalue;
         //    }
         //});
-        //$scope.back = function () {
-        //    window.location.reload();
-        //
-        //}
+        $scope.back = function () {
+            window.location.reload();
+
+        }
 
     }])
 })(angular);

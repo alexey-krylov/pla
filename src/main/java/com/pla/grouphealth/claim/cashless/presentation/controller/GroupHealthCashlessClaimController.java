@@ -774,6 +774,13 @@ public class GroupHealthCashlessClaimController {
         modelAndView.addObject("searchCriteria", new SearchClaimSettlementDetailDto());
         return modelAndView;
     }
+    @RequestMapping(value = "/batchview", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView batchView(@RequestParam String batchNumber,@RequestParam String hcpCode){
+        String userName = groupHealthCashlessClaimService.getLoggedInUsername();
+        ModelAndView modelAndView = new ModelAndView("pla/grouphealth/claim/ghclaimbatch");
+        return modelAndView;
+    }
     /*
 
         @RequestMapping (value= "/searchghcashlessclaimwhichcanbeamendedbycriteria" , method = RequestMethod.POST)
@@ -794,6 +801,8 @@ public class GroupHealthCashlessClaimController {
         String userName = preAuthorizationRequestService.getLoggedInUsername();
         return groupHealthCashlessClaimService.getDataForBatchView(batchNumber);
     }
+
+
 }
 
 

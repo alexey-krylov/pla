@@ -80,7 +80,7 @@
                         <accordion close-others="true">
                             <accordion-group is-open="accordionStatusDocuments.documents">
                                 <accordion-heading>
-                                    Batch <i class="pull-right glyphicon"
+                                    Batch Details <i class="pull-right glyphicon"
                                                      ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
                                                             'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
                                 </accordion-heading>
@@ -109,8 +109,6 @@
                                                        type="text"
                                                        class="form-control input-md"
                                                         />
-
-
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -134,7 +132,18 @@
                                         </div>
 
                                     </div>
-
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                                    <accordion close-others="true">
+                                        <accordion-group is-open="accordionStatusDocuments.documents">
+                                            <accordion-heading>
+                                               Claim Details <i class="pull-right glyphicon"
+                                                         ng-class="{'glyphicon-chevron-down': accordionStatusDocuments.documents,
+                                                            'glyphicon-chevron-right': !accordionStatusDocuments.documents}"></i>
+                                            </accordion-heading>
+                                            <div class="bs-callout  bs-callout-info" style="overflow:auto;height:240px;"
+                                                 disable-all-fields="isViewMode">
 
                                     <div class="row">
                                         <table class="table table-bordered table-hover">
@@ -148,12 +157,12 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr ng-repeat="pla in items">
-                                                <td>{{pla.assuredNumber}}</td>
-                                                <td>{{pla.assuredFirst}}</td>
-                                                <td>{{pla.assuredNumber}}</td>
-                                                <td>{{pla.assuredFirst}}</td>
-                                                <td>{{pla.assuredFirst}}</td>
+                                            <tr ng-repeat="pla in createUpdateCommand.batchClaimDetails">
+                                                <td>{{pla.claimNumber}}</td>
+                                                <td>{{pla.assuredName}}</td>
+                                                <td>{{pla.billedAmount}}</td>
+                                                <td>{{pla.agreedRate}}</td>
+                                                <td>{{pla.approvedAmount}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
