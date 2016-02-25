@@ -42,13 +42,22 @@
                                                                       deferred.reject();
                                                                   });
                                                                   return deferred.promise;
-                                                              }]
+                                                              }],
+                        bankDetails: ['$q', '$http', function ($q, $http) {
+                            var deferred = $q.defer();
+                            $http.get('/pla/grouplife/claim/getAllBankNames').success(function (response, status, headers, config) {
+                                deferred.resolve(response)
+                            }).error(function (response, status, headers, config) {
+                                deferred.reject();
+                            });
+                            return deferred.promise;
+                        }]
 
 
                     }
                 }
             )}]);
-    app.controller('createHcpCtrl', ['$scope','getQueryParameter','$http', 'provinces', 'hcpStatus', 'hcpCategories', function ($scope,getQueryParameter,$http, provinces,hcpStatus, hcpCategories) {
+    app.controller('createHcpCtrl', ['$scope','getQueryParameter','$http', 'provinces', 'hcpStatus', 'hcpCategories','bankDetails', function ($scope,getQueryParameter,$http, provinces,hcpStatus, hcpCategories,bankDetails) {
 
         $scope.mode=getQueryParameter('mode');
         $scope.hcpCode=getQueryParameter('hcpCode');
@@ -56,19 +65,25 @@
         $scope.hcpStatus = hcpStatus;
         $scope.hcpCategories = hcpCategories;
         $scope.town=[];
-       $scope.createOrUpdateHCPCommand={};
+        $scope.createOrUpdateHCPCommand={};
         $scope.provinces = provinces;
-         $scope.launchActivatedDate = function ($event) {
+        $scope.bankDetailsResponse=[];
+        $scope.bankDetailsResponse=bankDetails;
+        $scope.bankBranchDetails=[];
+        $scope.bankDetails={};
+
+        $scope.launchActivatedDate = function ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                     $scope.submissionActivatedDate= true;
                 };
 
-       $scope.savehcpDetail= function() {
+    $scope.savehcpDetail= function() {
+
        $scope.hcpdata=$scope.createOrUpdateHCPCommand;
        $scope.hcpdata.activatedOn = formatDate($scope.createOrUpdateHCPCommand.activatedOn);
        $scope.hcpdata = JSON.stringify($scope.hcpdata);
-       console.log( $scope.hcpdata );
+       console.log(JSON.stringify($scope.hcpdata ));
        $http({
         url : '/pla/core/hcp/createOrUpdateHCP',
         method : 'POST',
@@ -107,6 +122,22 @@
 
         });
 
+        $scope.$watch('createOrUpdateHCPCommand.bankName', function (newvalue, oldvalue) {
+            if (newvalue) {
+                var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
+                if (bankCode) {
+                    $http.get('/pla/grouplife/claim/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
+                        $scope.bankBranchDetails = response;
+                    }).error(function (response, status, headers, config) {
+                    });
+                }
+            }
+        });
+        $scope.$watch('createOrUpdateHCPCommand.bankBranchCode', function (newvalue, oldvalue) {
+            if (newvalue) {
+                $scope.createOrUpdateHCPCommand.bankBranchSortCode = newvalue;
+            }
+        });
         $scope.back = function () {
        window.location.reload();
 

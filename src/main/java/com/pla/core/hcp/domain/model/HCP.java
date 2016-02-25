@@ -30,6 +30,8 @@ public class HCP implements ICrudEntity {
     private HCPContactDetail hcpContactDetail;
     @Embedded
     private HCPContactPersonDetail hcpContactPersonDetail;
+    @Embedded
+    private  HCPBankDetail hcpBankDetail;
 
     public HCP updateWithHCPCode(HCPCode hcpCode){
         this.hcpCode = hcpCode;
@@ -68,6 +70,10 @@ public class HCP implements ICrudEntity {
     public HCP updateWithHcpContactPersonDetail( String contactPersonDetail, String contactPersonMobile, String contactPersonWorkPhoneNumber, String contactPersonEmailId){
         this.hcpContactPersonDetail = new HCPContactPersonDetail(contactPersonDetail, contactPersonMobile, contactPersonWorkPhoneNumber, contactPersonEmailId);
         return this;
+    }
+    public  HCP updateWithHcpBankDetail(String bankName, String bankBranchCode, String bankAccountType, String bankAccountNumber, String bankBranchSortCode){
+        this.hcpBankDetail = new HCPBankDetail(bankName,bankBranchCode,bankAccountType,bankAccountNumber,bankBranchSortCode);
+      return  this;
     }
 
 }

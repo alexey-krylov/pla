@@ -297,6 +297,73 @@
 
 
 
+                                Bank  Details
+                            <div class="bs-callout  bs-callout-info" style="overflow:auto;height:250px;">
+
+                                <div class = "row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label class="control-label">Bank Name</label>
+                                            <select class="form-control input-sm" name="bankName" ng-options="bankDetail.bankName as bankDetail.bankName for bankDetail in bankDetailsResponse"   ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                    ng-model="createOrUpdateHCPCommand.bankName"  ng-change="clearBankBranchName()" >
+                                            </select>
+                                            <div class="error" ng-messages="step1.bankName.$error" ng-if="step1.bankName.$dirty">
+                                                <small class="error" ng-message="required">Please specify Bank Name.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label class="control-label">Bank Branch Name</label>
+                                            <select class="form-control input-sm" name="branchname"  ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                    ng-options="bankBranchDetail.sortCode as bankBranchDetail.branchName for bankBranchDetail in bankBranchDetails"
+                                                    ng-model="createOrUpdateHCPCommand.bankBranchCode" ng-selected="bankBranchDetail.branchName" >
+                                            </select>
+                                            <div class="error" ng-messages="step1.branchname.$error" ng-if="step1.branchname.$dirty">
+                                                <small class="error" ng-message="required">Please specify Bank Branch Name.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Bank Account Type</label>
+                                            <select
+                                                    ng-model="createOrUpdateHCPCommand.bankAccountType"
+                                                    name="accountType" ng-disabled="mode=='new'||mode=='isViewMode'"
+                                                    class="form-control input-md">
+
+                                                <option value="Saving">Saving</option>
+                                                <option value="Current">Current</option>
+                                            </select>
+                                            <div class="error" ng-messages="step1.accountType.$error" ng-if="step1.accountType.$dirty">
+                                                <small class="error" ng-message="required">Please specify Bank Account Type.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group  ">
+                                            <label class="control-label">Bank Account Number</label>
+                                            <input  type="text"
+                                                    name="sumAssured"
+                                                    class="form-control input-md"
+                                                    ng-model="createOrUpdateHCPCommand.bankAccountNumber"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <div class="col-md-4">
+                                        <label class="control-label">Bank Branch Sort Code</label>
+                                        <input type="text" class="form-control input-sm" readonly="true" ng-model="createOrUpdateHCPCommand.bankBranchSortCode" ng-disabled="mode=='view'" name="bankBranchSortCode"  ng-maxlength="20"
+                                               ng-required="true" />
+                                    </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
                     <div class="row">
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" ng-click="back()">Cancel</button>

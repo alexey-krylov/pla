@@ -61,7 +61,8 @@ public class HCPService {
                 .updateWithHCPName(createOrUpdateHCPCommand.getHcpName())
                 .updateWithHcpStatus(createOrUpdateHCPCommand.getHcpStatus())
                 .updateWithHcpContactDetail(createOrUpdateHCPCommand.getEmailId(), createOrUpdateHCPCommand.getWorkPhoneNumber())
-                .updateWithHcpContactPersonDetail(createOrUpdateHCPCommand.getContactPersonDetail(), createOrUpdateHCPCommand.getContactPersonMobile(), createOrUpdateHCPCommand.getContactPersonWorkPhoneNumber(), createOrUpdateHCPCommand.getContactPersonEmailId());
+                .updateWithHcpContactPersonDetail(createOrUpdateHCPCommand.getContactPersonDetail(), createOrUpdateHCPCommand.getContactPersonMobile(), createOrUpdateHCPCommand.getContactPersonWorkPhoneNumber(), createOrUpdateHCPCommand.getContactPersonEmailId())
+                .updateWithHcpBankDetail(createOrUpdateHCPCommand.getBankName(),createOrUpdateHCPCommand.getBankBranchCode(),createOrUpdateHCPCommand.getBankAccountType(),createOrUpdateHCPCommand.getBankAccountNumber(),createOrUpdateHCPCommand.getBankBranchSortCode());
         return hcpRepository.saveAndFlush(hcp);
     }
 

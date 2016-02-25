@@ -56,6 +56,21 @@ public class CreateOrUpdateHCPCommand {
     @NotNull(message = "{contactPersonEmailId cannot be null}")
     @NotEmpty(message = "{contactPersonEmailId cannot be null}")
     private String contactPersonEmailId;
+    @NotNull(message = "{bankName cannot be null}")
+    @NotEmpty(message = "{bankName cannot be null}")
+    private String bankName;
+    @NotNull(message = "{bankBranchCode cannot be null}")
+    @NotEmpty(message = "{bankBranchCode cannot be null}")
+    private String bankBranchCode;
+    @NotNull(message = "{bankAccountType cannot be null}")
+    @NotEmpty(message = "{bankAccountType cannot be null}")
+    private String bankAccountType;
+    @NotNull(message = "{bankAccountNumber cannot be null}")
+    @NotEmpty(message = "{bankAccountNumber cannot be null}")
+    private String bankAccountNumber;
+    @NotNull(message = "{bankBranchSortCode cannot be null}")
+    @NotEmpty(message = "{bankBranchSortCode cannot be null}")
+    private String bankBranchSortCode;
 
     public static CreateOrUpdateHCPCommand setPropertiesFromHCPEntity(HCP hcp) {
         CreateOrUpdateHCPCommand createOrUpdateHCPCommand = new CreateOrUpdateHCPCommand();
@@ -75,6 +90,11 @@ public class CreateOrUpdateHCPCommand {
         createOrUpdateHCPCommand.contactPersonMobile = hcp.getHcpContactPersonDetail() != null ? hcp.getHcpContactPersonDetail().getContactPersonMobile() : null;
         createOrUpdateHCPCommand.contactPersonWorkPhoneNumber = hcp.getHcpContactPersonDetail() != null ? hcp.getHcpContactPersonDetail().getContactPersonWorkPhoneNumber() : null;
         createOrUpdateHCPCommand.contactPersonEmailId = hcp.getHcpContactPersonDetail() != null ? hcp.getHcpContactPersonDetail().getContactPersonEmailId() : null;
+        createOrUpdateHCPCommand.bankAccountNumber = hcp.getHcpBankDetail() != null ? hcp.getHcpBankDetail().getBankAccountNumber():null;
+        createOrUpdateHCPCommand.bankAccountType = hcp.getHcpBankDetail() != null ? hcp.getHcpBankDetail().getBankAccountType():null;
+        createOrUpdateHCPCommand.bankBranchCode = hcp .getHcpBankDetail()!= null? hcp.getHcpBankDetail().getBankBranchCode():null;
+        createOrUpdateHCPCommand.bankBranchSortCode =hcp.getHcpBankDetail()!=null ? hcp.getHcpBankDetail().getBankBranchSortCode():null;
+        createOrUpdateHCPCommand.bankName = hcp.getHcpBankDetail() !=null ? hcp.getHcpBankDetail().getBankName():null;
         return createOrUpdateHCPCommand;
     }
 }
