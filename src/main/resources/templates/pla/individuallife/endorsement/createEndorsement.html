@@ -130,25 +130,11 @@
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Endrosement Type</label>
-                                    <select class="form-control input-sm" ng-disabled="mode=='new'||mode=='view'||endorsementRequestNumber" name="endrosementType" ng-model="policy.endrosementType" ng-required="true" ng-change="clearData()">
-                                        <option value="">--- Select Endrosement Type -- </option>
-                                        <option value="ASSURED_NAME_CHANGE">Correction of Name- Life Assured</option>
-                                        <option value="POLICYHOLDER_NAME_CHANGE">Correction of Name- Policyholder</option>
-                                        <option value="POLICYHOLDER_GENDER_CHANGE">Correction of Gender- Policyholder</option>
-                                        <option value="ASSURED_GENDER_CHANGE">Correction of Gender- Life Assured</option>
-                                        <option value="ASSURED_DOB_CHANGE">Correction of DoB- Life Assured</option>
-                                        <option value="POLICYHOLDER_DOB_CHANGE">Correction of DoB- Policy Holder</option>
-                                        <option value="POLICYHOLDER_NRC_CHANGE">Correction of NRC- Policy Holder</option>
-                                        <option value="ASSURED_NRC_CHANGE">Correction of NRC- Life Assured</option>
-                                        <option value="ASSURED_CONTACT_DETAILS_CHANGE">Change of Contact Details- Life Assured</option>
-                                        <option value="POLICYHOLDER_CONTACT_DETAILS_CHANGE">Change of Contact Details- Policyholder</option>
-                                        <option value="changeSumAssured">Change in Sum Assured</option>
-                                        <option value="BENEFICIARY_DETAILS_CHANGE">Add/Change/Delete Beneficiary</option>
-                                        <option value="AGENT_DETAILS_CHANGE">Add/Change/Delete Agent</option>
-                                        <option value="PAYMENT_MODE_CHANGE">Change Payment Mode</option>
-                                        <option value="premiumAdjustment">Premium Adjustment</option>
-                                    </select>
 
+                                    <select class="form-control input-sm" name="endrosementType" ng-disabled="mode=='new'||mode=='view'||endorsementRequestNumber" ng-options="endorsementType.code as endorsementType.description for endorsementType in endorsementTypes"
+                                            ng-change="clearData()" ng-model="policy.endrosementType" ng-selected="endorsementType.description" >
+                                        <option value="">--- Select Endrosement Type -- </option>
+                                    </select>
                                     <div class="error" ng-messages="step1.endrosementType.$error" ng-if="step1.endrosementType.$dirty">
                                         <small ng-message="required">Please select Endrosement Type</small>
                                     </div>
@@ -1067,7 +1053,7 @@
                             </accordion-group>
                         </accordion>
 
-                        <accordion ng-if="policy.endrosementType== 'changeSumAssured'">
+                        <accordion ng-if="policy.endrosementType== 'SUM_ASSURED_CHANGE'">
                             <accordion-group ng-form="contactForm" is-open="true">
                                 <accordion-heading>
                                     Change Sum Assured-Plan <i class="pull-right glyphicon"

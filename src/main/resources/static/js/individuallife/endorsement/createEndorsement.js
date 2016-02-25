@@ -574,6 +574,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             }
         };
         $scope.ilEndrosementDetilsCopy={};
+        $scope.endorsementTypes=[];
         $scope.searchPolicyNumber=function(){
             if($scope.policy.policyNumber){
                 $http.get('/pla/individuallife/endorsement/searchpolicy/' + $scope.policy.policyNumber)
@@ -590,6 +591,8 @@ app.config(["$routeProvider", function ($routeProvider) {
                         console.log(JSON.stringify($scope.ilEndrosementDetils));
                         $scope.policy.policyHolderName=$scope.ilEndrosementDetils.policyHolder.firstName;
                         $scope.policy.endrosmentDate=$scope.ilEndrosementDetils.policyHolder.dateOfBirth;
+                        $scope.endorsementTypes=$scope.ilEndrosementDetils.endorsementTypes;
+
                     }).error(function (response, status, headers, config) {
                         $scope.serverError = true;
                         $scope.serverErrMsg = response.message;
@@ -646,7 +649,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'AGENT_DETAILS_CHANGE' && $scope.ilEndrosementDetils.agentCommissionDetailsNew == null){
                 $scope.ilEndrosementDetils.agentCommissionDetailsNew=[];
                 angular.copy($scope.ilEndrosementDetils.agentCommissionDetails,$scope.ilEndrosementDetils.agentCommissionDetailsNew);
-            }else if($scope.policy.endrosementType == 'changeSumAssured' && $scope.ilEndrosementDetils.proposalPlanDetailNew == null){
+            }else if($scope.policy.endrosementType == 'SUM_ASSURED_CHANGE' && $scope.ilEndrosementDetils.proposalPlanDetailNew == null){
                 $scope.ilEndrosementDetils.proposalPlanDetailNew=[];
                 angular.copy($scope.ilEndrosementDetils.proposalPlanDetail,$scope.ilEndrosementDetils.proposalPlanDetailNew);
                 $scope.ilEndrosementDetils.proposalPlanDetailNew.riderDetails=[];
@@ -658,7 +661,7 @@ app.config(["$routeProvider", function ($routeProvider) {
             }else if($scope.policy.endrosementType == 'POLICYHOLDER_DOB_CHANGE'){
                 $scope.earlierAgeCalculationForPolicyHolder();
                 $scope.planSetUp();
-            }else if($scope.policy.endrosementType == 'changeSumAssured'){
+            }else if($scope.policy.endrosementType == 'SUM_ASSURED_CHANGE'){
                 $scope.planSetUp();
             }
         }
