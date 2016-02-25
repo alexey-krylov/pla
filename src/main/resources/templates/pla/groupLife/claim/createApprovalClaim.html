@@ -147,7 +147,7 @@
             </ul>
             <div class="actions">
                 <span style="font-weight: bolder;margin-right: 15px;color: #999">Claim ID: <span
-                        style="font-size: 13px;color: #3a87ad;">{{claimId}}<span
+                        style="font-size: 13px;color: #3a87ad;">{{claimNumber}}<span
                         ng-show="versionNumber &amp;&amp; versionNumber!=0">/{{versionNumber}}</span></span></span>
                 <button type="button" class="btn btn-default btn-prev" disabled="disabled"><span
                         class="glyphicon glyphicon-arrow-left"></span>Prev
@@ -176,10 +176,10 @@
                                                 <tr>
                                                     <th >Details</th>
                                                     <th >Sum Assured</th>
-                                                    <th>Approved Amount</th>
-                                                    <th ng-if="rcvCriteria == 'amendment' ">Amount to be recovered</th>
-                                                    <th ng-if="rcvCriteria == 'amendment' ">Additional Approved Amount</th>
-                                                    <th ng-if="rcvCriteria == 'amendment' ">Remarks</th>
+                                                    <!--<th>Approved Amount</th>-->
+                                                    <!--<th ng-if="rcvCriteria == 'amendment' ">Amount to be recovered</th>-->
+                                                    <!--<th ng-if="rcvCriteria == 'amendment' ">Additional Approved Amount</th>-->
+                                                    <!--<th ng-if="rcvCriteria == 'amendment' ">Remarks</th>-->
                                                 </tr>
                                                 </thead>
                                                 <tbody >
@@ -187,20 +187,20 @@
                                                     <td >{{claimApprovalPlanDetail.planName}} </td>
                                                     <td >{{claimApprovalPlanDetail.sumAssured}} </td>
                                                     <!--<td >{{claimApprovalPlanDetail.approvedAmount}} </td>-->
-                                                    <td>
-                                                        <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.approvedAmount" value="{{claimApprovalPlanDetail.approvedAmount}}" />
-                                                    </td>
-                                                    <td ng-if="rcvCriteria == 'amendment' ">
-                                                        <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.amendedAmount" value="{{claimApprovalPlanDetail.amendedAmount}}" />
-                                                    </td>
-                                                    <td ng-if="rcvCriteria == 'amendment' ">
-                                                        <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.additionalAmount" value="{{claimApprovalPlanDetail.additionalAmount}}" />
-                                                    </td>
-                                                    <td ng-if="rcvCriteria =='amendment'">
-                                                        <textarea rows="4" cols="50"
-                                                                  name="comments"
-                                                                  ng-model="claimApprovalPlanDetail.remarks" />
-                                                    </td>
+                                                    <!--<td>-->
+                                                        <!--<input type="text" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-model="claimApprovalPlanDetail.approvedAmount" value="{{claimApprovalPlanDetail.approvedAmount}}" />-->
+                                                    <!--</td>-->
+                                                    <!--<td ng-if="rcvCriteria == 'amendment' ">-->
+                                                        <!--<input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.amendedAmount" value="{{claimApprovalPlanDetail.amendedAmount}}" />-->
+                                                    <!--</td>-->
+                                                    <!--<td ng-if="rcvCriteria == 'amendment' ">-->
+                                                        <!--<input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="claimApprovalPlanDetail.additionalAmount" value="{{claimApprovalPlanDetail.additionalAmount}}" />-->
+                                                    <!--</td>-->
+                                                    <!--<td ng-if="rcvCriteria =='amendment'">-->
+                                                        <!--<textarea rows="4" cols="50"-->
+                                                                  <!--name="comments"-->
+                                                                  <!--ng-model="claimApprovalPlanDetail.remarks" />-->
+                                                    <!--</td>-->
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -227,10 +227,10 @@
                                                <td >{{coverage.coverageName}} </td>
                                                <td >{{coverage.sumAssured}} </td>
                                                <td>
-                                                   <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="coverage.approvedAmount" value="{{coverage.approvedAmount}}" />
+                                                   <input type="string" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-init="totalApprovedAmountCalculation()" ng-blur="totalApprovedAmountCalculation()" ng-change="totalApprovedAmountCalculation()" ng-model="coverage.approvedAmount" value="{{coverage.approvedAmount}}" />
                                                </td>
                                                <td ng-if="rcvCriteria == 'amendment' ">
-                                                   <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="coverage.amendedAmount" value="{{coverage.amendedAmount}}" />
+                                                   <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag"  ng-model="coverage.amendedAmount" value="{{coverage.amendedAmount}}" />
                                                </td>
                                                <td ng-if="rcvCriteria == 'amendment' ">
                                                    <input type="number" ng-disabled="mode=='new'||mode=='view'" contenteditable="updateFlag" ng-model="coverage.additionalAmount" value="{{coverage.additionalAmount}}" />
@@ -239,6 +239,19 @@
                                                    <textarea rows="4" cols="50"
                                                              name="comments"
                                                              ng-model="coverage.remarks" />
+                                               </td>
+                                           </tr>
+                                           <tr>
+                                               <td></td>
+                                               <td></td>
+                                               <td>
+                                                   <input type="text" ng-disabled="true" contenteditable="updateFlag" placeholder="Total Approved Amount"  ng-model="comments.totalApprovedAmount" value="{{comments.totalApprovedAmount}}" />
+                                               </td>
+                                               <td ng-if="rcvCriteria == 'amendment' ">
+                                               </td>
+                                               <td ng-if="rcvCriteria == 'amendment' ">
+                                               </td>
+                                               <td ng-if="rcvCriteria == 'amendment' ">
                                                </td>
                                            </tr>
                                            </tbody>
@@ -281,7 +294,7 @@
                                                 <label class="control-label">Comments</label>
                                                 <textarea rows="4" cols="50"
                                                           name="comments"
-                                                          ng-model="comments.comment" />
+                                                           ng-model="comments.comment" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -335,7 +348,7 @@
                                     <button type="button" class="btn btn-default btn-sm" style="float: right" ng-click="approveClaim()">Approve</button>
                                     <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="rejectClaim()" ng-disabled="!comments.comment">Reject</button>
                                     <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="returnClaim()" ng-disabled="!comments.comment">Return</button>
-                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-disabled="!comments.comment">Refer to Senior Underwriter</button>
+                                    <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-click="claimReferToSeniorUnderWriter()" ng-if="underWritingLevelOneStatus" ng-disabled="!comments.comment">Refer to Senior Underwriter</button>
                                     <button type="button" class="btn btn-default btn-sm" style="float: right;margin-right: 10px;" ng-disabled="!comments.comment">Hold</button>
                                 </div>
                             </div>

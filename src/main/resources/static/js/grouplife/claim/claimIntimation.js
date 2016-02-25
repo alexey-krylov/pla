@@ -423,6 +423,22 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     $scope.bankDetails=response.bankDetails;
                     $scope.assuredDetails=response.claimAssuredDetail;
                     $scope.coverageList=response.coverageDetails;
+                    $scope.underWritingLevelOneStatus = false;
+                    $scope.underWritingLevelTwoStatus = false;
+
+                    if (response.routingLevel != null) {
+                        if (response.routingLevel == 'UnderWriting level 1') {
+                            $scope.underWritingLevelOneStatus = true;
+                        }
+                        else if (response.routingLevel == 'UnderWriting level 2') {
+                            //$scope.underWritingLevelTwoStatus = true;
+                            $scope.underWritingLevelOneStatus = false;
+                        }
+                        else {
+                            $scope.underWritingLevelOneStatus = false;
+                            $scope.underWritingLevelTwoStatus = false;
+                        }
+                    }
 
                     $http.get("/pla/grouplife/claim/getmandatorydocuments/" + $scope.claimId)
                         .success(function (response) {
@@ -474,8 +490,13 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                         console.log('**** Test');
                         console.log(JSON.stringify($scope.approvalCommentList));
                     }
+                    if(response.approvalDetails !=null && response.approvalDetails.totalApprovedAmount != null){
+                        $scope.comments.totalApprovedAmount=response.approvalDetails.totalApprovedAmount;
+                        console.log(JSON.stringify($scope.approvalDetails.totalApprovedAmount));
+                    }
                 }).error(function (response, status, headers, config) {
                 });
+
 
             }
 
@@ -923,6 +944,27 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 }*/
             };
 
+            $scope.totalApprovedAmountCalculation=function(){
+                var result=0;
+                for (i in $scope.claimApprovalCoverageDetails) {
+                    if($scope.claimApprovalCoverageDetails[i].approvedAmount){
+                        result = parseFloat(result) + parseFloat($scope.claimApprovalCoverageDetails[i].approvedAmount);
+                    }else{
+                        result = parseFloat(result);
+                    }
+                    //result = parseFloat(result) + parseFloat($scope.claimApprovalCoverageDetails[i].approvedAmount);
+                }
+
+                /*for(var i=0;i< $scope.claimApprovalCoverageDetails.length;i++){
+                    if($scope.claimApprovalCoverageDetails[i].approvedAmount != null){
+                        result=parseFloat($scope.claimApprovalCoverageDetails[i].approvedAmount)+parseFloat(result);
+                    }
+
+                }*/
+                //$scope.comments.totalApprovedAmount=parseFloat($scope.claimApprovalPlanDetail.approvedAmount);
+                $scope.comments.totalApprovedAmount=parseFloat(result);
+            }
+
             $scope.approveClaim=function(){
                 var requestForApproveClaim={
                     "claimApprovalPlanDetail":$scope.claimApprovalPlanDetail,
@@ -931,6 +973,7 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                     "referredToReassureOn":$scope.comments.reAssuredOn,
                     "responseReceivedOn":$scope.comments.reponseReceivedOn,
                     "claimId":$scope.claimId,
+                    "totalApprovedAmount":$scope.comments.totalApprovedAmount,
                     "criteria":$scope.rcvCriteria
                 }
                 console.log('Approval Request *********');
@@ -973,6 +1016,25 @@ App.controller('ClaimIntimationController', ['$scope', '$http','$window', '$uplo
                 console.log('Return Request *********');
                 console.log(JSON.stringify(requestForReturnClaim));
                 $http.post('/pla/grouplife/claim/return',requestForReturnClaim).success(function (response, status, headers, config) {
+                    window.location.href ="/pla/grouplife/claim/openapprovalclaim";
+
+                }).error(function (response, status, headers, config) {
+                });
+            }
+
+            $scope.claimReferToSeniorUnderWriter=function(){
+                var requestForReferToSeniorUnderWriterClaim={
+                    "claimApprovalPlanDetail":$scope.claimApprovalPlanDetail,
+                    "claimApprovalCoverageDetails":$scope.claimApprovalCoverageDetails,
+                    "comments":$scope.comments.comment,
+                    "referredToReassureOn":$scope.comments.reAssuredOn,
+                    "responseReceivedOn":$scope.comments.reponseReceivedOn,
+                    "claimId":$scope.claimId,
+                    "criteria":$scope.rcvCriteria
+                }
+                console.log('Return Request *********');
+                console.log(JSON.stringify(requestForReferToSeniorUnderWriterClaim));
+                $http.post('/pla/grouplife/claim/routetonextlevel',requestForReferToSeniorUnderWriterClaim).success(function (response, status, headers, config) {
                     window.location.href ="/pla/grouplife/claim/openapprovalclaim";
 
                 }).error(function (response, status, headers, config) {

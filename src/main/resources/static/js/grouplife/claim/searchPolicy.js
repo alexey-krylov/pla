@@ -81,13 +81,11 @@ var viewPolicyModule = (function () {
         var claimId = this.selectedItem;
         var claimStatus=this.status;
         window.location.href ="/pla/grouplife/claim/viewapprovalclaim/?claimId=" + claimId + "&mode=edit";
-        //window.location.href = "/pla/individuallife/proposal/viewApprovalProposal?proposalId=" + proposalId + "&status=return" + "&mode=edit";
     }
     services.viewClaimSettlement=function(){
         var claimId = this.selectedItem;
         var claimStatus=this.status;
         window.location.href ="/pla/grouplife/claim/viewsettlement/?claimId=" + claimId + "&mode=edit";
-        //window.location.href = "/pla/individuallife/proposal/viewApprovalProposal?proposalId=" + proposalId + "&status=return" + "&mode=edit";
     }
     services.viewAmendment=function(){
         var claimId = this.selectedItem;
@@ -117,15 +115,10 @@ var viewPolicyModule = (function () {
                 }
             }
         });
-
-        //window.location.href ="/pla/grouplife/claim/getclaimforreopen/"+claimId;
-
-        //$('#testModal').modal('toggle');
-
     }
 
     return services;
-    var closeModal=function(value,flag){
+    var closeModal=function(){
         alert('closeMOdal');
         window.location.href ="/pla/grouplife/claim/reopenclaim/";
     }
