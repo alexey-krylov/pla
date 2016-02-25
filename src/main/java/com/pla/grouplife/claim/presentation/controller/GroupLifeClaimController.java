@@ -237,15 +237,7 @@ public class GroupLifeClaimController {
             return new ResponseEntity(Result.failure(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-/*
-    @RequestMapping(value = "/getclaimsforunderwriterone", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
-    public List<GLClaimDataDto> getRoutedClaimForLevel1(@RequestBody SearchClaimDto searchClaimDto) {
-        return glClaimService.getApprovedClaimDetailLevelOne(searchClaimDto, new String[]{"ROUTED"});
 
-    }
-   */
     @RequestMapping(value = "/searchclaimforapproval", method = RequestMethod.POST)
     public ModelAndView getClaimDetailForApproval(SearchClaimIntimationDto searchClaimIntimationDto) {
         ModelAndView modelAndView = new ModelAndView();
@@ -342,20 +334,6 @@ public class GroupLifeClaimController {
 
     }
 
-
-/*
-
- @RequestMapping(value = "/searchclaimforsettlement", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(httpMethod = "GET", value = "To list CLAIMS which are routed for approval")
-    public List<GLClaimDataDto> getApprovedClaim(@RequestBody SearchClaimIntimationDto searchClaimIntimationDto) {
-         return glClaimService.getClaimDetailForSettlement(searchClaimIntimationDto, new String[]{"APPROVED"});
-
-    }
-
- */
-
-
     @RequestMapping(value = "/createclaimsettlement", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Result> createClaimSettlement(@RequestBody GLClaimSettlementCommand glClaimSettlementCommand, BindingResult bindingResult, HttpServletRequest request) {
@@ -392,18 +370,7 @@ public class GroupLifeClaimController {
         return glClaimService.getAllApprovedOrPaidClaimDetail();
 
     }
-/*
-@RequestMapping(value = "/searchclaimforamendment", method = RequestMethod.POST)
-    public ModelAndView getAmendmentClaimDetail(SearchClaimIntimationDto searchClaimIntimationDto) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pla/groupLife/claim/viewApprovalClaimIntimation");
-        modelAndView.addObject("searchResult",glClaimService.getApprovedClaimDetail(searchClaimIntimationDto, new String[]{"APPROVED","PAID_DISBURSED"}));
-        modelAndView.addObject("searchCriteria", searchClaimIntimationDto);
-        return modelAndView;
 
-    }
-
- */
 
     @RequestMapping(value = "/searchclaimforamendment", method = RequestMethod.POST)
     @ResponseBody
@@ -694,31 +661,6 @@ public class GroupLifeClaimController {
         return modelAndView;
 
     }
-
-
-    /*@RequestMapping(value = "/getclaimforreopen/{claimId}", method = RequestMethod.GET)
-    public ModelAndView getClaimReopenDetail(@PathVariable("claimId")String claimId, HttpServletRequest request) {
-        UserDetails userDetails  = getLoggedInUserDetail(request);
-        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("pla/groupLife/claim/viewClaimReOpen");
-        String message=null;
-          GLClaimReopenCommand glClaimOpenCommand=new GLClaimReopenCommand();
-           glClaimOpenCommand.setClaimId(claimId);
-          glClaimOpenCommand.setUserDetails(userDetails);
-        try{
-            String claimNumber=glClaimService.reopenClaim(glClaimOpenCommand);
-            message="Claim Submitted For Reopen Sucessfully";
-            modelAndView.addObject("sucess", message);
-        }
-         catch (Exception e) {
-             message="Claim Not Reopen.. Tryagain";
-             modelAndView.addObject("sucess", message);
-             return modelAndView;
-
-            }
-        return modelAndView;
-
-    }*/
 
     @RequestMapping(value = "/listallclaimstoreopen/{claimId}", method = RequestMethod.GET)
     @ResponseBody

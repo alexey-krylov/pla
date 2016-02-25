@@ -39,6 +39,7 @@ public class GLClaimIntimationDetailsDto {
     private List<ClaimApproverCoverageDetailDto> claimApprovalCoverageDetails;
     private ApprovalDetailsDto approvalDetails;
     private GLClaimSettlementDataDto claimSettlementDetails;
+    private String routingLevel;
 
     public GLClaimIntimationDetailsDto withClaimant(ClaimantDetail claimantDetail){
         this. claimantDetail  =  claimantDetail;

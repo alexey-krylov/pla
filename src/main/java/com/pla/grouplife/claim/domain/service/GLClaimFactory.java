@@ -176,6 +176,10 @@ public class GLClaimFactory {
        if(claimType == ClaimType.DEATH ||claimType== ClaimType.FUNERAL){
            reserveSum=tempReserveSum;
        }
+       if(claimType == ClaimType.DISABILITY){
+           reserveSum=tempReserveSum;
+
+       }
 
 
       //adding mandatory documents, if any
@@ -205,7 +209,16 @@ public class GLClaimFactory {
        groupLifeClaim.withClaimDocuments(claimDocuments);
        groupLifeClaim.updateWithReserveAmount(reserveSum);
        claimAmount=reserveSum;
-       groupLifeClaim.updateWithClaimAmount(claimAmount);
+
+       if(claimType == ClaimType.DEATH ||claimType== ClaimType.FUNERAL){
+           claimAmount=reserveSum;
+           groupLifeClaim.updateWithClaimAmount(claimAmount);
+       }
+       if(claimType == ClaimType.DISABILITY){
+           claimAmount=tempSumAssured;
+           groupLifeClaim.updateWithClaimAmount(claimAmount);
+       }
+      // groupLifeClaim.updateWithClaimAmount(claimAmount);
 
        if(earlyClaimDays>noOfDays){
            groupLifeClaim.withEarlyClaim(true);

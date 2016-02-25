@@ -35,7 +35,10 @@ import com.pla.sharedkernel.identifier.CoverageId;
 import com.pla.sharedkernel.identifier.LineOfBusinessEnum;
 import com.pla.sharedkernel.identifier.PlanId;
 import com.pla.sharedkernel.identifier.PolicyId;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
+import com.pla.underwriter.domain.model.UnderWriterLineItem;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
+import com.pla.underwriter.domain.model.UnderWritingRoutingLevelItem;
 import com.pla.underwriter.finder.UnderWriterFinder;
 import org.apache.commons.io.IOUtils;
 import org.axonframework.repository.Repository;
@@ -390,6 +393,14 @@ public class GLClaimService implements Serializable{
             disabilityRegistrationDetails.setVisitingMedicalOfficerDetails(disabilityClaimRegistration.getVisitingMedicalOfficerDetails());
         }
         claimIntimationDetailDto.withDisabilityRegistration(disabilityRegistrationDetails);
+        String routingLevelInString = (String)claimRecordMap.get("taggedRoutingLevel");
+        String resultRoutingLevel="";
+        if(routingLevelInString!=null){
+            RoutingLevel routingLevel = (RoutingLevel) RoutingLevel.valueOf(routingLevelInString);
+            resultRoutingLevel = routingLevel.getDescription();
+        }
+        claimIntimationDetailDto.setRoutingLevel(resultRoutingLevel);
+
         GlClaimUnderWriterApprovalDetail underWriterApprovalDetail = (GlClaimUnderWriterApprovalDetail) claimRecordMap.get("underWriterReviewDetail");
         if(underWriterApprovalDetail!=null){
         //creating approver plan detail
@@ -409,9 +420,13 @@ public class GLClaimService implements Serializable{
         }
         //getting and adding coverage details
         BigDecimal tempTotalApprovedAmount = underWriterApprovalDetail.getTotalApprovedAmount();
+            if(tempTotalApprovedAmount!=null){
         approvalDetails.setTotalApprovedAmount(tempTotalApprovedAmount);
+            }
         BigDecimal totalRecoveredAmout = underWriterApprovalDetail.getTotalRecoveredAmount();
+            if(totalRecoveredAmout!=null){
         approvalDetails.setTotalRecoveredOrAdditionalAmount(totalRecoveredAmout);
+            }
         BigDecimal additionalAmountPaid = underWriterApprovalDetail.getAdditionalAmountPaid();
         List<ApproverCoverageDetail> coverageDetailList = underWriterApprovalDetail.getCoverageDetails();
         List<ClaimApproverCoverageDetailDto> approverCoverageList = new ArrayList<ClaimApproverCoverageDetailDto>();
@@ -455,11 +470,17 @@ public class GLClaimService implements Serializable{
             }
             */
         String comments = underWriterApprovalDetail.getComment();
+            if(comments!=null){
         approvalDetails.setComments(comments);
+            }
         DateTime referredToReassuredOn = underWriterApprovalDetail.getReferredToReassuredOn();
-        approvalDetails.setReferredToReassuredOn(referredToReassuredOn);
+            if(referredToReassuredOn!=null) {
+                approvalDetails.setReferredToReassuredOn(referredToReassuredOn);
+            }
         DateTime responseReceivedOn = underWriterApprovalDetail.getResponseReceivedOn();
-            approvalDetails.setResponseReceivedOn(responseReceivedOn);
+            if(responseReceivedOn!=null) {
+                approvalDetails.setResponseReceivedOn(responseReceivedOn);
+            }
 
         claimIntimationDetailDto.withApprovalDetail(approvalDetails);
              ClaimApproverPlanDto claimApprovalPlanDetail=new ClaimApproverPlanDto();
@@ -492,25 +513,46 @@ public class GLClaimService implements Serializable{
     }
        //get Settlement data
         GLClaimSettlementData claimSettlementData=(GLClaimSettlementData) claimRecordMap.get("claimSettlementData");
+        //first time when creating settlement data auto populate data
+         if(claimSettlementData==null) {
+             GLClaimSettlementDataDto claimSettlementDetails = new GLClaimSettlementDataDto();
 
-        GLClaimSettlementDataDto claimSettlementDetails=new GLClaimSettlementDataDto();
+             if (underWriterApprovalDetail != null) {
+                 DateTime approvalDate = underWriterApprovalDetail.getClaimApprovedOn() != null ? new DateTime(underWriterApprovalDetail.getClaimApprovedOn()) : null;
+                 claimSettlementDetails.setClaimApprovedOn(approvalDate);
+                 BigDecimal tempTotalApprovedAmount = underWriterApprovalDetail.getTotalApprovedAmount();
+                 claimSettlementDetails.setApprovedAmount(tempTotalApprovedAmount);
+                 claimSettlementDetails.setPaidAmount(tempTotalApprovedAmount);
+             }
+             if (bankDetails != null) {
+                 claimSettlementDetails.setAccountNumber(bankDetails.getBankAccountNumber());
+                 claimSettlementDetails.setAccountType(bankDetails.getBankAccountType());
+                 claimSettlementDetails.setBankName(bankDetails.getBankName());
+                 claimSettlementDetails.setBankBranchName(bankDetails.getBankBranchName());
 
-        if(underWriterApprovalDetail!=null){
-            DateTime approvalDate = underWriterApprovalDetail.getClaimApprovedOn() != null ? new DateTime(underWriterApprovalDetail.getClaimApprovedOn()) : null;
-            claimSettlementDetails.setClaimApprovedOn(approvalDate);
-            BigDecimal tempTotalApprovedAmount = underWriterApprovalDetail.getTotalApprovedAmount();
-            claimSettlementDetails.setApprovedAmount(tempTotalApprovedAmount);
-            claimSettlementDetails.setPaidAmount(tempTotalApprovedAmount);
-        }
-        if(bankDetails!=null){
-            claimSettlementDetails.setAccountNumber(bankDetails.getBankAccountNumber());
-            claimSettlementDetails.setAccountType(bankDetails.getBankAccountType());
-            claimSettlementDetails.setBankName(bankDetails.getBankName());
-            claimSettlementDetails.setBankBranchName(bankDetails.getBankBranchName());
+             }
+             claimIntimationDetailDto.withClaimSettlementDetail(claimSettlementDetails);
+         }
+         //when settlement data is available
+           else{
+             GLClaimSettlementDataDto claimSettlementDetails = new GLClaimSettlementDataDto();
+             DateTime approvalDate =claimSettlementData.getClaimApprovedOn() != null ? new DateTime(claimSettlementData.getClaimApprovedOn()) : null;
+             claimSettlementDetails.setClaimApprovedOn(approvalDate);
+             claimSettlementDetails.setApprovedAmount(claimSettlementData.getApprovedAmount());
+             claimSettlementDetails.setPaymentMode(claimSettlementData.getPaymentMode());
+             DateTime paymentDate = claimSettlementData.getPaymentDate() != null ? new DateTime(claimSettlementData.getPaymentDate() ) : null;
+             claimSettlementDetails.setPaymentDate(paymentDate);
+             DateTime instrumentDate = claimSettlementData.getInstrumentDate() != null ? new DateTime(claimSettlementData.getInstrumentDate()) : null;
+             claimSettlementDetails.setInstrumentDate(instrumentDate);
+             claimSettlementDetails.setPaidAmount(claimSettlementData.getPaidAmount());
+             claimSettlementDetails.setBankName(claimSettlementData.getBankName());
+             claimSettlementDetails.setBankBranchName(claimSettlementData.getBankBranchName());
+             claimSettlementDetails.setAccountType(claimSettlementData.getAccountType());
+             claimSettlementDetails.setAccountNumber(claimSettlementData.getAccountNumber());
+             claimSettlementDetails.setInstrumentNumber(claimSettlementData.getInstrumentNumber());
+             claimIntimationDetailDto.withClaimSettlementDetail(claimSettlementDetails);
+         }
 
-        }
-
-        claimIntimationDetailDto.withClaimSettlementDetail(claimSettlementDetails);
             return claimIntimationDetailDto;
         }
 
@@ -2166,6 +2208,47 @@ public  List<GLClaimDataDto>  getAllRejectedOrClosedClaimDetail(){
         //groupLifeClaimRepository.save(groupLifeClaim);
         return claimNumber;
     }
+
+    public RoutingLevel getAssignedRoutingLevel(String claimId) {
+        RoutingLevel definedRoutingLevel = null;
+        GroupLifeClaim groupLifeClaim = glClaimFinder.findClaimDetailByClaimId(claimId);
+        String planId = groupLifeClaim.getPlanDetail().getPlanId().getPlanId();
+        UnderWriterRoutingLevel underWriterRoutingLevel = configuredForSelectedPlan(planId);
+        BigDecimal sumAssured = groupLifeClaim.getReserveAmount();
+        List<RoutingLevel> routingLevelList = new ArrayList<RoutingLevel>();
+        if (underWriterRoutingLevel != null) {
+            Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems = underWriterRoutingLevel.getUnderWritingRoutingLevelItems();
+            for (UnderWritingRoutingLevelItem underWritingRoutingLevelItem : underWritingRoutingLevelItems) {
+                Set<UnderWriterLineItem> underWriterLineItems = underWritingRoutingLevelItem.getUnderWriterLineItems();
+                for (UnderWriterLineItem underWriterLineItem : underWriterLineItems) {
+                    if (underWriterLineItem.getUnderWriterInfluencingFactor() == UnderWriterInfluencingFactor.SUM_ASSURED) {
+                        BigDecimal upperValue = new BigDecimal(underWriterLineItem.getInfluencingItemTo());
+                        BigDecimal lowerValue = new BigDecimal(underWriterLineItem.getInfluencingItemFrom());
+
+                        if ((upperValue.compareTo(sumAssured) > 0) || (sumAssured.compareTo(lowerValue) > 0)) {
+                            definedRoutingLevel = underWritingRoutingLevelItem.getRoutingLevel();
+                            routingLevelList.add(definedRoutingLevel);
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        RoutingLevel assignedRoutingLevel = null;
+        if (routingLevelList != null) {
+            assignedRoutingLevel = RoutingLevel.UNDERWRITING_LEVEL_ONE;
+            for (RoutingLevel routingLevel : routingLevelList) {
+                if (routingLevel == RoutingLevel.UNDERWRITING_LEVEL_TWO) {
+                    assignedRoutingLevel = routingLevel;
+                }
+
+            }
+        }
+      return assignedRoutingLevel;
+    }
+
 }
 
 

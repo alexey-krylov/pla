@@ -12,6 +12,7 @@ import com.pla.sharedkernel.domain.model.ClaimId;
 import com.pla.sharedkernel.domain.model.ClaimNumber;
 import com.pla.sharedkernel.domain.model.ClaimType;
 import com.pla.sharedkernel.domain.model.RoutingLevel;
+import com.pla.underwriter.domain.model.UnderWriterInfluencingFactor;
 import com.pla.underwriter.domain.model.UnderWriterLineItem;
 import com.pla.underwriter.domain.model.UnderWriterRoutingLevel;
 import com.pla.underwriter.domain.model.UnderWritingRoutingLevelItem;
@@ -111,6 +112,7 @@ public class GLClaimIntimationCommandHandler {
 
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimRegistrationCommand.getClaimId()));
         RoutingLevel definedRoutingLevel=null;
+        String claimIdInString=glClaimRegistrationCommand.getClaimId();
         ClaimRegistrationDto claimRegistrationDetail=glClaimRegistrationCommand.getIncidentDetails();
         ClaimRegistration claimRegistration = new ClaimRegistration(claimRegistrationDetail.getCauseOfDeath(), claimRegistrationDetail.getPlaceOfDeath()
                 , claimRegistrationDetail.getDateOfDeath(), claimRegistrationDetail.getTimeOfDeath(),claimRegistrationDetail.getDurationOfIllness(),claimRegistrationDetail.getNameOfDoctorAndHospitalAddress()
@@ -149,15 +151,20 @@ public class GLClaimIntimationCommandHandler {
         String planId=groupLifeClaim.getPlanDetail().getPlanId().getPlanId();
         UnderWriterRoutingLevel underWriterRoutingLevel=glClaimService.configuredForSelectedPlan(planId);
         BigDecimal sumAssured=groupLifeClaim.getReserveAmount();
-
+        List<RoutingLevel> routingLevelList=new ArrayList<RoutingLevel>();
         if(underWriterRoutingLevel!=null){
             Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems=underWriterRoutingLevel.getUnderWritingRoutingLevelItems();
             for(UnderWritingRoutingLevelItem underWritingRoutingLevelItem :underWritingRoutingLevelItems){
                 Set<UnderWriterLineItem> underWriterLineItems=underWritingRoutingLevelItem.getUnderWriterLineItems();
                 for(UnderWriterLineItem underWriterLineItem:underWriterLineItems){
-                    BigDecimal desValue=new BigDecimal(underWriterLineItem.getInfluencingItemTo());
-                    if ( desValue.compareTo(sumAssured)<0){
-                        definedRoutingLevel=underWritingRoutingLevelItem.getRoutingLevel();
+                    if(underWriterLineItem.getUnderWriterInfluencingFactor()== UnderWriterInfluencingFactor.SUM_ASSURED) {
+                        BigDecimal upperValue = new BigDecimal(underWriterLineItem.getInfluencingItemTo());
+                        BigDecimal lowerValue = new BigDecimal(underWriterLineItem.getInfluencingItemFrom());
+
+                        if ((upperValue.compareTo(sumAssured) > 0) || (upperValue.compareTo(sumAssured) > 0)) {
+                            definedRoutingLevel = underWritingRoutingLevelItem.getRoutingLevel();
+                            routingLevelList.add(definedRoutingLevel);
+                        }
                     }
                 }
 
@@ -165,9 +172,21 @@ public class GLClaimIntimationCommandHandler {
 
         }
 
+        RoutingLevel assignedRoutingLevel=null;
+        if(routingLevelList!=null) {
+            assignedRoutingLevel=RoutingLevel.UNDERWRITING_LEVEL_ONE;
+            for (RoutingLevel routingLevel:routingLevelList) {
+                if(routingLevel==RoutingLevel.UNDERWRITING_LEVEL_TWO){
+                    assignedRoutingLevel=routingLevel;
+                }
 
+            }
+        }
+       // RoutingLevel assignedRoutingLevel=glClaimService.getAssignedRoutingLevel(claimIdInString);
+       // if(assignedRoutingLevel!=null) {
+       // }
 
-        groupLifeClaim.taggedWithRoutingLevel(definedRoutingLevel);
+        groupLifeClaim.taggedWithRoutingLevel(assignedRoutingLevel);
 
         GLClaimRegistrationProcessor glClaimRegistrationProcessor = groupLifeClaimRoleAdapter.userToGLClaimRegistrationProcessor(glClaimRegistrationCommand.getUserDetails());
          groupLifeClaim=glClaimRegistrationProcessor.submitClaimRegistration(DateTime.now(), groupLifeClaim, glClaimRegistrationCommand.getComments()) ;
@@ -208,6 +227,8 @@ public class GLClaimIntimationCommandHandler {
             return;
         }
        */
+
+        /*
         String planId=groupLifeClaim.getPlanDetail().getPlanId().getPlanId();
         UnderWriterRoutingLevel underWriterRoutingLevel=glClaimService.configuredForSelectedPlan(planId);
         BigDecimal sumAssured=groupLifeClaim.getReserveAmount();
@@ -227,8 +248,39 @@ public class GLClaimIntimationCommandHandler {
 
         }
 
+      */
 
+        String planId=groupLifeClaim.getPlanDetail().getPlanId().getPlanId();
+        UnderWriterRoutingLevel underWriterRoutingLevel=glClaimService.configuredForSelectedPlan(planId);
+        BigDecimal sumAssured=groupLifeClaim.getReserveAmount();
+        List<RoutingLevel> routingLevelList=new ArrayList<RoutingLevel>();
+        if(underWriterRoutingLevel!=null){
+            Set<UnderWritingRoutingLevelItem> underWritingRoutingLevelItems=underWriterRoutingLevel.getUnderWritingRoutingLevelItems();
+            for(UnderWritingRoutingLevelItem underWritingRoutingLevelItem :underWritingRoutingLevelItems){
+                Set<UnderWriterLineItem> underWriterLineItems=underWritingRoutingLevelItem.getUnderWriterLineItems();
+                for(UnderWriterLineItem underWriterLineItem:underWriterLineItems){
+                    if(underWriterLineItem.getUnderWriterInfluencingFactor()== UnderWriterInfluencingFactor.SUM_ASSURED) {
+                        BigDecimal upperValue = new BigDecimal(underWriterLineItem.getInfluencingItemTo());
+                        BigDecimal lowerValue = new BigDecimal(underWriterLineItem.getInfluencingItemFrom());
 
+                        if ((upperValue.compareTo(sumAssured) > 0) || (upperValue.compareTo(sumAssured) > 0)) {
+                            definedRoutingLevel = underWritingRoutingLevelItem.getRoutingLevel();
+                            routingLevelList.add(definedRoutingLevel);
+                        }
+                    }
+                }
+            }
+        }
+        RoutingLevel assignedRoutingLevel=null;
+        if(routingLevelList!=null) {
+            assignedRoutingLevel=RoutingLevel.UNDERWRITING_LEVEL_ONE;
+            for (RoutingLevel routingLevel:routingLevelList) {
+                if(routingLevel==RoutingLevel.UNDERWRITING_LEVEL_TWO){
+                    assignedRoutingLevel=routingLevel;
+                }
+
+            }
+        }
         groupLifeClaim.taggedWithRoutingLevel(definedRoutingLevel);
 
         GLClaimRegistrationProcessor glClaimRegistrationProcessor = groupLifeClaimRoleAdapter.userToGLClaimRegistrationProcessor(glClaimCommand.getUserDetails());
@@ -477,7 +529,7 @@ public class GLClaimIntimationCommandHandler {
     }
 
     @CommandHandler
-    public boolean removeGLProposalClaimDocument(GLClaimDocumentRemoveCommand glClaimDocumentRemoveCommand) {
+    public boolean removeDocument(GLClaimDocumentRemoveCommand glClaimDocumentRemoveCommand) {
 
         boolean result = Boolean.FALSE;
         GroupLifeClaim groupLifeClaim = glClaimMongoRepository.load(new ClaimId(glClaimDocumentRemoveCommand.getClaimId()));
@@ -599,6 +651,7 @@ public class GLClaimIntimationCommandHandler {
         groupLifeClaim = glClaimApprover.routeClaimRecordToSeniorApprover(DateTime.now(),command.getComments(), groupLifeClaim);
         return groupLifeClaim.getIdentifier().getClaimId();
     }
+
 
 }
 
