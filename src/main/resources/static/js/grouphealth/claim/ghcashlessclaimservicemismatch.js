@@ -632,8 +632,8 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                                     $scope.createUpdateDto = response;
                                     if (status == "200") {
                                         setTimeout(function () {
-                                            window.location.reload();
-                                        }, 2000);
+                                            window.location.href = '/pla/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims';
+                                        }, 3000);
                                     }
                                 }).error(function (response, status, headers, config) {
                             });
@@ -678,8 +678,8 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                                     $scope.createUpdateDto = response;
                                     if (status == 200) {
                                         setTimeout(function () {
-                                            window.location.reload();
-                                        }, 2000);
+                                            window.location.href = '/pla/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims';
+                                        }, 3000);
                                     }
                                 }).error(function (response, status, headers, config) {
                             });
@@ -705,8 +705,8 @@ var  app = angular.module('CashLessClaimService', ['common', 'ngRoute','ngMessag
                                     $scope.createUpdateDto = response;
                                     if (status == 200) {
                                         setTimeout(function () {
-                                            window.location.reload();
-                                        }, 2000);
+                                            window.location.href = '/pla/grouphealth/claim/cashless/claim/getallservicemismatchedgrouphealthcashlessclaims';
+                                        }, 3000);
                                     }
                                 }).error(function (response, status, headers, config) {
                             });

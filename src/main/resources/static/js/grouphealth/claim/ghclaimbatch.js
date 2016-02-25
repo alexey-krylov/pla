@@ -4,12 +4,12 @@
         'directives', 'mgcrea.ngStrap.dropdown', 'ngSanitize', 'commonServices','ui.bootstrap.modal','ngMessages']);
 
     app.config(['datepickerPopupConfig', function (datepickerPopupConfig) {
-        datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
-        datepickerPopupConfig.currentText = 'Today';
-        datepickerPopupConfig.clearText = 'Clear';
-        datepickerPopupConfig.closeText = 'Done';
-        datepickerPopupConfig.closeOnDateSelection = true;
-    }])
+            datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
+            datepickerPopupConfig.currentText = 'Today';
+            datepickerPopupConfig.clearText = 'Clear';
+            datepickerPopupConfig.closeText = 'Done';
+            datepickerPopupConfig.closeOnDateSelection = true;
+        }])
         .config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when('/', {
                     templateUrl: 'ghclaimbatch.html',
@@ -33,19 +33,10 @@
             )}]);
     app.controller('createbatchCtrl', ['$scope','getQueryParameter','$http', 'batchDetails', function ($scope,getQueryParameter,$http, batchDetails) {
 
-        $scope.mode=getQueryParameter('mode');
-        $scope.hcpCode=getQueryParameter('hcpCode');
-
-        //$scope.hcpStatus = hcpStatus;
-        //
-        //$scope.createOrUpdateHCPCommand={};
-      $scope.createUpdateCommand =batchDetails;
-        //$scope.bankDetailsResponse=[];
-        //$scope.bankDetailsResponse=bankDetails;
-        //$scope.bankBranchDetails=[];
-        //$scope.bankDetails={};
-        //
-        console.log(JSON.stringify($scope.createUpdateCommand));
+        $scope.mode = getQueryParameter('mode');
+        $scope.hcpCode = getQueryParameter('hcpCode');
+        $scope.batchDetails = batchDetails;
+        $scope.showSaveButton = false;
         $scope.launchActivatedDate = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
@@ -53,53 +44,17 @@
         };
 
         $scope.saveBatchDetail= function() {
+        };
 
-            $scope.hcpdata=$scope.createOrUpdateHCPCommand;
-            $scope.hcpdata.activatedOn = formatDate($scope.createOrUpdateHCPCommand.activatedOn);
-            $scope.hcpdata = JSON.stringify($scope.hcpdata);
-            console.log(JSON.stringify($scope.hcpdata ));
-            $http({
-                url : '/pla/core/hcp/createOrUpdateHCP',
-                method : 'POST',
-                data : $scope.hcpdata
-            })
-                .then(function(response) {
-                    if(response.status=400){
-
-                    }
-
-                },
-                function(response) {
-
-
-                });
-        }
-
-
-
-
-        //
-        //$scope.$watch('createOrUpdateHCPCommand.bankName', function (newvalue, oldvalue) {
-        //    if (newvalue) {
-        //        var bankCode = _.findWhere($scope.bankDetailsResponse, {bankName: newvalue});
-        //        if (bankCode) {
-        //            $http.get('/pla/grouplife/claim/getAllBankBranchNames/' + bankCode.bankCode).success(function (response, status, headers, config) {
-        //                $scope.bankBranchDetails = response;
-        //            }).error(function (response, status, headers, config) {
-        //            });
-        //        }
-        //    }
-        //});
-        //$scope.$watch('createOrUpdateHCPCommand.bankBranchCode', function (newvalue, oldvalue) {
-        //    if (newvalue) {
-        //        $scope.createOrUpdateHCPCommand.bankBranchSortCode = newvalue;
-        //    }
-        //});
         $scope.back = function () {
-            window.location.reload();
+            window.location.href = '/pla/grouphealth/claim/cashless/claim/getallbatchesforsettlement';
+        };
 
+        $scope.shouldSaveBeDisabled = function(){
+            if($scope.batchDetails.batchClosedOnDate){
+                $scope.showSaveButton = true;
+            }
         }
-
     }])
 })(angular);
 

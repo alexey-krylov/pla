@@ -95,7 +95,7 @@
                                                 <input  type="text" name="batchNumber"
                                                         ng-maxlength="13"
                                                         ng-pattern="number"
-                                                        ng-model="createUpdateCommand.batchNumber"
+                                                        ng-model="batchDetails.batchNumber"
                                                         class="form-control input-md"/>
                                             </div>
                                         </div>
@@ -105,7 +105,7 @@
                                                 <label class="control-label">HCP </label>
                                                 <input id="hcpCode"
                                                        name="hcpCode"
-                                                       ng-model="createUpdateCommand.hcpCode"
+                                                       ng-model="batchDetails.hcpCode"
                                                        type="text"
                                                        class="form-control input-md"
                                                         />
@@ -120,7 +120,7 @@
                                                            view-enabled=""
                                                            is-open="claimIntimationDate"
                                                            max-date="todayDate"
-                                                           ng-model="createUpdateCommand.batchDate" name="batchDate"/>
+                                                           ng-model="batchDetails.batchDate" name="batchDate"/>
                                              <span class="input-group-btn">
                                            <button type="button" class="btn btn-default btn-sm" view-enabled=""
                                                    ng-click="launchclaimDate($event)">
@@ -174,7 +174,7 @@
                                                         <tbody>
                                                         <form id="viewAgentsForm">
                                                             <th:block>
-                                                                <tr ng-repeat="pla in createUpdateCommand.batchClaimDetails">
+                                                                <tr ng-repeat="pla in batchDetails.batchClaimDetails">
                                                                     <td>{{pla.claimNumber}}</td>
                                                                     <td>{{pla.assuredName}}</td>
                                                                     <td>{{pla.billedAmount}}</td>
@@ -210,7 +210,7 @@
                                                 <label class="control-label">Total Invoice Amount</label>
                                                 <input  type="text" name="totalInvoiceAmount"
                                                         ng-maxlength="3"
-                                                        ng-model="createUpdateCommand.accountingDetail.totalInvoiceAmount"
+                                                        ng-model="batchDetails.accountingDetail.totalInvoiceAmount"
                                                         class="form-control input-md"/>
                                             </div>
                                         </div>
@@ -220,7 +220,7 @@
 
                                                 <input  type="text" name="batchNumber"
                                                         ng-maxlength="3"
-                                                        ng-model="createUpdateCommand.accountingDetail.totalNumberOfClaims"
+                                                        ng-model="batchDetails.accountingDetail.totalNumberOfClaims"
                                                         class="form-control input-md"/>
                                             </div>
 
@@ -230,7 +230,7 @@
                                                 <label>Total Bill Amount</label>
                                                 <input  type="text" name="totalBillAmount"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalBillAmount"
+                                                        ng-model="batchDetails.accountingDetail.totalBillAmount"
                                                         class="form-control input-md"/>
                                             </div>
                                         </div>
@@ -243,7 +243,7 @@
                                                 <label class="control-label">Total Reviewed Claims</label>
                                                 <input  type="text" name="totalReviewedClaims"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalReviewedClaims"
+                                                        ng-model="batchDetails.accountingDetail.totalReviewedClaims"
                                                         class="form-control input-md"/>
 
                                             </div>
@@ -256,7 +256,7 @@
 
                                                 <input  type="text" name="totalApprovedAmount"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalApprovedAmount"
+                                                        ng-model="batchDetails.accountingDetail.totalApprovedAmount"
                                                         class="form-control input-md"/>
 
                                             </div>
@@ -268,7 +268,7 @@
                                                 <label>Total Approved Claims</label>
                                                 <input  type="text" name="totalApprovedClaims"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalApprovedClaims"
+                                                        ng-model="batchDetails.accountingDetail.totalApprovedClaims"
                                                         class="form-control input-md"/>
                                             </div>
 
@@ -281,7 +281,7 @@
                                                 <label class="control-label">Total Reject Amount due to Rate Mismatch</label>
                                                 <input  type="text" name="totalBillMismatchRejectedAmount"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalBillMismatchRejectedAmount"
+                                                        ng-model="batchDetails.accountingDetail.totalBillMismatchRejectedAmount"
                                                         class="form-control input-md"/>
 
 
@@ -292,7 +292,7 @@
                                                 <label class="control-label">Total Reject Amount due to Service Mismatch</label>
                                                 <input  type="text" name="totalServiceMismatchRejectedAmount"
 
-                                                        ng-model="createUpdateCommand.totalServiceMismatchRejectedAmount"
+                                                        ng-model="batchDetails.totalServiceMismatchRejectedAmount"
                                                         class="form-control input-md"/>
                                             </div>
                                             </div>
@@ -301,7 +301,7 @@
                                                     <label class="control-label">Total RejectClaim</label>
                                                     <input  type="text" name="totalRejectedClaims"
 
-                                                            ng-model="createUpdateCommand.accountingDetail.totalRejectedClaims"
+                                                            ng-model="batchDetails.accountingDetail.totalRejectedClaims"
                                                             class="form-control input-md"/>
                                                 </div>
                                         </div>
@@ -318,7 +318,7 @@
                                                 <label class="control-label">Total Unacknowledged Amount</label>
                                                 <input  type="text" name="totalUnacknowledgedAmount"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalUnacknowledgedAmount"
+                                                        ng-model="batchDetails.accountingDetail.totalUnacknowledgedAmount"
                                                         class="form-control input-md"/>
 
                                             </div>
@@ -329,7 +329,7 @@
                                                 <label class="control-label">Total Approved Claims With lesser than Claimed Amount</label>
                                                 <input  type="text" name="batchNumber"
 
-                                                        ng-model="createUpdateCommand.accountingDetail.totalApprovedClaimsLesserThanClaimAmount"
+                                                        ng-model="batchDetails.accountingDetail.totalApprovedClaimsLesserThanClaimAmount"
                                                         class="form-control input-md"/>
 
                                             </div>
@@ -354,7 +354,7 @@
                                                 <label class="control-label">Batch Closed On</label>
                                                 <input type="text" class="form-control input-sm" maxlength="13"
 
-                                                       ng-model="createUpdateCommand.batchClosedOnDate"/>
+                                                       ng-model="batchDetails.batchClosedOnDate"/>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -364,7 +364,7 @@
                                                         name="sumAssured"
                                                         type="text"
                                                         class="form-control input-md"
-                                                        ng-model="createUpdateCommand.groupHealthCashlessClaimBatchBankDetail.branchNumber"
+                                                        ng-model="batchDetails.groupHealthCashlessClaimBatchBankDetail.branchNumber"
                                                         >
                                                 </input>
 
@@ -377,7 +377,7 @@
                                                         name="paymentMode"
                                                         type="text"
                                                         class="form-control input-md"
-                                                        ng-model="createUpdateCommand.groupHealthCashlessClaimBatchBankDetail.paymentMode"
+                                                        ng-model="batchDetails.groupHealthCashlessClaimBatchBankDetail.paymentMode"
                                                         >
                                                 </input>
 
@@ -391,7 +391,7 @@
                                                 <input type="text" class="form-control input-sm" maxlength="13"
                                                        minlength="13"
                                                        name="sortCode"
-                                                       ng-model="createUpdateCommand.groupHealthCashlessClaimBatchBankDetail.sortCode"/>
+                                                       ng-model="batchDetails.groupHealthCashlessClaimBatchBankDetail.sortCode"/>
 
                                             </div>
                                         </div>
@@ -402,7 +402,7 @@
                                                         name="sumAssured"
                                                         type="text"
                                                         class="form-control input-md"
-                                                        ng-model="createUpdateCommand.groupHealthCashlessClaimBatchBankDetail.bankName"
+                                                        ng-model="batchDetails.groupHealthCashlessClaimBatchBankDetail.bankName"
                                                         >
                                                 </input>
 
@@ -415,7 +415,7 @@
                                                         name="sumAssured"
                                                         type="text"
                                                         class="form-control input-md"
-                                                        ng-model="createUpdateCommand.groupHealthCashlessClaimBatchBankDetail.accountNumber"
+                                                        ng-model="batchDetails.groupHealthCashlessClaimBatchBankDetail.accountNumber"
                                                         >
                                                 </input>
 
@@ -430,10 +430,9 @@
                     </ng-form>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="back()">Close</button>
+                            <button type="button" class="btn btn-primary btn-sm" ng-init="shouldSaveBeDisabled()" ng-disabled="!showSaveButton">save</button>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="back()">close</button>
                         </div>
-
-
                     </div>
                 </div>
 

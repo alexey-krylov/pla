@@ -1332,9 +1332,10 @@ public class GroupHealthCashlessClaimService {
         List<Status> listOfStatusOfAllClaims = getListOfStatusOfAllClaims(groupHealthCashlessClaimList);
         if(listOfStatusOfAllClaims.contains(INTIMATION) || listOfStatusOfAllClaims.contains(EVALUATION) || listOfStatusOfAllClaims.contains(RETURNED) || listOfStatusOfAllClaims.contains(UNDERWRITING_LEVEL1)  || listOfStatusOfAllClaims.contains(UNDERWRITING_LEVEL2) || listOfStatusOfAllClaims.contains(APPROVED))
             batchStatus = OPEN.getDescription();
-        else if(listOfStatusOfAllClaims.contains(AWAITING_DISBURSEMENT) || listOfStatusOfAllClaims.contains(CANCELLED) || listOfStatusOfAllClaims.contains(REPUDIATED) || listOfStatusOfAllClaims.contains(AMENDED) || !listOfStatusOfAllClaims.contains(DISBURSED)){
+        /*else if(listOfStatusOfAllClaims.contains(AWAITING_DISBURSEMENT) || listOfStatusOfAllClaims.contains(CANCELLED) || listOfStatusOfAllClaims.contains(REPUDIATED) || listOfStatusOfAllClaims.contains(AMENDED) || !listOfStatusOfAllClaims.contains(DISBURSED)){
             batchStatus = AWAITING_DISBURSEMENT.getDescription();
-        } else if(listOfStatusOfAllClaims.contains(DISBURSED) || listOfStatusOfAllClaims.contains(CANCELLED) || listOfStatusOfAllClaims.contains(REPUDIATED) || listOfStatusOfAllClaims.contains(AMENDED) || !listOfStatusOfAllClaims.contains(AWAITING_DISBURSEMENT)){
+        } */
+        else if(listOfStatusOfAllClaims.contains(DISBURSED) || listOfStatusOfAllClaims.contains(CANCELLED) || listOfStatusOfAllClaims.contains(REPUDIATED) || listOfStatusOfAllClaims.contains(AMENDED)){
             batchStatus = CLOSED.getDescription();
         }
         return batchStatus;

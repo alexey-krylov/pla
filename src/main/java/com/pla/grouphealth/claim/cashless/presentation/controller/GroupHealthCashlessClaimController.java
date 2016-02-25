@@ -496,6 +496,7 @@ public class GroupHealthCashlessClaimController {
             return Result.failure(e.getMessage());
         }
     }
+
     @RequestMapping(value = "/getallrelevantservices/{groupHealthCashlessClaimId}", method = RequestMethod.GET)
     @ResponseBody
     public Set<String> getAllRelevantServices(@PathVariable("groupHealthCashlessClaimId") String groupHealthCashlessClaimId, HttpServletResponse response) throws IOException {
