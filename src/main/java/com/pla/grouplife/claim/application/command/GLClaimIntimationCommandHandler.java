@@ -460,10 +460,10 @@ public class GLClaimIntimationCommandHandler {
 
         if(glClaimApprovalCommand.getCriteria()!=null && glClaimApprovalCommand.getCriteria().equals("amendment")){
 
-            GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
-            newGroupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), newGroupLifeClaim);
+           // GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
+            //newGroupLifeClaim = glClaimApprover.submitApproval(DateTime.now(), glClaimApprovalCommand.getComments(), newGroupLifeClaim);
             //groupLifeClaim = groupLifeClaim.markApproverApproval(glClaimApprovalCommand.getUserDetails().getUsername(), DateTime.now(), glClaimApprovalCommand.getComments(), ClaimStatus.APPROVED);
-            return groupLifeClaim.getIdentifier().getClaimId();
+            return newGroupLifeClaim.getIdentifier().getClaimId();
         }
         else{
             GLClaimApprover glClaimApprover = groupLifeClaimRoleAdapter.userToClaimApprover(glClaimApprovalCommand.getUserDetails());
